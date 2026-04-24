@@ -64,7 +64,7 @@
 | Field | Value |
 |---|---|
 | `llm_provider` | OpenRouter (routes to Anthropic, OpenAI, Google, Meta, etc.) |
-| `llm_model` | `anthropic/claude-sonnet-4.5` (default; change via `OPENROUTER_MODEL`) |
+| `llm_model` | `deepseek/deepseek-chat-v3.1` (default — ~30× cheaper than Sonnet 4.5, near-equal tutor quality; change via `OPENROUTER_MODEL`) |
 | `sdk` | `openai` (OpenAI-protocol, pointed at `https://openrouter.ai/api/v1`) |
 
 ## Mobile

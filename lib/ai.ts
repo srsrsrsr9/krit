@@ -7,7 +7,7 @@ import { logger } from "./logger";
  * Swap the model string to swap providers; no code change needed.
  */
 
-const MODEL = process.env.OPENROUTER_MODEL ?? "anthropic/claude-sonnet-4.5";
+const MODEL = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-chat-v3.1";
 
 let _client: OpenAI | null = null;
 function client(): OpenAI | null {
