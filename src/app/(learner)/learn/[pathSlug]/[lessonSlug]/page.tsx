@@ -24,61 +24,49 @@ export default async function LessonPage({
   if (!user) redirect("/sign-in");
   const m = await currentMembership();
 
-  const path = await db.path.findFirst({
-    where: { slug: pathSlug, ...(m ? { workspaceId: m.workspaceId } : {}) },
-    include: {
-      items: {
-        orderBy: { order: "asc" },
-        include: { lesson: true, assessment: true, project: true },
+  // Path + lesson in parallel — independent queries.
+  const [path, lesson] = await Promise.all([
+    db.path.findFirst({
+      where: { slug: pathSlug, ...(m ? { workspaceId: m.workspaceId } : {}) },
+      include: {
+        items: {
+          orderBy: { order: "asc" },
+          include: { lesson: true, assessment: true, project: true },
+        },
       },
-    },
-  });
-  if (!path) notFound();
+    }),
+    db.lesson.findFirst({
+      where: { slug: lessonSlug, ...(m ? { workspaceId: m.workspaceId } : {}) },
+      include: { skills: { include: { skill: true } } },
+    }),
+  ]);
+  if (!path || !lesson) notFound();
 
-  const lesson = await db.lesson.findFirst({
-    where: { slug: lessonSlug, workspaceId: path.workspaceId },
-    include: { skills: { include: { skill: true } } },
-  });
-  if (!lesson) notFound();
-
-  // Ensure enrollment + lessonProgress start row.
-  let enrollment = await db.enrollment.findUnique({
+  // Upsert enrollment + lessonProgress. Use upsert for a single round-trip
+  // each instead of find+create.
+  const enrollment = await db.enrollment.upsert({
     where: { userId_pathId: { userId: user.id, pathId: path.id } },
+    create: { id: cuid(), userId: user.id, pathId: path.id, lastActivityAt: new Date() },
+    update: { lastActivityAt: new Date() },
   });
-  if (!enrollment) {
-    enrollment = await db.enrollment.create({
-      data: { id: cuid(), userId: user.id, pathId: path.id, lastActivityAt: new Date() },
-    });
-  }
-  const existingProgress = await db.lessonProgress.findUnique({
+  const lessonProgressRow = await db.lessonProgress.upsert({
     where: { enrollmentId_lessonId: { enrollmentId: enrollment.id, lessonId: lesson.id } },
+    create: { id: cuid(), enrollmentId: enrollment.id, lessonId: lesson.id },
+    update: {},
   });
-  if (!existingProgress) {
-    await db.lessonProgress.create({
-      data: {
-        id: cuid(),
-        enrollmentId: enrollment.id,
-        lessonId: lesson.id,
-      },
-    });
-    await recordEvent({
-      userId: user.id,
-      workspaceId: path.workspaceId,
-      verb: "started",
-      objectType: "lesson",
-      objectId: lesson.id,
-      context: { pathId: path.id },
-    });
-  } else {
-    await recordEvent({
-      userId: user.id,
-      workspaceId: path.workspaceId,
-      verb: "viewed",
-      objectType: "lesson",
-      objectId: lesson.id,
-      context: { pathId: path.id },
-    });
-  }
+  const isFirstView = lessonProgressRow.startedAt.getTime() > Date.now() - 3000;
+
+  // Fire-and-forget: LRS writes don't need to block the render.
+  recordEvent({
+    userId: user.id,
+    workspaceId: path.workspaceId,
+    verb: isFirstView ? "started" : "viewed",
+    objectType: "lesson",
+    objectId: lesson.id,
+    context: { pathId: path.id },
+  }).catch(() => {});
+
+  const existingProgress = lessonProgressRow;
 
   const blocks = LessonBlocks.parse(lesson.blocks);
 

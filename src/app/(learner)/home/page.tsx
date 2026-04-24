@@ -15,42 +15,43 @@ export default async function HomePage() {
   if (!user) redirect("/sign-in");
   const membership = await currentMembership();
 
-  const enrollments = await db.enrollment.findMany({
-    where: { userId: user.id, status: "ACTIVE" },
-    include: { path: true },
-    orderBy: { lastActivityAt: { sort: "desc", nulls: "last" } },
-  });
+  // All the independent queries fire in parallel — big perceived-perf win.
+  const [enrollments, skillStates, assignments, credentials, totalEvidence, last7dEvidence] = await Promise.all([
+    db.enrollment.findMany({
+      where: { userId: user.id, status: "ACTIVE" },
+      include: { path: true },
+      orderBy: { lastActivityAt: { sort: "desc", nulls: "last" } },
+    }),
+    db.skillState.findMany({
+      where: { userId: user.id },
+      include: { skill: true },
+      orderBy: { lastEvidenceAt: { sort: "desc", nulls: "last" } },
+      take: 8,
+    }),
+    membership
+      ? db.assignment.findMany({
+          where: { assignedToId: user.id, workspaceId: membership.workspaceId, status: { in: ["PENDING", "ACTIVE"] } },
+          include: { path: true, assignedBy: true },
+          orderBy: [{ dueAt: { sort: "asc", nulls: "last" } }],
+          take: 5,
+        })
+      : Promise.resolve([]),
+    db.issuedCredential.findMany({
+      where: { userId: user.id, revokedAt: null },
+      include: { credential: true },
+      orderBy: { issuedAt: "desc" },
+      take: 3,
+    }),
+    db.evidence.count({ where: { userId: user.id } }),
+    db.evidence.count({
+      where: { userId: user.id, createdAt: { gte: new Date(Date.now() - 7 * 86_400_000) } },
+    }),
+  ]);
+
+  // Parallel across enrollments too.
   const progressByEnrollment = Object.fromEntries(
     await Promise.all(enrollments.map(async (e) => [e.id, await computePathProgress(e.id)] as const)),
   );
-
-  const skillStates = await db.skillState.findMany({
-    where: { userId: user.id },
-    include: { skill: true },
-    orderBy: { lastEvidenceAt: { sort: "desc", nulls: "last" } },
-    take: 8,
-  });
-
-  const assignments = membership
-    ? await db.assignment.findMany({
-        where: { assignedToId: user.id, workspaceId: membership.workspaceId, status: { in: ["PENDING", "ACTIVE"] } },
-        include: { path: true, assignedBy: true },
-        orderBy: [{ dueAt: { sort: "asc", nulls: "last" } }],
-        take: 5,
-      })
-    : [];
-
-  const credentials = await db.issuedCredential.findMany({
-    where: { userId: user.id, revokedAt: null },
-    include: { credential: true },
-    orderBy: { issuedAt: "desc" },
-    take: 3,
-  });
-
-  const totalEvidence = await db.evidence.count({ where: { userId: user.id } });
-  const last7dEvidence = await db.evidence.count({
-    where: { userId: user.id, createdAt: { gte: new Date(Date.now() - 7 * 86_400_000) } },
-  });
 
   return (
     <div className="space-y-10">

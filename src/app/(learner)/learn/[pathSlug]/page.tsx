@@ -47,10 +47,12 @@ export default async function PathPage({ params }: { params: Promise<{ pathSlug:
     });
   }
 
-  const progress = await computePathProgress(enrollment.id);
-  const lessonProgress = await db.lessonProgress.findMany({ where: { enrollmentId: enrollment.id } });
-  const attempts = await db.attempt.findMany({ where: { userId: user.id, assessmentId: { in: path.items.filter((i) => i.assessmentId).map((i) => i.assessmentId!) } } });
-  const submissions = await db.submission.findMany({ where: { userId: user.id, projectId: { in: path.items.filter((i) => i.projectId).map((i) => i.projectId!) } } });
+  const [progress, lessonProgress, attempts, submissions] = await Promise.all([
+    computePathProgress(enrollment.id),
+    db.lessonProgress.findMany({ where: { enrollmentId: enrollment.id } }),
+    db.attempt.findMany({ where: { userId: user.id, assessmentId: { in: path.items.filter((i) => i.assessmentId).map((i) => i.assessmentId!) } } }),
+    db.submission.findMany({ where: { userId: user.id, projectId: { in: path.items.filter((i) => i.projectId).map((i) => i.projectId!) } } }),
+  ]);
 
   const skillSet = new Map<string, { id: string; name: string; category: string | null }>();
   for (const i of path.items) {

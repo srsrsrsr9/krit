@@ -104,7 +104,10 @@ export async function* streamTutorReply(
     }
   } catch (e) {
     logger.error({ err: e }, "tutor_stream_failed");
-    yield "\n\n(I'm having trouble reaching the tutor right now. Try again in a moment.)";
+    const msg = e instanceof Error ? e.message : String(e);
+    // Surface the real error so misconfig (bad key / wrong model / no credits)
+    // is immediately diagnosable. Safe: no secrets, just the upstream reason.
+    yield `\n\n⚠️ Tutor upstream error: ${msg}\n\nCheck: (1) OPENROUTER_API_KEY in Vercel is valid, (2) OPENROUTER_MODEL="${MODEL}" exists at https://openrouter.ai/models, (3) your OpenRouter account has credits.`;
   }
 }
 
