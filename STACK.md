@@ -63,9 +63,9 @@
 
 | Field | Value |
 |---|---|
-| `llm_provider` | Anthropic |
-| `llm_model` | `claude-sonnet-4-6` |
-| `sdk` | `@anthropic-ai/sdk` |
+| `llm_provider` | OpenRouter (routes to Anthropic, OpenAI, Google, Meta, etc.) |
+| `llm_model` | `anthropic/claude-sonnet-4.5` (default; change via `OPENROUTER_MODEL`) |
+| `sdk` | `openai` (OpenAI-protocol, pointed at `https://openrouter.ai/api/v1`) |
 
 ## Mobile
 

@@ -1,19 +1,33 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { logger } from "./logger";
 
-const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-4-6";
+/**
+ * AI layer — goes through OpenRouter, which is OpenAI-protocol compatible
+ * and routes to Anthropic, OpenAI, Google, Meta, etc. under one account.
+ * Swap the model string to swap providers; no code change needed.
+ */
 
-let _client: Anthropic | null = null;
-function client(): Anthropic | null {
+const MODEL = process.env.OPENROUTER_MODEL ?? "anthropic/claude-sonnet-4.5";
+
+let _client: OpenAI | null = null;
+function client(): OpenAI | null {
   if (_client) return _client;
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;
-  _client = new Anthropic({ apiKey });
+  _client = new OpenAI({
+    apiKey,
+    baseURL: "https://openrouter.ai/api/v1",
+    defaultHeaders: {
+      // OpenRouter surfaces these on the rankings dashboard.
+      "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+      "X-Title": "Krit",
+    },
+  });
   return _client;
 }
 
 export function aiEnabled(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(process.env.OPENROUTER_API_KEY);
 }
 
 export interface TutorContext {
@@ -42,7 +56,7 @@ export function buildTutorSystemPrompt(ctx: TutorContext): string {
   if (ctx.pathTitle) lines.push(`Current path: ${ctx.pathTitle}.`);
   if (ctx.lessonTitle) lines.push(`Current lesson: ${ctx.lessonTitle}.`);
   if (ctx.lessonSummary) {
-    lines.push("Lesson summary (verbatim, cache-pinned):");
+    lines.push("Lesson summary (verbatim):");
     lines.push(ctx.lessonSummary);
   }
   if (ctx.skillHints?.length) {
@@ -74,25 +88,19 @@ export async function* streamTutorReply(
   }
 
   try {
-    // Cache the (usually longer) system prompt across turns. The SDK's
-    // TextBlockParam type doesn't yet expose cache_control in some versions,
-    // so we type-erase just that field at the boundary.
-    const systemBlocks = [
-      { type: "text", text: system, cache_control: { type: "ephemeral" } },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ] as unknown as any;
-
-    const stream = await c.messages.stream({
+    const stream = await c.chat.completions.create({
       model: MODEL,
+      stream: true,
       max_tokens: 800,
-      system: systemBlocks,
-      messages: history.map((m) => ({ role: m.role, content: m.content })),
+      messages: [
+        { role: "system", content: system },
+        ...history.map((m) => ({ role: m.role, content: m.content })),
+      ],
     });
 
-    for await (const event of stream) {
-      if (event.type === "content_block_delta" && event.delta.type === "text_delta") {
-        yield event.delta.text;
-      }
+    for await (const chunk of stream) {
+      const delta = chunk.choices[0]?.delta?.content;
+      if (delta) yield delta;
     }
   } catch (e) {
     logger.error({ err: e }, "tutor_stream_failed");
@@ -102,7 +110,7 @@ export async function* streamTutorReply(
 
 function fallbackTutorReply(userMsg: string): string {
   return [
-    "The AI tutor isn't configured yet (no `ANTHROPIC_API_KEY`), so here's a human-written nudge:",
+    "The AI tutor isn't configured yet (no `OPENROUTER_API_KEY`), so here's a human-written nudge:",
     "",
     "- Re-read the lesson's **Key takeaways** section.",
     "- Try the **Try it** block with a small variation — change a column, a filter, or a join side.",
