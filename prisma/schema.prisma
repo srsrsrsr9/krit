@@ -64,6 +64,27 @@ model Workspace {
   credentials         Credential[]
   assignments         Assignment[]
   roles               RoleProfile[]
+  invites             WorkspaceInvite[]
+}
+
+// Shareable signup links (no email infra needed). Anyone with the token
+// can claim a seat in this workspace at the chosen role.
+model WorkspaceInvite {
+  id          String   @id
+  workspaceId String
+  token       String   @unique
+  role        Role     @default(LEARNER)
+  roleProfileId String?
+  createdById String
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+  maxUses     Int      @default(1)
+  uses        Int      @default(0)
+  revokedAt   DateTime?
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
 }
 
 enum Role {

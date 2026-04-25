@@ -3,9 +3,11 @@ import { currentMembership } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatMinutes } from "@/lib/utils";
 import { LEVEL_LABEL } from "@/lib/progress";
-import { BookOpen } from "lucide-react";
+import { AUTHOR_ROLES } from "@/lib/roles";
+import { BookOpen, Pencil, Plus } from "lucide-react";
 
 export default async function WorkspacePaths() {
   const m = await currentMembership();
@@ -20,12 +22,19 @@ export default async function WorkspacePaths() {
     orderBy: { updatedAt: "desc" },
   });
 
+  const canAuthor = AUTHOR_ROLES.includes(m.role);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Paths are curated sequences over your skill graph. In production, this page gates author tooling.
+          Paths are curated sequences over your skill graph.
         </p>
+        {canAuthor && (
+          <Link href="/workspace/paths/new">
+            <Button size="sm" className="gap-1"><Plus className="h-4 w-4" />New path</Button>
+          </Link>
+        )}
       </div>
       <div className="overflow-hidden rounded-lg border border-border">
         <table className="w-full text-sm">
@@ -37,6 +46,7 @@ export default async function WorkspacePaths() {
               <th className="px-4 py-2 font-medium">Duration</th>
               <th className="px-4 py-2 font-medium">Enrolled</th>
               <th className="px-4 py-2 font-medium">Status</th>
+              <th className="px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
@@ -64,11 +74,18 @@ export default async function WorkspacePaths() {
                     {p.status}
                   </Badge>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  {canAuthor && (
+                    <Link href={`/workspace/paths/${p.slug}/edit`} className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                      <Pencil className="h-3.5 w-3.5" /> Edit
+                    </Link>
+                  )}
+                </td>
               </tr>
             ))}
             {paths.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
+                <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
                   No paths yet.
                 </td>
               </tr>
@@ -76,12 +93,6 @@ export default async function WorkspacePaths() {
           </tbody>
         </table>
       </div>
-      <Card>
-        <CardContent className="p-5 text-xs text-muted-foreground">
-          Path authoring UI (AI-assisted outline → draft → publish) is scoped for the next iteration. The data
-          model already supports block content, versioned questions, rubrics, and skill mappings.
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { currentUser, currentMembership } from "@/lib/auth";
 import { db } from "@/lib/db";
+
+// Catalog changes infrequently — cache the page for 60s per workspace.
+export const revalidate = 60;
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LEVEL_LABEL } from "@/lib/progress";
