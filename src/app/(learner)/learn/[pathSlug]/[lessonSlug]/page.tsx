@@ -20,9 +20,8 @@ export default async function LessonPage({
   params: Promise<{ pathSlug: string; lessonSlug: string }>;
 }) {
   const { pathSlug, lessonSlug } = await params;
-  const user = await currentUser();
+  const [user, m] = await Promise.all([currentUser(), currentMembership()]);
   if (!user) redirect("/sign-in");
-  const m = await currentMembership();
 
   // Path + lesson in parallel — independent queries.
   const [path, lesson] = await Promise.all([
@@ -42,31 +41,45 @@ export default async function LessonPage({
   ]);
   if (!path || !lesson) notFound();
 
-  // Upsert enrollment + lessonProgress. Use upsert for a single round-trip
-  // each instead of find+create.
-  const enrollment = await db.enrollment.upsert({
-    where: { userId_pathId: { userId: user.id, pathId: path.id } },
-    create: { id: cuid(), userId: user.id, pathId: path.id, lastActivityAt: new Date() },
-    update: { lastActivityAt: new Date() },
-  });
-  const lessonProgressRow = await db.lessonProgress.upsert({
-    where: { enrollmentId_lessonId: { enrollmentId: enrollment.id, lessonId: lesson.id } },
-    create: { id: cuid(), enrollmentId: enrollment.id, lessonId: lesson.id },
-    update: {},
-  });
-  const isFirstView = lessonProgressRow.startedAt.getTime() > Date.now() - 3000;
+  // Read everything we need to render in parallel. The lessonProgress
+  // findFirst joins through enrollment so we don't have to wait for the
+  // enrollment row first.
+  const [enrollment, reflections, existingProgress] = await Promise.all([
+    db.enrollment.upsert({
+      where: { userId_pathId: { userId: user.id, pathId: path.id } },
+      create: { id: cuid(), userId: user.id, pathId: path.id, lastActivityAt: new Date() },
+      update: { lastActivityAt: new Date() },
+    }),
+    db.reflection.findMany({
+      where: { userId: user.id, lessonId: lesson.id },
+      select: { prompt: true, content: true },
+    }),
+    db.lessonProgress.findFirst({
+      where: { lessonId: lesson.id, enrollment: { userId: user.id, pathId: path.id } },
+      select: { completedAt: true, startedAt: true },
+    }),
+  ]);
 
-  // Fire-and-forget: LRS writes don't need to block the render.
-  recordEvent({
+  // Fire-and-forget: write the started LessonProgress row (if missing) and
+  // the LRS event. Neither blocks render. Idempotent under enrollmentId+
+  // lessonId unique key.
+  if (!existingProgress) {
+    void db.lessonProgress
+      .create({
+        data: { id: cuid(), enrollmentId: enrollment.id, lessonId: lesson.id },
+      })
+      .catch(() => {});
+  }
+  void recordEvent({
     userId: user.id,
     workspaceId: path.workspaceId,
-    verb: isFirstView ? "started" : "viewed",
+    verb: existingProgress ? "viewed" : "started",
     objectType: "lesson",
     objectId: lesson.id,
     context: { pathId: path.id },
   }).catch(() => {});
 
-  const existingProgress = lessonProgressRow;
+  const savedReflections = Object.fromEntries(reflections.map((r) => [r.prompt, r.content]));
 
   const blocks = LessonBlocks.parse(lesson.blocks);
 
@@ -76,12 +89,6 @@ export default async function LessonPage({
 
   const nextHref = nextItem ? linkFor(nextItem, path.slug) : null;
   const prevHref = prevItem ? linkFor(prevItem, path.slug) : null;
-
-  const reflections = await db.reflection.findMany({
-    where: { userId: user.id, lessonId: lesson.id },
-    select: { prompt: true, content: true },
-  });
-  const savedReflections = Object.fromEntries(reflections.map((r) => [r.prompt, r.content]));
 
   const summary = blocks
     .filter((b) => b.type === "markdown" || b.type === "heading" || b.type === "keyTakeaways")

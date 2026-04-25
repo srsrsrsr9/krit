@@ -7,7 +7,10 @@ import { logger } from "./logger";
  * Swap the model string to swap providers; no code change needed.
  */
 
-const MODEL = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-chat-v3.1";
+// `deepseek/deepseek-chat` is the stable alias that always points at
+// the latest DeepSeek chat model. Specific version slugs (v3, v3.1)
+// come and go; this one stays.
+const MODEL = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-chat";
 
 let _client: OpenAI | null = null;
 function client(): OpenAI | null {

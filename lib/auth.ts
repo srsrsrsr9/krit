@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { getIronSession, type SessionOptions } from "iron-session";
 import { db } from "./db";
@@ -35,13 +36,16 @@ export async function signOut() {
   session.destroy();
 }
 
-export async function currentUser() {
+// React.cache() dedupes calls within a single server render. The lesson
+// page used to query the user twice (once in currentUser, once in
+// currentMembership.user). Now both reuse a single round-trip.
+export const currentUser = cache(async () => {
   const session = await getSession();
   if (!session.userId) return null;
   return db.user.findUnique({ where: { id: session.userId } });
-}
+});
 
-export async function currentMembership() {
+export const currentMembership = cache(async () => {
   const session = await getSession();
   if (!session.userId || !session.workspaceId) return null;
   return db.membership.findUnique({
@@ -50,7 +54,7 @@ export async function currentMembership() {
     },
     include: { workspace: true, user: true },
   });
-}
+});
 
 export async function requireUser() {
   const user = await currentUser();

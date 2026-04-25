@@ -13,6 +13,7 @@ import { cn, formatMinutes, pct } from "@/lib/utils";
 export default async function HomePage() {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
+  // currentMembership reuses the cached user lookup from currentUser above.
   const membership = await currentMembership();
 
   // All the independent queries fire in parallel — big perceived-perf win.

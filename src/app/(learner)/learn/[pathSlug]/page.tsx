@@ -14,9 +14,8 @@ import { BookOpen, ClipboardCheck, Clock, FolderOpen, Target, CheckCircle2, Circ
 
 export default async function PathPage({ params }: { params: Promise<{ pathSlug: string }> }) {
   const { pathSlug } = await params;
-  const user = await currentUser();
+  const [user, m] = await Promise.all([currentUser(), currentMembership()]);
   if (!user) redirect("/sign-in");
-  const m = await currentMembership();
 
   const path = await db.path.findFirst({
     where: { slug: pathSlug, ...(m ? { workspaceId: m.workspaceId } : {}) },
