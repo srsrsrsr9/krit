@@ -71,7 +71,11 @@ export async function recomputeSkillState(userId: string, skillId: string) {
   });
 }
 
-/** Compute path completion %: (completed required items) / (total required). */
+/**
+ * Compute path completion %: (completed required items) / (total required).
+ * Batches all attempt + submission lookups into 2 queries instead of 2 per
+ * required item — major perf win on paths with many items.
+ */
 export async function computePathProgress(enrollmentId: string) {
   const enrollment = await db.enrollment.findUnique({
     where: { id: enrollmentId },
@@ -86,29 +90,35 @@ export async function computePathProgress(enrollmentId: string) {
   const total = required.length;
   if (total === 0) return { completed: 0, total: 0, pct: 0, done: true };
 
+  const assessmentIds = required.flatMap((i) => (i.kind === "ASSESSMENT" && i.assessmentId ? [i.assessmentId] : []));
+  const projectIds = required.flatMap((i) => (i.kind === "PROJECT" && i.projectId ? [i.projectId] : []));
+
+  const [passedAttempts, reviewedSubs] = await Promise.all([
+    assessmentIds.length
+      ? db.attempt.findMany({
+          where: { userId: enrollment.userId, assessmentId: { in: assessmentIds }, passed: true },
+          select: { assessmentId: true },
+        })
+      : Promise.resolve([]),
+    projectIds.length
+      ? db.submission.findMany({
+          where: { userId: enrollment.userId, projectId: { in: projectIds }, status: "REVIEWED" },
+          select: { projectId: true },
+        })
+      : Promise.resolve([]),
+  ]);
+  const passedAssessments = new Set(passedAttempts.map((a) => a.assessmentId));
+  const reviewedProjects = new Set(reviewedSubs.map((s) => s.projectId));
+
   let completed = 0;
   for (const item of required) {
     if (item.kind === "LESSON" && item.lessonId) {
       const lp = enrollment.lessonProgress.find((p) => p.lessonId === item.lessonId);
       if (lp?.completedAt) completed++;
     } else if (item.kind === "ASSESSMENT" && item.assessmentId) {
-      const passed = await db.attempt.findFirst({
-        where: {
-          userId: enrollment.userId,
-          assessmentId: item.assessmentId,
-          passed: true,
-        },
-      });
-      if (passed) completed++;
+      if (passedAssessments.has(item.assessmentId)) completed++;
     } else if (item.kind === "PROJECT" && item.projectId) {
-      const reviewed = await db.submission.findFirst({
-        where: {
-          userId: enrollment.userId,
-          projectId: item.projectId,
-          status: "REVIEWED",
-        },
-      });
-      if (reviewed) completed++;
+      if (reviewedProjects.has(item.projectId)) completed++;
     }
   }
 

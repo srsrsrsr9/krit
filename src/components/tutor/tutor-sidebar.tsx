@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Bot, Send, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Bot, Send, Sparkles, AlertCircle, CheckCircle2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,28 @@ export function TutorSidebar({
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
+  const [diag, setDiag] = useState<{ ok: boolean; reason?: string; model?: string; status?: number; raw?: string } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/tutor/check")
+      .then((r) => r.json())
+      .then((j) => {
+        if (cancelled) return;
+        if (j.ok) setDiag({ ok: true, model: j.model });
+        else {
+          const upBody = j.upstream?.body;
+          const reason =
+            j.reason ??
+            (typeof upBody === "object" && upBody !== null && "error" in upBody ? JSON.stringify((upBody as { error: unknown }).error) : null) ??
+            (typeof upBody === "string" ? upBody : null) ??
+            "Unknown — see /api/tutor/check for details.";
+          setDiag({ ok: false, reason, model: j.model, status: j.upstream?.status, raw: JSON.stringify(j, null, 2) });
+        }
+      })
+      .catch(() => { if (!cancelled) setDiag({ ok: false, reason: "Could not reach /api/tutor/check" }); });
+    return () => { cancelled = true; };
+  }, []);
 
   const suggestedPrompts = [
     "Explain this lesson like I've never coded",
@@ -111,6 +133,23 @@ export function TutorSidebar({
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-3">
+        {diag && !diag.ok && (
+          <div className="mb-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-xs">
+            <div className="mb-1 flex items-center gap-1.5 font-semibold text-destructive">
+              <AlertCircle className="h-3.5 w-3.5" /> Tutor not configured
+            </div>
+            <p className="text-muted-foreground">
+              {diag.status ? `Upstream returned ${diag.status}. ` : ""}{diag.reason}
+            </p>
+            {diag.model && <p className="mt-1 text-muted-foreground">Model: <code className="rounded bg-muted px-1">{diag.model}</code></p>}
+            <details className="mt-2"><summary className="cursor-pointer text-muted-foreground">Raw diagnostic</summary><pre className="mt-1 max-h-40 overflow-auto whitespace-pre-wrap text-[10px] text-muted-foreground">{diag.raw}</pre></details>
+          </div>
+        )}
+        {diag?.ok && messages.length === 0 && (
+          <div className="mb-3 flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+            <CheckCircle2 className="h-3.5 w-3.5" /> Connected · {diag.model}
+          </div>
+        )}
         {messages.length === 0 ? (
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">

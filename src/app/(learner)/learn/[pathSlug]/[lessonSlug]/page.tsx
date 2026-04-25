@@ -77,6 +77,12 @@ export default async function LessonPage({
   const nextHref = nextItem ? linkFor(nextItem, path.slug) : null;
   const prevHref = prevItem ? linkFor(prevItem, path.slug) : null;
 
+  const reflections = await db.reflection.findMany({
+    where: { userId: user.id, lessonId: lesson.id },
+    select: { prompt: true, content: true },
+  });
+  const savedReflections = Object.fromEntries(reflections.map((r) => [r.prompt, r.content]));
+
   const summary = blocks
     .filter((b) => b.type === "markdown" || b.type === "heading" || b.type === "keyTakeaways")
     .slice(0, 12)
@@ -111,7 +117,7 @@ export default async function LessonPage({
           </div>
         </header>
 
-        <BlockRenderer blocks={blocks} />
+        <BlockRenderer blocks={blocks} lessonId={lesson.id} savedReflections={savedReflections} />
 
         <Card>
           <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">

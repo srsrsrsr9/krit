@@ -659,6 +659,20 @@ enum TutorRole {
   SYSTEM
 }
 
+// Learner reflections from Reflect blocks. Persisted per (user, lesson, prompt).
+model Reflection {
+  id        String   @id
+  userId    String
+  lessonId  String
+  prompt    String   // first 200 chars of the prompt — dedup key
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId, prompt])
+  @@index([userId, lessonId])
+}
+
 model TutorMessage {
   id             String   @id
   conversationId String

@@ -9,17 +9,33 @@ import type { ContentBlock } from "@/lib/content/blocks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
 
-export function BlockRenderer({ blocks }: { blocks: ContentBlock[] }) {
+export function BlockRenderer({
+  blocks,
+  lessonId,
+  savedReflections,
+}: {
+  blocks: ContentBlock[];
+  lessonId?: string;
+  savedReflections?: Record<string, string>;
+}) {
   return (
     <div className="prose-krit space-y-6">
       {blocks.map((b, i) => (
-        <BlockOne key={i} block={b} />
+        <BlockOne key={i} block={b} lessonId={lessonId} savedReflections={savedReflections ?? {}} />
       ))}
     </div>
   );
 }
 
-function BlockOne({ block }: { block: ContentBlock }) {
+function BlockOne({
+  block,
+  lessonId,
+  savedReflections,
+}: {
+  block: ContentBlock;
+  lessonId?: string;
+  savedReflections: Record<string, string>;
+}) {
   switch (block.type) {
     case "heading": {
       const Tag = `h${block.level}` as "h1" | "h2" | "h3";
@@ -46,7 +62,7 @@ function BlockOne({ block }: { block: ContentBlock }) {
     case "quiz":
       return <InlineQuiz block={block} />;
     case "reflect":
-      return <Reflect prompt={block.prompt} />;
+      return <Reflect prompt={block.prompt} lessonId={lessonId} initial={savedReflections[block.prompt.slice(0, 200)] ?? ""} />;
     case "keyTakeaways":
       return <KeyTakeaways points={block.points} />;
     case "tryIt":
@@ -190,17 +206,41 @@ function InlineQuiz({ block }: { block: Extract<ContentBlock, { type: "quiz" }> 
   );
 }
 
-function Reflect({ prompt }: { prompt: string }) {
-  const [value, setValue] = useState("");
-  const [saved, setSaved] = useState(false);
+function Reflect({ prompt, lessonId, initial }: { prompt: string; lessonId?: string; initial: string }) {
+  const [value, setValue] = useState(initial);
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">(initial ? "saved" : "idle");
+  const dirty = value !== initial && status !== "saving";
+
+  async function save() {
+    if (!lessonId) {
+      setStatus("error");
+      return;
+    }
+    setStatus("saving");
+    try {
+      const res = await fetch("/api/reflections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lessonId, prompt, content: value }),
+      });
+      setStatus(res.ok ? "saved" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
   return (
     <div className="not-prose rounded-lg border border-dashed border-border bg-muted/30 p-5">
       <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Reflect</div>
       <div className="mb-3 text-sm">{prompt}</div>
-      <Textarea value={value} onChange={(e) => setValue(e.target.value)} placeholder="Write your thinking…" />
-      <Button size="sm" className="mt-3" onClick={() => setSaved(true)} type="button">
-        {saved ? "Saved" : "Save"}
-      </Button>
+      <Textarea value={value} onChange={(e) => { setValue(e.target.value); if (status === "saved") setStatus("idle"); }} placeholder="Write your thinking…" />
+      <div className="mt-3 flex items-center gap-3">
+        <Button size="sm" onClick={save} disabled={status === "saving" || (!dirty && status === "saved")} type="button">
+          {status === "saving" ? "Saving…" : status === "saved" && !dirty ? "Saved" : "Save"}
+        </Button>
+        {status === "error" && <span className="text-xs text-destructive">Couldn't save — try again.</span>}
+        {status === "saved" && !dirty && <span className="text-xs text-muted-foreground">Saved to your profile</span>}
+      </div>
     </div>
   );
 }
