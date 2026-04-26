@@ -23,6 +23,11 @@ const BLOCK_LABEL: Record<BlockType, string> = {
   reflect: "Reflect",
   keyTakeaways: "Key takeaways",
   tryIt: "Try it",
+  remotion: "Animation",
+  animatedTimeline: "Timeline",
+  sortableSteps: "Sortable",
+  joinExplorer: "JOIN explorer",
+  sqlPlayground: "SQL playground",
 };
 
 function newBlock(type: BlockType): ContentBlock {
@@ -40,6 +45,11 @@ function newBlock(type: BlockType): ContentBlock {
     case "reflect": return { type: "reflect", prompt: "How does this apply to your work?" };
     case "keyTakeaways": return { type: "keyTakeaways", points: ["First takeaway"] };
     case "tryIt": return { type: "tryIt", instruction: "Now you try.", lang: "sql", starter: "", expected: "" };
+    case "remotion": return { type: "remotion", composition: "sqlExecutionOrder", durationFrames: 360, fps: 30, width: 1280, height: 720, props: {} };
+    case "animatedTimeline": return { type: "animatedTimeline", steps: [{ label: "Step one", body: "What happens" }, { label: "Step two", body: "What happens next" }] };
+    case "sortableSteps": return { type: "sortableSteps", prompt: "Drag into the right order.", items: [{ id: "a", label: "First" }, { id: "b", label: "Second" }] };
+    case "joinExplorer": return { type: "joinExplorer", left: { name: "left", keyColumn: "id", rows: [{ id: 1 }] }, right: { name: "right", keyColumn: "id", rows: [{ id: 1 }] } };
+    case "sqlPlayground": return { type: "sqlPlayground", prompt: "Write a query.", tables: [{ name: "t", columns: ["id"], rows: [[1]] }] };
   }
 }
 
@@ -226,5 +236,42 @@ function BlockFields({ block, onChange }: { block: ContentBlock; onChange: (patc
           <Textarea rows={3} value={block.expected ?? ""} onChange={(e) => onChange({ expected: e.target.value })} placeholder="Reference solution (optional)" className="font-mono text-xs" />
         </div>
       );
+    case "remotion":
+    case "animatedTimeline":
+    case "sortableSteps":
+    case "joinExplorer":
+    case "sqlPlayground":
+      // Rich editors for these block types are scoped for the AI authoring
+      // step. For now, raw JSON edit so existing content can be tweaked.
+      return <RawJsonField block={block} onChange={onChange} />;
   }
+}
+
+function RawJsonField({ block, onChange }: { block: ContentBlock; onChange: (patch: Partial<ContentBlock>) => void }) {
+  const [text, setText] = useState(JSON.stringify(block, null, 2));
+  const [err, setErr] = useState<string | null>(null);
+  return (
+    <div className="space-y-2">
+      <div className="text-xs text-muted-foreground">
+        Rich editor for {block.type} coming with AI authoring. For now you can edit the raw JSON.
+      </div>
+      <Textarea
+        rows={10}
+        value={text}
+        onChange={(e) => {
+          setText(e.target.value);
+          try {
+            const parsed = JSON.parse(e.target.value) as ContentBlock;
+            setErr(null);
+            // Replace whole block with patch keys.
+            onChange(parsed as Partial<ContentBlock>);
+          } catch (e) {
+            setErr(e instanceof Error ? e.message : "invalid JSON");
+          }
+        }}
+        className="font-mono text-xs"
+      />
+      {err && <div className="text-xs text-destructive">{err}</div>}
+    </div>
+  );
 }

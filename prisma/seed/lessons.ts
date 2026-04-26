@@ -108,6 +108,18 @@ FROM customers
 ORDER BY name ASC;`,
       },
       {
+        type: "sortableSteps",
+        prompt: "Drag these clauses into the order you write them in a SQL query.",
+        hint: "Start with what you want to read, then where it lives, then how to filter and arrange it.",
+        items: [
+          { id: "select", label: "SELECT", detail: "the columns you want" },
+          { id: "from", label: "FROM", detail: "the table to read" },
+          { id: "where", label: "WHERE", detail: "filter rows" },
+          { id: "order", label: "ORDER BY", detail: "sort the result" },
+          { id: "limit", label: "LIMIT", detail: "cap the rows" },
+        ],
+      },
+      {
         type: "keyTakeaways",
         points: [
           "Tables are rows of typed columns; rows are usually identified by a primary key.",
@@ -392,7 +404,17 @@ WHERE (plan = 'pro' AND signed_up_at > '2024-01-01')
     blocks: [
       {
         type: "markdown",
-        md: "Real databases don't live in one table. **Joins** are how you connect them. The mental model is simple once it clicks; until then it feels like magic. Let's demystify it.",
+        md: "Real databases don't live in one table. **Joins** are how you connect them. The mental model is simple once it clicks; until then it feels like magic. Let's demystify it — visually first.",
+      },
+      {
+        type: "remotion",
+        composition: "joinFlow",
+        durationFrames: 270,
+        fps: 30,
+        width: 1280,
+        height: 720,
+        caption: "INNER JOIN — only matching rows survive. Press play.",
+        props: { joinType: "INNER" },
       },
       {
         type: "heading",
@@ -503,6 +525,30 @@ Margaret | NULL       ← no orders`,
         md: "- **RIGHT JOIN** — mirror of LEFT; rarely needed (you can always flip the tables).\n- **FULL OUTER JOIN** — every row from both sides, NULLs where no match. Useful for reconciling two sources.\n- **CROSS JOIN** — Cartesian product (every row × every row). Useful with `generate_series` for filling date gaps; dangerous by accident.",
       },
       {
+        type: "joinExplorer",
+        prompt: "Click each join type to see exactly which rows survive. Notice the orphan order 104 and the customer with no orders.",
+        left: {
+          name: "customers",
+          keyColumn: "id",
+          rows: [
+            { id: 1, name: "Ada" },
+            { id: 2, name: "Grace" },
+            { id: 3, name: "Alan" },
+            { id: 4, name: "Margaret" },
+          ],
+        },
+        right: {
+          name: "orders",
+          keyColumn: "customer_id",
+          rows: [
+            { order_id: 101, customer_id: 1, total: 25 },
+            { order_id: 102, customer_id: 1, total: 18 },
+            { order_id: 103, customer_id: 3, total: 9 },
+            { order_id: 104, customer_id: 5, total: 42 },
+          ],
+        },
+      },
+      {
         type: "quiz",
         prompt: "You want **every** customer listed exactly once, alongside their total revenue (0 if none). Which is safest?",
         multi: false,
@@ -544,7 +590,17 @@ ORDER BY revenue_cents DESC;`,
     blocks: [
       {
         type: "markdown",
-        md: "Aggregation is where SQL turns data into answers. Five aggregate functions and one new clause unlock most analytic questions you'll ever write.",
+        md: "Aggregation is where SQL turns data into answers. Five aggregate functions and one new clause unlock most analytic questions you'll ever write. Here's what `GROUP BY` actually does — visually:",
+      },
+      {
+        type: "remotion",
+        composition: "groupByCollapse",
+        durationFrames: 270,
+        fps: 30,
+        width: 1280,
+        height: 720,
+        caption: "Many rows collapse into one row per group, then aggregates resolve.",
+        props: {},
       },
       {
         type: "heading",
@@ -651,13 +707,33 @@ ORDER BY month DESC, revenue_dollars DESC;`,
         md: "When joins fan out, aggregating distinct IDs is the cleanest way to say \"unique customers, please\".",
       },
       {
-        type: "tryIt",
-        instruction: "Write a query that returns each city and the number of customers from that city, only showing cities with at least 2 customers, sorted most first.",
+        type: "sqlPlayground",
+        prompt: "Write a query that returns each city and the number of customers from it, showing only cities with at least 2 customers, sorted most-first. Press Run — the engine is real.",
+        starter: "-- your query here\nSELECT city, COUNT(*) AS n\nFROM customers\nGROUP BY city;",
         expected: `SELECT city, COUNT(*) AS n
 FROM customers
 GROUP BY city
 HAVING COUNT(*) >= 2
 ORDER BY n DESC;`,
+        hint: "WHERE filters rows; HAVING filters groups. Use HAVING for the >= 2 condition.",
+        tables: [
+          {
+            name: "customers",
+            columns: ["id", "name", "city", "plan"],
+            rows: [
+              [1, "Ada", "London", "pro"],
+              [2, "Grace", "New York", "free"],
+              [3, "Alan", "London", "pro"],
+              [4, "Margaret", "Pittsburgh", "starter"],
+              [5, "Linus", "London", "starter"],
+              [6, "Hedy", "New York", "pro"],
+              [7, "Donald", "Mumbai", "free"],
+              [8, "Edsger", "Mumbai", "pro"],
+              [9, "Barbara", "Mumbai", "starter"],
+              [10, "Tony", "Pittsburgh", "free"],
+            ],
+          },
+        ],
       },
       {
         type: "keyTakeaways",
@@ -689,8 +765,43 @@ ORDER BY n DESC;`,
         text: "The four-step translation",
       },
       {
-        type: "markdown",
-        md: "**1. Clarify the question.** Ask: *at what grain is the answer?* One row per customer? Per order? Per month? This decides the shape of your result.\n\n**2. Identify the tables and the joins.** Which tables hold the facts? Which keys connect them? Draw it on paper if it helps.\n\n**3. Filter before you aggregate.** Apply WHERE early to shrink the working set. Use parentheses; be explicit about NULL.\n\n**4. Aggregate, then post-filter.** GROUP BY at the grain you decided in step 1. Use HAVING only for group-level filters.",
+        type: "animatedTimeline",
+        steps: [
+          {
+            label: "Clarify the grain",
+            body: "Ask: *at what grain is the answer?* One row per customer? Per order? Per month? **This decides the shape of your result.**",
+          },
+          {
+            label: "Identify tables and joins",
+            body: "Which tables hold the facts? Which keys connect them? Draw it on paper if it helps.",
+          },
+          {
+            label: "Filter before you aggregate",
+            body: "Apply `WHERE` early to shrink the working set. Use parentheses; be explicit about NULL.",
+            code: "WHERE plan IN ('starter','pro')\n  AND created_at >= NOW() - INTERVAL '6 months'",
+          },
+          {
+            label: "Aggregate, then post-filter",
+            body: "`GROUP BY` at the grain you decided in step 1. Use `HAVING` only for group-level filters.",
+            code: "GROUP BY city\nHAVING COUNT(*) >= 10",
+          },
+        ],
+      },
+      {
+        type: "callout",
+        tone: "tip",
+        title: "Bonus: SQL doesn't run in the order you write it",
+        md: "Watch the clauses re-shuffle into their actual execution order. This explains why you can't reference a `SELECT` alias in `WHERE`.",
+      },
+      {
+        type: "remotion",
+        composition: "sqlExecutionOrder",
+        durationFrames: 360,
+        fps: 30,
+        width: 1280,
+        height: 720,
+        caption: "Written order vs. execution order — the source of countless surprises.",
+        props: {},
       },
       {
         type: "heading",

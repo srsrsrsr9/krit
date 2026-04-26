@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CheckCircle2, XCircle, Lightbulb, Info, AlertTriangle, PartyPopper, PlayCircle } from "lucide-react";
@@ -8,6 +9,20 @@ import { cn } from "@/lib/utils";
 import type { ContentBlock } from "@/lib/content/blocks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/input";
+import { AnimatedTimelineBlock } from "./blocks/animated-timeline-block";
+import { SortableStepsBlock } from "./blocks/sortable-steps-block";
+import { JoinExplorerBlock } from "./blocks/join-explorer-block";
+
+// Lazy-load the heavy ones — Remotion + alasql shouldn't sit in the
+// initial lesson page bundle.
+const RemotionPlayerBlock = dynamic(
+  () => import("./blocks/remotion-player-block").then((m) => m.RemotionPlayerBlock),
+  { ssr: false, loading: () => <div className="aspect-video w-full rounded-lg border border-border bg-card" /> },
+);
+const SqlPlaygroundBlock = dynamic(
+  () => import("./blocks/sql-playground-block").then((m) => m.SqlPlaygroundBlock),
+  { ssr: false, loading: () => <div className="h-48 w-full rounded-lg border border-border bg-card" /> },
+);
 
 export function BlockRenderer({
   blocks,
@@ -67,6 +82,26 @@ function BlockOne({
       return <KeyTakeaways points={block.points} />;
     case "tryIt":
       return <TryIt block={block} />;
+    case "remotion":
+      return (
+        <RemotionPlayerBlock
+          composition={block.composition}
+          durationFrames={block.durationFrames}
+          fps={block.fps}
+          width={block.width}
+          height={block.height}
+          caption={block.caption}
+          inputProps={block.props}
+        />
+      );
+    case "animatedTimeline":
+      return <AnimatedTimelineBlock title={block.title} steps={block.steps} />;
+    case "sortableSteps":
+      return <SortableStepsBlock prompt={block.prompt} items={block.items} hint={block.hint} />;
+    case "joinExplorer":
+      return <JoinExplorerBlock prompt={block.prompt} left={block.left} right={block.right} />;
+    case "sqlPlayground":
+      return <SqlPlaygroundBlock prompt={block.prompt} tables={block.tables} starter={block.starter} expected={block.expected} hint={block.hint} />;
   }
 }
 
