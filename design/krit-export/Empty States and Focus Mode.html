@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · Empty States + Focus Mode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+  :root {
+    --bg: oklch(0.985 0.006 80);
+    --ink: oklch(0.14 0.015 264);
+    --ink-2: oklch(0.42 0.01 264);
+    --ink-3: oklch(0.68 0.008 264);
+    --indigo: oklch(0.52 0.22 264);
+    --violet: oklch(0.52 0.22 290);
+    --rule: oklch(0.88 0.008 264);
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); min-height: 100vh; }
+
+  @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes node-pulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.15);opacity:1} }
+  @keyframes orbit { from{transform:rotate(0deg) translateX(32px) rotate(0deg)} to{transform:rotate(360deg) translateX(32px) rotate(-360deg)} }
+  @keyframes shimmer { from{background-position:200% 0} to{background-position:-200% 0} }
+  @keyframes ambient-pulse { 0%,100%{opacity:0.15} 50%{opacity:0.3} }
+  @keyframes reading-cursor { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .fade-up { animation: fade-up 0.5s ease forwards; }
+  .btn-primary {
+    background: var(--indigo); color: #fff; font-family: var(--sans); font-weight: 500;
+    padding: 0.75rem 1.5rem; border-radius: 6px; border: none; cursor: pointer;
+    font-size: 0.9375rem; transition: background 0.18s, transform 0.12s;
+  }
+  .btn-primary:hover { background: var(--violet); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent; color: var(--indigo); font-family: var(--sans); font-weight: 500;
+    padding: 0.75rem 1.5rem; border-radius: 6px; border: 1.5px solid oklch(0.88 0.07 264);
+    cursor: pointer; font-size: 0.9375rem; transition: all 0.18s;
+  }
+  .btn-ghost:hover { border-color: var(--indigo); background: oklch(0.94 0.04 264); }
+
+  /* Tab bar */
+  .tab { padding: 0.625rem 1.25rem; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; border: none; transition: all 0.18s; white-space: nowrap; }
+  .tab.active { background: var(--ink); color: white; }
+  .tab:not(.active) { background: transparent; color: var(--ink-2); }
+  .tab:not(.active):hover { background: var(--rule); }
+
+  /* App shell */
+  .app-shell { display: flex; height: calc(100vh - 112px); overflow: hidden; }
+  .sidebar { width: 220px; flex-shrink: 0; background: white; border-right: 1px solid var(--rule); padding: 1.5rem 0; }
+  .sidebar-item { padding: 0.5rem 1.25rem; font-size: 0.875rem; color: var(--ink-2); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 0.625rem; }
+  .sidebar-item.active { color: var(--ink); font-weight: 500; background: oklch(0.94 0.04 264); }
+  .sidebar-item:hover:not(.active) { background: oklch(0.96 0.004 264); }
+  .main-content { flex: 1; overflow-y: auto; padding: 2.5rem; }
+
+  /* Lesson focus mode */
+  .focus-overlay { position: fixed; inset: 0; z-index: 200; transition: background 0.4s; pointer-events: none; }
+  .focus-overlay.active { background: oklch(0.985 0.006 80 / 0.96); pointer-events: auto; }
+  .tutor-sidebar { width: 280px; flex-shrink: 0; border-left: 1px solid var(--rule); background: white; transition: opacity 0.4s, transform 0.4s; }
+  .tutor-sidebar.dimmed { opacity: 0.15; pointer-events: none; }
+
+  /* Preview credential card */
+  .preview-cred { opacity: 0.45; filter: blur(0.5px); position: relative; overflow: hidden; }
+  .preview-cred::after { content: 'Earn this'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--sans); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--indigo); background: oklch(0.94 0.04 264 / 0.8); opacity: 0; transition: opacity 0.2s; }
+  .preview-cred:hover::after { opacity: 1; }
+  .preview-cred:hover { opacity: 0.7; }
+
+  /* Skill graph placeholder */
+  .skill-node { animation: node-pulse 2.5s ease-in-out infinite; }
+
+  /* Sound toggle */
+  .sound-toggle { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 100px; border: 1px solid var(--rule); background: white; cursor: pointer; font-size: 0.8125rem; color: var(--ink-2); transition: all 0.18s; }
+  .sound-toggle.on { border-color: oklch(0.88 0.07 264); color: var(--indigo); background: oklch(0.94 0.04 264); }
+  .sound-toggle:hover { border-color: var(--indigo); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const T = {
+  indigo: 'oklch(0.52 0.22 264)',
+  violet: 'oklch(0.52 0.22 290)',
+  ink: 'oklch(0.14 0.015 264)',
+  ink2: 'oklch(0.42 0.01 264)',
+  ink3: 'oklch(0.68 0.008 264)',
+  bg: 'oklch(0.985 0.006 80)',
+  rule: 'oklch(0.88 0.008 264)',
+  il: 'oklch(0.94 0.04 264)',
+};
+
+/* ── Tiny skill graph illustration ── */
+function MiniGraph({ animated = true }) {
+  const nodes = [
+    { x: 60, y: 100, r: 20, level: 3, label: 'SQL' },
+    { x: 140, y: 55, r: 18, level: 2, label: 'Python' },
+    { x: 140, y: 145, r: 18, level: 0, label: 'Stats' },
+    { x: 220, y: 100, r: 22, level: 0, label: 'ML' },
+  ];
+  const edges = [[0,1],[0,2],[1,3],[2,3]];
+  const lc = l => l===3?T.indigo:l===2?'oklch(0.72 0.15 264)':l===1?'oklch(0.82 0.09 264)':T.rule;
+  return (
+    <svg viewBox="0 0 280 200" width="100%" style={{ maxWidth: 280 }}>
+      {edges.map(([a,b],i) => (
+        <line key={i} x1={nodes[a].x} y1={nodes[a].y} x2={nodes[b].x} y2={nodes[b].y}
+          stroke={T.rule} strokeWidth={1.5} />
+      ))}
+      {nodes.map((n,i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r={n.r} fill={lc(n.level)}
+            className={animated && n.level===0 ? 'skill-node' : ''}
+            style={{ animationDelay: `${i*0.4}s` }} />
+          <text x={n.x} y={n.y+1} textAnchor="middle" dominantBaseline="middle"
+            fontSize="9" fontWeight="500" fill={n.level>=2?'#fff':T.ink2} fontFamily="var(--sans)">
+            {n.label}
+          </text>
+          {n.level > 0 && Array.from({length: n.level*2+1}, (_,k) => {
+            const a = (k/(n.level*2+1)) * Math.PI * 2 - Math.PI/2;
+            return <circle key={k} cx={n.x+Math.cos(a)*(n.r+10)} cy={n.y+Math.sin(a)*(n.r+10)} r={2.5} fill={T.violet} opacity={0.7}/>;
+          })}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* ── App shell wrapper ── */
+function AppShell({ active, children, tutorDimmed = false, focusMode = false }) {
+  const navItems = [
+    { icon: '⌂', label: 'Home', id: 'home' },
+    { icon: '◎', label: 'Skills', id: 'skills' },
+    { icon: '◈', label: 'Credentials', id: 'credentials' },
+    { icon: '◉', label: 'Lessons', id: 'lessons' },
+  ];
+
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* App nav */}
+      <div style={{ background: 'white', borderBottom: `1px solid ${T.rule}`, padding: '0 1.5rem', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, opacity: focusMode ? 0.15 : 1, transition: 'opacity 0.4s' }}>
+        <span style={{ fontFamily: 'var(--serif)', fontSize: '1.1rem', fontWeight: 600, color: T.ink }}>Krit</span>
+        <div style={{ display: 'flex', gap: '0.25rem' }}>
+          {navItems.map(item => (
+            <div key={item.id} style={{
+              padding: '0.375rem 0.75rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.8125rem',
+              fontWeight: item.id===active?600:400,
+              color: item.id===active?T.ink:T.ink3,
+              background: item.id===active?T.il:'transparent',
+            }}>
+              {item.label}
+            </div>
+          ))}
+        </div>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: T.il, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 600, color: T.indigo }}>PS</div>
+      </div>
+
+      {/* Content area */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        {/* Sidebar */}
+        <div style={{ width: 200, background: 'white', borderRight: `1px solid ${T.rule}`, padding: '1.25rem 0', flexShrink: 0, opacity: focusMode ? 0.12 : 1, transition: 'opacity 0.4s' }}>
+          {navItems.map(item => (
+            <div key={item.id} className={`sidebar-item${item.id===active?' active':''}`}>
+              <span style={{ fontSize: '0.875rem', opacity: 0.7 }}>{item.icon}</span>
+              {item.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Main + optional tutor */}
+        <div style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            {children}
+          </div>
+          {tutorDimmed !== undefined && active === 'lessons' && (
+            <div className={`tutor-sidebar${tutorDimmed ? ' dimmed' : ''}`} style={{ overflowY: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: T.ink3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Tutor</p>
+              <div style={{ background: T.il, borderRadius: 8, padding: '1rem' }}>
+                <p style={{ fontSize: '0.8125rem', color: T.ink2, lineHeight: 1.6 }}>
+                  You've spent 4 min on the backpropagation section. Want a quick check-in?
+                </p>
+                <button style={{ marginTop: '0.75rem', fontSize: '0.8125rem', color: T.indigo, background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, padding: 0 }}>Yes, quiz me →</button>
+              </div>
+              <div style={{ borderTop: `1px solid ${T.rule}`, paddingTop: '1rem' }}>
+                <p style={{ fontSize: '0.75rem', color: T.ink3, marginBottom: '0.5rem' }}>Skills this lesson</p>
+                {['Backpropagation','Gradient descent','Chain rule'].map(s => (
+                  <div key={s} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', padding: '0.375rem 0', color: T.ink2 }}>
+                    <span>{s}</span>
+                    <span style={{ color: T.indigo }}>+2 ev</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════
+   EMPTY STATE 1 — Home, no enrollments
+════════════════════════════════════════ */
+function HomeEmpty() {
+  return (
+    <AppShell active="home">
+      <div style={{ padding: '3rem 2.5rem', maxWidth: 720 }}>
+        <div className="fade-up">
+          <p style={{ fontSize: '0.8125rem', color: T.ink3, marginBottom: '0.25rem' }}>Good morning, Priya</p>
+          <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.75rem', color: T.ink, marginBottom: '2.5rem', lineHeight: 1.3 }}>
+            Where would you like to start?
+          </h1>
+        </div>
+
+        {/* Central empty state */}
+        <div className="fade-up" style={{ animationDelay: '0.1s', background: 'white', border: `1px solid ${T.rule}`, borderRadius: 16, padding: '3rem 2.5rem', textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
+            <MiniGraph animated={true} />
+          </div>
+          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.375rem', color: T.ink, marginBottom: '0.75rem' }}>
+            Your skill graph is empty — for now.
+          </h2>
+          <p style={{ fontSize: '0.9375rem', color: T.ink2, lineHeight: 1.7, maxWidth: 400, margin: '0 auto 2rem', fontWeight: 300 }}>
+            Pick a skill goal and Krit will map exactly what you know, what you're missing, and the fastest path forward.
+          </p>
+          <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="btn-primary">Explore skill paths</button>
+            <button className="btn-ghost">Import from LinkedIn</button>
+          </div>
+        </div>
+
+        {/* Suggested paths */}
+        <div className="fade-up" style={{ animationDelay: '0.2s' }}>
+          <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: T.ink3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '1rem' }}>Popular paths this week</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            {[
+              { name: 'ML Engineering', skills: 18, time: '~14 weeks', hot: true },
+              { name: 'Product Management', skills: 12, time: '~8 weeks', hot: false },
+              { name: 'Data Analysis', skills: 10, time: '~6 weeks', hot: false },
+            ].map(p => (
+              <div key={p.name} style={{ background: 'white', border: `1px solid ${T.rule}`, borderRadius: 10, padding: '1.25rem', cursor: 'pointer', transition: 'box-shadow 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow='0 4px 16px oklch(0.52 0.22 264 / 0.08)'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow='none'}>
+                {p.hot && <span style={{ fontSize: '0.7rem', fontWeight: 600, color: T.indigo, textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '0.5rem' }}>Trending</span>}
+                <p style={{ fontWeight: 500, fontSize: '0.9375rem', color: T.ink, marginBottom: '0.25rem' }}>{p.name}</p>
+                <p style={{ fontSize: '0.8125rem', color: T.ink3 }}>{p.skills} skills · {p.time}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </AppShell>
+  );
+}
+
+/* ════════════════════════════════════════
+   EMPTY STATE 2 — Skills, no evidence
+════════════════════════════════════════ */
+function SkillsEmpty() {
+  return (
+    <AppShell active="skills">
+      <div style={{ padding: '3rem 2.5rem' }}>
+        <div className="fade-up" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
+          <div>
+            <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.75rem', color: T.ink, lineHeight: 1.2 }}>Skills</h1>
+            <p style={{ fontSize: '0.9375rem', color: T.ink3, marginTop: '0.375rem', fontWeight: 300 }}>Your evidence log will live here.</p>
+          </div>
+          <button className="btn-ghost" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>Filter</button>
+        </div>
+
+        {/* Empty state */}
+        <div className="fade-up" style={{ animationDelay: '0.1s', display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1, background: 'white', border: `1px solid ${T.rule}`, borderRadius: 16, padding: '3rem', textAlign: 'center' }}>
+            {/* Illustrated empty graph */}
+            <svg viewBox="0 0 200 120" width={200} height={120} style={{ margin: '0 auto 1.75rem', display: 'block' }}>
+              {/* ghost nodes */}
+              {[[40,60],[100,30],[100,90],[160,60]].map(([x,y],i) => (
+                <g key={i}>
+                  <circle cx={x} cy={y} r={20} fill={T.rule} opacity={0.5}
+                    style={{ animation: `node-pulse 2s ${i*0.5}s ease-in-out infinite` }}/>
+                  <circle cx={x} cy={y} r={20} fill="none" stroke={T.rule} strokeWidth={1} strokeDasharray="3,3"/>
+                </g>
+              ))}
+              {[[0,1],[0,2],[1,3],[2,3]].map(([a,b],i) => {
+                const pts = [[40,60],[100,30],[100,90],[160,60]];
+                return <line key={i} x1={pts[a][0]} y1={pts[a][1]} x2={pts[b][0]} y2={pts[b][1]} stroke={T.rule} strokeWidth={1} strokeDasharray="4,3"/>;
+              })}
+            </svg>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.25rem', color: T.ink, marginBottom: '0.625rem' }}>
+              No evidence yet.
+            </h2>
+            <p style={{ fontSize: '0.9375rem', color: T.ink2, lineHeight: 1.7, maxWidth: 360, margin: '0 auto 2rem', fontWeight: 300 }}>
+              Evidence accumulates as you read lessons, complete exercises, and submit work. Start a lesson to collect your first evidence item.
+            </p>
+            <button className="btn-primary">Start your first lesson</button>
+          </div>
+
+          {/* Side explainer */}
+          <div style={{ width: 260, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <p style={{ fontSize: '0.75rem', fontWeight: 500, color: T.ink3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>How evidence works</p>
+            {[
+              { step: '01', title: 'Read a lesson', body: 'Your reading behaviour is logged — time, highlights, re-reads.' },
+              { step: '02', title: 'Complete exercises', body: 'Each correct answer adds a weighted evidence item to the skill.' },
+              { step: '03', title: 'Reach the threshold', body: 'Hit the mastery threshold to unlock your credential.' },
+            ].map(s => (
+              <div key={s.step} style={{ background: 'white', border: `1px solid ${T.rule}`, borderRadius: 10, padding: '1rem' }}>
+                <p style={{ fontFamily: 'var(--serif)', fontSize: '1.25rem', color: T.indigo, opacity: 0.3, lineHeight: 1, marginBottom: '0.375rem' }}>{s.step}</p>
+                <p style={{ fontWeight: 500, fontSize: '0.875rem', color: T.ink, marginBottom: '0.25rem' }}>{s.title}</p>
+                <p style={{ fontSize: '0.8125rem', color: T.ink3, lineHeight: 1.6, fontWeight: 300 }}>{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </AppShell>
+  );
+}
+
+/* ════════════════════════════════════════
+   EMPTY STATE 3 — Credentials, none earned
+════════════════════════════════════════ */
+function CredentialsEmpty() {
+  return (
+    <AppShell active="credentials">
+      <div style={{ padding: '3rem 2.5rem' }}>
+        <div className="fade-up" style={{ marginBottom: '2.5rem' }}>
+          <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.75rem', color: T.ink, lineHeight: 1.2 }}>Credentials</h1>
+          <p style={{ fontSize: '0.9375rem', color: T.ink3, marginTop: '0.375rem', fontWeight: 300 }}>Verifiable proof of what you know.</p>
+        </div>
+
+        <div className="fade-up" style={{ animationDelay: '0.1s', display: 'grid', gridTemplateColumns: '1fr 340px', gap: '2rem', alignItems: 'start' }}>
+          {/* Empty state */}
+          <div style={{ background: 'white', border: `1px solid ${T.rule}`, borderRadius: 16, padding: '3rem', textAlign: 'center' }}>
+            {/* Ghost credential */}
+            <div style={{ width: 220, margin: '0 auto 2rem', background: T.il, border: `1.5px dashed oklch(0.82 0.1 264)`, borderRadius: 12, padding: '1.5rem', opacity: 0.7 }}>
+              <div style={{ background: T.indigo, borderRadius: 8, height: 36, marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ color: 'white', fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.05em' }}>CERTIFICATE</span>
+              </div>
+              <div style={{ height: 8, background: T.rule, borderRadius: 4, marginBottom: '0.5rem' }}/>
+              <div style={{ height: 8, background: T.rule, borderRadius: 4, width: '70%', margin: '0 auto 1rem' }}/>
+              <div style={{ width: 40, height: 40, borderRadius: '50%', background: T.rule, margin: '0 auto' }}/>
+            </div>
+            <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.25rem', color: T.ink, marginBottom: '0.625rem' }}>
+              Your first credential is closer than you think.
+            </h2>
+            <p style={{ fontSize: '0.9375rem', color: T.ink2, lineHeight: 1.7, maxWidth: 380, margin: '0 auto 2rem', fontWeight: 300 }}>
+              Credentials are earned, not given. Complete the recommended path below to earn your first.
+            </p>
+            <button className="btn-primary">Begin recommended path</button>
+          </div>
+
+          {/* Recommended path preview */}
+          <div style={{ background: 'white', border: `1px solid ${T.rule}`, borderRadius: 16, overflow: 'hidden' }}>
+            <div style={{ padding: '1.25rem', borderBottom: `1px solid ${T.rule}` }}>
+              <p style={{ fontSize: '0.75rem', fontWeight: 500, color: T.ink3, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Fastest path to your first credential</p>
+              <h3 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.1rem', color: T.ink }}>Data Analysis Foundations</h3>
+              <p style={{ fontSize: '0.8125rem', color: T.ink3, marginTop: '0.25rem' }}>6 skills · ~4 weeks at 1h/day</p>
+            </div>
+            <div style={{ padding: '0 1.25rem' }}>
+              {['SQL Basics','Data Wrangling','Viz & Charts','Stats Essentials','Python Basics','Report Writing'].map((skill, i) => (
+                <div key={skill} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 0', borderBottom: i<5?`1px solid ${T.rule}`:'none' }}>
+                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: i===0?T.indigo:T.rule, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: '0.6rem', fontWeight: 700, color: i===0?'white':T.ink3 }}>{i+1}</span>
+                  </div>
+                  <span style={{ fontSize: '0.875rem', color: i===0?T.ink:T.ink3 }}>{skill}</span>
+                  {i===0 && <span style={{ marginLeft: 'auto', fontSize: '0.75rem', fontWeight: 500, color: T.indigo }}>Start here</span>}
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: '1.25rem', borderTop: `1px solid ${T.rule}` }}>
+              <button className="btn-primary" style={{ width: '100%', textAlign: 'center' }}>Begin path</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AppShell>
+  );
+}
+
+/* ════════════════════════════════════════
+   LESSON READING — Focus mode
+════════════════════════════════════════ */
+const LESSON_CONTENT = `Backpropagation is the algorithm that makes neural networks learn. At its core, it's an application of the chain rule from calculus — a way to compute how much each weight in the network contributed to the error in the output.
+
+Consider a network with an input layer, one hidden layer, and an output layer. When we make a prediction, we compute the loss: how far we were from the correct answer. Backpropagation works backwards from this loss, computing the gradient of the loss with respect to each weight.
+
+The key insight is that gradients at earlier layers can be computed from gradients at later layers. We never have to start from scratch. The chain rule gives us: ∂L/∂w = (∂L/∂a) × (∂a/∂z) × (∂z/∂w), where L is loss, a is activation, z is pre-activation, and w is the weight.
+
+In practice, modern frameworks like PyTorch and JAX compute this automatically through automatic differentiation — you define the forward pass, and the backward pass is computed for you. But understanding what's happening under the hood is essential for debugging and architecture decisions.`;
+
+function LessonFocusMode() {
+  const [focusMode, setFocusMode] = useState(false);
+  const [lineHeight, setLineHeight] = useState(1.8);
+  const [sound, setSound] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setProgress(p => Math.min(p + 0.5, 100)), 800);
+    return () => clearInterval(timer);
+  }, []);
+
+  const paragraphs = LESSON_CONTENT.split('\n\n');
+
+  return (
+    <AppShell active="lessons" tutorDimmed={focusMode} focusMode={focusMode}>
+      <div style={{ padding: '2rem 2.5rem', maxWidth: 680 }}>
+        {/* Lesson header */}
+        <div style={{ marginBottom: '2rem', opacity: focusMode ? 0.15 : 1, transition: 'opacity 0.4s' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.75rem' }}>
+            <span style={{ fontSize: '0.75rem', color: T.ink3 }}>Neural Networks</span>
+            <span style={{ color: T.rule }}>›</span>
+            <span style={{ fontSize: '0.75rem', color: T.ink3 }}>Lesson 4 of 8</span>
+          </div>
+          <h1 style={{ fontFamily: 'var(--serif)', fontWeight: 400, fontSize: '1.5rem', color: T.ink, lineHeight: 1.25 }}>
+            Backpropagation: How Networks Learn
+          </h1>
+          {/* Reading progress */}
+          <div style={{ marginTop: '1rem', height: 3, background: T.rule, borderRadius: 100 }}>
+            <div style={{ height: '100%', background: T.indigo, borderRadius: 100, width: `${progress}%`, transition: 'width 0.8s ease' }} />
+          </div>
+          <p style={{ fontSize: '0.75rem', color: T.ink3, marginTop: '0.25rem' }}>{Math.round(progress)}% read · ~6 min left</p>
+        </div>
+
+        {/* Focus mode toggle strip */}
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          <button onClick={() => setFocusMode(f => !f)}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', borderRadius: 100, border: `1px solid ${focusMode ? T.indigo : T.rule}`, background: focusMode ? T.il : 'white', cursor: 'pointer', fontSize: '0.8125rem', fontWeight: 500, color: focusMode ? T.indigo : T.ink2, transition: 'all 0.2s' }}>
+            <svg width={14} height={14} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <rect x={2} y={2} width={12} height={12} rx={2}/>
+              {focusMode ? <path d="M5 8h6M8 5v6" opacity={0}/> : <path d="M1 4h2M1 8h2M1 12h2M4 1v2M8 1v2M12 1v2"/>}
+            </svg>
+            {focusMode ? 'Exit focus mode' : 'Focus mode'}
+          </button>
+          {focusMode && (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: T.ink2 }}>
+                <span>Line height</span>
+                <input type="range" min={1.4} max={2.2} step={0.1} value={lineHeight}
+                  onChange={e => setLineHeight(+e.target.value)}
+                  style={{ width: 80, accentColor: T.indigo }} />
+              </div>
+              <button onClick={() => setSound(s => !s)} className={`sound-toggle${sound ? ' on' : ''}`}>
+                <svg width={13} height={13} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.5}>
+                  <path d="M1 5h3l4-3v12l-4-3H1z"/>
+                  {sound ? <><path d="M11 4a5 5 0 010 8"/><path d="M13 2a8 8 0 010 12"/></> : <path d="M13 6l-4 4M9 6l4 4"/>}
+                </svg>
+                {sound ? 'Ambient on' : 'Ambient sound'}
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Lesson body */}
+        <div style={{
+          fontFamily: 'var(--serif)', fontSize: focusMode ? '1.0625rem' : '1rem',
+          lineHeight: lineHeight, color: T.ink, fontWeight: 300,
+          maxWidth: focusMode ? 580 : '100%', transition: 'all 0.4s',
+          background: focusMode ? 'white' : 'transparent',
+          padding: focusMode ? '2.5rem' : 0,
+          borderRadius: focusMode ? 12 : 0,
+          border: focusMode ? `1px solid ${T.rule}` : 'none',
+          boxShadow: focusMode ? '0 8px 32px oklch(0.52 0.22 264 / 0.06)' : 'none',
+        }}>
+          {paragraphs.map((para, i) => (
+            <p key={i} style={{ marginBottom: '1.5em', textWrap: 'pretty' }}>{para}</p>
+          ))}
+          {/* Reading cursor blink */}
+          <span style={{ display: 'inline-block', width: 2, height: '1em', background: T.indigo, verticalAlign: 'middle', animation: 'reading-cursor 1.2s ease-in-out infinite', marginLeft: 2 }} />
+        </div>
+
+        {!focusMode && (
+          <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: `1px solid ${T.rule}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button className="btn-ghost" style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>← Previous</button>
+            <button className="btn-primary" style={{ fontSize: '0.875rem', padding: '0.5rem 1.25rem' }}>Next lesson →</button>
+          </div>
+        )}
+      </div>
+    </AppShell>
+  );
+}
+
+/* ════════════════════════════════════════
+   TOP-LEVEL SWITCHER
+════════════════════════════════════════ */
+const TABS = [
+  { id: 'home', label: 'Home (no enrollments)' },
+  { id: 'skills', label: 'Skills (no evidence)' },
+  { id: 'credentials', label: 'Credentials (none earned)' },
+  { id: 'lesson', label: 'Lesson + Focus mode' },
+];
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "activeTab": "home"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+  const t = tweaks || TWEAK_DEFAULTS;
+  const [tab, setTab] = useState(t.activeTab || 'home');
+
+  const handleTab = (id) => { setTab(id); setTweak('activeTab', id); };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      {/* Tab switcher */}
+      <div style={{ background: 'white', borderBottom: `1px solid ${T.rule}`, padding: '0.625rem 1.25rem', display: 'flex', gap: '0.25rem', flexShrink: 0 }}>
+        {TABS.map(tb => (
+          <button key={tb.id} className={`tab${tab===tb.id?' active':''}`} onClick={() => handleTab(tb.id)}>
+            {tb.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {tab === 'home' && <HomeEmpty />}
+        {tab === 'skills' && <SkillsEmpty />}
+        {tab === 'credentials' && <CredentialsEmpty />}
+        {tab === 'lesson' && <LessonFocusMode />}
+      </div>
+
+      <window.TweaksPanel>
+        <window.TweakSection label="Screen">
+          <window.TweakSelect label="Active screen" id="activeTab"
+            options={TABS.map(tb => ({ label: tb.label, value: tb.id }))}
+            value={tab} onChange={v => handleTab(v)} />
+        </window.TweakSection>
+      </window.TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

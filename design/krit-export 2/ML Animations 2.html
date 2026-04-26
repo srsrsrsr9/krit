@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · ML Animations Vol. 2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body,#root{height:100%;background:#07080f}
+  body{font-family:'DM Sans',sans-serif;overflow:hidden}
+  .tab-bar{display:flex;gap:4px;padding:8px 12px;background:#0d0f1e;border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0;overflow-x:auto}
+  .tab{padding:5px 13px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;white-space:nowrap;transition:all 0.18s}
+  .tab.active{background:oklch(0.52 0.22 264);color:#fff}
+  .tab:not(.active){background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5)}
+  .tab:not(.active):hover{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85)}
+  .stage-wrap{position:relative;flex:1;min-height:0}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+const { useTime, Stage, Easing, clamp } = window;
+
+const lerp = (a,b,t) => a+(b-a)*t;
+const c01  = t => Math.max(0,Math.min(1,t));
+const ez   = t => Easing.easeInOutCubic(c01(t));
+const fi   = (t,s,d=0.55) => ez((t-s)/d);
+const mv   = (t,s,d,a,b) => lerp(a,b,ez((t-s)/d));
+
+const C = {
+  bg:'#0d0f1e', grid:'rgba(255,255,255,0.05)',
+  text:'rgba(255,255,255,0.92)', dim:'rgba(255,255,255,0.42)',
+  indigo:'oklch(0.66 0.22 264)', violet:'oklch(0.66 0.22 292)',
+  green:'oklch(0.72 0.18 145)', red:'oklch(0.68 0.22 22)',
+  amber:'oklch(0.80 0.18 76)', teal:'oklch(0.70 0.17 195)',
+  pink:'oklch(0.72 0.20 340)',
+};
+
+const Tx = ({x,y,children,size=14,fill=C.text,anchor='middle',weight=400,opacity=1,italic=false}) => (
+  <text x={x} y={y} textAnchor={anchor} dominantBaseline="middle"
+    fontSize={size} fill={fill} fontWeight={weight} opacity={opacity}
+    fontFamily="'DM Sans',sans-serif" fontStyle={italic?'italic':'normal'}
+    style={{userSelect:'none'}}>{children}</text>
+);
+
+function Grid({x1,x2,y1,y2,step=60}){
+  const lines=[];
+  for(let x=Math.ceil(x1/step)*step;x<=x2;x+=step)
+    lines.push(<line key={'v'+x} x1={x} y1={y1} x2={x} y2={y2} stroke={C.grid} strokeWidth={1}/>);
+  for(let y=Math.ceil(y1/step)*step;y<=y2;y+=step)
+    lines.push(<line key={'h'+y} x1={x1} y1={y} x2={x2} y2={y} stroke={C.grid} strokeWidth={1}/>);
+  return <g>{lines}</g>;
+}
+
+function Defs(){
+  const mk=(id,col)=>(
+    <marker id={id} markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill={col}/>
+    </marker>
+  );
+  return(<defs>
+    {mk('a2-a',C.amber)}{mk('a2-g',C.green)}{mk('a2-i',C.indigo)}
+    {mk('a2-v',C.violet)}{mk('a2-r',C.red)}{mk('a2-w','rgba(255,255,255,0.6)')}
+    {mk('a2-t',C.teal)}{mk('a2-p',C.pink)}
+  </defs>);
+}
+
+function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xffffffff;};}
+
+/* ══ 1. BACKPROPAGATION ══════════════════════════════════ */
+function Backprop(){
+  const t=useTime();
+  const W=1280,H=680;
+  const layers=[
+    {x:170, ys:[195,335,475], vals:[0.8,0.3,0.6], label:'Input layer'},
+    {x:450, ys:[140,265,390,515], vals:[0.72,0.0,0.54,0.38], label:'Hidden (ReLU)'},
+    {x:730, ys:[295,415], vals:[0.73,0.27], label:'Output (Softmax)'},
+  ];
+  const edgeRng=rng(42);
+  const edges=[];
+  for(let l=0;l<2;l++) for(let i=0;i<layers[l].ys.length;i++) for(let j=0;j<layers[l+1].ys.length;j++)
+    edges.push({x1:layers[l].x,y1:layers[l].ys[i],x2:layers[l+1].x,y2:layers[l+1].ys[j],w:(edgeRng()-0.5)*1.6,l});
+
+  const fwdX = t>1.5 ? lerp(layers[0].x, layers[2].x, Easing.easeInOutCubic(c01((t-1.5)/2.5))) : layers[0].x;
+  const bwdX = t>5.5 ? lerp(layers[2].x, layers[0].x, Easing.easeInOutCubic(c01((t-5.5)/3.0))) : layers[2].x;
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={640} y={28} size={20} weight={600}>Backpropagation</Tx>
+      <Tx x={640} y={50} size={12} fill={C.dim}>Gradients flow backward through the network to update weights</Tx>
+    </g>
+    <g opacity={fi(t,0.6,0.6)}>
+      {edges.map((e,i)=><line key={i} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}
+        stroke={e.w>0?'rgba(100,140,255,0.15)':'rgba(255,100,100,0.12)'}
+        strokeWidth={Math.abs(e.w)*2+0.5}/>)}
+    </g>
+    {t>1.5&&t<5.2&&<g opacity={Math.min(fi(t,1.5,0.5),1-fi(t,4.8,0.5))}>
+      <circle cx={fwdX} cy={340} r={9} fill={C.green}/><circle cx={fwdX} cy={340} r={20} fill={C.green} opacity={0.18}/>
+    </g>}
+    {t>5.5&&<g opacity={fi(t,5.5,0.5)}>
+      <circle cx={bwdX} cy={340} r={9} fill={C.red}/><circle cx={bwdX} cy={340} r={20} fill={C.red} opacity={0.18}/>
+    </g>}
+    {layers.map((layer,li)=>(
+      <g key={li} opacity={fi(t,0.4+li*0.1,0.6)}>
+        {layer.ys.map((y,ni)=>{
+          const actOp=t>2.5+li*0.9?fi(t,2.5+li*0.9,0.5):0;
+          const gradOp=li<2&&t>6.2+(1-li)*0.9?fi(t,6.2+(1-li)*0.9,0.5):0;
+          const v=layer.vals[ni];
+          return(<g key={ni}>
+            <circle cx={layer.x} cy={y} r={30} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.16)" strokeWidth={1.5}/>
+            <circle cx={layer.x} cy={y} r={30} fill={C.indigo} opacity={v*actOp*0.65}/>
+            <Tx x={layer.x} y={y} size={13} fill="white" opacity={actOp} weight={500}>{v.toFixed(2)}</Tx>
+            {li<2&&<Tx x={layer.x-50} y={y} size={10} fill={C.red} opacity={gradOp} anchor="end">δ={[0.3,0.2,0.25,0.15][ni]}</Tx>}
+          </g>);
+        })}
+        <Tx x={layer.x} y={H-48} size={12} fill={C.dim}>{layer.label}</Tx>
+      </g>
+    ))}
+    {t>1.5&&t<5.5&&<g opacity={Math.min(fi(t,1.5,0.4),1-fi(t,5,0.4))}>
+      <rect x={310} y={600} width={200} height={28} rx={6} fill={C.green} opacity={0.15}/>
+      <Tx x={410} y={614} size={12} fill={C.green} weight={500}>→ Forward pass</Tx>
+    </g>}
+    {t>5.5&&<g opacity={fi(t,5.5,0.5)}>
+      <rect x={310} y={600} width={200} height={28} rx={6} fill={C.red} opacity={0.15}/>
+      <Tx x={410} y={614} size={12} fill={C.red} weight={500}>← Backward pass</Tx>
+    </g>}
+    {t>4&&<g opacity={fi(t,4,0.7)}>
+      <rect x={800} y={330} width={170} height={52} rx={8} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth={1}/>
+      <Tx x={885} y={350} size={13} fill={C.amber} weight={500}>L = −log(0.73)</Tx>
+      <Tx x={885} y={370} size={13} fill={C.amber}>= 0.314</Tx>
+    </g>}
+    {t>7.5&&<g opacity={fi(t,7.5,0.7)}>
+      <rect x={820} y={490} width={420} height={80} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={1030} y={516} size={14} fill={C.amber} weight={500}>W ← W − α · ∂L/∂W</Tx>
+      <Tx x={1030} y={538} size={11} fill={C.dim}>Chain rule: ∂L/∂W = ∂L/∂a · ∂a/∂z · ∂z/∂W</Tx>
+      <Tx x={1030} y={556} size={11} fill={C.dim}>α = learning rate (step size)</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ 2. K-MEANS CLUSTERING ═══════════════════════════════ */
+function KMeans(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=390,CY=360,XS=78,YS=72;
+  const toS=(x,y)=>[CX+x*XS,CY-y*YS];
+
+  const r0=rng(11),r1=rng(22),r2=rng(33);
+  const c0=Array.from({length:9},()=>[r0()*2.2-3.6,r0()*2-0.6]);
+  const c1=Array.from({length:9},()=>[r1()*2.2-0.4,r1()*2-2.8]);
+  const c2=Array.from({length:9},()=>[r2()*2.2+1.4,r2()*2+0.6]);
+  const all=[...c0,...c1,...c2];
+  const kColors=[C.indigo,C.amber,C.green];
+
+  const centHist=[
+    [[-0.5,-2.5],[3.0,2.8],[-2.5,2.5]],
+    [[-2.5,-0.4],[0.4,-1.8],[2.2,1.2]],
+    [[-2.6,-0.3],[0.3,-1.9],[2.3,1.1]],
+    [[-2.6,-0.3],[0.3,-1.9],[2.3,1.1]],
+  ];
+
+  const stepDur=2.5,stepStart=2.2;
+  const si=Math.min(3,Math.floor(Math.max(0,(t-stepStart))/stepDur));
+  const sp=c01((t-stepStart-si*stepDur)/stepDur);
+  const prevC=centHist[si];
+  const nextC=centHist[Math.min(3,si+1)];
+  const curC=prevC.map((c,i)=>[lerp(c[0],nextC[i][0],Easing.easeInOutCubic(c01(sp*2.2))),lerp(c[1],nextC[i][1],Easing.easeInOutCubic(c01(sp*2.2)))]);
+
+  const nearest=(pt)=>{const ds=curC.map(c=>Math.hypot(pt[0]-c[0],pt[1]-c[1]));return ds.indexOf(Math.min(...ds));};
+  const dotsV=Math.min(all.length,Math.floor(Math.max(0,(t-0.5)/0.1)));
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={60} x2={720} y1={60} y2={620} step={78}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={380} y={28} size={20} weight={600}>K-Means Clustering</Tx>
+      <Tx x={380} y={50} size={12} fill={C.dim}>Iteratively assign points to nearest centroid, then update</Tx>
+    </g>
+    <g opacity={fi(t,0.3,0.5)}>
+      <line x1={80} y1={CY} x2={700} y2={CY} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <line x1={CX} y1={615} x2={CX} y2={70} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+    </g>
+    {t>2.5&&all.slice(0,dotsV).map((pt,i)=>{
+      const ni=nearest(pt);const[sx,sy]=toS(pt[0],pt[1]);const[cx,cy]=toS(curC[ni][0],curC[ni][1]);
+      return<line key={i} x1={sx} y1={sy} x2={cx} y2={cy} stroke={kColors[ni]} strokeWidth={0.8} opacity={0.2}/>;
+    })}
+    {all.slice(0,dotsV).map((pt,i)=>{
+      const[sx,sy]=toS(pt[0],pt[1]);
+      const col=t>2.2?kColors[nearest(pt)]:'rgba(255,255,255,0.5)';
+      return<circle key={i} cx={sx} cy={sy} r={7} fill={col} opacity={0.82}/>;
+    })}
+    {t>1.5&&curC.map((c,i)=>{
+      const[sx,sy]=toS(c[0],c[1]);
+      return(<g key={i}>
+        <circle cx={sx} cy={sy} r={20} fill={kColors[i]} opacity={0.18}/>
+        <circle cx={sx} cy={sy} r={13} fill={kColors[i]}/>
+        <circle cx={sx} cy={sy} r={5} fill="white"/>
+        <Tx x={sx} y={sy-30} size={12} fill={kColors[i]} weight={600}>μ{i+1}</Tx>
+      </g>);
+    })}
+    {t>2&&<g opacity={fi(t,2,0.5)}>
+      <rect x={75} y={76} width={170} height={36} rx={6} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={160} y={94} size={13} fill={C.amber}>Iteration: {Math.min(si+1,3)}</Tx>
+    </g>}
+    {t>10&&<g opacity={fi(t,10,0.8)}>
+      <rect x={260} y={76} width={160} height={36} rx={6} fill={C.green} opacity={0.15}/>
+      <Tx x={340} y={94} size={13} fill={C.green} weight={600}>Converged ✓</Tx>
+    </g>}
+    <line x1={760} y1={60} x2={760} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,0.5,0.5)}>
+      <Tx x={1020} y={88} size={13} fill={C.dim} weight={500}>Algorithm</Tx>
+      {[
+        {s:'1. Initialise',d:'Place K centroids at random positions',t2:1.5},
+        {s:'2. Assign',    d:'Each point → nearest centroid',        t2:2.2},
+        {s:'3. Update',   d:'Move centroids to cluster mean',        t2:4.7},
+        {s:'4. Repeat',   d:'Until no assignments change',           t2:7.2},
+      ].map((it,i)=>(
+        <g key={i} opacity={fi(t,it.t2,0.55)}>
+          <rect x={800} y={130+i*82} width={440} height={62} rx={8}
+            fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)" strokeWidth={1}/>
+          <Tx x={822} y={156+i*82} size={13} fill={C.amber} anchor="start" weight={600}>{it.s}</Tx>
+          <Tx x={822} y={177+i*82} size={12} fill={C.dim} anchor="start">{it.d}</Tx>
+        </g>
+      ))}
+      <g opacity={fi(t,1,0.5)}>
+        <Tx x={1020} y={488} size={12} fill={C.dim}>Objective: minimise inertia</Tx>
+        <Tx x={1020} y={510} size={14} fill={C.amber} italic>J = Σₖ Σᵢ ‖xᵢ − μₖ‖²</Tx>
+        <Tx x={1020} y={532} size={11} fill={C.dim}>Sum of squared distances to assigned centroid</Tx>
+      </g>
+    </g>
+  </svg>);
+}
+
+/* ══ 3. DECISION TREE ════════════════════════════════════ */
+function DecisionTree(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=320,CY=370,XS=70,YS=65;
+  const toS=(x,y)=>[CX+x*XS,CY-y*YS];
+
+  const r0=rng(41),r1=rng(52),r2=rng(63);
+  const c0=Array.from({length:9},()=>[r0()*2.5-4.2,r0()*3-1.5]);
+  const c1=Array.from({length:9},()=>[r1()*2+0.3,r1()*2+0.6]);
+  const c2=Array.from({length:9},()=>[r2()*2+0.3,r2()*2-2.5]);
+  const all=[...c0,...c1,...c2];
+
+  const [sx0]=toS(0,0); // vertical split at x=0
+  const [,sy1]=toS(0,0.3); // horizontal split at y=0.3 (right side)
+  const [rx]=toS(3.5,0);
+
+  const dotsV=Math.min(27,Math.floor(Math.max(0,(t-0.5)/0.12)));
+  const getCol=(x,y)=>x<0?C.indigo:y>0.3?C.green:C.amber;
+
+  const treeNodes=[
+    {x:980,y:130,label:'x₁ < 0?',leaf:false},
+    {x:890,y:260,label:'Class A',leaf:true,col:C.indigo},
+    {x:1070,y:260,label:'x₂ > 0.3?',leaf:false},
+    {x:995,y:390,label:'Class B',leaf:true,col:C.green},
+    {x:1145,y:390,label:'Class C',leaf:true,col:C.amber},
+  ];
+  const treeEdges=[[0,1],[0,2],[2,3],[2,4]];
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={60} x2={670} y1={60} y2={630}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={340} y={28} size={20} weight={600}>Decision Tree</Tx>
+      <Tx x={340} y={50} size={12} fill={C.dim}>Recursive splitting of the feature space by Gini impurity</Tx>
+    </g>
+    <g opacity={fi(t,0.3,0.5)}>
+      <line x1={80} y1={CY} x2={640} y2={CY} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <line x1={CX} y1={625} x2={CX} y2={70} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <Tx x={648} y={CY} size={13} fill={C.dim} anchor="start">x₁</Tx>
+      <Tx x={CX+8} y={76} size={13} fill={C.dim} anchor="start">x₂</Tx>
+    </g>
+    {all.slice(0,dotsV).map(([x,y],i)=>{
+      const[sx2,sy2]=toS(x,y);if(sx2<80||sx2>635||sy2<70||sy2>620)return null;
+      const col=t>3.5?getCol(x,y):'rgba(255,255,255,0.55)';
+      return<circle key={i} cx={sx2} cy={sy2} r={7} fill={col} opacity={0.82}/>;
+    })}
+    {t>2.2&&<g opacity={fi(t,2.2,0.7)}>
+      <line x1={sx0} y1={72} x2={sx0} y2={618} stroke={C.amber} strokeWidth={2.5} strokeDasharray="8,5"/>
+      <Tx x={sx0-10} y={95} size={12} fill={C.indigo} anchor="end">x₁ &lt; 0</Tx>
+      <Tx x={sx0+10} y={95} size={12} fill={C.amber} anchor="start">x₁ ≥ 0</Tx>
+    </g>}
+    {t>4.2&&<g opacity={fi(t,4.2,0.7)}>
+      <line x1={sx0} y1={sy1} x2={rx} y2={sy1} stroke={C.violet} strokeWidth={2.5} strokeDasharray="8,5"/>
+      <Tx x={(sx0+rx)/2} y={sy1-18} size={12} fill={C.green}>x₂ &gt; 0.3</Tx>
+      <Tx x={(sx0+rx)/2} y={sy1+18} size={12} fill={C.amber}>x₂ ≤ 0.3</Tx>
+    </g>}
+    {t>4.8&&<g opacity={fi(t,4.8,0.6)*0.16}>
+      <rect x={80} y={72} width={sx0-80} height={548} fill={C.indigo}/>
+      <rect x={sx0} y={72} width={rx-sx0} height={sy1-72} fill={C.green}/>
+      <rect x={sx0} y={sy1} width={rx-sx0} height={618-sy1} fill={C.amber}/>
+    </g>}
+    <line x1={700} y1={60} x2={700} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,1.5,0.5)}>
+      <Tx x={980} y={78} size={13} fill={C.dim} weight={500}>Tree structure</Tx>
+    </g>
+    {treeEdges.map(([from,to],i)=>{
+      const fn2=treeNodes[from],tn=treeNodes[to];
+      const vis=to<=2?t>2.4:t>4.4;
+      return vis?<line key={i} x1={fn2.x} y1={fn2.y+15} x2={tn.x} y2={tn.y-15} stroke="rgba(255,255,255,0.2)" strokeWidth={1.5} opacity={fi(t,to<=2?2.4:4.4,0.5)}/>:null;
+    })}
+    {treeNodes.map((n,i)=>{
+      const vis=i===0?t>2.2:i<=2?t>2.5:t>4.4;if(!vis)return null;
+      const op=i===0?fi(t,2.2,0.5):i<=2?fi(t,2.5,0.5):fi(t,4.4,0.5);
+      return(<g key={i} opacity={op}>
+        <rect x={n.x-52} y={n.y-16} width={104} height={32} rx={8}
+          fill={n.leaf?n.col:'rgba(255,255,255,0.07)'} opacity={n.leaf?0.3:1}
+          stroke={n.leaf?n.col:'rgba(255,255,255,0.18)'} strokeWidth={1.5}/>
+        <Tx x={n.x} y={n.y} size={12} fill={n.leaf?n.col:C.text} weight={n.leaf?600:400}>{n.label}</Tx>
+      </g>);
+    })}
+    {t>7.5&&<g opacity={fi(t,7.5,0.7)}>
+      <rect x={730} y={490} width={510} height={96} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={985} y={514} size={12} fill={C.dim} weight={500}>Split criterion: Gini Impurity</Tx>
+      <Tx x={985} y={536} size={14} fill={C.amber} italic>Gini = 1 − Σ pₖ²</Tx>
+      <Tx x={985} y={558} size={11} fill={C.dim}>Choose split that maximises information gain</Tx>
+      <Tx x={985} y={574} size={11} fill={C.dim}>Prune to avoid overfitting (max depth, min samples)</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ 4. PCA ══════════════════════════════════════════════ */
+function PCA(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=380,CY=360,XS=82,YS=80;
+  const toS=(x,y)=>[CX+x*XS,CY-y*YS];
+
+  const r=rng(88);
+  const data=Array.from({length:26},()=>{
+    const u=(r()-0.5)*4.2,v=(r()-0.5)*1.1,ang=0.6;
+    return[u*Math.cos(ang)-v*Math.sin(ang),u*Math.sin(ang)+v*Math.cos(ang)];
+  });
+  const dotsV=Math.min(data.length,Math.floor(Math.max(0,(t-0.5)/0.1)));
+
+  const ang=0.6;
+  const pc1=[Math.cos(ang),Math.sin(ang)];
+  const pc2=[-Math.sin(ang),Math.cos(ang)];
+  const pc1L=2.5,pc2L=0.75;
+
+  const [p1x1,p1y1]=toS(-pc1[0]*pc1L,-pc1[1]*pc1L);
+  const [p1x2,p1y2]=toS(pc1[0]*pc1L,pc1[1]*pc1L);
+  const [p2x1,p2y1]=toS(-pc2[0]*pc2L,-pc2[1]*pc2L);
+  const [p2x2,p2y2]=toS(pc2[0]*pc2L,pc2[1]*pc2L);
+
+  const projT=Easing.easeInOutCubic(c01((t-5.5)/1.8));
+  const projData=data.map(([x,y])=>{
+    const dot=x*pc1[0]+y*pc1[1];
+    return{orig:toS(x,y),proj:toS(dot*pc1[0],dot*pc1[1])};
+  });
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={60} x2={700} y1={60} y2={620}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={370} y={28} size={20} weight={600}>Principal Component Analysis (PCA)</Tx>
+      <Tx x={370} y={50} size={12} fill={C.dim}>Finding axes of maximum variance for dimensionality reduction</Tx>
+    </g>
+    <g opacity={fi(t,0.4,0.5)}>
+      <line x1={80} y1={CY} x2={670} y2={CY} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <line x1={CX} y1={620} x2={CX} y2={75} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <Tx x={678} y={CY} size={13} fill={C.dim} anchor="start">x₁</Tx>
+      <Tx x={CX+8} y={80} size={13} fill={C.dim} anchor="start">x₂</Tx>
+    </g>
+    {data.slice(0,dotsV).map(([x,y],i)=>{const[sx,sy]=toS(x,y);return<circle key={i} cx={sx} cy={sy} r={6} fill={C.indigo} opacity={0.78}/>;} )}
+    {t>2&&<g opacity={fi(t,2,0.8)}>
+      <ellipse cx={CX} cy={CY} rx={pc1L*XS*0.95} ry={pc2L*YS*0.95}
+        fill="none" stroke="rgba(255,255,255,0.14)" strokeWidth={1.5} strokeDasharray="6,4"
+        transform={`rotate(${-ang*180/Math.PI},${CX},${CY})`}/>
+    </g>}
+    {t>3.2&&<g opacity={fi(t,3.2,0.8)}>
+      <line x1={p1x1} y1={p1y1} x2={p1x2} y2={p1y2} stroke={C.amber} strokeWidth={3} markerEnd="url(#a2-a)"/>
+      <Tx x={p1x2+14} y={p1y2-14} size={14} fill={C.amber} weight={600} anchor="start">PC1</Tx>
+      <Tx x={p1x2+14} y={p1y2+5} size={11} fill={C.dim} anchor="start">87% variance</Tx>
+    </g>}
+    {t>4.3&&<g opacity={fi(t,4.3,0.8)}>
+      <line x1={p2x1} y1={p2y1} x2={p2x2} y2={p2y2} stroke={C.teal} strokeWidth={2} markerEnd="url(#a2-t)"/>
+      <Tx x={p2x2+14} y={p2y2} size={13} fill={C.teal} weight={600} anchor="start">PC2</Tx>
+      <Tx x={p2x2+14} y={p2y2+16} size={11} fill={C.dim} anchor="start">13% variance</Tx>
+    </g>}
+    {t>5.5&&projData.map((pd,i)=>{
+      const px=lerp(pd.orig[0],pd.proj[0],projT);
+      const py=lerp(pd.orig[1],pd.proj[1],projT);
+      return(<g key={i} opacity={fi(t,5.5,0.5)}>
+        <line x1={pd.orig[0]} y1={pd.orig[1]} x2={pd.proj[0]} y2={pd.proj[1]} stroke={C.violet} strokeWidth={0.8} opacity={0.32} strokeDasharray="3,2"/>
+        <circle cx={px} cy={py} r={5} fill={C.amber} opacity={0.78}/>
+      </g>);
+    })}
+    <line x1={730} y1={60} x2={730} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,1,0.5)}>
+      <Tx x={1005} y={88} size={13} fill={C.dim} weight={500}>Variance explained</Tx>
+      {[{l:'PC1',p:87,col:C.amber,t2:3.2},{l:'PC2',p:13,col:C.teal,t2:4.3}].map((pc,i)=>(
+        <g key={i} opacity={fi(t,pc.t2,0.7)}>
+          <rect x={780} y={120+i*72} width={pc.p/100*400} height={46} rx={6} fill={pc.col} opacity={0.7}/>
+          <Tx x={772} y={143+i*72} size={13} fill={pc.col} anchor="end">{pc.l}</Tx>
+          <Tx x={780+(pc.p/100*400)+10} y={143+i*72} size={13} fill={C.dim} anchor="start">{pc.p}%</Tx>
+        </g>
+      ))}
+    </g>
+    <g opacity={fi(t,2,0.7)}>
+      <rect x={760} y={298} width={470} height={148} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={995} y={322} size={13} fill={C.dim} weight={500}>Steps</Tx>
+      {['1. Centre data — subtract mean','2. Compute covariance matrix C','3. Eigen-decompose: C = VΛVᵀ','4. Project onto top-k eigenvectors'].map((s,i)=>(
+        <Tx key={i} x={778} y={348+i*26} size={11} fill={C.dim} anchor="start" opacity={fi(t,1.8+i*0.5,0.5)}>{s}</Tx>
+      ))}
+    </g>
+    {t>6&&<g opacity={fi(t,6,0.7)}>
+      <rect x={760} y={480} width={470} height={56} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={995} y={502} size={13} fill={C.amber} italic>Projection: z = Vᵀ(x − μ)</Tx>
+      <Tx x={995} y={524} size={11} fill={C.dim}>2D → 1D: 87% variance retained</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ 5. CNN ══════════════════════════════════════════════ */
+function CNN(){
+  const t=useTime();
+  const W=1280,H=680;
+  const img=[[0,0,1,1,0,0],[0,0,1,1,0,0],[0,0,1,1,0,0],[0,0,1,1,0,0],[0,0,1,1,0,0],[0,0,1,1,0,0]];
+  const filt=[[-1,0,1],[-1,0,1],[-1,0,1]];
+  const cell=60,gap=4;
+  const imgOX=55,imgOY=145;
+  const filtOX=545,filtOY=240;
+  const outOX=790,outOY=180,outC=56;
+
+  const outH=4,outW=4;
+  const conv=Array.from({length:outH},(_,i)=>Array.from({length:outW},(_,j)=>{
+    let s=0;for(let fi2=0;fi2<3;fi2++) for(let fj=0;fj<3;fj++) s+=img[i+fi2][j+fj]*filt[fi2][fj];
+    return Math.max(0,s);
+  }));
+
+  const slideStart=1.8,slideDur=7;
+  const total=outH*outW;
+  const sT=c01((t-slideStart)/slideDur);
+  const posI=Math.min(total-1,Math.floor(sT*total));
+  const fI=Math.floor(posI/outW),fJ=posI%outW;
+  const filtX=imgOX+fJ*(cell+gap),filtY=imgOY+fI*(cell+gap);
+  const outVis=Math.min(total,Math.floor(Math.max(0,(t-slideStart-0.15)/slideDur*total)+1));
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={640} y={28} size={20} weight={600}>Convolutional Neural Network</Tx>
+      <Tx x={640} y={50} size={12} fill={C.dim}>A learnable filter slides over the image, computing dot products</Tx>
+    </g>
+    <g opacity={fi(t,0.4,0.6)}>
+      <Tx x={imgOX+3*(cell+gap)} y={120} size={13} fill={C.dim} weight={500}>Input (6×6)</Tx>
+      {img.map((row,i)=>row.map((v,j)=>{
+        const x=imgOX+j*(cell+gap),y=imgOY+i*(cell+gap);
+        return(<g key={`${i}-${j}`}>
+          <rect x={x} y={y} width={cell} height={cell} rx={4} fill={v?'rgba(100,140,255,0.82)':'rgba(255,255,255,0.05)'} stroke="rgba(255,255,255,0.1)" strokeWidth={1}/>
+          <Tx x={x+cell/2} y={y+cell/2} size={16} fill="white" opacity={0.9}>{v}</Tx>
+        </g>);
+      }))}
+    </g>
+    {t>slideStart&&<rect x={filtX} y={filtY} width={3*(cell+gap)-gap} height={3*(cell+gap)-gap} rx={4} fill="none" stroke={C.amber} strokeWidth={2.5}/>}
+    <g opacity={fi(t,1,0.7)}>
+      <Tx x={filtOX+1.5*(cell+gap)} y={215} size={13} fill={C.amber} weight={500}>Vertical Edge Filter (3×3)</Tx>
+      {filt.map((row,i)=>row.map((v,j)=>{
+        const x=filtOX+j*(cell+gap),y=filtOY+i*(cell+gap);
+        return(<g key={`f${i}-${j}`}>
+          <rect x={x} y={y} width={cell} height={cell} rx={4}
+            fill={v>0?`rgba(100,200,120,${v*0.7})`:v<0?`rgba(255,100,80,${-v*0.6})`:'rgba(255,255,255,0.04)'}
+            stroke="rgba(255,255,255,0.14)" strokeWidth={1}/>
+          <Tx x={x+cell/2} y={y+cell/2} size={18} fill="white" weight={600}>{v>0?'+'+v:v}</Tx>
+        </g>);
+      }))}
+    </g>
+    <g opacity={fi(t,slideStart,0.5)}>
+      <Tx x={outOX+2*(outC+gap)} y={155} size={13} fill={C.green} weight={500}>Feature Map (4×4, ReLU)</Tx>
+      {conv.map((row,i)=>row.map((v,j)=>{
+        const idx=i*outW+j,x=outOX+j*(outC+gap),y=outOY+i*(outC+gap);
+        const maxV=Math.max(...conv.flat());
+        return(<g key={`o${i}-${j}`} opacity={idx<outVis?1:0.12}>
+          <rect x={x} y={y} width={outC} height={outC} rx={4} fill={`rgba(100,200,120,${maxV>0?v/maxV*0.82:0})`} stroke="rgba(255,255,255,0.12)" strokeWidth={1}/>
+          <Tx x={x+outC/2} y={y+outC/2} size={15} fill="white">{v.toFixed(0)}</Tx>
+        </g>);
+      }))}
+    </g>
+    {t>slideStart&&<g opacity={fi(t,slideStart,0.6)}>
+      <rect x={490} y={492} width={260} height={96} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={620} y={516} size={12} fill={C.dim} weight={500}>Position ({fJ},{fI})</Tx>
+      <Tx x={620} y={538} size={13} fill={C.amber} italic>Σ(patch ⊙ filter)</Tx>
+      <Tx x={620} y={560} size={15} fill={C.green} weight={600}>= {conv[fI]?.[fJ]?.toFixed(0)??'?'}</Tx>
+      <Tx x={620} y={578} size={11} fill={C.dim}>→ ReLU: max(0, x)</Tx>
+    </g>}
+    <g opacity={fi(t,1.5,0.6)}>
+      <rect x={770} y={492} width={470} height={110} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={1005} y={516} size={12} fill={C.dim} weight={500}>Why convolutions?</Tx>
+      {['Weight sharing — same filter across the whole image','Translation invariance — detects feature anywhere','Stack filters → complex hierarchical features','Output: one activation map per filter'].map((s,i)=>(
+        <Tx key={i} x={782} y={538+i*20} size={11} fill={C.dim} anchor="start">• {s}</Tx>
+      ))}
+    </g>
+  </svg>);
+}
+
+/* ══ 6. RNN ══════════════════════════════════════════════ */
+function RNN(){
+  const t=useTime();
+  const W=1280,H=680;
+  const tokens=['The','cat','sat','on','the'];
+  const n=tokens.length;
+  const cellX=Array.from({length:n},(_,i)=>130+i*210);
+  const inputY=570,hiddenY=330,outputY=130;
+  const bW=96,bH=40;
+  const tColors=[C.indigo,C.violet,C.teal,C.green,C.amber];
+  const outPreds=['—','cat','sat','on','the','mat'];
+
+  const stepDur=1.7,stepStart=0.8;
+  const si=Math.min(n-1,Math.floor(Math.max(0,(t-stepStart))/stepDur));
+  const sp=c01((t-stepStart-si*stepDur)/stepDur);
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={640} y={28} size={20} weight={600}>Recurrent Neural Network</Tx>
+      <Tx x={640} y={50} size={12} fill={C.dim}>Hidden state carries context from each timestep to the next</Tx>
+    </g>
+    <g opacity={fi(t,0.5,0.7)}>
+      <rect x={840} y={66} width={400} height={52} rx={8} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.09)" strokeWidth={1}/>
+      <Tx x={1040} y={88} size={14} fill={C.amber} weight={500}>hₜ = tanh(Wₓxₜ + Wₕhₜ₋₁ + b)</Tx>
+      <Tx x={1040} y={108} size={11} fill={C.dim}>hₜ = hidden state  xₜ = token embedding</Tx>
+    </g>
+    {Array.from({length:n},(_,i)=>{
+      const vis=t>stepStart+i*stepDur-0.4,op=vis?fi(t,stepStart+i*stepDur-0.4,0.5):0;
+      const cx=cellX[i],active=i<=si,col=tColors[i];
+      return(<g key={i} opacity={op}>
+        <rect x={cx-bW/2} y={inputY-bH/2} width={bW} height={bH} rx={7} fill={col} opacity={0.22}/>
+        <rect x={cx-bW/2} y={inputY-bH/2} width={bW} height={bH} rx={7} fill="none" stroke={col} strokeWidth={1.5} opacity={0.65}/>
+        <Tx x={cx} y={inputY} size={13} fill={col} weight={600}>"{tokens[i]}"</Tx>
+        <line x1={cx} y1={inputY-bH/2-4} x2={cx} y2={hiddenY+bH/2+4} stroke={col} strokeWidth={1.5} markerEnd="url(#a2-w)" opacity={0.45}/>
+        <rect x={cx-bW/2} y={hiddenY-bH/2} width={bW} height={bH} rx={7}
+          fill={active?col:'rgba(255,255,255,0.04)'} opacity={active?0.3:0.25}/>
+        <rect x={cx-bW/2} y={hiddenY-bH/2} width={bW} height={bH} rx={7}
+          fill="none" stroke={active?col:'rgba(255,255,255,0.16)'} strokeWidth={active?2:1}/>
+        <Tx x={cx} y={hiddenY-7} size={11} fill={active?col:C.dim}>h{i+1}</Tx>
+        <Tx x={cx} y={hiddenY+9} size={10} fill={C.dim}>{active?'active':'–'}</Tx>
+        {i>0&&<line x1={cx} y1={hiddenY-bH/2-4} x2={cx} y2={outputY+bH/2+4} stroke={col} strokeWidth={1.5} markerEnd="url(#a2-w)" opacity={0.38}/>}
+        {i>0&&<g>
+          <rect x={cx-bW/2} y={outputY-bH/2} width={bW} height={bH} rx={7} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" strokeWidth={1}/>
+          <Tx x={cx} y={outputY} size={13} fill={active?C.green:C.dim}>{outPreds[i]}</Tx>
+        </g>}
+      </g>);
+    })}
+    {Array.from({length:n-1},(_,i)=>{
+      const vis=t>stepStart+(i+1)*stepDur-0.25,op=vis?fi(t,stepStart+(i+1)*stepDur-0.25,0.5):0;
+      const x1=cellX[i]+bW/2,x2=cellX[i+1]-bW/2;
+      return vis?(<path key={i} opacity={op}
+        d={`M ${x1} ${hiddenY} C ${x1+45} ${hiddenY-65}, ${x2-45} ${hiddenY-65}, ${x2-4} ${hiddenY}`}
+        fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth={2} markerEnd="url(#a2-w)"/>):null;
+    })}
+    <g opacity={fi(t,0.5,0.5)}>
+      <Tx x={50} y={inputY} size={12} fill={C.dim} anchor="end">xₜ</Tx>
+      <Tx x={50} y={hiddenY} size={12} fill={C.dim} anchor="end">hₜ</Tx>
+      <Tx x={50} y={outputY} size={12} fill={C.dim} anchor="end">ŷₜ</Tx>
+    </g>
+    {t>7&&<g opacity={fi(t,7,0.7)}>
+      <rect x={820} y={230} width={430} height={130} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={1035} y={256} size={13} fill={C.dim} weight={500}>LSTM adds three gates:</Tx>
+      <Tx x={833} y={278} size={11} fill={C.dim} anchor="start">• Forget gate — erase irrelevant memory</Tx>
+      <Tx x={833} y={298} size={11} fill={C.dim} anchor="start">• Input gate — store new information</Tx>
+      <Tx x={833} y={318} size={11} fill={C.dim} anchor="start">• Output gate — control what to expose as hₜ</Tx>
+      <Tx x={833} y={342} size={11} fill={C.amber} anchor="start">→ Solves vanishing gradient over long sequences</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ 7. BIAS-VARIANCE TRADEOFF ═══════════════════════════ */
+function BiasVariance(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=150,CY=565,XW=530,YH=440;
+  const toS=(x,y)=>[CX+x*(XW/10),CY-y*YH];
+
+  const bias2=x=>Math.exp(-0.55*x)*0.88+0.04;
+  const variance=x=>0.03+0.008*Math.pow(x,1.9);
+  const total=x=>bias2(x)+variance(x);
+
+  const optX=4.0,irreducible=0.05;
+  const[optSX]=toS(optX,0);const[,optSY]=toS(0,total(optX));
+
+  const curve=(fn,col,ts)=>{
+    const pts=Array.from({length:101},(_,i)=>{const x=i*10/100;const[sx,sy]=toS(x,fn(x));return`${sx.toFixed(1)},${sy.toFixed(1)}`;}).join(' ');
+    return<polyline points={pts} fill="none" stroke={col} strokeWidth={2.5} opacity={fi(t,ts,0.8)}/>;
+  };
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={CX} x2={CX+XW+40} y1={CY-YH-20} y2={CY} step={53}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={640} y={28} size={20} weight={600}>Bias-Variance Tradeoff</Tx>
+      <Tx x={640} y={50} size={12} fill={C.dim}>Why perfect training accuracy does not equal good generalisation</Tx>
+    </g>
+    <g opacity={fi(t,0.3,0.6)}>
+      <line x1={CX} y1={CY} x2={CX+XW+55} y2={CY} stroke="rgba(255,255,255,0.22)" strokeWidth={1.5}/>
+      <line x1={CX} y1={CY} x2={CX} y2={CY-YH-35} stroke="rgba(255,255,255,0.22)" strokeWidth={1.5}/>
+      <Tx x={CX+XW+66} y={CY} size={13} fill={C.dim} anchor="start">Complexity</Tx>
+      <Tx x={CX} y={CY-YH-44} size={13} fill={C.dim}>Error</Tx>
+      <Tx x={CX} y={CY+20} size={11} fill={C.dim}>Simple</Tx>
+      <Tx x={CX+XW} y={CY+20} size={11} fill={C.dim}>Complex</Tx>
+    </g>
+    {curve(bias2,C.red,1.0)}
+    {curve(variance,C.indigo,2.2)}
+    {curve(total,C.amber,3.5)}
+    {t>1&&<line x1={CX} y1={toS(0,irreducible)[1]} x2={CX+XW+40} y2={toS(0,irreducible)[1]} stroke="rgba(255,255,255,0.22)" strokeWidth={1} strokeDasharray="5,4" opacity={fi(t,1,0.6)}/>}
+    <g opacity={fi(t,1,0.7)}>
+      <Tx x={toS(0.6,bias2(0.6))[0]+12} y={toS(0.6,bias2(0.6))[1]-12} size={13} fill={C.red} anchor="start" weight={500}>Bias²</Tx>
+    </g>
+    <g opacity={fi(t,2.2,0.7)}>
+      <Tx x={toS(8,variance(8))[0]+10} y={toS(8,variance(8))[1]-10} size={13} fill={C.indigo} anchor="start" weight={500}>Variance</Tx>
+    </g>
+    <g opacity={fi(t,3.5,0.7)}>
+      <Tx x={toS(2,total(2))[0]} y={toS(2,total(2))[1]-18} size={13} fill={C.amber} weight={500}>Total Error</Tx>
+    </g>
+    {t>1&&<Tx x={CX+XW+52} y={toS(0,irreducible)[1]} size={11} fill={C.dim} anchor="start" opacity={fi(t,1,0.5)}>Noise ε</Tx>}
+    {t>4.2&&<g opacity={fi(t,4.2,0.8)}>
+      <line x1={optSX} y1={CY} x2={optSX} y2={optSY+8} stroke={C.green} strokeWidth={2} strokeDasharray="6,4"/>
+      <circle cx={optSX} cy={optSY} r={11} fill={C.green}/><circle cx={optSX} cy={optSY} r={5} fill="white"/>
+      <Tx x={optSX+14} y={optSY-16} size={13} fill={C.green} anchor="start" weight={600}>Optimal</Tx>
+      <rect x={optSX-55} y={CY+10} width={110} height={28} rx={5} fill={C.green} opacity={0.14}/>
+      <Tx x={optSX} y={CY+24} size={11} fill={C.green}>Best model here</Tx>
+    </g>}
+    {t>5.5&&<g opacity={fi(t,5.5,0.7)}>
+      <rect x={CX+2} y={CY-YH-8} width={optSX-CX-4} height={YH+8} fill={C.red} opacity={0.055}/>
+      <rect x={optSX+2} y={CY-YH-8} width={CX+XW-optSX-2} height={YH+8} fill={C.indigo} opacity={0.055}/>
+      <Tx x={CX+(optSX-CX)/2} y={CY-YH+20} size={13} fill={C.red} opacity={0.8}>Underfitting</Tx>
+      <Tx x={optSX+(CX+XW-optSX)/2} y={CY-YH+20} size={13} fill={C.indigo} opacity={0.8}>Overfitting</Tx>
+    </g>}
+    <line x1={730} y1={60} x2={730} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,1,0.6)}>
+      <Tx x={1010} y={90} size={13} fill={C.dim} weight={500}>Key concepts</Tx>
+      {[
+        {h:'High Bias',  b:'Underfits — model too simple for the data', col:C.red, t2:1.2},
+        {h:'High Variance',b:'Overfits — memorises noise, fails on new data', col:C.indigo, t2:2.5},
+        {h:'Sweet spot', b:'Balances fit and generalisation on test data', col:C.green, t2:4.4},
+      ].map((it,i)=>(
+        <g key={i} opacity={fi(t,it.t2,0.6)}>
+          <rect x={760} y={122+i*110} width={480} height={80} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+          <Tx x={780} y={148+i*110} size={13} fill={it.col} anchor="start" weight={600}>{it.h}</Tx>
+          <Tx x={780} y={170+i*110} size={12} fill={C.dim} anchor="start">{it.b}</Tx>
+        </g>
+      ))}
+      <g opacity={fi(t,6,0.7)}>
+        <rect x={760} y={478} width={480} height={58} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+        <Tx x={1000} y={500} size={14} fill={C.amber} weight={500}>Error = Bias² + Variance + ε</Tx>
+        <Tx x={1000} y={522} size={11} fill={C.dim}>ε = irreducible noise; cannot be eliminated</Tx>
+      </g>
+    </g>
+  </svg>);
+}
+
+/* ══ 8. REGULARISATION ═══════════════════════════════════ */
+function Regularisation(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=280,CY=380,XS=80,YS=58;
+  const toS=(x,y)=>[CX+x*XS,CY-y*YS];
+
+  const lambda=0.8;
+  const trueMin=[2,1];
+  const regMin=[2/(1+lambda),1/(1+lambda)];
+  const levels=[0.6,1.2,2,3,4];
+
+  const wBins=Array.from({length:20},(_,i)=>{
+    const w=-3+i*0.32;
+    return{w,noReg:Math.exp(-0.5*((w-2)**2)/1.4)*42+Math.exp(-0.5*((w+0.8)**2)/0.7)*18, reg:Math.exp(-0.5*((w-regMin[0])**2)/0.5)*58};
+  });
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={60} x2={530} y1={60} y2={630} step={80}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={300} y={28} size={20} weight={600}>L2 Regularisation (Ridge)</Tx>
+      <Tx x={300} y={50} size={12} fill={C.dim}>Penalising large weights to prevent overfitting</Tx>
+    </g>
+    <g opacity={fi(t,0.4,0.5)}>
+      <line x1={80} y1={CY} x2={500} y2={CY} stroke="rgba(255,255,255,0.2)" strokeWidth={1.5}/>
+      <line x1={CX} y1={610} x2={CX} y2={80} stroke="rgba(255,255,255,0.2)" strokeWidth={1.5}/>
+      <Tx x={508} y={CY} size={13} fill={C.dim} anchor="start">w₁</Tx>
+      <Tx x={CX+8} y={88} size={13} fill={C.dim} anchor="start">w₂</Tx>
+    </g>
+    <g opacity={fi(t,0.8,0.8)}>
+      {levels.map((l,i)=>(
+        <ellipse key={i} cx={toS(trueMin[0],trueMin[1])[0]} cy={toS(trueMin[0],trueMin[1])[1]}
+          rx={l*XS*0.88} ry={l*YS*0.72}
+          fill="none" stroke={C.indigo} strokeWidth={1.5} opacity={0.52-i*0.08} strokeDasharray="6,4"/>
+      ))}
+      <circle cx={toS(trueMin[0],trueMin[1])[0]} cy={toS(trueMin[0],trueMin[1])[1]} r={9} fill={C.indigo} opacity={0.9}/>
+      <circle cx={toS(trueMin[0],trueMin[1])[0]} cy={toS(trueMin[0],trueMin[1])[1]} r={4} fill="white"/>
+      <Tx x={toS(trueMin[0],trueMin[1])[0]+12} y={toS(trueMin[0],trueMin[1])[1]-14} size={12} fill={C.indigo} anchor="start">Unregularised min</Tx>
+    </g>
+    {t>2.5&&<g opacity={fi(t,2.5,0.7)}>
+      {[1,1.7,2.4,3.1].map((r,i)=>(
+        <circle key={i} cx={CX} cy={CY} r={r*XS*0.68} fill="none" stroke={C.amber} strokeWidth={1} opacity={0.38-i*0.07} strokeDasharray="4,4"/>
+      ))}
+      <Tx x={CX+18} y={CY+18} size={11} fill={C.amber} anchor="start">λ‖w‖²</Tx>
+    </g>}
+    {t>4.5&&<g opacity={fi(t,4.5,0.8)}>
+      <circle cx={toS(regMin[0],regMin[1])[0]} cy={toS(regMin[0],regMin[1])[1]} r={9} fill={C.green} opacity={0.9}/>
+      <circle cx={toS(regMin[0],regMin[1])[0]} cy={toS(regMin[0],regMin[1])[1]} r={4} fill="white"/>
+      <Tx x={toS(regMin[0],regMin[1])[0]+12} y={toS(regMin[0],regMin[1])[1]-14} size={12} fill={C.green} anchor="start" weight={600}>Regularised min</Tx>
+      <Tx x={toS(regMin[0],regMin[1])[0]+12} y={toS(regMin[0],regMin[1])[1]+4} size={11} fill={C.dim} anchor="start">Pulled toward origin</Tx>
+      <line x1={toS(trueMin[0],trueMin[1])[0]} y1={toS(trueMin[0],trueMin[1])[1]}
+        x2={toS(regMin[0],regMin[1])[0]+2} y2={toS(regMin[0],regMin[1])[1]-2}
+        stroke={C.green} strokeWidth={2} markerEnd="url(#a2-g)" strokeDasharray="5,3"/>
+    </g>}
+    <line x1={555} y1={60} x2={555} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,1,0.6)}>
+      <rect x={574} y={68} width={670} height={88} rx={8} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.09)" strokeWidth={1}/>
+      <Tx x={909} y={94} size={14} fill={C.amber} weight={500}>L_reg = L_data + λ · Σ wᵢ²</Tx>
+      <Tx x={909} y={116} size={11} fill={C.dim}>L1 (Lasso): λ Σ|wᵢ| → sparse weights (zero out features)</Tx>
+      <Tx x={909} y={134} size={11} fill={C.dim}>L2 (Ridge): λ Σwᵢ² → small weights (shrinkage)</Tx>
+    </g>
+    <g opacity={fi(t,3,0.7)}>
+      <Tx x={909} y={196} size={13} fill={C.dim} weight={500}>Weight magnitude distribution</Tx>
+      {wBins.map((b,i)=>{
+        const bx=580+i*33;
+        return(<g key={i}>
+          <rect x={bx} y={380-b.noReg} width={14} height={b.noReg} rx={2} fill={C.indigo} opacity={0.62}/>
+          <rect x={bx+14} y={380-b.reg} width={14} height={b.reg} rx={2} fill={C.green} opacity={0.62}/>
+        </g>);
+      })}
+      <line x1={580} y1={380} x2={1235} y2={380} stroke="rgba(255,255,255,0.18)" strokeWidth={1}/>
+      <Tx x={580} y={220} size={11} fill={C.indigo} anchor="start">■ No regularisation</Tx>
+      <Tx x={580} y={240} size={11} fill={C.green} anchor="start">■ L2 (pulled toward 0)</Tx>
+    </g>
+    {t>6&&<g opacity={fi(t,6,0.7)}>
+      <rect x={574} y={420} width={670} height={92} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={909} y={444} size={13} fill={C.dim} weight={500}>Choosing λ</Tx>
+      <Tx x={586} y={466} size={11} fill={C.dim} anchor="start">λ = 0 → no penalty → overfit risk</Tx>
+      <Tx x={586} y={484} size={11} fill={C.dim} anchor="start">λ → ∞ → all weights → 0 → underfit</Tx>
+      <Tx x={586} y={502} size={11} fill={C.amber} anchor="start">Tune λ via k-fold cross-validation</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ 9. SVM ══════════════════════════════════════════════ */
+function SVM(){
+  const t=useTime();
+  const W=1280,H=680;
+  const CX=380,CY=360,XS=80,YS=75;
+  const toS=(x,y)=>[CX+x*XS,CY-y*YS];
+
+  const r0=rng(17),r1=rng(28);
+  const c0=Array.from({length:12},()=>[r0()*2.5-3.5,(r0()-0.5)*2.6]);
+  const c1=Array.from({length:12},()=>[r1()*2.5+1.0,(r1()-0.5)*2.6]);
+  const dotsV=Math.min(24,Math.floor(Math.max(0,(t-0.5)/0.11)));
+
+  const[sx0]=toS(0,0),rx=toS(3.5,0)[0];
+  const[m1x]=toS(-1,0),[m2x]=toS(1,0);
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <Grid x1={60} x2={700} y1={60} y2={620}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={390} y={28} size={20} weight={600}>Support Vector Machine</Tx>
+      <Tx x={390} y={50} size={12} fill={C.dim}>Finding the maximum-margin hyperplane between classes</Tx>
+    </g>
+    <g opacity={fi(t,0.3,0.5)}>
+      <line x1={80} y1={CY} x2={670} y2={CY} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <line x1={CX} y1={620} x2={CX} y2={72} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5}/>
+      <Tx x={678} y={CY} size={13} fill={C.dim} anchor="start">x₁</Tx>
+    </g>
+    {c0.slice(0,Math.min(dotsV,12)).map(([x,y],i)=>{const[sx,sy]=toS(x,y);if(sx<80||sx>665||sy<72||sy>618)return null;return<circle key={i} cx={sx} cy={sy} r={8} fill={C.indigo} opacity={0.82}/>;} )}
+    {c1.slice(0,Math.max(0,dotsV-12)).map(([x,y],i)=>{const[sx,sy]=toS(x,y);if(sx<80||sx>665||sy<72||sy>618)return null;return<g key={i}><rect x={sx-6} y={sy-6} width={12} height={12} fill={C.amber} opacity={0.85} transform={`rotate(45,${sx},${sy})`}/></g>;} )}
+    {t>2&&t<3.8&&[{w:-0.5,b:0.5},{w:0.7,b:-0.4}].map((bnd,i)=>{
+      const op=fi(t,2+i*0.4,0.4)*(1-fi(t,3.4,0.7));
+      const[x1,y1]=toS(-3,bnd.w*-3+bnd.b),[x2,y2]=toS(3,bnd.w*3+bnd.b);
+      return<line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.28)" strokeWidth={2} strokeDasharray="6,4" opacity={op}/>;
+    })}
+    {t>2&&t<3.8&&<g opacity={fi(t,2,0.4)*(1-fi(t,3.4,0.7))}><Tx x={400} y={95} size={13} fill={C.dim}>Which boundary is best?</Tx></g>}
+    {t>3.5&&<g opacity={fi(t,3.5,0.7)}>
+      <rect x={m1x} y={72} width={m2x-m1x} height={546} fill={C.green} opacity={0.065}/>
+      <line x1={m1x} y1={72} x2={m1x} y2={618} stroke={C.green} strokeWidth={1.5} strokeDasharray="8,5" opacity={0.7}/>
+      <line x1={m2x} y1={72} x2={m2x} y2={618} stroke={C.green} strokeWidth={1.5} strokeDasharray="8,5" opacity={0.7}/>
+      <line x1={sx0} y1={72} x2={sx0} y2={618} stroke={C.amber} strokeWidth={3}/>
+      <Tx x={sx0+14} y={95} size={13} fill={C.amber} anchor="start" weight={600}>Max-margin hyperplane</Tx>
+      <line x1={m1x} y1={toS(0,1.5)[1]} x2={m2x} y2={toS(0,1.5)[1]} stroke={C.green} strokeWidth={1.5} markerStart="url(#a2-g)" markerEnd="url(#a2-g)"/>
+      <Tx x={sx0} y={toS(0,1.5)[1]-16} size={12} fill={C.green} weight={600}>margin = 2/‖w‖</Tx>
+    </g>}
+    {t>5&&<g opacity={fi(t,5,0.7)}>
+      {[[-1.2,0.3],[-0.9,-0.8],[1.1,-0.2]].map(([x,y],i)=>{const[sx,sy]=toS(x,y);return<circle key={i} cx={sx} cy={sy} r={15} fill="none" stroke={C.violet} strokeWidth={2.5}/>;} )}
+      <Tx x={toS(-1.2,0.3)[0]-20} y={toS(-1.2,0.3)[1]-24} size={11} fill={C.violet} anchor="end">Support vectors</Tx>
+    </g>}
+    <line x1={720} y1={60} x2={720} y2={630} stroke="rgba(255,255,255,0.07)" strokeWidth={1}/>
+    <g opacity={fi(t,1,0.6)}>
+      <rect x={748} y={68} width={490} height={80} rx={8} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.09)" strokeWidth={1}/>
+      <Tx x={993} y={94} size={14} fill={C.amber} weight={500}>Objective: max 2/‖w‖</Tx>
+      <Tx x={993} y={116} size={12} fill={C.dim}>subject to yᵢ(w·xᵢ + b) ≥ 1 for all i</Tx>
+      <Tx x={993} y={134} size={11} fill={C.dim}>Equivalent: min ½‖w‖²</Tx>
+    </g>
+    {[
+      {h:'Soft margin (C)',b:'Allow misclassifications — C trades margin vs. error',col:C.indigo,t2:3.8},
+      {h:'Kernel trick',   b:'Map to high-dim space (RBF, polynomial, sigmoid)',   col:C.teal, t2:5.8},
+      {h:'Support vectors',b:'Only boundary points define the hyperplane',           col:C.violet,t2:5.2},
+    ].map((it,i)=>(
+      <g key={i} opacity={fi(t,it.t2,0.6)}>
+        <rect x={748} y={192+i*112} width={490} height={82} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+        <Tx x={768} y={218+i*112} size={13} fill={it.col} anchor="start" weight={600}>{it.h}</Tx>
+        <Tx x={768} y={242+i*112} size={11} fill={C.dim} anchor="start">{it.b}</Tx>
+      </g>
+    ))}
+  </svg>);
+}
+
+/* ══ 10. ATTENTION MECHANISM ═════════════════════════════ */
+function Attention(){
+  const t=useTime();
+  const W=1280,H=680;
+  const tokens=['I','love','learning'];
+  const n=tokens.length,dk=4;
+
+  const Q=[[1,0,1,0],[0,1,0,1],[1,1,0,0]];
+  const K=[[1,0,0,1],[0,1,1,0],[1,0,1,1]];
+  const V=[[0.5,0,0.8,0],[0,0.7,0,0.5],[0.3,0.3,0.6,0.4]];
+
+  const scores=Q.map(qi=>K.map(kj=>qi.reduce((s,v,i)=>s+v*kj[i],0)/Math.sqrt(dk)));
+  const smx=row=>{const m=Math.max(...row);const ex=row.map(x=>Math.exp(x-m));const s=ex.reduce((a,b)=>a+b,0);return ex.map(x=>x/s);};
+  const attn=scores.map(smx);
+
+  const tCols=[C.indigo,C.violet,C.teal];
+  const tokX=[110,260,410];
+  const tokY=590;
+  const mW=68,mH=48,mGap=4;
+  const hmX=690,hmY=190,hmC=82;
+
+  return(<svg width={W} height={H}>
+    <Defs/>
+    <rect width={W} height={H} fill={C.bg}/>
+    <g opacity={fi(t,0,0.7)}>
+      <Tx x={640} y={28} size={20} weight={600}>Attention Mechanism (Deep Dive)</Tx>
+      <Tx x={640} y={50} size={12} fill={C.dim}>Query · Key · Value — the core of every Transformer</Tx>
+    </g>
+    <g opacity={fi(t,0.5,0.7)}>
+      <rect x={450} y={66} width={430} height={32} rx={6} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.09)" strokeWidth={1}/>
+      <Tx x={665} y={82} size={14} fill={C.amber} weight={500} italic>Attention = softmax(QKᵀ/√dₖ) · V</Tx>
+    </g>
+    {tokens.map((tok,i)=>(
+      <g key={i} opacity={fi(t,0.3+i*0.15,0.5)}>
+        <rect x={tokX[i]-32} y={tokY-18} width={64} height={34} rx={7} fill={tCols[i]} opacity={0.22}/>
+        <rect x={tokX[i]-32} y={tokY-18} width={64} height={34} rx={7} fill="none" stroke={tCols[i]} strokeWidth={1.5} opacity={0.65}/>
+        <Tx x={tokX[i]} y={tokY-1} size={14} fill={tCols[i]} weight={600}>"{tok}"</Tx>
+      </g>
+    ))}
+    <Tx x={260} y={tokY+26} size={11} fill={C.dim} opacity={fi(t,0.4,0.5)}>Input sequence</Tx>
+    {[
+      {label:'Q  (queries)',mat:Q,col:C.indigo,yB:440,t0:1.0},
+      {label:'K  (keys)',   mat:K,col:C.amber, yB:320,t0:1.5},
+      {label:'V  (values)', mat:V,col:C.teal,  yB:200,t0:2.0},
+    ].map(({label,mat,col,yB,t0},mi)=>(
+      <g key={mi} opacity={fi(t,t0,0.6)}>
+        <Tx x={tokX[0]-38} y={yB-20} size={12} fill={col} anchor="start" weight={600}>{label}</Tx>
+        {mat.map((row,i)=>row.map((v,j)=>{
+          const x=tokX[0]-40+j*(mW+mGap),y=yB+i*(mH+mGap);
+          return(<g key={`${i}-${j}`}>
+            <rect x={x} y={y} width={mW} height={mH} rx={4} fill={col} opacity={Math.min(1,Math.abs(v))*0.58} stroke="rgba(255,255,255,0.1)" strokeWidth={1}/>
+            <Tx x={x+mW/2} y={y+mH/2} size={12} fill="white">{v.toFixed(1)}</Tx>
+          </g>);
+        }))}
+      </g>
+    ))}
+    {t>3&&<g opacity={fi(t,3,0.5)}>
+      <line x1={tokX[n-1]+mW+16} y1={290} x2={hmX-16} y2={290} stroke="rgba(255,255,255,0.18)" strokeWidth={1.5} markerEnd="url(#a2-w)"/>
+      <Tx x={(tokX[n-1]+mW+16+hmX-16)/2} y={274} size={11} fill={C.dim}>QKᵀ/√dₖ → softmax</Tx>
+    </g>}
+    <g opacity={fi(t,3.2,0.7)}>
+      <Tx x={hmX+n*hmC/2} y={168} size={13} fill={C.dim} weight={500}>Attention weights (softmax)</Tx>
+      {tokens.map((tok,j)=><Tx key={j} x={hmX+j*hmC+hmC/2} y={hmY-18} size={12} fill={C.dim}>{tok}</Tx>)}
+      {tokens.map((tok,i)=><Tx key={i} x={hmX-12} y={hmY+i*hmC+hmC/2} size={12} fill={C.dim} anchor="end">{tok}</Tx>)}
+      {attn.map((row,i)=>row.map((w,j)=>(
+        <g key={`${i}-${j}`} opacity={fi(t,3.4+(i*n+j)*0.08,0.45)}>
+          <rect x={hmX+j*hmC} y={hmY+i*hmC} width={hmC-3} height={hmC-3} rx={6} fill={C.indigo} opacity={w*0.9}/>
+          <Tx x={hmX+j*hmC+(hmC-3)/2} y={hmY+i*hmC+(hmC-3)/2} size={13} fill={w>0.4?'white':C.dim}>{w.toFixed(2)}</Tx>
+        </g>
+      )))}
+    </g>
+    {t>6.5&&<g opacity={fi(t,6.5,0.7)}>
+      <Tx x={hmX+n*hmC/2} y={hmY+n*hmC+26} size={12} fill={C.dim} weight={500}>Output = attn · V</Tx>
+      {tokens.map((_,i)=>{
+        const out=V[0].map((_,j)=>attn[i].reduce((s,w,k)=>s+w*V[k][j],0));
+        return out.map((v,j)=>(
+          <rect key={`${i}-${j}`} x={hmX+i*hmC+(j*17)} y={hmY+n*hmC+38} width={14} height={44} rx={3} fill={C.green} opacity={v*0.82}/>
+        ));
+      })}
+      <Tx x={hmX+n*hmC/2} y={hmY+n*hmC+98} size={11} fill={C.dim}>Context-enriched representations</Tx>
+    </g>}
+    {t>8&&<g opacity={fi(t,8,0.7)}>
+      <rect x={650} y={530} width={590} height={88} rx={8} fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" strokeWidth={1}/>
+      <Tx x={945} y={554} size={12} fill={C.amber} weight={500}>Why self-attention scales</Tx>
+      <Tx x={662} y={574} size={11} fill={C.dim} anchor="start">• All tokens attend to all others in a single matrix multiply — O(n²·d)</Tx>
+      <Tx x={662} y={592} size={11} fill={C.dim} anchor="start">• Multi-head: run H attention ops in parallel → richer, diverse representations</Tx>
+      <Tx x={662} y={610} size={11} fill={C.dim} anchor="start">• No sequential dependency — parallelises across the full sequence length</Tx>
+    </g>}
+  </svg>);
+}
+
+/* ══ APP ═════════════════════════════════════════════════ */
+const SCENES=[
+  {id:'bp', label:'Backpropagation',    dur:12, Comp:Backprop},
+  {id:'km', label:'K-Means',            dur:12, Comp:KMeans},
+  {id:'dt', label:'Decision Tree',      dur:12, Comp:DecisionTree},
+  {id:'pca',label:'PCA',                dur:12, Comp:PCA},
+  {id:'cnn',label:'CNN',                dur:13, Comp:CNN},
+  {id:'rnn',label:'RNN',                dur:12, Comp:RNN},
+  {id:'bv', label:'Bias-Variance',      dur:12, Comp:BiasVariance},
+  {id:'reg',label:'Regularisation',     dur:12, Comp:Regularisation},
+  {id:'svm',label:'SVM',                dur:12, Comp:SVM},
+  {id:'att',label:'Attention Mechanism',dur:12, Comp:Attention},
+];
+
+function App(){
+  const[active,setActive]=useState('bp');
+  return(
+    <div style={{display:'flex',flexDirection:'column',height:'100vh',overflow:'hidden'}}>
+      <div className="tab-bar">
+        {SCENES.map(s=>(
+          <button key={s.id} className={`tab${active===s.id?' active':''}`} onClick={()=>setActive(s.id)}>{s.label}</button>
+        ))}
+      </div>
+      <div className="stage-wrap">
+        {SCENES.map(s=>active===s.id&&(
+          <div key={s.id} style={{position:'absolute',inset:0}}>
+            <Stage width={1280} height={680} duration={s.dur} background={C.bg}
+              persistKey={`krit-a2-${s.id}`} loop autoplay>
+              <s.Comp/>
+            </Stage>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { Toaster } from "sonner";
 import { QueryProvider } from "@/components/providers/query-provider";
 import "./globals.css";
 
-const inter = Inter({
+const sans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
+  weight: ["300", "400", "500", "600"],
+});
+const serif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+  weight: ["300", "400", "600"],
+  style: ["normal", "italic"],
 });
 const mono = JetBrains_Mono({
   subsets: ["latin"],
@@ -21,13 +29,13 @@ export const metadata: Metadata = {
     template: "%s · Krit",
   },
   description:
-    "A learning platform built around skills, not courses. For corporate L&D teams and retail learners.",
+    "Learn skills, not courses. Krit maps every concept into a skill graph, with an AI tutor that watches what you read and verifiable credentials that prove what you know.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${mono.variable} min-h-screen font-sans`}>
+      <body className={`${sans.variable} ${serif.variable} ${mono.variable} min-h-screen font-sans`}>
         <QueryProvider>
           {children}
           <Toaster richColors closeButton position="top-right" />

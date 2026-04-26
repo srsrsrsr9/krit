@@ -11,7 +11,10 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        // `display` and `serif` both map to Source Serif 4 — `display` is
+        // kept as an alias for the legacy classes scattered across the app.
+        display: ["var(--font-serif)", "Georgia", "serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
