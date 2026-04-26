@@ -44,13 +44,26 @@ export function AiBlockGenerator({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ concept, lessonTitle, lessonOutline: surroundingMarkdown }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        setError(data.error ?? "Generation failed");
+      // Robust parse: if the body isn't JSON (e.g., Vercel timeout HTML),
+      // fall back to text and surface it instead of crashing on JSON.parse.
+      const text = await res.text();
+      let data: { ok?: boolean; error?: string; block?: ContentBlock; modelTookMs?: number; attempts?: number } | null = null;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        setError(
+          res.status === 504 || /timeout/i.test(text)
+            ? "The AI request timed out. Try a shorter concept or try again."
+            : `Server returned non-JSON (status ${res.status}). First chars: ${text.slice(0, 120)}`,
+        );
         return;
       }
-      setPreview(data.block);
-      setInfo(`${data.block.type} · ${data.modelTookMs}ms · ${data.attempts} attempt${data.attempts === 1 ? "" : "s"}`);
+      if (!res.ok || !data?.ok) {
+        setError(data?.error ?? `Generation failed (status ${res.status})`);
+        return;
+      }
+      setPreview(data.block!);
+      setInfo(`${data.block!.type} · ${data.modelTookMs}ms`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Network error");
     } finally {

@@ -7,6 +7,9 @@ import { captureError } from "@/lib/logger";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Vercel Hobby caps non-streaming functions at 10s by default — too short
+// for DeepSeek + a single retry. Bump to 60s (max allowed on Hobby).
+export const maxDuration = 60;
 
 const Body = z.object({
   concept: z.string().min(3).max(500),
@@ -94,60 +97,48 @@ export async function POST(req: Request) {
       "Produce one content block JSON now.",
     ].filter(Boolean).join("\n");
 
-    let attempts = 0;
-    let lastRaw = "";
-    let lastError = "";
     const t0 = Date.now();
+    // Single call; no retry. We could retry, but with Hobby's 60s cap the
+    // safer approach is one good attempt and surface the error if it fails.
+    const completion = await client.chat.completions.create({
+      model,
+      max_tokens: 1200,
+      temperature: 0.3,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        { role: "user", content: userMessage },
+      ],
+    });
 
-    // Up to 2 tries: if the model returns invalid JSON or fails Zod, feed
-    // the error back and retry once.
-    for (attempts = 1; attempts <= 2; attempts++) {
-      const completion = await client.chat.completions.create({
-        model,
-        max_tokens: 1500,
-        temperature: 0.4,
-        response_format: { type: "json_object" },
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMessage },
-          ...(attempts > 1 && lastRaw
-            ? [
-                { role: "assistant" as const, content: lastRaw },
-                { role: "user" as const, content: `That output failed validation: ${lastError}\n\nPlease re-emit a single valid JSON object that conforms to one of the block schemas. No prose.` },
-              ]
-            : []),
-        ],
-      });
+    const raw = completion.choices[0]?.message?.content ?? "";
+    const trimmed = extractJson(raw);
 
-      const raw = completion.choices[0]?.message?.content ?? "";
-      lastRaw = raw;
-      const trimmed = raw.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
-
-      let parsedJson: unknown;
-      try {
-        parsedJson = JSON.parse(trimmed);
-      } catch (e) {
-        lastError = `Not valid JSON: ${e instanceof Error ? e.message : "parse error"}`;
-        continue;
-      }
-
-      const validated = ContentBlock.safeParse(parsedJson);
-      if (validated.success) {
-        return NextResponse.json<BlockResult>({
-          ok: true,
-          block: validated.data,
-          modelTookMs: Date.now() - t0,
-          attempts,
-        });
-      }
-      lastError = validated.error.issues.slice(0, 3).map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    let parsedJson: unknown;
+    try {
+      parsedJson = JSON.parse(trimmed);
+    } catch (e) {
+      return NextResponse.json<BlockError>({
+        ok: false,
+        error: `Model returned non-JSON: ${e instanceof Error ? e.message : "parse error"}`,
+        rawResponse: raw.slice(0, 500),
+        attempts: 1,
+      }, { status: 422 });
     }
 
+    const validated = ContentBlock.safeParse(parsedJson);
+    if (validated.success) {
+      return NextResponse.json<BlockResult>({
+        ok: true,
+        block: validated.data,
+        modelTookMs: Date.now() - t0,
+        attempts: 1,
+      });
+    }
     return NextResponse.json<BlockError>({
       ok: false,
-      error: lastError || "Model failed to produce a valid block after 2 attempts.",
-      rawResponse: lastRaw.slice(0, 500),
-      attempts,
+      error: `Schema validation failed: ${validated.error.issues.slice(0, 3).map((i) => `${i.path.join(".")}: ${i.message}`).join("; ")}`,
+      rawResponse: raw.slice(0, 500),
+      attempts: 1,
     }, { status: 422 });
   } catch (e) {
     captureError(e, { route: "ai/generate-block" });
@@ -157,4 +148,21 @@ export async function POST(req: Request) {
       attempts: 0,
     }, { status: 500 });
   }
+}
+
+/**
+ * Best-effort JSON extraction: handles models that wrap output in
+ * markdown fences or chatty preambles. Looks for the first `{` and the
+ * last `}` and returns that slice.
+ */
+function extractJson(text: string): string {
+  let t = text.trim();
+  // Strip ``` or ```json fences if present.
+  t = t.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+  const first = t.indexOf("{");
+  const last = t.lastIndexOf("}");
+  if (first >= 0 && last > first) {
+    return t.slice(first, last + 1);
+  }
+  return t;
 }
