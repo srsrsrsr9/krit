@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp, Trash2, Plus, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import type { ContentBlock } from "@/lib/content/blocks";
 import { BlockRenderer } from "@/components/lesson/block-renderer";
 import { cn } from "@/lib/utils";
+import { AiBlockGenerator } from "./ai-block-generator";
 
 type BlockType = ContentBlock["type"];
 
@@ -56,11 +57,28 @@ function newBlock(type: BlockType): ContentBlock {
 export function BlockEditor({
   blocks,
   onChange,
+  lessonTitle,
 }: {
   blocks: ContentBlock[];
   onChange: (next: ContentBlock[]) => void;
+  lessonTitle?: string;
 }) {
   const [preview, setPreview] = useState(false);
+
+  // Compact summary of existing markdown/heading blocks — fed to the AI
+  // generator as context so it produces blocks that fit the lesson tone.
+  const lessonOutline = useMemo(() => {
+    return blocks
+      .filter((b) => b.type === "heading" || b.type === "markdown" || b.type === "callout")
+      .slice(0, 8)
+      .map((b) => {
+        if (b.type === "heading") return `# ${b.text}`;
+        if (b.type === "markdown") return b.md.slice(0, 200);
+        if (b.type === "callout") return `[${b.tone}] ${b.title ?? ""}: ${b.md.slice(0, 120)}`;
+        return "";
+      })
+      .join("\n");
+  }, [blocks]);
 
   function update(i: number, patch: Partial<ContentBlock>) {
     onChange(blocks.map((b, idx) => (idx === i ? { ...b, ...patch } as ContentBlock : b)));
@@ -122,8 +140,15 @@ export function BlockEditor({
         </Card>
       ))}
 
-      <div className="rounded-lg border border-dashed border-border p-3">
-        <div className="mb-2 text-xs font-medium text-muted-foreground">Add block</div>
+      <div className="space-y-3 rounded-lg border border-dashed border-border p-3">
+        <div className="flex items-center justify-between">
+          <div className="text-xs font-medium text-muted-foreground">Add block</div>
+          <AiBlockGenerator
+            lessonTitle={lessonTitle}
+            surroundingMarkdown={lessonOutline}
+            onInsert={(b) => onChange([...blocks, b])}
+          />
+        </div>
         <div className="flex flex-wrap gap-1.5">
           {(Object.keys(BLOCK_LABEL) as BlockType[]).map((t) => (
             <Button key={t} size="sm" variant="outline" onClick={() => add(t)} className="gap-1">

@@ -119,7 +119,7 @@ export function LessonForm({
 
       <div>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">Content blocks</h2>
-        <BlockEditor blocks={blocks} onChange={setBlocks} />
+        <BlockEditor blocks={blocks} onChange={setBlocks} lessonTitle={title} />
       </div>
 
       <div className="flex items-center justify-between">

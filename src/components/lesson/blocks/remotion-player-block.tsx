@@ -1,24 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { Player, type PlayerRef } from "@remotion/player";
 import { Play } from "lucide-react";
 import { COMPOSITIONS } from "@/remotion";
 
 /**
- * Renders a Remotion composition inline. The Player is dynamically
- * imported so the heavy Remotion runtime doesn't bloat the initial
- * lesson page bundle.
+ * Renders a Remotion composition inline. The whole module is already
+ * dynamic-imported (ssr:false) at the renderer level, so we import
+ * Player directly here — no need for a second dynamic boundary.
+ *
+ * Aspect-ratio is enforced via CSS so the Player container never
+ * collapses to 0 height, which is the default failure mode.
  */
-
-const Player = dynamic(() => import("@remotion/player").then((m) => m.Player), {
-  ssr: false,
-  loading: () => (
-    <div className="flex aspect-video w-full items-center justify-center rounded-lg border border-border bg-card text-sm text-muted-foreground">
-      Loading animation…
-    </div>
-  ),
-});
 
 export interface RemotionPlayerBlockProps {
   composition: keyof typeof COMPOSITIONS;
@@ -41,11 +35,9 @@ export function RemotionPlayerBlock({
 }: RemotionPlayerBlockProps) {
   const def = COMPOSITIONS[composition];
   const containerRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<PlayerRef>(null);
   const [autoplayed, setAutoplayed] = useState(false);
-  const playerRef = useRef<{ play: () => void; pause: () => void } | null>(null);
 
-  // Auto-play once the player scrolls into view (better than autoPlay
-  // which trips browser policies).
   useEffect(() => {
     if (autoplayed) return;
     const el = containerRef.current;
@@ -75,12 +67,13 @@ export function RemotionPlayerBlock({
 
   return (
     <figure ref={containerRef} className="not-prose">
-      <div className="overflow-hidden rounded-xl border border-border bg-black">
+      <div
+        className="relative w-full overflow-hidden rounded-xl border border-border bg-black"
+        style={{ aspectRatio: `${width} / ${height}` }}
+      >
         <Player
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ref={playerRef as any}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          component={def.Component as any}
+          ref={playerRef}
+          component={def.Component}
           durationInFrames={durationFrames}
           fps={fps}
           compositionWidth={width}
@@ -89,7 +82,7 @@ export function RemotionPlayerBlock({
           controls
           loop
           clickToPlay
-          style={{ width: "100%", height: "auto" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
         />
       </div>
       {caption && (
