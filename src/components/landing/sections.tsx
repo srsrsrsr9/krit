@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
-  SkillGraph,
   IllustrationGraph,
   IllustrationTutor,
   IllustrationCredential,
   StepDiagram,
 } from "@/components/brand/illustrations";
+import { AnimatedSkillGraph } from "./animated-skill-graph";
 
 const T = {
   indigo: "oklch(0.52 0.22 264)",
@@ -178,13 +178,23 @@ export function LandingHero() {
           className="rounded-2xl border bg-white p-8 shadow-[0_4px_24px_oklch(0.52_0.22_264_/_0.05)]"
           style={{ borderColor: T.rule }}
         >
-          <p
-            className="mb-4 text-xs font-medium uppercase tracking-[0.08em]"
-            style={{ color: T.ink3, fontFamily: "var(--font-sans)" }}
-          >
-            Your skill graph · Data Science path
-          </p>
-          <SkillGraph animated />
+          <div className="mb-4 flex items-center justify-between">
+            <span
+              className="text-xs font-medium uppercase tracking-[0.08em]"
+              style={{ color: T.ink3, fontFamily: "var(--font-sans)" }}
+            >
+              Your skill graph · Data Science path
+            </span>
+            <span className="hidden items-center gap-2 text-[0.7rem] sm:flex" style={{ color: T.ink3 }}>
+              <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: T.violet }} />
+              evidence
+              <span className="ml-2 inline-block h-1.5 w-1.5 rounded-full" style={{ background: T.indigo }} />
+              mastered
+            </span>
+          </div>
+          <div className="aspect-[4/3]">
+            <AnimatedSkillGraph />
+          </div>
         </div>
       </div>
     </section>

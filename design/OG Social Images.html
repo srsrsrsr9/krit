@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · OG Image Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:oklch(0.92 0.006 264);font-family:'DM Sans',sans-serif;padding:2rem}
+.tab-bar{display:flex;gap:6px;margin-bottom:2rem;padding:6px;background:white;border-radius:10px;width:fit-content;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.tab{padding:6px 16px;border-radius:7px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .18s}
+.tab.active{background:oklch(0.52 0.22 264);color:white}
+.tab:not(.active){background:transparent;color:oklch(0.42 0.01 264)}
+.og-wrapper{transform-origin:top left;box-shadow:0 12px 48px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.06);border-radius:12px;overflow:hidden;display:inline-block}
+.label{font-size:12px;color:oklch(0.55 0.01 264);margin-bottom:.5rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const OG_W = 1200, OG_H = 630;
+const SCALE = 0.54; // preview scale
+
+const T = {
+  dark:   'oklch(0.12 0.018 264)',
+  dark2:  'oklch(0.17 0.016 264)',
+  dark3:  'oklch(0.22 0.014 264)',
+  indigo: 'oklch(0.52 0.22 264)',
+  indigoL:'oklch(0.66 0.22 264)',
+  violet: 'oklch(0.52 0.22 292)',
+  white:  'rgba(255,255,255,0.92)',
+  dim:    'rgba(255,255,255,0.5)',
+  muted:  'rgba(255,255,255,0.22)',
+  gold:   'oklch(0.80 0.12 76)',
+  rule:   'rgba(255,255,255,0.1)',
+  bgLight:'oklch(0.985 0.006 80)',
+  ink:    'oklch(0.14 0.015 264)',
+  ink2:   'oklch(0.42 0.01 264)',
+  ink3:   'oklch(0.68 0.008 264)',
+  ruleL:  'oklch(0.88 0.008 264)',
+};
+
+/* Shared text helper */
+const Tx = ({x,y,children,size=16,fill=T.white,anchor='start',weight=400,opacity=1,family="'DM Sans',sans-serif",italic=false})=>(
+  <text x={x} y={y} textAnchor={anchor} dominantBaseline="middle" fontSize={size} fill={fill} fontWeight={weight} opacity={opacity} fontFamily={family} fontStyle={italic?'italic':'normal'}>{children}</text>
+);
+
+/* Mini skill graph for OG */
+const OG_NODES=[{x:180,y:315,r:34,col:T.indigoL,ev:8},{x:320,y:200,r:30,col:T.indigoL,ev:5},{x:320,y:430,r:30,col:T.indigoL,ev:4},{x:480,y:315,r:26,col:'rgba(100,140,255,0.4)',ev:2},{x:580,y:200,r:22,col:'rgba(255,255,255,0.12)',ev:0},{x:580,y:430,r:22,col:'rgba(100,140,255,0.25)',ev:1}];
+const OG_EDGES=[[0,1],[0,2],[1,3],[2,3],[3,4],[3,5]];
+const OG_LABELS=['SQL','Python','Statistics','ML Basics','NLP','Regression'];
+
+function MiniSkillGraph({x=100,y=100,scale=1}) {
+  return (
+    <g transform={`translate(${x},${y}) scale(${scale})`}>
+      {OG_EDGES.map(([a,b],i)=>{
+        const na=OG_NODES[a],nb=OG_NODES[b];
+        return<line key={i} x1={na.x} y1={na.y} x2={nb.x} y2={nb.y} stroke="rgba(255,255,255,0.15)" strokeWidth={2}/>;
+      })}
+      {OG_NODES.map((n,i)=>(
+        <g key={i}>
+          {n.ev>0&&Array.from({length:n.ev},(_,k)=>{
+            const a=(k/Math.max(n.ev,1))*Math.PI*2-Math.PI/2;
+            return<circle key={k} cx={n.x+Math.cos(a)*(n.r+14)} cy={n.y+Math.sin(a)*(n.r+14)} r={4} fill={T.violet} opacity={.8}/>;
+          })}
+          <circle cx={n.x} cy={n.y} r={n.r} fill={n.col}/>
+          <text x={n.x} y={n.y+1} textAnchor="middle" dominantBaseline="middle" fontSize={11} fontWeight={600} fill="white" fontFamily="'DM Sans',sans-serif" opacity={.9}>{OG_LABELS[i]}</text>
+        </g>
+      ))}
+    </g>
+  );
+}
+
+/* ══ OG 1: Path detail ══ */
+function OGPath() {
+  return (
+    <svg width={OG_W} height={OG_H} viewBox={`0 0 ${OG_W} ${OG_H}`}>
+      <rect width={OG_W} height={OG_H} fill={T.dark}/>
+      {/* Subtle grid */}
+      {Array.from({length:12},(_,i)=><line key={i} x1={0} y1={i*55} x2={OG_W} y2={i*55} stroke="rgba(255,255,255,0.03)" strokeWidth={1}/>)}
+      {Array.from({length:22},(_,i)=><line key={i} x1={i*57} y1={0} x2={i*57} y2={OG_H} stroke="rgba(255,255,255,0.03)" strokeWidth={1}/>)}
+      {/* Gradient bleed */}
+      <defs>
+        <radialGradient id="pg1" cx="65%" cy="50%"><stop offset="0%" stopColor={T.indigo} stopOpacity=".18"/><stop offset="100%" stopColor="transparent"/></radialGradient>
+      </defs>
+      <rect width={OG_W} height={OG_H} fill="url(#pg1)"/>
+      {/* Left: copy */}
+      <Tx x={80} y={100} size={18} fill="rgba(255,255,255,0.4)" weight={500} opacity={1}>Krit · Learning Path</Tx>
+      <text x={80} y={210} fontSize={68} fontWeight={300} fill="white" fontFamily="'Source Serif 4',serif" dominantBaseline="middle">SQL</text>
+      <text x={80} y={280} fontSize={68} fontWeight={300} fill="white" fontFamily="'Source Serif 4',serif" dominantBaseline="middle">Foundations</text>
+      <Tx x={80} y={360} size={20} fill="rgba(255,255,255,0.55)" weight={300} italic>Earn the credential →</Tx>
+      {/* Skill pills */}
+      {['SELECT','JOINs','Window Functions','Optimisation'].map((s,i)=>(
+        <g key={i}>
+          <rect x={80+i*180} y={410} width={165} height={36} rx={18} fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)" strokeWidth={1}/>
+          <text x={80+i*180+82} y={428} textAnchor="middle" dominantBaseline="middle" fontSize={13} fill="rgba(255,255,255,0.7)" fontFamily="'DM Sans',sans-serif">{s}</text>
+        </g>
+      ))}
+      {/* Stats row */}
+      {[{v:'4',l:'core skills'},{v:'~6 wk',l:'to credential'},{v:'Free',l:'to start'}].map((s,i)=>(
+        <g key={i}>
+          <text x={80+i*190} y={510} fontSize={32} fontWeight={600} fill="white" fontFamily="'DM Sans',sans-serif" dominantBaseline="middle">{s.v}</text>
+          <text x={80+i*190} y={545} fontSize={14} fill="rgba(255,255,255,0.45)" fontFamily="'DM Sans',sans-serif" dominantBaseline="middle">{s.l}</text>
+        </g>
+      ))}
+      {/* Right: skill graph */}
+      <MiniSkillGraph x={680} y={-30} scale={0.9}/>
+      {/* Bottom bar */}
+      <rect x={0} y={OG_H-56} width={OG_W} height={56} fill="rgba(0,0,0,0.3)"/>
+      <Tx x={80} y={OG_H-28} size={15} fill="rgba(255,255,255,0.5)">krit.so/path/sql-foundations</Tx>
+      <Tx x={OG_W-80} y={OG_H-28} size={18} fill="white" anchor="end" weight={600} family="'Source Serif 4',serif">Krit</Tx>
+    </svg>
+  );
+}
+
+/* ══ OG 2: Public credential ══ */
+function OGCredential() {
+  return (
+    <svg width={OG_W} height={OG_H} viewBox={`0 0 ${OG_W} ${OG_H}`}>
+      <rect width={OG_W} height={OG_H} fill={T.dark}/>
+      <defs>
+        <radialGradient id="cg1" cx="35%" cy="50%"><stop offset="0%" stopColor={T.indigo} stopOpacity=".22"/><stop offset="100%" stopColor="transparent"/></radialGradient>
+        <radialGradient id="cg2" cx="80%" cy="40%"><stop offset="0%" stopColor={T.violet} stopOpacity=".1"/><stop offset="100%" stopColor="transparent"/></radialGradient>
+      </defs>
+      <rect width={OG_W} height={OG_H} fill="url(#cg1)"/>
+      <rect width={OG_W} height={OG_H} fill="url(#cg2)"/>
+      {/* Seal */}
+      {[0,1,2].map(i=><circle key={i} cx={130} cy={OG_H/2} r={80-i*22} fill="none" stroke={T.indigo} strokeWidth={i===0?2:1} opacity={0.35-i*0.08}/>)}
+      {Array.from({length:24},(_,i)=>{
+        const a=(i/24)*Math.PI*2-Math.PI/2,r1=55,r2=63;
+        return<line key={i} x1={130+Math.cos(a)*r1} y1={OG_H/2+Math.sin(a)*r1} x2={130+Math.cos(a)*r2} y2={OG_H/2+Math.sin(a)*r2} stroke="rgba(255,255,255,0.4)" strokeWidth={i%6===0?1.8:0.9}/>;
+      })}
+      <circle cx={130} cy={OG_H/2} r={50} fill={T.indigo}/>
+      <polyline points="105,315 120,338 158,292" fill="none" stroke="white" strokeWidth={5} strokeLinecap="round" strokeLinejoin="round"/>
+      {/* Copy */}
+      <Tx x={240} y={130} size={17} fill="rgba(255,255,255,0.4)" weight={500}>Krit · Verified Credential</Tx>
+      <text x={240} y={220} fontSize={62} fontWeight={400} fill="white" fontFamily="'Source Serif 4',serif" dominantBaseline="middle">ML Engineering</text>
+      <text x={240} y={290} fontSize={62} fontWeight={400} fill="white" fontFamily="'Source Serif 4',serif" dominantBaseline="middle">Foundations</text>
+      <Tx x={240} y={370} size={22} fill="rgba(255,255,255,0.55)" weight={300}>Earned by <tspan fill="white" fontWeight={500}>Priya Sharma</tspan></Tx>
+      {/* Skill bars */}
+      {[{l:'Python',w:0.95},{l:'Statistics',w:0.88},{l:'SQL',w:0.82},{l:'ML Basics',w:0.76},{l:'Neural Nets',w:0.68},{l:'Features',w:0.72}].map((s,i)=>(
+        <g key={i}>
+          <text x={240} y={430+i*22} fontSize={12} fill="rgba(255,255,255,0.45)" fontFamily="'DM Sans',sans-serif" dominantBaseline="middle">{s.l}</text>
+          <rect x={360} y={422+i*22} width={300} height={7} rx={3.5} fill="rgba(255,255,255,0.1)"/>
+          <rect x={360} y={422+i*22} width={s.w*300} height={7} rx={3.5} fill={T.indigoL} opacity={.9}/>
+        </g>
+      ))}
+      {/* Verification */}
+      <rect x={240} y={OG_H-90} width={220} height={34} rx={17} fill={T.indigo} opacity={.22}/>
+      <circle cx={260} cy={OG_H-73} r={9} fill={T.indigo}/>
+      <text x={265} y={OG_H-73} fontSize={9} fontWeight={700} fill="white" fontFamily="'DM Sans',sans-serif" dominantBaseline="middle">✓</text>
+      <Tx x={278} y={OG_H-73} size={13} fill="rgba(255,255,255,0.65)">KRT-7F2A-9B3C · krit.so/verify</Tx>
+      <Tx x={OG_W-80} y={OG_H-73} size={18} fill="white" anchor="end" weight={600} family="'Source Serif 4',serif">Krit</Tx>
+    </svg>
+  );
+}
+
+/* ══ OG 3: Brand homepage ══ */
+function OGBrand() {
+  return (
+    <svg width={OG_W} height={OG_H} viewBox={`0 0 ${OG_W} ${OG_H}`}>
+      <rect width={OG_W} height={OG_H} fill={T.bgLight}/>
+      {/* Subtle grid */}
+      {Array.from({length:12},(_,i)=><line key={i} x1={0} y1={i*54} x2={OG_W} y2={i*54} stroke="rgba(0,0,0,0.04)" strokeWidth={1}/>)}
+      {Array.from({length:22},(_,i)=><line key={i} x1={i*57} y1={0} x2={i*57} y2={OG_H} stroke="rgba(0,0,0,0.04)" strokeWidth={1}/>)}
+      <defs>
+        <radialGradient id="bg1" cx="50%" cy="50%"><stop offset="0%" stopColor="oklch(0.52 0.22 264)" stopOpacity=".06"/><stop offset="100%" stopColor="transparent"/></radialGradient>
+      </defs>
+      <rect width={OG_W} height={OG_H} fill="url(#bg1)"/>
+      {/* Large wordmark */}
+      <text x={OG_W/2} y={240} fontSize={140} fontWeight={400} fill={T.ink} fontFamily="'Source Serif 4',serif" textAnchor="middle" dominantBaseline="middle">Krit</text>
+      {/* Tagline */}
+      <text x={OG_W/2} y={340} fontSize={28} fontWeight={300} fill={T.ink2} fontFamily="'Source Serif 4',serif" textAnchor="middle" dominantBaseline="middle" fontStyle="italic">Learn skills. Not courses. Show your work.</text>
+      {/* Pill chips */}
+      {['Skill graph','AI tutor','Verifiable credentials'].map((s,i)=>{
+        const widths=[165,145,230];
+        const starts=[OG_W/2-265, OG_W/2-60, OG_W/2+100];
+        return(
+          <g key={i}>
+            <rect x={starts[i]} y={410} width={widths[i]} height={38} rx={19} fill="oklch(0.52 0.22 264)" opacity={.12} stroke="oklch(0.52 0.22 264)" strokeWidth={1} strokeOpacity={.3}/>
+            <text x={starts[i]+widths[i]/2} y={429} textAnchor="middle" dominantBaseline="middle" fontSize={15} fill="oklch(0.52 0.22 264)" fontWeight={500} fontFamily="'DM Sans',sans-serif">{s}</text>
+          </g>
+        );
+      })}
+      {/* Bottom strip */}
+      <rect x={0} y={OG_H-60} width={OG_W} height={60} fill={T.ink}/>
+      <Tx x={80} y={OG_H-30} size={16} fill="rgba(255,255,255,0.5)">krit.so</Tx>
+      <Tx x={OG_W/2} y={OG_H-30} size={14} fill="rgba(255,255,255,0.4)" anchor="middle">Skill-first learning · Free to start · Verifiable credentials</Tx>
+      <Tx x={OG_W-80} y={OG_H-30} size={14} fill="rgba(255,255,255,0.35)" anchor="end">© 2026 Krit Learning, Inc.</Tx>
+    </svg>
+  );
+}
+
+const TEMPLATES = [
+  { id:'path',  label:'Path detail',  Comp:OGPath },
+  { id:'cred',  label:'Credential',   Comp:OGCredential },
+  { id:'brand', label:'Brand homepage',Comp:OGBrand },
+];
+
+function App() {
+  const [active, setActive] = useState('path');
+  const tmpl = TEMPLATES.find(t=>t.id===active);
+
+  return (
+    <div>
+      <h2 style={{ fontSize:'1.375rem', fontWeight:600, color:'oklch(0.14 0.015 264)', marginBottom:'0.5rem' }}>OG Image Templates · 1200×630</h2>
+      <p style={{ fontSize:'0.875rem', color:'oklch(0.55 0.01 264)', marginBottom:'1.5rem' }}>React SVG components, ready for @vercel/og. Switch between templates below.</p>
+      <div className="tab-bar">
+        {TEMPLATES.map(t=>(
+          <button key={t.id} className={`tab${active===t.id?' active':''}`} onClick={()=>setActive(t.id)}>{t.label}</button>
+        ))}
+      </div>
+      <div className="label">{tmpl.label} · {OG_W}×{OG_H} · previewed at {Math.round(SCALE*100)}%</div>
+      <div className="og-wrapper" style={{ transform:`scale(${SCALE})` }}>
+        <tmpl.Comp/>
+      </div>
+      {/* Vercel OG usage hint */}
+      <div style={{ marginTop:`${OG_H*SCALE+20}px`, background:'white', borderRadius:10, padding:'1.25rem 1.5rem', border:'1px solid oklch(0.88 0.008 264)', maxWidth:700 }}>
+        <p style={{ fontSize:'0.75rem', fontWeight:600, color:'oklch(0.55 0.01 264)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'0.5rem' }}>Usage with @vercel/og</p>
+        <pre style={{ fontSize:'0.8125rem', color:'oklch(0.14 0.015 264)', lineHeight:1.7, whiteSpace:'pre-wrap', fontFamily:"'DM Mono',monospace" }}>{`// app/og/route.tsx
+import { ImageResponse } from '@vercel/og';
+import { ${tmpl.Comp.name} } from './templates';
+
+export const runtime = 'edge';
+
+export function GET(req: Request) {
+  return new ImageResponse(<${tmpl.Comp.name} />, {
+    width: 1200, height: 630,
+  });
+}`}</pre>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

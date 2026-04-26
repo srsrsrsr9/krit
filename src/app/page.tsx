@@ -7,6 +7,7 @@ import {
   LandingPricing,
   LandingFooter,
 } from "@/components/landing/sections";
+import { BeforeAfterSection } from "@/components/landing/before-after";
 
 /**
  * Production landing page derived from the Claude Design handoff at
@@ -18,6 +19,7 @@ export default function Landing() {
     <div className="krit-landing min-h-screen">
       <LandingNav />
       <LandingHero />
+      <BeforeAfterSection />
       <LandingFeatures />
       <LandingHowItWorks />
       <LandingSocialProof />

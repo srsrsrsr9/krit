@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · Hero Animation</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;background:oklch(0.985 0.006 80);font-family:'DM Sans',sans-serif}
+@keyframes ev-pop{0%{r:0;opacity:0}60%{r:5.5;opacity:1}100%{r:4;opacity:1}}
+@keyframes node-glow{0%,100%{filter:drop-shadow(0 0 0px transparent)}50%{filter:drop-shadow(0 0 14px oklch(0.52 0.22 264))}}
+@keyframes edge-draw{from{stroke-dashoffset:var(--len,200)}to{stroke-dashoffset:0}}
+@keyframes badge-in{0%{opacity:0;transform:scale(0.4)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes pulse-ring{0%{r:28;opacity:.55}100%{r:44;opacity:0}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ── Brand ── */
+const T = {
+  bg:    'oklch(0.985 0.006 80)',
+  ink:   'oklch(0.14 0.015 264)',
+  ink2:  'oklch(0.42 0.01 264)',
+  ink3:  'oklch(0.68 0.008 264)',
+  rule:  'oklch(0.88 0.008 264)',
+  indigoFull: 'oklch(0.52 0.22 264)',
+  indigo70:   'oklch(0.62 0.20 264)',
+  violet:     'oklch(0.52 0.22 290)',
+  indigoLight:'oklch(0.94 0.04 264)',
+  locked:     'oklch(0.88 0.008 264)',
+};
+
+/* ── Graph definition (deterministic) ── */
+const NODES = [
+  { id:'sql',   x:0.14, y:0.48, label:'SQL',        threshold:3 },
+  { id:'py',    x:0.36, y:0.22, label:'Python',     threshold:3 },
+  { id:'stats', x:0.36, y:0.74, label:'Statistics', threshold:3 },
+  { id:'ml',    x:0.60, y:0.48, label:'ML Basics',  threshold:3 },
+  { id:'reg',   x:0.80, y:0.74, label:'Regression', threshold:2 },
+  { id:'nlp',   x:0.80, y:0.22, label:'NLP',        threshold:2 },
+];
+const EDGES = [
+  ['sql','py'], ['sql','stats'],
+  ['py','ml'],  ['stats','ml'],
+  ['ml','nlp'], ['ml','reg'],
+];
+
+/* Evidence schedule: [nodeId, time] — fully deterministic */
+const EVIDENCE = [
+  ['sql',0.9],['sql',1.5],['sql',2.1],
+  ['py',2.6],['stats',2.8],
+  ['py',3.2],['stats',3.5],
+  ['py',3.9],['stats',4.2],
+  ['ml',4.7],['ml',5.2],['ml',5.8],
+  ['reg',6.2],['nlp',6.2],
+  ['reg',6.7],['nlp',6.7],
+  ['reg',7.15],['nlp',7.15],
+];
+
+const LOOP = 12; // seconds
+
+function easeInOut(t) {
+  return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+}
+function easeOut(t) {
+  return 1-(1-t)*(1-t);
+}
+
+function SkillGraphHero({ width=560, height=400 }) {
+  const [phase, setPhase] = useState(0); // 0..LOOP seconds
+  const startRef = useRef(null);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    const tick = (ts) => {
+      if (!startRef.current) startRef.current = ts;
+      const elapsed = ((ts - startRef.current) / 1000) % LOOP;
+      setPhase(elapsed);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  const t = phase;
+
+  /* Evidence state */
+  const evidenceByNode = {};
+  NODES.forEach(n => { evidenceByNode[n.id] = []; });
+  EVIDENCE.forEach(([nid, at]) => {
+    if (t >= at) evidenceByNode[nid].push(at);
+  });
+
+  const mastered = (nid) => {
+    const node = NODES.find(n=>n.id===nid);
+    return evidenceByNode[nid].length >= node.threshold;
+  };
+
+  /* Node fill progress (0→1 as evidence accumulates) */
+  const nodeProgress = (nid) => {
+    const node = NODES.find(n=>n.id===nid);
+    return Math.min(1, evidenceByNode[nid].length / node.threshold);
+  };
+
+  /* Edge visible when both endpoints mastered */
+  const edgeVisible = ([a,b]) => mastered(a) && mastered(b);
+
+  /* End-state glow (t > 7.5) */
+  const glowPhase = Math.max(0, Math.min(1, (t-7.5)/1.5));
+
+  /* Camera "zoom" — very subtle scale from 0.95→1 */
+  const zoom = 0.95 + 0.05 * easeInOut(Math.min(1, t/8));
+
+  const px = (frac) => frac * width;
+  const py = (frac) => frac * height;
+
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      width="100%" height="100%"
+      style={{ overflow:'visible', transform:`scale(${zoom})`, transformOrigin:'center' }}
+    >
+      <defs>
+        <radialGradient id="node-grad" cx="40%" cy="35%">
+          <stop offset="0%" stopColor="white" stopOpacity="0.35"/>
+          <stop offset="100%" stopColor="transparent"/>
+        </radialGradient>
+        <filter id="glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {/* Edges */}
+      {EDGES.map(([a,b], i) => {
+        const na = NODES.find(n=>n.id===a), nb = NODES.find(n=>n.id===b);
+        const x1=px(na.x), y1=py(na.y), x2=px(nb.x), y2=py(nb.y);
+        const len = Math.hypot(x2-x1, y2-y1);
+        const vis = edgeVisible([a,b]);
+        // When did it become visible?
+        const unlockT = Math.max(
+          EVIDENCE.filter(([nid])=>nid===a).slice(NODES.find(n=>n.id===a).threshold-1)[0]?.[1]??0,
+          EVIDENCE.filter(([nid])=>nid===b).slice(NODES.find(n=>n.id===b).threshold-1)[0]?.[1]??0,
+        );
+        const drawP = vis ? Math.min(1, (t - unlockT) / 0.7) : 0;
+        const dashLen = len;
+        return (
+          <line key={i}
+            x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke={vis ? T.indigoFull : T.rule}
+            strokeWidth={vis ? 2 : 1.5}
+            strokeDasharray={dashLen}
+            strokeDashoffset={dashLen * (1-easeOut(drawP))}
+            opacity={vis ? 0.65 + glowPhase*0.35 : 0.5}
+          />
+        );
+      })}
+
+      {/* Nodes */}
+      {NODES.map((node) => {
+        const cx=px(node.x), cy=py(node.y);
+        const prog=nodeProgress(node.id);
+        const mast=mastered(node.id);
+        const evDots=evidenceByNode[node.id];
+        const r=28;
+        const fillColor = mast ? T.indigoFull : (prog>0 ? T.indigo70 : T.locked);
+        const textColor = mast || prog>0.5 ? 'white' : T.ink2;
+
+        /* When node first became mastered */
+        const mastT = mast ? (EVIDENCE.filter(([nid])=>nid===node.id).slice(node.threshold-1)[0]?.[1] ?? 0) : 0;
+        const popProgress = mast ? Math.min(1,(t-mastT)/0.5) : 0;
+        const nodeScale = mast ? (0.88 + 0.12*easeOut(popProgress) + (popProgress<1?0.12*Math.sin(popProgress*Math.PI):0)) : (0.85 + prog*0.15);
+
+        /* Pulse ring on master */
+        const ringOpacity = mast ? Math.max(0, 1 - (t-mastT)/1.2) * 0.6 : 0;
+        const ringR = mast ? 28 + (t-mastT)/1.2*20 : 28;
+
+        /* Evidence dots around node */
+        const evPositions = evDots.map((evT, k) => {
+          const angle = (k / node.threshold) * Math.PI * 2 - Math.PI/2;
+          const dist = r + 14;
+          return { x: cx+Math.cos(angle)*dist, y: cy+Math.sin(angle)*dist, at: evT };
+        });
+
+        return (
+          <g key={node.id} style={{ filter: mast && glowPhase>0 ? `drop-shadow(0 0 ${8*glowPhase}px oklch(0.52 0.22 264 / 0.6))` : 'none' }}>
+            {/* Pulse ring */}
+            {mast && ringOpacity>0 && (
+              <circle cx={cx} cy={cy} r={Math.min(ringR,46)} fill="none"
+                stroke={T.indigoFull} strokeWidth={1.5} opacity={ringOpacity}/>
+            )}
+            {/* Node circle */}
+            <circle cx={cx} cy={cy} r={r*nodeScale} fill={fillColor} opacity={mast?1:0.5+prog*0.5}/>
+            <circle cx={cx} cy={cy} r={r*nodeScale} fill="url(#node-grad)"/>
+            {mast && <circle cx={cx} cy={cy} r={r*nodeScale} fill="none" stroke="white" strokeWidth={1} opacity={0.25}/>}
+            <text x={cx} y={cy+1} textAnchor="middle" dominantBaseline="middle"
+              fontSize={10} fontWeight={600} fill={textColor} fontFamily="'DM Sans',sans-serif"
+              style={{userSelect:'none'}}>
+              {node.label}
+            </text>
+
+            {/* Evidence dots */}
+            {evPositions.map((ev, k) => {
+              const age = t - ev.at;
+              const dotProg = Math.min(1, age / 0.3);
+              const dotR = 4 * easeOut(dotProg);
+              return (
+                <circle key={k} cx={ev.x} cy={ev.y} r={dotR}
+                  fill={T.violet} opacity={0.85}/>
+              );
+            })}
+
+            {/* Mastered checkmark shimmer */}
+            {mast && popProgress > 0.5 && (
+              <text x={cx} y={cy+1} textAnchor="middle" dominantBaseline="middle"
+                fontSize={10} fontWeight={700} fill="white" opacity={(popProgress-0.5)*2}
+                fontFamily="'DM Sans',sans-serif" style={{userSelect:'none'}}>
+                ✓
+              </text>
+            )}
+          </g>
+        );
+      })}
+
+      {/* Final credential badge — appears at t≈8 */}
+      {t > 8.2 && (
+        <g opacity={Math.min(1,(t-8.2)/0.8)} style={{transformOrigin:`${px(0.5)}px ${py(0.5)}px`}}>
+          <rect x={px(0.5)-70} y={py(0.5)-26} width={140} height={52} rx={10}
+            fill={T.indigoFull} opacity={0.92}/>
+          <rect x={px(0.5)-70} y={py(0.5)-26} width={140} height={52} rx={10}
+            fill="none" stroke="white" strokeWidth={1} opacity={0.25}/>
+          <text x={px(0.5)} y={py(0.5)-6} textAnchor="middle" dominantBaseline="middle"
+            fontSize={9} fontWeight={500} fill="rgba(255,255,255,0.7)" fontFamily="'DM Sans',sans-serif"
+            letterSpacing="0.08em" style={{userSelect:'none'}}>CREDENTIAL EARNED</text>
+          <text x={px(0.5)} y={py(0.5)+12} textAnchor="middle" dominantBaseline="middle"
+            fontSize={13} fontWeight={600} fill="white" fontFamily="'DM Sans',sans-serif"
+            style={{userSelect:'none'}}>ML Foundations</text>
+        </g>
+      )}
+    </svg>
+  );
+}
+
+/* ── Full hero section ── */
+function HeroSection() {
+  return (
+    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:'4rem 2rem', background:T.bg }}>
+      <div style={{ maxWidth:1200, width:'100%', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'5rem', alignItems:'center' }}>
+        {/* Copy */}
+        <div>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:'0.5rem', padding:'0.3rem 0.875rem', borderRadius:100, background:T.indigoLight, border:`1px solid oklch(0.88 0.07 264)`, marginBottom:'1.5rem' }}>
+            <span style={{ fontSize:'0.75rem', fontWeight:600, color:T.indigoFull, letterSpacing:'0.08em', textTransform:'uppercase' }}>Skill-first learning</span>
+          </div>
+          <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'clamp(2.5rem,4.5vw,3.75rem)', lineHeight:1.12, color:T.ink, letterSpacing:'-0.01em', marginBottom:'1.5rem' }}>
+            Learn skills.<br/>Not courses.<br/><em style={{color:T.indigoFull}}>Show your work.</em>
+          </h1>
+          <p style={{ fontSize:'1.125rem', color:T.ink2, lineHeight:1.75, fontWeight:300, maxWidth:420, marginBottom:'2.5rem' }}>
+            Krit maps every concept into a skill graph — with AI that watches what you read and verifiable credentials that prove what you know.
+          </p>
+          <div style={{ display:'flex', gap:'1rem' }}>
+            <button style={{ background:T.indigoFull, color:'#fff', fontFamily:"'DM Sans',sans-serif", fontWeight:500, padding:'0.75rem 1.75rem', borderRadius:7, border:'none', cursor:'pointer', fontSize:'0.9375rem' }}>
+              Start learning free
+            </button>
+            <button style={{ background:'transparent', color:T.indigoFull, fontFamily:"'DM Sans',sans-serif", fontWeight:500, padding:'0.75rem 1.75rem', borderRadius:7, border:`1.5px solid oklch(0.88 0.07 264)`, cursor:'pointer', fontSize:'0.9375rem' }}>
+              See how it works
+            </button>
+          </div>
+        </div>
+        {/* Animation panel */}
+        <div style={{ background:'white', border:`1px solid ${T.rule}`, borderRadius:16, padding:'2rem', boxShadow:'0 4px 32px oklch(0.52 0.22 264 / 0.06)', aspectRatio:'4/3', display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:'0.75rem', fontWeight:500, color:T.ink3, textTransform:'uppercase', letterSpacing:'0.08em' }}>Your skill graph</span>
+            <div style={{ display:'flex', gap:'0.5rem', alignItems:'center' }}>
+              <div style={{ width:7, height:7, borderRadius:'50%', background:T.violet }}/>
+              <span style={{ fontSize:'0.7rem', color:T.ink3 }}>evidence</span>
+              <div style={{ width:7, height:7, borderRadius:'50%', background:T.indigoFull, marginLeft:'0.5rem' }}/>
+              <span style={{ fontSize:'0.7rem', color:T.ink3 }}>mastered</span>
+            </div>
+          </div>
+          <div style={{ flex:1 }}>
+            <SkillGraphHero width={520} height={340} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<HeroSection/>);
+</script>
+</body>
+</html>

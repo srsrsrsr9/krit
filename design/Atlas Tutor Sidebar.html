@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · Atlas Tutor Sidebar</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;font-family:'DM Sans',sans-serif;overflow:hidden}
+body{background:oklch(0.985 0.006 80);color:oklch(0.14 0.015 264)}
+
+@keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes thinking-dot{0%,80%,100%{transform:scale(0.4);opacity:.4}40%{transform:scale(1);opacity:1}}
+@keyframes slide-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+@keyframes reading-bar{0%{width:0}100%{width:60%}}
+@keyframes pulse-eye{0%,100%{opacity:.6}50%{opacity:1}}
+
+.msg-atlas{animation:fade-up 0.35s ease forwards}
+.msg-user{animation:fade-up 0.35s ease forwards}
+.thinking span{display:inline-block;width:7px;height:7px;border-radius:50%;background:oklch(0.52 0.22 264);animation:thinking-dot 1.4s ease-in-out infinite}
+.thinking span:nth-child(2){animation-delay:.2s}
+.thinking span:nth-child(3){animation-delay:.4s}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const T = {
+  bg:'oklch(0.985 0.006 80)', ink:'oklch(0.14 0.015 264)', ink2:'oklch(0.42 0.01 264)',
+  ink3:'oklch(0.68 0.008 264)', rule:'oklch(0.88 0.008 264)', indigo:'oklch(0.52 0.22 264)',
+  violet:'oklch(0.52 0.22 292)', indigoLight:'oklch(0.94 0.04 264)', indigoMid:'oklch(0.88 0.07 264)',
+  white:'white',
+};
+
+const LESSON_SECTIONS = [
+  { id:'intro',    title:'What is backpropagation?',  excerpt:'Backpropagation is the algorithm that makes neural networks learn. At its core, it\'s an application of the chain rule…' },
+  { id:'forward',  title:'The forward pass',           excerpt:'When we make a prediction, we compute the loss: how far we were from the correct answer. The loss function…' },
+  { id:'chain',    title:'The chain rule in practice', excerpt:'∂L/∂w = (∂L/∂a) × (∂a/∂z) × (∂z/∂w). This decomposition is the key insight — we never recompute…' },
+  { id:'impl',     title:'Modern implementations',    excerpt:'PyTorch and JAX compute gradients automatically through automatic differentiation. You define the forward pass…' },
+];
+
+const SAVED_ANSWERS = [];
+
+const SUGGESTED_QUESTIONS = [
+  'What exactly is a gradient?',
+  'Why does the chain rule work here?',
+  'Show me a concrete numeric example',
+  'How does this relate to vanishing gradients?',
+];
+
+/* ── Atlas logo mark ── */
+function AtlasLogo({ size=24 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      <circle cx={12} cy={12} r={11} fill={T.indigo}/>
+      <circle cx={12} cy={10} r={4} fill="none" stroke="white" strokeWidth={1.4}/>
+      <circle cx={12} cy={10} r={1.5} fill="white"/>
+      <path d="M7 18c0-3 2-5 5-5s5 2 5 5" fill="none" stroke="white" strokeWidth={1.4} strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+/* ── Reading context banner ── */
+function ReadingContext({ section, mode }) {
+  return (
+    <div style={{ padding:'0.625rem 0.875rem', background:T.indigoLight, borderBottom:`1px solid ${T.indigoMid}`, display:'flex', alignItems:'center', gap:'0.625rem' }}>
+      <svg width={13} height={13} viewBox="0 0 16 16" fill="none" style={{ animation:'pulse-eye 2s ease-in-out infinite', flexShrink:0 }}>
+        <circle cx={8} cy={8} r={7} stroke={T.indigo} strokeWidth={1.5}/>
+        <circle cx={8} cy={8} r={3} fill={T.indigo}/>
+        <circle cx={9.5} cy={6.5} r={1} fill="white"/>
+      </svg>
+      <div style={{ flex:1, minWidth:0 }}>
+        <div style={{ fontSize:'0.7rem', color:T.indigo, fontWeight:600, letterSpacing:'0.04em' }}>
+          {mode==='section' ? 'Reading now' : 'Whole lesson'}
+        </div>
+        <div style={{ fontSize:'0.75rem', color:T.ink2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+          {mode==='section' ? `"${section.title}"` : 'Backpropagation: How Networks Learn'}
+        </div>
+      </div>
+      {/* animated reading bar */}
+      <div style={{ width:36, height:3, background:T.indigoMid, borderRadius:2, overflow:'hidden' }}>
+        <div style={{ height:'100%', width:'60%', background:T.indigo, borderRadius:2, animation:'reading-bar 3s ease-in-out infinite alternate' }}/>
+      </div>
+    </div>
+  );
+}
+
+/* ── Thinking indicator ── */
+function Thinking() {
+  return (
+    <div style={{ padding:'0.875rem 1rem', display:'flex', alignItems:'center', gap:'0.75rem' }}>
+      <AtlasLogo size={22}/>
+      <div className="thinking" style={{ display:'flex', gap:'4px', alignItems:'center' }}>
+        <span/><span/><span/>
+      </div>
+    </div>
+  );
+}
+
+/* ── Message ── */
+function Message({ msg, onSave }) {
+  const [saved, setSaved] = useState(false);
+  const isAtlas = msg.role === 'atlas';
+  return (
+    <div className={isAtlas?'msg-atlas':'msg-user'} style={{ padding:'0.75rem 1rem', display:'flex', gap:'0.625rem', alignItems:'flex-start' }}>
+      {isAtlas && <AtlasLogo size={22}/>}
+      <div style={{ flex:1, minWidth:0 }}>
+        {msg.context && (
+          <div style={{ fontSize:'0.7rem', color:T.ink3, marginBottom:'0.375rem', fontStyle:'italic' }}>
+            re: "{msg.context}"
+          </div>
+        )}
+        <div style={{ fontSize:'0.8875rem', color:isAtlas?T.ink:T.ink2, lineHeight:1.65, background:isAtlas?'transparent':T.indigoLight, padding:isAtlas?0:'0.5rem 0.75rem', borderRadius:isAtlas?0:8, fontWeight:isAtlas?300:400 }}>
+          {msg.text}
+        </div>
+        {isAtlas && (
+          <button onClick={()=>{ setSaved(true); onSave(msg); }}
+            style={{ marginTop:'0.5rem', fontSize:'0.7rem', color:saved?T.indigo:T.ink3, background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:'0.3rem', padding:0, transition:'color 0.2s' }}>
+            {saved ? '✓ Saved to notes' : '↓ Save to notes'}
+          </button>
+        )}
+      </div>
+      {!isAtlas && <div style={{ width:22, height:22, borderRadius:'50%', background:T.indigo, display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, fontWeight:600, color:'white', flexShrink:0 }}>P</div>}
+    </div>
+  );
+}
+
+/* ── Sidebar component ── */
+function AtlasSidebar({ currentSection }) {
+  const [mode, setMode] = useState('section'); // 'section' | 'lesson'
+  const [messages, setMessages] = useState([
+    { id:0, role:'atlas', text:`I noticed you just re-read the chain rule section. It's dense — want me to walk through a concrete numeric example?`, context:'The chain rule in practice' },
+  ]);
+  const [input, setInput] = useState('');
+  const [thinking, setThinking] = useState(false);
+  const [savedNotes, setSavedNotes] = useState([]);
+  const [showNotes, setShowNotes] = useState(false);
+  const bottomRef = useRef(null);
+
+  const RESPONSES = {
+    'gradient': 'A gradient is the generalisation of a derivative to functions with multiple inputs. For a loss function L(w₁, w₂, …), the gradient ∇L is a vector pointing in the direction of steepest increase. We move against it.',
+    'chain': 'Because the forward pass is just function composition: output = f(g(h(x))). The chain rule lets us decompose ∂output/∂x into a product of local derivatives — each layer only needs to know its own local gradient.',
+    'numeric': 'Let\'s say w=0.5, x=2, so z=wx=1. With sigmoid a=σ(z)≈0.731 and loss L=(a-1)²≈0.072. Then ∂L/∂w = ∂L/∂a · ∂a/∂z · ∂z/∂w = 2(a-1)·a(1-a)·x ≈ −0.286. So w updates to 0.5 + 0.3·0.286 ≈ 0.586.',
+    'vanishing': 'With sigmoid activations, ∂a/∂z = a(1-a) ≤ 0.25. After 10 layers, the gradient shrinks by 0.25¹⁰ ≈ 0.0000001. ReLU (max(0,z)) has ∂a/∂z = 1 for z>0, breaking the vanishing problem — one reason transformers and ResNets use it.',
+    default: 'That\'s a sharp question. In backpropagation, every gradient flows backward through the chain rule. The key is that each layer sees only its local gradient — the global error signal gets distributed automatically.',
+  };
+
+  const sendMessage = (text) => {
+    if(!text.trim()) return;
+    const userMsg = { id:Date.now(), role:'user', text };
+    setMessages(m=>[...m,userMsg]);
+    setInput('');
+    setThinking(true);
+    setTimeout(()=>{
+      const lower = text.toLowerCase();
+      const resp = lower.includes('gradient')?RESPONSES.gradient:lower.includes('chain')?RESPONSES.chain:lower.includes('numeric')||lower.includes('example')?RESPONSES.numeric:lower.includes('vanish')?RESPONSES.vanishing:RESPONSES.default;
+      setThinking(false);
+      setMessages(m=>[...m,{ id:Date.now()+1, role:'atlas', text:resp, context:mode==='section'?currentSection.title:null }]);
+    }, 1200 + Math.random()*600);
+  };
+
+  useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:'smooth'}); },[messages,thinking]);
+
+  return (
+    <div style={{ width:'100%', height:'100%', display:'flex', flexDirection:'column', background:'white', borderLeft:`1px solid ${T.rule}` }}>
+      {/* Header */}
+      <div style={{ padding:'0.875rem 1rem', borderBottom:`1px solid ${T.rule}`, display:'flex', alignItems:'center', gap:'0.625rem', flexShrink:0 }}>
+        <AtlasLogo size={28}/>
+        <div>
+          <div style={{ fontSize:'0.9375rem', fontWeight:600, color:T.ink }}>Atlas</div>
+          <div style={{ fontSize:'0.7rem', color:T.ink3 }}>Your AI tutor</div>
+        </div>
+        <div style={{ marginLeft:'auto', display:'flex', gap:'0.375rem' }}>
+          <button onClick={()=>setShowNotes(n=>!n)} style={{ padding:'0.35rem 0.625rem', borderRadius:6, border:`1px solid ${T.rule}`, background:'none', fontSize:'0.75rem', color:T.ink3, cursor:'pointer', display:'flex', alignItems:'center', gap:'0.3rem' }}>
+            📝 {savedNotes.length>0?`${savedNotes.length} notes`:'Notes'}
+          </button>
+        </div>
+      </div>
+
+      {/* Mode toggle */}
+      <div style={{ padding:'0.625rem 0.875rem', borderBottom:`1px solid ${T.rule}`, flexShrink:0, display:'flex', gap:'0.5rem', alignItems:'center' }}>
+        <span style={{ fontSize:'0.7rem', color:T.ink3, fontWeight:500, marginRight:'0.25rem' }}>Ask about:</span>
+        {[{id:'section',label:'This section'},{id:'lesson',label:'Whole lesson'}].map(opt=>(
+          <button key={opt.id} onClick={()=>setMode(opt.id)} style={{ padding:'0.3rem 0.75rem', borderRadius:100, border:`1px solid ${mode===opt.id?T.indigo:T.rule}`, background:mode===opt.id?T.indigoLight:'transparent', color:mode===opt.id?T.indigo:T.ink3, fontSize:'0.75rem', fontWeight:mode===opt.id?600:400, cursor:'pointer', transition:'all 0.18s' }}>
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Reading context */}
+      <ReadingContext section={currentSection} mode={mode}/>
+
+      {/* Notes panel */}
+      {showNotes && (
+        <div style={{ padding:'0.875rem 1rem', borderBottom:`1px solid ${T.rule}`, background:T.bg, animation:'slide-in 0.25s ease forwards' }}>
+          <div style={{ fontSize:'0.75rem', fontWeight:600, color:T.ink3, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'0.625rem' }}>Saved notes</div>
+          {savedNotes.length===0
+            ? <p style={{ fontSize:'0.8125rem', color:T.ink3, fontStyle:'italic' }}>No notes yet. Save useful answers below.</p>
+            : savedNotes.map((n,i)=><div key={i} style={{ fontSize:'0.8125rem', color:T.ink2, padding:'0.5rem 0', borderBottom:i<savedNotes.length-1?`1px solid ${T.rule}`:'none', lineHeight:1.55 }}>"{n.text.slice(0,80)}…"</div>)}
+        </div>
+      )}
+
+      {/* Messages */}
+      <div style={{ flex:1, overflowY:'auto', display:'flex', flexDirection:'column' }}>
+        {messages.map(m=><Message key={m.id} msg={m} onSave={n=>setSavedNotes(s=>[...s,n])}/>)}
+        {thinking && <Thinking/>}
+        <div ref={bottomRef}/>
+      </div>
+
+      {/* Suggested questions */}
+      <div style={{ padding:'0.625rem 0.875rem', borderTop:`1px solid ${T.rule}`, display:'flex', gap:'0.5rem', overflowX:'auto', flexShrink:0 }}>
+        {SUGGESTED_QUESTIONS.map((q,i)=>(
+          <button key={i} onClick={()=>sendMessage(q)} style={{ padding:'0.35rem 0.75rem', borderRadius:100, border:`1px solid ${T.rule}`, background:T.bg, color:T.ink2, fontSize:'0.75rem', cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.18s', flexShrink:0 }}>
+            {q}
+          </button>
+        ))}
+      </div>
+
+      {/* Input */}
+      <div style={{ padding:'0.75rem 0.875rem', borderTop:`1px solid ${T.rule}`, display:'flex', gap:'0.5rem', flexShrink:0 }}>
+        <input value={input} onChange={e=>setInput(e.target.value)}
+          onKeyDown={e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(input); }}}
+          placeholder={mode==='section'?`Ask about "${currentSection.title}"…`:'Ask about the whole lesson…'}
+          style={{ flex:1, padding:'0.625rem 0.875rem', borderRadius:8, border:`1px solid ${T.rule}`, background:T.bg, fontSize:'0.875rem', color:T.ink, outline:'none', fontFamily:"'DM Sans',sans-serif" }}/>
+        <button onClick={()=>sendMessage(input)} style={{ width:36, height:36, borderRadius:8, background:T.indigo, border:'none', color:'white', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <svg width={14} height={14} viewBox="0 0 16 16" fill="none"><path d="M2 8h12M9 3l5 5-5 5" stroke="white" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Lesson page mock ── */
+function LessonPage() {
+  const [activeSection, setActiveSection] = useState(LESSON_SECTIONS[2]);
+
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'1fr 360px', height:'100vh', overflow:'hidden' }}>
+      {/* Lesson content */}
+      <div style={{ overflowY:'auto', padding:'2rem 2.5rem' }}>
+        <div style={{ maxWidth:640, margin:'0 auto' }}>
+          <div style={{ display:'flex', gap:'0.5rem', alignItems:'center', marginBottom:'1rem' }}>
+            <span style={{ fontSize:'0.75rem', color:T.ink3 }}>Neural Networks</span>
+            <span style={{ color:T.rule }}>›</span>
+            <span style={{ fontSize:'0.75rem', color:T.ink3 }}>Lesson 4 of 8</span>
+          </div>
+          <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'2rem', color:T.ink, marginBottom:'0.75rem', lineHeight:1.2 }}>
+            Backpropagation: How Networks Learn
+          </h1>
+          <div style={{ height:3, background:T.rule, borderRadius:2, marginBottom:'0.5rem', overflow:'hidden' }}>
+            <div style={{ width:'38%', height:'100%', background:T.indigo, borderRadius:2 }}/>
+          </div>
+          <p style={{ fontSize:'0.8125rem', color:T.ink3, marginBottom:'2.5rem' }}>38% read · ~8 min remaining</p>
+
+          {LESSON_SECTIONS.map(sec=>(
+            <div key={sec.id} onClick={()=>setActiveSection(sec)}
+              style={{ marginBottom:'2rem', padding:'1.25rem', borderRadius:10, border:`1.5px solid ${activeSection.id===sec.id?T.indigo:T.rule}`, background:activeSection.id===sec.id?T.indigoLight:'transparent', cursor:'pointer', transition:'all 0.2s' }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'0.5rem' }}>
+                <h2 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'1.1rem', color:T.ink }}>{sec.title}</h2>
+                {activeSection.id===sec.id&&<span style={{ fontSize:'0.7rem', fontWeight:600, color:T.indigo, background:'white', padding:'0.2rem 0.5rem', borderRadius:100, border:`1px solid ${T.indigoMid}` }}>Atlas reading</span>}
+              </div>
+              <p style={{ fontSize:'0.875rem', color:T.ink2, lineHeight:1.7, fontWeight:300 }}>{sec.excerpt}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <AtlasSidebar currentSection={activeSection}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<LessonPage/>);
+</script>
+</body>
+</html>

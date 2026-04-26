@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;font-family:'DM Sans',sans-serif}
+body{background:oklch(0.985 0.006 80);color:oklch(0.14 0.015 264);overflow:hidden}
+@keyframes slide-in-right{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes slide-in-left{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes fade-up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes node-bloom{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const T = {
+  bg: 'oklch(0.985 0.006 80)',
+  ink: 'oklch(0.14 0.015 264)',
+  ink2: 'oklch(0.42 0.01 264)',
+  ink3: 'oklch(0.68 0.008 264)',
+  rule: 'oklch(0.88 0.008 264)',
+  indigo: 'oklch(0.52 0.22 264)',
+  violet: 'oklch(0.52 0.22 292)',
+  indigoLight: 'oklch(0.94 0.04 264)',
+  indigoMid: 'oklch(0.88 0.07 264)',
+};
+
+const GOALS = [
+  { id:'pm',  label:'Become a data-aware PM',     icon:'◈', skills:['SQL','Analytics','Experimentation','Product Metrics'] },
+  { id:'ml',  label:'Learn ML basics',            icon:'◎', skills:['Python','Statistics','ML Basics','Neural Networks'] },
+  { id:'job', label:'Get my first job in tech',   icon:'◉', skills:['Python','SQL','Data Wrangling','Portfolio'] },
+  { id:'sql', label:'Brush up on SQL',            icon:'◇', skills:['SQL Basics','Joins','Window Functions','Optimisation'] },
+  { id:'other',label:'Other (describe)',          icon:'…',  skills:[] },
+];
+
+const SKILL_QUESTIONS = {
+  ml: [
+    { skill:'Python basics',       id:'py'  },
+    { skill:'Basic statistics',    id:'stats'},
+    { skill:'Linear algebra',      id:'la'  },
+    { skill:'Working with data',   id:'data' },
+    { skill:'Probability theory',  id:'prob' },
+  ],
+  pm: [
+    { skill:'SQL queries',         id:'sql' },
+    { skill:'A/B testing basics',  id:'ab'  },
+    { skill:'Excel / Sheets',      id:'xl'  },
+    { skill:'Funnel analysis',     id:'fn'  },
+  ],
+  job: [
+    { skill:'Python basics',       id:'py'  },
+    { skill:'SQL basics',          id:'sql' },
+    { skill:'Git / GitHub',        id:'git' },
+    { skill:'HTML / CSS',          id:'web' },
+  ],
+  sql: [
+    { skill:'Basic SELECT queries', id:'sel'},
+    { skill:'Joins (INNER/LEFT)',   id:'join'},
+    { skill:'Aggregations (GROUP)', id:'agg' },
+  ],
+  other: [],
+};
+
+const NODES_BY_GOAL = {
+  ml:  [{x:0.5,y:0.15,l:'Python'},{x:0.2,y:0.45,l:'Stats'},{x:0.8,y:0.45,l:'Lin Alg'},{x:0.35,y:0.75,l:'ML Basics'},{x:0.65,y:0.75,l:'NLP'}],
+  pm:  [{x:0.5,y:0.15,l:'SQL'},{x:0.2,y:0.5,l:'Analytics'},{x:0.8,y:0.5,l:'A/B Test'},{x:0.5,y:0.82,l:'Metrics'}],
+  job: [{x:0.5,y:0.15,l:'Python'},{x:0.25,y:0.5,l:'SQL'},{x:0.75,y:0.5,l:'Git'},{x:0.5,y:0.82,l:'Portfolio'}],
+  sql: [{x:0.5,y:0.2,l:'SELECT'},{x:0.25,y:0.55,l:'Joins'},{x:0.75,y:0.55,l:'Aggr'},{x:0.5,y:0.85,l:'Window'}],
+  other:[{x:0.5,y:0.5,l:'?'}],
+};
+
+/* ── Step indicators ── */
+function StepBar({ step }) {
+  const steps = ['Goal','Snapshot','Schedule','Start'];
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:'0', marginBottom:'2rem' }}>
+      {steps.map((s,i)=>(
+        <React.Fragment key={i}>
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'0.375rem' }}>
+            <div style={{ width:28, height:28, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, fontWeight:600, background:i<=step?T.indigo:'rgba(0,0,0,0.08)', color:i<=step?'white':T.ink3, transition:'all 0.35s' }}>
+              {i<step?'✓':i+1}
+            </div>
+            <span style={{ fontSize:10, fontWeight:500, color:i===step?T.indigo:T.ink3, textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{s}</span>
+          </div>
+          {i<3&&<div style={{ flex:1, height:2, background:i<step?T.indigo:T.rule, transition:'background 0.4s', margin:'0 0.5rem', marginBottom:'1.25rem' }}/>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+/* ── Screen 1: Goal picker ── */
+function GoalPicker({ onSelect }) {
+  const [hovered, setHovered] = useState(null);
+  return (
+    <div style={{ animation:'slide-in-right 0.45s ease forwards' }}>
+      <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'clamp(1.75rem,3vw,2.5rem)', color:T.ink, marginBottom:'0.75rem', lineHeight:1.2 }}>
+        What are you here to do?
+      </h1>
+      <p style={{ fontSize:'1rem', color:T.ink2, fontWeight:300, marginBottom:'2.5rem' }}>
+        Pick the goal that's closest. You can change it later.
+      </p>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'1rem' }}>
+        {GOALS.map((g,i)=>(
+          <button key={g.id} onClick={()=>onSelect(g)}
+            onMouseEnter={()=>setHovered(g.id)} onMouseLeave={()=>setHovered(null)}
+            style={{ background:hovered===g.id?T.indigoLight:'white', border:`1.5px solid ${hovered===g.id?T.indigo:T.rule}`, borderRadius:12, padding:'1.5rem 1.25rem', textAlign:'left', cursor:'pointer', transition:'all 0.18s', animation:`fade-up 0.4s ease ${i*0.06}s both`, display:'flex', flexDirection:'column', gap:'1rem' }}>
+            {/* Illustrated preview */}
+            <div style={{ height:80, borderRadius:8, background:T.indigoLight, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <svg viewBox="0 0 80 60" width={80} height={60}>
+                {g.skills.slice(0,4).map((s,k)=>{
+                  const cx=[40,20,60,40][k], cy=[12,40,40,55][k];
+                  return<g key={k}><circle cx={cx} cy={cy} r={12} fill={T.indigo} opacity={0.2+k*0.15}/><text x={cx} y={cy+1} textAnchor="middle" dominantBaseline="middle" fontSize={6} fill={T.indigo} fontFamily="'DM Sans',sans-serif" fontWeight={600}>{s.split(' ')[0]}</text></g>;
+                })}
+                {g.skills.length>1&&[[20,40,40,12],[40,12,60,40],[20,40,40,55],[40,55,60,40]].slice(0,g.skills.length-1).map(([x1,y1,x2,y2],k)=><line key={k} x1={x1} y1={y1} x2={x2} y2={y2} stroke={T.indigo} strokeWidth={1} opacity={0.4}/>)}
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontSize:'0.9375rem', fontWeight:600, color:T.ink, marginBottom:'0.375rem' }}>{g.label}</div>
+              <div style={{ fontSize:'0.8125rem', color:T.ink3 }}>{g.skills.length ? `${g.skills.length} core skills` : 'You define it'}</div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Screen 2: Skill snapshot ── */
+function SkillSnapshot({ goal, onNext }) {
+  const [answers, setAnswers] = useState({});
+  const questions = SKILL_QUESTIONS[goal.id] || [];
+  const nodes = NODES_BY_GOAL[goal.id] || [];
+
+  const toggle = (id) => setAnswers(a=>({...a,[id]:!a[id]}));
+  const known = Object.values(answers).filter(Boolean).length;
+
+  return (
+    <div style={{ animation:'slide-in-right 0.45s ease forwards', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'3rem', alignItems:'start' }}>
+      <div>
+        <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'clamp(1.5rem,2.5vw,2rem)', color:T.ink, marginBottom:'0.75rem', lineHeight:1.25 }}>
+          What do you already know?
+        </h1>
+        <p style={{ fontSize:'0.9375rem', color:T.ink2, fontWeight:300, marginBottom:'2rem' }}>
+          Quick yes/no — this seeds your skill graph with your real starting point.
+        </p>
+        <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+          {questions.map((q,i)=>{
+            const yes = answers[q.id]===true, no = answers[q.id]===false;
+            return(
+              <div key={q.id} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0.875rem 1rem', background:'white', border:`1.5px solid ${yes?T.indigo:no?T.rule:T.rule}`, borderRadius:10, animation:`fade-up 0.4s ease ${i*0.07}s both` }}>
+                <span style={{ fontSize:'0.9375rem', color:T.ink, fontWeight:yes?500:400 }}>{q.skill}</span>
+                <div style={{ display:'flex', gap:'0.5rem' }}>
+                  <button onClick={()=>setAnswers(a=>({...a,[q.id]:true}))} style={{ padding:'0.35rem 0.875rem', borderRadius:6, border:`1.5px solid ${yes?T.indigo:T.rule}`, background:yes?T.indigo:'transparent', color:yes?'white':T.ink3, cursor:'pointer', fontSize:'0.8125rem', fontWeight:500, transition:'all 0.18s' }}>Yes</button>
+                  <button onClick={()=>setAnswers(a=>({...a,[q.id]:false}))} style={{ padding:'0.35rem 0.875rem', borderRadius:6, border:`1.5px solid ${no?T.ink:T.rule}`, background:no?T.ink:'transparent', color:no?'white':T.ink3, cursor:'pointer', fontSize:'0.8125rem', fontWeight:500, transition:'all 0.18s' }}>No</button>
+                </div>
+              </div>
+            );
+          })}
+          {questions.length===0&&<p style={{color:T.ink3}}>We'll start fresh — your goal will shape the graph.</p>}
+        </div>
+        <button onClick={()=>onNext({answers})} style={{ marginTop:'2rem', background:T.indigo, color:'white', border:'none', padding:'0.75rem 1.75rem', borderRadius:8, fontSize:'0.9375rem', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+          {Object.keys(answers).length===0?'Skip →':'Continue →'}
+        </button>
+      </div>
+      {/* Mini skill graph */}
+      <div style={{ background:'white', border:`1px solid ${T.rule}`, borderRadius:16, padding:'1.5rem', aspectRatio:'1' }}>
+        <p style={{ fontSize:'0.75rem', fontWeight:500, color:T.ink3, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'1rem' }}>Your starting graph · {goal.label}</p>
+        <svg viewBox="0 0 200 180" width="100%" height="200">
+          {nodes.map((n,i)=>nodes.slice(i+1).map((m,j)=>{
+            const dx=Math.abs(n.x-m.x),dy=Math.abs(n.y-m.y);
+            if(dx<0.4&&dy<0.4)return<line key={j} x1={n.x*200} y1={n.y*180} x2={m.x*200} y2={m.y*180} stroke={T.rule} strokeWidth={1.5}/>;
+            return null;
+          }))}
+          {nodes.map((n,i)=>{
+            const ans = questions[i]?answers[questions[i].id]:undefined;
+            const col = ans===true?T.indigo:ans===false?'oklch(0.72 0.06 264)':T.rule;
+            return(
+              <g key={i} style={{ animation:`node-bloom 0.4s cubic-bezier(0.22,1,0.36,1) ${i*0.08}s both`, transformOrigin:`${n.x*200}px ${n.y*180}px` }}>
+                <circle cx={n.x*200} cy={n.y*180} r={18} fill={col} opacity={ans===true?1:0.5}/>
+                <text x={n.x*200} y={n.y*180+1} textAnchor="middle" dominantBaseline="middle" fontSize={7.5} fontWeight={600} fill={ans===true?'white':'oklch(0.5 0.01 264)'} fontFamily="'DM Sans',sans-serif">{n.l}</text>
+                {ans===true&&Array.from({length:3},(_,k)=>{
+                  const a=(k/3)*Math.PI*2;
+                  return<circle key={k} cx={n.x*200+Math.cos(a)*26} cy={n.y*180+Math.sin(a)*26} r={3} fill={T.violet} opacity={0.8}/>;
+                })}
+              </g>
+            );
+          })}
+        </svg>
+        {known>0&&<p style={{ fontSize:'0.8125rem', color:T.ink3, textAlign:'center', marginTop:'0.5rem' }}>{known} skill{known>1?'s':''} seeded from your knowledge</p>}
+      </div>
+    </div>
+  );
+}
+
+/* ── Screen 3: Time commitment ── */
+const TIME_OPTIONS = [
+  { mins:15, label:'15 min/day', weeks:16 },
+  { mins:30, label:'30 min/day', weeks:9  },
+  { mins:60, label:'1 hr/day',   weeks:5  },
+];
+
+function TimeCommitment({ goal, onNext }) {
+  const [selected, setSelected] = useState(1);
+  const opt = TIME_OPTIONS[selected];
+
+  return (
+    <div style={{ animation:'slide-in-right 0.45s ease forwards', maxWidth:560 }}>
+      <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'clamp(1.5rem,2.5vw,2rem)', color:T.ink, marginBottom:'0.75rem' }}>
+        How much time can you give it?
+      </h1>
+      <p style={{ fontSize:'0.9375rem', color:T.ink2, fontWeight:300, marginBottom:'2.5rem' }}>
+        Be honest — a realistic schedule beats an ambitious one you'll abandon.
+      </p>
+
+      {/* Options */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'1rem', marginBottom:'2.5rem' }}>
+        {TIME_OPTIONS.map((o,i)=>(
+          <button key={i} onClick={()=>setSelected(i)} style={{ padding:'1.5rem 1rem', borderRadius:12, border:`2px solid ${selected===i?T.indigo:T.rule}`, background:selected===i?T.indigoLight:'white', cursor:'pointer', transition:'all 0.2s', textAlign:'center' }}>
+            <div style={{ fontFamily:"'Source Serif 4',serif", fontSize:'1.75rem', color:selected===i?T.indigo:T.ink, marginBottom:'0.25rem' }}>{o.mins}<span style={{fontSize:'1rem',marginLeft:2}}>m</span></div>
+            <div style={{ fontSize:'0.8125rem', color:selected===i?T.indigo:T.ink3 }}>{o.label}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Visual projection */}
+      <div style={{ background:'white', border:`1px solid ${T.rule}`, borderRadius:12, padding:'1.5rem', marginBottom:'2rem' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1rem' }}>
+          <p style={{ fontSize:'0.9375rem', color:T.ink2 }}>At {opt.label}, your credential is {opt.weeks} weeks away</p>
+          <span style={{ fontSize:'0.875rem', fontWeight:600, color:T.indigo }}>{opt.weeks}w</span>
+        </div>
+        {/* Timeline bar */}
+        <div style={{ position:'relative', height:12, background:T.rule, borderRadius:6, overflow:'hidden' }}>
+          <div style={{ position:'absolute', left:0, top:0, bottom:0, width:`${(1-opt.weeks/20)*100}%`, background:`linear-gradient(90deg, ${T.indigo}, ${T.violet})`, borderRadius:6, transition:'width 0.4s ease' }}/>
+          <div style={{ position:'absolute', left:0, top:-1, height:14, width:14, borderRadius:'50%', background:T.indigo, transition:'left 0.4s ease' }}/>
+        </div>
+        <div style={{ display:'flex', justifyContent:'space-between', marginTop:'0.5rem', fontSize:'0.75rem', color:T.ink3 }}>
+          <span>Today</span>
+          <span>Credential ✓</span>
+        </div>
+        {/* Week labels */}
+        <div style={{ display:'flex', gap:'0.5rem', marginTop:'1rem', flexWrap:'wrap' }}>
+          {Array.from({length:opt.weeks},(_,i)=>(
+            <div key={i} style={{ width:20, height:20, borderRadius:4, background:i<opt.weeks*0.6?T.indigoLight:T.rule, display:'flex', alignItems:'center', justifyContent:'center', fontSize:8, color:T.ink3 }}>{i+1}</div>
+          ))}
+        </div>
+      </div>
+
+      <button onClick={()=>onNext({mins:opt.mins})} style={{ background:T.indigo, color:'white', border:'none', padding:'0.75rem 1.75rem', borderRadius:8, fontSize:'0.9375rem', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+        Set my schedule →
+      </button>
+    </div>
+  );
+}
+
+/* ── Screen 4: First lesson ── */
+function FirstLesson({ goal, timeData, onStart }) {
+  const lessonMap = {
+    ml:  { title:'Python for ML: Data Structures', duration:'22 min', skills:['Python','NumPy'], difficulty:'Beginner' },
+    pm:  { title:'SQL Basics: Your First Query',    duration:'18 min', skills:['SQL','SELECT'], difficulty:'Beginner' },
+    job: { title:'Python Fundamentals: Variables',  duration:'20 min', skills:['Python'], difficulty:'Beginner' },
+    sql: { title:'Writing Your First SELECT',       duration:'15 min', skills:['SQL'], difficulty:'Beginner' },
+    other:{ title:'Intro to Skill-Based Learning',  duration:'12 min', skills:['Orientation'], difficulty:'Beginner' },
+  };
+  const lesson = lessonMap[goal.id];
+
+  return (
+    <div style={{ animation:'slide-in-right 0.45s ease forwards', maxWidth:540 }}>
+      <div style={{ marginBottom:'0.5rem', fontSize:'0.8125rem', fontWeight:500, color:T.indigo }}>You're all set.</div>
+      <h1 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'clamp(1.5rem,2.5vw,2.25rem)', color:T.ink, marginBottom:'0.75rem', lineHeight:1.2 }}>
+        Your first lesson is ready.
+      </h1>
+      <p style={{ fontSize:'0.9375rem', color:T.ink2, fontWeight:300, marginBottom:'2.5rem' }}>
+        One lesson. {lesson.duration}. Let's see what evidence feels like.
+      </p>
+
+      {/* Lesson card */}
+      <div style={{ background:'white', border:`1.5px solid ${T.indigo}`, borderRadius:16, padding:'1.75rem', marginBottom:'1.5rem', boxShadow:`0 0 0 4px oklch(0.52 0.22 264 / 0.08)` }}>
+        <div style={{ display:'flex', gap:'0.625rem', marginBottom:'1rem' }}>
+          {lesson.skills.map(s=>(
+            <span key={s} style={{ fontSize:'0.7rem', fontWeight:600, padding:'0.2rem 0.625rem', borderRadius:100, background:T.indigoLight, color:T.indigo, border:`1px solid ${T.indigoMid}`, textTransform:'uppercase', letterSpacing:'0.06em' }}>{s}</span>
+          ))}
+          <span style={{ marginLeft:'auto', fontSize:'0.75rem', color:T.ink3 }}>{lesson.duration}</span>
+        </div>
+        <h2 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'1.25rem', color:T.ink, marginBottom:'1rem', lineHeight:1.3 }}>{lesson.title}</h2>
+        <div style={{ display:'flex', gap:'1rem', fontSize:'0.8125rem', color:T.ink3 }}>
+          <span>📖 Reading + exercises</span>
+          <span>+3 evidence items</span>
+          <span style={{ marginLeft:'auto' }}>{lesson.difficulty}</span>
+        </div>
+        {/* Progress preview */}
+        <div style={{ marginTop:'1rem', padding:'0.875rem', background:T.indigoLight, borderRadius:8 }}>
+          <div style={{ fontSize:'0.75rem', color:T.indigo, marginBottom:'0.5rem', fontWeight:500 }}>After this lesson</div>
+          <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
+            <div style={{ flex:1, height:6, background:'rgba(255,255,255,0.6)', borderRadius:3, overflow:'hidden' }}>
+              <div style={{ width:'18%', height:'100%', background:T.indigo, borderRadius:3 }}/>
+            </div>
+            <span style={{ fontSize:'0.75rem', color:T.indigo, fontWeight:600 }}>3 / 14 evidence</span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display:'flex', gap:'0.875rem' }}>
+        <button onClick={onStart} style={{ flex:1, background:T.indigo, color:'white', border:'none', padding:'0.875rem', borderRadius:8, fontSize:'1rem', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif" }}>
+          Start lesson →
+        </button>
+      </div>
+      <p style={{ marginTop:'1rem', fontSize:'0.8125rem', color:T.ink3, textAlign:'center' }}>
+        You can explore your skill graph first if you'd like.
+      </p>
+    </div>
+  );
+}
+
+/* ── Onboarding flow controller ── */
+function OnboardingFlow() {
+  const [step, setStep] = useState(0);
+  const [data, setData] = useState({ goal:null, snapshot:null, time:null });
+
+  return (
+    <div style={{ height:'100vh', display:'flex', flexDirection:'column', background:T.bg }}>
+      {/* Top bar */}
+      <div style={{ padding:'1.25rem 2rem', display:'flex', alignItems:'center', justifyContent:'space-between', borderBottom:`1px solid ${T.rule}`, flexShrink:0 }}>
+        <span style={{ fontFamily:"'Source Serif 4',serif", fontSize:'1.25rem', fontWeight:600, color:T.ink }}>Krit</span>
+        <div style={{ fontSize:'0.8125rem', color:T.ink3 }}>Step {step+1} of 4</div>
+      </div>
+
+      {/* Content */}
+      <div style={{ flex:1, overflow:'hidden', display:'flex', flexDirection:'column', padding:'2.5rem 2rem', maxWidth:1200, width:'100%', margin:'0 auto', minHeight:0 }}>
+        <StepBar step={step}/>
+        <div style={{ flex:1, overflow:'auto', paddingBottom:'1rem' }}>
+          {step===0&&<GoalPicker onSelect={g=>{ setData(d=>({...d,goal:g})); setStep(1); }}/>}
+          {step===1&&data.goal&&<SkillSnapshot goal={data.goal} onNext={s=>{ setData(d=>({...d,snapshot:s})); setStep(2); }}/>}
+          {step===2&&data.goal&&<TimeCommitment goal={data.goal} onNext={t=>{ setData(d=>({...d,time:t})); setStep(3); }}/>}
+          {step===3&&data.goal&&<FirstLesson goal={data.goal} timeData={data.time} onStart={()=>alert('Starting lesson! (wire to lesson page)')}/>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<OnboardingFlow/>);
+</script>
+</body>
+</html>

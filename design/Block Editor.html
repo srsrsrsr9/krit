@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krit · Block Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#root{height:100%;font-family:'DM Sans',sans-serif;overflow:hidden}
+body{background:oklch(0.985 0.006 80);color:oklch(0.14 0.015 264)}
+
+.block-row{position:relative;display:flex;align-items:flex-start;gap:0;border-radius:10px;transition:background 0.15s}
+.block-row:hover{background:oklch(0.96 0.003 264)}
+.block-handles{width:52px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:flex-end;gap:4px;padding-top:10px;padding-right:6px;opacity:0;transition:opacity 0.15s}
+.block-row:hover .block-handles{opacity:1}
+.handle-btn{width:22px;height:22px;border-radius:5px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:oklch(0.68 0.008 264);transition:background 0.15s}
+.handle-btn:hover{background:oklch(0.88 0.008 264)}
+.block-inner{flex:1;min-width:0;padding:6px 0}
+.type-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:100px;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px;opacity:0;transition:opacity 0.15s}
+.block-row:hover .type-chip{opacity:1}
+.preview-toggle{padding:3px 8px;border-radius:5px;border:1px solid oklch(0.88 0.008 264);background:transparent;font-size:11px;color:oklch(0.68 0.008 264);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;margin-bottom:6px;display:inline-flex;align-items:center;gap:4px;opacity:0}
+.block-row:hover .preview-toggle{opacity:1}
+.preview-toggle:hover{border-color:oklch(0.52 0.22 264);color:oklch(0.52 0.22 264)}
+
+@keyframes ai-gen-pulse{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef } = React;
+
+const T = {
+  bg:'oklch(0.985 0.006 80)', ink:'oklch(0.14 0.015 264)', ink2:'oklch(0.42 0.01 264)',
+  ink3:'oklch(0.68 0.008 264)', rule:'oklch(0.88 0.008 264)', indigo:'oklch(0.52 0.22 264)',
+  violet:'oklch(0.52 0.22 292)', indigoLight:'oklch(0.94 0.04 264)', indigoMid:'oklch(0.88 0.07 264)',
+  amber:'oklch(0.72 0.16 76)', green:'oklch(0.54 0.16 145)',
+};
+
+const BLOCK_TYPES = {
+  heading:  { label:'Heading',   color:'oklch(0.52 0.22 264)', bg:'oklch(0.92 0.06 264)' },
+  text:     { label:'Text',      color:T.ink3, bg:T.rule },
+  callout:  { label:'Callout',   color:'oklch(0.52 0.18 76)', bg:'oklch(0.92 0.08 76)' },
+  code:     { label:'Code',      color:'oklch(0.40 0.12 264)', bg:'oklch(0.88 0.07 264)' },
+  equation: { label:'Equation',  color:'oklch(0.52 0.14 145)', bg:'oklch(0.90 0.06 145)' },
+  quiz:     { label:'Quiz',      color:'oklch(0.52 0.14 22)', bg:'oklch(0.92 0.07 22)' },
+  image:    { label:'Image',     color:T.ink3, bg:T.rule },
+  divider:  { label:'Divider',   color:T.ink3, bg:T.rule },
+};
+
+const INITIAL_BLOCKS = [
+  { id:1, type:'heading',  content:'Backpropagation: How Networks Learn', preview:false },
+  { id:2, type:'text',     content:'Backpropagation is the algorithm that makes neural networks learn. At its core, it is an application of the chain rule from calculus.', preview:false },
+  { id:3, type:'callout',  content:'Key insight: Gradients at earlier layers can be computed from gradients at later layers — we never start from scratch.', preview:false },
+  { id:4, type:'equation', content:'∂L/∂w = (∂L/∂a) × (∂a/∂z) × (∂z/∂w)', preview:false },
+  { id:5, type:'text',     content:'The chain rule tells us how to decompose the gradient into local factors. Each layer in the network only needs to know its local gradient — the global signal flows automatically.', preview:false },
+  { id:6, type:'code',     content:`import torch\nimport torch.nn as nn\n\nloss = nn.CrossEntropyLoss()(output, target)\nloss.backward()  # computes all gradients\noptimizer.step() # updates weights`, preview:false },
+  { id:7, type:'quiz',     content:'What does the chain rule allow us to compute?\n(A) The optimal learning rate\n(B) Gradients of composed functions\n(C) The number of hidden layers\n(D) The loss function', preview:false },
+  { id:8, type:'divider',  content:'', preview:false },
+  { id:9, type:'heading',  content:'Modern Implementations', preview:false },
+  { id:10,type:'text',     content:'Modern frameworks like PyTorch and JAX handle backpropagation automatically through autograd. You define the forward pass — the backward pass is computed for you.', preview:false },
+];
+
+/* ── Block preview renderer ── */
+function BlockPreview({ block }) {
+  const t = block.type;
+  if(t==='heading') return <h2 style={{ fontFamily:"'Source Serif 4',serif", fontWeight:400, fontSize:'1.625rem', color:T.ink, lineHeight:1.2 }}>{block.content}</h2>;
+  if(t==='text')    return <p style={{ fontSize:'1rem', color:T.ink, lineHeight:1.75, fontWeight:300 }}>{block.content}</p>;
+  if(t==='callout') return <div style={{ padding:'1rem 1.25rem', background:'oklch(0.96 0.06 76 / 0.5)', border:'1.5px solid oklch(0.88 0.08 76)', borderRadius:8, fontSize:'0.9375rem', color:T.ink2, lineHeight:1.7 }}>💡 {block.content}</div>;
+  if(t==='code')    return <pre style={{ fontFamily:"'DM Mono',monospace", fontSize:'0.8375rem', background:'oklch(0.12 0.02 264)', color:'oklch(0.85 0.06 264)', padding:'1.25rem', borderRadius:10, lineHeight:1.7, overflow:'auto', whiteSpace:'pre-wrap' }}>{block.content}</pre>;
+  if(t==='equation')return <div style={{ padding:'1rem', background:T.indigoLight, borderRadius:8, textAlign:'center', fontFamily:"'DM Mono',monospace", fontSize:'1.125rem', color:T.indigo }}>{block.content}</div>;
+  if(t==='quiz')    return <div style={{ padding:'1.25rem', background:'oklch(0.97 0.03 22)', border:'1.5px solid oklch(0.88 0.06 22)', borderRadius:8 }}>{block.content.split('\n').map((l,i)=><p key={i} style={{ fontSize:i===0?'0.9375rem':'0.875rem', color:i===0?T.ink:T.ink2, fontWeight:i===0?500:300, marginBottom:i===0?'0.5rem':'0.2rem' }}>{l}</p>)}</div>;
+  if(t==='divider') return <hr style={{ border:'none', borderTop:`1px solid ${T.rule}`, margin:'0.5rem 0' }}/>;
+  return null;
+}
+
+/* ── AI generate button ── */
+function AIGenButton({ onGenerate }) {
+  const [loading, setLoading] = useState(false);
+  return (
+    <button onClick={()=>{ setLoading(true); setTimeout(()=>{ onGenerate(); setLoading(false); },900); }}
+      style={{ display:'flex', alignItems:'center', gap:'0.5rem', padding:'0.45rem 0.875rem', borderRadius:7, border:`1px solid ${T.indigoMid}`, background:T.indigoLight, color:T.indigo, fontSize:'0.8125rem', fontWeight:500, cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .18s', animation:loading?'ai-gen-pulse 0.9s ease-in-out infinite':'' }}>
+      <svg width={13} height={13} viewBox="0 0 16 16" fill="none"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.2 3.2l1.4 1.4M11.4 11.4l1.4 1.4M11.4 3.2l-1.4 1.4M4.6 11.4l-1.4 1.4" stroke={T.indigo} strokeWidth={1.5} strokeLinecap="round"/><circle cx={8} cy={8} r={2.5} fill={T.indigo}/></svg>
+      {loading ? 'Generating…' : 'AI generate'}
+    </button>
+  );
+}
+
+/* ── Single block ── */
+function Block({ block, index, total, onUpdate, onDelete, onMove, onInsertAfter }) {
+  const [dragging, setDragging] = useState(false);
+  const [preview, setPreview] = useState(block.preview);
+  const bt = BLOCK_TYPES[block.type];
+
+  const togglePreview = () => setPreview(p=>!p);
+
+  return (
+    <div className="block-row" draggable
+      onDragStart={e=>{ setDragging(true); e.dataTransfer.setData('blockId', block.id); }}
+      onDragEnd={()=>setDragging(false)}
+      style={{ opacity:dragging?0.4:1, outline:dragging?`2px dashed ${T.indigo}`:'none', borderRadius:10 }}>
+
+      {/* Left handles */}
+      <div className="block-handles">
+        {block.type!=='divider'&&<button className="handle-btn" title="AI generate" onClick={()=>{}}>
+          <svg width={12} height={12} viewBox="0 0 16 16" fill="none"><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round"/><circle cx={8} cy={8} r={3} fill="currentColor" opacity={.5}/></svg>
+        </button>}
+        <button className="handle-btn" title="Drag to reorder" style={{ cursor:'grab' }}>
+          <svg width={12} height={14} viewBox="0 0 12 14" fill="currentColor" opacity={.6}><circle cx={3} cy={2} r={1.3}/><circle cx={9} cy={2} r={1.3}/><circle cx={3} cy={7} r={1.3}/><circle cx={9} cy={7} r={1.3}/><circle cx={3} cy={12} r={1.3}/><circle cx={9} cy={12} r={1.3}/></svg>
+        </button>
+      </div>
+
+      {/* Block content */}
+      <div className="block-inner">
+        {/* Type chip + controls row */}
+        <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', flexWrap:'wrap' }}>
+          <span className="type-chip" style={{ color:bt.color, background:bt.bg }}>{bt.label}</span>
+          {block.type!=='divider'&&<button className="preview-toggle" onClick={togglePreview}>{preview?'✎ Edit':'⊞ Preview'}</button>}
+          {block.type==='text'&&!preview&&<AIGenButton onGenerate={()=>onUpdate(block.id,'content',block.content+' [AI generated continuation: The backward pass distributes the error signal proportionally to each weight\'s contribution.]')}/>}
+        </div>
+
+        {/* Content area */}
+        {preview ? (
+          <div style={{ padding:'0.25rem 0', animation:'fade-in 0.2s ease forwards' }}>
+            <BlockPreview block={block}/>
+          </div>
+        ) : (
+          <div>
+            {block.type==='heading'&&(
+              <input value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)}
+                style={{ width:'100%', fontFamily:"'Source Serif 4',serif", fontSize:'1.625rem', fontWeight:400, color:T.ink, border:'none', background:'transparent', outline:'none', padding:'2px 0' }}/>
+            )}
+            {block.type==='text'&&(
+              <textarea value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)} rows={3}
+                style={{ width:'100%', fontSize:'0.9375rem', color:T.ink2, border:'none', background:'transparent', outline:'none', resize:'none', padding:'2px 0', lineHeight:1.7, fontFamily:"'DM Sans',sans-serif", fontWeight:300 }}/>
+            )}
+            {block.type==='callout'&&(
+              <textarea value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)} rows={2}
+                style={{ width:'100%', fontSize:'0.9375rem', color:T.ink2, border:'none', background:'transparent', outline:'none', resize:'none', padding:'2px 0', lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}/>
+            )}
+            {block.type==='code'&&(
+              <textarea value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)} rows={6}
+                style={{ width:'100%', fontFamily:"'DM Mono',monospace", fontSize:'0.8375rem', color:T.ink, border:'none', background:'transparent', outline:'none', resize:'none', padding:'2px 0', lineHeight:1.7 }}/>
+            )}
+            {block.type==='equation'&&(
+              <input value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)}
+                style={{ width:'100%', fontFamily:"'DM Mono',monospace", fontSize:'1rem', color:T.ink, border:'none', background:'transparent', outline:'none', padding:'2px 0' }}/>
+            )}
+            {block.type==='quiz'&&(
+              <textarea value={block.content} onChange={e=>onUpdate(block.id,'content',e.target.value)} rows={5}
+                style={{ width:'100%', fontSize:'0.875rem', color:T.ink2, border:'none', background:'transparent', outline:'none', resize:'none', padding:'2px 0', lineHeight:1.7, fontFamily:"'DM Sans',sans-serif" }}/>
+            )}
+            {block.type==='divider'&&<div style={{ height:1, background:T.rule, margin:'8px 0' }}/>}
+          </div>
+        )}
+
+        {/* Insert + delete controls */}
+        <div className="block-controls" style={{ display:'flex', gap:'0.5rem', marginTop:'4px', opacity:0, transition:'opacity .15s' }}>
+        </div>
+      </div>
+
+      {/* Right delete */}
+      <div className="block-handles" style={{ justifyContent:'flex-start', paddingLeft:6, paddingRight:0 }}>
+        <button className="handle-btn" onClick={()=>onDelete(block.id)} title="Delete block" style={{ color:T.ink3 }}>
+          <svg width={12} height={12} viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Add block menu ── */
+function AddBlockMenu({ onAdd, onClose }) {
+  return (
+    <div style={{ padding:'0.5rem', background:'white', borderRadius:12, boxShadow:`0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px ${T.rule}`, display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'0.375rem', minWidth:320 }}>
+      {Object.entries(BLOCK_TYPES).map(([type,bt])=>(
+        <button key={type} onClick={()=>{ onAdd(type); onClose(); }}
+          style={{ padding:'0.5rem 0.375rem', borderRadius:7, border:'none', background:'transparent', cursor:'pointer', textAlign:'center', transition:'background .15s', display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' }}
+          onMouseEnter={e=>e.currentTarget.style.background=T.indigoLight}
+          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+          <span style={{ fontSize:'0.7rem', fontWeight:600, color:bt.color, textTransform:'uppercase', letterSpacing:'.04em' }}>{bt.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* ── Main editor ── */
+function BlockEditor() {
+  const [blocks, setBlocks] = useState(INITIAL_BLOCKS);
+  const [showAddMenu, setShowAddMenu] = useState(false);
+  const [addMenuPos, setAddMenuPos] = useState({x:0,y:0});
+  const [publishPreview, setPublishPreview] = useState(false);
+  const nextId = useRef(100);
+
+  const updateBlock = (id, key, val) => setBlocks(bs=>bs.map(b=>b.id===id?{...b,[key]:val}:b));
+  const deleteBlock = (id) => setBlocks(bs=>bs.filter(b=>b.id!==id));
+  const addBlock = (type) => {
+    const newBlock = { id:nextId.current++, type, content:type==='heading'?'New section':type==='divider'?'':'New '+type+' block', preview:false };
+    setBlocks(bs=>[...bs,newBlock]);
+  };
+
+  const handleAddClick = (e) => {
+    setAddMenuPos({ x:e.clientX, y:e.clientY });
+    setShowAddMenu(s=>!s);
+  };
+
+  return (
+    <div style={{ height:'100vh', display:'flex', flexDirection:'column', background:T.bg }}>
+      {/* Toolbar */}
+      <div style={{ padding:'0 1.5rem', height:52, borderBottom:`1px solid ${T.rule}`, display:'flex', alignItems:'center', gap:'1rem', background:'white', flexShrink:0 }}>
+        <span style={{ fontFamily:"'Source Serif 4',serif", fontSize:'1.1rem', fontWeight:600, color:T.ink }}>Krit</span>
+        <div style={{ width:1, height:20, background:T.rule }}/>
+        <span style={{ fontSize:'0.875rem', color:T.ink2 }}>Backpropagation: How Networks Learn</span>
+        <div style={{ marginLeft:'auto', display:'flex', gap:'0.75rem', alignItems:'center' }}>
+          <span style={{ fontSize:'0.75rem', color:T.ink3 }}>4 of 8 lessons</span>
+          <button onClick={()=>setPublishPreview(p=>!p)} style={{ padding:'0.4rem 1rem', borderRadius:6, border:`1px solid ${T.rule}`, background:publishPreview?T.indigo:'transparent', color:publishPreview?'white':T.ink2, fontSize:'0.8125rem', fontWeight:500, cursor:'pointer', transition:'all .18s' }}>
+            {publishPreview?'Exit preview':'Preview'}
+          </button>
+          <button style={{ padding:'0.4rem 1rem', borderRadius:6, border:'none', background:T.indigo, color:'white', fontSize:'0.8125rem', fontWeight:500, cursor:'pointer' }}>Publish</button>
+        </div>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:publishPreview?'1fr':'280px 1fr', flex:1, overflow:'hidden' }}>
+        {/* Sidebar: lesson outline */}
+        {!publishPreview&&(
+          <div style={{ borderRight:`1px solid ${T.rule}`, overflowY:'auto', padding:'1.5rem 1rem' }}>
+            <p style={{ fontSize:'0.7rem', fontWeight:600, color:T.ink3, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'1rem' }}>Lesson blocks</p>
+            {blocks.map((b,i)=>(
+              <div key={b.id} style={{ display:'flex', alignItems:'center', gap:'0.5rem', padding:'0.4rem 0.625rem', borderRadius:6, marginBottom:'2px', cursor:'pointer', transition:'background .15s' }}
+                onMouseEnter={e=>e.currentTarget.style.background=T.indigoLight}
+                onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+                <span style={{ fontSize:'0.7rem', fontWeight:600, color:BLOCK_TYPES[b.type].color, textTransform:'uppercase', letterSpacing:'.04em', minWidth:52 }}>{BLOCK_TYPES[b.type].label}</span>
+                <span style={{ fontSize:'0.8125rem', color:T.ink2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{b.content.slice(0,35)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Editor canvas */}
+        <div style={{ overflowY:'auto', padding:'2.5rem', display:'flex', flexDirection:'column' }}>
+          <div style={{ maxWidth:700, width:'100%', margin:'0 auto' }}>
+            {publishPreview ? (
+              blocks.map(b=>(
+                <div key={b.id} style={{ marginBottom:'1.25rem', animation:'fade-in .3s ease forwards' }}>
+                  <BlockPreview block={b}/>
+                </div>
+              ))
+            ) : (
+              <>
+                {blocks.map((b,i)=>(
+                  <Block key={b.id} block={b} index={i} total={blocks.length}
+                    onUpdate={updateBlock} onDelete={deleteBlock}
+                    onMove={()=>{}} onInsertAfter={()=>{}}/>
+                ))}
+                {/* Add block button */}
+                <div style={{ marginTop:'1rem', display:'flex', gap:'0.75rem', alignItems:'center' }}>
+                  <button onClick={handleAddClick} style={{ display:'flex', alignItems:'center', gap:'0.5rem', padding:'0.5rem 1rem', borderRadius:8, border:`1.5px dashed ${T.rule}`, background:'transparent', color:T.ink3, fontSize:'0.875rem', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", transition:'all .2s', width:'100%', justifyContent:'center' }}
+                    onMouseEnter={e=>{ e.currentTarget.style.borderColor=T.indigo; e.currentTarget.style.color=T.indigo; }}
+                    onMouseLeave={e=>{ e.currentTarget.style.borderColor=T.rule; e.currentTarget.style.color=T.ink3; }}>
+                    <svg width={16} height={16} viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round"/></svg>
+                    Add block
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Add menu popup */}
+      {showAddMenu&&(
+        <>
+          <div style={{ position:'fixed', inset:0, zIndex:49 }} onClick={()=>setShowAddMenu(false)}/>
+          <div style={{ position:'fixed', left:Math.min(addMenuPos.x, window.innerWidth-360), top:Math.min(addMenuPos.y+8, window.innerHeight-200), zIndex:50, animation:'fade-in .18s ease forwards' }}>
+            <AddBlockMenu onAdd={addBlock} onClose={()=>setShowAddMenu(false)}/>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<BlockEditor/>);
+</script>
+</body>
+</html>
