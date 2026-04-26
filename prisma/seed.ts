@@ -14,6 +14,9 @@ import { PrismaClient } from "@prisma/client";
 import { seedSkills } from "./seed/skills";
 import { lessonDefs } from "./seed/lessons";
 import { sqlAssessmentQuestions } from "./seed/questions";
+import { seedPythonSkills } from "./seed/python-skills";
+import { pythonLessonDefs } from "./seed/python-lessons";
+import { pythonAssessmentQuestions } from "./seed/python-questions";
 
 const db = new PrismaClient();
 
@@ -332,7 +335,200 @@ async function main() {
     },
   });
 
-  console.log("→ Assigning path to learner (as compliance-style assignment)…");
+  // ──────────────────────────────────────────────────────────────
+  // Python Foundations course
+  // ──────────────────────────────────────────────────────────────
+
+  console.log("→ Seeding Python skill graph…");
+  const pythonSkills = await seedPythonSkills(db, corporateId);
+  const pySkillSlugToId = {
+    pythonBasics: pythonSkills.pythonBasics,
+    pythonTypes: pythonSkills.pythonTypes,
+    pythonControlFlow: pythonSkills.pythonControlFlow,
+    pythonFunctions: pythonSkills.pythonFunctions,
+    pythonCollections: pythonSkills.pythonCollections,
+    pythonProblemSolving: pythonSkills.pythonProblemSolving,
+  };
+
+  console.log("→ Creating Python lessons…");
+  const pythonLessonIds: Record<string, string> = {};
+  for (const def of pythonLessonDefs) {
+    const id = cuid();
+    await db.lesson.create({
+      data: {
+        id,
+        workspaceId: corporateId,
+        slug: def.slug,
+        title: def.title,
+        subtitle: def.subtitle,
+        estimatedMinutes: def.estimatedMinutes,
+        blocks: def.blocks as unknown as object,
+      },
+    });
+    for (const s of def.skills) {
+      await db.lessonSkill.create({
+        data: { id: cuid(), lessonId: id, skillId: pySkillSlugToId[s] },
+      });
+    }
+    pythonLessonIds[def.slug] = id;
+  }
+
+  console.log("→ Creating Python assessment…");
+  const pythonAssessmentId = cuid();
+  await db.assessment.create({
+    data: {
+      id: pythonAssessmentId,
+      workspaceId: corporateId,
+      slug: "python-foundations-assessment",
+      title: "Python Foundations Assessment",
+      description: "15 questions on syntax, types, control flow, functions, and collections.",
+      mode: "GRADED",
+      passThreshold: 70,
+      timeLimitSec: 30 * 60,
+      attemptsAllowed: 3,
+      shuffleQuestions: true,
+    },
+  });
+  for (const skillId of [
+    pythonSkills.pythonBasics,
+    pythonSkills.pythonTypes,
+    pythonSkills.pythonControlFlow,
+    pythonSkills.pythonFunctions,
+    pythonSkills.pythonCollections,
+    pythonSkills.pythonProblemSolving,
+  ]) {
+    await db.assessmentSkill.create({
+      data: { id: cuid(), assessmentId: pythonAssessmentId, skillId, awardsAtLevel: "WORKING", weight: 1.0 },
+    });
+  }
+  for (let i = 0; i < pythonAssessmentQuestions.length; i++) {
+    const q = pythonAssessmentQuestions[i]!;
+    await db.question.create({
+      data: {
+        id: cuid(),
+        assessmentId: pythonAssessmentId,
+        order: i + 1,
+        kind: q.kind,
+        stem: q.stem,
+        payload: { choices: q.choices } as unknown as object,
+        points: q.points,
+        explanation: q.explanation,
+        skillSlug: q.skillSlug,
+      },
+    });
+  }
+
+  console.log("→ Creating Python capstone project…");
+  const pythonProjectId = cuid();
+  await db.projectBrief.create({
+    data: {
+      id: pythonProjectId,
+      workspaceId: corporateId,
+      slug: "python-csv-analyzer-capstone",
+      title: "Capstone: Build a CSV analyzer",
+      prompt: PYTHON_CAPSTONE_PROMPT,
+      rubric: [
+        {
+          criterion: "Correctness",
+          levels: [
+            { label: "All four functions return correct results on the sample data and edge cases.", points: 4 },
+            { label: "3/4 functions correct; one bug.", points: 3 },
+            { label: "2/4 correct.", points: 2 },
+            { label: "Less than 2 correct.", points: 0 },
+          ],
+        },
+        {
+          criterion: "Pythonic style",
+          levels: [
+            { label: "Comprehensions used appropriately, defaultdict for accumulators, type hints, descriptive names.", points: 3 },
+            { label: "Mostly idiomatic with one or two non-pythonic patterns.", points: 2 },
+            { label: "Functional but reads like a different language.", points: 0 },
+          ],
+        },
+        {
+          criterion: "Error handling",
+          levels: [
+            { label: "Handles missing files, malformed rows, and empty input gracefully.", points: 3 },
+            { label: "Handles the obvious cases.", points: 2 },
+            { label: "Crashes on edge cases.", points: 0 },
+          ],
+        },
+      ] as unknown as object,
+    },
+  });
+
+  console.log("→ Creating Python path and linking items…");
+  const pythonPathId = cuid();
+  const pythonTotalMinutes =
+    pythonLessonDefs.reduce((s, l) => s + l.estimatedMinutes, 0) + 30 + 30;
+  await db.path.create({
+    data: {
+      id: pythonPathId,
+      workspaceId: corporateId,
+      slug: "python-foundations",
+      title: "Python Foundations",
+      subtitle: "From your first `print` to a working CSV analyzer.",
+      summary:
+        "A skill-first path that builds genuine Python literacy: the language's design philosophy, the four containers you'll use 95% of the time, the mutability trap that catches every beginner, and a capstone where you compose a real script out of small named functions.",
+      kind: "PATH",
+      status: "PUBLISHED",
+      estimatedMinutes: pythonTotalMinutes,
+      level: "NOVICE",
+      publishedAt: new Date(),
+    },
+  });
+
+  let pyOrder = 1;
+  for (const def of pythonLessonDefs) {
+    await db.pathItem.create({
+      data: {
+        id: cuid(),
+        pathId: pythonPathId,
+        order: pyOrder++,
+        kind: "LESSON",
+        lessonId: pythonLessonIds[def.slug]!,
+        title: def.title,
+      },
+    });
+  }
+  await db.pathItem.create({
+    data: {
+      id: cuid(),
+      pathId: pythonPathId,
+      order: pyOrder++,
+      kind: "ASSESSMENT",
+      assessmentId: pythonAssessmentId,
+      title: "Python Foundations Assessment",
+    },
+  });
+  await db.pathItem.create({
+    data: {
+      id: cuid(),
+      pathId: pythonPathId,
+      order: pyOrder++,
+      kind: "PROJECT",
+      projectId: pythonProjectId,
+      title: "Capstone: Build a CSV analyzer",
+    },
+  });
+
+  console.log("→ Creating Python credential…");
+  await db.credential.create({
+    data: {
+      id: cuid(),
+      workspaceId: corporateId,
+      pathId: pythonPathId,
+      slug: "python-foundations",
+      title: "Python Foundations",
+      description:
+        "Demonstrates working-level Python: types, mutability, control flow, functions, collections, and end-to-end script composition.",
+      issuerName: "Krit Academy",
+    },
+  });
+
+  // ──────────────────────────────────────────────────────────────
+
+  console.log("→ Assigning paths to learner (as compliance-style assignments)…");
   await db.assignment.create({
     data: {
       id: cuid(),
@@ -344,6 +540,19 @@ async function main() {
       status: "ACTIVE",
       compliance: false,
       reason: "Data-Aware PM onboarding",
+    },
+  });
+  await db.assignment.create({
+    data: {
+      id: cuid(),
+      workspaceId: corporateId,
+      pathId: pythonPathId,
+      assignedById: adminId,
+      assignedToId: learnerId,
+      dueAt: new Date(Date.now() + 30 * 86_400_000),
+      status: "ACTIVE",
+      compliance: false,
+      reason: "Stretch goal: pick up Python alongside SQL",
     },
   });
 
@@ -413,6 +622,46 @@ Write one SQL query for each of the five questions below. For each query, includ
 ### How you'll be reviewed
 
 You'll be scored against three criteria — **correctness**, **clarity**, and **handling of edge cases**. Don't be afraid to use CTEs (\`WITH\`) to layer your thinking.`;
+
+const PYTHON_CAPSTONE_PROMPT = `You're the new analyst on a small team. Your manager hands you \`orders.csv\` and asks: *"give me a one-pager that answers four questions — and show me the code."*
+
+\`\`\`text
+# orders.csv
+order_id,customer,city,total,status
+101,Ada,London,2500,paid
+102,Ada,London,1800,paid
+103,Grace,New York,900,refunded
+104,Alan,London,4200,paid
+105,Margaret,Mumbai,1500,paid
+106,Linus,Mumbai,3000,paid
+107,Hedy,Mumbai,2200,refunded
+108,Alan,London,1100,paid
+109,Linus,Mumbai,800,paid
+110,Margaret,Mumbai,1900,refunded
+\`\`\`
+
+### Your task
+
+Write a single Python file \`analyze_orders.py\` with these four functions, plus a \`main()\` that prints a one-page report.
+
+1. \`load_orders(path: str) -> list[dict]\` — read the CSV and cast \`total\` to int.
+2. \`total_paid_revenue(orders) -> int\` — sum of \`total\` where \`status == "paid"\`.
+3. \`revenue_by_city(orders) -> dict[str, int]\` — paid revenue per city, sorted descending in your output.
+4. \`top_customers(orders, n=3) -> list[tuple[str, int]]\` — top n customers by paid revenue.
+
+Plus the \`__main__\` guard. Plus type hints throughout.
+
+### Bonus (only if you have time)
+
+Add a \`refund_rate(orders)\` function that returns the percentage of all orders with status='refunded' (rounded to 1 decimal place).
+
+### How you'll be reviewed
+
+- **Correctness** — does it produce the right numbers, including on edge cases (empty file, malformed row)?
+- **Pythonic style** — comprehensions, defaultdict, type hints, descriptive names.
+- **Error handling** — graceful behaviour on missing file or malformed input.
+
+Submit your code as Markdown with a fenced \`\`\`python block.`;
 
 main()
   .catch((e) => {
