@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, ArrowRight, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MaybeCelebration } from "@/components/credentials/maybe-celebration";
 
 export default async function ResultPage({
   params,
@@ -52,8 +53,32 @@ export default async function ResultPage({
       })
     : null;
 
+  // If a credential was just issued (within the last 5 minutes), trigger
+  // the celebration overlay once. We pull the evidence snapshot from the
+  // IssuedCredential to drive the orb labels + counts.
+  const freshlyIssued =
+    credentialIssued && credentialIssued.issuedAt.getTime() > Date.now() - 5 * 60 * 1000
+      ? credentialIssued
+      : null;
+  const celebrationSkills =
+    freshlyIssued && Array.isArray(freshlyIssued.evidenceBlob)
+      ? (freshlyIssued.evidenceBlob as { skillName?: string; count?: number }[])
+          .slice(0, 6)
+          .map((e) => ({ label: e.skillName ?? "Skill", count: e.count ?? 0 }))
+      : [];
+
   return (
     <div className="space-y-6">
+      {freshlyIssued && (
+        <MaybeCelebration
+          title={freshlyIssued.credential.title}
+          learner={user.name}
+          issueDate={freshlyIssued.issuedAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          code={freshlyIssued.verificationCode}
+          skills={celebrationSkills}
+          credentialUrl={`/credentials/${freshlyIssued.verificationCode}`}
+        />
+      )}
       <Link
         href={sp.from ? `/learn/${sp.from}` : "/home"}
         className="text-xs text-muted-foreground hover:text-foreground"
