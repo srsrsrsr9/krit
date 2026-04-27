@@ -4,16 +4,24 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Trophy, ExternalLink } from "lucide-react";
+import { CredentialsEmptyState } from "@/components/empty-states/empty-states";
 
 export default async function CredentialsPage() {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
 
-  const issued = await db.issuedCredential.findMany({
-    where: { userId: user.id, revokedAt: null },
-    include: { credential: true },
-    orderBy: { issuedAt: "desc" },
-  });
+  const [issued, recommended] = await Promise.all([
+    db.issuedCredential.findMany({
+      where: { userId: user.id, revokedAt: null },
+      include: { credential: true },
+      orderBy: { issuedAt: "desc" },
+    }),
+    db.path.findFirst({
+      where: { status: "PUBLISHED" },
+      orderBy: { publishedAt: "asc" },
+      select: { slug: true, title: true },
+    }),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -25,11 +33,7 @@ export default async function CredentialsPage() {
       </div>
 
       {issued.length === 0 ? (
-        <Card>
-          <CardContent className="p-10 text-center text-muted-foreground">
-            No credentials yet. Complete a path end-to-end to earn your first one.
-          </CardContent>
-        </Card>
+        <CredentialsEmptyState recommendedPath={recommended ?? undefined} />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {issued.map((c) => (

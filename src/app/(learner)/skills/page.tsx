@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { LEVEL_COLOR, LEVEL_LABEL, LEVEL_RANK } from "@/lib/progress";
 import { cn } from "@/lib/utils";
+import { SkillsEmptyState } from "@/components/empty-states/empty-states";
 
 export default async function SkillsPage() {
   const user = await currentUser();
@@ -42,11 +43,7 @@ export default async function SkillsPage() {
       </div>
 
       {states.length === 0 ? (
-        <Card>
-          <CardContent className="p-10 text-center text-muted-foreground">
-            No skills yet — complete a lesson or assessment to start building evidence.
-          </CardContent>
-        </Card>
+        <SkillsEmptyState />
       ) : (
         <div className="space-y-8">
           {[...byCategory.entries()].map(([cat, skills]) => (

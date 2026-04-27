@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Clock, Target, Trophy, ArrowRight, Flame } from "lucide-react";
 import { cn, formatMinutes, pct } from "@/lib/utils";
+import { HomeEmptyState } from "@/components/empty-states/empty-states";
 
 export default async function HomePage() {
   const user = await currentUser();
@@ -56,6 +57,11 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-10">
+      {/* Empty state: no enrollments, no skills, no credentials yet. */}
+      {enrollments.length === 0 && skillStates.length === 0 && credentials.length === 0 && assignments.length === 0 ? (
+        <HomeEmptyState learnerName={user.name} />
+      ) : (
+      <>
       <section>
         <h1 className="font-display text-3xl font-semibold tracking-tight">Hi, {user.name.split(" ")[0]}.</h1>
         <p className="mt-1 text-muted-foreground">
@@ -206,6 +212,8 @@ export default async function HomePage() {
             </p>
           </CardContent>
         </Card>
+      )}
+      </>
       )}
     </div>
   );
