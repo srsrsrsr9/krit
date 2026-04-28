@@ -1,7 +1,32 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { CredentialPublicView, type CredentialView } from "@/components/credentials/credential-public-view";
 import { LEVEL_RANK } from "@/lib/progress";
+
+export async function generateMetadata({ params }: { params: Promise<{ code: string }> }): Promise<Metadata> {
+  const { code } = await params;
+  const issued = await db.issuedCredential.findUnique({
+    where: { verificationCode: code },
+    include: { credential: { include: { workspace: true } }, user: true },
+  });
+  if (!issued) return { title: "Credential not found" };
+  const title = `${issued.credential.title} — earned by ${issued.user.name}`;
+  return {
+    title: `${issued.credential.title} · ${issued.user.name}`,
+    description: `Verified credential issued by ${issued.credential.workspace?.name ?? "Krit"}.`,
+    openGraph: {
+      title,
+      description: `Verified on Krit. Code ${issued.verificationCode}.`,
+      images: [`/api/og/credential/${code}`],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [`/api/og/credential/${code}`],
+    },
+  };
+}
 
 interface EvidenceBlobItem {
   skillName?: string;

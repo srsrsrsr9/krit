@@ -30,6 +30,16 @@ export const metadata: Metadata = {
   },
   description:
     "Learn skills, not courses. Krit maps every concept into a skill graph, with an AI tutor that watches what you read and verifiable credentials that prove what you know.",
+  openGraph: {
+    title: "Krit — Skill-first learning",
+    description: "Learn skills. Not courses. Show your work.",
+    images: ["/api/og/brand"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/api/og/brand"],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

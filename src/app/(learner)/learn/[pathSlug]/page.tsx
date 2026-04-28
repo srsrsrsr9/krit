@@ -1,8 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import cuid from "cuid";
 import { currentUser, currentMembership } from "@/lib/auth";
 import { db } from "@/lib/db";
+
+export async function generateMetadata({ params }: { params: Promise<{ pathSlug: string }> }): Promise<Metadata> {
+  const { pathSlug } = await params;
+  const path = await db.path.findFirst({ where: { slug: pathSlug, status: "PUBLISHED" }, select: { title: true, summary: true, subtitle: true } });
+  if (!path) return { title: "Path" };
+  return {
+    title: path.title,
+    description: path.subtitle ?? path.summary ?? `${path.title} — a Krit learning path.`,
+    openGraph: {
+      title: path.title,
+      description: path.subtitle ?? "Earn the credential.",
+      images: [`/api/og/path/${pathSlug}`],
+      type: "article",
+    },
+    twitter: { card: "summary_large_image", images: [`/api/og/path/${pathSlug}`] },
+  };
+}
 import { computePathProgress, LEVEL_COLOR, LEVEL_LABEL } from "@/lib/progress";
 import { recordEvent } from "@/lib/lrs";
 import { Card, CardContent } from "@/components/ui/card";
