@@ -124,21 +124,7 @@ export function BlockEditor({
         </Button>
       </div>
 
-      {blocks.map((b, i) => (
-        <Card key={i}>
-          <CardContent className="space-y-3 p-4">
-            <div className="flex items-center justify-between">
-              <Badge variant="outline">{BLOCK_LABEL[b.type]}</Badge>
-              <div className="flex items-center gap-1">
-                <button onClick={() => move(i, -1)} disabled={i === 0} className="rounded p-1 text-muted-foreground hover:bg-accent disabled:opacity-30" type="button"><ChevronUp className="h-4 w-4" /></button>
-                <button onClick={() => move(i, 1)} disabled={i === blocks.length - 1} className="rounded p-1 text-muted-foreground hover:bg-accent disabled:opacity-30" type="button"><ChevronDown className="h-4 w-4" /></button>
-                <button onClick={() => remove(i)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" type="button"><Trash2 className="h-4 w-4" /></button>
-              </div>
-            </div>
-            <BlockFields block={b} onChange={(patch) => update(i, patch)} />
-          </CardContent>
-        </Card>
-      ))}
+      {blocks.map((b, i) => <BlockCard key={i} block={b} index={i} total={blocks.length} onUpdate={(patch) => update(i, patch)} onMove={(d) => move(i, d)} onRemove={() => remove(i)} />)}
 
       <div className="space-y-3 rounded-lg border border-dashed border-border p-3">
         <div className="flex items-center justify-between">
@@ -158,6 +144,55 @@ export function BlockEditor({
         </div>
       </div>
     </div>
+  );
+}
+
+function BlockCard({
+  block,
+  index,
+  total,
+  onUpdate,
+  onMove,
+  onRemove,
+}: {
+  block: ContentBlock;
+  index: number;
+  total: number;
+  onUpdate: (patch: Partial<ContentBlock>) => void;
+  onMove: (delta: number) => void;
+  onRemove: () => void;
+}) {
+  const [previewOne, setPreviewOne] = useState(false);
+  return (
+    <Card className="group transition-colors hover:border-primary/30">
+      <CardContent className="space-y-3 p-4">
+        <div className="flex items-center justify-between">
+          <span className="rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-[0.06em] text-primary">
+            {BLOCK_LABEL[block.type]}
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setPreviewOne((p) => !p)}
+              className="rounded px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-foreground"
+              title={previewOne ? "Edit" : "Preview"}
+            >
+              {previewOne ? "✎ Edit" : "⊞ Preview"}
+            </button>
+            <button onClick={() => onMove(-1)} disabled={index === 0} className="rounded p-1 text-muted-foreground hover:bg-accent disabled:opacity-30" type="button"><ChevronUp className="h-4 w-4" /></button>
+            <button onClick={() => onMove(1)} disabled={index === total - 1} className="rounded p-1 text-muted-foreground hover:bg-accent disabled:opacity-30" type="button"><ChevronDown className="h-4 w-4" /></button>
+            <button onClick={onRemove} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" type="button"><Trash2 className="h-4 w-4" /></button>
+          </div>
+        </div>
+        {previewOne ? (
+          <div className="rounded-md border border-border bg-card/40 p-4">
+            <BlockRenderer blocks={[block]} />
+          </div>
+        ) : (
+          <BlockFields block={block} onChange={onUpdate} />
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
