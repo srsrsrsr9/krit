@@ -95,7 +95,29 @@ async function main() {
   }
   const wsSlug = process.argv[3] ?? "krit-academy";
 
-  const raw = JSON.parse(readFileSync(resolve(process.cwd(), fileArg), "utf-8"));
+  // Strip UTF-8 BOM and any wrapping ``` fences if the LLM left them.
+  let text = readFileSync(resolve(process.cwd(), fileArg), "utf-8");
+  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+  text = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+
+  // First attempt: strict parse. If that fails, repair common LLM JSON
+  // bugs and try again — most often this is unescaped inner double quotes
+  // inside string values, which is invalid JSON but extremely common.
+  let raw: unknown;
+  try {
+    raw = JSON.parse(text);
+  } catch (e) {
+    const repaired = repairJson(text);
+    try {
+      raw = JSON.parse(repaired);
+      console.log("⚠ Repaired malformed JSON (escaped inner quotes). Original error:", (e as Error).message);
+    } catch (e2) {
+      console.error("✗ Could not parse JSON, even after repair.");
+      console.error("  First failure:", (e as Error).message);
+      console.error("  Second failure:", (e2 as Error).message);
+      process.exit(1);
+    }
+  }
   const parsed = CourseFile.safeParse(raw);
   if (!parsed.success) {
     console.error("✗ Validation failed.");
@@ -366,6 +388,51 @@ async function main() {
 
   console.log(`✓ Imported "${course.path.title}" — ${course.lessons.length} lessons, ${course.assessment.questions.length} questions, capstone, credential.`);
   console.log(`  Visit: /learn/${course.path.slug}`);
+}
+
+/**
+ * Walk the text char-by-char tracking string state. Inside a string, any
+ * `"` that is NOT followed by a structural delimiter (`,` `}` `]` `:` or EOF)
+ * is treated as an unescaped inner quote and gets escaped. This handles the
+ * single most common LLM JSON bug: inline quoted phrases.
+ */
+function repairJson(text: string): string {
+  let out = "";
+  let inStr = false;
+  let esc = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]!;
+    if (esc) {
+      out += c;
+      esc = false;
+      continue;
+    }
+    if (c === "\\") {
+      out += c;
+      esc = true;
+      continue;
+    }
+    if (c === '"') {
+      if (!inStr) {
+        inStr = true;
+        out += c;
+        continue;
+      }
+      // Inside a string. Peek past whitespace at the next non-ws char.
+      let j = i + 1;
+      while (j < text.length && /\s/.test(text[j]!)) j++;
+      const next = text[j];
+      if (next === undefined || next === "," || next === "}" || next === "]" || next === ":") {
+        inStr = false;
+        out += c;
+      } else {
+        out += '\\"';
+      }
+      continue;
+    }
+    out += c;
+  }
+  return out;
 }
 
 main()

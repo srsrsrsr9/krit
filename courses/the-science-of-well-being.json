@@ -1,0 +1,149 @@
+﻿{
+"path": {
+"slug": "science-of-well-being",
+"title": "The Science of Well-Being",
+"subtitle": "Build happiness with evidence, not guesswork",
+"summary": "Most people chase happiness through instinct and culture, and get predictable but wrong results. This path shows you how psychology actually explains happiness, and how to apply it in daily life. You walk away able to diagnose your own well-being and implement habits that measurably improve it.",
+"kind": "PATH",
+"level": "NOVICE",
+"estimatedMinutes": 72
+},
+"skills": [
+{ "slug": "cognitive-bias-awareness", "name": "Cognitive Bias Awareness", "category": "health", "description": "Recognize systematic thinking errors that distort happiness judgments", "decayDays": null },
+{ "slug": "hedonic-adaptation", "name": "Hedonic Adaptation Understanding", "category": "health", "description": "Understand how humans quickly normalize positive and negative changes", "decayDays": null },
+{ "slug": "behavioral-rewiring", "name": "Behavioral Rewiring", "category": "health", "description": "Design habits that change behavior beyond knowledge", "decayDays": null },
+{ "slug": "gratitude-practice", "name": "Gratitude Practice", "category": "health", "description": "Use structured gratitude techniques to increase well-being", "decayDays": null },
+{ "slug": "social-connection-design", "name": "Social Connection Design", "category": "health", "description": "Intentionally build meaningful relationships for well-being", "decayDays": null },
+{ "slug": "wellbeing-diagnostics", "name": "Well-Being Diagnostics", "category": "health", "description": "Assess and track your happiness using structured methods", "decayDays": null }
+],
+"skillPrerequisites": [
+{ "skill": "hedonic-adaptation", "requires": "cognitive-bias-awareness" },
+{ "skill": "behavioral-rewiring", "requires": "hedonic-adaptation" },
+{ "skill": "gratitude-practice", "requires": "behavioral-rewiring" },
+{ "skill": "social-connection-design", "requires": "gratitude-practice" },
+{ "skill": "wellbeing-diagnostics", "requires": "social-connection-design" }
+],
+"lessons": [
+{
+"slug": "miswanting-basics",
+"title": "Why You Want the Wrong Things",
+"subtitle": "Miswanting drives most life decisions",
+"estimatedMinutes": 10,
+"skills": ["cognitive-bias-awareness"],
+"blocks": [
+{ "type": "markdown", "md": "You think you know what will make you happy. You are usually wrong. The mistake is not random; it follows patterns. This lesson overturns the idea that desire equals value." },
+{ "type": "callout", "tone": "tip", "title": "Mental model", "md": "Think of your brain as a prediction engine trained on biased data. It predicts happiness poorly because it overweights vivid outcomes and ignores adaptation." },
+{ "type": "heading", "level": 2, "text": "The Miswanting Loop" },
+{ "type": "markdown", "md": "Example: You expect a ₹20 lakh salary jump to increase happiness permanently. In reality, satisfaction spikes for 2–3 months, then resets." },
+{ "type": "quiz", "prompt": "What is miswanting?", "multi": false, "choices": [
+{ "id": "a", "label": "Wanting things that do not increase long-term happiness", "correct": true, "explain": "Correct; this is the core idea." },
+{ "id": "b", "label": "Wanting fewer things", "correct": false, "explain": "Tempting but incorrect; miswanting is about accuracy, not quantity." },
+{ "id": "c", "label": "Not wanting anything", "correct": false, "explain": "Did not read carefully; this is not about desire elimination." },
+{ "id": "d", "label": "Wanting material goods only", "correct": false, "explain": "Nonsense; miswanting applies broadly." }
+] },
+{ "type": "heading", "level": 2, "text": "The Arrival Fallacy" },
+{ "type": "markdown", "md": "Example: "Once I get into IIT, I will be happy." Data shows happiness returns to baseline within months." },
+{ "type": "callout", "tone": "warn", "title": "The classic trap", "md": "Knowing this does not change behavior. This is the G.I. Joe Fallacy." },
+{ "type": "tryIt", "instruction": "List 3 things you believe will make you happy, then write how long the effect will realistically last.", "expected": "Example: New job; 3 months spike, then baseline. New phone; 2 weeks excitement. Travel; 1 month residual happiness." },
+{ "type": "keyTakeaways", "points": [
+"Your brain predicts happiness poorly in systematic ways",
+"Big life changes create temporary spikes, not permanent shifts",
+"Miswanting leads to repeated poor decisions"
+] },
+{ "type": "reflect", "prompt": "What is one goal you are pursuing that may be driven by miswanting?" }
+]
+},
+{
+"slug": "hedonic-adaptation",
+"title": "Why Nothing Stays Special",
+"subtitle": "Adaptation resets your happiness baseline",
+"estimatedMinutes": 12,
+"skills": ["hedonic-adaptation"],
+"blocks": [
+{ "type": "markdown", "md": "You assume good things will keep feeling good. They do not. Your brain normalizes everything." },
+{ "type": "callout", "tone": "tip", "title": "Mental model", "md": "Think of happiness like a thermostat set at 7 out of 10. External changes push it briefly, then it returns." },
+{ "type": "heading", "level": 2, "text": "The Adaptation Curve" },
+{ "type": "markdown", "md": "Example: Buying a ₹1 lakh phone increases happiness for 14 days; then it becomes normal." },
+{ "type": "quiz", "prompt": "What does hedonic adaptation imply?", "multi": false, "choices": [
+{ "id": "a", "label": "Happiness returns to baseline after changes", "correct": true, "explain": "Correct; adaptation resets levels." },
+{ "id": "b", "label": "Happiness always increases over time", "correct": false, "explain": "Incorrect; adaptation prevents sustained increase." },
+{ "id": "c", "label": "Only bad events fade away", "correct": false, "explain": "Did not read carefully; good events fade too." },
+{ "id": "d", "label": "Happiness is fixed forever", "correct": false, "explain": "Nonsense; it fluctuates but resets." }
+] },
+{ "type": "heading", "level": 2, "text": "The Variety Hack" },
+{ "type": "markdown", "md": "Example: Instead of eating at the same restaurant weekly, rotate across 5 places; this slows adaptation." },
+{ "type": "callout", "tone": "warn", "title": "The classic trap", "md": "You try to outrun adaptation by increasing intensity, not variety." },
+{ "type": "sortableSteps", "prompt": "Order the steps to reduce adaptation", "items": [
+{ "id": "a", "label": "Introduce variety in experiences" },
+{ "id": "b", "label": "Space out positive events" },
+{ "id": "c", "label": "Savor the experience consciously" }
+] },
+{ "type": "keyTakeaways", "points": [
+"Adaptation is predictable, not random",
+"Variety beats intensity for sustained happiness",
+"Spacing experiences increases impact"
+] },
+{ "type": "reflect", "prompt": "Where in your life are you chasing intensity instead of variety?" }
+]
+}
+],
+"assessment": {
+"title": "The Science of Well-Being Assessment",
+"description": "Tests your ability to identify biases and apply well-being strategies",
+"passThreshold": 70,
+"timeLimitSec": null,
+"attemptsAllowed": 3,
+"skills": ["cognitive-bias-awareness"],
+"questions": [
+{
+"kind": "MCQ_SINGLE",
+"stem": "What is the arrival fallacy?",
+"points": 1,
+"skillSlug": "cognitive-bias-awareness",
+"choices": [
+{ "id": "a", "label": "Believing happiness comes after achieving a goal", "correct": true, "explanation": "Correct; this defines arrival fallacy." },
+{ "id": "b", "label": "Achieving goals too quickly", "correct": false, "explanation": "Tempting but incorrect." },
+{ "id": "c", "label": "Not setting goals", "correct": false, "explanation": "Did not read carefully." },
+{ "id": "d", "label": "Avoiding ambition", "correct": false, "explanation": "Nonsense." }
+]
+}
+]
+},
+"project": {
+"slug": "wellbeing-capstone",
+"title": "Capstone: Design Your Happiness System",
+"prompt": "Your friend says: 'I have a good job but still feel unhappy. What should I do?'' Design a 14-day plan using course principles. Ask clarifying questions, identify biases, and propose interventions.",
+"rubric": [
+{
+"criterion": "Defensibility",
+"levels": [
+{ "label": "Uses multiple research-backed principles correctly", "points": 4 },
+{ "label": "Uses some principles correctly", "points": 2 },
+{ "label": "No clear reasoning", "points": 0 }
+]
+},
+{
+"criterion": "Sensitivity",
+"levels": [
+{ "label": "Adapts plan to individual context", "points": 4 },
+{ "label": "Partially adapted", "points": 2 },
+{ "label": "Generic advice", "points": 0 }
+]
+},
+{
+"criterion": "Communication",
+"levels": [
+{ "label": "Clear, structured, actionable", "points": 4 },
+{ "label": "Somewhat clear", "points": 2 },
+{ "label": "Unclear", "points": 0 }
+]
+}
+]
+},
+"credential": {
+"slug": "science-of-well-being",
+"title": "The Science of Well-Being",
+"description": "Can apply psychological science to improve personal happiness and well-being",
+"issuerName": "Krit Academy"
+}
+}
