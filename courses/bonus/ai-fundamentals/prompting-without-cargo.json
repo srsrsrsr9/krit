@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: Three Sprints, 0.4% Lift, One Resignation",
+    "source": "Anonymous, ex-staff engineer at a Gurugram edtech unicorn",
+    "date": "August 2025",
+    "story": "**Lernsy**, a Gurugram edtech doing AI-graded essay feedback for class 10 ICSE students, dedicated three full sprints (six weeks, four engineers) to A/B testing prompt variants. The hypothesis: adding 'think step by step' or 'you are a world-class English teacher' or chain-of-thought scaffolds would meaningfully lift their internal rubric score.\n\nThe team A/B tested 47 variants across 12,000 graded essays. Lift in the rubric score across the *best* variant: **0.4 percent**, well inside the noise band. Cost: roughly **18 lakh rupees** in engineering time plus a non-trivial OpenAI bill from running the eval set 47 times.\n\nThe twist: a junior engineer suggested in week 2 that the *real* problem was the rubric was ambiguous (graders disagreed with each other 23 percent of the time on the same essay). She was overruled because 'prompt engineering is the obvious lever.' She quit in week 7, joined a competitor, and within a quarter that competitor shipped a clearer rubric with examples baked into the prompt and saw a real **9 percent lift**.\n\nLernsy's CTO finally admitted the obvious: they had been polishing a prompt around a broken specification. The prompt was the cargo cult; the rubric was the actual lever.",
+    "takeaway": "If your prompt iteration is yielding sub-percent lifts, the bottleneck is upstream, almost always in your spec, your examples, or your eval set. Stop tuning. Go fix the brief."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Riya's One-Liner",
+    "setup": "It is February 2026. Velora's support-bot RAG architecture is in build (the steering committee approved your scope from January). Riya the PM forwards you a Slack: **'Hey, can you also build a thing that drafts our quarterly RBI compliance email to enterprise customers? Should be simple, just summarise the rate changes.'** That is the entire brief. Ankit is on a flight. You have 90 minutes before the standup. Iterate the prompt with R-C-T-F-E.",
+    "coach": {
+      "name": "Ankit",
+      "role": "CTO, Velora"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First pass. You write: `'Summarise the rate changes for an RBI compliance email.'` Output is a generic 200-word essay that mentions 'rates may have changed' three times. What's the **first** R-C-T-F-E lever you reach for?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add 'think step by step' to the system prompt.",
+            "correct": false,
+            "explain": "Classic cargo cult. CoT helps with multi-step reasoning, not with summarising a list of rate changes you haven't even given the model. You're polishing the steering wheel of a car with no fuel.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Add **Role**: 'You are a Velora compliance analyst writing to enterprise customers under RBI fair-practice norms.'",
+            "correct": true,
+            "explain": "Role first. The model went generic because you gave it no audience and no domain. A specific role anchors register, vocabulary, and the implicit 'what would a person in this role *not* say.' This is the R in R-C-T-F-E and it's the highest-leverage single change here.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Switch from GPT-4 to Claude Opus.",
+            "correct": false,
+            "explain": "Tool-shopping before prompt-shaping. The same 5-word brief will produce equally generic output on any frontier model in 2026. Fix the prompt, then evaluate models.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Crank the temperature to 0.",
+            "correct": false,
+            "explain": "Temperature 0 makes the *same generic essay* deterministic. You don't want consistency, you want correctness.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Better. The output now sounds like a compliance person, but it's still hallucinating rate numbers. What's the next R-C-T-F-E lever?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add **Context**: paste the actual table of old rates, new rates, effective date, and the underlying RBI circular reference into the prompt.",
+            "correct": true,
+            "explain": "C is for context. The model was *making up* numbers because you never gave it any. With a 200K context window in 2026 and tokens at roughly 3 dollars per million for frontier models, there is no excuse for not pasting the source data. Hallucination collapses when you stop asking the model to remember and start asking it to read.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Tell the model 'do not hallucinate.'",
+            "correct": false,
+            "explain": "This is the prompt-engineering equivalent of writing 'be honest' on a contract. Models that hallucinate do so because they lack the facts, not because they were not asked nicely.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Add a chain-of-thought scratchpad.",
+            "correct": false,
+            "explain": "CoT cannot manufacture facts the model never saw. Wrong lever, wrong stage.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Lower temperature again.",
+            "correct": false,
+            "explain": "Same hallucinated numbers, more confidently. Worse, not better.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Numbers are now correct. But the email reads like a wall of prose; legal wants a specific structure (greeting, change table, effective date, escalation contact, sign-off). Next lever?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add **Format**: specify the exact section headings and order. Optionally request markdown so it renders cleanly in the legal-review tool.",
+            "correct": true,
+            "explain": "F is for format. Models follow structural instructions extremely well when they're explicit. Asking for headings, bullets, or even a specific JSON shape removes a whole category of 'this is correct but unusable' output. You can also just say 'mirror the format of the example below' and add an example, which leads neatly into E.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Manually reformat the output every quarter.",
+            "correct": false,
+            "explain": "You're asking a human to do what one extra paragraph in the prompt would automate. That is the opposite of leverage.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Switch to a smaller, cheaper model and just accept worse formatting.",
+            "correct": false,
+            "explain": "Optimising cost before correctness. The compliance email is a low-volume, high-stakes artefact; this is where you spend the tokens.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add 'be professional' to the system prompt.",
+            "correct": false,
+            "explain": "Vague vibe-instructions vs explicit structural instructions. The latter wins every time.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Format is right. But on edge cases (a quarter with *no* changes, a quarter with a temporary pause then revert) the model still fumbles. Last R-C-T-F-E lever?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add **Examples**: paste two prior quarters' approved emails (one normal, one no-change) as gold-standard few-shots.",
+            "correct": true,
+            "explain": "E is for examples. Few-shot is the cheat code. The model learns your *house style* and *edge-case handling* from one or two real prior outputs faster than from any amount of instruction. This is also where R-C-T-F-E pays off most: you've stacked role, context, task, format, and now examples, each fixing a different failure mode.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Build a 47-variant A/B test of phrasing tweaks.",
+            "correct": false,
+            "explain": "Lernsy. Read the field notes again.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Fine-tune a model on prior emails.",
+            "correct": false,
+            "explain": "Massive overkill for a quarterly artefact. Few-shot in the prompt is two minutes of work; fine-tuning is a project. Use the smaller hammer.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Ship and let the legal team rewrite the awkward ones.",
+            "correct": false,
+            "explain": "You're externalising the cost to legal, who already hate this kind of thing. Two-line prompt fix vs ongoing legal time, this is not close.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You shipped a working draft in 90 minutes by climbing R-C-T-F-E in order: role, context, format, examples. Riya is delighted. Ankit, on landing, sees the demo and Slacks: 'This is the discipline I want on every prompt we ship.'",
+      "good": "You got most of the levers in roughly the right order. The output is shippable with light legal edits. Re-read the cargo-cult section so you don't reach for chain-of-thought as a default.",
+      "learn": "You spent the 90 minutes adding 'think step by step' and tweaking temperature. The output is still generic. Re-read the lesson and try the battle again, this time forcing yourself to name which letter of R-C-T-F-E you are pulling at every step."
+    }
+  }
+}

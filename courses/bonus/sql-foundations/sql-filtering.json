@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The NULL That Failed an Audit",
+    "source": "Anonymous data engineer at PaisaPe, a Mumbai-based payments series-C",
+    "date": "March 2025",
+    "story": "PaisaPe runs settlement reconciliation every night for ~14 million transactions. On March 11, 2025, the RBI auditor for their quarterly review pulled their internal \"failed-payment\" report and found a **0.42% discrepancy** versus the bank's own statement: ₹4.7 crore of transactions that the bank said happened, that PaisaPe's own report said didn't.\n\nThe culprit was one line in a query that had run, untouched, for 19 months:\n\n```sql\nSELECT COUNT(*) FROM transactions\nWHERE payment_status <> 'success'\nAND created_at >= '2024-12-01';\n```\n\nThe problem: when an upstream service timed out, it wrote `NULL` into `payment_status`. And `NULL <> 'success'` doesn't evaluate to `TRUE`. It evaluates to `NULL`. Which the `WHERE` clause treats as \"don't include this row.\"\n\nResult: **62,400 timed-out transactions** had been quietly excluded from every \"failed payments\" report for 19 months. The auditor noticed because the bank's reconciliation file included them. The fix was eight characters: `OR payment_status IS NULL`. The remediation memo to RBI was twelve pages.\n\nThe engineer who wrote the original query had left the company in 2023. The query had passed code review three times.",
+    "takeaway": "`NULL` is not equal to anything, not even itself — and `WHERE x <> 'A'` silently drops every row where `x` is unknown."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Missing 1,400 Customers",
+    "setup": "It's Tuesday morning. **Aanya, the same PM from Friday**, is back. *\"Quick one — the customer-segmentation report says we have 8,600 active customers in Tier 2 cities. But the marketing dashboard says 10,000. Where are the missing 1,400?\"*\n\nShe's on a call with the CMO in 40 minutes. The two queries were written by two different engineers, one of whom is on parental leave. You crack open both queries.",
+    "coach": { "name": "DBA Aunty Lakshmi", "role": "Senior database administrator, NULL-whisperer" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Query A (segmentation, 8,600) reads:\n\n```sql\nSELECT COUNT(*) FROM customers\nWHERE tier <> 'Tier 1' AND tier <> 'Tier 3';\n```\n\nQuery B (marketing, 10,000) reads:\n\n```sql\nSELECT COUNT(*) FROM customers\nWHERE tier = 'Tier 2';\n```\n\nWhat's your **first hypothesis**?",
+        "options": [
+          { "id": "a", "label": "Query B is wrong — it's missing some Tier 2 variants like 'tier 2' or 'TIER_2'.", "correct": false, "explain": "Possible but unlikely — Query B is the *more inclusive* count. Case mismatches would make it *smaller*, not bigger. Aunty Lakshmi gestures at the screen impatiently. Look at Query A again.", "points": 0 },
+          { "id": "b", "label": "Query A excludes rows where `tier IS NULL` — those 1,400 customers have a NULL tier.", "correct": true, "explain": "**Spot on.** `NULL <> 'Tier 1'` is `NULL`, not `TRUE`. Same for the second clause. Both fail, the row is excluded. Query B's `tier = 'Tier 2'` *also* excludes NULLs — but Query B is the one that's correct *for marketing's intent* (only count confirmed Tier 2).", "points": 3 },
+          { "id": "c", "label": "Query A and B are both correct — the difference is timing; one ran before a backfill.", "correct": false, "explain": "Both queries were run at the same hour. The discrepancy is structural, not temporal. Aunty Lakshmi reminds you: *\"NULL is the first thing you check when two counts disagree.\"*", "points": 0 },
+          { "id": "d", "label": "There's a JOIN somewhere fanning out one of the counts.", "correct": false, "explain": "Both queries are single-table `COUNT(*)` from `customers`. No JOINs, no fan-out. Read the queries again — the difference is in how `WHERE` treats NULL.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You confirm: `SELECT COUNT(*) FROM customers WHERE tier IS NULL` returns **1,400**. Aanya needs to know which number to give the CMO. **What do you tell her?**",
+        "options": [
+          { "id": "a", "label": "\"Use 10,000. Query B is right; Query A has a NULL bug.\"", "correct": false, "explain": "Half-right. Query A *does* have a NULL bug. But \"Tier 2\" customers and \"customers with no tier yet\" are not the same business segment. The CMO will plan a campaign for 10,000 people, then 1,400 of those targeted folks will get an offer for a tier they don't actually have.", "points": 1 },
+          { "id": "b", "label": "\"Both are technically correct for what they ask. The real number depends on what the CMO means by 'Tier 2': confirmed-Tier-2 (8,600) or not-classified-as-non-Tier-2 (10,000). Ask her.\"", "correct": true, "explain": "**This is the answer.** The bug isn't the count — it's the ambiguity. Aanya goes back, asks the CMO, returns 90 seconds later with: *\"Confirmed Tier 2 only.\"* You ship 8,600 and add a NULL-tier follow-up to the next sprint.", "points": 3 },
+          { "id": "c", "label": "\"Use 8,600 — it's the more conservative number.\"", "correct": false, "explain": "Conservatism is not a substitute for correctness. The CMO might *want* the 1,400 unclassified customers in the campaign — those could be the highest-intent new signups. You're choosing for her without telling her.", "points": 1 },
+          { "id": "d", "label": "\"Average them: 9,300. Splits the difference.\"", "correct": false, "explain": "Aunty Lakshmi physically winces. Averaging two counts is never an answer to a data question. Please do not put this in the deck.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "The CMO says **\"confirmed Tier 2 only.\"** You ship 8,600. Aanya asks: *\"How do we make sure this NULL-mismatch never happens again?\"* What's the **best long-term fix**?",
+        "options": [
+          { "id": "a", "label": "Add a `NOT NULL` constraint on `customers.tier` and backfill the 1,400 NULLs to a default like 'Unclassified'.", "correct": true, "explain": "**The right move.** Constraints prevent the ambiguity from re-entering the system. Backfilling NULLs to an explicit `'Unclassified'` label means future `WHERE tier <> 'Tier 1'` queries actually count those rows. Three-way decisions become two-way decisions.", "points": 3 },
+          { "id": "b", "label": "Write a wiki page reminding everyone that `<>` ignores NULLs.", "correct": false, "explain": "Wiki pages do not enforce SQL semantics. The next engineer to write `tier <> 'X'` will not have read your page. Documentation is a backstop, not a fix.", "points": 1 },
+          { "id": "c", "label": "Add `OR tier IS NULL` to every existing query as a one-time sweep.", "correct": false, "explain": "You'd need to find every query, in every dashboard, in every notebook, in every cron job. You will miss some. And the next engineer will write the bug all over again.", "points": 1 },
+          { "id": "d", "label": "Ban `<>` from the codebase via a SQL linter rule.", "correct": false, "explain": "Banning operators is a hammer where you need a constraint. `<>` is fine; ambiguous data is the problem. Aunty Lakshmi says: *\"Fix the schema, not the syntax.\"*", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You diagnosed a 19-month-old class of bug, refused to ship a wrong number under time pressure, and proposed a fix that prevents the next incident. **Aunty Lakshmi adds you to her short list of people she'll answer at midnight.**",
+      "good": "You found the NULL. You shipped a number. The fix you chose was a backstop instead of a structural prevention — re-read the section on three-valued logic and constraints, because this exact bug will reappear.",
+      "learn": "Re-read the lesson on `NULL` semantics — especially **\"NULL is not equal to anything, not even itself\"** and the section on `IS NULL` / `IS NOT NULL`. The CMO is now planning a campaign for the wrong customer set. Tomorrow you'll have to walk it back."
+    }
+  }
+}

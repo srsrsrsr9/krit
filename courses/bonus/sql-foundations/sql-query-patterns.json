@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Six-Hour Subquery",
+    "source": "Anonymous staff data engineer at LogiKart, a Gurgaon-based logistics SaaS series-D",
+    "date": "September 2025",
+    "story": "On September 22, 2025, LogiKart's overnight \"warehouse-utilization\" report failed. The on-call engineer opened the cron log at 7:14am to find a query that had been running for **9 hours and 41 minutes** before being killed by a database timeout — a job that historically completed in 18 minutes.\n\nThe query was 312 lines long. It contained **four levels of nested subqueries**, with the innermost one re-aggregating a 14-million-row events table inside a `SELECT` clause. The original author had left the company in 2023. The query was last modified by *six different engineers across two years*, each adding a `LEFT JOIN (SELECT ... )` patch to handle a new edge case. Nobody had ever rewritten it.\n\nThe on-call engineer spent **6 hours and 12 minutes** that morning trying to even *read* the query before identifying the regression: a subquery that previously returned 80,000 rows now returned 9.2 million, after a feature flag rollout the day before changed the granularity of an upstream events table.\n\nThe rewrite — into **five named CTEs**, each with a one-line comment — took 90 minutes once the bug was understood. The new query runs in 14 minutes. The post-mortem's most cited line: *\"This query was 312 lines because nobody felt allowed to delete the previous engineer's work.\"*\n\nLogiKart now has a hard rule: **no query in production may exceed two levels of subquery nesting** without a CTE refactor and a code review.",
+    "takeaway": "Nested subqueries are write-only code — CTEs are the same logic, but readable, testable, and debuggable when the on-call page comes at 7am."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Inherited Query",
+    "setup": "Wednesday, 10:14am. Your tech lead drops a Slack message: *\"Aanya wants the weekly cohort-retention report by Friday. The current query takes 4 hours to run, breaks every time someone touches the schema, and the engineer who wrote it is on sabbatical until June. Can you take a look?\"*\n\nYou open the file. **187 lines. Three nested subqueries. Zero comments.** Aanya is in your DMs already: *\"Btw can we also add a column for average sessions-per-user-per-week? Should be quick right?\"*",
+    "coach": { "name": "DBA Aunty Lakshmi", "role": "Senior database administrator, refactor evangelist" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "You skim the query. It looks roughly like:\n\n```sql\nSELECT cohort_week,\n       COUNT(DISTINCT user_id) AS retained_users,\n       (SELECT COUNT(*) FROM (\n         SELECT user_id FROM events e2\n         WHERE e2.created_at >= ... AND e2.user_id IN (\n           SELECT user_id FROM signups s2 WHERE ...\n         )\n       ) inner_alias) AS some_metric\nFROM signups s\nLEFT JOIN (SELECT ... FROM events ... GROUP BY ...) e ON ...\nWHERE ...\n```\n\n**What's your first move**?",
+        "options": [
+          { "id": "a", "label": "Start patching it in place — Aanya needs the new column by Friday, no time to refactor.", "correct": false, "explain": "You'll spend Thursday debugging a 187-line query you don't understand, ship a wrong number Friday, and own the bug forever. Aunty Lakshmi: *\"The fastest way to ship Friday is to refactor Wednesday.\"*", "points": 0 },
+          { "id": "b", "label": "Run the existing query against a known sample, save the output as a baseline, *then* refactor into CTEs.", "correct": true, "explain": "**This is the move.** Without a baseline you can't prove the refactor preserves behavior. With a baseline, every step of the refactor is a `diff` against truth. Aunty Lakshmi nods — this is exactly how she'd approach it.", "points": 3 },
+          { "id": "c", "label": "Throw it away and rewrite from the spec.", "correct": false, "explain": "There is no spec. The query *is* the spec — encoded badly across 187 lines and two years of edge cases. Throw it away and you'll re-discover every edge case in production over the next six months.", "points": 0 },
+          { "id": "d", "label": "Ask Aanya to delay until June when the original author is back.", "correct": false, "explain": "She won't. The author won't remember it anyway. And \"the only person who can touch this code is on sabbatical\" is a six-alarm fire your tech lead is asking you to put out.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Baseline saved (cohort retention numbers for the past 12 weeks). You start the refactor. **What's the right CTE structure**?",
+        "options": [
+          { "id": "a", "label": "One giant CTE called `everything` that does all the work, then `SELECT * FROM everything`.", "correct": false, "explain": "You've moved the mess from a subquery into a CTE. Same readability. Aunty Lakshmi: *\"A CTE is not magic — it's a name. Name things meaningfully.\"*", "points": 0 },
+          { "id": "b", "label": "Three CTEs: `cohorts` (signup → cohort_week), `weekly_activity` (events → user-week activity), `retention` (joins them, computes the metric). Then a final SELECT.", "correct": true, "explain": "**Excellent.** Each CTE has one job, a name a stranger could understand, and is independently testable. You can `SELECT * FROM weekly_activity LIMIT 20` and verify the intermediate state. This is what the original engineer should have done.", "points": 3 },
+          { "id": "c", "label": "Two CTEs: `data` and `aggregates`. Generic but short.", "correct": false, "explain": "Generic names are a smell. `data` doesn't tell you what's in it; `aggregates` doesn't tell you *of what*. The next on-call engineer will hate you. Names are documentation.", "points": 1 },
+          { "id": "d", "label": "Five CTEs, one for every individual transformation.", "correct": false, "explain": "Now you've over-fragmented — `signups_filtered`, `signups_with_cohort`, `signups_with_cohort_renamed`, etc. Each step is too small to understand in isolation. Goldilocks: 3-5 CTEs, each a meaningful logical step.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "You finish the refactor. Run it against the baseline — **all 12 weeks of retention numbers match exactly**. The query is now 64 lines, runs in 11 minutes (down from 4 hours). Now Aanya's new ask: *\"Add average sessions-per-user-per-week.\"* **Where do you put it?**",
+        "options": [
+          { "id": "a", "label": "Add it as a new CTE called `weekly_sessions` that computes per-user-per-week session counts, then join it into the final SELECT.", "correct": true, "explain": "**Clean.** New requirement, new CTE, new join — additive, doesn't touch the existing logic, easy to roll back if Aanya changes her mind. The retention numbers stay verified against your baseline.", "points": 3 },
+          { "id": "b", "label": "Add a `COUNT(DISTINCT session_id) / 7.0` expression to the existing `weekly_activity` CTE.", "correct": false, "explain": "You're shoving two responsibilities into one CTE and changing a CTE that's already verified by your baseline. You'd need to re-verify everything. Keep CTEs single-purpose; add new ones for new asks.", "points": 1 },
+          { "id": "c", "label": "Wrap the whole query in another subquery that calculates sessions on top.", "correct": false, "explain": "You're literally re-introducing the nesting you just refactored away. Aunty Lakshmi makes a sound that is technically Tamil but universally translates as *\"why.\"*", "points": 0 },
+          { "id": "d", "label": "Write it as a separate query Aanya joins in Excel.", "correct": false, "explain": "Now there are two reports, two timestamps, two ways for them to disagree. The whole point of this refactor was that the query is now extensible — extend it.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final query: 5 CTEs, 78 lines, 12-minute runtime, baseline-verified, new metric added. **What do you do before merging?**",
+        "options": [
+          { "id": "a", "label": "Add a 6-line header comment: what the query produces, the CTE pipeline order, the baseline verification date, and your name + the date.", "correct": true, "explain": "**Yes.** The next on-call engineer (which might be you in six months) needs to know what this query is for, that it was verified against a baseline on a specific date, and how to re-verify. Six lines of comments saves six hours of confusion.", "points": 3 },
+          { "id": "b", "label": "Save the baseline output file in the repo as `tests/cohort_retention_baseline.csv` and add a CI test that re-runs the query and diffs against it.", "correct": true, "explain": "**Top-shelf.** Now any future change to the query (or to upstream schemas) fails CI if it changes the retention numbers. This is how you stop the *next* 9-hour query from emerging. Aunty Lakshmi raises a chai cup.", "points": 3 },
+          { "id": "c", "label": "Delete the old 187-line query immediately.", "correct": false, "explain": "Keep it for one release cycle as a reference, marked clearly as deprecated. If Friday's report is wrong, your tech lead will want to compare against the old logic. Delete in two weeks once the new query has run cleanly.", "points": 1 },
+          { "id": "d", "label": "Ship without the comment header — the CTE names are self-documenting enough.", "correct": false, "explain": "CTE names tell you *what each step does*. A header tells you *what the whole query is for and how to verify it*. Both matter. The comment costs 60 seconds.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Master class. You established a baseline, refactored to clean CTEs, added a new metric without breaking the verified pipeline, and left the codebase better than you found it — with comments and a CI test for the next person. **Aunty Lakshmi forwards your PR to the entire eng team as a refactoring case study. You have arrived.**",
+      "good": "You shipped a working refactor and Aanya got her report. You missed at least one of: the baseline-first discipline, the right CTE granularity, or the CI test for future protection. Re-read the section on **CTE structure and refactoring patterns** — these are the senior moves.",
+      "learn": "Re-read the lesson — especially the section on **CTEs vs subqueries** and the **refactoring playbook**. The strategy of \"baseline → refactor → verify → extend\" is the difference between the engineer who fears the 187-line query and the engineer who casually rewrites it on a Wednesday morning."
+    }
+  }
+}

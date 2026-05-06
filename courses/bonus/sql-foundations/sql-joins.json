@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 3x Revenue That Wasn't",
+    "source": "Anonymous analytics lead at Kettlebell Fitness, a Pune-based D2C wellness brand",
+    "date": "November 2024",
+    "story": "Two days before Kettlebell's series-A board meeting, the marketing team produced a slide titled **\"Q3 Revenue by Acquisition Channel.\"** The headline number: **₹14.2 crore**, up 47% QoQ. The board was thrilled. The CFO was confused.\n\nThe CFO's own ledger said Q3 revenue was **₹4.8 crore**.\n\nThe analytics team had built the slide off this query (paraphrased):\n\n```sql\nSELECT channel, SUM(orders.amount)\nFROM customers\nJOIN attribution_touchpoints USING (customer_id)\nJOIN orders USING (customer_id)\nGROUP BY channel;\n```\n\nThe `attribution_touchpoints` table had, on average, **2.9 rows per customer** — every Instagram ad, every Google search, every newsletter click. The JOIN multiplied each order by every touchpoint. Customer Aanya, who had 3 ad touches and bought ₹2,500 worth of kettlebells, contributed **₹7,500** to the revenue total. Across 18,000 customers, the inflation came out to roughly **2.96x** — close to the 3x miss.\n\nThe slide was killed at 11pm the night before the board meeting. The CEO called the analytics lead personally. Nobody was fired, but trust in the marketing dashboard took **6 months** to rebuild — the team instituted a mandatory \"pre-aggregate before joining\" review for any cross-domain query.",
+    "takeaway": "JOINs multiply rows; aggregations downstream double-count — pre-aggregate the many-side first, or you'll ship a number 3x too big."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Customers With Order Counts",
+    "setup": "It's a Wednesday standup. **Aanya is back** — *\"For the customer-success team, I need a list of every customer with their order count. All customers, even ones who haven't ordered yet, because success wants to reach out. By lunch please.\"*\n\nThe schema:\n\n```sql\ncustomers (id, name, city, signed_up_at)\norders    (id, customer_id, amount, status, ordered_at)\n```\n\nA customer can have zero, one, or many orders. You have one query to write.",
+    "coach": { "name": "DBA Aunty Lakshmi", "role": "Senior database administrator, JOIN-direction enforcer" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision: **which JOIN type** gets you \"all customers, including ones with zero orders\"?",
+        "options": [
+          { "id": "a", "label": "`INNER JOIN orders ON customers.id = orders.customer_id`", "correct": false, "explain": "INNER drops customers with no matching order row. The 1,200 customers who signed up last week and haven't bought yet — exactly the people success wants to call — vanish from your result. Aunty Lakshmi shakes her head.", "points": 0 },
+          { "id": "b", "label": "`LEFT JOIN orders ON customers.id = orders.customer_id` with `customers` on the left.", "correct": true, "explain": "**Correct.** LEFT JOIN keeps every row from the left table (`customers`) and fills NULL for any unmatched right-side columns. Zero-order customers come through with NULL in the order columns — exactly what success needs to find them.", "points": 3 },
+          { "id": "c", "label": "`RIGHT JOIN customers ON ...` because the customers list is the priority.", "correct": false, "explain": "A `RIGHT JOIN` keeps everything from the *right* table. You wrote `customers` on the right of `RIGHT`, so this technically works — but it's a readability disaster. Aunty Lakshmi: *\"Always lead with LEFT. Future-you will thank present-you.\"*", "points": 1 },
+          { "id": "d", "label": "`FULL OUTER JOIN` to be safe.", "correct": false, "explain": "FULL OUTER also keeps orphan orders (orders whose customer was deleted). You don't want those in a customer-success outreach list. You'd be paging the success team about ghosts.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You write:\n\n```sql\nSELECT c.id, c.name, COUNT(*) AS order_count\nFROM customers c\nLEFT JOIN orders o ON o.customer_id = c.id\nGROUP BY c.id, c.name;\n```\n\nYou run it. The new customer Vikram (signed up Monday, zero orders) shows up with `order_count = 1`. **What's wrong?**",
+        "options": [
+          { "id": "a", "label": "`COUNT(*)` counts the row, including the LEFT JOIN's NULL-filled row. Should be `COUNT(o.id)`.", "correct": true, "explain": "**Sharp.** `COUNT(*)` counts rows; the LEFT JOIN produces one row for Vikram with NULL order columns. `COUNT(o.id)` (or any non-nullable order column) skips NULLs and correctly returns `0`. This is one of the most-failed SQL interview questions.", "points": 3 },
+          { "id": "b", "label": "The `GROUP BY` is missing `c.signed_up_at`.", "correct": false, "explain": "Not selected, so not required. The bug is `COUNT(*)` vs `COUNT(o.id)`. Look at how COUNT treats NULL.", "points": 0 },
+          { "id": "c", "label": "Vikram has a hidden order from a test run last week.", "correct": false, "explain": "Possible in real life, but the question is about the query semantics. `COUNT(*)` is the structural cause. Don't blame the data when the query is the bug.", "points": 0 },
+          { "id": "d", "label": "Should use `COUNT(DISTINCT o.id)` instead.", "correct": true, "explain": "**Also correct.** `COUNT(DISTINCT o.id)` produces the right count *and* protects against accidental fan-out if a future engineer adds another JOIN. Defensive choice. Aunty Lakshmi gives a small nod.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aanya looks at the results: *\"Wait — the totals don't match the finance dashboard. They say we have 7,200 customers; your query returns 9,800.\"* What's your **next diagnostic**?",
+        "options": [
+          { "id": "a", "label": "Check whether `customers` includes soft-deleted (`deleted_at IS NOT NULL`) accounts that finance excludes.", "correct": true, "explain": "**First place to look.** Finance dashboards almost always filter out soft-deleted customers; raw `customers` queries don't. Add `WHERE c.deleted_at IS NULL` and watch the 2,600 ghosts disappear.", "points": 3 },
+          { "id": "b", "label": "Re-run with `INNER JOIN` to be safe.", "correct": false, "explain": "That would *drop* the zero-order customers Aanya specifically asked for. You'd reduce the count, but for the wrong reason — and break the original requirement. Aunty Lakshmi says: *\"Never fix a count by changing the JOIN type without understanding the discrepancy.\"*", "points": 0 },
+          { "id": "c", "label": "Check whether the `orders` table is causing fan-out somehow.", "correct": false, "explain": "You're aggregating with `GROUP BY c.id`, so each customer collapses to one row regardless of orders. Fan-out isn't the inflation source here — soft-deletes or test accounts are the usual culprits.", "points": 1 },
+          { "id": "d", "label": "Add `WHERE c.signed_up_at >= '2024-01-01'` to filter to recent customers.", "correct": false, "explain": "You're guessing at a date filter without knowing what finance does. That's how reports diverge in opposite directions. Find out *why* the gap exists before changing anything.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "You add `WHERE c.deleted_at IS NULL`. Counts now match: 7,200. Final query, ready to ship. **One last polish — what do you add before sending?**",
+        "options": [
+          { "id": "a", "label": "`ORDER BY order_count DESC, c.signed_up_at DESC` so success can prioritize.", "correct": true, "explain": "**Helpful.** Success will sort the CSV anyway, but pre-sorting by `order_count DESC` puts whales first and `signed_up_at DESC` puts new signups (the zero-order ones success cares about) at the top of *their* section. Two birds.", "points": 3 },
+          { "id": "b", "label": "A header comment: `-- 7,200 customers · LEFT JOIN orders · excludes soft-deleted · run 2026-05-08` ", "correct": true, "explain": "**Excellent practice.** When this CSV gets forwarded three times and someone asks \"is this current?\" three weeks from now, the comment answers without an email thread.", "points": 3 },
+          { "id": "c", "label": "`LIMIT 100` to keep it small.", "correct": false, "explain": "Aanya asked for *all* customers. A `LIMIT` would cut off most of the 7,200 — including, ironically, most of the zero-order customers success specifically wanted to find.", "points": 0 },
+          { "id": "d", "label": "Wrap it in a `SELECT *` outer query for safety.", "correct": false, "explain": "Wrapping a clean query in `SELECT *` undoes everything you just fixed. Aunty Lakshmi looks personally hurt.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Textbook. You picked the right JOIN, caught the `COUNT(*)` trap, diagnosed the soft-delete inflation, and shipped a polished result. **Aunty Lakshmi quietly adds your name to the on-call rotation as a backup — the highest compliment she gives.**",
+      "good": "You shipped a workable query, but you missed at least one of: the `COUNT(*)` NULL-counting trap, the soft-delete diagnostic, or the LEFT vs RIGHT readability call. Re-read the JOIN-direction and `COUNT` sections — these are the everyday traps.",
+      "learn": "Re-read the lesson — especially the **fan-out** section and the discussion of how `COUNT(*)` interacts with `LEFT JOIN`. The query you would have shipped today double-counts revenue and miscounts customers. Aanya's customer-success team would have spent the week chasing customers who don't exist."
+    }
+  }
+}

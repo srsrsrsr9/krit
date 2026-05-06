@@ -1,0 +1,114 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 4.7% Endowment vs the 11.8% Index",
+    "source": "Practising CA in Pune, partner at a fictional firm Bhide & Sathe Associates, after a Diwali family lunch with a school friend",
+    "date": "November 2024",
+    "story": "At Diwali 2024 my friend — call him Ravi, 38, mid-level IT manager — proudly showed me a maturity statement from an LIC endowment policy his father had bought him in **2002**.\n\nPremium: **₹24,000/year** for 21 years. Total paid in: **₹5.04L**. Maturity (with 'bonuses'): **₹13.6L** in 2023.\n\nRavi was beaming. *'See, more than 2.5x.'*\n\nI asked if I could open a calculator. The IRR worked out to **4.7%** — actually below CPI inflation over the same period (~5.4%). In real terms, **he had lost purchasing power**.\n\nThen I ran the alternative. The same **₹24K/year** invested annually in a Nifty 50 index fund from 2002 to 2023 (XIRR via Value Research, dividend reinvested):\n\n- Total invested: **₹5.04L** (identical)\n- Terminal value: **₹52.8L**\n- Effective IRR: **~13.1%**\n- Gap vs the LIC endowment: **₹39.2L of foregone wealth**\n\nThe punchline: **Ravi's father did not save him ₹39.2L of risk. He spent ₹39.2L of compounding to buy an emotional sense of safety**, sold to him by an LIC agent in 2002 who was paid a 35% first-year commission.\n\nRavi was quiet for the rest of the lunch. The samosas got cold.",
+    "takeaway": "The cost of a 'safe' investment is not the lower return — it is the trillion small compounding events you didn't get. Compounding doesn't punish risk-aversion in year 1. It punishes it in year 21."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav vs the ULIP",
+    "setup": "Aarav, 31, calls in a panic between meetings. Cleaning out a cupboard at his mother's place in Pune, he found a **ULIP policy** she bought him in **2019** as a 'wedding gift advance'. He never paid attention to it. SBI Life Smart Wealth Builder, premium **₹60,000/year**, locked for 5 years.\n\nThe numbers as of today:\n\n- Years paid: **5 of 5** (lock-in just ended last month)\n- Total premium paid: **₹3.0L**\n- Current fund value: **₹3.42L**\n- Effective IRR: **~3.8%**\n- Surrender value if he exits today: **₹3.42L** (no surrender charge post lock-in)\n- Continue option: pay ₹60K/year for 10 more years, projected maturity ~₹14L at the policy's 'illustrated' 8% (which the IRDAI documents disclose may not materialise)\n\nHis mother is on the call. She is upset that he is even *considering* surrendering. *'Beta, agent-uncle said this is the safest one. Why are you listening to some YouTube person?'*\n\nYour move.",
+    "coach": {
+      "name": "FIRE-walla Falguni",
+      "role": "Ex-Deutsche Bank, retired at 41, runs a personal-finance Substack from Goa"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First question — should Aarav surrender today, continue paying, or convert to paid-up?\n\nAssume he can redirect the **₹60K/year** premium into a Nifty 50 index fund instead.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Continue paying. Insurance-cum-investment is balanced; surrendering 'wastes' the 5 years.",
+            "correct": false,
+            "explain": "**Sunk cost fallacy in pure form.** The ₹3L is gone whether he stays or leaves. The only question is what the *next* ₹6L (10 × ₹60K) earns. At the policy's 3.8% IRR vs the index's long-term ~12%, continuing for 10 more years costs roughly **₹4.8L in foregone wealth** — to keep a sub-inflation product alive.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Surrender now. Take the ₹3.42L, redirect the future ₹60K/year to a Nifty 50 index fund.",
+            "correct": true,
+            "explain": "Correct. Lock-in is over, no surrender charge, and the *forward* expected value of the ₹3.42L + ₹60K/year flowing into an index fund vastly outperforms continuing the ULIP. Re-running the field-notes maths: ₹3.42L lump + ₹60K/year for 10 years at 12% ≈ **₹21.5L**. ULIP same horizon at 8% illustrated ≈ ~₹14L. Difference of **~₹7.5L for one decision today**.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Convert to paid-up: stop paying, let the existing ₹3L grow inside the policy. Best of both worlds.",
+            "correct": false,
+            "explain": "Paid-up status freezes the corpus inside the same low-return ULIP — it keeps eating mortality charges and fund management fees but you've stopped feeding it. You get the worst of both: capital trapped at 3.8% AND no new compounding. Surrender beats paid-up here because the fund value is already above premium paid.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Surrender, but keep the ₹3.42L in a 5-year FD 'because it was meant for the wedding'.",
+            "correct": false,
+            "explain": "Right call on surrender, wrong call on redeployment. FD at 7% pre-tax = ~5% post-tax for Aarav's bracket = barely above inflation. He just escaped one sub-inflation trap; don't park the proceeds in another. Index fund or, if the wedding really is 12 months away, a debt fund — not an FD with an emotional tag.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav's mother is now actively crying. *'But the agent said this gives life cover too! If something happens to you, this protects Meera.'*\n\nHow do you handle the emotional + technical layer at once?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Soften: keep paying for the 'life cover peace of mind', it's not a huge amount.",
+            "correct": false,
+            "explain": "Avoiding the conversation costs Aarav real money. The ULIP's life cover is **₹6L** — laughably inadequate for an engaged 31-year-old engineer. Real life cover for him should be **₹2-3 crore term insurance** at roughly **₹14-18K/year**. The ULIP is the wrong product for both jobs it claims to do.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Decouple insurance and investment cleanly: buy a ₹2 crore term plan (~₹15K/year), surrender the ULIP, invest the rest in an index. Tell mom: 'Meera is more protected, not less.'",
+            "correct": true,
+            "explain": "This is the script. The ULIP fails at *both* jobs — the cover is inadequate AND the returns are sub-inflation. Term + index gives mom what she actually wants (Meera protected) at a fraction of the cost, AND wealth that compounds. Frame it as upgrading her gift, not rejecting it.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Show mom the IRR spreadsheet. Numbers don't lie.",
+            "correct": false,
+            "explain": "Numbers don't lie, but they also don't persuade your mother. The agent sold her *trust*, not maths. Counter with story (Ravi's ₹39L gap from the field notes), then with a better gift (term + index in *her* name as the gift-giver). Spreadsheets lose to feelings; better stories beat both.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Plan accepted. Aarav surrenders the ULIP, buys term insurance, redirects to index. He asks: *'Falguni — assume I do this religiously, ₹60K/year into the Nifty for the next 30 years until I'm 61. What does compounding actually look like for *that* one decision?'*\n\nPick the most useful answer:",
+        "options": [
+          {
+            "id": "a",
+            "label": "₹60K × 30 years = ₹18L invested. At 12% it's about ₹1.45 crore. Decent.",
+            "correct": false,
+            "explain": "Maths is right, narration is wrong. 'Decent' undersells the compounding cascade. Of that ₹1.45 crore, only **₹18L (12%) is your money** — the other **₹1.27 crore (88%) is compounding doing the work.** That ratio is the single most important fact in personal finance and Aarav should feel it in his bones.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "₹1.45 crore at age 61 — but the magic isn't the number. **The last 10 years of that 30 generate ₹86L of the ₹1.45 cr.** Compounding is back-loaded; that's why surrendering the ULIP today (year 0) matters so much more than a similar fix at year 20.",
+            "correct": true,
+            "explain": "This is *the* answer. The compounding cascade is non-linear — it whispers for 15 years and roars for the last 10. Every year of delay isn't 'one year' of cost, it's one year *off the loud end*. That's why a 31-year-old surrendering a bad product today saves more than a 41-year-old surrendering the same product, even though the 41-year-old has paid more in.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Don't promise 12% — that's optimistic. Use 8% and say ₹73L.",
+            "correct": false,
+            "explain": "Conservatism is good but the wrong frame here. The Nifty 50 has delivered **~12.4% CAGR over the last 25 years** including 2008 and 2020. Quoting 8% to be 'safe' makes the index look only marginally better than the ULIP and undercuts the whole intervention. Use rolling-period averages, name the assumption, then own the number.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You just saved Aarav approximately ₹7.5L in foregone wealth from this single decision, set him up for ₹1+ crore of additional terminal wealth at 61, AND defused the family-WhatsApp battle by upgrading his mother's gift instead of rejecting it. This is what good advice actually looks like.",
+      "good": "Right call on surrender, slightly soft on the term insurance or the redeployment vehicle. Aarav is meaningfully better off but might leave ₹2-3L on the table over 30 years.",
+      "learn": "The ULIP is still in force. Mom is happy. In 2055 Aarav will be Ravi from the field notes, looking at a maturity statement with a 5% IRR and the ₹39L hole where compounding should have been. Re-read the field notes. The cost is paid in year 21, not year 1."
+    }
+  }
+}

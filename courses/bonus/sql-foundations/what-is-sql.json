@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The SELECT * That Leaked PII",
+    "source": "Anonymous backend engineer at Tatva Health, a Bengaluru-based series-B health-tech startup",
+    "date": "August 2024",
+    "story": "On August 14, 2024, Tatva's growth team launched a new partner-referral dashboard. The query powering it was, charitably, *seven days old*: `SELECT * FROM patients JOIN referrals ON ...`. It worked beautifully on staging. Three weeks later, on September 3, the schema team added a column called `aadhaar_last_four` to the `patients` table — a perfectly reasonable addition for a new KYC flow.\n\nNobody changed the dashboard query. Nobody had to. The `*` happily picked up the new column and started piping it into the partner portal — a portal that **42 external referral partners** could log into.\n\nThe leak was caught 11 days later by a security review, not by the engineering team. Internal post-mortem put exposed records at **₹0 in fines** (caught before reporting threshold) but **18 engineering-days** of cleanup, partner notifications, and a board-level memo. The fix was four characters: replacing `*` with the explicit column list the dashboard actually needed.\n\nThe engineer who wrote the original query had been at the company eight weeks. The reviewer who approved the PR had been there four years.",
+    "takeaway": "`SELECT *` is not a shortcut — it's a contract you didn't read with a schema you don't yet have."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The 4PM Friday Customer List",
+    "setup": "It's 4:07pm on a Friday. **Aanya, your PM**, walks up to your desk holding her laptop like a tray. *\"Just a quick one — can you pull me the customer list? I need it for a partner call at 9am Monday. Should be five minutes, right?\"*\n\nThe office is emptying. Your weekend plans involve a Goa flight at 7am tomorrow. The `customers` table has 19 columns. You have one shot to do this right before the Friday-night brain-fog sets in.",
+    "coach": { "name": "DBA Aunty Lakshmi", "role": "Senior database administrator, 18 years on call so you don't have to be" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aanya hovers. You open your SQL client. What's your **first move**?",
+        "options": [
+          { "id": "a", "label": "`SELECT * FROM customers;` — fastest, send the CSV, catch the flight.", "correct": false, "explain": "Aunty Lakshmi raises one eyebrow. The `customers` table has 19 columns including `password_hash`, `aadhaar_last_four`, and `internal_risk_score`. You just emailed all of it to a PM who will forward it to a partner. Friday-evening dread incoming.", "points": 0 },
+          { "id": "b", "label": "Ask Aanya: \"Which columns do you actually need, and is this for an external partner?\"", "correct": true, "explain": "**Correct.** Two questions, ten seconds, saves your weekend. Aanya thinks for a moment and says: *\"Oh — name, city, signup date. And yes, it's going to a partner.\"* You just dodged a PII incident.", "points": 3 },
+          { "id": "c", "label": "Pull `SELECT * FROM customers LIMIT 100;` and let Aanya filter columns in Excel.", "correct": false, "explain": "Limiting rows doesn't limit columns. The 100-row sample still contains every sensitive field, and now there's a CSV with `aadhaar_last_four` sitting in someone's Downloads folder forever.", "points": 0 },
+          { "id": "d", "label": "Say \"can't do it, raise a ticket\" and go home.", "correct": false, "explain": "Aanya escalates to your manager, who finds someone who *will* run `SELECT *`. You skipped the work but didn't prevent the incident. Partial credit only because you didn't personally cause the leak.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aanya confirms: **name, city, signup date, external partner**. You write the query. Which version ships?",
+        "options": [
+          { "id": "a", "label": "`SELECT name, city, signed_up_at FROM customers;`", "correct": true, "explain": "**Clean.** Three named columns, one table, zero surprises. If marketing adds a `lifetime_value` column tomorrow, this query won't quietly start leaking it.", "points": 3 },
+          { "id": "b", "label": "`SELECT name, city, signed_up_at FROM customers WHERE deleted_at IS NULL;`", "correct": true, "explain": "**Even better.** You filtered out soft-deleted accounts — a partner doesn't need to see customers who asked to be forgotten. Aunty Lakshmi nods approvingly.", "points": 3 },
+          { "id": "c", "label": "`SELECT name, city, signed_up_at, email FROM customers;`", "correct": false, "explain": "Aanya didn't ask for email. You added it because \"they might need it.\" That's how scope creeps into a partner data dump. Email is PII the partner has no consented basis to receive.", "points": 1 },
+          { "id": "d", "label": "`SELECT * FROM customers WHERE 1=1;` and delete the columns in Excel.", "correct": false, "explain": "The `WHERE 1=1` does nothing. The `*` does everything. The Excel filter doesn't exist in the CSV download you just emailed.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Query runs. 47,000 rows. CSV exports in 8 seconds. Aanya is reaching for the file-attachment button. **Last call** — what do you say?",
+        "options": [
+          { "id": "a", "label": "\"Looks good, send it. Have a great weekend!\"", "correct": false, "explain": "Aanya emails 47,000 customer records as an unencrypted CSV attachment. It bounces off the partner's 25MB Gmail limit, gets re-sent via WeTransfer, and lives on a public link for 7 days. You technically did your job. Aunty Lakshmi sighs.", "points": 0 },
+          { "id": "b", "label": "\"Drop it in the secure-share folder, set 7-day expiry, send Aanya the link — not the file.\"", "correct": true, "explain": "**This is the move.** Link beats attachment. Expiry beats forever. The partner gets what they need, the audit trail is clean, and on Monday at 9am Aanya looks like the most prepared PM in the room.", "points": 3 },
+          { "id": "c", "label": "\"Send only the first 100 rows so the partner can sample, then we'll do the rest later.\"", "correct": false, "explain": "Now Aanya has to chase you on Monday for the full file, from her partner call, while you're 30,000 feet over Karnataka. You optimized for your weekend, not the outcome. Half-measure.", "points": 1 },
+          { "id": "d", "label": "\"Hold up — let me also add a row count and the run timestamp so we can audit this later.\"", "correct": true, "explain": "**Solid.** A one-line comment header (`-- 47,231 rows · 2026-05-08 16:14 IST · pulled by you for Aanya · partner: Acme Co.`) takes 5 seconds and makes the next post-mortem (if there is one) trivial.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Flawless. You scoped the request, wrote the minimum-viable query, shipped it via the right channel, and left an audit trail. **Aunty Lakshmi pours you a virtual filter coffee.** Now go catch your flight.",
+      "good": "Good instincts on most of it — you avoided the headline disaster. Re-read the lesson on `SELECT *` semantics before next Friday's last-minute request, because they always come back.",
+      "learn": "You shipped data you didn't need to a channel you shouldn't have used. Re-read the lesson — especially the section on **explicit column lists** and **why `*` is a contract**. The good news: this was a drill. The next one might not be."
+    }
+  }
+}

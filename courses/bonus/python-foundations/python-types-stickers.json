@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: One Equals Sign, 41,000 Wrong Settings",
+    "source": "Anonymous backend engineer at PaisaPay (Bengaluru fintech, ~120 engineers)",
+    "date": "March 2024",
+    "story": "We shipped a 'remember last filter' feature on a Wednesday. By 02:14 a.m. Friday the on-call pager was on fire. A merchant in Indore had set his dashboard to show only failed UPI transactions. Within four hours, **41,287 other merchants** were also seeing only failed UPI transactions. Their actual filters were gone. Support inbox: 312 angry tickets, three of them in all caps in Marathi.\n\nI bisected for ninety minutes before I saw it. The PR added a tiny helper:\n\n```python\ndef get_user_prefs(user_id):\n    prefs = DEFAULT_PREFS  # <-- the crime\n    prefs['last_filter'] = load_filter(user_id)\n    return prefs\n```\n\n`DEFAULT_PREFS` was a module-level dict. `prefs = DEFAULT_PREFS` did not copy it. It pointed a second sticker at the *same* dict. Every call mutated the global default. The first user to set a filter overwrote the default for every user the cache touched after them.\n\nFix was one line: `prefs = DEFAULT_PREFS.copy()`. Refund credits issued: ₹4.7 lakh. Post-mortem cost in engineering hours: roughly ₹11 lakh. Cost of the actual bug: zero, because `=` is free.\n\nThe junior who wrote it had two years of Java. In Java, `=` on a primitive copies. He assumed the same here. He wasn't wrong about Python; he was wrong about *which Python*.",
+    "takeaway": "`=` aliases. It never copies. If you wrote `=` and meant 'give me my own version,' you wrote a bug — you just haven't paid for it yet."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Code Review at 11:47 p.m.",
+    "setup": "It's Thursday night. The release train leaves at midnight. **Aakash**, the new grad on your team, just opened a PR titled *'add user notification preferences endpoint.'* Three files, 142 lines. He needs your LGTM in thirteen minutes or it slips a week. You open the diff. Veteran-CTO Vidya is pinged on the same review and is watching what you say.",
+    "coach": {
+      "name": "Veteran-CTO Vidya",
+      "role": "Two-time CTO, has seen this exact bug at three different companies"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First file. The helper looks like this:\n\n```python\ndef build_prefs(user_id, overrides={}):\n    overrides['user_id'] = user_id\n    overrides['updated_at'] = now()\n    return overrides\n```\n\nAakash says it works — he ran it locally, output looks fine. What do you flag?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Approve. The function returns a dict; the caller can ignore `overrides` if they don't pass one.",
+            "correct": false,
+            "explain": "This is the **mutable default trap**. `overrides={}` is evaluated **once** at definition time. Every call that omits `overrides` mutates the *same* dict. By call #2, it already has the previous user's `user_id` baked in. Vidya is grimacing.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Block. The default `overrides={}` is shared across calls. Use the `None`-sentinel pattern: `overrides=None` and `overrides = {} if overrides is None else overrides`.",
+            "correct": true,
+            "explain": "Exactly the textbook fix. The default expression is evaluated once at `def` time, so `{}` becomes a singleton. The sentinel pattern creates a fresh dict per call. This is the named trap from the lesson and Vidya nods.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Suggest a copy: `overrides = overrides.copy()` at the top of the function.",
+            "correct": false,
+            "explain": "Partial credit. It does protect the caller's dict from mutation, but the *shared default* is still the same dict every call — and `.copy()` on it still leaks the *previous* mutation if any caller mutated before `copy`. The sentinel is the canonical fix.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Approve with a TODO comment to revisit.",
+            "correct": false,
+            "explain": "TODO comments without an issue number are a CLAUDE.md violation, but more importantly: this is a **silent data-corruption bug**, not a style nit. It will only show up under load with the second concurrent request. You will not 'revisit.'",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Second file. Aakash defends the next snippet — *'this is just shorthand, what's the issue?'*\n\n```python\nuser_a = load_user(101)\nuser_b = user_a\nuser_b.preferences['theme'] = 'dark'\nsave(user_a)\nsave(user_b)\n```\n\nWhat's the actual behavior here?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Both `user_a` and `user_b` end up with `theme='dark'`, because `user_b = user_a` aliases — they're the same object. We just saved the same user twice.",
+            "correct": true,
+            "explain": "Correct. `=` peels the same sticker off and slaps it on `user_b`. There is one `User` object in memory. The `save(user_a)` and `save(user_b)` calls both write the same row. Worse: if there's an `updated_at` trigger, you've now logged two write events for one user.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "`user_a` keeps its old theme; only `user_b` is dark, because Python passes by value.",
+            "correct": false,
+            "explain": "Python doesn't 'pass by value' the way Java does for primitives. `=` aliases. `user_a` and `user_b` point at the same dict. Both will show `dark`.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "It's fine — Python's garbage collector handles the duplicate save.",
+            "correct": false,
+            "explain": "Garbage collection is about *unreachable* objects. This is reachable, mutated, and double-saved. GC has nothing to do with it.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "It's mostly fine, but you should add `user_b = copy.deepcopy(user_a)` to be safe.",
+            "correct": false,
+            "explain": "Partial. `deepcopy` *would* break the alias, but only if the *intent* was to have two users. If the intent was one user, the right fix is to delete the second `save()`. Diagnose intent before you reach for `deepcopy`.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Third file. Aakash refactored the test helper:\n\n```python\nDEFAULT_NOTIFICATION_TYPES = ['email', 'sms', 'push']\n\ndef test_user(types=DEFAULT_NOTIFICATION_TYPES):\n    types.append('whatsapp')\n    return User(notif=types)\n```\n\nThe test passes. He's confused why you keep making faces.",
+        "options": [
+          {
+            "id": "a",
+            "label": "First call returns a user with 4 types. Second call returns 5. Third returns 6. The module-level list grows forever because every call appends to the *same* list.",
+            "correct": true,
+            "explain": "This is the mutable-default trap *plus* a module-level list aliased through the default. `DEFAULT_NOTIFICATION_TYPES` is now permanently corrupted for any other code that imports it. The test passes once. The next test in the suite gets `['email', 'sms', 'push', 'whatsapp', 'whatsapp']`.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Each call gets its own list, so the test is fine.",
+            "correct": false,
+            "explain": "No — `types=DEFAULT_NOTIFICATION_TYPES` does not copy the list. It binds the parameter `types` to the same list object. `.append` mutates it.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "It's fine because lists are immutable in Python.",
+            "correct": false,
+            "explain": "Lists are mutable. Tuples are immutable. This is the most common mix-up and the one most likely to bite in a code review. Vidya is now drinking her chai a little faster.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "It might be fine, but I'd write `types = types + ['whatsapp']` to be safe.",
+            "correct": false,
+            "explain": "Partial. `types + ['whatsapp']` creates a *new* list and rebinds `types` locally — the module-level list is no longer mutated. Good fix, but you also need to break the default-aliasing root cause: `types=None` with a sentinel.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "11:54 p.m. Aakash pings: *'Bro, six minutes. Can you just approve and I'll fix in a follow-up?'* What do you do?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Block the PR. Post the three issues with one-line fixes for each. Offer to pair on the fix tomorrow morning. It's six minutes vs a 2 a.m. page next week.",
+            "correct": true,
+            "explain": "The grown-up answer. The three bugs in this PR are exactly the kind that pass code review, pass tests, and surface in production at 02:14 a.m. on a Friday. A one-week slip costs less than one Saturday on-call rotation, and Aakash learns the named traps with his name on them — the only way they actually stick.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Approve with comments. Trust him to fix them tomorrow.",
+            "correct": false,
+            "explain": "'Fix in a follow-up' is the second-most expensive sentence in software, right after 'it works on my machine.' These are silent data-corruption bugs — the worst kind to defer because they don't crash; they just give wrong answers until someone notices.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Approve. He's a junior, the bugs are minor, and the release train is the priority.",
+            "correct": false,
+            "explain": "Mutable default + aliased global + cross-test contamination is not 'minor.' This is the exact shape of the PaisaPay incident — ₹4.7 lakh in refund credits, eleven lakh in eng hours. The release train is not the priority. Not waking up on Friday is.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Block, but instead of a comment, push your own fix to his branch.",
+            "correct": false,
+            "explain": "Partial. You unblock the train but you also rob Aakash of the lesson. He'll hit the same bug in a different shape next month. The whole point of the named traps is that *naming* them in review is what teaches them.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. You blocked three silent data-corruption bugs in one review, named each trap from the lesson, and taught a junior the vocabulary at the same time. Vidya DMs you: *'send me your salary band, we're undershooting.'* This is what senior IC work actually looks like.",
+      "good": "Solid B+. You caught the bugs and stopped the release. You missed naming one of them precisely, but the PR didn't ship and the production data is safe. Aakash will learn — slower than ideal, but he'll learn. Go drink water.",
+      "learn": "C-tier — but the only way to get to S-tier is by losing this round once. Re-read the lesson on aliasing and the mutable-default trap. The next time you see `def fn(x=[])` or `b = a` followed by `b.append`, your hands should move toward the comment box before your brain finishes reading the line. Not your fault — every Python engineer pays this tuition once."
+    }
+  }
+}

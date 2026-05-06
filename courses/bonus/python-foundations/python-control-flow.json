@@ -1,0 +1,128 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 100% Discount That Slipped Through Range(len)",
+    "source": "Anonymous senior engineer at ChamakDeals (Gurugram D2C marketplace, ~80M users)",
+    "date": "October 2023, two days before Diwali sale",
+    "story": "Festive sale. Marketing wanted a *'one in a million'* gimmick — every millionth checkout, the user wins a 100% discount. PR went up Friday, demoed Saturday, deployed Monday morning at 09:00 IST.\n\nBy 10:42 a.m., the BI dashboard lit up. **One in a million** had become **roughly one in 999,999** — close enough that nobody flinched. Then 11:14: revenue was off plan by ₹3.2 lakh and climbing. By noon, ₹18 lakh.\n\nThe culprit was a perfect-looking loop:\n\n```python\nfor i in range(len(checkouts)):\n    if i % 1_000_000 == 0:\n        checkouts[i].discount_pct = 100\n```\n\nLook closely. `range(len(checkouts))` starts at `0`. `0 % 1_000_000 == 0`. **The first checkout of every batch got 100% off.** Batches ran every 30 seconds. We were giving away one free order every 30 seconds during peak Diwali traffic.\n\nThe idiomatic version would have been `for i, c in enumerate(checkouts, start=1)`. The `start=1` is the entire fix. Total damage by the time the rollback completed at 12:47 p.m.: **₹47.3 lakh in unintended discounts**, 6,214 checkouts, one PM crying in the conference room, and a director-level post-mortem that produced exactly one rule: *no `range(len(...))` ships from this team again.*\n\nThe author was a five-year Python engineer. He'd written the same loop a thousand times. He just hadn't written it on a million-row collection on the day before Diwali.",
+    "takeaway": "`range(len(x))` is a *boundary statement disguised as a count statement*. If your loop uses the index for anything other than indexing, you wanted `enumerate` — and you almost certainly wanted `start=1`."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Refactor Under the Senior's Gaze",
+    "setup": "It's standup-plus-15. Veteran-CTO Vidya pulls up your screen on the big TV. *'Show me the discount-engine PR. We're doing it live.'* The team gathers. Your loop is sixty lines long. You have one hour and four pairs of eyes. **PM Sneha** is listening because the same engine ships her A/B tests next week.",
+    "coach": {
+      "name": "Veteran-CTO Vidya",
+      "role": "Reads code like she's reading a contract"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First section of the loop:\n\n```python\nresults = []\nfor i in range(len(orders)):\n    if orders[i].status == 'paid':\n        results.append(orders[i].amount)\n```\n\nVidya: *'Rewrite this. Out loud. What's the most idiomatic Python form?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "`results = [o.amount for o in orders if o.status == 'paid']`",
+            "correct": true,
+            "explain": "List comprehension. Reads as English: *'amounts of orders where status is paid.'* No index, no boundary, no off-by-one possible. This is the canonical translation of the 'collect things matching a condition' pattern.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "`results = list(filter(lambda o: o.status == 'paid', orders))` then map.",
+            "correct": false,
+            "explain": "Functional but un-Pythonic. PEP 8 and Guido himself have said: prefer comprehensions over `filter`/`map` for readability. Also returns whole orders, not amounts — you'd need a second pass.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Keep the `range(len(...))` but rename `i` to `idx` for clarity.",
+            "correct": false,
+            "explain": "Renaming a code smell is not the same as removing it. The boundary trap from the lesson — and the Diwali story — lives inside `range(len(...))`. Better names don't fix off-by-one.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "`for i, o in enumerate(orders): if o.status == 'paid': results.append(o.amount)`",
+            "correct": false,
+            "explain": "Better than `range(len)` because you don't double-index, but you're not using `i` for anything. If the index is unused, drop the `enumerate` and use a comprehension. Partial credit for instinct.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Next section. Same loop body now needs the *position* of each paid order (1-indexed, for a customer-facing receipt: *'order 1 of 3'*).\n\n```python\nfor i in range(len(paid_orders)):\n    paid_orders[i].position_label = f'Order {i} of {len(paid_orders)}'\n```\n\nWhat ships to the customer right now?",
+        "options": [
+          {
+            "id": "a",
+            "label": "*'Order 0 of 3'*, *'Order 1 of 3'*, *'Order 2 of 3'*. The first customer sees 'Order 0', which looks broken. Fix: `enumerate(paid_orders, start=1)`.",
+            "correct": true,
+            "explain": "Bingo. The off-by-one trap, exactly as the Diwali field notes named it. `range(len)` and `enumerate` both default to 0-indexed. For human-facing labels, you almost always want `start=1`. Vidya nods.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "*'Order 1 of 3'*, *'Order 2 of 3'*, *'Order 3 of 3'*. Looks fine.",
+            "correct": false,
+            "explain": "You skipped the trap. `range(len(x))` starts at 0. The first label will be *'Order 0 of 3'*. This will show up in a screenshot in the founder's WhatsApp by EOD.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "It crashes at `len(paid_orders)` because you can't call `len` inside a loop.",
+            "correct": false,
+            "explain": "`len()` is fine inside a loop (just inefficient if recomputed). The bug is the indexing, not the call.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Replace `i` with `i + 1` in the f-string. Done.",
+            "correct": false,
+            "explain": "Functionally fixes the output, but you're patching the symptom. The named idiom is `enumerate(seq, start=1)`. Adding `+1` to indices is the smell that the lesson explicitly warned about — it's how the Diwali bug shipped.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Next chunk — the boundary itself:\n\n```python\nwhile i < len(orders):\n    process(orders[i])\n    if orders[i].is_refund:\n        i += 2\n    else:\n        i += 1\n```\n\nVidya: *'A while loop with manual index management on a list. What is your gut response?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "Refactor to a `for` loop with a flag, or to two passes — one for refunds, one for non-refunds. Manual index increments in a `while` are off-by-one bait, especially when increments are conditional.",
+            "correct": true,
+            "explain": "Correct instinct. Manual `i +=` with conditional jumps is the most error-prone shape in Python control flow. Either separate the concerns into two passes, or pre-filter the refunds. The shape of the code should match the shape of the question.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Approve. It's a valid `while` loop, the bounds check is right.",
+            "correct": false,
+            "explain": "The bounds check is right *today*, on *this* data. The `i += 2` skips the next item — if that item is also a refund, you'll skip processing it. If the list ends on a refund, you'll do `i += 2` and your next iteration's `orders[i]` is past the end. The check catches it, but only because of `<`. One typo to `<=` and it's a crash.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Convert to `for i, o in enumerate(orders): ...` and keep the conditional skip.",
+            "correct": false,
+            "explain": "You can't skip iterations in a `for ... in enumerate` loop the way you can with manual `i +=`. Reassigning `i` inside the body has no effect on the next iteration. This would silently change behavior. Partial credit for the instinct toward `enumerate`, but the diagnosis is wrong.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Add a comment explaining the skip logic.",
+            "correct": false,
+            "explain": "Comments are not refactors. The next person — or you in three months — will still misread the skip and break it. Code should not need a comment to be safely modifiable.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. You collapsed sixty lines into roughly fifteen, named the off-by-one trap by its full name, and pre-empted three bugs that would have shipped. Vidya: *'Send the diff to the team channel as a teaching example.'* PM Sneha smiles for the first time in this standup. You bought back forty minutes of your future on-call life.",
+      "good": "B+. The refactor is cleaner and shorter, the off-by-one is gone, and the loop reads like English. You missed one idiom (probably the comprehension or the `start=1`), but nothing that ships will harm a customer. Vidya gives you the *'fine, ship it'* nod.",
+      "learn": "C-tier — but every Python engineer trades one Diwali sale for this lesson. Re-read the boundary section. The next time you type `for i in range(len(...))`, treat it as a smell that the *real* loop you wanted is one of: `for x in seq`, `for i, x in enumerate(seq, start=1)`, or `[expr for x in seq if cond]`. Pick before you type."
+    }
+  }
+}

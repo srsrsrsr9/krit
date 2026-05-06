@@ -1,0 +1,114 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ₹25L Raise That Vanished",
+    "source": "Compensation review at a fictional Mumbai i-bank, Khanna Sterling Partners — VP, M&A Advisory, anonymous",
+    "date": "March 2025",
+    "story": "In April 2023 a 32-year-old VP at Khanna Sterling jumped from a fixed of **₹40L** to **₹65L** after a strong cycle. He told me, very seriously, that this was the year his net worth would 'finally start working.'\n\nIn March 2025 we sat down with his statements. Two years in. The score:\n\n- Bandra rental: **₹85K → ₹1.6L/month** (new building, sea-facing, club access)\n- Vacations: **2 → 4 a year**, business class once 'because I deserved it'\n- iPhone, MacBook, AirPods, Apple Watch — refreshed within 9 months of the raise\n- New car EMI: **₹62K/month** for an Audi (the 'starter Audi', he said)\n- SIP: still **₹40K/month**, exactly what it was on the ₹40L salary\n\nNet worth delta over 24 months on a **₹50L of additional take-home**: ~₹3L, mostly forced by SIPs.\n\nHe did not feel rich. He felt anxious. The Audi EMI made the bonus feel small. The Bandra rent made every Swiggy order feel justified.\n\nThe raise didn't fail him. The default — *spend the raise, save the same* — failed him.",
+    "takeaway": "Lifestyle inflation is silent because every individual upgrade feels reasonable. The damage is only visible in aggregate, two years later."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav's Promotion Trap",
+    "setup": "Aarav, 31, Bengaluru engineer, just got promoted from **Senior** to **Staff**. Take-home jumped from **₹2.4L/month** to **₹3.6L/month** — an extra **₹1.2L** landing in his account on the first of every month.\n\nHe is engaged, wedding in 14 months, and his fiancée Meera 'doesn't want to think about money right now.' He texts you on a Tuesday at 11:47pm with a list of things he wants to do with the raise. You have his attention for the next 20 minutes.",
+    "coach": {
+      "name": "FIRE-walla Falguni",
+      "role": "Ex-Deutsche Bank, retired at 41, runs a personal-finance Substack from Goa"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aarav opens with: *'Falguni, I want to upgrade my flat from Indiranagar (₹38K rent) to a 2BHK in Koramangala (₹72K rent). Meera and I will both work from home post-wedding, so it's an investment in productivity.'*\n\nWhat do you say?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Sure, the productivity argument is sound. Sign the lease.",
+            "correct": false,
+            "explain": "The 'productivity' frame is the most common lifestyle-inflation rationalisation in tech. A **₹34K/month** rent jump is **₹4.08L/year** — at 12% compounded that's roughly **₹73L** over 30 years. Productivity does not pay you ₹73L.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Lock in your *savings rate first*. If your old SIP was ₹40K, set the new one to ₹80K **before** you let any lifestyle decision land. Then we talk rent.",
+            "correct": true,
+            "explain": "Correct. The rule is simple and brutal: **save the raise first, then negotiate with what's left.** If the higher rent survives a ₹80K SIP, fine. If it doesn't, the raise was already spent before he saw it. Pay yourself before you pay your landlord.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Compromise — half rent upgrade (₹55K), half SIP increase (₹60K).",
+            "correct": false,
+            "explain": "Sounds balanced, isn't. The 'half upgrade' becomes a permanent fixed cost. The SIP can be paused any month his cousin's wedding hits. Always raise the SIP **first** so the lifestyle has to fit around it, never the other way around.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav listens. SIP is now **₹80K/month**. He still has roughly **₹40K** of new monthly headroom. He says: *'OK, then at least let me lease the new Mahindra XUV — ₹38K EMI for 5 years, basically uses up the leftover. I can afford it now.'*\n\nWhat's the move?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Greenlight the EMI. He saved the raise, the rest is his to enjoy.",
+            "correct": false,
+            "explain": "He has a **wedding in 14 months**. A ₹38K/month, 5-year EMI is the worst possible commitment to make right now — it locks **₹22.8L** of future income to a depreciating asset before he even knows what married-Aarav's expenses look like.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "No new EMIs in the 18 months around a major life event. Park the ₹40K in a sweep-FD as 'wedding + post-wedding' liquidity.",
+            "correct": true,
+            "explain": "Exactly. The cardinal sin of lifestyle inflation is locking in fixed monthly costs before a known life-shock. Wedding, baby, parent-care, sabbatical — all reasons to keep variable expenses variable. A car can wait 14 months. A wedding cannot get cheaper.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Buy outright with savings instead of leasing. No EMI, no problem.",
+            "correct": false,
+            "explain": "Worse. He's draining the corpus he just started building, *and* he's still committing to insurance + fuel + parking + depreciation. The problem isn't the EMI structure, it's the underlying decision to add a car right before a wedding.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "OK fine, but cap it at ₹20K EMI — used car, not new.",
+            "correct": false,
+            "explain": "Better than option A, but you're still letting him add a recurring fixed cost in the worst possible window. A used Maruti for ₹20K/month is a smaller mistake. It is still a mistake.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "It is now midnight. Aarav, slightly defeated: *'So I get a ₹1.2L raise and you're telling me I can't change anything. What's the point?'*\n\nThis is the moment. What do you actually tell him?",
+        "options": [
+          {
+            "id": "a",
+            "label": "He's right, this is too austere. Approve one upgrade — gym membership, food delivery budget, anything — to keep him motivated.",
+            "correct": false,
+            "explain": "The 'reward yourself or you'll quit' frame is exactly how people end up where the i-banker in the case study ended up. Two years of 'small rewards' = one large lifestyle baseline that never rolls back.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Reframe: he just bought himself **freedom**. The ₹80K SIP at 12% is **₹2.8 crore in 20 years.** That's the actual upgrade — he 'spent' the raise on early retirement. The car and the flat are the consolation prize, not the prize.",
+            "correct": true,
+            "explain": "This is the *only* sustainable answer. If saving feels like deprivation, it loses to one bad Tuesday. If saving feels like buying freedom — buying the right to quit, sabbatical, switch industries — it survives. Sell the *story*, not the spreadsheet.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Tell him 'one upgrade per raise' is the rule. He picks one — flat or car or vacations — and the rest goes to SIP.",
+            "correct": false,
+            "explain": "Sounds reasonable but encodes lifestyle inflation as a *right*. Three raises in, he has the upgraded flat, the car, *and* the vacations — back to square one, just slower. The rule should be 'savings rate goes up with every raise', not 'you're owed a treat'.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Clean sweep. You did the hard thing — you made him *feel* the raise without spending it. Aarav will text you in 5 years with a screenshot of his portfolio.",
+      "good": "Solid. You saved most of the raise from the lifestyle gravity well. One leak (the rent or the car) will cost him about ₹50L over 20 years, but he's still 80% better off than the i-banker in the case study.",
+      "learn": "Aarav is now the i-banker. The Audi is on order. Re-read the field notes — every single mistake he made was 'reasonable in isolation'. Lifestyle inflation never announces itself."
+    }
+  }
+}

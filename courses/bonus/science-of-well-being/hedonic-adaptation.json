@@ -1,0 +1,128 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: Three Cities, One Thermostat",
+    "source": "A couples counsellor in Indiranagar, Bengaluru",
+    "date": "August 2025",
+    "story": "Vikram, 36, and Aanya, 34. DINK couple, both in tech. Came in after 11 years of marriage, exhausted. Their pattern, mapped on a whiteboard:\n\n- 2019, Pune to Bengaluru: 'we'll be happier with better weather, better food, more friends'. Mood lifted for ~5 months. Back to baseline by Diwali.\n- 2022, Bengaluru to Goa (remote phase): 'beach, slower pace, real life'. ₹38L spent on a sea-facing 3BHK. 7 weeks of bliss in the photos. By month 4 they were arguing about who forgot to call the grocery guy.\n- 2024, Goa to Bengaluru: 'we miss the cafés, the energy, our people'. Mood lifted for ~3 months. By month 5, same arguments, same Sunday-night dread.\n\nWhat broke them was not the third move. It was Aanya doing the math at the dining table in July: ₹1.4 crore in moving costs, brokerage, furniture write-offs, and 11 months of cumulative *real* mood improvement across all three relocations.\n\nThe thermostat resets. They had run a 5-year experiment and produced clean evidence that geography is not the lever. The relief in the room when I drew the hedonic curve on the whiteboard was the loudest data point of the session.",
+    "takeaway": "If the same problem follows you across 3 cities, the city was never the variable. The thermostat travels with you."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav, 90 Days In",
+    "setup": "It's been 3 months. Aarav took the EM role despite your coffee-shop diagnostic (your call to let him decide was the right one).\n\nVoice note at 11:47 p.m.:\n\n> *yaar, EM is fine. comp is great. but my Cantril ladder this morning was 6.2 — exact same number as 90 days ago before the hike. WHAT. I was sure this would put me at like an 8. Help, what's the next move from the lesson, I forget which one to run.*\n\nYou just finished Lesson 2. Time to pick a hedonic-adaptation counter-move that actually fits Aarav's situation.",
+    "coach": {
+      "name": "Therapist-Aunty Tarini",
+      "role": "Your no-nonsense Pune-based pop-psychology coach"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First, frame the data for Aarav. What do you tell him about his 6.2?",
+        "options": [
+          {
+            "id": "a",
+            "label": "'You're depressed bro, see someone.'",
+            "correct": false,
+            "explain": "6.2 is not a clinical signal, it's his baseline. Pathologising adaptation is a classic over-react. Tarini frowns from Pune.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "'This is hedonic adaptation working exactly as advertised. Your set point absorbed the hike in ~90 days. Predicted by the lesson, not a bug.'",
+            "correct": true,
+            "explain": "Naming the mechanism is half the medicine. He'll stop catastrophising once he sees this is biology, not a personal failure.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "'Quit the EM role, go back to IC.'",
+            "correct": false,
+            "explain": "You're solving a hedonic-adaptation problem with a career change. That's a sledgehammer for a thermostat issue.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "'Give it more time, it'll kick in.'",
+            "correct": false,
+            "explain": "It will not 'kick in'. The lesson literally proved adaptation is the destination, not the delay. Waiting longer = more adaptation, not less.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav: 'Okay, mechanism named. Now what do I actually do this week?' From the lesson, you have variety, savouring, and deprivation as counter-levers. He works 9-7, no time. Pick the highest-leverage move for *his* situation.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Variety: stop ordering the same Swiggy lunch every day. Rotate 5 spots.",
+            "correct": false,
+            "explain": "Variety works but on a small surface. Lunch isn't where his adaptation is happening — comp and role are. Low-leverage move.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "Deprivation: 1-week 'comp blackout' — uninstall the brokerage app, delete payslip from Notion, no compensation talk. Reintroduce on day 8 and re-rate the ladder.",
+            "correct": true,
+            "explain": "The thing he adapted to is the *visibility* of his hike (constant payslip-checking, brokerage refresh). Removing the stimulus and reintroducing it is the textbook deprivation play. Cheap, time-bound, measurable.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Savouring: write a daily journal entry about the hike.",
+            "correct": false,
+            "explain": "Journalling about a thing he's already adapted to will accelerate the adaptation, not reverse it. You're rehearsing the new normal.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Buy a bigger apartment, fresh stimulus.",
+            "correct": false,
+            "explain": "This is the Vikram-Aanya move from the field notes. Three cities later, same thermostat. Do not recommend the move that has documented n=2 failure.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 8. Aarav reports his ladder went from 6.2 to 7.4 during the blackout, dropped back to 6.6 after he checked the brokerage. He wants to know what to take from this experiment.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Permanent rule: never check the brokerage again.",
+            "correct": false,
+            "explain": "Over-correction. The lesson is that *exposure frequency* is the lever, not exposure itself. Going from daily to monthly will likely capture most of the gain.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "The blackout was placebo, ignore it.",
+            "correct": false,
+            "explain": "+1.2 ladder points then a measurable drop on re-exposure is too clean to dismiss. He just produced his own n=1 evidence for hedonic adaptation.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Set a rule: brokerage app on the 1st of each month only. Keep the deprivation-then-savour rhythm. Re-measure ladder at day 30.",
+            "correct": true,
+            "explain": "He converted a one-off experiment into a sustainable cadence and built in measurement. This is the lesson's playbook for keeping a hedonic counter-move alive past week 2.",
+            "points": 3
+          },
+          {
+            "id": "d",
+            "label": "Repeat the blackout every week.",
+            "correct": false,
+            "explain": "Over-frequent deprivation kills the contrast effect. The lever works *because* it's rare. Once a month is plenty.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "9/9. You named the mechanism, picked the right counter-lever for Aarav's specific adaptation surface, and turned a one-off experiment into a habit with measurement. Tarini sends one (1) approving samosa emoji from Pune.",
+      "good": "6-8. Solid diagnosis, slightly mismatched intervention. Re-check which surface Aarav has actually adapted to before picking the lever.",
+      "learn": "Under 6. You either pathologised normal adaptation or reached for moves that don't match Aarav's specific stimulus. Re-read the variety-savouring-deprivation matrix and try again."
+    }
+  }
+}

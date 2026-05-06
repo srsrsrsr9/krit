@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Nightly Job That Grew From 3 Minutes to 4 Hours",
+    "source": "Anonymous platform engineer at SaharaMart (Hyderabad grocery delivery, 14M MAU)",
+    "date": "January 2025",
+    "story": "Our nightly fraud-flagging job had a service-level objective: finish before 04:30 IST so the morning ops team could review flagged orders over chai. For sixteen months it ran in roughly **2 minutes 50 seconds**. Then, over four weeks, it crept up: 4 minutes, 12, 47, 88, **4 hours 11 minutes**. The 06:30 standup got an awkward *'…the report isn't ready yet'* every morning.\n\nThe SRE on rotation blamed the database. The DBA blamed the network. I blamed nobody and read the code:\n\n```python\nseen_order_ids = []\nfor order in todays_orders:\n    if order.id not in seen_order_ids:\n        seen_order_ids.append(order.id)\n        process(order)\n```\n\n`order.id not in seen_order_ids` on a **list** is O(n). Inside a `for` loop over the same orders, that's **O(n²)**. When `todays_orders` was 30,000 rows (sixteen months ago), n² was 900M comparisons — fast on modern hardware. After Diwali expansion to Tier-2 cities, `todays_orders` was **180,000** rows. n² became **32.4 billion** comparisons. The database was innocent.\n\nFix: `seen_order_ids = set()`. `in` on a set is O(1). Job time the next night: **2 minutes 11 seconds**. The PR was three characters: `[]` to `set()` and `.append` to `.add`. The code review took longer than the change.\n\nThe cost wasn't compute. The cost was four weeks of *'the report isn't ready'* eroding ops trust, and one all-hands where an exec said *'Python doesn't scale'* — a sentence that haunts me.",
+    "takeaway": "The wrong container is almost never an algorithm problem; it's a *shape* problem. *'Have I seen this?'* wants a `set`. *'How many?'* wants a `Counter`. *'Look up by key?'* wants a `dict`. List is the default — and almost never the right answer past 10K rows."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Refactor Before Tomorrow's Batch",
+    "setup": "It's Monday, 7:42 p.m. Tomorrow's batch run kicks off at 02:00. **Aakash** pings you: *'bro, the dedup pipeline ran for 9 hours yesterday — it has to finish in under 2 hours tomorrow or finance will lose their mind. Veteran-CTO Vidya CC'd. Help?'* You open the file. It's worse than you feared.",
+    "coach": {
+      "name": "Veteran-CTO Vidya",
+      "role": "Will quietly walk past your desk if the fix isn't shipped by 9 p.m."
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First function:\n\n```python\ndef dedup_orders(orders):\n    unique = []\n    for o in orders:\n        if o.id not in unique:\n            unique.append(o)\n    return unique\n```\n\n`orders` is 240,000 rows. What's the surgical fix?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Use a `set` for the seen-IDs and keep the order: `seen = set(); unique = []; for o in orders: if o.id not in seen: seen.add(o.id); unique.append(o)`. O(n).",
+            "correct": true,
+            "explain": "Textbook. `set` membership is O(1) average. You preserve original order with the `unique` list and use the set only for the membership question. This is the canonical *'dedup while preserving order'* idiom.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "`return list(set(orders))` — one line.",
+            "correct": false,
+            "explain": "Two problems: (1) `Order` objects need to be hashable, which usually requires implementing `__hash__` and `__eq__`. (2) `set()` does not preserve insertion order. If downstream code assumes order, you've silently broken it.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Sort `orders` by `id`, then dedup adjacent. O(n log n).",
+            "correct": false,
+            "explain": "Better than O(n²) but worse than the set approach, *and* you've changed the order. Reaching for sort when you wanted membership is the wrong-shape choice from the lesson.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Add `@lru_cache` to the function and rerun.",
+            "correct": false,
+            "explain": "`lru_cache` caches *function calls by argument tuple*. It does nothing inside this function body. Also, `orders` is a list — not hashable — so `lru_cache` would crash on the first call.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Next function:\n\n```python\ndef customer_order_counts(orders):\n    counts = {}\n    for o in orders:\n        if o.customer_id in counts:\n            counts[o.customer_id] += 1\n        else:\n            counts[o.customer_id] = 1\n    return counts\n```\n\nThis works but Aakash wants the *most-Pythonic* version. What ships?",
+        "options": [
+          {
+            "id": "a",
+            "label": "`from collections import Counter; return Counter(o.customer_id for o in orders)`",
+            "correct": true,
+            "explain": "`Counter` is the named container for *'how many of each.'* One line, faster than the dict version, returns a dict-like that supports `.most_common()`, addition, subtraction. The lesson's *'shape matches the question'* in its purest form.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "`counts = defaultdict(int); for o in orders: counts[o.customer_id] += 1; return counts`",
+            "correct": false,
+            "explain": "Better than the original — no `if-in-else` — and uses `defaultdict` correctly. But `Counter` exists for exactly this case and is even more idiomatic. Partial credit for picking the right family of container.",
+            "points": 2
+          },
+          {
+            "id": "c",
+            "label": "`return {o.customer_id: orders.count(o.customer_id) for o in orders}`",
+            "correct": false,
+            "explain": "Disaster. `orders.count(...)` is O(n) and you call it once per row — back to O(n²). Also computes the count multiple times for the same customer. The exact bug class from the field notes, in dict-comprehension clothing.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Use `pandas.value_counts` after converting to a DataFrame.",
+            "correct": false,
+            "explain": "If you're already in pandas, sure — but loading pandas just for this is a 200ms import for an O(n) operation. Tool-fit failure. Stay in stdlib for stdlib-shaped problems.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Now the dict-key trap. Aakash wrote:\n\n```python\nbuckets = {}\nfor order in orders:\n    key = [order.region, order.payment_method]\n    if key in buckets:\n        buckets[key].append(order)\n    else:\n        buckets[key] = [order]\n```\n\nIt crashes with `TypeError: unhashable type: 'list'`. What do you tell Aakash?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Lists can't be dict keys because they're mutable. Use a tuple: `key = (order.region, order.payment_method)`. Tuples of immutable values are hashable.",
+            "correct": true,
+            "explain": "Exactly the named trap from the lesson. Hashable requires immutable (so the hash never changes after insertion). Tuples of strings are immutable; lists are not. Vidya nods from her desk.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Use `str(key)` to convert the list to a string and use that as the key.",
+            "correct": false,
+            "explain": "Works but is a code smell. You've stringified structured data; now everything that reads `buckets` has to parse the key back. Also `str(['a', 'b'])` and `str(['a', 'b '])` (trailing space) hash to different keys silently.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Use `frozenset(key)` instead.",
+            "correct": false,
+            "explain": "`frozenset` *is* hashable, but it loses order — `frozenset(['UPI', 'south'])` equals `frozenset(['south', 'UPI'])`. If region and payment-method should be a *positional* key, that's wrong. Tuple is the right shape.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Switch `buckets` to a `defaultdict(list)` and use `tuple(key)`. Drops the `if/else` and fixes the key.",
+            "correct": false,
+            "explain": "Actually quite good — `defaultdict(list)` *plus* tuple key is the cleaner version of the whole block. Marking partial because the question asked specifically about the key crash, but this is a stronger refactor end-to-end.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "8:47 p.m. The dedup, counter, and bucketing are fixed. Aakash: *'should we add a cache?'* What's your call?",
+        "options": [
+          {
+            "id": "a",
+            "label": "No. Measure first. The original 9-hour run was an O(n²) bug, not a missing cache. With the set + Counter fixes, run it once and time it. Add caching only if there's still a hot path.",
+            "correct": true,
+            "explain": "*Measure before you optimize* and *the wrong container masquerades as a slow algorithm*. You've already removed two O(n²)s — the most likely outcome is the job is now fast enough. Adding a cache before measuring just adds invalidation bugs.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Yes. Cache aggressively. Caches always make things faster.",
+            "correct": false,
+            "explain": "*Two hard problems in CS: cache invalidation, naming things, and off-by-one errors.* The job runs once a night. Caches are for repeated reads; one-shot batch jobs rarely benefit and almost always pay an invalidation cost.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Add `@lru_cache` to every function that returns a value.",
+            "correct": false,
+            "explain": "`lru_cache` works on hashable args and pure functions. A pipeline that processes 240K rows once doesn't have repeated calls to cache. You'd add overhead, not save time.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Cache the dedup result on disk so tomorrow's run can reuse it.",
+            "correct": false,
+            "explain": "*Tomorrow's orders are different orders.* Disk-caching the dedup of *yesterday's* data doesn't speed up *tomorrow's* run. Partial credit if the intent was to cache lookup tables (regions, payment methods) — but that's not what was asked.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. You took a 9-hour pipeline to under 2 hours by changing four characters in three places. Vidya walks past, sees the diff, says: *'good. Go home.'* Aakash buys you a samosa the next morning. The 06:30 standup is short for the first time in five weeks.",
+      "good": "B+. The set fix and the Counter fix shipped. The bucketing got cleaner. The pipeline runs in 12 minutes instead of 9 hours. Vidya is happy, Aakash is grateful, and you only worked an hour past 9 p.m.",
+      "learn": "C-tier — but container-choice intuition is the difference between *'Python is slow'* and *'I picked the wrong shape.'* Re-read the lesson. The three-second decision: *'how will I access this?'* If the answer is *'check membership,'* it's a set. *'Count things,'* it's a Counter. *'Look up by key,'* it's a dict. List is the default and almost always wrong past 10K rows."
+    }
+  }
+}

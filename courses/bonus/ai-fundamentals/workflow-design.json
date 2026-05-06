@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 12 Percent Drift, Caught on Twitter",
+    "source": "Anonymous, head of growth at a Delhi NCR D2C beauty brand",
+    "date": "February 2026",
+    "story": "**Maitri Beauty**, a Delhi NCR D2C skincare brand doing roughly 18 crore annual revenue, shipped an AI feature in mid-2025 that personalised product-recommendation cards on the homepage based on the user's chat history with their support bot. Launch metrics looked great: a **9 percent lift in click-through rate** in the first month. The team celebrated, moved on, and shipped the next thing.\n\nNo eval set was built. No periodic audit was scheduled. The model the vendor used was silently updated by the upstream provider in September 2025 (a routine version bump). Then again in December.\n\nIn early February 2026, a customer tweeted: 'Why is @maitribeauty recommending me a *men's* beard-care kit when I have only ever bought face serums?' The tweet got 11,000 likes. Internal review found the recommendation quality had drifted *downward* by approximately **12 percent on the original eval-equivalent rubric**, with a sharp deterioration starting in mid-September, exactly when the upstream model bumped. No one had noticed because no one was looking. The CTR metric had stayed flat (the model was still confidently recommending *something*; users were still clicking, just on increasingly wrong things).\n\nThe team spent **the next four weeks** rebuilding the recommendation logic, this time with a 150-question gold-standard eval set, a nightly run, a Slack alert if score dropped more than 3 percent week-over-week, and a 14-day staffed audit of every model version bump. The Twitter incident cost an estimated **70 lakh in PR cleanup and lost cohort lifetime value**, plus the four weeks of engineering time.\n\nThe head of growth (the byline) said in the post-mortem: 'The launch was the easy part. We forgot that AI features rot if you do not water them.'",
+    "takeaway": "An AI feature without an eval set and a scheduled audit is not 'shipped,' it is 'abandoned.' Quality drifts silently when upstream models update or user-input distributions shift. If you are not measuring weekly, you are finding out from a customer."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "The 14-Day Audit",
+    "setup": "It is October 2026. Velora's support bot has been live for six months. Riya pings: 'Customer just complained on Twitter that the bot quoted the wrong prepayment penalty. Ankit wants you to design our first proper eval set and the 14-day audit cadence by Friday.' You can feel the Maitri parallel.",
+    "coach": {
+      "name": "Ankit",
+      "role": "CTO, Velora"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision: how do you build the eval set itself?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Pull 200 real customer questions from the last 90 days, stratified across categories (KYC, repayment, prepayment, rejection, top-up, technical), and have two support leads independently grade gold-standard answers. Resolve disagreements by a third reviewer.",
+            "correct": true,
+            "explain": "Three things right. **Real questions** (not synthetic, so the eval reflects production drift). **Stratified** (so you catch regressions in low-volume but high-stakes categories). **Two-grader-with-tiebreak** (so 'gold standard' is not one person's opinion). 200 is large enough to detect a 3-5 percent regression with confidence, small enough to grade in a week.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Have an LLM generate 1,000 synthetic questions and grade itself.",
+            "correct": false,
+            "explain": "Synthetic questions miss the long tail of weird real phrasing. LLM-graded-by-LLM has a known correlation problem (the grader systematically forgives errors the generator would make). You want real questions and human gold-standards for the foundation; LLM-as-judge can come later as a *complement*, not a replacement.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Use the 50 questions the support team thinks are tricky.",
+            "correct": false,
+            "explain": "Selection bias. You will have a great eval for the failure modes you already know about and zero coverage of the ones that matter most, the ones you do not know about. Stratified sampling from real production is the antidote.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Skip the eval set and just run a vibe-check weekly.",
+            "correct": false,
+            "explain": "Maitri Beauty had a vibe-check too. It missed a 12 percent drift over six months. Vibes do not survive contact with quiet model regressions.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "How often do you run the eval set, and what triggers an alert?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Run nightly in CI. Alert on a 3 percent drop week-over-week, on any single-question regression in the 'high-stakes' subset (rejection reasons, regulatory quotes), and unconditionally on every upstream model version bump.",
+            "correct": true,
+            "explain": "Three triggers, three timescales: gradual drift (weekly), high-stakes regressions (instant), and the known-unknown of upstream changes (event-driven). The model-version-bump trigger is the Maitri lesson made operational. This costs you maybe 30 dollars a month in API spend and saves you 70 lakh in PR cleanup.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Run quarterly with a manual review.",
+            "correct": false,
+            "explain": "By the time you find the regression at quarter-end, you have served three months of bad answers. This is also approximately what Maitri did.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Run weekly but only alert on a 10 percent drop.",
+            "correct": false,
+            "explain": "A 10 percent drop is a crisis, not an alert threshold. You want to catch the 3-5 percent drift *before* it compounds. Threshold too loose.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Run on every deploy only.",
+            "correct": false,
+            "explain": "Misses the silent killer: the model your vendor swaps under you with no deploy on your side. Catch this only by trigger-on-upstream-version or scheduled cadence.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Riya asks: 'What about the 14-day staffed audit Ankit mentioned, what is that *for*?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "It is a manual sample-and-grade of 50 real production conversations per day for 14 days, looking at conversation-level quality the eval set cannot see (was the handoff to a human triggered correctly, did the bot give *true* but *unhelpful* answers, did multi-turn coherence hold).",
+            "correct": true,
+            "explain": "Right purpose. Eval sets measure *single-turn correctness on a fixed slice*. Audits catch *systemic* and *conversational* failures the eval cannot, like 'the bot is technically right but rude' or 'multi-turn context drops on turn 4.' Two layers, two complementary signals.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "It is a one-time launch ceremony with a slide deck.",
+            "correct": false,
+            "explain": "If the audit is not generating a *changed eval set* and a *changed prompt or architecture*, it is theatre. The deliverable of an audit is concrete fixes, not a slide.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "It is a security review.",
+            "correct": false,
+            "explain": "Security reviews are valuable and orthogonal. The audit being asked for is about *quality* drift and conversational failure modes, which security review will not catch.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "It is a cost review of token spend.",
+            "correct": false,
+            "explain": "Also valuable, also orthogonal. Cost is not the dominant risk to a regulated bot at Velora's volume.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Last call: who **owns** the eval set and audit on an ongoing basis at Velora?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Whoever shipped it. The bot is theirs.",
+            "correct": false,
+            "explain": "Ship-and-own is great in theory; in practice the original engineer rotates off, the eval set bit-rots, and you are back to Maitri. Needs a *durable* owner role, not a person.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "A named **AI-quality role** (could be a fractional responsibility on an existing engineer or PM) with a quarterly OKR tied to eval-set health, audit cadence, and time-to-detect on regressions.",
+            "correct": true,
+            "explain": "Three things right. **Named role** (so when someone leaves, the responsibility transfers explicitly). **OKR-tied** (so it is on someone's plate during planning). **Time-to-detect as a metric** (so the *speed* of catching regressions is itself measured, not just whether they are eventually caught). This is what 'eval-set discipline' looks like as an org artefact, not a vibe.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "The vendor. They built the model.",
+            "correct": false,
+            "explain": "The vendor optimises for their average customer; your eval set is yours and reflects *your* policies, *your* customer phrasings, *your* edge cases. You cannot outsource caring about your own quality.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Nobody specifically. Everyone watches.",
+            "correct": false,
+            "explain": "Diffuse ownership is the same as no ownership. This is how you become Maitri.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You designed a 200-question stratified eval, a nightly run with three smart alert triggers, a 14-day staffed audit with a clear distinct purpose, and a named AI-quality role with OKR ownership. Ankit walks the design into the next board meeting. Velora's bot is now *maintained*, not just *shipped*. The Twitter complaint that started this becomes the last one.",
+      "good": "Most pieces are right but one layer (the audit purpose, the alert thresholds, or the ownership model) is fuzzy. Read the Maitri story again and tighten the weakest layer; the cost of a missed drift is roughly two orders of magnitude larger than the cost of a tighter process.",
+      "learn": "You skipped the eval set, ran quarterly, or left ownership diffuse. This is exactly the Maitri pattern. The launch is not the work; the maintenance is the work. Redo the battle and treat the eval set as a load-bearing artefact, not a 'nice to have.'"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 4.5-Star Product That Wasn't",
+    "source": "Anonymous senior data analyst at GharSe, a Hyderabad-based home-services marketplace",
+    "date": "January 2025",
+    "story": "GharSe's Head of Product, on January 17, 2025, opened the weekly product-quality dashboard with a smile: their newly launched **\"deep clean — premium\"** service had a stellar **4.5-star average** across 800 ratings. He greenlit a ₹1.2 crore marketing push and put it on the homepage hero.\n\nBy late February, refund requests for that service spiked 380%. The CX team flagged it. The data team re-ran the rating math, this time *not* trusting the dashboard.\n\nThe dashboard query was:\n\n```sql\nSELECT service_id, AVG(rating) AS avg_rating\nFROM bookings\nWHERE service_id = 'deep-clean-premium'\nGROUP BY service_id;\n```\n\nThe gotcha: of the 800 \"ratings,\" only **120 were actual numeric scores**. The other 680 were `NULL` — customers who never opened the rating prompt. `AVG()` silently skips NULLs. The 4.5 was an average of 120 self-selecting happy customers (the 15% who bothered to rate). The other 680 included **a lot of unhappy people** who churned in silence.\n\nWhen the analyst recalculated treating non-responses as a 1-star equivalent (the conservative business assumption), the rating was **1.8 stars**. The marketing push was paused mid-campaign. The Head of Product wrote a memo titled *\"Why I'm never trusting a single AVG() ever again.\"*\n\nNet cost: ₹47 lakh in spent ad budget on a product that needed fixing first, plus three months of customer trust to repair.",
+    "takeaway": "`AVG()`, `SUM()`, `COUNT()` and friends silently skip `NULL` — and the *response rate* is often the most important number on the dashboard."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Quarterly Top-Cities Report",
+    "setup": "Tuesday afternoon. **Aanya, the PM**, pings you on Slack:\n\n*\"Hey, can you pull the top 10 cities by revenue for Q1 2026? But only count paid orders. Exclude refunds (negative amounts). And only include cities with at least 3 distinct customers — leadership doesn't want one-customer cities skewing things. Also they want average order size per city. Need it by EOD.\"*\n\nThe schema:\n\n```sql\ncustomers (id, name, city, signed_up_at)\norders    (id, customer_id, amount, status, ordered_at)\n-- amount is positive for sales, negative for refunds\n-- status is 'paid' | 'pending' | 'cancelled'\n```",
+    "coach": { "name": "DBA Aunty Lakshmi", "role": "Senior database administrator, GROUP BY whisperer" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision — **where do you put the \"at least 3 distinct customers\" filter**?",
+        "options": [
+          { "id": "a", "label": "In the `WHERE` clause: `WHERE COUNT(DISTINCT customer_id) >= 3`.", "correct": false, "explain": "`WHERE` runs *before* aggregation, on row-by-row predicates. It cannot reference an aggregate function. The query won't even parse. Aunty Lakshmi: *\"WHERE filters rows. HAVING filters groups.\"*", "points": 0 },
+          { "id": "b", "label": "In the `HAVING` clause: `HAVING COUNT(DISTINCT customer_id) >= 3`.", "correct": true, "explain": "**Correct.** `HAVING` runs *after* `GROUP BY` and can reference aggregates. This is the textbook use case: filter groups (cities) based on a property of the group (customer count).", "points": 3 },
+          { "id": "c", "label": "In the `WHERE` clause as `WHERE customer_id IN (SELECT customer_id ...)` somehow.", "correct": false, "explain": "You'd have to write a correlated subquery that re-counts customers per city for every row — possible but absurd. `HAVING` exists exactly so you don't have to do this.", "points": 1 },
+          { "id": "d", "label": "Run the query first, then filter the result in a spreadsheet.", "correct": false, "explain": "Now the report can't be re-run unattended. Tomorrow's version will silently include one-customer cities again. Always push business rules into the query.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Where do you handle **\"only paid orders, exclude refunds\"** — `WHERE` or `HAVING`?",
+        "options": [
+          { "id": "a", "label": "Both go in `WHERE`: `WHERE status = 'paid' AND amount > 0`.", "correct": true, "explain": "**Right.** Both are row-level predicates — they're true or false for a single order, no aggregation needed. `WHERE` is more efficient because it filters before grouping (less data to aggregate).", "points": 3 },
+          { "id": "b", "label": "`status = 'paid'` in `WHERE`, but refund exclusion via `HAVING SUM(amount) > 0`.", "correct": false, "explain": "`HAVING SUM(amount) > 0` would let an individual ₹-500 refund row through, then *net* it against positive sales for the city. The city total stays positive but the per-row refunds still inflate `COUNT(*)`. Filter refunds at the row level.", "points": 1 },
+          { "id": "c", "label": "Both in `HAVING` — safer.", "correct": false, "explain": "You'd be aggregating every row including pending and cancelled orders, then filtering after. Wasted work and risk of including the wrong rows in counts. Aunty Lakshmi: *\"Filter early. Aggregate late.\"*", "points": 0 },
+          { "id": "d", "label": "Add a `CASE WHEN status = 'paid' THEN amount ELSE 0 END` instead of filtering.", "correct": false, "explain": "Clever but it leaves the wrong rows in `COUNT(*)` and `COUNT(DISTINCT customer_id)`. A pending-order customer in Pune would still count toward the 3-customer minimum. Filter rows out, don't zero them.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "You write:\n\n```sql\nSELECT c.city,\n       SUM(o.amount) AS revenue,\n       AVG(o.amount) AS avg_order,\n       COUNT(DISTINCT c.id) AS distinct_customers\nFROM customers c\nJOIN orders o ON o.customer_id = c.id\nWHERE o.status = 'paid'\n  AND o.amount > 0\n  AND o.ordered_at BETWEEN '2026-01-01' AND '2026-03-31'\nGROUP BY c.city\nHAVING COUNT(DISTINCT c.id) >= 3\nORDER BY revenue DESC\nLIMIT 10;\n```\n\nAunty Lakshmi reviews. **What does she flag first?**",
+        "options": [
+          { "id": "a", "label": "`BETWEEN '2026-01-01' AND '2026-03-31'` excludes orders placed at 2026-03-31 14:30 if `ordered_at` is a timestamp — should be `< '2026-04-01'`.", "correct": true, "explain": "**Classic.** `BETWEEN` is inclusive on both ends, but `'2026-03-31'` parses as `2026-03-31 00:00:00`. Any order on March 31 after midnight is silently excluded. The half-open form `>= '2026-01-01' AND < '2026-04-01'` is bulletproof and the industry-standard pattern.", "points": 3 },
+          { "id": "b", "label": "`AVG(o.amount)` should be `SUM(amount) / COUNT(DISTINCT customer_id)` for \"average order size.\"", "correct": false, "explain": "Read carefully — Aanya asked for *average order size*, not *average per customer*. `AVG(o.amount)` is correct. (If she'd asked \"average revenue per customer,\" you'd be right.) But Aunty Lakshmi nods at the careful reading.", "points": 1 },
+          { "id": "c", "label": "`GROUP BY c.city` should also include `c.id` for safety.", "correct": false, "explain": "Adding `c.id` would group by *every customer in every city*, giving you per-customer-per-city rows. You'd lose the city-level rollup entirely. The current `GROUP BY` is right.", "points": 0 },
+          { "id": "d", "label": "Missing `WHERE c.deleted_at IS NULL` to exclude soft-deleted customers.", "correct": true, "explain": "**Good catch.** Soft-deleted customers shouldn't contribute to a top-cities report. Add it. Two-for-the-price-of-one — Aunty Lakshmi awards both points.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final ship — Aanya asks one more thing: *\"Can you also add a column for the percentage each top-10 city contributes to total Q1 revenue?\"* **What's the cleanest way?**",
+        "options": [
+          { "id": "a", "label": "A window function: `100.0 * revenue / SUM(revenue) OVER ()` in a wrapping `SELECT`.", "correct": true, "explain": "**Elegant.** Wrap the existing query in a CTE or subquery, then use `SUM(revenue) OVER ()` in the outer `SELECT`. One query, one pass, no joins back to itself. *(Note: this gives % of top-10 revenue, not % of all-cities revenue — clarify with Aanya which she means.)*", "points": 3 },
+          { "id": "b", "label": "Run a separate query for total Q1 revenue, then divide in code.", "correct": false, "explain": "Two queries, two failure modes, two timestamps that might not match if data updates between them. Use a window function and ship one atomic query.", "points": 1 },
+          { "id": "c", "label": "Add `AVG(amount) / SUM(amount) * 100` in the SELECT.", "correct": false, "explain": "That math is meaningless — average-order divided by total-revenue isn't a contribution percentage of anything useful. Aunty Lakshmi removes her glasses slowly.", "points": 0 },
+          { "id": "d", "label": "Tell Aanya it's out of scope and ship the original query.", "correct": false, "explain": "It's a 5-line addition with a window function. Refusing reasonable scope creep that takes 60 seconds is bad partnership. (Refusing scope creep that takes 6 hours is good partnership — know the difference.)", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Surgical work. You handled `WHERE` vs `HAVING`, the `BETWEEN`-on-timestamps gotcha, the soft-delete diagnostic, *and* delivered the contribution-percentage ask cleanly. **Aunty Lakshmi sends a thumbs-up GIF. From Aunty Lakshmi, this is effusive praise.**",
+      "good": "You shipped a working report with the right HAVING and the right filters. You missed at least one of: the `BETWEEN`-timestamp trap, the soft-delete filter, or the cleanest way to add the percentage column. Re-read the section on aggregate execution order.",
+      "learn": "Re-read the lesson — especially **`WHERE` vs `HAVING`** (one filters rows, the other filters groups) and the **NULL-handling behavior** of `AVG`/`SUM`/`COUNT`. The query you would have shipped today either won't parse or will silently miscount March 31's orders."
+    }
+  }
+}

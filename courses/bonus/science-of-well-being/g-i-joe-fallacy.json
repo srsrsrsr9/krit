@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: Nine Years of Knowing About Sleep",
+    "source": "A senior backend developer in Koramangala, Bengaluru (told over chai, anonymised)",
+    "date": "November 2025",
+    "story": "Karthik, 38, has been a Staff Engineer at a payments company since 2017. He has read *Why We Sleep* twice. He owns an Oura ring (since 2019), an 8Sleep mattress cover (since 2022), and has subscribed to 4 different sleep podcasts. His Notion has a 'Sleep Protocol' page last updated 11 February 2024. He can quote the cortisol-melatonin curve from memory.\n\nFor 9 years and 2 months, he has checked work email at 6:58 a.m. from bed. Every single day. He knows the email check spikes his cortisol by ~40 percent within 8 minutes, kills the morning sunlight ritual he has also read about, and explains 80 percent of his afternoon crashes. He has a Whoop screenshot proving the pattern. He has shown me the screenshot on three separate visits.\n\nHe came to me because his wife, Divya, finally asked: 'You've spent ₹2.4 lakh on sleep tech and zero rupees on actually moving the phone out of the bedroom. Why?'\n\nThis is the G.I. Joe fallacy in its purest form: knowing IS NOT half the battle. Knowing is roughly 4 percent of the battle. The other 96 percent is friction design — and Karthik had aggressively engineered the *opposite*: bedside charger, work email pinned to home screen, Slack notifications on. The phone moved 1.2 metres on the day he fixed it. Email-check rate: from 1.0 per day to 0.07.",
+    "takeaway": "If you've known a thing for 9 years and not done it, you don't have a knowledge problem. You have a friction problem. Move the object, not the mind."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav vs the Evening Walk",
+    "setup": "Aarav, riding the high of his hedonic-adaptation experiment, decided 4 weeks ago to add an 'evening walk, 6:30 p.m., 25 mins' to his routine. He's read the lesson. He knows about the 4 rewire parts: **cue, friction, accountability, identity**.\n\nVoice note:\n\n> *bro I have FAILED. 4 weeks, 6 walks. SIX. and I know everything from the lesson, I literally have it bookmarked. tell me what's broken.*\n\nYou just finished Lesson 3. Diagnose which of the 4 parts is missing.",
+    "coach": {
+      "name": "Therapist-Aunty Tarini",
+      "role": "Your no-nonsense Pune-based pop-psychology coach"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "You ask Aarav to describe his current setup. He says: 'I just plan to walk at 6:30. I check my watch around then, and if a meeting overruns or Meera's making chai, I skip.' First diagnosis?",
+        "options": [
+          {
+            "id": "a",
+            "label": "He's lazy. Willpower problem.",
+            "correct": false,
+            "explain": "'Lazy' is the diagnosis people reach for when they haven't read the lesson. Tarini will not accept this. Try again.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Missing **cue**: 'around 6:30' isn't a cue, it's a rough wish. He needs an environmental trigger — phone alarm + shoes by the door + a visual anchor like 'when the building lights come on'.",
+            "correct": true,
+            "explain": "Exactly. A vague time isn't a cue. Cues are concrete, environmental, and impossible to miss. Lesson 3 was unambiguous about this.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Missing **identity**: he doesn't think of himself as 'a walker' yet.",
+            "correct": false,
+            "explain": "Possibly true but you're skipping the obvious mechanical failure. Identity comes after a few reps land. Right now no rep is even firing.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Missing **accountability**: he needs a walking buddy.",
+            "correct": false,
+            "explain": "Accountability is a real lever but it doesn't fix the fact that the trigger to start the walk doesn't exist in the first place.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav adds a 6:30 alarm + shoes by the door. Walks 4 of next 7 days. Better but he says: 'On meeting-heavy days I see the alarm, dismiss it, tell myself I'll go after one more email. Never go.' What's still broken?",
+        "options": [
+          {
+            "id": "a",
+            "label": "**Friction is wrong direction**: skipping the walk has lower friction than doing it. He needs to RAISE the cost of skipping (e.g. ₹500 to a friend's UPI per skip via stickK or manual).",
+            "correct": true,
+            "explain": "When the cost of skipping = 0 and the cost of going = 25 minutes + bothering Meera, the math always wins for skipping. Adding a financial sting flips the equation. This is the asymmetry the lesson called out.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Push the walk to morning instead.",
+            "correct": false,
+            "explain": "Time-shifting doesn't fix the underlying issue: he hasn't built any friction *against* skipping. Same problem will reappear at 7 a.m.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Drop walks, try a different habit.",
+            "correct": false,
+            "explain": "He's failing the system, not the habit. Switching habits without fixing the rewire parts will produce the same failure on a new noun.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add a second alarm.",
+            "correct": false,
+            "explain": "He's not missing the alarm. He's choosing to dismiss it. More alarms = more dismissals.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aarav adds a ₹500-per-skip rule (paid to his cousin Rohan). Walks 6 of next 7 days. He's thrilled. He asks: 'Should I add the identity move now? Start calling myself a walker?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "No. He has 6 reps. He needs ~30 reps before identity sticks. Premature identity-claiming feels fake and collapses on the first miss.",
+            "correct": true,
+            "explain": "Lesson 3 was specific: identity is the *output* of consistent behaviour, not the input. Claiming 'I'm a walker' at rep 6 is the LinkedIn-bio version of habit formation.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Yes, manifest it now, identity drives behaviour.",
+            "correct": false,
+            "explain": "Cute on Instagram, wrong in the lesson. Identity-first is what 12-month-old failed gym memberships are made of.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Add accountability instead — group chat with 3 friends.",
+            "correct": false,
+            "explain": "He already has accountability via Rohan and the ₹500 rule. Stacking another layer is over-engineering. Let the current system bake.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Drop the ₹500 rule, walk should be intrinsic now.",
+            "correct": false,
+            "explain": "Removing the friction at rep 6 will collapse the habit. Intrinsic motivation comes around rep 60-ish, not rep 6.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final move. Aarav, 6 walks deep, asks: 'What's the marker for when I CAN drop the ₹500 rule?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "When he goes 21 consecutive days without skipping AND has caught himself walking on auto-pilot at least 3 times (cue fires, body moves, no internal debate).",
+            "correct": true,
+            "explain": "Two-criteria gate: streak (proves the system works) + auto-pilot reps (proves the cue is wired). This is exactly the de-scaffolding test the lesson recommended. Tarini approves.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "After 1 month, automatically.",
+            "correct": false,
+            "explain": "Calendar-based de-scaffolding ignores actual evidence of habit strength. A bad month and a great month are not the same data.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "When walks 'feel natural'.",
+            "correct": false,
+            "explain": "'Feels natural' is a vibe, not a marker. Lesson explicitly warned against vibe-based progress measurement.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Never drop it, friction is forever.",
+            "correct": false,
+            "explain": "Permanent ₹500 stakes are unsustainable and miss the point. The friction is scaffolding; you remove scaffolding when the structure stands.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "12/12. You diagnosed cue then friction then resisted both premature identity-claiming and premature de-scaffolding. Aarav now has a working evening-walk system. Tarini sends a rare 'beta, well done' from Pune.",
+      "good": "8-11. You found the right rewire parts but tripped on sequencing. The lesson's ordering — cue, then friction, then identity — exists for a reason.",
+      "learn": "Under 8. You either reached for 'try harder' or skipped to identity-mode. The G.I. Joe fallacy is alive in your diagnosis. Re-read the 4 rewire parts."
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ₹18K Subscription Leak Nobody Noticed",
+    "source": "DINK couple in Gurgaon (mid-30s, both in product roles at large tech firms), audit shared anonymously after a Falguni reader workshop",
+    "date": "January 2026",
+    "story": "In November 2025 a 34/35 couple ran the **14-day burn audit** I prescribe at every workshop. Both earn well, both consider themselves 'careful with money', no expensive vices. They expected to find maybe ₹2-3K of leaks. They wanted to feel virtuous.\n\nFor 14 days they logged every rupee out — UPI, card, cash, auto-debit, EMI, the lot — into a single Notion table, with a single column called *recurring?*. No judgement, no categorisation theatre, just a list.\n\nThe audit surfaced **₹18,140/month in pure subscription leakage** they had no idea about:\n\n- Netflix (his) + Netflix (hers, different profile, both billing): **₹1,498**\n- Two overlapping music subscriptions (Spotify + Apple Music): **₹318**\n- Three news subscriptions, one of which had auto-renewed at full ₹6,999/yr: **₹583/mo amortised**\n- A ₹2,400/mo gym membership last used in March 2024: **₹2,400**\n- ChatGPT Plus + Claude Pro + Perplexity Pro (all 'for work', none reimbursed): **₹4,890**\n- iCloud 2TB (her) + Google One 2TB (him), both ~40% empty: **₹1,490**\n- A ₹999/mo meditation app last opened 11 months ago: **₹999**\n- An expired domain auto-renewing on the wife's old freelance card: **₹4,200/yr → ₹350/mo**\n- A wine club shipping monthly that they'd been re-gifting unopened: **₹2,499**\n- 8 different Patreon/Substack subs: **₹2,113**\n\nTotal: **₹18,140/month = ₹2.18L/year.** At 12% compounded for 25 years: **~₹3.4 crore of foregone wealth, paid in monthly instalments to forgotten free trials.**\n\nThey cancelled 80% of it the same evening. The remaining 20% they re-subscribed deliberately, with end dates.",
+    "takeaway": "You cannot optimise a budget you have not seen. The 14-day audit is not about discipline — it's about **visibility**. The leakage is always larger than you think and almost always in your blind spot."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav's 14-Day Experiment",
+    "setup": "Last call with Aarav before the wedding. He is 31, three weeks into being a Staff engineer. He has done the work — the SIP is at ₹80K, the EF is built, the ULIP was surrendered, the inheritance is allocated. He is, on paper, sorted.\n\nBut he tells you, slightly sheepish: *'Falguni — I want to do something concrete in the next two weeks before Meera and I get into wedding chaos. I have three things on my list:*\n\n1. *Set up the **SIP step-up plan** — automate a 10% increase every January.*\n2. *Top up the EF cushion in case the wedding overruns.*\n3. *Audit the surrendered-ULIP investment to make sure the index allocation actually went through.*\n\n*I have ~10 hours of focus over the next 14 days. Pick ONE for me, please.'*\n\nThis is the final stage. Pick the right one and tell him *why*.",
+    "coach": {
+      "name": "FIRE-walla Falguni",
+      "role": "Ex-Deutsche Bank, retired at 41, runs a personal-finance Substack from Goa"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Which of his three should you actually pick — and is there a fourth, more important option he hasn't named?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Set up the SIP step-up. It's the highest-leverage action — 10% step-up over 30 years adds ~₹2 cr to terminal wealth. Do it once, automate forever.",
+            "correct": false,
+            "explain": "It is high-leverage and you should absolutely do it — but **it takes 8 minutes, not 10 hours**. Most AMC apps have a one-tap step-up option. Picking this as the 'big project' wastes 9.8 hours on something that's already solved. Wrong shape of task for the time available.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "Top up the emergency fund. Wedding is 11 months out, better safe than sorry.",
+            "correct": false,
+            "explain": "EF is at the **target ₹8.4L** already. Adding more before the wedding is *anxiety expressed as money*. Above-target EF is dead capital — additional rupees here are earning 6.5% pre-tax instead of compounding in equity. The right move when you feel anxious is rarely to add to the cushion; it's usually to *understand the burn*.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Audit the ULIP-proceeds redeployment. Check the cheque cleared, the STP was set up, the right fund was selected.",
+            "correct": false,
+            "explain": "Important, but it's a 30-minute due-diligence task — open Coin, verify the SIP mandate, screenshot it, done. Doesn't fit the '10 hours over 14 days' budget either.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "**None of the three. Run a 14-day burn audit.** Log every outflow for 14 days into a single sheet with a *recurring?* column. The other three are 30-min admin tasks; the audit is the only one that returns Aarav information he doesn't already have, and it's the only one that informs every future decision.",
+            "correct": true,
+            "explain": "This is the answer. The three things on his list are **already-known knowns** — they need a few minutes of admin, not 10 hours of focus. The unknown — **his actual burn pattern, leak profile, and pre-marriage baseline** — is the only thing that genuinely requires the time he has. And he needs the baseline now so that married-Aarav has a *before* number to compare against. Run the audit.",
+            "points": 3
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav is convinced. He's never done a burn audit. He asks: *'What's the cheapest way to do this — am I downloading some app, paying for Walnut Plus, building a Notion thing? Don't tell me to manually log everything, I won't last 3 days.'*\n\nDesign the actual mechanism:",
+        "options": [
+          {
+            "id": "a",
+            "label": "Download a fancy aggregator app (Walnut, Money View, Cred Track). Let it auto-categorise from SMS. Look at the report on day 14.",
+            "correct": false,
+            "explain": "Two failure modes. (1) **SMS-scraping aggregators miss UPI, miss split bills, mis-categorise 30% of transactions.** (2) Watching a passive dashboard doesn't change behaviour. The **act of logging it yourself** is what creates the behaviour change — the dashboard view is downstream of that.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "**One Notion table. 4 columns: date, amount, what, *recurring? Y/N*.** Manual entry, but only takes 90 seconds at end of each day. The discipline of typing it is the point. On day 14, sort by *recurring=Y* and decide for each line: keep, kill, downgrade.",
+            "correct": true,
+            "explain": "Correct. The *recurring?* column is the killer feature — it surfaces the leak class (subscriptions, EMIs, auto-debits) separately from one-off spending. 90 seconds × 14 days = 21 minutes total of logging. The *decisions* on day 14 are where the 10 hours actually go. Cheap, manual, behaviour-changing, and the audit becomes a quarterly habit.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Just download the bank statement on day 15 and analyse it then. No need to log daily.",
+            "correct": false,
+            "explain": "Misses the behavioural mechanism entirely. A bank statement reviewed *after the fact* tells you what happened; daily logging changes what happens next. The act of typing 'Zomato — ₹487' on Tuesday quietly stops the Wednesday Zomato. Statements are forensics; logging is therapy.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Use both — aggregator for one-time spending, manual for subscriptions.",
+            "correct": false,
+            "explain": "Two systems = no system. The whole point is one source of truth, low friction, decision-forcing. Aarav will abandon both within 5 days. Pick one, the manual one, and execute it cleanly.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 15 arrives. Aarav has logged 87 transactions across 14 days. He sorts by *recurring? = Y* and finds **₹11,200/month of subscriptions and auto-debits** he didn't realise were active. Smaller than the Gurgaon couple's ₹18K, but real.\n\nWhat does he *do* with that information today, before the energy fades?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Cancel everything aggressive — all 11K, redirect entirely to the SIP step-up. Maximum optimisation.",
+            "correct": false,
+            "explain": "Two problems. (1) Some of those subscriptions are genuinely valuable — cancelling all of them is austerity theatre, and austerity always reverses with interest. (2) The behavioural lift is the wrong shape — if Aarav cancels 11 things in one evening he resubscribes to 6 of them within a month from sheer reflex. **Decide each one deliberately.**",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "**Three buckets in one sitting: KILL (cancel today), DOWNGRADE (move to cheaper tier or annual billing), KEEP-WITH-DATE (set a calendar reminder to re-decide in 90 days).** Whatever monthly amount that frees up — automate it as a SIP top-up the same evening so the savings *cannot* re-leak into lifestyle.",
+            "correct": true,
+            "explain": "Exactly. The KILL/DOWNGRADE/KEEP-WITH-DATE frame forces a decision per line item without nuking everything. The **automate-the-saving-the-same-evening** bit is the load-bearing rule — every rupee of leak that gets surfaced and *not* re-routed into a SIP within 24 hours will silently become a Swiggy order or a different subscription within 30 days. Money flows to the path of least friction; you have to lay the rail.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Show the spreadsheet to Meera. Make this a joint decision — joint money habits start now.",
+            "correct": false,
+            "explain": "Good instinct, wrong sequence. Meera's audit is *her* audit; bringing her into Aarav's first-ever audit on day 15, while she is in wedding-planning mode, will turn a productive personal exercise into a relationship debate about whose Netflix gets cancelled. Do this as a **couple's quarterly audit** post-wedding — that's a different ritual. Right now, Aarav decides on his own line items, automates his own savings.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Cancel only the obvious zombies (gym not used, expired domain). Leave the active subscriptions alone — they're 'reasonable'.",
+            "correct": false,
+            "explain": "This is how the Gurgaon couple ended up with ₹18K of leakage in the first place — every individual subscription was 'reasonable'. The leak is in **the cumulative**, not the individual. Force a decision on every line item, including the reasonable ones. The two Netflix accounts both feel reasonable; together they aren't.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final question. Aarav has run the audit, made the decisions, redirected ₹7,800/month of recovered leakage into his SIP (now ₹87,800/month). He asks: *'Falguni — when do I do this again? Once a year? Once a quarter? Or never, because I've now built the habit?'*\n\nClose the loop.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Once a year, in January with your tax filing. Keeps it linked to a habit that already exists.",
+            "correct": false,
+            "explain": "Once-a-year is too rare — subscriptions creep, lifestyle inflates, life events change the burn shape. By the next January, 6-9 months of leakage has compounded. Tying it to tax filing also bundles it with a stressful task; it gets skipped in busy years.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "**Quarterly, 14 days each — and *always* immediately after a major life event (wedding, new job, baby, parent moves in).** Life-event audits matter most because the burn-shape is structurally different on the other side. Quarterly keeps the muscle warm; life-event audits prevent silent drift.",
+            "correct": true,
+            "explain": "This is the durable answer. Quarterly is frequent enough to catch creep, infrequent enough not to become a chore. Life-event triggers are the single highest-leverage moment to re-audit because **every assumption in the previous burn baseline just changed**. Married-Aarav, new-dad-Aarav, sabbatical-Aarav each need a fresh audit. The plan that worked at 31 will quietly fail at 34 if no one re-checks.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Never again — the habit is built, the subscriptions are clean. Auditing is a one-time setup.",
+            "correct": false,
+            "explain": "Subscriptions don't stay clean. New ones get added (work tools, kid apps, family plans), old ones change pricing, free trials convert. The Gurgaon couple in the field notes had run an audit two years prior — and still found ₹18K of leakage on the second one. The audit is a recurring instrument, not a one-off cleanup.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Aarav now has a SIP at ₹87,800/month (after recovered leakage), a quarterly audit ritual, and a framework that survives wedding, kids, and the inevitable Staff-to-Principal promotion. He just bought his future self decades of compounding paid for entirely by killed subscriptions. This is the finale — and the only sustainable finale — of personal finance.",
+      "good": "Aarav ran the audit, killed the obvious zombies, redirected ~₹4-5K to the SIP. He'll do this once more in 2026 and then drift. Still meaningfully better off than 90% of his cohort.",
+      "learn": "Aarav set up the step-up SIP in 8 minutes and spent the other 9 hours 52 minutes scrolling Reddit. He never ran the audit. In 2027, he'll look at his bank statement and find ₹14K/month of leakage he doesn't recognise. Re-read the Gurgaon field notes — visibility is the only intervention that scales."
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: A Tuesday Phone Call, +1.5 Ladder Points",
+    "source": "A 34-year-old infrastructure engineer in Whitefield, Bengaluru (writeup shared on a closed Slack of ex-colleagues, used with permission)",
+    "date": "October 2025",
+    "story": "Pranav, 34, runs a 9-person SRE team. After a divorce in 2023 his social graph collapsed to: wife of best friend (awkward), 2 cousins (functional), one running buddy who moved to Berlin in early 2024.\n\nIn July 2025 he ran one experiment, taken from a podcast he half-remembered: he texted Suresh, his closest friend from a 2014 startup, and proposed a recurring video call every Tuesday at 9 p.m. IST, no agenda, 30 minutes minimum, 90 max. Both opted in. The rule: it happens unless one of them is on a flight or in surgery.\n\nHe tracked his Cantril ladder weekly on a Google Sheet starting July 7. Baseline: 5.8.\n\n- Week 1-3: 5.9, 5.8, 6.1 (no real movement, calls felt forced)\n- Week 4-6: 6.4, 6.6, 6.5 (the 'depth threshold' kicked in around call 4 — they started talking about real things, not work)\n- Week 7-12: 6.9, 7.0, 7.2, 7.1, 7.3, 7.3 (steady, sticky)\n- Week 13: 7.3\n\nNet movement: +1.5 ladder points over 13 weeks. He spent ₹0. He gained ~6 hours of conversation. The Whoop data showed a parallel ~9 percent improvement in sleep variability on Tuesday nights.\n\nMost telling: he told me 'I underestimated this by an order of magnitude. I would have paid ₹50,000 to feel this much better and spent it on a fitness coach instead.'",
+    "takeaway": "One scheduled, no-agenda, depth-friendly call with one real person, weekly, beats most things you can buy. Cadence and depth matter more than headcount."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav's Drifting Four",
+    "setup": "Mid-week voice note from Aarav, six days into his first gratitude+connection sprint:\n\n> *yaar, I did the friend audit. four people I actually care about — Rohan (cousin, Pune), Suresh (college, now in Bangalore but we haven't met in 8 months), Priya (ex-teammate, Hyderabad), and Akshay (school friend, in the same city, drifted hard). I have ONE WEEK to sequence the moves before this momentum dies. Walk me through it, lesson 4 style.*\n\nYou just finished Lesson 4. Help him pick the audit / opener / cadence / depth-move sequence.",
+    "coach": {
+      "name": "Therapist-Aunty Tarini",
+      "role": "Your no-nonsense Pune-based pop-psychology coach"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aarav already did the audit (4 names). What's the next move per the lesson?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Send all 4 a long heartfelt text right now.",
+            "correct": false,
+            "explain": "Mass-firing a vulnerability blast is a great way to feel exposed and get 1 reply. Lesson 4 sequenced opener BEFORE depth for a reason.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Pick the lowest-friction opener for each person — one short, specific, no-pressure ping referencing a real shared memory or current life event. Cast 4, see what comes back.",
+            "correct": true,
+            "explain": "Openers are deliberately low-stakes: a meme, a song, 'saw this and thought of you'. The job of the opener is to restart the channel, not to deliver depth. The lesson called this the 'reconnect probe'.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Wait for them to text first.",
+            "correct": false,
+            "explain": "Drift gets fixed by the person who notices the drift. Waiting is the documented pattern that produced the drift in the first place.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add them all to a group chat.",
+            "correct": false,
+            "explain": "Group chats are where 1:1 friendships go to die. The lesson was explicit: depth lives in 1:1 channels.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Three of four reply within 48 hours. Akshay (the same-city drifted friend) ghosts. What does Aarav do with the 3 who replied?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Move all 3 to weekly calls immediately.",
+            "correct": false,
+            "explain": "Weekly is the right cadence for the relationship that *fits* it (one person, like Pranav-Suresh in the field notes). Three weeklies is a load that will crash by week 4.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Pick ONE for a recurring weekly call (Suresh, lives in same city, easiest), and set monthly cadence for Rohan and Priya. One channel-per-friend, matched to feasibility.",
+            "correct": true,
+            "explain": "This is the cadence-matching move from the lesson. One depth relationship + two warm relationships > three forced weeklies. Pranav's field notes are the proof: one weekly call moved his ladder 1.5 points.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Skip cadence, just message them when he feels like it.",
+            "correct": false,
+            "explain": "Cadence-by-feeling is how the original drift happened. The lesson was unambiguous: connection requires *scheduled* recurrence.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Pick the one he's most romantically drawn to talk to.",
+            "correct": false,
+            "explain": "Aarav is engaged. This is a different kind of trap, not the lesson's trap. Skip.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Suresh agrees to a weekly Tuesday 9 p.m. call. Call 1 happens, lasts 22 minutes, mostly cricket. Aarav says: 'felt nice but not deep, am I doing it wrong?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "Call it off, find a different friend.",
+            "correct": false,
+            "explain": "Call 1 is supposed to feel surface-level. Pranav's data showed depth kicked in around call 4. Quitting at call 1 is the impatience trap the lesson named.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Trust the depth threshold. Run 4-5 calls before judging. Add ONE depth-move to call 3: 'what's something you've been chewing on that you haven't told anyone?'",
+            "correct": true,
+            "explain": "Cricket-level rapport is the runway, not the destination. The depth-move at call 3 is the lesson's 'open one door' technique — small, optional, not a confession demand.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Skip cricket, jump to deep questions on call 2.",
+            "correct": false,
+            "explain": "Forcing depth before the channel is warm reads as therapy ambush. The depth-move works *because* the channel is comfortable first.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add a third person to the call to make it more interesting.",
+            "correct": false,
+            "explain": "Adding a third caps depth at the lowest common comfort. 1:1 stays 1:1. The lesson was loud about this.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "What does Aarav do about Akshay (the ghoster)?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Send 4 follow-ups across 2 weeks.",
+            "correct": false,
+            "explain": "Pestering converts 'drifted' into 'actively avoided'. The opener is one shot.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "One follow-up after 10-14 days with a different specific hook (concert, restaurant, mutual friend's news). If still silent, archive the relationship — not forever, just not in this sprint.",
+            "correct": true,
+            "explain": "Two openers max. After that, the relationship goes into the 'warm acquaintance' bucket. The lesson was clear that not every reconnect lands, and chasing is worse than archiving.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Show up at his house unannounced.",
+            "correct": false,
+            "explain": "Bold. Also a great way to find out exactly why he ghosted.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Take it personally and unfollow him on everything.",
+            "correct": false,
+            "explain": "Burning the bridge is the over-correction trap. Akshay might just be in a bad month.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "12/12. You ran audit then opener then matched cadence then trusted the depth threshold and handled the ghoster cleanly. Aarav now has a 1-weekly + 2-monthly social system that costs him ₹0. Tarini sends actual praise from Pune.",
+      "good": "8-11. Right shape, wrong sequencing in places. The lesson's order — opener, cadence, depth-move — is load-bearing.",
+      "learn": "Under 8. You either over-fired the openers or rushed depth. Re-read the cadence-matching section; the answer is rarely 'message everyone weekly'."
+    }
+  }
+}

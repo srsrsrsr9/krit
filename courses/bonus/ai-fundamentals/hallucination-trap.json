@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Section Number That Did Not Exist",
+    "source": "Anonymous, compliance lead at a Pune-based NBFC",
+    "date": "November 2025",
+    "story": "**Arundhati Capital**, a mid-sized Pune NBFC, had quietly rolled out an internal Slack bot that summarised RBI circulars for the credit-policy team. The bot was wrapping a frontier model with no retrieval layer; the team had pasted in 'recent circulars' as context once, then never updated.\n\nIn October 2025, an analyst asked the bot to summarise the *latest* RBI circular on digital lending fair-practice norms. The bot produced a confident, well-structured 4-paragraph summary. It cited **'Section 4.2(b) of RBI/2025-26/87'** as the source for a specific provisioning requirement. The analyst pasted the summary into a memo for the credit committee. The credit committee tightened a policy based on it. Operations ran with the new policy for **41 days**.\n\nDuring legal review for an unrelated audit, an external counsel flagged the citation. The circular existed. The section did not. The provisioning requirement was a hallucination, plausible-sounding because the model had pattern-matched to the *style* of RBI circulars. The actual cost: a forced 6-week policy reversal, an internal investigation, a strongly-worded note from the board's risk committee, and **roughly 2.3 crore in foregone disbursements** during the over-tightened window.\n\nThe post-mortem identified the root cause in one line: **'No retrieval. No citations users could click. No grounding.'**",
+    "takeaway": "In regulated domains, RAG with clickable citations is not optional. If a user cannot in two clicks verify the source of an AI claim, you have built a confident fiction generator wearing a compliance costume."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Architecting the Support Bot",
+    "setup": "It is March 2026. The support-bot project from January is now your responsibility to architect. Velora's policies live in a versioned 80-page PDF (last updated 9 days ago) plus a Notion knowledge base of about 400 articles. Customers ask things like 'what is my interest rate if I prepay in month 4' and 'why was my loan rejected.' Ankit wants a recommendation by EOD.",
+    "coach": {
+      "name": "Ankit",
+      "role": "CTO, Velora"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Three architectures on the table. Which do you take to Ankit?",
+        "options": [
+          {
+            "id": "a",
+            "label": "**Ship now without RAG.** Just a strong system prompt that says 'only answer based on Velora policy.'",
+            "correct": false,
+            "explain": "This is Arundhati Capital. The model has no idea what Velora's policy is; the instruction 'only answer based on policy' will be cheerfully ignored because there is no policy in its context. You will hallucinate rates, terms, and rejection reasons in week one.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "**RAG with mandatory citations** for every factual claim, sourced from the versioned PDF and Notion KB. Refuse to answer if retrieval returns nothing relevant.",
+            "correct": true,
+            "explain": "Correct. RAG is non-optional in regulated domains. Mandatory citations let customers and your own QA team verify every answer in one click. The 'refuse if retrieval is empty' rule is the load-bearing piece, it converts hallucinations into honest 'I don't know, here's a human' fallbacks.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "**Refuse the use case entirely.** Hire more support staff.",
+            "correct": false,
+            "explain": "Over-conservative for a use case where the source-of-truth is *your own documented policies*. This is the canonical RAG sweet spot.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "**Fine-tune** a model on the PDF and KB.",
+            "correct": false,
+            "explain": "Fine-tuning bakes in *today's* policies. The PDF was updated 9 days ago and will be updated again. You'd need to retrain every refresh, and customers would still get stale answers in between. RAG handles freshness for free.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Ankit signs off on RAG. Now: what is the **single most important** failure mode you must engineer against on day one?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Latency. The bot must reply in under 2 seconds.",
+            "correct": false,
+            "explain": "Latency matters but a 4-second correct answer beats a 2-second hallucination every time. Wrong priority on a regulated bot.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "**Retrieval-source mismatch:** the model answers using its pre-training knowledge instead of the retrieved chunks, even when chunks are present.",
+            "correct": true,
+            "explain": "This is the silent killer. The model 'helpfully' supplements retrieved context with its own training-data memory of how *most* fintechs work, and you ship a confidently wrong answer that looks grounded. Defences: explicit 'answer ONLY from CONTEXT, refuse otherwise' instruction, evals that test retrieval-blank cases, and a citation requirement so missing citations become a visible signal.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Cost. Tokens are expensive at 200K context.",
+            "correct": false,
+            "explain": "At roughly 3 dollars per million input tokens for a frontier model in 2026 and a typical retrieval payload of a few thousand tokens, your support-bot per-query cost is in single-digit rupees. This is not the hill.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Profanity in customer queries.",
+            "correct": false,
+            "explain": "Real but minor; off-the-shelf moderation handles it. Not the dominant failure mode of a RAG bot.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Riya asks: 'What if the customer asks something the KB does not cover, like 'should I take this loan'?' How do you handle out-of-scope?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Refuse politely and route to a human agent. Never let the bot give financial advice.",
+            "correct": true,
+            "explain": "Correct, two reasons. One: 'should I take this loan' is investment advice, which in India requires registration the bot does not have. Two: out-of-scope refusal with handoff is the *only* way to keep the trust contract honest. The moment the bot pretends to know things outside its retrieval scope, you are back to Arundhati.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Let the model freelance with a disclaimer.",
+            "correct": false,
+            "explain": "Disclaimers do not protect you from SEBI's investment-advice rules. And a customer who got bad advice from your bot will not be mollified by small-print.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Train the bot to say 'definitely take it' to drive conversion.",
+            "correct": false,
+            "explain": "This is a regulator-bait answer wearing a growth-team costume. Do not.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Give a generic 'consult a financial advisor' response and end the chat.",
+            "correct": false,
+            "explain": "Half right. The 'consult an advisor' framing is fine but ending the chat without offering a Velora human is bad CX. The right pattern is refuse + offer handoff in the same turn.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Last call: how do you measure that the RAG bot is *actually* not hallucinating, in production, week after week?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Trust customer NPS. If it drops, investigate.",
+            "correct": false,
+            "explain": "By the time NPS moves, you have already shipped weeks of bad answers. Lagging indicator. This is the workflow trap from Lesson 5 in miniature.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Eval set of 200 labelled questions, run nightly. Plus weekly sample-and-grade on 50 real production conversations. Plus a hard-flag rule: any response missing a citation is auto-escalated to QA.",
+            "correct": true,
+            "explain": "Three layers, three timescales. Eval set catches regressions on *known* cases. Sampled production grade catches drift on *new* cases. The citation hard-flag catches the dangerous failure mode (model bypassing retrieval) immediately. We will deepen this in Lesson 5.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Have one engineer skim the logs every Friday.",
+            "correct": false,
+            "explain": "Will not survive contact with reality. By month two no one is skimming. You need the eval set in CI and the citation flag in runtime.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Just count escalations to humans. Lower escalations is better.",
+            "correct": false,
+            "explain": "Perverse incentive. The bot will learn (via your prompt tweaks) to confidently *avoid* escalating, even when it should. Lower escalation can mean *more* hallucination, not less.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You shipped a RAG architecture with mandatory citations, retrieval-only-answer enforcement, out-of-scope handoff, and a three-layer eval. Ankit forwards your design doc to the board with a one-liner: 'This is how we ship AI in regulated domains.' Velora's bot will go live in April with a clean trust surface.",
+      "good": "Most of the architecture is right. You may have under-weighted the retrieval-source-mismatch failure mode or the citation hard-flag. Re-read the hallucination-defences section and tighten the spec before build.",
+      "learn": "You shipped without retrieval, or trusted disclaimers, or relied on NPS. Read the Arundhati story again, then redo the battle. In regulated domains the cost of hallucination is not 'awkward,' it is 2.3 crore and a board memo."
+    }
+  }
+}

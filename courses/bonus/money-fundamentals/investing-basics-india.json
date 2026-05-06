@@ -1,0 +1,148 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 0.18% vs 1.74% — The Year-Long Bake-Off",
+    "source": "Retail investor in Hyderabad, posted on a fictional fee-comparison subreddit r/IndianFireMovement, anonymous handle u/parsimonious_panda",
+    "date": "April 2025",
+    "story": "From April 2024 to March 2025 a 34-year-old data engineer ran a clean experiment with **₹5L of his own money**. Two funds, both broadly large-cap Indian equity, very similar mandates, very different fee structures:\n\n- **Fund A — UTI Nifty 50 Index Fund (Direct, Growth):** TER **0.18%**\n- **Fund B — A well-known active large-cap fund (Direct, Growth):** TER **1.74%**\n\nHe put **₹2.5L in each** on **April 2, 2024** and didn't touch either for 12 months.\n\nResults on **March 31, 2025**:\n\n- Fund A (index): closing value **₹2.81L** → **+12.4%** for the year\n- Fund B (active): closing value **₹2.74L** → **+9.6%** for the year\n- Outperformance of the index over the active fund: **2.8 percentage points**\n\nOf that 2.8% gap, roughly **1.56 percentage points** is just the **TER difference** (1.74% − 0.18%). The other ~1.24% is the active manager actually underperforming the benchmark this year — which is *not unusual*. SPIVA India 2024 reports that **~63% of active large-cap funds underperformed the Nifty 50 over 5 years**.\n\nForward-projected on a **₹50K/month SIP for 25 years**: that 1.56% TER difference compounds to roughly **₹38L of foregone wealth** — paid as fees to the AMC, fees that bought him slightly worse performance.\n\nHe sold Fund B in April 2025. He did not tell his RM why.",
+    "takeaway": "In Indian retail investing, **fees are the only certainty and outperformance is a coin flip.** The cheap, boring, index option is the answer to a question most people don't realise they're being asked."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav's ₹40L Inheritance",
+    "setup": "Aarav's Naani — his maternal grandmother — passed away peacefully in Pune last week. In her will, Aarav inherits **₹40L**. The cheque has cleared. The money is sitting in his savings account, earning **2.7%** while it 'rests'.\n\nThe family WhatsApp group has, in the last 72 hours, suggested:\n\n- **CA-uncle:** 'Put ₹15L in an LIC Jeevan Anand, ₹10L in a 5-year FD, ₹15L into gold.'\n- **Engineer-cousin:** 'Bro just chuck the whole thing into a Bandra flat as down payment.'\n- **Fintwit-friend:** 'Bitcoin is consolidating, ₹5L allocation easy 5x.'\n- **Aarav's fiancée Meera:** 'Maybe just keep it in FD until after the wedding?'\n\nAarav has a wedding in 11 months, an EF that's 70% built (~₹6L of the ₹8.4L target), an active SIP of ₹80K/month, and the recently-surrendered ULIP cash of ₹3.42L sitting in his liquid fund.\n\nHe gives you 30 minutes on a video call to decide what happens to the ₹40L. The family WhatsApp is exploding in real time.",
+    "coach": {
+      "name": "FIRE-walla Falguni",
+      "role": "Ex-Deutsche Bank, retired at 41, runs a personal-finance Substack from Goa"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Before allocation, before product picks — what's the **first move** in the next 5 minutes?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Open Zerodha Coin and start putting it into index funds. Time in market beats timing the market.",
+            "correct": false,
+            "explain": "Right principle, wrong sequence. Lump-summing ₹40L on day 1 of receiving a windfall is asking to be that person who put it all in at the all-time-high in January. **Time in market beats timing — but inheritance isn't an emergency**. Plan first, allocate over weeks, not minutes.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Park the entire ₹40L in a liquid mutual fund (~6.8% yield, T+1 redemption) and **mute the family WhatsApp for 14 days**. No allocation decisions while emotional and while everyone has an opinion.",
+            "correct": true,
+            "explain": "Correct. The two real risks with inheritance money are (1) panicked rapid deployment and (2) family pressure converting to bad products. Liquid fund earns ~4 percentage points more than savings while you think. Muting WhatsApp is not rude, it's a fiduciary act. Then build the actual plan on a clear head.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Split it 50/50 between savings (for the wedding) and an FD ladder (for safety) — be conservative until you have a plan.",
+            "correct": false,
+            "explain": "Looks prudent, costs real money. ₹20L in savings at 2.7% = ₹54K/year. ₹20L in an FD = locked + taxed at slab. The 'temporary' parking spot will become permanent because no one revisits FDs once they're booked. **Use a vehicle that's easy to *un-decide*.** Liquid fund is.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Pay off any high-interest debt first.",
+            "correct": false,
+            "explain": "Excellent rule generally — but Aarav has no credit card debt and no personal loan. Only his car-EMI-that-you-talked-him-out-of (good job, battle 1) and his rent. There's nothing to pay off. Don't apply a rule when its precondition isn't met.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Two weeks later, Aarav is calm. Plan time. The ₹40L needs to land in three buckets: **wedding (T+11 months)**, **emergency-fund completion (now)**, and **long-term wealth (Aarav is 31, horizon 30 years)**.\n\nWhich allocation is the cleanest?",
+        "options": [
+          {
+            "id": "a",
+            "label": "₹2.4L → finish EF (liquid fund). ₹9L → wedding (debt fund + sweep-FD, 11-month horizon). ₹28.6L → long-term: Nifty 50 index fund (Direct, Growth) deployed via 12-month STP from a liquid fund. Zero gold, zero LIC, zero flat.",
+            "correct": true,
+            "explain": "This is the textbook allocation: **liquidity completed → known short-term goal funded → long-term wealth into a low-fee broad-market index, lump-sum risk smoothed via STP.** STP over 12 months reduces single-day price risk without giving up the dry powder yield. The 'no gold, no LIC, no flat' choices are deliberate — addressed in stage 3.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "₹15L → LIC Jeevan Anand (CA-uncle's pick). ₹10L → 5-year FD. ₹15L → gold ETF. Conservative, won't lose value.",
+            "correct": false,
+            "explain": "This is exactly the field-notes scenario in slow motion. LIC endowment IRR will land near 4.5%, FD post-tax ~5%, gold ETF historical real return ~2-3%. Blended real return: roughly **0.5%**. Aarav's 30-year horizon is being wasted on capital-preservation products designed for retirees. Wrong horizon, wrong tool.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "₹2.4L → finish EF. ₹9L → wedding (FD). ₹28.6L → split across 5 active equity mutual funds for diversification.",
+            "correct": false,
+            "explain": "Right structure, wrong long-term vehicle. **5 active funds with 1.5-2% TER each underperform 1 cheap index fund** roughly 60% of the time over 5 years (SPIVA India). 'Diversifying across funds' is not real diversification — they all hold mostly the same top-30 stocks. Fund overlap is 60-80%. You've paid 5x the fees for the same exposure.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "₹40L all-in as down payment for a Bandra 2BHK. Real estate beats stocks long-term.",
+            "correct": false,
+            "explain": "Two myths in one sentence. (1) 'Real estate beats stocks' is **false in India over 2010-2025** — Nifty Realty CAGR ~5.8%, Nifty 50 CAGR ~12.4%. (2) A Bandra 2BHK is ~₹3.5cr — ₹40L is a 12% down payment, not a purchase. Aarav would lock his entire inheritance into illiquid leveraged real estate **3 months before getting married**. Single worst possible time.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aarav loves the plan. Then he asks the question every Indian investor asks: *'Falguni — but what about gold? Naani would have wanted some gold. And don't I need to own some property eventually? And shouldn't I have at least *some* LIC for tax benefits?'*\n\nGive the cleanest, most honest answer.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Sure — add 10% gold (sovereign gold bonds), do an SBI home loan in 3 years, buy one small LIC for 80C. Compromise where it's emotionally important.",
+            "correct": false,
+            "explain": "Soft answer that loses real money. **80C is already filled by his EPF + ELSS** if he's earning ₹3.6L/month — he doesn't need an LIC. Gold at 10% is defensible *only* if there's no other diversifier; for a 30-year-old with equity allocation, it dilutes returns by ~1% CAGR. Home eventually maybe; not as part of *this* allocation. Stop saying 'but emotionally'.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "Honest answers: **(1) Gold = 0% in your portfolio; if you want a Naani memorial, buy a single physical 50g coin from your salary, not from this corpus. (2) Property = a future life decision, not an inheritance allocation. (3) LIC for 80C is unnecessary because EPF + ELSS already fill it; if you want term cover, buy *term*, not endowment.**",
+            "correct": true,
+            "explain": "This is the answer. Each 'but what about' is unbundled into either (a) an emotional purchase that doesn't belong in the long-term portfolio, or (b) a misunderstanding of what 80C / term insurance / real estate actually is for. **Sentimental allocations are the most expensive allocations** because they never get rebalanced, never get questioned, and live in your portfolio for 30 years.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Honour Naani's wishes — keep ₹5L in physical gold and a 5L LIC policy. The rest follows the plan.",
+            "correct": false,
+            "explain": "₹10L of the ₹40L (25%) in two of the lowest-return-per-rupee products available, justified by sentiment. Naani would not have wanted Aarav to be poorer in 2055. Honour her by *being prudent*, not by replicating her era's product choices into a different era's market.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Last call. Aarav, ready to execute, asks one final tactical question: *'Direct or Regular plan? Growth or Dividend? And which app?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "**Direct plan, Growth option.** Use any AMC's own website or a platform that doesn't take commissions (Zerodha Coin, Kuvera, MFCentral). Avoid any platform with a 'Regular' default, avoid any RM who 'recommends' funds.",
+            "correct": true,
+            "explain": "Correct on every dimension. **Direct vs Regular** = ~1% TER difference = ~₹40L on a 30-year SIP. **Growth vs Dividend** = dividend forces tax events without rebalancing benefit; growth lets compounding run untouched. **Platform** matters because Regular-plan platforms quietly siphon trailing commission for the next 30 years on every rupee you invest through them.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Regular plan, Growth, via the family RM. The hand-holding is worth the small fee difference.",
+            "correct": false,
+            "explain": "The 'small fee' is **~1% per year forever** — on ₹40L over 30 years, the foregone wealth is roughly **₹40L itself**. The hand-holding is not worth ₹40L. If Aarav wants advice, he should pay a **fee-only SEBI-RIA** a flat ₹15-25K once a year — that scales to far less than 1% of corpus.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Direct plan, Dividend option. Get periodic income to enjoy.",
+            "correct": false,
+            "explain": "Right on Direct, wrong on Dividend. Dividends are taxed at slab (Aarav is at 30%) and force taxable events on money he doesn't need to spend. **Growth is the default for accumulation**, dividend is for retirees needing income. Aarav is 31. The whole point is *not* to extract.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Aarav just inherited ₹40L and turned it into roughly ₹4.6 crore at age 61 (₹28.6L at 12% over 30 years), funded his wedding without panic, completed his EF, and stayed out of every product the family WhatsApp pushed. Naani would, in fact, be proud.",
+      "good": "Mostly right. Probably one sentimental allocation slipped in (a small LIC, some gold) that will cost ~₹15-20L over 30 years. Still in the top 5% of inheritance outcomes for his cohort.",
+      "learn": "Aarav now owns LIC Jeevan Anand, a 50g gold coin, an FD ladder, and a flat down payment in a project that will be delayed 5 years. The ₹40L is gone in the sense that it stopped compounding. Re-read the bake-off field notes. Fees are certainty; outperformance is a coin flip; sentiment is the most expensive fee of all."
+    }
+  }
+}

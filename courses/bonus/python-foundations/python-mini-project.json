@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The BOM That Ate ₹3.4 Crore in Revenue",
+    "source": "Anonymous finance-systems engineer at TaaraTextiles (Surat textile exporter, public-listed)",
+    "date": "April 2024, Q4 close",
+    "story": "TaaraTextiles closes its books on the second of every month. Q4 close was an investor-relations day; the CFO would walk on stage at the BSE the next morning and quote the revenue number off our pipeline. The pipeline ingested CSVs from 47 regional offices, each exported by a different person on a different machine running a different version of MS Excel. We'd been running this pipeline for three years.\n\nThe Q4 number came in at **₹89.2 crore**. The CFO read it off the slide. The audit team caught the discrepancy two weeks later: the *actual* revenue was **₹92.6 crore**. We had under-reported by **₹3.4 crore** to investors. The phrase *'material misstatement'* entered our legal team's daily vocabulary.\n\nThe bug was four characters inside the CSV reader:\n\n```python\nwith open(path, encoding='utf-8', errors='ignore') as f:\n    rows = csv.DictReader(f)\n    ...\n```\n\nThe `errors='ignore'` was added two years ago by an engineer to silence an `UnicodeDecodeError` from one office whose Excel saved files as Windows-1252. *'It works now,'* the commit message said.\n\nWhat *actually* happened: 6 of the 47 offices used Excel that prepended a UTF-8 BOM (`\\ufeff`) to the file. The first column header read as `﻿invoice_id` instead of `invoice_id`. The DictReader silently skipped those rows because the row's keys didn't match the schema. Worse: rows that contained the **₹** symbol in a notes field, when read with `errors='ignore'`, had the rupee character and any nearby digits silently dropped. Some `1,25,000` invoices became `25,000`. Some entire rows vanished.\n\nThe fix was `encoding='utf-8-sig'` (which handles the BOM) and `errors='strict'` (which crashes loudly instead of silently corrupting). The audit committee restated the quarter. The CFO's bonus was clawed back. The engineer who added `errors='ignore'` had left the company eighteen months earlier.",
+    "takeaway": "`errors='ignore'` is not a fix; it is a permission slip for silent data loss. If the CSV is broken, **crash loudly** with the row number. Auditors prefer a delayed report to a wrong report; investors prefer it even more."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Q4 Close at 11:32 p.m.",
+    "setup": "It's 11:32 p.m. on the night before Q4 close. **PM Sneha** is in the office. The CFO will be on stage at the BSE in 11 hours. The end-of-quarter pipeline just crashed with `KeyError: 'amount '` (note the trailing space). Aakash sent you the script in Slack with three crying-emoji and one prayer-hands. Veteran-CTO Vidya is online but is *'trying not to step in.'* You have to ship.",
+    "coach": {
+      "name": "Veteran-CTO Vidya",
+      "role": "Has lived through three restated quarters. Will not let it be a fourth."
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First glance at the script:\n\n```python\ndef summarize(path, recipients=[], boost=False):\n    f = open(path)\n    reader = csv.reader(f)\n    totals = []\n    for row in reader:\n        amt = float(row[2])\n        ...\n```\n\nWhat are the **first** three traps you name from this course, in order of urgency for the next 11 hours?",
+        "options": [
+          {
+            "id": "a",
+            "label": "(1) `recipients=[]` mutable default. (2) `open(path)` with no `encoding` and no `with`. (3) `row[2]` positional indexing instead of header-based DictReader — fragile to column reorders.",
+            "correct": true,
+            "explain": "All three are named traps from the course, ordered correctly: the mutable default could be silently corrupting prior runs, the missing encoding is the BOM/Windows-1252 trap from the field notes, and positional row indexing crashes the moment finance reorders columns. Vidya is quietly impressed.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "(1) `float(row[2])` could throw — wrap in try/except. (2) The function should return the result. (3) Add type hints.",
+            "correct": false,
+            "explain": "These are real issues but not in priority order, and you've missed the silent-corruption traps. Type hints don't ship a Q4 number tonight. The mutable default and the encoding bug do.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "(1) The function name is too short. (2) No docstring. (3) Indentation could be tabs vs spaces.",
+            "correct": false,
+            "explain": "Style nits while the building burns. The CFO is on stage in 11 hours; you cannot lead with the bikeshed.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Just rewrite from scratch in pandas — it'll handle BOMs and missing values automatically.",
+            "correct": false,
+            "explain": "Rewriting at 11:32 p.m. before a Q4 close is how you ship a *different* set of bugs. Vidya: *'no.'* Diagnose, patch, ship the existing script with named fixes. Pandas can come next quarter.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You decide on the encoding fix first because it explains the `KeyError: 'amount '` (BOM-prefixed first column header). What's the right fix?",
+        "options": [
+          {
+            "id": "a",
+            "label": "`with open(path, encoding='utf-8-sig', newline='') as f:` and switch to `csv.DictReader`. The `utf-8-sig` codec strips the BOM if present.",
+            "correct": true,
+            "explain": "Exactly the canonical fix from the field notes. `utf-8-sig` is BOM-tolerant, `newline=''` lets the csv module handle line endings correctly across OSes, `with` ensures the file closes on exception, and `DictReader` makes the script robust to column reorders.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Strip the BOM manually: read the file, `.lstrip('\\ufeff')`, then parse.",
+            "correct": false,
+            "explain": "Works for the BOM at the very start, but you've reinvented `utf-8-sig`. Also you've now read the entire file into memory before parsing — pointless overhead on a large file.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Add `errors='ignore'` so the BOM is silently dropped.",
+            "correct": false,
+            "explain": "**This is the bug from the field notes.** `errors='ignore'` doesn't fix anything; it gives the parser permission to silently drop characters, including the **₹** symbol and digits adjacent to it. You'd ship the same restated-quarter incident.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Open in binary mode (`'rb'`) and decode each row manually.",
+            "correct": false,
+            "explain": "Massively over-engineered. You'd be reimplementing what `utf-8-sig` does in one parameter. Save the heroics for problems that need them.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Encoding fixed; now the empty `amount` cells crash `float('')`. The discipline from the lesson is *'fail loudly, with row number.'* What ships?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Wrap parsing in a per-row try/except that re-raises with the row number and field name: `raise ValueError(f'Row {row_num}: amount field is empty or invalid: {row.get(\"amount\")!r}')`. Use `enumerate(reader, start=2)` so row numbers match the spreadsheet (header is row 1).",
+            "correct": true,
+            "explain": "*Boundary discipline.* The script crashes loudly, the error names the row and the column, and the row number matches what the finance team sees in Excel. The `start=2` is the lesson's `enumerate(start=1)` rule applied to the spreadsheet convention.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "`amt = float(row['amount']) if row['amount'] else 0`",
+            "correct": false,
+            "explain": "**Silent data corruption.** An empty amount becomes ₹0; the row is included in the total at zero rupees; the Q4 number is wrong but doesn't crash. This is the *'errors=ignore'* bug in if-statement form.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "`try: amt = float(row['amount']); except: continue`",
+            "correct": false,
+            "explain": "Bare `except` is the worst flavor of silence. Catches everything (including KeyboardInterrupt), drops the row, the totals are wrong, and you have no idea which rows were dropped. Two anti-patterns in one line.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Log a warning and skip the row.",
+            "correct": false,
+            "explain": "Better than (b) and (c) because you have a record, but for a financial pipeline at quarter-close, *'warning, skipped row'* in a log is not enough — auditors need to know whether the totals are complete. Crash loudly, fix the data, re-run.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "01:14 a.m. The script runs clean, totals match what finance expected within ₹1,200 (rounding). Vidya: *'before you go to bed — what guardrail do you add for next quarter?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add a pre-flight schema check: read the header row, compare against an expected schema, fail loudly if columns are missing/added/renamed. Plus a row-count assertion against a finance-provided expected count for the quarter, with a 5% tolerance.",
+            "correct": true,
+            "explain": "Two guardrails that catch the *next* class of failure: schema drift (the *'finance reorganized columns'* bug) and silent row-loss (the *'BOM ate three rows'* bug). Both fail at the *boundary*, before the totals are computed. Auditor-grade.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Add unit tests for the parsing function.",
+            "correct": false,
+            "explain": "Tests catch *known* failure modes. Unit tests would not have caught the BOM bug because no one wrote a test for it. Schema validation catches the *unknown* drift. Partial credit because tests are still good — they're just the second guardrail, not the first.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Add monitoring — alert if the Q4 number is more than 10% different from Q3.",
+            "correct": false,
+            "explain": "Anomaly detection on revenue numbers will flag legitimate growth as a bug and miss small silent losses. The TaaraTextiles incident was a 3.7% under-report — well inside any reasonable threshold. The fix is at the parsing boundary, not in monitoring.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Wrap the whole script in a try/except and email yourself if it fails.",
+            "correct": false,
+            "explain": "You've moved the silence one level up. Email-on-failure is a fallback, not a guardrail. The point of the lesson is *fail loudly at the boundary*, not *email-loudly at the top.*",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. You diagnosed three named traps in the first read, fixed the encoding without `errors='ignore'`, made the failures crash loudly with row numbers, and added schema + row-count guardrails for next quarter. The CFO walks on stage at the BSE with a number you'd swear to in court. Vidya DMs you at 9 a.m.: *'this is the script we'll forward to the audit committee as the new standard.'* Sleep is now allowed.",
+      "good": "B+. The pipeline runs, the Q4 number is right, the bad-row crashes are loud and named. You added one guardrail instead of two. Vidya signs off; the next-quarter retro will catch the rest. Auditors are happy. You can sleep.",
+      "learn": "C-tier — but the boundary discipline is the *one* thing that separates a script that works once from a pipeline a financial team can rely on. Re-read the mini-project lesson on read/transform/summarize/write boundaries. The three rules: (1) **encoding is a contract,** never `errors='ignore'`. (2) **schema is a contract,** validate the header before you parse. (3) **failures are loud,** with row numbers, so finance can fix the data instead of distrusting the code. Memorize these three before next quarter."
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ₹4.2 Cr Anticlimax",
+    "source": "A therapist in Bandra, Mumbai (anonymised, with client permission)",
+    "date": "March 2024",
+    "story": "Riya, 28, product manager at a fintech in Lower Parel. Spent 7 years and 3 months on the FIRE plan: 62 percent savings rate, two side-hustles, a colour-coded Notion dashboard updated every Sunday at 9 p.m. The number she had picked at 21 was ₹4.2 crore. The day her portfolio crossed it, March 11, 2024, she screenshotted the brokerage app, sent it to her father, made dal-chawal, and felt nothing. Not relief, not joy, not even smugness. By Tuesday she was anxious that the market would dip and undo it.\n\nShe came to me 6 weeks later because she could not stop refreshing the app. The diagnosis was textbook miswanting: she had built her entire identity around a single forecast — *crossing the number will feel like crossing the finish line of a marathon*. Brain delivered exactly what was ordered. The forecast was wrong. The number was a number.\n\nWhat she had actually wanted, surfaced over 4 sessions: the Sunday ritual with her dad of comparing portfolios, the chai breaks with her side-hustle pod on Discord, the feeling of being the youngest person in every room talking compounding. She had optimised away every one of those by hitting the number early.",
+    "takeaway": "The thing you forecast you'll feel is almost never the thing you'll actually feel. Audit the side-effects of the goal before you reach it, not after."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav vs the Promotion",
+    "setup": "It's a Wednesday night. Your phone buzzes. **Aarav, 31, software engineer at a Bengaluru product company, engaged to Meera**, has messaged you on WhatsApp.\n\n> *yaar, big news. EM role just opened up. ₹14L hike, more scope. I HAVE to go for this. it'll change everything. you in for a coffee tomorrow? need to game-plan.*\n\nYou just finished Lesson 1. Your job is not to talk him in or out of it. Your job is to run the miswanting diagnostic before he sprints.",
+    "coach": {
+      "name": "Therapist-Aunty Tarini",
+      "role": "Your no-nonsense Pune-based pop-psychology coach"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First reply. Aarav is hyped. What do you actually send back?",
+        "options": [
+          {
+            "id": "a",
+            "label": "'Bro do it, EM money is unreal, don't overthink.'",
+            "correct": false,
+            "explain": "You just rubber-stamped his forecast without testing it. This is the friend version of miswanting: catching the contagion instead of containing it. Tarini is shaking her head from Pune.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "'Don't take it. EM is a trap, you'll hate the meetings.'",
+            "correct": false,
+            "explain": "You replaced his forecast with your forecast. Both forecasts are guesses. The diagnostic is supposed to surface *his* data, not yours.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "'Coffee yes. Bring two things: what your Tuesday looks like in this role, and the last time a hike actually moved your mood for more than 3 weeks.'",
+            "correct": true,
+            "explain": "You just asked for a behavioural forecast (the Tuesday) and a base rate (last hike). This is exactly the affective-forecasting checklist from the lesson. Tarini approves.",
+            "points": 3
+          },
+          {
+            "id": "d",
+            "label": "'Make a pros/cons list and send it to me.'",
+            "correct": false,
+            "explain": "Pros/cons lists are where miswants come to dress up as logic. He'll list the ₹14L and the 'scope' and call it analysis.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "At coffee, Aarav says: 'Last hike was 18 months ago, ₹6L bump. Felt amazing for maybe 10 days. By month 2 I was Googling the next role.' What does this data tell you?",
+        "options": [
+          {
+            "id": "a",
+            "label": "He needs a bigger hike this time so the boost lasts longer.",
+            "correct": false,
+            "explain": "Classic dose-response error. Hedonic adaptation does not scale linearly with size. ₹14L will follow the same curve as ₹6L, just with a slightly steeper drop.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "His own n=1 evidence shows hike-driven mood lifts decay in under 30 days. He's about to forecast it'll feel different this time. It won't.",
+            "correct": true,
+            "explain": "He has personal base-rate data and he's ignoring it. This is miswanting in its purest form: the forecast contradicts his own measured history.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Means the last role was wrong. EM is the right fit, this hike will stick.",
+            "correct": false,
+            "explain": "Maybe. But you have zero evidence and one strong forecast bias. You're letting him narrate his way past the data.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Doesn't matter, money is money, the math is good.",
+            "correct": false,
+            "explain": "The lesson is not 'don't take money'. The lesson is 'don't take money *because you think it'll fix your mood*'. Different decision, different inputs.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aarav describes his Tuesday as EM: 4 hours of 1:1s, 2 hours of stakeholder syncs, 1 hour of code review, no deep work. He currently codes 5 hours a day and calls it the best part of his week. Verdict?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Solid miswant. He's optimising for status and salary while deleting the activity that actually drives his daily mood. Recommend: negotiate IC track or stay.",
+            "correct": true,
+            "explain": "He just told you the load-bearing wall of his current happiness (5 hours of coding) is being knocked down. The hike pays for the demolition. This is the diagnostic working exactly as designed.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "He'll grow into the meetings. Most engineers do.",
+            "correct": false,
+            "explain": "Maybe over 18 months. But the lesson is about *forecasting accuracy*. He has not forecasted this trade-off at all; he's only forecasted the bank balance.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Tell him to take it and just block 2 hours a day to code.",
+            "correct": false,
+            "explain": "Tempting. But 'I'll just protect my deep work' is the EM new-year's resolution that dies by Q2. You've patched the symptom, not surfaced the miswant.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Inconclusive, need more data.",
+            "correct": false,
+            "explain": "You have his Tuesday breakdown, his last hike's mood decay, and his stated favourite activity. That's enough. Decisiveness is part of the diagnostic.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "9/9. You ran a clean miswanting diagnostic on a hyped friend without becoming his therapist or his cheerleader. Aarav now has data instead of a forecast. Tarini sends a thumbs up from Pune.",
+      "good": "6-8 points. You caught the miswant but slipped into advice-mode in places. The skill is to surface his data, not substitute yours.",
+      "learn": "Under 6. You either rubber-stamped Aarav's forecast or replaced it with your own. Re-read the affective-forecasting section and try again — the goal is to test the prediction, not to vote on the decision."
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: UnboundLocalError on the Quarter-End Dashboard",
+    "source": "Anonymous data engineer at LeharLogistics (Pune supply-chain SaaS, Series B)",
+    "date": "September 2025, last day of Q3",
+    "story": "Quarter-end. Finance, Sales, and the founder were all refreshing the same Looker dashboard at 5 p.m. waiting for the *'Q3 close'* number. The pipeline that fed it had run every weekday for eleven months without incident.\n\nAt 17:03, the dashboard threw `UnboundLocalError: local variable 'total' referenced before assignment`. Not a crash on a remote server — a giant red toast in the browser, in front of the founder, on the day the Series C deck needed the number.\n\nI bisected. The diff was forty minutes old:\n\n```python\ntotal = 0\n\ndef compute_revenue(orders):\n    if len(orders) == 0:\n        return 0\n    for o in orders:\n        total = total + o.amount  # <-- crime\n    return total\n```\n\nThe author had added `total = total + o.amount` inside the function, intending to use the module-level `total`. Python saw an assignment to `total` *anywhere* in the function, decided `total` was a **local** variable for the *whole* function, and so the read on the right-hand side referenced the not-yet-assigned local. The module-level `total` might as well not exist.\n\nThe original code had been `total += o.amount` after a `total = 0` *inside* the function. Someone had refactored, hoisted `total = 0` out for *'reusability,'* and triggered the trap. Eleven months of green builds; one quarter-end at 17:03.\n\nFix took eight seconds: move `total = 0` back inside the function. Investor call was delayed by twenty minutes. The founder learned what `UnboundLocalError` means. He has not forgotten.",
+    "takeaway": "Python decides scope by *static analysis of assignments*, not by what runs first. One `=` anywhere in a function makes the name local for the *entire* function — and the read above it will fail with `UnboundLocalError`."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Designing the Notification Function",
+    "setup": "**PM Sneha** wants a *'send notification'* function. Simple: takes a user, sends a message. Two days into the spec, it has eight new flags. Veteran-CTO Vidya is in the design-review thread asking pointed questions. You hold the pen on the signature.",
+    "coach": {
+      "name": "Veteran-CTO Vidya",
+      "role": "Will absolutely send your PR back if the signature looks like a Christmas tree"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Sneha's first ask: *'Send a notification to a user via email or SMS, with optional WhatsApp, optional in-app banner, with a delay, with a priority, with a category, and the ability to skip if the user has DND on.'*\n\nFirst-draft signature?",
+        "options": [
+          {
+            "id": "a",
+            "label": "`def send_notification(user, message, email=True, sms=False, whatsapp=False, in_app=False, delay_sec=0, priority='normal', category='general', skip_if_dnd=True):`",
+            "correct": false,
+            "explain": "This is the *'Christmas tree signature'* the lesson warned about. Nine arguments, mixed positional and keyword, no clear contract. Six months from now, every call site is `send_notification(u, m, True, False, True, False, 0, 'normal', 'billing', True)` and nobody can tell which boolean is which. Vidya is sharpening her review pen.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "`def send_notification(user, message, *, channels: list[str], delay_sec: int = 0, priority: Priority = Priority.NORMAL, category: Category = Category.GENERAL, respect_dnd: bool = True) -> NotificationResult:`",
+            "correct": true,
+            "explain": "Keyword-only after `*`, so call sites are self-documenting. `channels` is a list (open-set, not 4 booleans). Enums for the closed-set categoricals. Type hints. Return type. This is the contract version. Vidya nods.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "`def send_notification(user, message, **opts):` and let callers pass whatever.",
+            "correct": false,
+            "explain": "Hides the contract entirely. The reader of `send_notification` has no idea what `opts` accepts. The lesson named this anti-pattern: `**kwargs` is for *genuine* variadic forwarding, not for laziness about defining a signature.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "`def send_notification(user, message, channels=['email'], delay_sec=0, priority='normal', category='general'):`",
+            "correct": false,
+            "explain": "Hits the **mutable default trap** from lesson 1 — `channels=['email']` is the same list across calls, and any `.append` will leak. Also no keyword-only, no return type, no enums. Partial credit for trying to consolidate channels into a list.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Sneha pings: *'Wait, also — can it sometimes be scheduled for a specific datetime instead of a delay? And can it batch with other notifications to the same user?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add `send_at: datetime | None = None` and `batch_with: list[NotificationId] | None = None` to the same signature.",
+            "correct": false,
+            "explain": "You're starting to grow the Christmas tree back. `delay_sec` *or* `send_at`, but not both, is a state machine smuggled into a parameter list. Same with batching. The signature should not encode mutually exclusive modes.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Split into two: `send_notification(...)` for immediate/delayed and `schedule_notification(send_at, ...)` for absolute-time. Batching becomes its own function: `batch_notifications(notifications: list[NotificationDraft])`.",
+            "correct": true,
+            "explain": "Excellent. *One function, one job.* When mutually exclusive modes show up, that's the universe telling you it's two functions. Batching is a different operation entirely — it takes drafts, not single sends. Vidya: *'Yes.'*",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Add a `mode: Literal['delay', 'absolute', 'batch']` arg and validate inside.",
+            "correct": false,
+            "explain": "Better than option (a) but you've moved the state machine from the type system into a runtime check. Now your function body is a giant `if mode == ...` and the caller has to read your function to know which other args are valid in which mode.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Refuse the change. Tell Sneha the spec is too big.",
+            "correct": false,
+            "explain": "Refusing scope changes is a PM-relationship-destroying move. The right answer is *'yes, and here's the cleaner shape.'* Disagreeing on the shape is fine; refusing the work is not.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Sneha approves the split. Now Vidya: *'Show me how the function returns. Success vs failure vs partial — what does the caller get?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "`-> bool` — `True` if sent, `False` if not.",
+            "correct": false,
+            "explain": "Throws away every useful piece of information. *Why* did it fail? Which channel? Was it a retryable failure or a permanent one? `bool` returns are the *'we'll figure it out from the logs'* anti-pattern.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "`-> NotificationResult` where `NotificationResult` is a typed result with `status: Literal['sent', 'partial', 'failed']`, `delivered_channels: list[str]`, `failed_channels: list[ChannelFailure]`, and `retryable: bool`.",
+            "correct": true,
+            "explain": "This is the *Result-shape* return. The caller can branch on `status`, log the failures, and decide whether to retry. Aligns with the project's `Result<T,E>` rule from CLAUDE.md and the lesson's *'one return shape'* principle.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "`-> None` and raise an exception on failure.",
+            "correct": false,
+            "explain": "Mixes the success path with the framework boundary. Exceptions for *exceptional* states; partial-failure of a multi-channel send is a *normal* state. The lesson and CLAUDE.md both say: return Result, don't throw.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "`-> dict` — flexible, callers can read whatever keys they need.",
+            "correct": false,
+            "explain": "Untyped dicts are signature death. Six months from now, nobody knows which keys are guaranteed. This is the *'stringly typed'* anti-pattern in dict form.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final stage. Sneha: *'One last thing — for the in-app channel, the function needs to write to the in-app feed table. Should that be inside `send_notification`?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "Yes. Inline the write. One function, one call, simpler for callers.",
+            "correct": false,
+            "explain": "*'One function does everything'* is the opposite of *'one job.'* Now `send_notification` is a notification dispatcher *and* a database writer *and* a transaction manager. It's also un-testable without a real DB.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "No. `send_notification` calls `in_app_channel.deliver(user, message)`, and `InAppChannel` is a separate class with the DB write. The notification function knows nothing about the storage layer.",
+            "correct": true,
+            "explain": "Single responsibility. Each channel is a strategy. `send_notification` orchestrates; channels execute. Testable with a fake `InAppChannel`. Vidya: *'This is the function I would approve in five minutes.'*",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Yes, but only if the DB write is inside a `try/except` that swallows failures.",
+            "correct": false,
+            "explain": "Swallowed exceptions are how data corruption ships silently. Worse, you've coupled the function to the DB *and* hidden the failure. Two anti-patterns for the price of one.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Inline the write but put it behind a feature flag for emergency removal.",
+            "correct": false,
+            "explain": "Feature flags are for behavior changes, not for compensating for bad architecture. Partial credit for caring about reversibility, but the right reversibility is *'replace one channel implementation,'* not *'flip a flag in production.'*",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. You held the line on the signature, split the function when the spec asked for two modes, returned a typed Result, and isolated the storage layer behind a channel abstraction. Vidya forwards the design doc to the eng-all channel: *'this is the standard.'* Sneha gets her feature, you get your weekend, and nobody gets paged at quarter-end.",
+      "good": "B-tier. The signature is cleaner than the first draft, you caught the mutable-default trap and the Christmas tree, and the function is roughly testable. Vidya leaves three review comments and signs off. The next iteration will get the rest.",
+      "learn": "C-tier — but the design instincts are learnable in a way the bugs aren't. Re-read the function-design lesson. The two questions to ask of every signature: (1) *can the caller read this without opening my code?* and (2) *is there exactly one job here, or did two jobs sneak in?* If either answer is no, refactor before you ship."
+    }
+  }
+}

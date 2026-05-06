@@ -1,0 +1,141 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ₹4.2L Hospital Bill That Cost ₹11L",
+    "source": "Freelance UI designer in Indore, anonymous, shared via the FIRE-walla Falguni Substack reader mailbag",
+    "date": "August 2024",
+    "story": "In June 2024 a 36-year-old freelancer got a 2am call: her father had collapsed in Indore. ICU, three days, ventilator, finally stable. The hospital handed her a bill of **₹4.2L**.\n\nShe had no emergency fund. She had a Zerodha account with **₹14.8L** in equity mutual funds, accumulated over six years of disciplined SIPs.\n\nThe market was, of course, **down 11% from the May peak** that week. She panic-redeemed enough to clear the bill on a Tuesday morning. The redemption settled at the worst price of the cycle — **22% below where she'd later sell**.\n\nThe forensics, six months on:\n\n- Realised loss vs. holding through: **~₹3.1L** (the units she sold rebounded 22%)\n- Tax on the gains she *did* have: **₹38K** STCG she could have avoided with a 6-month emergency fund\n- Insurance reimbursement she didn't claim in time because she was 'too stressed': **₹1.4L**\n- A health-insurance top-up she has now bought, retroactively useless: **₹19K/year premium**\n\nTotal cost of *not having* a six-month emergency fund: roughly **₹5L on top of the ₹4.2L bill**, and a relationship with the equity market that took 18 months to recover. The bill was ₹4.2L. The lesson cost ₹11L.",
+    "takeaway": "The job of an emergency fund is not to earn returns. It is to stop you from selling your real returns at the worst possible moment."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "The ₹50K Surplus War",
+    "setup": "Aarav, still 31, is six weeks past his Staff promotion. SIP is now **₹80K/month** (good job last battle). Wedding is in **12 months**. After the SIP, EMIs, rent and household, he has **₹50K of pure monthly surplus** to deploy.\n\nThree things are competing for it:\n\n1. **Wedding kitty** — Meera's family expects a contribution of about **₹6L** from his side\n2. **Emergency fund** — current balance: **₹65K** in his savings account, no liquid funds, no FDs\n3. **An NPS Tier-1 contribution** his CA-uncle keeps pestering him to start for the ₹50K 80CCD(1B) deduction\n\nIt's Sunday night. He wants a single answer: where does the ₹50K go?",
+    "coach": {
+      "name": "FIRE-walla Falguni",
+      "role": "Ex-Deutsche Bank, retired at 41, runs a personal-finance Substack from Goa"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aarav's opener: *'CA-uncle says NPS first because of the tax deduction. Wedding is closest in time so wedding second. Emergency fund last because nothing's wrong right now. Sound right?'*\n\nWhat do you reply?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Sounds rational. Tax deduction first is the textbook answer.",
+            "correct": false,
+            "explain": "Textbook for someone who already has an emergency fund. For Aarav, putting money into NPS — which **locks until age 60** with limited partial withdrawal — when he has **₹65K of liquid cash** and a wedding 12 months away, is engineering a future panic-sale. Tax savings are worthless if you're forced to break a higher-return investment to cover a shock.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Wrong order. Emergency fund first, *then* wedding kitty, NPS only after both are sorted.",
+            "correct": true,
+            "explain": "Correct. The hierarchy is: **liquidity (emergency) → known short-term goals (wedding) → tax-optimised long-term (NPS)**. NPS is the *last* problem, not the first. A locked-in tax deduction can wait. A medical emergency at month 4 cannot.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Split it three ways: ₹17K each into NPS, wedding, emergency.",
+            "correct": false,
+            "explain": "The 'split-equal' answer is what people do when they want to feel responsible without being responsible. At ₹17K/month the emergency fund hits **₹2L in 12 months** — still nowhere near 6 months of expenses. Hierarchy beats balance.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aarav agrees. *'Fine. Emergency fund first. How much, and in what?'* His monthly burn (rent + EMI + food + utilities + parents' upkeep) is **~₹1.4L/month**. His take-home is ₹3.6L.\n\nPick the target and the parking spot:",
+        "options": [
+          {
+            "id": "a",
+            "label": "₹4.2L (3× monthly burn) in his SBI savings account at 2.7% interest. Easy access.",
+            "correct": false,
+            "explain": "Right shape, wrong size and wrong vehicle. **3 months is too thin** for someone supporting parents and 12 months from a wedding. Savings account at 2.7% loses **~3.5% real every year** to inflation. Right answer is 6 months minimum, parked smarter.",
+            "points": 1
+          },
+          {
+            "id": "b",
+            "label": "₹8.4L (6× monthly burn) split: ₹1.5L sweep-FD for instant access, ₹6.9L in a liquid mutual fund. Build it over 14 months at ₹50K/month while pausing the wedding allocation.",
+            "correct": true,
+            "explain": "Right size, right structure. **6 months of burn** absorbs job loss + medical + family shock. **Liquid funds yield 6.5-7% with T+1 redemption**, sweep-FD for the 'I need it tonight' tier. The 14-month build runs in parallel to wedding planning — by the time Meera walks in, Aarav has the fund *and* the kitty.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "₹8.4L target, but in equity mutual funds — same SIP discipline, better long-term returns.",
+            "correct": false,
+            "explain": "This is the i-banker mistake from the case study, in slow motion. **Equity is not an emergency fund.** The day he needs the money is statistically the day the market is down. Equity funds are for goals 7+ years out. Emergency fund needs to be *boring* by design.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "₹8.4L target, all of it in a 5-year FD for the highest interest rate.",
+            "correct": false,
+            "explain": "Defeats the entire purpose. Premature FD breakage = penalty + tax inefficiency + 24-48hr access lag. The whole point of 'liquid' is *liquid*. Locking emergency money is like buying a fire extinguisher and chaining it to the wall outside.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "It is now ten days later. Aarav texts: *'Meera's mom called. The wedding budget went up — they want a destination thing in Udaipur, our share is now ₹9L not ₹6L. Should I pause the emergency fund build and redirect to wedding?'*\n\nThis is the test.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Yes, pause the EF build. Wedding is in 12 months, EF can resume after.",
+            "correct": false,
+            "explain": "This is exactly the scenario the freelancer in the field notes was in — *'I'll get the EF later, this thing is more urgent.'* There is **always a more urgent thing**. If the EF gets paused for the wedding, it gets paused for the honeymoon, then the new flat, then the baby. The EF is never built.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "No. The EF is non-negotiable. The wedding budget gets renegotiated *down*, or his side contributes less, or the venue changes — but the ₹50K/month into the EF does not stop.",
+            "correct": true,
+            "explain": "Correct, and worth saying out loud. The EF protects the *marriage*, not just Aarav. A couple that starts married life with no liquid cushion will fight about money within 18 months — that is empirically the #1 fight in Indian marriages of this cohort. A cheaper wedding with a cushion beats a fancier wedding with none.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Compromise: ₹30K to wedding, ₹20K to EF. Build slower but make both happen.",
+            "correct": false,
+            "explain": "Now the EF takes **35 months** to hit 6 months of burn — and somewhere in those 35 months a real shock will arrive. A half-built EF in month 18 is exactly when the freelancer's father had his ICU emergency. You either build the EF *first* and finish it, or you don't really have one.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final question. Aarav, accepting the plan, asks: *'OK once the EF is built — 14 months from now — do I keep adding to it as my income grows, or freeze it?'*",
+        "options": [
+          {
+            "id": "a",
+            "label": "Keep adding indefinitely. Bigger cushion, bigger safety.",
+            "correct": false,
+            "explain": "After 6-9 months of expenses, additional EF money is **dead capital** earning 6.5% pre-tax against equity's 11-13% long-term. The EF is insurance, not an investment. You don't keep buying more fire extinguishers once your flat is covered.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Freeze the rupee amount, but recompute it once a year against new monthly burn. As his expenses grow, top it up. Once at target, redirect new surplus to investments.",
+            "correct": true,
+            "explain": "Exactly. The EF is denominated in *months of burn*, not rupees. When Aarav's child arrives and burn jumps from ₹1.4L to ₹2.1L/month, the EF target jumps from ₹8.4L to ₹12.6L — top it up, then redirect. Annual recompute, not perpetual contribution.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Freeze it permanently at ₹8.4L. That's the number, that's the number.",
+            "correct": false,
+            "explain": "Inflation alone erodes that ₹8.4L into ~5 months of burn within 4 years. And if his life changes — kid, parent care, sabbatical — the cushion is now too small. The amount must move with the life.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Aarav is going to walk into his wedding with a real cushion, a real plan, and one *less* thing to fight about. This is the difference between starting marriage on offence and starting on defence.",
+      "good": "Mostly right. The EF will get built but probably take 22 months instead of 14. Some shock in month 16 will hurt more than it should. Aarav will recover.",
+      "learn": "Aarav now thinks NPS is the answer to liquidity. When the wedding bill spikes or his father needs medical care, he will sell equity at the worst price. Re-read the freelancer's story — that is Aarav in 18 months."
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Number They Almost Missed",
+    "source": "A couple in Adyar, Chennai (Maya, 32, content strategist; Arjun, 33, analytics lead) — interviewed for a podcast pilot, written up with consent",
+    "date": "January 2026",
+    "story": "Maya and Arjun ran a 14-day shared gratitude experiment in November 2025. Three numbers, daily, in a shared Google Sheet at 9 p.m.:\n\n1. **Cantril ladder (0-10)**: where am I today.\n2. **PANAS+ rough proxy (0-25)**: how many genuinely positive moments today.\n3. **Sleep hours (decimal)**: from Maya's Apple Watch and Arjun's Mi band.\n\nThe gratitude ritual: each writes down 3 specific things that happened that day, no abstractions allowed ('coffee with Anika at 11' counts; 'feeling grateful' does not).\n\nBy day 7 both their Cantril ladders had moved: Maya 6.4 to 7.1, Arjun 5.9 to 6.8. PANAS+ moved roughly in parallel. Big celebratory dinner on day 7. They almost called the experiment a win and stopped.\n\nWhat they nearly missed: Maya's sleep had drifted from 7.4h baseline to 6.6h — a quiet 0.8h drop. The gratitude habit was happening at 9 p.m., spawning 25-min phone discussions, pushing bedtime from 11:00 to 11:45. The Cantril gain was real. The sleep loss was creeping. By day 13 Maya noticed it because she felt 'happy but foggy' and finally cross-referenced the columns.\n\nThe fix on day 14: move the gratitude ritual to 8:30 p.m. and cap discussion at 10 minutes. They re-ran for 14 more days. Both numbers held and the sleep went back to 7.3.",
+    "takeaway": "If you only track the number you expect to move, you will miss the number that breaks. Three columns minimum, and read the ones you didn't predict to change."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Aarav's 14-Day Readout",
+    "setup": "It's been two weeks. Aarav ran his own diagnostic experiment with three numbers and now sends you the spreadsheet:\n\n> *yaar 14 days done. Cantril ladder up 1.0 (6.2 to 7.2). PANAS+ up 5 (12 to 17). Sleep DOWN 0.6 hours (7.4 to 6.8). I'm confused — am I winning or losing? Lesson 5 said something about reading all three but I forget the playbook. Help me interpret and pick the next move.*\n\nYou just finished Lesson 5. Time to read the data like a grown-up.",
+    "coach": {
+      "name": "Therapist-Aunty Tarini",
+      "role": "Your no-nonsense Pune-based pop-psychology coach"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First call: how do you frame the result for Aarav?",
+        "options": [
+          {
+            "id": "a",
+            "label": "'You're winning. Cantril and PANAS+ both up, that's the signal.'",
+            "correct": false,
+            "explain": "Two of three numbers up is partial evidence, not the result. The lesson was clear: a drift on the unexpected variable is the signal you almost missed in the field notes.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "'You're losing. Sleep matters most, ignore the others.'",
+            "correct": false,
+            "explain": "Sleep matters but you're throwing away two valid signals. The diagnostic is a *triangulation*, not a hierarchy.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "'Mixed result. Two real wins and one quiet loss. The interesting question is whether the wins *caused* the loss — likely yes given timing — and whether you can keep the wins without the loss.'",
+            "correct": true,
+            "explain": "This is the lesson's read-all-three move. Acknowledge both signals, then ask the causal question. Same shape as Maya's 9 p.m. gratitude pushing bedtime to 11:45.",
+            "points": 3
+          },
+          {
+            "id": "d",
+            "label": "'14 days isn't enough data, run for 30.'",
+            "correct": false,
+            "explain": "Punting on 14 days of clean signal because you want more is paralysis dressed as rigour. The patterns are visible.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You ask Aarav for the timestamps. He confesses: gratitude journal at 11:15 p.m. (in bed), Tuesday call with Suresh ran 9 p.m. to 11 p.m. (over the 90-min cap). Diagnosis?",
+        "options": [
+          {
+            "id": "a",
+            "label": "The well-being habits themselves are causing the sleep drop. Move both: gratitude to 9 p.m., cap Tuesday call at 90 min hard.",
+            "correct": true,
+            "explain": "The mechanism is identical to the Maya-Arjun field note. Good rituals at the wrong time become a sleep tax. Move the ritual, keep the gain. Lesson 5's 'read across columns then fix the timing' move.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Drop the gratitude practice, sleep is more important.",
+            "correct": false,
+            "explain": "Throwing away a habit that produced +1 ladder and +5 PANAS+ is the over-correction the lesson warned against. Adjust before you abandon.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Take melatonin to compensate.",
+            "correct": false,
+            "explain": "Pharmacological patch on a behavioural problem. Tarini disapproves. Move the ritual.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Sleep less, the mood gains are worth it.",
+            "correct": false,
+            "explain": "Trading 0.6h of sleep nightly for 1 ladder point is a terrible exchange rate that compounds badly over 90 days.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aarav re-runs for 14 more days with the timing fix. Result: Cantril 7.3 (held), PANAS+ 18 (held), sleep 7.2h (recovered). He asks: 'Now what?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "Stop tracking, the experiment worked.",
+            "correct": false,
+            "explain": "The diagnostic is the early-warning system. Turning it off after 28 days means the next drift goes undetected for months. Lesson 5 explicitly framed tracking as a permanent (low-cost) layer, not a sprint.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Drop to weekly tracking (one Sunday entry: 7-day average ladder, PANAS+, sleep). Quarterly: re-run a 14-day daily sprint. Add a fourth number tied to a new variable he wants to test.",
+            "correct": true,
+            "explain": "This is the lesson's sustainable cadence model: high-frequency for diagnosis sprints, low-frequency for monitoring, periodic re-sprints. Adding a fourth variable keeps the system informative as life changes.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Keep daily tracking forever.",
+            "correct": false,
+            "explain": "Daily tracking has high adherence cost. Most people quit by week 6. The lesson explicitly designed for sustainability.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Add 5 new metrics to track.",
+            "correct": false,
+            "explain": "Metric bloat kills tracking habits faster than fatigue. Three numbers is the lesson's recommended ceiling for daily; adding 5 is a recipe for abandonment.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final call. Aarav asks: 'How do I know if my baseline has actually shifted, vs me just being on a good streak?'",
+        "options": [
+          {
+            "id": "a",
+            "label": "Compare a 28-day rolling average to his pre-experiment baseline (6.2). Sustained delta of >=0.5 ladder points across 2 separate 28-day windows = real shift. Single good streak doesn't qualify.",
+            "correct": true,
+            "explain": "Two independent windows is the lesson's 'proof of baseline shift' criterion. Single streaks regress to mean and produce false confidence — exactly the trap Lesson 1 (miswanting) warned against.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "If he feels better, the baseline shifted.",
+            "correct": false,
+            "explain": "The whole point of measurement is to override 'feels better'. Vibe-based baseline assessment is what got him into miswanting in Lesson 1.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Wait one year, then judge.",
+            "correct": false,
+            "explain": "A year is too long for actionable feedback. The lesson recommended ~28-day windows specifically because they're long enough to denoise and short enough to act on.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Compare to the global average for engineers his age.",
+            "correct": false,
+            "explain": "Comparing to a population baseline ignores his individual set point. The lesson was insistent: n=1 longitudinal beats n=many cross-sectional for personal diagnostics.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "12/12. You read all three columns, caught the unexpected drift, fixed the timing without abandoning the gains, set a sustainable monitoring cadence and gave him a real baseline-shift criterion. Aarav graduates with data, not vibes. Tarini sends a final 'shabaash beta' from Pune and considers her work here done.",
+      "good": "8-11. You handled the data well but rushed the cadence or the baseline criterion. The diagnostic only earns its keep if the read-out becomes routine.",
+      "learn": "Under 8. You either celebrated incomplete wins or over-corrected on the loss. Re-read the read-across-columns section; the discipline is to look at the number you didn't expect to move."
+    }
+  }
+}

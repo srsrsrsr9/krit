@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 11 Days, Then a Quiet Rollback",
+    "source": "Anonymous, CMIO at a tertiary-care hospital chain in South India",
+    "date": "June 2025",
+    "story": "**Saraswati Healthcare**, a 600-bed multi-specialty group with hospitals in Chennai and Coimbatore, piloted an AI feature that auto-drafted **discharge summaries** from the structured EMR record plus the doctor's progress notes. The vendor had pitched it as 'doctor saves 12 minutes per discharge, scales linearly with bed count.' Procurement loved the math. The pilot launched on a Monday across two wards.\n\nBy Wednesday, attending physicians were complaining the drafts confidently invented medications the patient had **never been on**. By Friday, a draft for a post-cardiac-surgery patient listed a contraindicated beta-blocker that the patient had explicitly refused (documented in the nursing notes the AI had not been wired to read). A senior consultant caught it during sign-off; the patient was not harmed.\n\nOn day 11, the CMIO (the clinical lead in the field-notes byline) pulled the plug. The post-mortem found three things: clinicians could not visually distinguish AI drafts from human drafts in the UI; there was no structured 'I edited this' signal back to the model; and the time savings (real, about 8 minutes per discharge) was never enough to outweigh the **constant low-grade vigilance cost** of reading every line for hallucinations.\n\nThe hospital later relaunched the feature as **'AI suggests, doctor authors,'** with a side-by-side diff view, mandatory clinician initialing of every section, and zero auto-save. Adoption was slower but stuck. The original 'auto-draft' framing never came back.",
+    "takeaway": "Tool-fit is not 'is the model capable of generating output X.' It is 'does the human in the loop have the ability and the incentive to catch errors before they harm someone.' If the answer is no, the right call is refuse, not ship-with-disclaimer."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Triaging the Q3 AI Roadmap",
+    "setup": "It is July 2026. The support bot from March is live and stable. Riya forwards Velora's leadership wishlist for Q3: **five new AI features.** Ankit pulls you into a room with a whiteboard. 'For each one, tell me: ship as autonomous AI, ship with human-in-the-loop, or refuse. Defend your call.'",
+    "coach": {
+      "name": "Ankit",
+      "role": "CTO, Velora"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Feature 1: **'AI auto-categorises customer support tickets'** (e.g. 'this is a KYC question' vs 'this is a repayment query') so they route to the right queue. Volume is 8,000 tickets per day. What is your call?",
+        "options": [
+          {
+            "id": "a",
+            "label": "**Ship autonomous.** Cost of mis-routing is a 30-second delay; routing accuracy at 95+ percent in pilot; reversibility is trivial (queue agent re-routes).",
+            "correct": true,
+            "explain": "Textbook ship-it. Low stakes, reversible, high volume, the human cost-benefit math obviously favours automation. Even at 90 percent accuracy you save 7,200 humans-touched-tickets per day. This is exactly the case AI was built for.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Ship with human-in-the-loop on every ticket.",
+            "correct": false,
+            "explain": "You've now built an AI feature whose throughput is bottlenecked by humans. You spent the AI dollars and got no labour leverage. HITL is for high-stakes calls, not for low-stakes routing.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Refuse. Hire more humans to triage.",
+            "correct": false,
+            "explain": "You are turning down a 90-plus percent margin gain on a low-risk task. Tool-fit is good here.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Ship autonomous but only on tickets the model is 'very confident' about.",
+            "correct": false,
+            "explain": "Defensible but adds a confidence-calibration project on top. For a low-stakes, easily-reversible task, just ship the simple version and watch the metric. Half-credit.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Feature 2: **'AI drafts the rejection email when a loan is rejected,'** explaining the reason in friendly language. Volume: 1,200 per day. What's your call?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ship fully autonomous. Email is just text.",
+            "correct": false,
+            "explain": "Loan-rejection reasons are regulated under RBI fair-practice norms. Wrong or vague reasoning can trigger an Ombudsman complaint. The 'just text' framing under-rates the legal surface.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "**HITL: AI drafts, credit ops reviews and sends.** Add a structured 'edit reason' field so the model learns from rejections of its drafts.",
+            "correct": true,
+            "explain": "Right spot on the spectrum. The AI does the writing (high leverage) but a human owns the regulatory accountability (legal cover). The structured edit signal is the bonus, it gives you eval data for free, which sets up Lesson 5.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Refuse. Rejection emails are too sensitive.",
+            "correct": false,
+            "explain": "Over-conservative. With a human reviewing every send, the autonomy risk is bounded and the time savings are real (Saraswati got a real 8 minutes per discharge; Velora will get similar).",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Ship autonomous but only at certain confidence levels.",
+            "correct": false,
+            "explain": "Confidence calibration is shaky and the regulatory exposure is binary, you either had a human approve or you didn't. Don't lean on the model's self-reported certainty for legal cover.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Feature 3: **'AI auto-approves loan top-ups for existing customers up to 50,000 rupees'** based on repayment history. Volume: ~300 per day. Reversibility: hard (money disbursed is hard to claw back). What's your call?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ship autonomous. The amounts are small.",
+            "correct": false,
+            "explain": "50K times 300 per day is 1.5 crore per day in disbursements. A 1 percent hallucination rate on credit decisions is 4.5 lakh per day going to the wrong people. 'Small' is in the eye of the regulator.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "**Refuse the autonomous version.** Counter-propose: AI scores and recommends; a credit officer one-click-approves. Or: keep it rules-based (deterministic), no LLM in the loop.",
+            "correct": true,
+            "explain": "Two right answers, both better than autonomous LLM. Either keep the human, or keep the LLM out and use deterministic rules. The wrong move is to put a probabilistic system in charge of irreversible regulated money decisions, which is also the lesson of Saraswati's discharge summaries.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Ship autonomous with a daily cap of 50 lakh.",
+            "correct": false,
+            "explain": "A cap limits total exposure but does not limit the *per-customer* harm. Wrong customer gets the wrong loan; the regulator does not care that the daily total was bounded.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Ship HITL with a credit officer approving each one.",
+            "correct": false,
+            "explain": "Acceptable, but at 300 per day this is a meaningful human workload. The deterministic-rules-engine alternative may be cheaper *and* safer. Half-credit because HITL is a defensible second choice.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Feature 4: **'AI generates personalised marketing copy for SMS campaigns,'** 50,000 sends per day. Cost of a bad SMS: low (annoyed customer, possible TRAI complaint if egregious). Reversibility: bad SMS cannot be unsent.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ship autonomous with a hard-coded template + LLM-generated personalisation tokens (name, recent product). Plus a moderation pass on every send.",
+            "correct": true,
+            "explain": "Smart hybrid. The template carries the regulatory and brand load (deterministic). The LLM only fills in personalisation, where the worst case is 'awkward' not 'unlawful.' Moderation pass catches the rare egregious miss. This is how you ship LLMs into high-volume customer-facing surfaces without losing sleep.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Ship fully autonomous: model writes the whole SMS each time.",
+            "correct": false,
+            "explain": "50K sends a day means you will eventually generate something off-brand or TRAI-flaggable. The constraint of the template is doing useful work; do not throw it away for a small marginal lift in 'creativity.'",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "HITL on every SMS.",
+            "correct": false,
+            "explain": "50K human reviews per day is not a workflow, it is a hostage situation. Wrong tier of oversight for the stakes.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Refuse. Marketing should be human-written.",
+            "correct": false,
+            "explain": "Throws away real volume leverage on a task whose downside is bounded.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You triaged all four cleanly: ship the routing, HITL the rejection email, refuse-or-rules the auto-approval, hybrid the SMS. Ankit takes your call to the leadership offsite. The Q3 AI roadmap ships with zero regulatory surprises and a 31 percent labour-cost reduction in support ops.",
+      "good": "Three out of four right, with one over- or under-conservative call. Re-read the spectrum framework (autonomous / HITL / refuse) and the reversibility checklist before the next roadmap meeting.",
+      "learn": "You either shipped the auto-approval or refused the routing. Both are the wrong end of the spectrum. Read the Saraswati story again, then redo the triage. The question is never 'can the model do it,' it is always 'who owns the cost when it is wrong.'"
+    }
+  }
+}

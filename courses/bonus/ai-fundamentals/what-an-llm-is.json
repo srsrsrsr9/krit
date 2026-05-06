@@ -1,0 +1,128 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Pitch That Died at Question One",
+    "source": "Anonymous, ex-investor at a Mumbai growth fund",
+    "date": "March 2024",
+    "story": "**Stitchly**, a Series A apparel-tech startup in Bandra, walked into a partner meeting with a deck that promised their AI agent could 'handle the entire customer journey end to end, from sizing to returns to dispute resolution.' The CEO ran a live demo on the partner's laptop. First question from the GP, deliberately mundane: 'My order #STC-44982 hasn't arrived in 9 days, what's going on?'\n\nThe model confidently invented a tracking ID, claimed the package was at a Hyderabad sorting hub (the order didn't exist), then offered a 15 percent voucher. The CEO laughed it off as 'a sandbox issue.' Second question: 'What's your refund policy for damaged silk?' The model hallucinated a 30-day window. Stitchly's actual policy was 7 days.\n\nThe round did not close. Post-mortem revealed the team had wrapped GPT-4 in a thin prompt and called it an 'agentic platform,' with no tools, no retrieval, no policy lookup. They had confused **'sounds fluent'** with **'knows things.'** The fund passed, and within four months Stitchly had pivoted to a B2B styling tool with a much narrower AI scope and finally raised at a 40 percent down round.",
+    "takeaway": "An LLM is a next-token predictor with no live database access. If your demo depends on facts the model wasn't trained on, you don't have a product, you have a generator of confident fiction."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Velora's First AI Feature",
+    "setup": "It is January 2026. You have just joined **Velora**, a Bengaluru fintech doing UPI-based small-business lending. Your CTO **Ankit** corners you in the kitchen with a coffee and says: 'Board wants an AI feature shipped by end of Q1. Riya the PM is drafting a list. I want you to scope what we say yes to and what we politely refuse, based on what an LLM actually is.'",
+    "coach": {
+      "name": "Ankit",
+      "role": "CTO, Velora"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Riya's first proposal: **'AI loan officer'** that reads the customer's UPI transaction history (live) and approves or rejects loans up to 5 lakh rupees, fully automated. What do you tell Ankit?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ship it. LLMs are great at numbers and reasoning.",
+            "correct": false,
+            "explain": "LLMs are notoriously brittle on multi-step arithmetic over long tables, and 'autonomous credit decision up to 5 lakh' is an RBI-regulated decision. You are stacking three failure modes: hallucinated numbers, unauditable reasoning, and direct regulatory exposure.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Refuse the autonomous version. Counter-propose: LLM drafts a 1-page memo summarising the UPI history, a human credit officer approves.",
+            "correct": true,
+            "explain": "Correct frame. The LLM is good at *summarising* and *drafting*; it is bad at *deciding* under regulation. Keep the human in the loop where the legal accountability sits. This is the human-in-the-loop pattern from Lesson 4 in skeleton form.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "Refuse entirely. AI cannot touch lending.",
+            "correct": false,
+            "explain": "Too absolute. The drafting and summarisation steps are genuinely useful and low-risk. The job is to draw the line at the *decision*, not refuse the whole category.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Ship it but with a confidence threshold; only auto-approve if the model is 'very confident.'",
+            "correct": false,
+            "explain": "LLMs are famously poorly calibrated. A model saying 'I am 95 percent confident' is closer to vibes than probability. Confidence is not a substitute for human accountability on a regulated decision.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Riya's second proposal: a **support chatbot** that answers questions about Velora's lending policies, rates, and disbursement timelines. The policies live in a 60-page PDF that was last updated last month.",
+        "options": [
+          {
+            "id": "a",
+            "label": "Drop GPT-4 in with a system prompt and ship.",
+            "correct": false,
+            "explain": "GPT-4 has no idea what is in your 60-page PDF. It will pattern-match to generic fintech policies and be wrong half the time. This is the Stitchly mistake, exactly.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "Fine-tune a model on the PDF.",
+            "correct": false,
+            "explain": "Fine-tuning teaches *style*, not *facts that update monthly*. Next quarter's rate change would require retraining. Wrong tool. RAG is the right tool here, and you'll formalise that in Lesson 3.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Build retrieval over the PDF, force citations, and ship with a fallback to a human agent if confidence is low.",
+            "correct": true,
+            "explain": "This matches what an LLM actually is: a great *language interface* over *retrieved facts*. The model never has to remember; it just has to read and quote. Citations let users (and you) audit. We will deepen this in Lesson 3.",
+            "points": 3
+          },
+          {
+            "id": "d",
+            "label": "Refuse, hire more support staff.",
+            "correct": false,
+            "explain": "Over-conservative. Q&A over your own documented policies is exactly the use case LLMs were born for, *if* you architect retrieval correctly.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Riya's third proposal: an **'AI relationship manager'** that proactively calls customers, holds a real-time voice conversation about cross-sell, and *closes a sale of a top-up loan on the call*. What is your read?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Refuse. This combines voice (latency-fragile), sales (regulated), and autonomous closing (no human accountability) in one feature.",
+            "correct": true,
+            "explain": "All three risks compound. Voice agents in 2026 are still flaky on Indian-English accents and code-mix. 'Closing a sale' on a regulated credit product without a human signature is a compliance nightmare. Three red flags is one too many.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Ship with disclaimers in the call recording.",
+            "correct": false,
+            "explain": "Disclaimers do not absolve you of mis-selling under RBI's fair-practice code. You're optimising the legal copy instead of the actual risk surface.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Ship voice-only, no closing; just qualify leads and hand off to a human.",
+            "correct": false,
+            "explain": "Defensible, but voice-LLM latency on Indian languages in 2026 is still unreliable enough that you'd be the case study. Better to start with text and earn the right to voice. Half-credit.",
+            "points": 2
+          },
+          {
+            "id": "d",
+            "label": "Ship the full thing as 'beta' to 100 customers.",
+            "correct": false,
+            "explain": "'Beta' is not a regulatory shield. The 100 customers experiencing a hallucinated rate quote will not care about the label.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Ankit nods slowly and adds you to the AI Steering Committee. You have correctly applied the LLM mental model: great at language, brittle at facts, terrible at regulated autonomous decisions. Ship the support bot with RAG, refuse the rest, propose a human-in-the-loop loan-memo tool as a counter.",
+      "good": "Ankit is mostly satisfied. You correctly refused at least one of the dangerous proposals and protected Velora from the obvious traps. Re-read the LLM mental model section before the next steering meeting.",
+      "learn": "Ankit pulls you aside: 'You're treating the LLM like a database. It isn't one. Go back to the fundamentals before you scope any more features.' Re-read this lesson and try the battle again."
+    }
+  }
+}
