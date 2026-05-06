@@ -75,6 +75,31 @@ BLOCK SCHEMAS (output JSON must conform exactly)
 - sortableSteps     { "type":"sortableSteps", "prompt":string, "items":[{"id":string,"label":string,"detail"?:string}, ...], "hint"?:string }
                     NOTE: items MUST be in correct order; UI shuffles them.
 
+VISUAL + AUDIO + INTERACTIVE BLOCKS (use these heavily; aim for 6+ per lesson)
+- svgFigure         { "type":"svgFigure", "svg":string, "alt":string, "caption"?:string, "maxWidth"?:int }
+                    Inline SVG markup for concept diagrams. Keep palettes vivid and child-book-friendly. The renderer sanitizes
+                    the SVG; do not include scripts or external refs. Aim for 1-2 svgFigures per lesson section.
+- culturalAside     { "type":"culturalAside", "defaultLocale":"hi-IN",
+                      "variants": { "<locale>": { "title"?:string, "tone":"tip"|"info"|"warn"|"success", "md":string, "attribution"?:string } } }
+                    A swappable humor/culture box. For Indian audience use "hi-IN" with Hindi-English slang ("bhai", "scene yeh hai",
+                    "matlab", "literally chai-time stuff"). Keep it slapstick, not preachy. 2-3 per lesson; locale defaults to hi-IN.
+- embedAnimation    { "type":"embedAnimation", "src":string, "height"?:int, "caption"?:string, "fallbackImage"?:string }
+                    A sandbox-iframe to a self-contained HTML animation file under /public/courses/<slug>/anim/<file>.html.
+                    Use the standard placeholder path; the animation HTML is produced separately by the team.
+- chatScenario      { "type":"chatScenario",
+                      "coach": {"name":string, "role"?:string, "avatarSrc"?:string},
+                      "intro": [string, ...],
+                      "buckets": [{"id":string,"label":string,"tone":"danger"|"neutral"|"safe"}, ...] (2-4 items),
+                      "scenarios": [{"id":string,"situation":string,"correctBucketId":string,"explain":string}, ...] }
+                    Multi-turn chat coach with chip-button answers. Use for judgment training, ethics, awkward situations.
+                    Pick a coach name with personality (e.g. "Bhai-GPT", "Nani's Notes", "The Detective"). 3-5 scenarios is ideal.
+- lessonMeta        { "type":"lessonMeta", "audioUrl"?:string, "audioDurationSec"?:int,
+                      "audioChapters"?: [{"startSec":int,"label":string}, ...],
+                      "notesPdfUrl"?:string, "notesByline"?:string }
+                    Place as the FIRST block of every lesson. Renderer extracts it for the audio player + downloadable notes.
+                    Use placeholder paths: "/audio/<lesson-slug>.mp3" and "/notes/<lesson-slug>.pdf". Include audioChapters
+                    matching your major H2 sections so learners can scrub.
+
 DO NOT use these unless the course is SQL-specific:
 - joinExplorer, sqlPlayground, remotion (the existing Remotion compositions are SQL-only)
 
@@ -160,6 +185,10 @@ Reply with ONE valid JSON object — no prose, no markdown fence, no commentary.
 }
 
 QUALITY CHECKLIST (verify before emitting)
+[ ] Every lesson has a `lessonMeta` block as block #0 with audioUrl + notesPdfUrl placeholders.
+[ ] Every lesson has at least 1 `svgFigure` and at least 1 `embedAnimation`.
+[ ] Every lesson has 2-3 `culturalAside` blocks (defaultLocale "hi-IN").
+[ ] Every lesson has at least one `chatScenario` OR a comparable rich interactive.
 [ ] Every lesson has a mental model in the first third.
 [ ] Every lesson has at least one named pattern or trap.
 [ ] Every lesson has at least one interactive block.

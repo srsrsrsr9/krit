@@ -94,6 +94,13 @@ These are the only block types the renderer understands. Output JSON conforming 
 | `joinExplorer` | `{type, prompt?, left, right}` | SQL JOIN-only — don't use outside SQL courses. |
 | `sqlPlayground` | `{type, prompt, tables, starter?, expected?, hint?}` | SQL-only. Real in-browser execution. |
 | `remotion` | `{type, composition: <id>, durationFrames, fps, width, height, caption?, props}` | Use only with existing compositions: `sqlExecutionOrder`, `joinFlow`, `groupByCollapse`. Don't invent new ones. |
+| `svgFigure` | `{type, svg, alt, caption?, maxWidth?}` | Inline SVG concept diagrams. Vivid palette, sanitized at render. Aim for 1-2 per lesson section. |
+| `culturalAside` | `{type, defaultLocale, variants: { "<locale>": { title?, tone, md, attribution? } } }` | Locale-swappable humor box. Default `hi-IN` for Hindi-English slapstick analogies. 2-3 per lesson. |
+| `embedAnimation` | `{type, src, height?, caption?, fallbackImage?}` | Sandbox-iframe HTML animation under `/public/courses/<slug>/anim/`. Built externally (Gemini etc). One per lesson minimum. |
+| `chatScenario` | `{type, coach: {name, role?, avatarSrc?}, intro: string[], buckets: [{id, label, tone}], scenarios: [{id, situation, correctBucketId, explain}]}` | Coach + chip-button judgment training. Use for ethics/judgment/awkward-situation training. 3-5 scenarios. |
+| `lessonMeta` | `{type, audioUrl?, audioDurationSec?, audioChapters?, notesPdfUrl?, notesByline?}` | Place as block #0 of each lesson. Drives the per-lesson audio player + notes download button. |
+| `fieldNotes` | `{type, title, source, date?, story, takeaway}` | Premium closer #1. 150-250 word production case study from a fictional-but-specific Indian company. Place near end of each lesson, before bossBattle. |
+| `bossBattle` | `{type, title, setup, coach: {name, role?, avatarSrc?}, stages: [{id, prompt, options: [{id, label, correct, explain, points}]}], outcomes: {perfect, good, learn}}` | Premium closer #2. Multi-stage end-of-lesson interactive challenge with letter grades S/A/B/C. 3-4 stages. Reuse a recurring character across all 5 lessons in a course for binge-watch continuity. |
 
 **Output rule:** the `Lesson.blocks` field is an array of these objects. Strict JSON, double-quoted property names.
 
