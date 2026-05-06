@@ -22,3 +22,8 @@ prisma/*.db-journal
 
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+# Generated lesson audio (~300MB across all courses).
+# Regenerate with: npm run course:audio <course-slug>
+# See: docs/courses/<slug>/tts/gemini/_README.md for engine recommendations.
+public/audio/
