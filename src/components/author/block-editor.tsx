@@ -29,6 +29,13 @@ const BLOCK_LABEL: Record<BlockType, string> = {
   sortableSteps: "Sortable",
   joinExplorer: "JOIN explorer",
   sqlPlayground: "SQL playground",
+  svgFigure: "SVG figure",
+  culturalAside: "Cultural aside",
+  embedAnimation: "Embedded animation",
+  chatScenario: "Chat scenario",
+  lessonMeta: "Lesson meta",
+  bossBattle: "Boss battle",
+  fieldNotes: "Field notes",
 };
 
 function newBlock(type: BlockType): ContentBlock {
@@ -51,6 +58,13 @@ function newBlock(type: BlockType): ContentBlock {
     case "sortableSteps": return { type: "sortableSteps", prompt: "Drag into the right order.", items: [{ id: "a", label: "First" }, { id: "b", label: "Second" }] };
     case "joinExplorer": return { type: "joinExplorer", left: { name: "left", keyColumn: "id", rows: [{ id: 1 }] }, right: { name: "right", keyColumn: "id", rows: [{ id: 1 }] } };
     case "sqlPlayground": return { type: "sqlPlayground", prompt: "Write a query.", tables: [{ name: "t", columns: ["id"], rows: [[1]] }] };
+    case "svgFigure": return { type: "svgFigure", svg: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 60\"><rect width=\"100\" height=\"60\" fill=\"#eee\"/></svg>", alt: "Diagram" };
+    case "culturalAside": return { type: "culturalAside", defaultLocale: "hi-IN", variants: { "hi-IN": { tone: "tip", title: "Apna analogy", md: "Local-flavor explanation goes here." } } };
+    case "embedAnimation": return { type: "embedAnimation", src: "/courses/example/anim/example.html", height: 420 };
+    case "chatScenario": return { type: "chatScenario", coach: { name: "Coach" }, intro: ["Welcome."], buckets: [{ id: "a", label: "Yes", tone: "safe" }, { id: "b", label: "No", tone: "danger" }], scenarios: [{ id: "s1", situation: "Scenario text.", correctBucketId: "a", explain: "Why." }] };
+    case "lessonMeta": return { type: "lessonMeta" };
+    case "bossBattle": return { type: "bossBattle", title: "Boss Battle: …", setup: "Scenario opening.", coach: { name: "The Final Boss" }, stages: [{ id: "s1", prompt: "Pick the best move.", options: [{ id: "a", label: "Right answer", correct: true, explain: "Why this is correct.", points: 3 }, { id: "b", label: "Wrong answer", correct: false, explain: "Why this is wrong.", points: 0 }] }], outcomes: { perfect: "Perfect run.", good: "Strong run.", learn: "Worth a re-read." } };
+    case "fieldNotes": return { type: "fieldNotes", title: "Field Notes: …", source: "Anonymous engineer at a Bengaluru fintech", date: "April 2026", story: "Story body.", takeaway: "What this proves." };
   }
 }
 

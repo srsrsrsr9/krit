@@ -12,6 +12,13 @@ import { Textarea } from "@/components/ui/input";
 import { AnimatedTimelineBlock } from "./blocks/animated-timeline-block";
 import { SortableStepsBlock } from "./blocks/sortable-steps-block";
 import { JoinExplorerBlock } from "./blocks/join-explorer-block";
+import { SvgFigureBlock } from "./blocks/svg-figure-block";
+import { CulturalAsideBlock } from "./blocks/cultural-aside-block";
+import { EmbedAnimationBlock } from "./blocks/embed-animation-block";
+import { ChatScenarioBlock } from "./blocks/chat-scenario-block";
+import { LessonMetaBar } from "./blocks/lesson-meta-bar";
+import { BossBattleBlock } from "./blocks/boss-battle-block";
+import { FieldNotesBlock } from "./blocks/field-notes-block";
 
 // Lazy-load the heavy ones — Remotion + alasql shouldn't sit in the
 // initial lesson page bundle.
@@ -33,9 +40,22 @@ export function BlockRenderer({
   lessonId?: string;
   savedReflections?: Record<string, string>;
 }) {
+  // Extract the (at most one) lessonMeta block; render its bar above the
+  // rest. Renders nothing if the lesson didn't include one.
+  const meta = blocks.find((b) => b.type === "lessonMeta");
+  const rest = blocks.filter((b) => b.type !== "lessonMeta");
   return (
     <div className="prose-krit space-y-6">
-      {blocks.map((b, i) => (
+      {meta && meta.type === "lessonMeta" && (
+        <LessonMetaBar
+          audioUrl={meta.audioUrl}
+          audioDurationSec={meta.audioDurationSec}
+          audioChapters={meta.audioChapters}
+          notesPdfUrl={meta.notesPdfUrl}
+          notesByline={meta.notesByline}
+        />
+      )}
+      {rest.map((b, i) => (
         <BlockOne key={i} block={b} lessonId={lessonId} savedReflections={savedReflections ?? {}} />
       ))}
     </div>
@@ -102,6 +122,21 @@ function BlockOne({
       return <JoinExplorerBlock prompt={block.prompt} left={block.left} right={block.right} />;
     case "sqlPlayground":
       return <SqlPlaygroundBlock prompt={block.prompt} tables={block.tables} starter={block.starter} expected={block.expected} hint={block.hint} />;
+    case "svgFigure":
+      return <SvgFigureBlock svg={block.svg} alt={block.alt} caption={block.caption} maxWidth={block.maxWidth} />;
+    case "culturalAside":
+      return <CulturalAsideBlock defaultLocale={block.defaultLocale} variants={block.variants} />;
+    case "embedAnimation":
+      return <EmbedAnimationBlock src={block.src} height={block.height} caption={block.caption} fallbackImage={block.fallbackImage} />;
+    case "chatScenario":
+      return <ChatScenarioBlock coach={block.coach} intro={block.intro} buckets={block.buckets} scenarios={block.scenarios} />;
+    case "lessonMeta":
+      // Already extracted at the top of BlockRenderer; render nothing inline.
+      return null;
+    case "bossBattle":
+      return <BossBattleBlock title={block.title} setup={block.setup} coach={block.coach} stages={block.stages} outcomes={block.outcomes} />;
+    case "fieldNotes":
+      return <FieldNotesBlock title={block.title} source={block.source} date={block.date} story={block.story} takeaway={block.takeaway} />;
   }
 }
 
