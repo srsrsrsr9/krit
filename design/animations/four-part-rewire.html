@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>G.I. Joe Fallacy — The 4-Part Rewire</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFFBEB;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
+#w{position:relative;width:100%;max-width:720px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:12px;right:12px;background:#1F2937;color:#FFFBEB;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+#ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(31,41,55,0.52);backdrop-filter:blur(3px);border-radius:12px;z-index:20;cursor:pointer}
+#ov-btn{background:#FFFBEB;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.28);transition:transform .15s}
+#ov:hover #ov-btn{transform:scale(1.1)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Split-screen: failed habit attempt (left) vs 4-part rewire success (right)">
+
+  <rect width="720" height="500" fill="#FFFBEB"/>
+
+  <!-- Top title bar -->
+  <text x="360" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Same person. Same alarm. Different design.</text>
+
+  <!-- ═══ LEFT PHONE FRAME (BEFORE) ═══ x 18–342 -->
+  <!-- Phone outline -->
+  <rect x="18" y="46" width="320" height="426" rx="20" fill="#F1F5F9" stroke="#94A3B8" stroke-width="2.5"/>
+  <rect x="28" y="56" width="300" height="406" rx="14" fill="#E2E8F0"/>
+  <!-- Notch -->
+  <rect x="133" y="48" width="52" height="12" rx="6" fill="#94A3B8"/>
+  <!-- BEFORE label -->
+  <rect x="80" y="62" width="100" height="22" rx="6" fill="#F43F5E" opacity="0.12"/>
+  <text x="130" y="77" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E">✕ BEFORE</text>
+
+  <!-- Left scene content -->
+  <!-- Bed -->
+  <g id="lbed">
+    <rect x="50" y="310" width="258" height="120" rx="10" fill="#CBD5E1" stroke="#94A3B8" stroke-width="1.5"/>
+    <rect x="50" y="300" width="258" height="30" rx="8" fill="#94A3B8"/>
+    <rect x="78" y="308" width="85" height="38" rx="10" fill="white" stroke="#CBD5E1" stroke-width="1"/>
+    <path d="M50,358 Q178,348 308,358 Q178,368 50,358" fill="#B0BEC5" opacity="0.5"/>
+  </g>
+  <!-- Person in bed (sleeping) -->
+  <circle cx="120" cy="322" r="13" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+  <!-- Closed eyes -->
+  <path d="M113,320 Q117,317 121,320" fill="none" stroke="#1F2937" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M121,320 Q125,317 129,320" fill="none" stroke="#1F2937" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- ZZZ -->
+  <text id="lzzz" x="142" y="308" font-size="14" fill="#94A3B8" opacity="0">zzz</text>
+
+  <!-- Alarm clock LEFT — next to bed, not overlapping person -->
+  <g id="lalarm" transform="translate(240,290)">
+    <rect x="-18" y="-14" width="36" height="28" rx="5" fill="#374151" stroke="#1F2937" stroke-width="1.5"/>
+    <text x="0" y="-1" text-anchor="middle" font-size="8" fill="#F59E0B" font-family="ui-monospace,monospace" font-weight="700">6:30</text>
+    <text x="0" y="9" text-anchor="middle" font-size="6" fill="#9CA3AF" font-family="ui-monospace,monospace">AM</text>
+    <line x1="-8" y1="-15" x2="-12" y2="-23" stroke="#374151" stroke-width="2"/>
+    <line x1="8"  y1="-15" x2="12"  y2="-23" stroke="#374151" stroke-width="2"/>
+    <circle cx="-12" cy="-25" r="4" fill="#374151" stroke="#6B7280" stroke-width="1"/>
+    <circle cx="12"  cy="-25" r="4" fill="#374151" stroke="#6B7280" stroke-width="1"/>
+  </g>
+
+  <!-- Phone in hand (instagram scroll) -->
+  <g id="linsta" opacity="0" transform="translate(195,330)">
+    <rect x="-14" y="-24" width="28" height="44" rx="4" fill="#1F2937" stroke="#374151" stroke-width="1"/>
+    <rect x="-10" y="-20" width="20" height="36" rx="2" fill="#8B5CF6" opacity="0.85"/>
+    <text x="0" y="-2"  text-anchor="middle" font-size="9"  fill="white">📸</text>
+    <text x="0" y="10" text-anchor="middle" font-size="6.5" fill="white" opacity="0.7">scrolling…</text>
+  </g>
+
+  <!-- X mark for fail -->
+  <g id="lfail" opacity="0" transform="translate(178,215)">
+    <circle cx="0" cy="0" r="24" fill="#F43F5E" opacity="0.15"/>
+    <circle cx="0" cy="0" r="24" fill="none" stroke="#F43F5E" stroke-width="2"/>
+    <line x1="-12" y1="-12" x2="12" y2="12" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+    <line x1="12"  y1="-12" x2="-12" y2="12" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+    <text x="0" y="45" text-anchor="middle" font-size="9" fill="#F43F5E">no walk today</text>
+  </g>
+
+  <!-- Left caption (below phone) -->
+  <text x="178" y="475" text-anchor="middle" font-size="9.5" fill="#64748B">Vague intention. No cue. No friction reduction.</text>
+  <text x="178" y="489" text-anchor="middle" font-size="9.5" fill="#64748B">Doer ignores the memo.</text>
+
+  <!-- ═══ RIGHT PHONE FRAME (AFTER) ═══ x 378–702 -->
+  <rect x="378" y="46" width="320" height="426" rx="20" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="2.5"/>
+  <rect x="388" y="56" width="300" height="406" rx="14" fill="#DCFCE7"/>
+  <rect x="493" y="48" width="52" height="12" rx="6" fill="#6EE7B7"/>
+  <!-- AFTER label -->
+  <rect x="500" y="62" width="100" height="22" rx="6" fill="#10B981" opacity="0.15"/>
+  <text x="550" y="77" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">✓ AFTER</text>
+
+  <!-- Step chip — top left of right frame -->
+  <g id="chip" opacity="0" transform="translate(400,92)">
+    <rect x="0" y="0" width="32" height="32" rx="8" fill="#1F2937"/>
+    <text id="chipnum" x="16" y="22" text-anchor="middle" font-size="16" fill="white"
+          font-weight="700" font-family="ui-monospace,monospace">1</text>
+  </g>
+
+  <!-- ── STAGE 1: CUE ── -->
+  <g id="rs1" opacity="0">
+    <!-- Bed (right frame) -->
+    <rect x="410" y="310" width="258" height="120" rx="10" fill="#BBF7D0" stroke="#6EE7B7" stroke-width="1.5"/>
+    <rect x="410" y="300" width="258" height="30" rx="8" fill="#6EE7B7"/>
+    <rect x="438" y="308" width="85" height="38" rx="10" fill="white" stroke="#D1FAE5" stroke-width="1"/>
+    <!-- Person sitting up alert -->
+    <circle cx="478" cy="315" r="13" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+    <circle cx="474" cy="313" r="2" fill="#1F2937"/>
+    <circle cx="482" cy="313" r="2" fill="#1F2937"/>
+    <path d="M475,319 Q478,322 481,319" fill="none" stroke="#1F2937" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Alarm across room -->
+    <g transform="translate(654,272)">
+      <rect x="-18" y="-14" width="36" height="28" rx="5" fill="#374151" stroke="#F59E0B" stroke-width="2"/>
+      <text x="0" y="-1" text-anchor="middle" font-size="8" fill="#F59E0B" font-family="ui-monospace,monospace" font-weight="700">6:30</text>
+      <!-- Vibration lines -->
+      <line x1="-22" y1="-6" x2="-27" y2="-6" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="-22" y1="0"  x2="-28" y2="0"  stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="22"  y1="-6" x2="27"  y2="-6" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="22"  y1="0"  x2="28"  y2="0"  stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+    <!-- Arrow from person to alarm -->
+    <path d="M495,308 Q575,288 630,276" fill="none" stroke="#F59E0B"
+          stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#arr)"/>
+    <!-- Caption step 1 -->
+    <text x="540" y="180" text-anchor="middle" font-size="10" fill="#065F46" font-weight="600">1. Cue: alarm far away</text>
+    <text x="540" y="194" text-anchor="middle" font-size="10" fill="#065F46">→ have to physically get up</text>
+  </g>
+
+  <!-- ── STAGE 2: FRICTION REDUCTION ── -->
+  <g id="rs2" opacity="0">
+    <!-- Clothes on chair -->
+    <g transform="translate(620,250)">
+      <rect x="-4" y="-40" width="8" height="80" rx="2" fill="#9CA3AF"/>
+      <rect x="-22" y="36" width="44" height="5" rx="2" fill="#9CA3AF"/>
+      <path d="M-16,-18 L-22,-32 L-12,-36 L0,-28 L12,-36 L22,-32 L16,-18 L16,10 L-16,10 Z"
+            fill="#0EA5E9" stroke="#0284C7" stroke-width="1.2"/>
+    </g>
+    <!-- Shoes -->
+    <g transform="translate(658,330)">
+      <ellipse cx="-13" cy="0" rx="13" ry="8" fill="#92683A" stroke="#1F2937" stroke-width="1.5"/>
+      <ellipse cx="13"  cy="0" rx="13" ry="8" fill="#92683A" stroke="#1F2937" stroke-width="1.5"/>
+      <text x="0" y="20" text-anchor="middle" font-size="8" fill="#6B7280">by the door</text>
+    </g>
+    <!-- Friction badge -->
+    <rect x="430" y="175" width="130" height="30" rx="8" fill="#1F2937"/>
+    <text x="495" y="193" text-anchor="middle" font-size="11" fill="#10B981" font-weight="700" font-family="ui-monospace,monospace">friction −3</text>
+    <!-- Person walking toward door -->
+    <circle cx="490" cy="310" r="13" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+    <line x1="490" y1="323" x2="490" y2="355" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="490" y1="335" x2="478" y2="350" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="490" y1="335" x2="502" y2="350" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="490" y1="330" x2="475" y2="320" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="490" y1="330" x2="505" y2="320" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="540" y="388" text-anchor="middle" font-size="9.5" fill="#065F46">clothes + shoes ready, phone in other room</text>
+  </g>
+
+  <!-- ── STAGE 3: TINY FIRST STEP ── -->
+  <g id="rs3" opacity="0">
+    <!-- Door frame at right -->
+    <rect x="648" y="200" width="10" height="220" rx="0" fill="#9CA3AF" stroke="#6B7280" stroke-width="1"/>
+    <rect x="658" y="200" width="6"  height="220" rx="3" fill="none" stroke="#9CA3AF" stroke-width="1.5"/>
+    <!-- Person at doorway -->
+    <circle cx="525" cy="280" r="13" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+    <line x1="525" y1="293" x2="525" y2="325" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="525" y1="308" x2="510" y2="328" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="525" y1="308" x2="540" y2="325" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="525" y1="302" x2="510" y2="290" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="525" y1="302" x2="540" y2="290" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Speech bubble above person -->
+    <rect x="455" y="238" width="130" height="28" rx="8" fill="white" stroke="#10B981" stroke-width="1.5"/>
+    <polygon points="515,266 525,266 520,276" fill="white" stroke="#10B981" stroke-width="1.5"/>
+    <text x="520" y="257" text-anchor="middle" font-size="9" fill="#065F46">Goal: cross the doorway.</text>
+    <!-- Checkmark -->
+    <g id="rcheck" opacity="0" transform="translate(615,195)">
+      <circle cx="0" cy="0" r="18" fill="#10B981"/>
+      <path d="M-9,0 L-2,8 L11,-9" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <text x="540" y="388" text-anchor="middle" font-size="9.5" fill="#065F46">Tiny first step: cross the doorway. That's it.</text>
+  </g>
+
+  <!-- ── STAGE 4: ACCOUNTABILITY ── -->
+  <g id="rs4" opacity="0">
+    <!-- Person walking outside -->
+    <circle cx="465" cy="260" r="13" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+    <line x1="465" y1="273" x2="465" y2="305" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="465" y1="288" x2="450" y2="308" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="465" y1="288" x2="480" y2="304" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="465" y1="283" x2="450" y2="272" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="465" y1="283" x2="480" y2="276" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Trees/outside context -->
+    <circle cx="440" cy="220" r="16" fill="#86EFAC" stroke="#4ADE80" stroke-width="1.5"/>
+    <rect   x="437" y="234" width="6" height="20" rx="2" fill="#78350F"/>
+    <circle cx="650" cy="215" r="20" fill="#86EFAC" stroke="#4ADE80" stroke-width="1.5"/>
+    <rect   x="646" y="232" width="8" height="24" rx="2" fill="#78350F"/>
+    <!-- Thumbs up bubble to friend -->
+    <rect x="490" y="238" width="70" height="30" rx="8" fill="#1F2937"/>
+    <text x="525" y="257" text-anchor="middle" font-size="16" fill="white">👍</text>
+    <!-- Calendar with streak -->
+    <g transform="translate(610,290)">
+      <rect x="-30" y="-40" width="60" height="70" rx="7" fill="white" stroke="#10B981" stroke-width="2"/>
+      <rect x="-30" y="-40" width="60" height="20" rx="7" fill="#10B981"/>
+      <rect x="-30" y="-26" width="60" height="6" rx="0" fill="#10B981"/>
+      <text x="0" y="-24" text-anchor="middle" font-size="9" fill="white" font-weight="700">MAY</text>
+      <text x="-14" y="-2"  font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">✓</text>
+      <text x="-2"  y="-2"  font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">✓</text>
+      <text x="10"  y="-2"  font-size="9" fill="#10B981" font-weight="700" font-family="ui-monospace,monospace">✓</text>
+      <text x="-5"  y="14" font-size="7.5" fill="#6B7280" text-anchor="middle">streak 🔥</text>
+    </g>
+    <text x="540" y="388" text-anchor="middle" font-size="9.5" fill="#065F46">Accountability + log: streak is the dopamine.</text>
+  </g>
+
+  <!-- Right caption bar -->
+  <text id="rcap" x="540" y="480" text-anchor="middle" font-size="9.5" fill="#065F46" opacity="0"/>
+
+  <!-- Arrow marker defs -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#F59E0B"/>
+    </marker>
+  </defs>
+
+</svg>
+<button id="rb">↺ reset</button>
+<div id="ov"><div id="ov-btn"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l18 10L7 24V4z" fill="#1F2937"/></svg></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ── AUDIO ─────────────────────────────────────────────
+let AC=null,bgTimer=null,bgIdx=0;
+function getAC(){
+  if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume().catch(()=>{});
+  return AC;
+}
+document.addEventListener('click',()=>{try{getAC();}catch(e){}},{passive:true});
+
+function tone(freq,dur,delay,type,vol){
+  delay=delay||0;type=type||'sine';vol=vol||0.2;
+  try{
+    const c=getAC(),t=c.currentTime+delay;
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    o.start(t);o.stop(t+dur+0.1);
+  }catch(e){}
+}
+function nz(dur,delay,fc,vol){
+  delay=delay||0;fc=fc||1000;vol=vol||0.2;
+  try{
+    const c=getAC(),sr=c.sampleRate,t=c.currentTime+delay;
+    const buf=c.createBuffer(1,Math.ceil(sr*Math.max(dur,0.05)),sr);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fc;f.Q.value=1;
+    const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    const s=c.createBufferSource();s.buffer=buf;s.connect(f);f.connect(g);g.connect(c.destination);
+    s.start(t);s.stop(t+dur+0.1);
+  }catch(e){}
+}
+
+function sfxAlarm(){
+  // Beep beep beep
+  for(let i=0;i<3;i++) tone(880,0.15,i*0.22,'square',0.15);
+}
+function sfxSuccess(){
+  tone(523.25,0.2,0,'sine',0.22);
+  tone(659.25,0.2,0.15,'sine',0.18);
+  tone(783.99,0.3,0.3,'sine',0.15);
+}
+function sfxClick(){nz(0.04,0,2000,0.15);tone(1200,0.05,0,'square',0.08);}
+function sfxWhoosh(){
+  try{
+    const c=getAC(),t=c.currentTime;
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.type='sawtooth';
+    o.frequency.setValueAtTime(500,t);o.frequency.exponentialRampToValueAtTime(80,t+0.4);
+    g.gain.setValueAtTime(0.07,t);g.gain.exponentialRampToValueAtTime(0.0001,t+0.4);
+    o.start(t);o.stop(t+0.45);
+  }catch(e){}
+}
+function sfxStreak(){
+  for(let i=0;i<3;i++) tone(523.25*(1+i*0.2),0.18,i*0.14,'sine',0.18);
+  nz(0.06,0.3,600,0.12);
+}
+
+const BG=[196,246.94,293.66,369.99,440,369.99,293.66,246.94];
+function startBg(){
+  if(bgTimer)return;
+  function beat(){
+    const f=BG[bgIdx%BG.length];
+    tone(f,2.2,0,'sine',0.028);
+    bgIdx++;bgTimer=setTimeout(beat,1800);
+  }beat();
+}
+function stopBg(){clearTimeout(bgTimer);bgTimer=null;}
+
+// ── UTILS ─────────────────────────────────────────────
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];stopBg();}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function setStep(n){
+  $id('chipnum').textContent=String(n);
+  animOp('chip',0,1,300,null);
+}
+
+function run(){
+  clearAll();
+  setOp('lzzz',0);setOp('linsta',0);setOp('lfail',0);
+  setOp('rs1',0);setOp('rs2',0);setOp('rs3',0);setOp('rs4',0);
+  setOp('chip',0);setOp('rcheck',0);setOp('rcap',0);
+  startBg();
+
+  // LEFT: alarm rings, fall asleep
+  after(400,()=>{
+    sfxAlarm();
+    animOp('lzzz',0,1,500,null);
+  });
+  after(1500,()=>animOp('linsta',0,1,500,null));
+  after(3000,()=>{sfxWhoosh();animOp('lfail',0,1,600,null);});
+
+  // RIGHT: Step 1 — CUE
+  after(600,()=>{
+    setStep(1);
+    sfxAlarm();
+    animOp('rs1',0,1,500,null);
+    const cap=$id('rcap');cap.textContent='1. Cue: alarm is across the room.';
+    animOp('rcap',0,1,500,null);
+  });
+
+  // Step 2 — FRICTION REDUCTION
+  after(4500,()=>{
+    animOp('rs1',1,0,300,null);
+    sfxClick();
+    after(350,()=>{
+      setStep(2);
+      animOp('rs2',0,1,500,null);
+      const cap=$id('rcap');cap.textContent='2. Friction reduction: clothes + shoes ready.';
+      animOp('rcap',0,1,400,null);
+    });
+  });
+
+  // Step 3 — TINY FIRST STEP
+  after(7800,()=>{
+    animOp('rs2',1,0,300,null);
+    sfxClick();
+    after(350,()=>{
+      setStep(3);
+      animOp('rs3',0,1,500,null);
+      const cap=$id('rcap');cap.textContent='3. Tiny first step: cross the doorway.';
+      animOp('rcap',0,1,400,null);
+      after(1200,()=>{animOp('rcheck',0,1,400,null);sfxSuccess();});
+    });
+  });
+
+  // Step 4 — ACCOUNTABILITY
+  after(11200,()=>{
+    animOp('rs3',1,0,300,null);
+    after(350,()=>{
+      setStep(4);
+      animOp('rs4',0,1,500,null);
+      const cap=$id('rcap');cap.textContent='4. Log + accountability: streak is the dopamine.';
+      animOp('rcap',0,1,400,null);
+      sfxStreak();
+    });
+  });
+
+  // Loop
+  after(14500,()=>{
+    animOp('rs4',1,0,400,null);
+    animOp('lfail',1,0,400,null);
+    animOp('linsta',1,0,400,null);
+    animOp('lzzz',1,0,400,null);
+    animOp('chip',1,0,400,null);
+    animOp('rcap',1,0,400,null);
+    after(600,run);
+  });
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+function $id(id){return document.getElementById(id);}
+document.getElementById('ov').addEventListener('click',()=>{
+  getAC();
+  document.getElementById('ov').style.display='none';
+  run();
+},{once:true});
+})();
+</script>
+</body>
+</html>

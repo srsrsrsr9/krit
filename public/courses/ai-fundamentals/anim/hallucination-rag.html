@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hallucination vs RAG</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#EFF6FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#EFF6FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.7}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 540" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Animation comparing the same query about an Indian RBI UPI fees circular answered without RAG which produces a fake citation, versus with RAG which retrieves a real document and cites it correctly">
+
+  <rect width="780" height="540" fill="#EFF6FF"/>
+
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Same query · two pipelines</text>
+  <text x="390" y="50" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Watch what happens when the model has — and hasn't — read the source.</text>
+
+  <!-- Query bar -->
+  <rect x="32" y="68" width="716" height="44" rx="10" fill="white" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="48" y="88" font-size="10" font-weight="700" fill="#9CA3AF">QUERY</text>
+  <text x="48" y="104" font-size="13" fill="#1F2937" font-family="ui-monospace,monospace">"Cite the RBI circular on UPI transaction fees."</text>
+  <circle id="qPulse" cx="730" cy="90" r="8" fill="#0EA5E9" opacity="0"/>
+
+  <!-- Routing arrows -->
+  <path d="M 200 112 L 200 132 L 200 142" stroke="#BFDBFE" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 580 112 L 580 132 L 580 142" stroke="#BFDBFE" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <text x="200" y="130" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF">A · NO RAG</text>
+  <text x="580" y="130" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF">B · WITH RAG</text>
+
+  <!-- ── LEFT COLUMN (NO RAG) y=148-440 ── -->
+  <g>
+    <rect x="32" y="148" width="336" height="296" rx="12" fill="white" stroke="#FECACA" stroke-width="2"/>
+
+    <!-- Model brain icon -->
+    <g id="brainA">
+      <circle cx="80" cy="184" r="20" fill="#FEE2E2" stroke="#F43F5E" stroke-width="2"/>
+      <text x="80" y="190" text-anchor="middle" font-size="16">🧠</text>
+    </g>
+    <text x="112" y="180" font-size="13" font-weight="700" fill="#1F2937">Plain LLM</text>
+    <text x="112" y="196" font-size="10" fill="#6B7280" font-style="italic">no retrieval, just parametric memory</text>
+
+    <!-- Thinking dots -->
+    <g id="thinkA" opacity="0">
+      <circle cx="190" cy="232" r="4" fill="#F43F5E">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="206" cy="232" r="4" fill="#F43F5E">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" begin="0.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="222" cy="232" r="4" fill="#F43F5E">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" begin="0.4s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Output card -->
+    <g id="outA" opacity="0">
+      <rect x="48" y="222" width="304" height="158" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+      <text x="60" y="240" font-size="9" font-weight="700" fill="#991B1B">RESPONSE</text>
+      <text x="60" y="258" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">"Per RBI Circular</text>
+      <text x="60" y="274" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">DPSS.CO.PD.No.1729/02.14.</text>
+      <text x="60" y="290" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">003/2022-23 dated 17 May</text>
+      <text x="60" y="306" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">2023, UPI P2M transactions</text>
+      <text x="60" y="322" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">above ₹2,000 attract a 1.1%</text>
+      <text x="60" y="338" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">interchange fee paid by the</text>
+      <text x="60" y="354" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">PSP, not the user."</text>
+      <text x="60" y="372" font-size="10" fill="#9CA3AF" font-style="italic">— confident. plausible. unverified.</text>
+    </g>
+
+    <!-- Verdict pill -->
+    <g id="vA" opacity="0">
+      <rect x="48" y="396" width="304" height="34" rx="8" fill="#F43F5E"/>
+      <text x="200" y="418" text-anchor="middle" font-size="13" font-weight="700" fill="white">⚠ HALLUCINATION · citation invented</text>
+    </g>
+  </g>
+
+  <!-- ── RIGHT COLUMN (WITH RAG) y=148-440 ── -->
+  <g>
+    <rect x="412" y="148" width="336" height="296" rx="12" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+
+    <!-- Brain + retrieval -->
+    <g id="brainB">
+      <circle cx="460" cy="184" r="20" fill="#D1FAE5" stroke="#10B981" stroke-width="2"/>
+      <text x="460" y="190" text-anchor="middle" font-size="16">🧠</text>
+    </g>
+    <text x="492" y="180" font-size="13" font-weight="700" fill="#1F2937">LLM + Retriever</text>
+    <text x="492" y="196" font-size="10" fill="#6B7280" font-style="italic">parametric + grounded sources</text>
+
+    <!-- Index stack — animates a doc shooting back to brain -->
+    <g id="indexStack">
+      <rect x="640" y="172" width="84" height="14" rx="3" fill="#A7F3D0" stroke="#10B981" stroke-width="1.2"/>
+      <rect x="640" y="190" width="84" height="14" rx="3" fill="#A7F3D0" stroke="#10B981" stroke-width="1.2"/>
+      <rect x="640" y="208" width="84" height="14" rx="3" fill="#A7F3D0" stroke="#10B981" stroke-width="1.2"/>
+      <text x="682" y="237" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46">vector index</text>
+    </g>
+
+    <!-- Retrieval arrow that highlights the matched doc -->
+    <g id="retArrow" opacity="0">
+      <path d="M 638 197 L 488 197" stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round" marker-end="url(#arrhead)"/>
+    </g>
+
+    <!-- Highlighted doc that flies into context -->
+    <g id="flyDoc" opacity="0">
+      <rect width="84" height="14" rx="3" fill="#10B981" stroke="#065F46" stroke-width="1.5"/>
+      <text x="42" y="11" text-anchor="middle" font-size="8" font-weight="700" fill="white" font-family="ui-monospace,monospace">DPSS.CO.PD.1198</text>
+    </g>
+
+    <defs>
+      <marker id="arrhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#10B981"/>
+      </marker>
+    </defs>
+
+    <!-- Output card -->
+    <g id="outB" opacity="0">
+      <rect x="428" y="222" width="304" height="158" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+      <text x="440" y="240" font-size="9" font-weight="700" fill="#065F46">RESPONSE</text>
+      <text x="440" y="258" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">"Per RBI circular</text>
+      <text x="440" y="274" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">DPSS.CO.PD.No.1198/02.</text>
+      <text x="440" y="290" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">14.003/2022-23 (24 Mar</text>
+      <text x="440" y="306" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">2023), UPI is free for</text>
+      <text x="440" y="322" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">P2P; PPI-issued P2M</text>
+      <text x="440" y="338" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">&gt; ₹2,000 carries 1.1%</text>
+      <text x="440" y="354" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">interchange [src §3]."</text>
+      <text x="440" y="372" font-size="10" fill="#10B981" font-style="italic">— quoted from retrieved doc.</text>
+    </g>
+
+    <!-- Verdict pill -->
+    <g id="vB" opacity="0">
+      <rect x="428" y="396" width="304" height="34" rx="8" fill="#10B981"/>
+      <text x="580" y="418" text-anchor="middle" font-size="13" font-weight="700" fill="white">✓ GROUNDED · verifiable citation</text>
+    </g>
+  </g>
+
+  <!-- Bottom takeaway -->
+  <rect x="32" y="460" width="716" height="60" rx="10" fill="#1F2937"/>
+  <text x="390" y="484" text-anchor="middle" font-size="13" fill="white" font-weight="600">A model fluent in the shape of an answer is not the same as a model that knows.</text>
+  <text x="390" y="504" text-anchor="middle" font-size="11" fill="#BFDBFE">RAG grounds the words to a document you can audit.</text>
+
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+function $id(id){return document.getElementById(id);}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function lerp(a,b,t){return a+(b-a)*t;}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+
+function fade(id,from,to,dur,cb){
+  const e=$id(id);if(!e){if(cb)cb();return;}
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function pulseQuery(){
+  // pulse the cyan dot at the right of query bar
+  const dot=$id('qPulse');
+  let n=0;
+  function p(){
+    if(n>=3)return;
+    dot.setAttribute('opacity','1');
+    dot.setAttribute('r','8');
+    const s=performance.now();
+    function tick(now){
+      const t=Math.min((now-s)/600,1);
+      dot.setAttribute('r',String(lerp(8,18,t)));
+      dot.setAttribute('opacity',String(1-t));
+      if(t<1)requestAnimationFrame(tick);else{n++;after(120,p);}
+    }
+    requestAnimationFrame(tick);
+  }
+  p();
+}
+
+function flyDocAnim(cb){
+  // Fly doc from indexStack (640,190) to brainB (460,184)
+  const fd=$id('flyDoc');
+  fd.setAttribute('transform','translate(640 190)');
+  fd.setAttribute('opacity','1');
+  const s=performance.now();
+  const dur=900;
+  const fromX=640, toX=420;
+  const fromY=190, toY=176;
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const x=lerp(fromX,toX,e), y=lerp(fromY,toY,e);
+    const sc=lerp(1,0.85,e);
+    fd.setAttribute('transform',`translate(${x} ${y}) scale(${sc})`);
+    if(t>0.7) fd.setAttribute('opacity',String(lerp(1,0,(t-0.7)/0.3)));
+    if(t<1)requestAnimationFrame(tick);else{fd.setAttribute('opacity','0');if(cb)cb();}
+  }
+  requestAnimationFrame(tick);
+}
+
+function reset(){
+  clearAll();
+  ['thinkA','outA','vA','outB','vB','retArrow','flyDoc','qPulse'].forEach(id=>setOp(id,0));
+  // sequence
+  after(400,()=>{
+    pulseQuery();
+  });
+  // PIPELINE A starts thinking
+  after(900,()=>fade('thinkA',0,1,400));
+  // PIPELINE B starts retrieval almost in parallel
+  after(1100,()=>fade('retArrow',0,1,400));
+  after(1400,()=>flyDocAnim());
+  // A confidently outputs first (because it has nothing to wait for)
+  after(2400,()=>{
+    fade('thinkA',1,0,300);
+    fade('outA',0,1,500);
+  });
+  // B output once doc lands
+  after(2700,()=>{
+    fade('outB',0,1,500);
+  });
+  // verdicts
+  after(4200,()=>{
+    fade('vA',0,1,500);
+    fade('vB',0,1,500);
+  });
+  // hold then loop
+  after(8500,reset);
+}
+
+$id('rb').addEventListener('click',reset);
+reset();
+
+})();
+</script>
+</body>
+</html>

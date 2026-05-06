@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The 14-Day Loop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F0F9FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
+#w{position:relative;width:100%;max-width:720px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:12px;right:12px;background:#1F2937;color:#F0F9FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+#ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(31,41,55,0.52);backdrop-filter:blur(3px);border-radius:12px;z-index:20;cursor:pointer}
+#ov-btn{background:#F0F9FF;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.28);transition:transform .15s}
+#ov:hover #ov-btn{transform:scale(1.1)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg"
+     aria-label="14-day wellbeing experiment loop showing baseline, mid-check, and final measurement">
+
+  <rect width="720" height="500" fill="#F0F9FF"/>
+
+  <!-- Title -->
+  <text x="360" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#1F2937">The 14-day loop.</text>
+
+  <!-- ══ THREE METRIC TILES  y 52–162 ══ -->
+  <!-- Tiles are spaced evenly: centers at x=130, 360, 590 -->
+  <!-- Each tile: 130w × 100h -->
+
+  <!-- Cantril tile -->
+  <g id="t-cantril">
+    <rect x="65"  y="52" width="130" height="100" rx="10" fill="white" stroke="#0369A1" stroke-width="3"/>
+    <text x="130" y="88"  text-anchor="middle" font-size="34" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace" id="vCantril">6.0</text>
+    <text x="130" y="106" text-anchor="middle" font-size="9"  fill="#6B7280">Cantril</text>
+    <text x="130" y="118" text-anchor="middle" font-size="8"  fill="#9CA3AF">life ladder</text>
+    <!-- Change indicator bar at bottom -->
+    <rect id="iCantril" x="65" y="146" width="130" height="5" rx="2" fill="#6B7280" opacity="0"/>
+  </g>
+  <!-- Up arrow for Cantril -->
+  <text id="aCantril" x="130" y="50" text-anchor="middle" font-size="14" fill="#10B981" opacity="0">↑</text>
+
+  <!-- PANAS tile -->
+  <g id="t-panas">
+    <rect x="295" y="52" width="130" height="100" rx="10" fill="white" stroke="#0369A1" stroke-width="3"/>
+    <text x="360" y="88"  text-anchor="middle" font-size="34" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace" id="vPanas">14</text>
+    <text x="360" y="106" text-anchor="middle" font-size="9"  fill="#6B7280">PANAS+</text>
+    <text x="360" y="118" text-anchor="middle" font-size="8"  fill="#9CA3AF">positive affect</text>
+    <rect id="iPanas" x="295" y="146" width="130" height="5" rx="2" fill="#6B7280" opacity="0"/>
+  </g>
+  <text id="aPanas" x="360" y="50" text-anchor="middle" font-size="14" fill="#10B981" opacity="0">↑</text>
+
+  <!-- Sleep tile -->
+  <g id="t-sleep">
+    <rect id="bSleep" x="525" y="52" width="130" height="100" rx="10" fill="white" stroke="#0369A1" stroke-width="3"/>
+    <text x="590" y="88"  text-anchor="middle" font-size="34" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace" id="vSleep">7.2</text>
+    <text x="590" y="106" text-anchor="middle" font-size="9"  fill="#6B7280">Sleep hrs</text>
+    <text x="590" y="118" text-anchor="middle" font-size="8"  fill="#9CA3AF">avg / night</text>
+    <rect id="iSleep" x="525" y="146" width="130" height="5" rx="2" fill="#6B7280" opacity="0"/>
+  </g>
+  <text id="aSleep" x="590" y="50" text-anchor="middle" font-size="14" fill="#F43F5E" opacity="0">↓</text>
+
+  <!-- ══ TIMELINE TRACK  y 168–248 ══ -->
+  <!-- Track bg -->
+  <rect x="32" y="168" width="656" height="70" rx="10" fill="white" stroke="#BAE6FD" stroke-width="1.8"/>
+
+  <!-- Intervention bar fills from day 0 (x=32) to day 14 (x=688): 656px total, 46.9px/day -->
+  <!-- Day x: 32 + day*(656/15) = 32 + day*43.73 -->
+  <rect id="barfill" x="32" y="168" width="0" height="70" rx="10" fill="#10B981" opacity="0.15"/>
+
+  <!-- Calendar tick motif (repeating subtle lines) — static decoration inside bar -->
+  <g stroke="#10B981" stroke-width="0.8" opacity="0.3">
+    <line x1="75"  y1="175" x2="75"  y2="233"/>
+    <line x1="119" y1="175" x2="119" y2="233"/>
+    <line x1="163" y1="175" x2="163" y2="233"/>
+    <line x1="207" y1="175" x2="207" y2="233"/>
+    <line x1="251" y1="175" x2="251" y2="233"/>
+    <line x1="295" y1="175" x2="295" y2="233"/>
+    <line x1="339" y1="175" x2="339" y2="233"/>
+    <line x1="383" y1="175" x2="383" y2="233"/>
+    <line x1="427" y1="175" x2="427" y2="233"/>
+    <line x1="471" y1="175" x2="471" y2="233"/>
+    <line x1="515" y1="175" x2="515" y2="233"/>
+    <line x1="559" y1="175" x2="559" y2="233"/>
+    <line x1="603" y1="175" x2="603" y2="233"/>
+    <line x1="647" y1="175" x2="647" y2="233"/>
+  </g>
+
+  <!-- Measurement lines -->
+  <!-- Day 0: x=32 -->
+  <g id="ml0" opacity="0">
+    <line x1="32" y1="154" x2="32" y2="248" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="10" y="140" width="44" height="18" rx="5" fill="#10B981"/>
+    <text x="32" y="152" text-anchor="middle" font-size="9" fill="white" font-weight="700" font-family="ui-monospace,monospace">Day 0</text>
+  </g>
+  <!-- Day 7: x = 32+7*43.73 = 32+306 = 338 -->
+  <g id="ml7" opacity="0">
+    <line x1="338" y1="154" x2="338" y2="248" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="313" y="140" width="50" height="18" rx="5" fill="#F59E0B"/>
+    <text x="338" y="152" text-anchor="middle" font-size="9" fill="white" font-weight="700" font-family="ui-monospace,monospace">Day 7</text>
+  </g>
+  <!-- Day 14: x = 32+14*43.73 = 32+612 = 644 -->
+  <g id="ml14" opacity="0">
+    <line x1="644" y1="154" x2="644" y2="248" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="619" y="140" width="52" height="18" rx="5" fill="#10B981"/>
+    <text x="645" y="152" text-anchor="middle" font-size="9" fill="white" font-weight="700" font-family="ui-monospace,monospace">Day 14</text>
+  </g>
+
+  <!-- Day axis labels — below track -->
+  <g font-size="8" fill="#CBD5E1" font-family="ui-monospace,monospace" text-anchor="middle">
+    <text x="32"  y="256">0</text>
+    <text x="119" y="256">2</text>
+    <text x="207" y="256">4</text>
+    <text x="295" y="256">6</text>
+    <text x="382" y="256">8</text>
+    <text x="470" y="256">10</text>
+    <text x="558" y="256">12</text>
+    <text x="644" y="256">14</text>
+    <text x="688" y="256">15</text>
+  </g>
+  <g stroke="#E5E7EB" stroke-width="1">
+    <line x1="32"  y1="238" x2="32"  y2="244"/>
+    <line x1="119" y1="238" x2="119" y2="244"/>
+    <line x1="207" y1="238" x2="207" y2="244"/>
+    <line x1="295" y1="238" x2="295" y2="244"/>
+    <line x1="382" y1="238" x2="382" y2="244"/>
+    <line x1="470" y1="238" x2="470" y2="244"/>
+    <line x1="558" y1="238" x2="558" y2="244"/>
+    <line x1="644" y1="238" x2="644" y2="244"/>
+    <line x1="688" y1="238" x2="688" y2="244"/>
+  </g>
+  <text x="360" y="266" text-anchor="middle" font-size="9" fill="#9CA3AF">days</text>
+
+  <!-- ══ CAPTION STRIP  y 278–300 ══ -->
+  <rect id="capbg" x="32" y="274" width="656" height="28" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap"   x="360" y="292" text-anchor="middle" font-size="11" fill="white" opacity="0"/>
+
+  <!-- ══ DECISION CARD  y 310–410 ══ -->
+  <g id="deccard" opacity="0">
+    <rect x="32" y="308" width="656" height="130" rx="12" fill="#1F2937"/>
+    <text x="360" y="332" text-anchor="middle" font-size="12" fill="#9CA3AF" font-weight="600">Day 15 — What do you do?</text>
+    <!-- Three options in a row -->
+    <!-- Keep -->
+    <rect x="48"  y="340" width="175" height="46" rx="8" fill="#374151"/>
+    <text x="136" y="362" text-anchor="middle" font-size="12" fill="#9CA3AF" font-weight="600">Keep</text>
+    <text x="136" y="378" text-anchor="middle" font-size="9" fill="#6B7280">2 of 3 improved</text>
+    <!-- Modify (highlighted) -->
+    <rect x="272" y="336" width="176" height="54" rx="8" fill="#0369A1"/>
+    <text x="360" y="358" text-anchor="middle" font-size="11.5" fill="white" font-weight="700">Modify w/ sleep guardrail</text>
+    <text x="360" y="375" text-anchor="middle" font-size="9" fill="#BAE6FD">← recommended</text>
+    <!-- Drop -->
+    <rect x="497" y="340" width="175" height="46" rx="8" fill="#374151"/>
+    <text x="585" y="362" text-anchor="middle" font-size="12" fill="#9CA3AF" font-weight="600">Drop</text>
+    <text x="585" y="378" text-anchor="middle" font-size="9" fill="#6B7280">sleep regressed</text>
+    <!-- Bottom note -->
+    <text x="360" y="426" text-anchor="middle" font-size="10.5" fill="#9CA3AF">2 of 3 metrics improved; sleep dropped. Modify — don't drop.</text>
+  </g>
+
+  <!-- ══ END CARD  y 310–410 ══ -->
+  <g id="endcard" opacity="0">
+    <rect x="80" y="325" width="560" height="82" rx="12" fill="#1F2937"/>
+    <text x="360" y="364" text-anchor="middle" font-size="15" fill="white" font-weight="700">Single intervention. Two real measurements.</text>
+    <text x="360" y="387" text-anchor="middle" font-size="13" fill="#6B7280">One decision.</text>
+  </g>
+
+</svg>
+<button id="rb">↺ reset</button>
+<div id="ov"><div id="ov-btn"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l18 10L7 24V4z" fill="#1F2937"/></svg></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ── AUDIO ─────────────────────────────────────────────
+let AC=null,bgTimer=null,bgIdx=0;
+function getAC(){
+  if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume().catch(()=>{});
+  return AC;
+}
+document.addEventListener('click',()=>{try{getAC();}catch(e){}},{passive:true});
+
+function tone(freq,dur,delay,type,vol){
+  delay=delay||0;type=type||'sine';vol=vol||0.2;
+  try{
+    const c=getAC(),t=c.currentTime+delay;
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    o.start(t);o.stop(t+dur+0.1);
+  }catch(e){}
+}
+function nz(dur,delay,fc,vol){
+  delay=delay||0;fc=fc||1000;vol=vol||0.18;
+  try{
+    const c=getAC(),sr=c.sampleRate,t=c.currentTime+delay;
+    const buf=c.createBuffer(1,Math.ceil(sr*Math.max(dur,0.05)),sr);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fc;f.Q.value=1;
+    const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    const s=c.createBufferSource();s.buffer=buf;s.connect(f);f.connect(g);g.connect(c.destination);
+    s.start(t);s.stop(t+dur+0.1);
+  }catch(e){}
+}
+
+function sfxBaseline(){ tone(440,0.2,0,'sine',0.18);tone(660,0.15,0.15,'sine',0.12);}
+function sfxBarFill(){ nz(0.08,0,200,0.12);tone(330,0.1,0,'sine',0.08);}
+function sfxMeasure(positive){
+  if(positive){tone(523.25,0.2,0,'sine',0.22);tone(659.25,0.2,0.12,'sine',0.16);}
+  else{tone(370,0.2,0,'sine',0.18);tone(293,0.3,0.1,'sine',0.15);}
+}
+function sfxTileUpdate(){nz(0.06,0,1200,0.15);tone(880,0.12,0,'sine',0.18);}
+function sfxDecision(){ tone(523.25,0.18,0,'sine',0.2);tone(622.25,0.18,0.1,'sine',0.16);tone(783.99,0.25,0.2,'sine',0.14);}
+
+const BG=[261.63,329.63,440,523.25,440,329.63,261.63,220];
+function startBg(){
+  if(bgTimer)return;
+  function beat(){
+    const f=BG[bgIdx%BG.length];
+    tone(f,2.3,0,'sine',0.024);
+    bgIdx++;bgTimer=setTimeout(beat,2000);
+  }beat();
+}
+function stopBg(){clearTimeout(bgTimer);bgTimer=null;}
+
+// ── UTILS ─────────────────────────────────────────────
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];stopBg();}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function animWidth(id,fromW,toW,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('width',String(lerp(fromW,toW,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function animNum(id,from,to,dur,decimals){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),v=lerp(from,to,easeOut(t));
+    e.textContent=decimals?v.toFixed(decimals):Math.round(v).toString();
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function showCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,400,null);
+  animOp('capbg',0,0.92,400,null);
+}
+function hideCap(cb){
+  animOp('cap',1,0,300,null);
+  animOp('capbg',0.92,0,300,cb||null);
+}
+
+function setIndicator(indId,color){
+  const e=$id(indId);
+  if(!e)return;
+  e.setAttribute('fill',color);
+  e.setAttribute('opacity','1');
+}
+
+function run(){
+  clearAll();
+
+  // Reset
+  $id('barfill').setAttribute('width','0');
+  $id('vCantril').textContent='6.0';
+  $id('vPanas').textContent='14';
+  $id('vSleep').textContent='7.2';
+  $id('bSleep').setAttribute('stroke','#0369A1');
+  ['iCantril','iPanas','iSleep','aCantril','aPanas','aSleep',
+   'ml0','ml7','ml14','cap','capbg','deccard','endcard'].forEach(id=>setOp(id,0));
+  startBg();
+
+  // t=0.8 Day 0
+  after(800,()=>{
+    animOp('ml0',0,1,400,null);
+    sfxBaseline();
+    showCap('Day 0 — baseline established. Cantril 6 · PANAS+ 14 · Sleep 7.2');
+  });
+
+  // t=2.5 Bar fills days 1–6 (x: 32→338, width: 306)
+  after(2500,()=>{
+    hideCap(()=>showCap('Days 1–6: intervention running. No peeking yet.'));
+    sfxBarFill();
+    animWidth('barfill',0,306,2200,null);
+  });
+
+  // t=5.5 Day 7 mid-check
+  after(5500,()=>{
+    animOp('ml7',0,1,400,null);
+    hideCap(()=>showCap('Day 7 mid-check. Resist adding a second intervention.'));
+    sfxMeasure(true);
+    sfxTileUpdate();
+    animNum('vCantril',6.0,6.5,600,1);
+    animNum('vPanas',14,17,600,0);
+    animNum('vSleep',7.2,7.0,600,1);
+    after(700,()=>{
+      setIndicator('iCantril','#10B981');
+      setIndicator('iPanas','#10B981');
+      setIndicator('iSleep','#6B7280');
+      animOp('iCantril',0,1,300,null);animOp('iPanas',0,1,300,null);animOp('iSleep',0,1,300,null);
+    });
+  });
+
+  // t=7.5 Bar fills days 8–13 (x: 338→600, width: 262 more → total 568)
+  after(7500,()=>{
+    hideCap(()=>showCap('Days 8–13: staying the course.'));
+    sfxBarFill();
+    animWidth('barfill',306,568,2000,null);
+  });
+
+  // t=10.5 Day 14 final
+  after(10500,()=>{
+    animOp('ml14',0,1,400,null);
+    hideCap(()=>showCap('Day 14 — final measurement.'));
+    sfxMeasure(true);
+    sfxTileUpdate();
+    animNum('vCantril',6.5,7.0,700,1);
+    animNum('vPanas',17,19,700,0);
+    animNum('vSleep',7.0,6.8,700,1);
+    after(750,()=>{
+      setIndicator('iCantril','#10B981');
+      setIndicator('iPanas','#10B981');
+      setIndicator('iSleep','#F43F5E');
+      $id('bSleep').setAttribute('stroke','#F59E0B');
+      animOp('iSleep',0.5,1,300,null);
+      // Arrows
+      animOp('aCantril',0,1,400,null);
+      animOp('aPanas',0,1,400,null);
+      sfxMeasure(false);
+      after(200,()=>animOp('aSleep',0,1,400,null));
+    });
+  });
+
+  // t=12.0 Bar finishes to day 15
+  after(12000,()=>animWidth('barfill',568,656,400,null));
+
+  // t=12.5 Decision card
+  after(12500,()=>{
+    hideCap(null);
+    after(300,()=>{animOp('deccard',0,1,500,null);sfxDecision();});
+  });
+
+  // t=15 End card
+  after(15000,()=>{
+    animOp('deccard',1,0,400,null);
+    after(400,()=>animOp('endcard',0,1,500,null));
+  });
+
+  // t=17 Loop
+  after(17000,()=>{
+    animOp('endcard',1,0,500,()=>{ after(500,run); });
+  });
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+document.getElementById('ov').addEventListener('click',()=>{
+  getAC();
+  document.getElementById('ov').style.display='none';
+  run();
+},{once:true});
+})();
+</script>
+</body>
+</html>

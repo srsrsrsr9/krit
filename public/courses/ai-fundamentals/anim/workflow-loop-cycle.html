@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Production AI Loop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FEF3C7;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#FEF3C7;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.7}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 540" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Animation of the production AI workflow loop with five stages — define output, prototype prompt, evaluate, instrument, iterate — running twice; accuracy improves from 78 percent to 89 percent to 94 percent across cycles">
+
+  <rect width="780" height="540" fill="#FEF3C7"/>
+
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">The production AI loop</text>
+  <text x="390" y="50" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Five stages. Run it twice. Watch accuracy climb.</text>
+
+  <!-- ═══ THE WHEEL — center (290, 295), radius 130 ═══ -->
+  <!-- Faint full ring -->
+  <circle cx="290" cy="295" r="135" fill="none" stroke="#FDE68A" stroke-width="2" stroke-dasharray="3 4"/>
+
+  <!-- Active progress arc — circumference = 2*PI*135 ≈ 848 -->
+  <circle id="progArc" cx="290" cy="295" r="135" fill="none" stroke="#F59E0B" stroke-width="4"
+    stroke-dasharray="848" stroke-dashoffset="848"
+    transform="rotate(-90 290 295)" stroke-linecap="round"/>
+
+  <!-- 5 stage nodes positioned at angles -90, -18, 54, 126, 198 (every 72deg) -->
+  <!-- Stage 1: angle -90 (top) -->
+  <g id="s1">
+    <circle cx="290" cy="160" r="36" fill="white" stroke="#FDE68A" stroke-width="2.5"/>
+    <text x="290" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">1</text>
+    <text x="290" y="172" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Define</text>
+    <text x="290" y="184" text-anchor="middle" font-size="9" fill="#6B7280">output</text>
+  </g>
+  <!-- Stage 2: angle -18, x=290+135*cos(-18)=290+128.4=418, y=295+135*sin(-18)=295-41.7=253 -->
+  <g id="s2">
+    <circle cx="418" cy="253" r="36" fill="white" stroke="#FDE68A" stroke-width="2.5"/>
+    <text x="418" y="248" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">2</text>
+    <text x="418" y="265" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Prototype</text>
+    <text x="418" y="277" text-anchor="middle" font-size="9" fill="#6B7280">prompt</text>
+  </g>
+  <!-- Stage 3: angle 54, x=290+135*cos(54)=290+79.4=369, y=295+135*sin(54)=295+109.2=404 -->
+  <g id="s3">
+    <circle cx="369" cy="404" r="36" fill="white" stroke="#FDE68A" stroke-width="2.5"/>
+    <text x="369" y="399" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">3</text>
+    <text x="369" y="416" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Evaluate</text>
+    <text x="369" y="428" text-anchor="middle" font-size="9" fill="#6B7280">vs eval set</text>
+  </g>
+  <!-- Stage 4: angle 126, x=290+135*cos(126)=290-79.4=211, y=404 -->
+  <g id="s4">
+    <circle cx="211" cy="404" r="36" fill="white" stroke="#FDE68A" stroke-width="2.5"/>
+    <text x="211" y="399" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">4</text>
+    <text x="211" y="416" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Instrument</text>
+    <text x="211" y="428" text-anchor="middle" font-size="9" fill="#6B7280">in prod</text>
+  </g>
+  <!-- Stage 5: angle 198, x=290+135*cos(198)=290-128.4=162, y=295+135*sin(198)=295-41.7=253 -->
+  <g id="s5">
+    <circle cx="162" cy="253" r="36" fill="white" stroke="#FDE68A" stroke-width="2.5"/>
+    <text x="162" y="248" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">5</text>
+    <text x="162" y="265" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Iterate</text>
+    <text x="162" y="277" text-anchor="middle" font-size="9" fill="#6B7280">+ refine</text>
+  </g>
+
+  <!-- Center label -->
+  <g>
+    <text x="290" y="288" text-anchor="middle" font-size="11" fill="#9CA3AF" font-weight="700">CYCLE</text>
+    <text id="cycleNum" x="290" y="313" text-anchor="middle" font-size="32" font-weight="800" fill="#F59E0B" font-family="ui-monospace,monospace">1</text>
+  </g>
+
+  <!-- Active stage label below wheel -->
+  <rect x="170" y="450" width="240" height="32" rx="8" fill="#1F2937"/>
+  <text id="activeStageText" x="290" y="471" text-anchor="middle" font-size="12" font-weight="700" fill="white">→ defining output</text>
+
+  <!-- Travelling marker that moves around the loop -->
+  <circle id="trav" cx="290" cy="160" r="9" fill="#F43F5E" stroke="white" stroke-width="2.5" opacity="0"/>
+
+  <!-- ═══ ACCURACY PANEL (right side) ═══ -->
+  <g>
+    <text x="488" y="92" font-size="12" font-weight="700" fill="#9CA3AF">EVAL ACCURACY</text>
+
+    <!-- Big number readout -->
+    <rect x="478" y="100" width="260" height="92" rx="12" fill="white" stroke="#FDE68A" stroke-width="2"/>
+    <text id="accBig" x="608" y="158" text-anchor="middle" font-size="48" font-weight="800" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+    <text id="accBigSub" x="608" y="180" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">awaiting first eval…</text>
+
+    <!-- Bar chart of cycles -->
+    <text x="488" y="216" font-size="11" font-weight="700" fill="#9CA3AF">PROGRESS</text>
+    <rect x="478" y="222" width="260" height="160" rx="10" fill="white" stroke="#FDE68A" stroke-width="2"/>
+
+    <!-- chart axes -->
+    <line x1="510" y1="370" x2="710" y2="370" stroke="#E5E7EB" stroke-width="1.5"/>
+    <!-- grid lines for 50, 75, 100 -->
+    <line x1="510" y1="244" x2="710" y2="244" stroke="#F3F4F6" stroke-width="1"/>
+    <line x1="510" y1="294" x2="710" y2="294" stroke="#F3F4F6" stroke-width="1"/>
+    <line x1="510" y1="344" x2="710" y2="344" stroke="#F3F4F6" stroke-width="1"/>
+    <text x="503" y="248" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">100</text>
+    <text x="503" y="298" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">75</text>
+    <text x="503" y="348" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">50</text>
+
+    <!-- Bars: chart area y=232..370 (height 138 == 100%); each pct→ height = pct*138/100 -->
+    <!-- Bar1 cycle 0 -->
+    <rect x="528" y="370" width="40" height="0" rx="4" fill="#F59E0B" id="bar1"/>
+    <text id="bar1l" x="548" y="385" text-anchor="middle" font-size="10" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">c0</text>
+    <text id="bar1v" x="548" y="0" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace" opacity="0">—</text>
+    <!-- Bar2 cycle 1 -->
+    <rect x="608" y="370" width="40" height="0" rx="4" fill="#F59E0B" id="bar2"/>
+    <text id="bar2l" x="628" y="385" text-anchor="middle" font-size="10" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">c1</text>
+    <text id="bar2v" x="628" y="0" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace" opacity="0">—</text>
+    <!-- Bar3 cycle 2 -->
+    <rect x="688" y="370" width="40" height="0" rx="4" fill="#10B981" id="bar3"/>
+    <text id="bar3l" x="708" y="385" text-anchor="middle" font-size="10" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">c2</text>
+    <text id="bar3v" x="708" y="0" text-anchor="middle" font-size="10" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace" opacity="0">—</text>
+
+    <!-- delta arrows -->
+    <text id="d1" x="588" y="262" text-anchor="middle" font-size="11" fill="#10B981" font-weight="700" font-family="ui-monospace,monospace" opacity="0">+11</text>
+    <text id="d2" x="668" y="240" text-anchor="middle" font-size="11" fill="#10B981" font-weight="700" font-family="ui-monospace,monospace" opacity="0">+5</text>
+  </g>
+
+  <!-- Bottom takeaway -->
+  <rect x="32" y="492" width="716" height="40" rx="10" fill="#1F2937"/>
+  <text x="390" y="517" text-anchor="middle" font-size="13" fill="white" font-weight="600">A prompt isn't shipped — it's iterated. The eval set is the steering wheel.</text>
+
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+function $id(id){return document.getElementById(id);}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function easeInOut(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function lerp(a,b,t){return a+(b-a)*t;}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+
+// Stage centers (from SVG above)
+const STAGES=[
+  {id:'s1', x:290, y:160, name:'1 · defining output',     ang:-Math.PI/2},
+  {id:'s2', x:418, y:253, name:'2 · prototyping prompt',  ang:-Math.PI/2 + (2*Math.PI/5)},
+  {id:'s3', x:369, y:404, name:'3 · running evaluation',  ang:-Math.PI/2 + 2*(2*Math.PI/5)},
+  {id:'s4', x:211, y:404, name:'4 · instrumenting in prod', ang:-Math.PI/2 + 3*(2*Math.PI/5)},
+  {id:'s5', x:162, y:253, name:'5 · iterating with data', ang:-Math.PI/2 + 4*(2*Math.PI/5)}
+];
+
+const CYCLES=[
+  // each cycle records eval% at the end
+  {accuracy:78, sub:'first prototype', barId:'bar1', barVId:'bar1v'},
+  {accuracy:89, sub:'eval-driven rewrite', barId:'bar2', barVId:'bar2v', deltaId:'d1'},
+  {accuracy:94, sub:'tightened format + few-shot', barId:'bar3', barVId:'bar3v', deltaId:'d2'}
+];
+
+const CX=290, CY=295, R=135;
+const ARC_LEN=2*Math.PI*R; // 848
+
+function highlightStage(idx){
+  STAGES.forEach((s,i)=>{
+    const g=$id(s.id);
+    const c=g.querySelector('circle');
+    const ts=g.querySelectorAll('text');
+    if(i===idx){
+      c.setAttribute('fill','#F59E0B');
+      c.setAttribute('stroke','#92400E');
+      c.setAttribute('stroke-width','3');
+      // brighten texts
+      ts[0].setAttribute('fill','white');
+      ts[1].setAttribute('fill','white');
+      ts[2].setAttribute('fill','#FEF3C7');
+    }else{
+      c.setAttribute('fill','white');
+      c.setAttribute('stroke','#FDE68A');
+      c.setAttribute('stroke-width','2.5');
+      ts[0].setAttribute('fill','#92400E');
+      ts[1].setAttribute('fill','#1F2937');
+      ts[2].setAttribute('fill','#6B7280');
+    }
+  });
+  $id('activeStageText').textContent='→ '+STAGES[idx].name;
+}
+
+function clearStageHighlights(){
+  STAGES.forEach(s=>{
+    const g=$id(s.id);
+    const c=g.querySelector('circle');
+    const ts=g.querySelectorAll('text');
+    c.setAttribute('fill','white');
+    c.setAttribute('stroke','#FDE68A');
+    c.setAttribute('stroke-width','2.5');
+    ts[0].setAttribute('fill','#92400E');
+    ts[1].setAttribute('fill','#1F2937');
+    ts[2].setAttribute('fill','#6B7280');
+  });
+}
+
+function setTrav(angle){
+  // angle in radians, 0 at right; we want 0 at top (-PI/2)
+  const x=CX+R*Math.cos(angle);
+  const y=CY+R*Math.sin(angle);
+  $id('trav').setAttribute('cx',x);
+  $id('trav').setAttribute('cy',y);
+}
+
+function setProgress(pct){
+  // pct 0..1 around the ring (starting from top, clockwise via rotation)
+  const dashOff=ARC_LEN*(1-pct);
+  $id('progArc').setAttribute('stroke-dashoffset',String(dashOff));
+}
+
+function animBigNumber(to,dur,onDone){
+  const e=$id('accBig');
+  const fromV=parseFloat(e.textContent.replace('%',''))||0;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),v=lerp(fromV,to,easeOut(t));
+    e.textContent=Math.round(v)+'%';
+    if(t<1)requestAnimationFrame(tick);else if(onDone)onDone();
+  }
+  requestAnimationFrame(tick);
+}
+
+function animBar(barId,labelId,toPct,dur){
+  const bar=$id(barId);
+  const label=$id(labelId);
+  const fromH=parseFloat(bar.getAttribute('height'))||0;
+  const fromY=parseFloat(bar.getAttribute('y'))||370;
+  const toH=toPct*138/100;
+  const toY=370-toH;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const h=lerp(fromH,toH,e);
+    const y=lerp(fromY,toY,e);
+    bar.setAttribute('height',String(h));
+    bar.setAttribute('y',String(y));
+    if(t<1)requestAnimationFrame(tick);else{
+      label.textContent=toPct+'%';
+      label.setAttribute('y',String(toY-4));
+      label.setAttribute('opacity','1');
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function fadeIn(id,dur){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(t));
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function spinOnce(cycleIdx,onDone){
+  // Travel from -PI/2 around to -PI/2 + 2PI, hitting each stage
+  $id('trav').setAttribute('opacity','1');
+  const totalDur=4500; // 4.5s per cycle
+  const stageDur=totalDur/STAGES.length; // 900ms per stage
+
+  STAGES.forEach((s,i)=>{
+    after(i*stageDur,()=>highlightStage(i));
+  });
+  // Travel marker animation (rAF over 4.5s)
+  const start=performance.now();
+  const startAng=-Math.PI/2;
+  function tick(now){
+    const dt=(now-start);
+    const t=Math.min(dt/totalDur,1);
+    const ang=startAng + 2*Math.PI*easeInOut(t);
+    setTrav(ang);
+    setProgress(t);
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // Toward end of cycle, set accuracy
+  const cyc=CYCLES[cycleIdx];
+  after(totalDur-200,()=>{
+    animBigNumber(cyc.accuracy,500);
+    $id('accBigSub').textContent=cyc.sub;
+    animBar(cyc.barId, cyc.barVId, cyc.accuracy, 600);
+    if(cyc.deltaId){
+      after(700,()=>fadeIn(cyc.deltaId,400));
+    }
+  });
+
+  after(totalDur+700,()=>{
+    if(onDone)onDone();
+  });
+}
+
+function reset(){
+  clearAll();
+  // Reset visuals
+  $id('cycleNum').textContent='1';
+  $id('accBig').textContent='—';
+  $id('accBigSub').textContent='awaiting first eval…';
+  ['bar1','bar2','bar3'].forEach(id=>{
+    const b=$id(id);
+    b.setAttribute('height','0');
+    b.setAttribute('y','370');
+  });
+  ['bar1v','bar2v','bar3v','d1','d2'].forEach(id=>$id(id).setAttribute('opacity','0'));
+  setProgress(0);
+  $id('trav').setAttribute('opacity','0');
+  clearStageHighlights();
+  $id('activeStageText').textContent='→ ready';
+
+  // Cycle 1 → cycle 2 (twice the loop spins)
+  after(700,()=>{
+    $id('cycleNum').textContent='1';
+    spinOnce(0,()=>{
+      // brief pause
+      $id('cycleNum').textContent='2';
+      setProgress(0);
+      after(450,()=>{
+        spinOnce(1,()=>{
+          $id('cycleNum').textContent='3';
+          setProgress(0);
+          after(450,()=>{
+            spinOnce(2,()=>{
+              clearStageHighlights();
+              $id('activeStageText').textContent='→ accuracy climbing — cycle continues';
+              after(2200,reset);
+            });
+          });
+        });
+      });
+    });
+  });
+}
+
+$id('rb').addEventListener('click',reset);
+reset();
+
+})();
+</script>
+</body>
+</html>

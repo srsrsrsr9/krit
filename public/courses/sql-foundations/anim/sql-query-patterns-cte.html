@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CTE pipeline vs nested subqueries</title>
+<style>
+  :root{
+    --bg:#EFF6FF; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:720px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 720 405" aria-label="A three-stage CTE pipeline filters, groups, and selects top five cities, compared to a tangled nested subquery">
+    <rect width="720" height="405" fill="#EFF6FF"/>
+
+    <!-- Title -->
+    <text x="360" y="24" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      Same answer. Two ways to ask.
+    </text>
+
+    <!-- ===================== TOP HALF: CTE PIPELINE ===================== -->
+    <g transform="translate(20,46)">
+      <text x="0" y="14" font-size="11" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace">WITH …  (CTE pipeline)</text>
+      <text x="680" y="14" text-anchor="end" font-size="10" fill="#6B7280" font-style="italic">read top to bottom</text>
+    </g>
+
+    <!-- Pipeline track -->
+    <g transform="translate(20,60)">
+      <line x1="0" y1="60" x2="680" y2="60" stroke="#BFDBFE" stroke-width="2" stroke-dasharray="4,4"/>
+
+      <!-- Stage 1: Filter to Q1 -->
+      <g id="stage1" transform="translate(0,0)">
+        <rect x="0" y="20" width="170" height="80" rx="10" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.8"/>
+        <rect x="0" y="20" width="170" height="22" rx="10" fill="#0EA5E9"/>
+        <text x="10" y="35" font-size="10" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">stage 1 — q1_orders</text>
+        <text x="10" y="58" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">SELECT * FROM orders</text>
+        <text x="10" y="71" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">WHERE quarter = 'Q1'</text>
+        <g transform="translate(10,82)">
+          <text x="0" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">in: </text>
+          <text id="s1in" x="20" y="0" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace" font-weight="700">12,400</text>
+          <text x="76" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">out:</text>
+          <text id="s1out" x="100" y="0" font-size="9" fill="#10B981" font-family="ui-monospace,monospace" font-weight="700">3,210</text>
+        </g>
+      </g>
+
+      <!-- Arrow -->
+      <g transform="translate(170,60)" id="arrow1">
+        <line x1="0" y1="0" x2="40" y2="0" stroke="#0EA5E9" stroke-width="2"/>
+        <polygon points="40,-5 50,0 40,5" fill="#0EA5E9"/>
+      </g>
+
+      <!-- Stage 2: Group by city -->
+      <g id="stage2" transform="translate(225,0)" opacity="0.35">
+        <rect x="0" y="20" width="170" height="80" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.8"/>
+        <rect x="0" y="20" width="170" height="22" rx="10" fill="#10B981"/>
+        <text x="10" y="35" font-size="10" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">stage 2 — by_city</text>
+        <text x="10" y="58" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">SELECT city, SUM(amt)</text>
+        <text x="10" y="71" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">FROM q1_orders GROUP city</text>
+        <g transform="translate(10,82)">
+          <text x="0" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">in: </text>
+          <text id="s2in" x="20" y="0" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace" font-weight="700">3,210</text>
+          <text x="76" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">out:</text>
+          <text id="s2out" x="100" y="0" font-size="9" fill="#10B981" font-family="ui-monospace,monospace" font-weight="700">42</text>
+        </g>
+      </g>
+
+      <!-- Arrow -->
+      <g transform="translate(395,60)" id="arrow2">
+        <line x1="0" y1="0" x2="40" y2="0" stroke="#10B981" stroke-width="2"/>
+        <polygon points="40,-5 50,0 40,5" fill="#10B981"/>
+      </g>
+
+      <!-- Stage 3: Top 5 + decision card -->
+      <g id="stage3" transform="translate(450,0)" opacity="0.35">
+        <rect x="0" y="20" width="170" height="80" rx="10" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="1.8"/>
+        <rect x="0" y="20" width="170" height="22" rx="10" fill="#8B5CF6"/>
+        <text x="10" y="35" font-size="10" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">stage 3 — top_5</text>
+        <text x="10" y="58" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">SELECT * FROM by_city</text>
+        <text x="10" y="71" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace">ORDER BY sum DESC LIMIT 5</text>
+        <g transform="translate(10,82)">
+          <text x="0" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">in: </text>
+          <text id="s3in" x="20" y="0" font-size="9" fill="#1F2937" font-family="ui-monospace,monospace" font-weight="700">42</text>
+          <text x="76" y="0" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">out:</text>
+          <text id="s3out" x="100" y="0" font-size="9" fill="#10B981" font-family="ui-monospace,monospace" font-weight="700">5</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Decision card emerging from stage 3 -->
+    <g id="decisionCard" transform="translate(636,108)" opacity="0">
+      <rect x="-2" y="-2" width="64" height="50" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="30" y="11" text-anchor="middle" font-size="8" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">TOP 5</text>
+      <text x="30" y="22" text-anchor="middle" font-size="7" fill="#92400E" font-family="ui-monospace,monospace">1. Lagos</text>
+      <text x="30" y="30" text-anchor="middle" font-size="7" fill="#92400E" font-family="ui-monospace,monospace">2. Berlin</text>
+      <text x="30" y="38" text-anchor="middle" font-size="7" fill="#92400E" font-family="ui-monospace,monospace">3. Mumbai</text>
+      <text x="30" y="45" text-anchor="middle" font-size="6" fill="#92400E" font-family="ui-monospace,monospace">…</text>
+    </g>
+
+    <!-- Traveling token (data flowing through) -->
+    <circle id="token" cx="105" cy="120" r="5" fill="#F59E0B" opacity="0"/>
+
+    <!-- Divider -->
+    <line x1="20" y1="216" x2="700" y2="216" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2,4"/>
+    <text x="360" y="232" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">vs.</text>
+
+    <!-- ===================== BOTTOM HALF: NESTED ===================== -->
+    <g transform="translate(20,244)">
+      <text x="0" y="14" font-size="11" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">SELECT (SELECT (SELECT …))  (nested subqueries)</text>
+      <text x="680" y="14" text-anchor="end" font-size="10" fill="#6B7280" font-style="italic">read inside-out, then squint</text>
+    </g>
+
+    <!-- Russian-doll nested rectangles -->
+    <g transform="translate(20,260)">
+      <!-- Outer doll -->
+      <rect x="0" y="0" width="430" height="120" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.8"/>
+      <text x="10" y="16" font-size="10" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">SELECT * FROM (</text>
+      <text x="10" y="115" font-size="10" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">) ORDER BY sum DESC LIMIT 5;</text>
+
+      <!-- Middle doll -->
+      <rect x="22" y="24" width="396" height="78" rx="8" fill="#FFF1F2" stroke="#F87171" stroke-width="1.5"/>
+      <text x="32" y="40" font-size="9.5" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">SELECT city, SUM(amt) FROM (</text>
+      <text x="32" y="93" font-size="9.5" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">) GROUP BY city</text>
+
+      <!-- Inner doll -->
+      <rect x="42" y="50" width="356" height="34" rx="6" fill="#FFE4E6" stroke="#FCA5A5" stroke-width="1.2"/>
+      <text x="52" y="65" font-size="9.5" font-weight="700" fill="#7F1D1D" font-family="ui-monospace,monospace">SELECT * FROM orders</text>
+      <text x="52" y="78" font-size="9.5" font-weight="700" fill="#7F1D1D" font-family="ui-monospace,monospace">WHERE quarter = 'Q1'</text>
+
+      <!-- Animated tangle squiggle -->
+      <g id="tangle" opacity="0">
+        <path d="M210,12 Q260,40 200,60 Q160,80 220,98 Q280,108 250,114"
+              stroke="#F43F5E" stroke-width="1.2" fill="none" opacity="0.6" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Comparison panel on right -->
+    <g transform="translate(470,260)">
+      <rect x="0" y="0" width="230" height="120" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="11" font-weight="700" fill="#1F2937">same answer either way</text>
+
+      <g transform="translate(14,38)" font-family="ui-monospace,monospace">
+        <text x="0" y="0" font-size="9.5" fill="#0369A1">CTE  </text>
+        <text x="40" y="0" font-size="9.5" fill="#1F2937">— named, debuggable,</text>
+        <text x="40" y="12" font-size="9.5" fill="#1F2937">  reusable, easier diff.</text>
+      </g>
+
+      <g transform="translate(14,76)" font-family="ui-monospace,monospace">
+        <text x="0" y="0" font-size="9.5" fill="#9F1239">nest </text>
+        <text x="40" y="0" font-size="9.5" fill="#1F2937">— anonymous, unwind</text>
+        <text x="40" y="12" font-size="9.5" fill="#1F2937">  to read, easy to break.</text>
+      </g>
+    </g>
+  </svg>
+  <div class="caption">
+    Both queries return the same five cities. Only one of them you'll still understand on Monday.
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var stage1=document.getElementById('stage1');
+  var stage2=document.getElementById('stage2');
+  var stage3=document.getElementById('stage3');
+  var token =document.getElementById('token');
+  var card  =document.getElementById('decisionCard');
+  var tangle=document.getElementById('tangle');
+  var resetBtn=document.getElementById('reset');
+
+  function easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  // Stage box centers within the SVG (after the parent translate(20,60) on the pipeline group):
+  // Pipeline group origin: (20, 60). So in absolute coords:
+  // Stage1 box: x 20..190, y 80..160. Center: (105, 120)
+  // Stage2 box: x 245..415, y 80..160. Center: (330, 120)
+  // Stage3 box: x 470..640, y 80..160. Center: (555, 120)
+  // Card at (636,108).
+  var P1={x:105,y:120}, P2={x:330,y:120}, P3={x:555,y:120}, P4={x:666,y:130};
+
+  function setStageActive(g, on){
+    g.setAttribute('opacity', on ? '1' : '0.35');
+    // pulse the box stroke briefly
+    if(on){
+      var rect = g.querySelector('rect');
+      if(rect){
+        rect.setAttribute('stroke-width','2.6');
+        setTimeout(function(){ rect.setAttribute('stroke-width','1.8'); }, 350);
+      }
+    }
+  }
+
+  function moveToken(from, to, dur, onDone){
+    if(prefersReduce){ token.setAttribute('cx',to.x); token.setAttribute('cy',to.y); onDone&&onDone(); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/dur,1), v=easeInOut(t);
+      var x=lerp(from.x,to.x,v), y=lerp(from.y,to.y,v);
+      token.setAttribute('cx',x);
+      token.setAttribute('cy',y);
+      if(t<1) requestAnimationFrame(step); else onDone&&onDone();
+    }
+    requestAnimationFrame(step);
+  }
+
+  function showCard(){
+    if(prefersReduce){ card.setAttribute('opacity','1'); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/500,1), v=easeInOut(t);
+      card.setAttribute('opacity', String(v));
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function hideCard(){ card.setAttribute('opacity','0'); }
+
+  function showTangle(){
+    if(prefersReduce){ tangle.setAttribute('opacity','1'); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/700,1), v=easeInOut(t);
+      tangle.setAttribute('opacity', String(v*0.85));
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function hideTangle(){ tangle.setAttribute('opacity','0'); }
+
+  function play(){
+    // Reset
+    setStageActive(stage1, false);
+    setStageActive(stage2, false);
+    setStageActive(stage3, false);
+    hideCard(); hideTangle();
+    token.setAttribute('opacity','0');
+    token.setAttribute('cx', P1.x);
+    token.setAttribute('cy', P1.y);
+
+    if(prefersReduce){
+      setStageActive(stage1, true);
+      setStageActive(stage2, true);
+      setStageActive(stage3, true);
+      showCard();
+      showTangle();
+      return;
+    }
+
+    // 0ms — Show stage 1 active, token enters
+    setTimeout(function(){
+      setStageActive(stage1, true);
+      token.setAttribute('opacity','1');
+      // Token moves slightly inside stage 1 to show "filter happens"
+      moveToken({x: -10, y: P1.y}, P1, 600, function(){
+        // 700ms pause then move to stage 2
+        setTimeout(function(){
+          setStageActive(stage2, true);
+          moveToken(P1, P2, 800, function(){
+            // pause, then color shifts to green for grouping (token color change)
+            token.setAttribute('fill','#10B981');
+            setTimeout(function(){
+              setStageActive(stage3, true);
+              moveToken(P2, P3, 800, function(){
+                token.setAttribute('fill','#8B5CF6');
+                setTimeout(function(){
+                  // emit card
+                  moveToken(P3, P4, 500, function(){
+                    token.setAttribute('opacity','0');
+                    showCard();
+                    // Now show the tangle in the bottom half
+                    setTimeout(showTangle, 500);
+                    // Loop after a pause
+                    setTimeout(play, 4500);
+                  });
+                }, 500);
+              });
+            }, 400);
+          });
+        }, 600);
+      });
+    }, 200);
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

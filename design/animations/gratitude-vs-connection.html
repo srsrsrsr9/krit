@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Two Cheat Codes — Gratitude vs Connection</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#F5F0FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
+#w{position:relative;width:100%;max-width:720px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:12px;right:12px;background:#1F2937;color:#F5F0FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+#ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(31,41,55,0.52);backdrop-filter:blur(3px);border-radius:12px;z-index:20;cursor:pointer}
+#ov-btn{background:#F5F0FF;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.28);transition:transform .15s}
+#ov:hover #ov-btn{transform:scale(1.1)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 720 490" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Two parallel tracks: structured gratitude practice and engineered friendship plan">
+
+  <rect width="720" height="490" fill="#F5F0FF"/>
+
+  <!-- Title -->
+  <text x="360" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1F2937">Two cheat codes.</text>
+
+  <!-- ══ TOP TRACK: GRATITUDE  y 44–235 ══ -->
+  <rect x="14" y="44" width="692" height="192" rx="13" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="2"/>
+  <text x="32" y="65"  font-size="11" font-weight="700" fill="#7C3AED">GRATITUDE PRACTICE</text>
+  <text x="32" y="79"  font-size="9.5" fill="#9CA3AF">10 Sundays · 3 entries each</text>
+
+  <!-- NOTEBOOK: x 32–280, y 88–230 — firmly inside top track -->
+  <g id="nb" transform="translate(32,88)">
+    <!-- Notebook body -->
+    <rect x="0"  y="0"   width="200" height="138" rx="9" fill="white" stroke="#DDD6FE" stroke-width="2"/>
+    <!-- Binding -->
+    <rect x="0"  y="0"   width="14"  height="138" rx="5" fill="#8B5CF6" opacity="0.18"/>
+    <g stroke="#8B5CF6" stroke-width="1.5" fill="none">
+      <circle cx="7" cy="16" r="4"/><circle cx="7" cy="32" r="4"/>
+      <circle cx="7" cy="48" r="4"/><circle cx="7" cy="64" r="4"/>
+      <circle cx="7" cy="80" r="4"/><circle cx="7" cy="96" r="4"/>
+      <circle cx="7" cy="112" r="4"/><circle cx="7" cy="128" r="4"/>
+    </g>
+    <!-- Ruled lines -->
+    <g stroke="#F0E6FF" stroke-width="1">
+      <line x1="18" y1="24"  x2="196" y2="24"/>
+      <line x1="18" y1="44"  x2="196" y2="44"/>
+      <line x1="18" y1="64"  x2="196" y2="64"/>
+      <line x1="18" y1="84"  x2="196" y2="84"/>
+      <line x1="18" y1="104" x2="196" y2="104"/>
+      <line x1="18" y1="124" x2="196" y2="124"/>
+    </g>
+    <!-- Week label (updated by JS) -->
+    <text id="wklbl" x="108" y="13" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="700">Sunday 1</text>
+    <!-- Entry lines container -->
+    <g id="entries"/>
+  </g>
+
+  <!-- WELL-BEING GAUGE: x 560–700, y 88–230 — right side, clear of notebook -->
+  <g id="wbg" transform="translate(634,162)">
+    <text x="0" y="-72" text-anchor="middle" font-size="9" fill="#7C3AED" font-weight="600">well-being</text>
+    <circle cx="0" cy="0" r="52" fill="white" stroke="#DDD6FE" stroke-width="2"/>
+    <!-- Background arc -->
+    <circle cx="0" cy="0" r="36" fill="none" stroke="#F0E6FF" stroke-width="9"/>
+    <!-- Fill arc -->
+    <circle id="wba" cx="0" cy="0" r="36" fill="none" stroke="#7C3AED" stroke-width="9"
+            stroke-dasharray="45 226" stroke-dashoffset="170" stroke-linecap="round"
+            transform="rotate(-90)"/>
+    <text id="wbv" x="0" y="8" text-anchor="middle" font-size="22" font-weight="700" fill="#7C3AED" font-family="ui-monospace,monospace">7.0</text>
+    <text x="0" y="22" text-anchor="middle" font-size="7.5" fill="#9CA3AF">/ 10</text>
+    <!-- Gauge needle -->
+    <g id="wbn" transform="rotate(-54)"><!-- -90 + 7*18*0.4 = -90+50.4 ≈ -54 (scaled 0-10 over 180°) -->
+      <line x1="0" y1="0" x2="0" y2="-33" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <circle cx="0" cy="0" r="5" fill="#F43F5E"/>
+    <text x="-50" y="20" text-anchor="middle" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">0</text>
+    <text x="50"  y="20" text-anchor="middle" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">10</text>
+  </g>
+
+  <!-- Top-track caption (week moves) -->
+  <text id="trcap" x="180" y="228" text-anchor="middle" font-size="10" fill="#7C3AED" opacity="0"/>
+
+  <!-- ══ DIVIDER ══ -->
+  <line x1="14" y1="240" x2="706" y2="240" stroke="#DDD6FE" stroke-width="2"/>
+
+  <!-- ══ BOTTOM TRACK: FRIENDSHIP  y 248–450 ══ -->
+  <rect x="14" y="248" width="692" height="202" rx="13" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="2"/>
+  <text x="32" y="270" font-size="11" font-weight="700" fill="#065F46">FRIENDSHIP ENGINEERING</text>
+  <text x="32" y="284" font-size="9.5" fill="#9CA3AF">4 weeks · one move per week</text>
+
+  <!-- Week boxes — 4 equal columns inside bottom track -->
+  <!-- Each box: width=158, height=130, with 10px gap. x = 22+i*168 -->
+  <g id="wk1" opacity="0">
+    <rect x="22" y="295" width="158" height="132" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="101" y="312" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">Week 1 — The Audit</text>
+    <!-- 5 person badges -->
+    <g font-size="18" text-anchor="middle">
+      <text x="48"  y="352">👤</text><text x="76"  y="352">👤</text>
+      <text x="104" y="352">👤</text><text x="132" y="352">👤</text>
+      <text x="160" y="352">👤</text>
+    </g>
+    <text x="101" y="378" text-anchor="middle" font-size="9" fill="#065F46">name your 5 close people</text>
+    <text x="101" y="393" text-anchor="middle" font-size="9" fill="#6B7280">"who would I call at 2 AM?"</text>
+  </g>
+
+  <g id="wk2" opacity="0">
+    <rect x="190" y="295" width="158" height="132" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="269" y="312" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">Week 2 — The Opener</text>
+    <!-- Speech bubble -->
+    <rect x="200" y="320" width="138" height="34" rx="9" fill="white" stroke="#10B981" stroke-width="1.5"/>
+    <polygon points="259,354 269,354 264,362" fill="white" stroke="#10B981" stroke-width="1.5"/>
+    <text x="269" y="336" text-anchor="middle" font-size="9"   fill="#065F46">"Thought of you — hope</text>
+    <text x="269" y="349" text-anchor="middle" font-size="9"   fill="#065F46">you're doing well 👋"</text>
+    <text x="269" y="393" text-anchor="middle" font-size="9"   fill="#065F46">no agenda. just warmth.</text>
+  </g>
+
+  <g id="wk3" opacity="0">
+    <rect x="358" y="295" width="158" height="132" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="437" y="312" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">Week 3 — The Cadence</text>
+    <!-- Calendar slot -->
+    <rect x="368" y="320" width="138" height="32" rx="7" fill="#10B981"/>
+    <text x="437" y="332" text-anchor="middle" font-size="9" fill="white" font-weight="700">Tue 8 pm</text>
+    <text x="437" y="345" text-anchor="middle" font-size="8" fill="white" opacity="0.85">↻ recurring · locked in</text>
+    <text x="437" y="378" text-anchor="middle" font-size="9" fill="#065F46">schedule before you forget</text>
+    <text x="437" y="393" text-anchor="middle" font-size="9" fill="#6B7280">make it effortless to show up</text>
+  </g>
+
+  <g id="wk4" opacity="0">
+    <rect x="526" y="295" width="158" height="132" rx="8" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="605" y="312" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">Week 4 — Depth Move</text>
+    <!-- Two heads -->
+    <circle cx="580" cy="348" r="16" fill="#FBBF24" stroke="#1F2937" stroke-width="1.5"/>
+    <circle cx="632" cy="348" r="16" fill="#F9A8D4" stroke="#1F2937" stroke-width="1.5"/>
+    <!-- Hearts/sparkle between them -->
+    <text x="606" y="340" text-anchor="middle" font-size="14">✨</text>
+    <text x="605" y="390" text-anchor="middle" font-size="9" fill="#065F46">share something real</text>
+    <text x="605" y="403" text-anchor="middle" font-size="9" fill="#6B7280">"vulnerability" → connection</text>
+  </g>
+
+  <!-- Bottom caption -->
+  <text id="brcap" x="360" y="464" text-anchor="middle" font-size="10" fill="#065F46" opacity="0"/>
+
+  <!-- END CARD -->
+  <g id="endcard" opacity="0">
+    <rect x="50" y="180" width="620" height="86" rx="14" fill="#1F2937"/>
+    <text x="360" y="220" text-anchor="middle" font-size="16" fill="white" font-weight="700">Boring on the surface.</text>
+    <text x="360" y="246" text-anchor="middle" font-size="14" fill="#9CA3AF">Index-fund returns underneath.</text>
+  </g>
+
+</svg>
+<button id="rb">↺ reset</button>
+<div id="ov"><div id="ov-btn"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l18 10L7 24V4z" fill="#1F2937"/></svg></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ── AUDIO ─────────────────────────────────────────────
+let AC=null,bgTimer=null,bgIdx=0;
+function getAC(){
+  if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume().catch(()=>{});
+  return AC;
+}
+document.addEventListener('click',()=>{try{getAC();}catch(e){}},{passive:true});
+
+function tone(freq,dur,delay,type,vol){
+  delay=delay||0;type=type||'sine';vol=vol||0.2;
+  try{
+    const c=getAC(),t=c.currentTime+delay;
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    o.start(t);o.stop(t+dur+0.1);
+  }catch(e){}
+}
+function nz(dur,delay,fc,vol){
+  delay=delay||0;fc=fc||1000;vol=vol||0.18;
+  try{
+    const c=getAC(),sr=c.sampleRate,t=c.currentTime+delay;
+    const buf=c.createBuffer(1,Math.ceil(sr*Math.max(dur,0.05)),sr);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fc;f.Q.value=1;
+    const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    const s=c.createBufferSource();s.buffer=buf;s.connect(f);f.connect(g);g.connect(c.destination);
+    s.start(t);s.stop(t+dur+0.1);
+  }catch(e){}
+}
+
+function sfxPenWrite(){ nz(0.12,0,600,0.12);nz(0.08,0.12,400,0.08);}
+function sfxWeekTick(){ tone(880,0.18,0,'sine',0.18);tone(1320,0.12,0.08,'sine',0.1);}
+function sfxGaugeRise(){ tone(440,0.12,0,'sine',0.1);tone(523.25,0.1,0.12,'sine',0.08);}
+function sfxCalendar(){ nz(0.06,0,1500,0.15);tone(660,0.15,0.04,'sine',0.15);}
+function sfxMessage(){ tone(523.25,0.15,0,'sine',0.18);tone(659.25,0.12,0.1,'sine',0.14);}
+function sfxSpark(){ for(let i=0;i<4;i++) tone(800+i*200,0.12,i*0.08,'sine',0.12);}
+
+const BG=[261.63,311.13,392,493.88,392,311.13,261.63,220];
+function startBg(){
+  if(bgTimer)return;
+  function beat(){
+    const f=BG[bgIdx%BG.length];
+    tone(f,2.4,0,'sine',0.026);
+    bgIdx++;bgTimer=setTimeout(beat,2100);
+  }beat();
+}
+function stopBg(){clearTimeout(bgTimer);bgTimer=null;}
+
+// ── UTILS ─────────────────────────────────────────────
+const NS='http://www.w3.org/2000/svg';
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];stopBg();}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+// Entries
+const ENTRIES=[
+  ['my morning coffee ritual','the quiet before work','old playlist on commute'],
+  ['call from Mum out of nowhere','stranger held the lift door','had time to cook properly'],
+  ['finished that overdue book','evening light through window','stretch that fixed my neck'],
+  ['friend remembered my story','parking spot on first try','laughed until I snorted'],
+  ['deadline moved back a week','new tea I actually liked','dog sat on my feet (not mine)'],
+  ['got lost, found a better route','met deadline with 2 min spare','clean bedsheets Tuesday'],
+  ['rain smelled like childhood','honest talk with old friend','nailed the parallel park'],
+  ['remembered everyone\'s orders','sunset behind the crane','inbox zero (briefly)'],
+  ['no alarm today','tomato plant finally fruited','problem solved in shower'],
+  ['10 weeks of this. Still works.','good silence with good company','wrote this sentence'],
+];
+
+function wbAngle(v){return -90+v*(180/10);} // -90 to 90 for 0-10
+
+function animWB(fromV,toV,dur,cb){
+  const circ=2*Math.PI*36;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const v=lerp(fromV,toV,e);
+    const angle=wbAngle(v);
+    $id('wbn').setAttribute('transform',`rotate(${angle})`);
+    $id('wbv').textContent=v.toFixed(1);
+    // Arc portion
+    const portion=(v/10)*circ*0.5;
+    $id('wba').setAttribute('stroke-dasharray',`${portion.toFixed(1)} ${circ.toFixed(1)}`);
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+let wbVal=7;
+
+function showWeek(wIdx){
+  const lbl=$id('wklbl');
+  lbl.textContent=`Sunday ${wIdx+1}`;
+  const entries=$id('entries');
+  while(entries.firstChild)entries.removeChild(entries.firstChild);
+  const week=ENTRIES[wIdx]||[];
+  const toShow=week.slice(0,3);
+  toShow.forEach((txt,i)=>{
+    const el=document.createElementNS(NS,'text');
+    el.setAttribute('x','20');
+    el.setAttribute('y',String(38+i*22));
+    el.setAttribute('font-size','9');
+    el.setAttribute('fill','#4B5563');
+    el.setAttribute('font-family','system-ui,-apple-system,sans-serif');
+    el.setAttribute('transform','skewX(-4)');
+    el.setAttribute('opacity','0');
+    el.textContent='— '+txt;
+    entries.appendChild(el);
+    // Animate in with pen delay
+    const delay=i*200;
+    setTimeout(()=>{
+      sfxPenWrite();
+      const s2=performance.now();
+      function tick2(now){
+        const t=Math.min((now-s2)/250,1),e=easeOut(t);
+        el.setAttribute('opacity',String(e));
+        if(t<1)requestAnimationFrame(tick2);
+      }
+      requestAnimationFrame(tick2);
+    },delay);
+  });
+  sfxWeekTick();
+  // Nudge WB gauge
+  const nextWB=Math.min(7+wIdx*0.065,7.65);
+  animWB(wbVal,nextWB,600,null);
+  wbVal=nextWB;
+  sfxGaugeRise();
+}
+
+function run(){
+  clearAll();
+  // Reset
+  wbVal=7;
+  $id('wklbl').textContent='Sunday 1';
+  const entries=$id('entries');while(entries.firstChild)entries.removeChild(entries.firstChild);
+  setOp('wk1',0);setOp('wk2',0);setOp('wk3',0);setOp('wk4',0);
+  setOp('trcap',0);setOp('brcap',0);setOp('endcard',0);
+  $id('wbn').setAttribute('transform',`rotate(${wbAngle(7)})`);
+  $id('wba').setAttribute('stroke-dasharray','35.6 226');
+  $id('wbv').textContent='7.0';
+  startBg();
+
+  // Gratitude: 10 weeks over ~9s
+  const wDur=850;
+  for(let w=0;w<10;w++){
+    after(w*wDur,()=>showWeek(w));
+  }
+
+  // Friendship: 4 moves timed against gratitude
+  after(500,()=>{
+    animOp('wk1',0,1,500,null);
+    sfxCalendar();
+    const c=$id('brcap');c.textContent='The audit: name your 5 close people.';
+    animOp('brcap',0,1,400,null);
+  });
+  after(2600,()=>{
+    animOp('wk2',0,1,500,null);
+    sfxMessage();
+    $id('brcap').textContent='The opener: no-agenda message sent.';
+  });
+  after(5100,()=>{
+    animOp('wk3',0,1,500,null);
+    sfxCalendar();
+    $id('brcap').textContent='The cadence: Tuesday 8 pm, recurring.';
+  });
+  after(7200,()=>{
+    animOp('wk4',0,1,500,null);
+    sfxSpark();
+    $id('brcap').textContent='The depth move: share something real.';
+  });
+
+  // End card
+  after(10000,()=>{
+    animOp('brcap',1,0,300,null);
+    animOp('trcap',1,0,300,null);
+    after(400,()=>animOp('endcard',0,1,600,null));
+  });
+
+  // Loop
+  after(12800,()=>{
+    animOp('endcard',1,0,500,()=>{ after(400,run); });
+  });
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+document.getElementById('ov').addEventListener('click',()=>{
+  getAC();
+  document.getElementById('ov').style.display='none';
+  run();
+},{once:true});
+})();
+</script>
+</body>
+</html>

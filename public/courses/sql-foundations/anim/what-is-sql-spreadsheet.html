@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQL is a spreadsheet with rules</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B; --blue:#0EA5E9; --purple:#8B5CF6;
+    --xlbg:#ECFDF5; --sqlbg:#EFF6FF;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:720px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 720 405" aria-label="Excel cells drift and overflow under load while a SQL table holds its shape">
+    <rect width="720" height="405" fill="#FFF7ED"/>
+
+    <!-- Title -->
+    <text x="360" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      Same data, 100,000 inserts later.
+    </text>
+
+    <!-- Counter -->
+    <g transform="translate(360,46)">
+      <rect x="-60" y="-12" width="120" height="20" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text id="counter" x="0" y="3" text-anchor="middle" font-size="11" font-weight="700"
+            fill="#1F2937" font-family="ui-monospace,monospace">0 rows</text>
+    </g>
+
+    <!-- ===================== LEFT: SPREADSHEET ===================== -->
+    <g transform="translate(20,80)">
+      <rect x="0" y="0" width="320" height="280" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+      <text x="14" y="22" font-size="13" font-weight="700" fill="#065F46">Spreadsheet</text>
+      <text x="14" y="38" font-size="10" fill="#047857" font-style="italic">"a cell is whatever you type"</text>
+
+      <!-- Column headers -->
+      <g transform="translate(10,52)">
+        <rect x="0" y="0" width="300" height="22" rx="4" fill="#D1FAE5"/>
+        <line x1="80" y1="0" x2="80" y2="22" stroke="#10B981" stroke-width="0.8"/>
+        <line x1="180" y1="0" x2="180" y2="22" stroke="#10B981" stroke-width="0.8"/>
+        <line x1="240" y1="0" x2="240" y2="22" stroke="#10B981" stroke-width="0.8"/>
+        <text x="40" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">name</text>
+        <text x="130" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">price</text>
+        <text x="210" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">date</text>
+        <text x="270" y="15" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">qty</text>
+      </g>
+
+      <!-- Spreadsheet rows -->
+      <g id="xlRows" transform="translate(10,76)" font-family="ui-monospace,monospace" font-size="9.5"></g>
+
+      <!-- Crack overlay (for chaos stage) -->
+      <g id="xlCracks" opacity="0" transform="translate(10,76)" pointer-events="none">
+        <path d="M0,30 L80,38 L160,28 L240,42 L300,36" stroke="#F43F5E" stroke-width="0.7" fill="none" opacity="0.4"/>
+        <path d="M0,90 L60,86 L140,98 L220,88 L300,96" stroke="#F43F5E" stroke-width="0.7" fill="none" opacity="0.4"/>
+        <path d="M40,0 L48,180" stroke="#F43F5E" stroke-width="0.5" fill="none" opacity="0.3"/>
+      </g>
+
+      <!-- Status pill -->
+      <g id="xlStatus" transform="translate(160,260)">
+        <rect x="-70" y="-9" width="140" height="18" rx="9" fill="#FFFFFF" stroke="#10B981" stroke-width="1.2"/>
+        <text id="xlStatusText" x="0" y="3" text-anchor="middle" font-size="10" font-weight="700" fill="#047857">happy and small</text>
+      </g>
+    </g>
+
+    <!-- ===================== RIGHT: SQL TABLE ===================== -->
+    <g transform="translate(380,80)">
+      <rect x="0" y="0" width="320" height="280" rx="10" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2"/>
+      <text x="14" y="22" font-size="13" font-weight="700" fill="#075985">SQL table</text>
+      <text x="14" y="38" font-size="10" fill="#0369A1" font-style="italic">"a cell is what its column allows"</text>
+
+      <!-- Column headers w/ types -->
+      <g transform="translate(10,52)">
+        <rect x="0" y="0" width="300" height="34" rx="4" fill="#DBEAFE"/>
+        <line x1="80" y1="0" x2="80" y2="34" stroke="#0EA5E9" stroke-width="0.8"/>
+        <line x1="180" y1="0" x2="180" y2="34" stroke="#0EA5E9" stroke-width="0.8"/>
+        <line x1="240" y1="0" x2="240" y2="34" stroke="#0EA5E9" stroke-width="0.8"/>
+        <text x="40" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">name</text>
+        <text x="40" y="27" text-anchor="middle" font-size="8" fill="#0369A1" font-family="ui-monospace,monospace">VARCHAR(40)</text>
+        <text x="130" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">price</text>
+        <text x="130" y="27" text-anchor="middle" font-size="8" fill="#0369A1" font-family="ui-monospace,monospace">NUMERIC(8,2)</text>
+        <text x="210" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">date</text>
+        <text x="210" y="27" text-anchor="middle" font-size="8" fill="#0369A1" font-family="ui-monospace,monospace">DATE</text>
+        <text x="270" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">qty</text>
+        <text x="270" y="27" text-anchor="middle" font-size="8" fill="#0369A1" font-family="ui-monospace,monospace">INTEGER</text>
+      </g>
+
+      <!-- SQL rows -->
+      <g id="sqlRows" transform="translate(10,88)" font-family="ui-monospace,monospace" font-size="9.5"></g>
+
+      <!-- Rejection slips area -->
+      <g id="sqlRejects" transform="translate(10,224)" opacity="0">
+        <rect x="0" y="0" width="300" height="22" rx="4" fill="#FEE2E2" stroke="#F43F5E" stroke-width="1"/>
+        <text id="sqlRejText" x="150" y="14" text-anchor="middle" font-size="9.5" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">
+          ERROR: 3 rows rejected (type mismatch)
+        </text>
+      </g>
+
+      <!-- Status pill -->
+      <g id="sqlStatus" transform="translate(160,260)">
+        <rect x="-70" y="-9" width="140" height="18" rx="9" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.2"/>
+        <text id="sqlStatusText" x="0" y="3" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">strict and tidy</text>
+      </g>
+    </g>
+
+    <!-- Stage marker -->
+    <g transform="translate(360,388)">
+      <text id="stageLabel" x="0" y="0" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+        stage 1 of 4 — the small, polite database
+      </text>
+    </g>
+  </svg>
+  <div class="caption">A spreadsheet trusts you. A database doesn't. That's the whole feature.</div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var xlRows=document.getElementById('xlRows');
+  var sqlRows=document.getElementById('sqlRows');
+  var counter=document.getElementById('counter');
+  var xlStatusText=document.getElementById('xlStatusText');
+  var sqlStatusText=document.getElementById('sqlStatusText');
+  var sqlRejects=document.getElementById('sqlRejects');
+  var sqlRejText=document.getElementById('sqlRejText');
+  var xlCracks=document.getElementById('xlCracks');
+  var stageLabel=document.getElementById('stageLabel');
+  var resetBtn=document.getElementById('reset');
+
+  // Both sides have 8 visible rows
+  var ROWS=8, ROW_H=18;
+
+  // Clean (stage 1) data
+  var clean=[
+    ["Apple",      "1.20", "2026-01-04", "12"],
+    ["Pear",       "0.95", "2026-01-04", "30"],
+    ["Bread",      "3.50", "2026-01-05", "4"],
+    ["Milk 1L",    "2.10", "2026-01-05", "8"],
+    ["Eggs x6",    "2.80", "2026-01-05", "6"],
+    ["Coffee",     "9.40", "2026-01-06", "2"],
+    ["Tea",        "4.10", "2026-01-06", "5"],
+    ["Honey",      "7.25", "2026-01-07", "1"]
+  ];
+
+  // Drifted (stage 2-3) — humans typing nonsense
+  var drift=[
+    ["Apple",                "$1.20",        "1/4/26",      "twelve"],
+    ["Pear pear",            "free?",        "Jan 4",       "30"],
+    ["Bread",                "3.50",         "2026-01-05",  "4"],
+    ["organic Milk 1L FRESH","2,10",         "today",       "eight"],
+    ["Eggs x6 (cracked 1)",  "2.80",         "5-Jan",       "6"],
+    ["coffee ☕",            "nine.40",      "2026/1/6",    "two"],
+    ["TEA",                  "4.10 USD",     "yesterday",   "5"],
+    ["honey ❤❤❤❤❤❤❤❤", "TBD",          "?",            "1"]
+  ];
+
+  // SQL stage 2 — same intent, but 3 rows are rejected (italic placeholders)
+  var sqlClean=[
+    ["Apple",      "1.20",  "2026-01-04", "12"],
+    ["Pear",       "0.95",  "2026-01-04", "30"],
+    ["Bread",      "3.50",  "2026-01-05", "4"],
+    ["Milk 1L",    "2.10",  "2026-01-05", "8"],
+    ["Eggs x6",    "2.80",  "2026-01-05", "6"],
+    ["Coffee",     "9.40",  "2026-01-06", "2"],
+    ["Tea",        "4.10",  "2026-01-06", "5"],
+    ["Honey",      "7.25",  "2026-01-07", "1"]
+  ];
+
+  // SQL replacement set for stage 4 — keeps shape (8 rows), rejects bad inputs
+  var sqlAfter=[
+    ["Apple",        "1.20",  "2026-01-04", "12"],
+    ["[rejected]",   "—",     "—",          "—"],
+    ["Bread",        "3.50",  "2026-01-05", "4"],
+    ["[rejected]",   "—",     "—",          "—"],
+    ["Eggs x6",      "2.80",  "2026-01-05", "6"],
+    ["[rejected]",   "—",     "—",          "—"],
+    ["Tea",          "4.10",  "2026-01-06", "5"],
+    ["Honey",        "7.25",  "2026-01-07", "1"]
+  ];
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+
+  // Truncate text without measuring (cheap but predictable)
+  function trunc(s, max){
+    if(s.length<=max) return s;
+    return s.slice(0,max-1)+'…';
+  }
+
+  // Render a row group
+  // mode: 'xl' or 'sql', chaos = boolean (drifted look), rejected = optional flag for sql side
+  function renderRows(g, data, mode, chaos){
+    clear(g);
+    var cols=[40,130,210,270];     // x-centers of the 4 columns
+    var maxLens=[10,7,11,5];       // truncation per col
+    for(var i=0;i<ROWS;i++){
+      var d=data[i] || ['','','',''];
+      var y=i*ROW_H;
+      // row background
+      var rowBg=el('rect',{x:0,y:y,width:300,height:ROW_H-2,rx:3,
+        fill: (i%2===0)?'#FFFFFF':(mode==='xl'?'#F0FDF4':'#F0F9FF'),
+        opacity:0.85});
+      g.appendChild(rowBg);
+
+      // separators
+      [80,180,240].forEach(function(x){
+        var ln=el('line',{x1:x,y1:y,x2:x,y2:y+ROW_H-2,
+          stroke: mode==='xl'?'#A7F3D0':'#BAE6FD', 'stroke-width':0.7});
+        g.appendChild(ln);
+      });
+
+      var rejected = (d[0]==='[rejected]');
+
+      for(var c=0;c<4;c++){
+        var raw=d[c]||'';
+        var txt=trunc(raw, maxLens[c]);
+        var color='#1F2937';
+        var fontStyle='normal';
+        var weight='normal';
+
+        if(rejected){
+          color='#9CA3AF';
+          fontStyle='italic';
+        } else if(chaos && mode==='xl'){
+          // color the obviously broken cells
+          var bad=false;
+          if(c===1 && /[a-zA-Z$,?]/.test(raw)) bad=true;          // price not numeric
+          if(c===2 && !/^\d{4}-\d{2}-\d{2}$/.test(raw)) bad=true; // date not ISO
+          if(c===3 && /[a-zA-Z]/.test(raw)) bad=true;             // qty not integer
+          if(c===0 && raw.length>10) bad=true;                    // name overflow
+          if(bad){ color='#9F1239'; weight='700'; }
+        }
+
+        var t=el('text',{
+          x:cols[c], y:y+12, 'text-anchor':'middle',
+          'font-size':9.5, 'font-family':'ui-monospace,monospace',
+          fill:color, 'font-style':fontStyle, 'font-weight':weight
+        });
+        t.textContent = txt;
+        g.appendChild(t);
+
+        // Overflow indicator on excel side: if name long, draw a ragged red right edge
+        if(chaos && mode==='xl' && c===0 && raw.length>10){
+          var spill=el('rect',{x:78,y:y+1,width:2,height:ROW_H-4,fill:'#F43F5E',opacity:0.7});
+          g.appendChild(spill);
+        }
+        // Special: emoji overflow on honey row
+        if(chaos && mode==='xl' && c===0 && raw.indexOf('❤')>=0){
+          var h=el('text',{x:130,y:y+12,'font-size':9,'font-family':'ui-monospace,monospace',fill:'#F43F5E',opacity:0.7});
+          h.textContent='❤❤❤❤';
+          g.appendChild(h);
+        }
+      }
+    }
+  }
+
+  // -------- Stages --------
+  var stages=[
+    { label:'stage 1 of 4 — the small, polite database',
+      n:8, xl:clean, sql:sqlClean,
+      xlStat:'happy and small', sqlStat:'happy and small',
+      xlChaos:false, sqlReject:false, crack:0 },
+    { label:'stage 2 of 4 — humans start typing',
+      n:1240, xl:drift, sql:sqlClean,
+      xlStat:'cells start lying', sqlStat:'rejects bad inputs',
+      xlChaos:true, sqlReject:true, sqlRejN:'ERROR: 3 rows rejected (type mismatch)',
+      crack:0.3 },
+    { label:'stage 3 of 4 — under load',
+      n:38000, xl:drift, sql:sqlAfter,
+      xlStat:'sorting by "price" returns chaos', sqlStat:'still typed, still tidy',
+      xlChaos:true, sqlReject:true, sqlRejN:'ERROR: 11,402 rows rejected over time',
+      crack:0.7 },
+    { label:'stage 4 of 4 — 100,000 inserts in',
+      n:100000, xl:drift, sql:sqlAfter,
+      xlStat:'open the file at your own risk', sqlStat:'shape held. all 88,598 valid rows.',
+      xlChaos:true, sqlReject:true, sqlRejN:'ERROR: 11,402 rows rejected (logged + recoverable)',
+      crack:1 }
+  ];
+
+  var stageIdx=0;
+  var counterFrom=0;
+  var stageStart=0;
+  var STAGE_MS=2600;
+  var animId=null;
+
+  function fmtRows(n){
+    if(n<1000) return n+' rows';
+    if(n<1000000) return Math.round(n/100)/10 + 'k rows';
+    return (n/1000000).toFixed(1)+'M rows';
+  }
+  function easeOut(t){ return 1-Math.pow(1-t,3); }
+
+  function setStage(i){
+    var s=stages[i];
+    renderRows(xlRows, s.xl, 'xl', s.xlChaos);
+    renderRows(sqlRows, s.sql, 'sql', false);
+    xlStatusText.textContent = s.xlStat;
+    sqlStatusText.textContent = s.sqlStat;
+    stageLabel.textContent = s.label;
+    sqlRejects.setAttribute('opacity', s.sqlReject?'1':'0');
+    if(s.sqlReject) sqlRejText.textContent = s.sqlRejN || sqlRejText.textContent;
+    xlCracks.setAttribute('opacity', String(s.crack));
+    counterFrom = i===0 ? 0 : stages[i-1].n;
+    stageStart = performance.now();
+    counter.textContent = fmtRows(s.n);
+  }
+
+  function tick(now){
+    var s=stages[stageIdx];
+    var t=Math.min((now-stageStart)/STAGE_MS, 1);
+    var v=easeOut(t);
+    var n=Math.round(counterFrom + (s.n - counterFrom)*v);
+    counter.textContent = fmtRows(n);
+    if(t<1){
+      animId=requestAnimationFrame(tick);
+    } else {
+      // hold then advance
+      setTimeout(function(){
+        stageIdx++;
+        if(stageIdx>=stages.length){
+          // pause then loop
+          setTimeout(function(){ stageIdx=0; setStage(0); animId=requestAnimationFrame(tick); }, 2200);
+        } else {
+          setStage(stageIdx);
+          animId=requestAnimationFrame(tick);
+        }
+      }, 600);
+    }
+  }
+
+  function play(){
+    if(animId) cancelAnimationFrame(animId);
+    stageIdx=0;
+    setStage(0);
+    if(prefersReduce){
+      // Jump to final stage instantly
+      stageIdx = stages.length-1;
+      setStage(stageIdx);
+      counter.textContent = fmtRows(stages[stageIdx].n);
+      return;
+    }
+    animId=requestAnimationFrame(tick);
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

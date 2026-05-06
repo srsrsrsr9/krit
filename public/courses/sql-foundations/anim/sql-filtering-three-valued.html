@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQL three-valued logic — TRUE, FALSE, UNKNOWN</title>
+<style>
+  :root{
+    --bg:#FAF5FF; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:720px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 720 405" aria-label="Eight rows pass through a WHERE filter; TRUE rows pass, FALSE rows are blocked, UNKNOWN (NULL) rows are silently dropped">
+    <rect width="720" height="405" fill="#FAF5FF"/>
+
+    <!-- Title -->
+    <text x="360" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      <tspan font-family="ui-monospace,monospace" fill="#7C3AED">WHERE</tspan>
+      <tspan> price &gt; 5</tspan>
+    </text>
+    <text x="360" y="44" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      Three answers: yes, no, and "I have no idea."
+    </text>
+
+    <!-- ===================== INPUT TABLE (left) ===================== -->
+    <g transform="translate(20,68)">
+      <rect x="0" y="0" width="220" height="296" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="22" font-size="12" font-weight="700" fill="#1F2937">orders</text>
+
+      <!-- Header -->
+      <g transform="translate(10,32)">
+        <rect x="0" y="0" width="200" height="22" rx="4" fill="#F3E8FF"/>
+        <line x1="44" y1="0" x2="44" y2="22" stroke="#C4B5FD" stroke-width="0.8"/>
+        <line x1="124" y1="0" x2="124" y2="22" stroke="#C4B5FD" stroke-width="0.8"/>
+        <text x="22" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">id</text>
+        <text x="84" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">item</text>
+        <text x="162" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">price</text>
+      </g>
+
+      <g id="inputRows" transform="translate(10,56)" font-family="ui-monospace,monospace" font-size="10"></g>
+    </g>
+
+    <!-- ===================== FILTER (middle) ===================== -->
+    <!-- A vertical "sieve" with 3 lanes -->
+    <g transform="translate(260,68)">
+      <!-- Filter housing -->
+      <rect x="0" y="0" width="200" height="296" rx="14" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="2"/>
+      <rect x="0" y="0" width="200" height="36" rx="14" fill="#8B5CF6"/>
+      <text x="100" y="23" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">WHERE clause</text>
+
+      <!-- Three lanes labeled at the bottom of the filter -->
+      <g transform="translate(0,260)" font-family="ui-monospace,monospace">
+        <text x="36"  y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#047857">TRUE</text>
+        <text x="100" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#9F1239">FALSE</text>
+        <text x="164" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#92400E">UNKNOWN</text>
+      </g>
+
+      <!-- Lane separators -->
+      <line x1="68"  y1="36" x2="68"  y2="260" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="132" y1="36" x2="132" y2="260" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <!-- Lane subtle background -->
+      <rect x="2"   y="36" width="64" height="222" fill="#ECFDF5" opacity="0.5"/>
+      <rect x="68"  y="36" width="64" height="222" fill="#FEF2F2" opacity="0.5"/>
+      <rect x="132" y="36" width="64" height="222" fill="#FFFBEB" opacity="0.5"/>
+
+      <!-- Decision text per row, set by JS -->
+      <text id="evalText" x="100" y="156" text-anchor="middle" font-size="10"
+            font-family="ui-monospace,monospace" font-weight="700" fill="#1F2937" opacity="0">
+        5 &gt; 5  →  FALSE
+      </text>
+    </g>
+
+    <!-- The traveling row capsule -->
+    <g id="traveler" opacity="0">
+      <rect x="-58" y="-12" width="116" height="24" rx="6" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+      <text id="travelerText" x="0" y="4" text-anchor="middle" font-size="10"
+            font-family="ui-monospace,monospace" fill="#1F2937">#1 Apple  6.20</text>
+    </g>
+
+    <!-- ===================== OUTPUT BUCKETS (right) ===================== -->
+    <g transform="translate(480,68)">
+      <text x="110" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">result set</text>
+
+      <!-- Bucket: TRUE — passes through -->
+      <g transform="translate(0,28)">
+        <rect x="0" y="0" width="220" height="100" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#047857" font-family="ui-monospace,monospace">PASSES — kept</text>
+        <g id="bucketTrue" transform="translate(10,22)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+
+      <!-- Bucket: FALSE — blocked, but visible (you know they were excluded) -->
+      <g transform="translate(0,138)">
+        <rect x="0" y="0" width="220" height="76" rx="8" fill="#FEF2F2" stroke="#F43F5E" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">FAILS — visibly rejected</text>
+        <g id="bucketFalse" transform="translate(10,22)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+
+      <!-- Bucket: UNKNOWN — the trapdoor -->
+      <g transform="translate(0,224)">
+        <rect x="0" y="0" width="220" height="72" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">UNKNOWN — silently dropped</text>
+        <text x="10" y="32" font-size="9" fill="#92400E" font-style="italic">no error, no warning, no row.</text>
+        <g id="bucketNull" transform="translate(10,40)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+    </g>
+
+    <!-- Footer hint (the bug) -->
+    <g id="bugHint" opacity="0">
+      <rect x="160" y="376" width="400" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
+      <text x="360" y="391" text-anchor="middle" font-size="10.5" font-weight="700" fill="#92400E">
+        2 of 8 orders never showed up in your dashboard. NULL is not zero.
+      </text>
+    </g>
+  </svg>
+  <div class="caption">
+    NOT (price &gt; 5) is FALSE for cheap orders — but UNKNOWN for missing prices. Both vanish from your report.
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 8 rows: id, item, price (price === null means NULL)
+  var rows=[
+    {id:1, item:'Apple',   price:6.20, verdict:'T'},
+    {id:2, item:'Pear',    price:3.10, verdict:'F'},
+    {id:3, item:'Bread',   price:8.40, verdict:'T'},
+    {id:4, item:'Milk',    price:null, verdict:'U'},
+    {id:5, item:'Eggs',    price:5.00, verdict:'F'}, // 5 > 5 is FALSE
+    {id:6, item:'Coffee',  price:9.95, verdict:'T'},
+    {id:7, item:'Tea',     price:null, verdict:'U'},
+    {id:8, item:'Honey',   price:7.25, verdict:'T'}
+  ];
+
+  var inputRows=document.getElementById('inputRows');
+  var bucketTrue=document.getElementById('bucketTrue');
+  var bucketFalse=document.getElementById('bucketFalse');
+  var bucketNull=document.getElementById('bucketNull');
+  var traveler=document.getElementById('traveler');
+  var travelerText=document.getElementById('travelerText');
+  var evalText=document.getElementById('evalText');
+  var bugHint=document.getElementById('bugHint');
+  var resetBtn=document.getElementById('reset');
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+
+  function priceStr(p){ return (p===null) ? 'NULL' : p.toFixed(2); }
+
+  // Render input table (8 rows)
+  function renderInput(highlightIdx){
+    clear(inputRows);
+    var ROW_H=22;
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i];
+      var y=i*ROW_H;
+      var isHL = (i===highlightIdx);
+      var bg=el('rect',{x:0,y:y,width:200,height:ROW_H-2,rx:3,
+        fill: isHL ? '#FEF3C7' : ((i%2===0)?'#FFFFFF':'#FAF5FF'),
+        stroke: isHL ? '#F59E0B' : 'none',
+        'stroke-width': isHL ? 1.5 : 0
+      });
+      inputRows.appendChild(bg);
+      // separators
+      [44,124].forEach(function(x){
+        var ln=el('line',{x1:x,y1:y+1,x2:x,y2:y+ROW_H-3,stroke:'#E5E7EB','stroke-width':0.7});
+        inputRows.appendChild(ln);
+      });
+
+      var t1=el('text',{x:22,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t1.textContent='#'+r.id;
+      var t2=el('text',{x:84,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t2.textContent=r.item;
+      var pStr = priceStr(r.price);
+      var t3=el('text',{x:162,y:y+13,'text-anchor':'middle','font-size':10,
+        fill: (r.price===null)?'#92400E':'#1F2937',
+        'font-style': (r.price===null)?'italic':'normal',
+        'font-weight': (r.price===null)?'700':'normal'
+      });
+      t3.textContent=pStr;
+      inputRows.appendChild(t1); inputRows.appendChild(t2); inputRows.appendChild(t3);
+    }
+  }
+
+  function rowLabel(r){
+    return '#'+r.id+' '+padRight(r.item,7)+priceStr(r.price);
+  }
+  function padRight(s,n){ while(s.length<n) s+=' '; return s; }
+
+  // ----- Animation -----
+  // Path: input row anchor (~x=160, y per row) → filter center (x=360,y=215) → bucket (x=590, y per bucket)
+  // SVG coords: traveler is positioned as transform="translate(x,y)"
+  // Start positions per row in input: x=130, y=68+56+i*22+10 = roughly 134 + i*22
+  function inputAnchor(i){
+    return {x: 20 + 220 - 10, y: 68 + 56 + i*22 + 9};
+  }
+  // Filter center
+  var FILTER_CX = 260 + 100, FILTER_CY = 68 + 156;
+
+  // Bucket targets (final resting points)
+  var trueX = 480 + 110, trueY0 = 68+28+22;       // top of true bucket content
+  var falseX = 480 + 110, falseY0 = 68+138+22;
+  var nullX = 480 + 110, nullY0 = 68+224+40;
+
+  // Track how many in each bucket so we can stack them
+  var bucketCounts={T:0,F:0,U:0};
+
+  function bucketTarget(verdict){
+    if(verdict==='T'){ var i=bucketCounts.T++; return {x:trueX, y:trueY0 + i*12}; }
+    if(verdict==='F'){ var j=bucketCounts.F++; return {x:falseX, y:falseY0 + j*12}; }
+    var k=bucketCounts.U++; return {x:nullX, y:nullY0 + k*12};
+  }
+
+  function placeInBucket(r){
+    var target = bucketTarget(r.verdict);
+    var g = (r.verdict==='T')?bucketTrue:(r.verdict==='F')?bucketFalse:bucketNull;
+    var t=el('text',{
+      x: 5, y: 5 + bucketCounts[r.verdict]*0,  // y handled by separate stacking below
+      'font-size':9, 'font-family':'ui-monospace,monospace'
+    });
+    // Recompute correct stack position
+    var idx = bucketCounts[r.verdict] - 1;
+    t.setAttribute('y', 12 + idx*12);
+    t.setAttribute('x', 4);
+    if(r.verdict==='T'){ t.setAttribute('fill','#065F46'); }
+    else if(r.verdict==='F'){
+      t.setAttribute('fill','#9F1239');
+      t.setAttribute('text-decoration','line-through');
+      t.setAttribute('opacity','0.7');
+    } else {
+      t.setAttribute('fill','#92400E');
+      t.setAttribute('font-style','italic');
+      t.setAttribute('opacity','0.5');
+    }
+    t.textContent = rowLabel(r);
+    g.appendChild(t);
+
+    // For NULL bucket, append a tiny "?" trail
+    if(r.verdict==='U'){
+      var q=el('text',{x:200, y:12+idx*12,'font-size':10,fill:'#92400E','text-anchor':'end'});
+      q.textContent='???';
+      g.appendChild(q);
+    }
+  }
+
+  function easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  function animateRow(i, done){
+    var r=rows[i];
+    renderInput(i);
+    travelerText.textContent = rowLabel(r);
+    // color the traveler border based on verdict (set later when leaving filter)
+    traveler.querySelector('rect').setAttribute('stroke','#1F2937');
+    traveler.querySelector('rect').setAttribute('fill','#FFFFFF');
+
+    var start = inputAnchor(i);
+    var mid   = {x: FILTER_CX, y: FILTER_CY};
+    // Lane offsets within filter -> exit point
+    var laneX = (r.verdict==='T') ? FILTER_CX-64 : (r.verdict==='F') ? FILTER_CX : FILTER_CX+64;
+    var exitPt = {x: laneX, y: 68+260};
+    var end   = bucketTarget(r.verdict);  // increments counter
+
+    // Phase 1: input → filter top
+    // Phase 2: pause at center while eval text shows
+    // Phase 3: drop down through lane
+    // Phase 4: slide to bucket
+
+    var P1 = 600, P2 = 700, P3 = 500, P4 = 500;
+    if(prefersReduce){ P1=P2=P3=P4=0; }
+
+    traveler.setAttribute('opacity','1');
+    traveler.setAttribute('transform','translate('+start.x+','+start.y+')');
+
+    var s0 = performance.now();
+    function p1(now){
+      var t=Math.min((now-s0)/P1,1), v=easeInOut(t);
+      var x=lerp(start.x, mid.x, v);
+      var y=lerp(start.y, mid.y - 60, v);
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      if(t<1){ requestAnimationFrame(p1); }
+      else { showEval(); }
+    }
+    function showEval(){
+      // Show evaluation text
+      var p = (r.price===null) ? 'NULL' : r.price.toFixed(2);
+      var verdictLabel = r.verdict==='T' ? 'TRUE' : (r.verdict==='F' ? 'FALSE' : 'UNKNOWN');
+      var verdictColor = r.verdict==='T' ? '#047857' : (r.verdict==='F' ? '#9F1239' : '#92400E');
+      evalText.textContent = p + ' > 5  →  ' + verdictLabel;
+      evalText.setAttribute('fill', verdictColor);
+      evalText.setAttribute('opacity','1');
+      // recolor traveler stroke
+      traveler.querySelector('rect').setAttribute('stroke', verdictColor);
+      var bgFill = r.verdict==='T' ? '#ECFDF5' : (r.verdict==='F' ? '#FEF2F2' : '#FFFBEB');
+      traveler.querySelector('rect').setAttribute('fill', bgFill);
+      setTimeout(function(){
+        evalText.setAttribute('opacity','0');
+        s0b=performance.now();
+        requestAnimationFrame(p3);
+      }, P2);
+    }
+    var s0b;
+    function p3(now){
+      var t=Math.min((now-s0b)/P3,1), v=easeInOut(t);
+      var x=lerp(mid.x, exitPt.x, v);
+      var y=lerp(mid.y - 60, exitPt.y, v);
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      if(t<1){ requestAnimationFrame(p3); }
+      else { s0c=performance.now(); requestAnimationFrame(p4); }
+    }
+    var s0c;
+    function p4(now){
+      var t=Math.min((now-s0c)/P4,1), v=easeInOut(t);
+      var x=lerp(exitPt.x, end.x + 4, v);
+      var y=lerp(exitPt.y, end.y + 6, v);
+      // Fade out as it lands
+      var op = 1 - v;
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      traveler.setAttribute('opacity', String(op));
+      if(t<1){ requestAnimationFrame(p4); }
+      else {
+        traveler.setAttribute('opacity','0');
+        placeInBucket(r);
+        // For UNKNOWN, soft yellow flicker on the bucket border for emphasis
+        done();
+      }
+    }
+
+    if(prefersReduce){
+      // Skip animation entirely
+      placeInBucket(r);
+      done();
+    } else {
+      requestAnimationFrame(p1);
+    }
+  }
+
+  function play(){
+    bucketCounts={T:0,F:0,U:0};
+    clear(bucketTrue); clear(bucketFalse); clear(bucketNull);
+    bugHint.setAttribute('opacity','0');
+    evalText.setAttribute('opacity','0');
+    traveler.setAttribute('opacity','0');
+    renderInput(-1);
+
+    if(prefersReduce){
+      for(var i=0;i<rows.length;i++) animateRow(i, function(){});
+      bugHint.setAttribute('opacity','1');
+      return;
+    }
+
+    var i=0;
+    function next(){
+      if(i>=rows.length){
+        // Final beat: show the bug hint
+        setTimeout(function(){
+          bugHint.setAttribute('opacity','1');
+          // Loop after a pause
+          setTimeout(play, 3600);
+        }, 500);
+        return;
+      }
+      animateRow(i, function(){
+        i++;
+        setTimeout(next, 180);
+      });
+    }
+    next();
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

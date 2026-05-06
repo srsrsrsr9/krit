@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Money Audit — 14 Days</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FEF3C7;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:8px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:14px;right:18px;background:#1F2937;color:#FEF3C7;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75;z-index:5}
+#rb:hover{opacity:1}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 500" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Money audit 14-day savings rate experiment: day zero baseline, days one through thirteen daily intervention bars filling, day seven mid-check, day fourteen final, day fifteen decision card. Three numeric tiles for net worth, savings rate, and monthly burn update at each measurement.">
+
+  <rect width="780" height="500" fill="#FEF3C7"/>
+
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">A 14-day savings-rate experiment.</text>
+  <text id="phaseLbl" x="390" y="52" text-anchor="middle" font-size="12" fill="#92400E" font-weight="600">Day 0 — baseline</text>
+
+  <!-- ── Three numeric tiles top ── -->
+  <g transform="translate(40,72)">
+    <rect width="220" height="76" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.4"/>
+    <text x="16" y="22" font-size="10" fill="#9CA3AF" letter-spacing="0.5">NET WORTH</text>
+    <text id="tNet" x="16" y="50" font-size="22" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">₹4.20L</text>
+    <text id="tNetDelta" x="16" y="68" font-size="10" fill="#10B981" font-family="ui-monospace,monospace" opacity="0">+₹0</text>
+  </g>
+  <g transform="translate(280,72)">
+    <rect width="220" height="76" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.4"/>
+    <text x="16" y="22" font-size="10" fill="#9CA3AF" letter-spacing="0.5">SAVINGS RATE</text>
+    <text id="tSav" x="16" y="50" font-size="22" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">12%</text>
+    <text id="tSavDelta" x="16" y="68" font-size="10" fill="#10B981" font-family="ui-monospace,monospace" opacity="0">+0%</text>
+  </g>
+  <g transform="translate(520,72)">
+    <rect width="220" height="76" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.4"/>
+    <text x="16" y="22" font-size="10" fill="#9CA3AF" letter-spacing="0.5">MONTHLY BURN</text>
+    <text id="tBurn" x="16" y="50" font-size="22" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">₹62K</text>
+    <text id="tBurnDelta" x="16" y="68" font-size="10" fill="#10B981" font-family="ui-monospace,monospace" opacity="0">-₹0</text>
+  </g>
+
+  <!-- ── Day bars: 14 bars, x 50..730, gap → bar w ~46, gap 2 ── -->
+  <g transform="translate(0,170)">
+    <text x="40" y="0" font-size="10" fill="#9CA3AF" letter-spacing="0.5">DAILY SAVED (₹)</text>
+    <text x="740" y="0" text-anchor="end" font-size="10" fill="#9CA3AF" font-style="italic">target ₹500/day</text>
+
+    <!-- Target line at full bar height -->
+    <!-- Bar area: y 8 (top, ₹600) to y 170 (bottom, ₹0). Target ₹500 → y = 170 - (500/600)*162 = 170 - 135 = 35 -->
+    <line x1="40" y1="35" x2="730" y2="35" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.7"/>
+
+    <g id="dayBars"></g>
+
+    <!-- Day labels -->
+    <g id="dayLabels" font-family="ui-monospace,monospace" font-size="9" fill="#9CA3AF"></g>
+
+    <!-- Mid-check marker -->
+    <g id="midCheck" opacity="0">
+      <line x1="378" y1="6" x2="378" y2="180" stroke="#0EA5E9" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <rect x="332" y="-22" width="92" height="22" rx="6" fill="#0EA5E9"/>
+      <text x="378" y="-7" text-anchor="middle" font-size="11" fill="#FFFFFF" font-weight="700">Day 7 check</text>
+    </g>
+
+    <!-- Final marker -->
+    <g id="finalCheck" opacity="0">
+      <line x1="722" y1="6" x2="722" y2="180" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <rect x="650" y="-22" width="80" height="22" rx="6" fill="#10B981"/>
+      <text x="690" y="-7" text-anchor="middle" font-size="11" fill="#FFFFFF" font-weight="700">Day 14</text>
+    </g>
+  </g>
+
+  <!-- ── Decision card (day 15) ── -->
+  <g id="decCard" opacity="0" transform="translate(70,372)">
+    <rect width="640" height="115" rx="14" fill="#1F2937"/>
+    <text x="320" y="28" text-anchor="middle" font-size="11" fill="#9CA3AF" letter-spacing="0.6">DAY 15 — DECISION</text>
+    <text x="320" y="52" text-anchor="middle" font-size="15" font-weight="700" fill="#FFFFFF">Saved ₹6,400 in 14 days. Burn down ₹8K/month.</text>
+
+    <!-- Three options -->
+    <g id="optKeep" transform="translate(28,68)">
+      <rect width="180" height="34" rx="8" fill="#10B981"/>
+      <text x="90" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">KEEP it</text>
+    </g>
+    <g id="optMod" transform="translate(228,68)">
+      <rect width="180" height="34" rx="8" fill="#F59E0B"/>
+      <text x="90" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">MODIFY it</text>
+    </g>
+    <g id="optDrop" transform="translate(428,68)">
+      <rect width="180" height="34" rx="8" fill="#6B7280"/>
+      <text x="90" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#FFFFFF">DROP it</text>
+    </g>
+  </g>
+
+</svg>
+<button id="rb">restart</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<0?0:t>1?1:1-Math.pow(1-t,3);}
+
+let timers=[], rafs=[];
+function after(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+// Daily saved amounts (₹). 14 days. Mix of around ₹400-550, target ₹500.
+const daily = [380, 520, 460, 510, 540, 350, 480, 530, 510, 470, 560, 490, 520, 580];
+// cumulative
+function cumUpto(d){
+  let s=0;
+  for(let i=0;i<d;i++) s += daily[i];
+  return s;
+}
+const totalSaved = cumUpto(14); // should be ~6800
+
+// Bar geometry: 14 bars in width 690 (40..730), each bar 42 wide, gap 7
+const barW = 42;
+const gap = 7;
+const startX = 50;
+function barX(i){ return startX + i*(barW+gap); }
+
+function buildBars(){
+  const g = $('dayBars');
+  g.innerHTML = '';
+  for(let i=0;i<14;i++){
+    // background slot
+    const slot = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    slot.setAttribute('x', barX(i));
+    slot.setAttribute('y', 8);
+    slot.setAttribute('width', barW);
+    slot.setAttribute('height', 162);
+    slot.setAttribute('rx', 5);
+    slot.setAttribute('fill', '#FFFBEB');
+    slot.setAttribute('stroke', '#FDE68A');
+    slot.setAttribute('stroke-width', '1');
+    g.appendChild(slot);
+
+    // filled bar
+    const bar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bar.setAttribute('id', `bar${i}`);
+    bar.setAttribute('x', barX(i));
+    bar.setAttribute('y', 170);
+    bar.setAttribute('width', barW);
+    bar.setAttribute('height', 0);
+    bar.setAttribute('rx', 5);
+    bar.setAttribute('fill', '#F59E0B');
+    g.appendChild(bar);
+  }
+
+  // day labels
+  const lg = $('dayLabels');
+  lg.innerHTML = '';
+  for(let i=0;i<14;i++){
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', barX(i) + barW/2);
+    t.setAttribute('y', 192);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-family','ui-monospace,monospace');
+    t.setAttribute('font-size','9');
+    t.setAttribute('fill','#9CA3AF');
+    t.textContent = `D${i+1}`;
+    lg.appendChild(t);
+  }
+}
+
+function fillBar(i, dur, cb){
+  const bar = $(`bar${i}`);
+  const target = daily[i];
+  // height: (target/600)*162
+  const h = (target/600)*162;
+  const finalY = 170 - h;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    const e = ease(t);
+    const ch = h*e;
+    bar.setAttribute('height', String(ch));
+    bar.setAttribute('y', String(170 - ch));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else if(cb) cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Tiles
+function setTiles(savedTotal, isFinal){
+  // Net worth: 4.20L + savedTotal/100000 (in lakh, 2 decimals)
+  const netLakh = 4.20 + (savedTotal/100000);
+  $('tNet').textContent = '₹' + netLakh.toFixed(2) + 'L';
+  // Savings rate: baseline 12%, scales toward 22% as savedTotal increases (target ₹6800 → 22%)
+  const rate = 12 + (savedTotal/totalSaved)*10;
+  $('tSav').textContent = Math.round(rate) + '%';
+  $('tSav').setAttribute('fill', rate >= 18 ? '#10B981' : rate >= 15 ? '#F59E0B' : '#F43F5E');
+  // Monthly burn: starts ₹62K, drops toward ₹54K
+  const burn = 62 - (savedTotal/totalSaved)*8;
+  $('tBurn').textContent = '₹' + Math.round(burn) + 'K';
+
+  if(isFinal){
+    $('tNetDelta').textContent = '+₹' + Math.round(savedTotal/1000) + 'K';
+    $('tNetDelta').setAttribute('opacity','1');
+    $('tSavDelta').textContent = '+10%';
+    $('tSavDelta').setAttribute('opacity','1');
+    $('tBurnDelta').textContent = '-₹8K';
+    $('tBurnDelta').setAttribute('opacity','1');
+  }
+}
+
+function setPhase(label, color){
+  $('phaseLbl').textContent = label;
+  $('phaseLbl').setAttribute('fill', color || '#92400E');
+}
+
+function pulseTile(id){
+  const tile = $(id);
+  if(!tile) return;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/280, 1);
+    const s = 1 + 0.06*Math.sin(t*Math.PI);
+    tile.setAttribute('font-size', String(22*s));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else tile.setAttribute('font-size','22');
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function fadeIn(id, dur){
+  dur = dur || 500;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    $(id).setAttribute('opacity', String(ease(t)));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function reset(){
+  clearAll();
+  buildBars();
+  setTiles(0, false);
+  setPhase('Day 0 — baseline', '#92400E');
+  $('midCheck').setAttribute('opacity','0');
+  $('finalCheck').setAttribute('opacity','0');
+  $('decCard').setAttribute('opacity','0');
+  $('tNetDelta').setAttribute('opacity','0');
+  $('tSavDelta').setAttribute('opacity','0');
+  $('tBurnDelta').setAttribute('opacity','0');
+  // Reset tile colors
+  $('tSav').setAttribute('fill','#F43F5E');
+}
+
+function run(){
+  reset();
+
+  // Day 0 baseline pause
+  after(700, ()=>{
+    setPhase('Day 1 — intervention starts', '#92400E');
+  });
+
+  // Days 1..6 fill
+  let cumSaved = 0;
+  let dayDelay = 1100;
+  for(let i=0;i<6;i++){
+    const idx = i;
+    after(dayDelay + i*420, ()=>{
+      fillBar(idx, 380, null);
+      cumSaved += daily[idx];
+      setTiles(cumSaved, false);
+      setPhase(`Day ${idx+1}`, '#92400E');
+    });
+  }
+
+  // Day 7 mid-check
+  after(dayDelay + 6*420 + 300, ()=>{
+    fillBar(6, 380, null);
+    cumSaved += daily[6];
+    setTiles(cumSaved, false);
+    setPhase('Day 7 — mid-check', '#0369A1');
+    fadeIn('midCheck', 500);
+    pulseTile('tSav');
+  });
+
+  // Days 8..13 fill
+  const phase2Start = dayDelay + 6*420 + 1200;
+  for(let i=7;i<13;i++){
+    const idx = i;
+    after(phase2Start + (i-7)*380, ()=>{
+      fillBar(idx, 350, null);
+      cumSaved += daily[idx];
+      setTiles(cumSaved, false);
+      setPhase(`Day ${idx+1}`, '#92400E');
+    });
+  }
+
+  // Day 14 final
+  after(phase2Start + 6*380 + 200, ()=>{
+    fillBar(13, 400, null);
+    cumSaved += daily[13];
+    setTiles(cumSaved, true);
+    setPhase('Day 14 — final reading', '#065F46');
+    fadeIn('finalCheck', 500);
+    pulseTile('tNet');
+    pulseTile('tSav');
+    pulseTile('tBurn');
+  });
+
+  // Day 15 decision
+  after(phase2Start + 6*380 + 1200, ()=>{
+    setPhase('Day 15 — decide', '#1F2937');
+    fadeIn('decCard', 600);
+  });
+
+  // Loop
+  after(phase2Start + 6*380 + 4500, run);
+}
+
+$('rb').addEventListener('click', run);
+run();
+})();
+</script>
+</body>
+</html>

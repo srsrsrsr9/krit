@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>When AI Is the Right Tool (and When It Isn't) — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>When AI Is the Right Tool (and When It Isn't)</h1>
+  <p class="subtitle">Tool-fit heuristics that ship products</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Picking the right AI use case is a more important skill than picking the right model. The features that ship and the features that get rolled back differ less in their engineering than in their initial framing.</p>
+  <div class="callout"><strong>Mental model: volume × stakes × verifiability</strong><br/>Three axes pick whether AI fits a use case:</div>
+  
+<h2>Move 1 — High-volume + low-stakes is the sweet spot</h2>
+<ul>
+<li>Most successful production AI features sit in the same corner: high-volume, low-stakes, high-verifiability. Why: at high volume, you can afford to build infra, evals, and monitoring.</li>
+<li>1. Volume: We get ~500 leads/day. High volume — AI infra investment is worth it.</li>
+<li>2. Stakes: Wrong category routes the lead to the wrong sales person, who routes it back. Cost: 30 min of human time. Bounded.</li>
+<li>3. Verifiability: Sales person spots a mismatched lead within seconds (it's their job). Detection is high; recovery is fast.</li>
+<li>4. Decision: SHIP. High volume + bounded stakes + high verifiability = textbook fit.</li>
+<li>5. Eval: Build a 200-lead labeled set; require &gt;90% accuracy on a held-out 50 before launch. Add a 'low-confidence → human queue' fallback. Monitor weekly.</li>
+</ul>
+<h2>Move 2 — Human-in-the-loop is the pragmatic fix</h2>
+<ul>
+<li>Many use cases sit in the middle: not pure ship, not pure refuse. The fix is **human-in-the-loop (HITL)** — AI drafts, human reviews, ship the human-approved output.</li>
+</ul>
+  
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Three axes pick AI fit: volume, stakes, verifiability</div>
+<div class="takeaway">Sweet spot: high-volume + low-stakes + high-verifiability — start here</div>
+<div class="takeaway">Never-ship zone: low-volume + high-stakes + low-verifiability — refuse regardless of model quality</div>
+<div class="takeaway">HITL is the pragmatic fix for the middle: AI drafts, human approves, ship</div>
+<div class="takeaway">No eval = no launch, regardless of model quality or prompt sophistication</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

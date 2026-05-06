@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Filtering Without Crying — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Filtering Without Crying</h1>
+  <p class="subtitle">Operators, NULL semantics, and the WHERE-the-cat-sat-on trap</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most SQL bugs that ship to production are filter bugs. Not the obvious kind.</p>
+  <div class="callout"><strong>Mental model: three-valued logic</strong><br/>Most languages have two truth values: true and false. **SQL has three: TRUE, FALSE, and UNKNOWN.** Whenever a condition involves a NULL, the result is UNKNOWN — not TRUE, not FALSE.</div>
+  
+<h2>Move 1 — Operators that do what you mean</h2>
+<ul>
+<li>Operators in SQL look like the operators in your other language. They mostly behave the same.</li>
+<li>1. English: Orders from Pune or Bengaluru, with amount above 1000, placed in March or April 2026.</li>
+<li>2. The city filter: Two cities — use IN, not OR.</li>
+<li>3. The amount filter: Above 1000 means strictly greater.</li>
+<li>4. The date filter: March 1 to April 30, inclusive. BETWEEN handles this cleanly.</li>
+<li>5. Combine with AND: All three conditions must hold.</li>
+</ul>
+<h2>Move 2 — NULL is not a value</h2>
+<ul>
+<li>**NULL means *unknown* or *missing*.** It is not zero. It is not empty string.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: WHERE-the-cat-sat-on: Senior SQL writers call this *the WHERE-the-cat-sat-on bug*. The cat (NULL) was definitely on the mat, but your filter didn't see it because you assumed equality would touch every row.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">SQL has three truth values: TRUE, FALSE, UNKNOWN — WHERE keeps only TRUE</div>
+<div class="takeaway">NULL means 'unknown'; any operator applied to NULL returns NULL (UNKNOWN)</div>
+<div class="takeaway">Use IS NULL / IS NOT NULL for NULL tests; never `= NULL`</div>
+<div class="takeaway">Negative filters (`&lt;&gt;`, `NOT IN`) silently drop NULLs — handle them explicitly</div>
+<div class="takeaway">COALESCE is the canonical fix when you want NULL to be treated as a known default</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

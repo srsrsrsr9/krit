@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hedonic Adaptation — The Thermostat</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#EFF6FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,sans-serif}
+#w{position:relative;width:100%;max-width:720px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:12px;right:12px;background:#1F2937;color:#EFF6FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+#ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(31,41,55,0.52);backdrop-filter:blur(3px);border-radius:12px;z-index:20;cursor:pointer}
+#ov-btn{background:#EFF6FF;border-radius:50%;width:72px;height:72px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,0.28);transition:transform .15s}
+#ov:hover #ov-btn{transform:scale(1.1)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 720 490" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Hedonic adaptation thermostat: happiness returns to setpoint 7 after positive and negative events">
+
+  <rect width="720" height="490" fill="#EFF6FF"/>
+
+  <!-- Title -->
+  <text x="360" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#1F2937">The thermostat in your skull.</text>
+
+  <!-- ══ LEFT HALF: THERMOSTAT  x 30–340 ══ -->
+  <!-- Thermostat circle, center at (175, 260) -->
+  <g id="thermo" transform="translate(175,260)">
+    <!-- Outer bezel -->
+    <circle cx="0" cy="0" r="105" fill="white" stroke="#0E7490" stroke-width="3"/>
+    <circle cx="0" cy="0" r="96"  fill="#F0FDFA" stroke="#A5F3FC" stroke-width="1"/>
+
+    <!-- Scale ticks (arc from 210° to 330°, 11 ticks for 0–10) -->
+    <!-- Tick at angle θ: x1=sin(θ)*88, y1=-cos(θ)*88; x2=sin(θ)*96, y2=-cos(θ)*96 -->
+    <!-- θ(v) = (210 + v*24)° -->
+    <g stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round">
+      <!-- v=0  θ=210 sin=-0.5 cos=-0.866 → (-44,+76) to (-48,+83) -->
+      <line x1="-44" y1="76" x2="-48" y2="83"/>
+      <!-- v=1  θ=234 sin=-0.809 cos=-0.588 → (-71,+52) to (-78,+57) -->
+      <line x1="-71" y1="52" x2="-78" y2="57"/>
+      <!-- v=2  θ=258 sin=-0.978 cos=-0.208 → (-86,+18) to (-94,+20) -->
+      <line x1="-86" y1="18" x2="-94" y2="20"/>
+      <!-- v=3  θ=282 sin=-0.978 cos=+0.208 → (-86,-18) to (-94,-20) -->
+      <line x1="-86" y1="-18" x2="-94" y2="-20"/>
+      <!-- v=4  θ=306 sin=-0.809 cos=+0.588 → (-71,-52) to (-78,-57) -->
+      <line x1="-71" y1="-52" x2="-78" y2="-57"/>
+      <!-- v=5  θ=330 sin=-0.5 cos=+0.866 → (-44,-76) to (-48,-83) -->
+      <line x1="-44" y1="-76" x2="-48" y2="-83"/>
+      <!-- v=6  θ=354 sin=-0.105 cos=+0.995 → (-9,-88) to (-10,-96) -->
+      <line x1="-9" y1="-88" x2="-10" y2="-96"/>
+      <!-- v=7  θ=18  sin=+0.309 cos=+0.951 → (+27,-84) to (+30,-91) -->
+      <line x1="27" y1="-84" x2="30" y2="-91"/>
+      <!-- v=8  θ=42  sin=+0.669 cos=+0.743 → (+59,-65) to (+64,-71) -->
+      <line x1="59" y1="-65" x2="64" y2="-71"/>
+      <!-- v=9  θ=66  sin=+0.914 cos=+0.407 → (+80,-36) to (+88,-39) -->
+      <line x1="80" y1="-36" x2="88" y2="-39"/>
+      <!-- v=10 θ=90  sin=+1.0  cos=0    → (+88,0) to (+96,0) -->
+      <line x1="88" y1="0" x2="96" y2="0"/>
+    </g>
+
+    <!-- Setpoint ring at 7 (dashed) -->
+    <circle cx="0" cy="0" r="68" fill="none" stroke="#6B7280" stroke-width="1.2"
+            stroke-dasharray="4 4" opacity="0.4"/>
+
+    <!-- Scale labels -->
+    <text x="-55" y="90"  text-anchor="middle" font-size="11" fill="#9CA3AF" font-family="ui-monospace,monospace">0</text>
+    <text x="-60" y="-88" text-anchor="middle" font-size="11" fill="#9CA3AF" font-family="ui-monospace,monospace">5</text>
+    <text x="104" y="5"   text-anchor="middle" font-size="11" fill="#9CA3AF" font-family="ui-monospace,monospace">10</text>
+
+    <!-- Setpoint annotation -->
+    <text x="38" y="-70" text-anchor="start" font-size="9" fill="#6B7280">setpoint</text>
+    <text x="38" y="-58" text-anchor="start" font-size="11" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace">7</text>
+
+    <!-- Needle glow -->
+    <circle id="ng" cx="0" cy="0" r="0" fill="#0EA5E9" opacity="0" pointer-events="none"/>
+
+    <!-- NEEDLE group — rotated by JS -->
+    <g id="needle" transform="rotate(-36)">
+      <!-- -90 + 7*18 = -90+126 = +36 from vertical; needle points UP so transform rotate(-36) means pointing at 7 -->
+      <!-- Wait: valueToAngle(v) = -90 + v*18. For v=7: -90+126=+36. rotate(36) in SVG rotates CW.
+           SVG rotate is CW, so rotate(36) tilts needle CW 36° from vertical = points at v=7 ✓ -->
+      <line x1="0" y1="0" x2="0" y2="-78" stroke="#F43F5E" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+    <circle cx="0" cy="0" r="8" fill="#F43F5E"/>
+
+    <!-- Current value display -->
+    <text id="thval" x="0" y="36" text-anchor="middle" font-size="28" font-weight="700"
+          fill="#0E7490" font-family="ui-monospace,monospace">7.0</text>
+    <text x="0" y="52" text-anchor="middle" font-size="9" fill="#9CA3AF">happiness</text>
+  </g>
+
+  <!-- Event icon landing zone — left side -->
+  <g id="ev-icon" transform="translate(60,260)" opacity="0">
+    <circle cx="0" cy="0" r="24" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+    <text id="ev-glyph" x="0" y="8" text-anchor="middle" font-size="22">📱</text>
+  </g>
+
+  <!-- Thermostat label -->
+  <text x="175" y="386" text-anchor="middle" font-size="12" fill="#6B7280">HAPPINESS DIAL</text>
+
+  <!-- ══ RIGHT HALF: LINE CHART  x 360–710 ══ -->
+  <!-- Chart area: x=370 to 710, y=55 to 420. Inner plot: x=400..700, y=65..410 -->
+  <text x="552" y="52" text-anchor="middle" font-size="12" font-weight="600" fill="#6B7280">happiness over 90 days</text>
+
+  <!-- Chart frame -->
+  <rect x="400" y="60" width="300" height="355" rx="6" fill="white" stroke="#BFDBFE" stroke-width="1.5"/>
+
+  <!-- Grid -->
+  <g stroke="#F0F9FF" stroke-width="1">
+    <!-- Horizontal grid every 2 units: y = 60+355 - v*(355/10) = 415 - v*35.5 -->
+    <line x1="400" y1="344.5" x2="700" y2="344.5"/><!-- v=2 -->
+    <line x1="400" y1="273.5" x2="700" y2="273.5"/><!-- v=4 -->
+    <line x1="400" y1="202.5" x2="700" y2="202.5"/><!-- v=6 -->
+    <line x1="400" y1="131.5" x2="700" y2="131.5"/><!-- v=8 -->
+    <line x1="400" y1="60.5"  x2="700" y2="60.5"/><!-- v=10 -->
+    <!-- Vertical grid every 30 days: x = 400 + day*(300/90) -->
+    <line x1="500" y1="60" x2="500" y2="415"/><!-- day 30 -->
+    <line x1="600" y1="60" x2="600" y2="415"/><!-- day 60 -->
+  </g>
+
+  <!-- Baseline at 7: y = 415 - 7*35.5 = 415-248.5 = 166.5 -->
+  <line x1="400" y1="166.5" x2="700" y2="166.5" stroke="#6B7280" stroke-width="1.5"
+        stroke-dasharray="5 4" opacity="0.55"/>
+  <text x="396" y="170" text-anchor="end" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">7</text>
+
+  <!-- Y axis labels -->
+  <text x="396" y="64"  text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">10</text>
+  <text x="396" y="419" text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">0</text>
+
+  <!-- X axis labels -->
+  <text x="400" y="428" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">0</text>
+  <text x="500" y="428" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">30</text>
+  <text x="600" y="428" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">60</text>
+  <text x="700" y="428" text-anchor="middle" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">90</text>
+  <text x="550" y="442" text-anchor="middle" font-size="10" fill="#9CA3AF">days</text>
+
+  <!-- Chart line -->
+  <polyline id="cline" points="400,166.5" fill="none" stroke="#0EA5E9" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="cdot" cx="400" cy="166.5" r="5" fill="#0EA5E9"/>
+
+  <!-- Caption box — bottom, between both halves -->
+  <rect id="cap-bg" x="20" y="454" width="680" height="28" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="360" y="471" text-anchor="middle" font-size="12" fill="white" opacity="0"/>
+
+  <!-- End card -->
+  <g id="end-card" opacity="0">
+    <rect x="60" y="180" width="600" height="90" rx="14" fill="#1F2937"/>
+    <text x="360" y="222" text-anchor="middle" font-size="16" fill="white" font-weight="700">Setpoint changes are slow. Dial swings are fast.</text>
+    <text x="360" y="246" text-anchor="middle" font-size="13" fill="#9CA3AF">Don't confuse them.</text>
+  </g>
+
+</svg>
+<button id="rb">↺ reset</button>
+<div id="ov"><div id="ov-btn"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 4l18 10L7 24V4z" fill="#1F2937"/></svg></div></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// ── AUDIO ──────────────────────────────────────────────
+let AC=null,bgTimer=null,bgIdx=0;
+function getAC(){
+  if(!AC) AC=new(window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==='suspended') AC.resume().catch(()=>{});
+  return AC;
+}
+document.addEventListener('click',()=>{try{getAC();}catch(e){}},{passive:true});
+
+function tone(freq,dur,delay,type,vol){
+  delay=delay||0;type=type||'sine';vol=vol||0.2;
+  try{
+    const c=getAC(),t=c.currentTime+delay;
+    const o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    o.start(t);o.stop(t+dur+0.1);
+  }catch(e){}
+}
+function nz(dur,delay,fc,vol){
+  delay=delay||0;fc=fc||1000;vol=vol||0.2;
+  try{
+    const c=getAC(),sr=c.sampleRate,t=c.currentTime+delay;
+    const buf=c.createBuffer(1,Math.ceil(sr*Math.max(dur,0.05)),sr);
+    const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const src=c.createBufferSource();src.buffer=buf;
+    const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fc;f.Q.value=1;
+    const g=c.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(0.0001,t+Math.max(dur,0.05));
+    src.connect(f);f.connect(g);g.connect(c.destination);
+    src.start(t);src.stop(t+dur+0.1);
+  }catch(e){}
+}
+function sfxTick(){tone(1200,0.06,0,'square',0.06);nz(0.04,0,2000,0.1);}
+function sfxPositive(){tone(523.25,0.3,0,'sine',0.25);tone(659.25,0.3,0.08,'sine',0.18);tone(783.99,0.4,0.16,'sine',0.14);}
+function sfxNegative(){tone(220,0.25,0,'sawtooth',0.1);tone(185,0.3,0.1,'sine',0.15);}
+function sfxReset(){tone(440,0.2,0,'sine',0.12);tone(523.25,0.2,0.1,'sine',0.1);tone(659.25,0.3,0.2,'sine',0.08);}
+function sfxIcon(){nz(0.06,0,800,0.15);tone(660,0.15,0,'sine',0.15);}
+
+const BG=[220,261.63,329.63,392,493.88,392,329.63,261.63];
+function startBg(){
+  if(bgTimer)return;
+  function beat(){
+    const f=BG[bgIdx%BG.length];
+    tone(f,2.2,0,'sine',0.025);tone(f*2,1.6,0,'triangle',0.012);
+    bgIdx++;bgTimer=setTimeout(beat,2200);
+  }beat();
+}
+function stopBg(){clearTimeout(bgTimer);bgTimer=null;}
+
+// ── UTILS ──────────────────────────────────────────────
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+let tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];stopBg();}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Chart helpers: y=415-v*35.5, x=400+day*(300/90)=400+day*3.333
+function cy(v){return 415-v*35.5;}
+function cx(day){return 400+day*3.333;}
+
+let chartPts=[{day:0,val:7}];
+let curNeedleVal=7;
+
+function setNeedle(v){
+  const angle=-90+v*18; // -90+v*18 deg
+  $id('needle').setAttribute('transform',`rotate(${angle})`);
+  $id('thval').textContent=v.toFixed(1);
+  curNeedleVal=v;
+}
+
+function animNeedle(fromV,toV,dur,cb){
+  const s=performance.now();
+  // Show glow
+  const ng=$id('ng');ng.setAttribute('r','18');ng.setAttribute('opacity','0.18');
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const v=lerp(fromV,toV,e);
+    setNeedle(v);
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else{ng.setAttribute('opacity','0');if(cb)cb();}
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function animChart(fromDay,fromVal,toDay,toVal,dur,cb){
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const d=lerp(fromDay,toDay,e),v=lerp(fromVal,toVal,e);
+    let pts=chartPts.map(p=>`${cx(p.day).toFixed(1)},${cy(p.val).toFixed(1)}`).join(' ');
+    pts+=` ${cx(d).toFixed(1)},${cy(v).toFixed(1)}`;
+    $id('cline').setAttribute('points',pts);
+    $id('cdot').setAttribute('cx',cx(d));$id('cdot').setAttribute('cy',cy(v));
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else{chartPts.push({day:toDay,val:toVal});if(cb)cb();}
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function showCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,400,null);
+  animOp('cap-bg',0,0.92,400,null);
+}
+function hideCap(cb){
+  animOp('cap',1,0,300,null);
+  animOp('cap-bg',0.92,0,300,cb);
+}
+
+function showIcon(emoji,delay){
+  after(delay,()=>{
+    $id('ev-glyph').textContent=emoji;
+    sfxIcon();
+    animOp('ev-icon',0,1,350,null);
+  });
+}
+function hideIcon(delay){
+  after(delay,()=>animOp('ev-icon',1,0,300,null));
+}
+
+function run(){
+  clearAll();
+  chartPts=[{day:0,val:7}];
+  $id('cline').setAttribute('points',`${cx(0)},${cy(7)}`);
+  $id('cdot').setAttribute('cx',cx(0));$id('cdot').setAttribute('cy',cy(7));
+  setNeedle(7);
+  setOp('cap',0);setOp('cap-bg',0);setOp('ev-icon',0);setOp('end-card',0);
+  $id('ng').setAttribute('opacity','0');
+  startBg();
+
+  // EVENT A positive phone
+  after(1400,()=>{
+    showCap('Big new purchase. 📈');
+    showIcon('📱',0);
+    sfxPositive();
+    animNeedle(7,9,600,null);
+    animChart(0,7,7,9,600,null);
+    sfxTick();
+  });
+
+  // Adapt A
+  after(3500,()=>{
+    hideCap(()=>showCap('Back to baseline by day 30.'));
+    animNeedle(9,7,2000,null);
+    animChart(7,9,30,7,2000,null);
+    sfxReset();
+  });
+
+  // EVENT B negative
+  after(6600,()=>{
+    hideIcon(0);
+    hideCap(()=>showCap('Bad week at work. 📉'));
+    showIcon('🌧',200);
+    sfxNegative();
+    animNeedle(7,4,600,null);
+    animChart(30,7,45,4,600,null);
+  });
+
+  // Adapt B
+  after(8700,()=>{
+    hideCap(()=>showCap("Symmetric. The thermostat doesn't care which direction."));
+    animNeedle(4,7,2000,null);
+    animChart(45,4,60,7,2000,null);
+    sfxReset();
+  });
+
+  // EVENT C variety
+  after(11800,()=>{
+    hideIcon(0);
+    hideCap(()=>showCap('Variety nudges the setpoint — gently.'));
+    showIcon('☕',200);
+    sfxPositive();
+    animNeedle(7,7.6,500,null);
+    animChart(60,7,90,7.8,3000,null);
+    sfxTick();
+  });
+
+  // End card
+  after(14200,()=>{
+    hideIcon(0);hideCap(null);
+    after(300,()=>animOp('end-card',0,1,600,null));
+  });
+
+  // Loop
+  after(16500,()=>{
+    animOp('end-card',1,0,500,()=>{ after(400,run); });
+  });
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+document.getElementById('ov').addEventListener('click',()=>{
+  getAC();
+  document.getElementById('ov').style.display='none';
+  run();
+},{once:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSV → JSON pipeline — bugs live at the boundaries</title>
+<style>
+  :root{--bg:#FEF3C7;--ink:#1F2937;--muted:#6B7280;--paper:#FFFFFF;--rule:#E5E7EB;--good:#10B981;--bad:#F43F5E;--warn:#F59E0B;--blue:#0EA5E9;--purple:#8B5CF6;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:760px}
+  .frame{width:100%;aspect-ratio:16/9;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:8px;min-height:18px}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font:600 11px system-ui,sans-serif;cursor:pointer;opacity:.78}
+  .reset:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:0.001s !important;transition-duration:0.001s !important}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 720 405" aria-label="A four-stage CSV to JSON pipeline. A messy input row passes through read, transform, summarize, and write stages, becoming clean JSON. The boundary stages — read and write — are highlighted as where most bugs live.">
+      <defs>
+        <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#1F2937"/></marker>
+        <marker id="arrG" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#10B981"/></marker>
+      </defs>
+
+      <!-- title -->
+      <rect x="20" y="14" width="680" height="32" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="360" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2937">CSV → JSON in 4 stages. 80% of bugs live at the edges.</text>
+
+      <!-- track line -->
+      <line x1="50" y1="190" x2="690" y2="190" stroke="#FCD34D" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- 4 stages -->
+      <!-- 1 READ (boundary, danger) -->
+      <g id="stage1">
+        <rect x="60" y="130" width="120" height="120" rx="14" fill="#FFE4E6" stroke="#F43F5E" stroke-width="2"/>
+        <text x="120" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">1. read</text>
+        <text x="120" y="168" text-anchor="middle" font-size="10" fill="#991B1B" font-style="italic">boundary</text>
+        <!-- icon: file -->
+        <g transform="translate(96,182)">
+          <path d="M0,0 L36,0 L48,12 L48,52 L0,52 Z" fill="#FFFFFF" stroke="#991B1B" stroke-width="1.6"/>
+          <path d="M36,0 L36,12 L48,12" fill="none" stroke="#991B1B" stroke-width="1.6"/>
+          <line x1="8"  y1="22" x2="40" y2="22" stroke="#991B1B" stroke-width="1.2"/>
+          <line x1="8"  y1="30" x2="40" y2="30" stroke="#991B1B" stroke-width="1.2"/>
+          <line x1="8"  y1="38" x2="32" y2="38" stroke="#991B1B" stroke-width="1.2"/>
+        </g>
+        <!-- danger badge -->
+        <g id="dangerR">
+          <circle cx="170" cy="140" r="11" fill="#F43F5E"/>
+          <text x="170" y="144" text-anchor="middle" font-size="13" font-weight="700" fill="#FFF7ED">!</text>
+        </g>
+      </g>
+
+      <!-- 2 TRANSFORM -->
+      <g id="stage2">
+        <rect x="200" y="130" width="120" height="120" rx="14" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6"/>
+        <text x="260" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">2. transform</text>
+        <text x="260" y="168" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">pure</text>
+        <!-- icon: cogwheel-ish -->
+        <g transform="translate(260,210)">
+          <circle cx="0" cy="0" r="22" fill="none" stroke="#0EA5E9" stroke-width="2"/>
+          <circle cx="0" cy="0" r="8" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.8"/>
+          <line x1="0" y1="-22" x2="0" y2="-30" stroke="#0EA5E9" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="0" y1="22"  x2="0" y2="30"  stroke="#0EA5E9" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="-22" y1="0" x2="-30" y2="0" stroke="#0EA5E9" stroke-width="2.4" stroke-linecap="round"/>
+          <line x1="22"  y1="0" x2="30"  y2="0" stroke="#0EA5E9" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+      </g>
+
+      <!-- 3 SUMMARIZE -->
+      <g id="stage3">
+        <rect x="340" y="130" width="120" height="120" rx="14" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.6"/>
+        <text x="400" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">3. summarize</text>
+        <text x="400" y="168" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">pure</text>
+        <!-- icon: bars -->
+        <g transform="translate(370,196)">
+          <rect x="0"  y="32" width="10" height="20" fill="#10B981"/>
+          <rect x="14" y="20" width="10" height="32" fill="#10B981"/>
+          <rect x="28" y="6"  width="10" height="46" fill="#10B981"/>
+          <rect x="42" y="24" width="10" height="28" fill="#10B981"/>
+        </g>
+      </g>
+
+      <!-- 4 WRITE (boundary) -->
+      <g id="stage4">
+        <rect x="480" y="130" width="120" height="120" rx="14" fill="#FFE4E6" stroke="#F43F5E" stroke-width="2"/>
+        <text x="540" y="152" text-anchor="middle" font-size="11" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">4. write</text>
+        <text x="540" y="168" text-anchor="middle" font-size="10" fill="#991B1B" font-style="italic">boundary</text>
+        <!-- icon: brace -->
+        <g transform="translate(508,184)">
+          <rect x="0" y="0" width="64" height="56" rx="8" fill="#FFFFFF" stroke="#991B1B" stroke-width="1.6"/>
+          <text x="32" y="34" text-anchor="middle" font-family="ui-monospace,monospace" font-size="22" fill="#991B1B" font-weight="700">{ }</text>
+        </g>
+        <g id="dangerW">
+          <circle cx="610" cy="140" r="11" fill="#F43F5E"/>
+          <text x="610" y="144" text-anchor="middle" font-size="13" font-weight="700" fill="#FFF7ED">!</text>
+        </g>
+      </g>
+
+      <!-- output -->
+      <g id="outFile" opacity="0.4">
+        <rect x="620" y="178" width="76" height="48" rx="10" fill="#D1FAE5" stroke="#10B981" stroke-width="1.6"/>
+        <text x="658" y="196" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46">out.json</text>
+        <text x="658" y="214" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="#065F46" font-weight="700">{ … }</text>
+      </g>
+
+      <!-- arrows between stages -->
+      <path d="M180,190 L200,190" fill="none" stroke="#1F2937" stroke-width="1.8" marker-end="url(#arr)"/>
+      <path d="M320,190 L340,190" fill="none" stroke="#1F2937" stroke-width="1.8" marker-end="url(#arr)"/>
+      <path d="M460,190 L480,190" fill="none" stroke="#1F2937" stroke-width="1.8" marker-end="url(#arr)"/>
+
+      <!-- ── Token (the row, animated) ── -->
+      <g id="token" opacity="0">
+        <rect id="tokBg" x="-60" y="-14" width="120" height="28" rx="6" fill="#1F2937" stroke="#FBBF24" stroke-width="1.2"/>
+        <text id="tokT" x="0" y="6" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="#FBBF24"></text>
+      </g>
+
+      <!-- ── Bug call-outs (read & write) ── -->
+      <g id="readBugs" opacity="0">
+        <rect x="40" y="60" width="180" height="58" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.4"/>
+        <text x="56" y="78" font-size="10" font-weight="700" fill="#991B1B">bugs at READ:</text>
+        <text x="56" y="92" font-size="10" fill="#991B1B" font-family="ui-monospace,monospace">· BOM ﻿ in header</text>
+        <text x="56" y="106" font-size="10" fill="#991B1B" font-family="ui-monospace,monospace">· stray whitespace</text>
+        <!-- pointer -->
+        <path d="M120,118 L120,130" stroke="#F43F5E" stroke-width="1.5" marker-end="url(#arr)"/>
+      </g>
+
+      <g id="writeBugs" opacity="0">
+        <rect x="500" y="60" width="180" height="58" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.4"/>
+        <text x="516" y="78" font-size="10" font-weight="700" fill="#991B1B">bugs at WRITE:</text>
+        <text x="516" y="92" font-size="10" fill="#991B1B" font-family="ui-monospace,monospace">· empty cell → "" or 0?</text>
+        <text x="516" y="106" font-size="10" fill="#991B1B" font-family="ui-monospace,monospace">· no fsync, no encoding</text>
+        <path d="M580,118 L580,130" stroke="#F43F5E" stroke-width="1.5" marker-end="url(#arr)"/>
+      </g>
+
+      <!-- score band -->
+      <rect x="20" y="356" width="680" height="36" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="40"  y="378" font-size="12" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">edge stages: 2</text>
+      <text x="180" y="378" font-size="12" font-weight="700" fill="#374151" font-family="ui-monospace,monospace">·  pure stages: 2</text>
+      <text x="360" y="378" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">·</text>
+      <text id="bugTally" x="700" y="378" text-anchor="end" font-size="12" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">≈ 80% of bugs land in those 2 edges</text>
+    </svg>
+    <div class="caption" id="cap">Same row in. Same row out. The middle is easy. Watch the edges.</div>
+    <button class="reset" id="reset" type="button" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var prm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(id){return document.getElementById(id);};
+  var timers=[]; function after(ms,fn){timers.push(setTimeout(fn, prm?0:ms));}
+  function clearAll(){timers.forEach(clearTimeout); timers=[];}
+
+  function fade(id,from,to,dur){
+    var el=$(id); if(!el) return;
+    if(prm){el.setAttribute('opacity',String(to));return;}
+    var t0=performance.now();
+    function step(now){var t=Math.min(1,(now-t0)/dur),k=1-Math.pow(1-t,3);
+      el.setAttribute('opacity',String(from+(to-from)*k));
+      if(t<1) requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+
+  function move(id, x0,y0, x1,y1, dur, cb){
+    var el=$(id); if(!el) return;
+    if(prm){el.setAttribute('transform','translate('+x1+','+y1+')'); if(cb) cb(); return;}
+    var t0=performance.now();
+    function step(now){var t=Math.min(1,(now-t0)/dur),k=1-Math.pow(1-t,3);
+      el.setAttribute('transform','translate('+(x0+(x1-x0)*k)+','+(y0+(y1-y0)*k)+')');
+      if(t<1) requestAnimationFrame(step); else if(cb) cb();}
+    requestAnimationFrame(step);
+  }
+
+  function setToken(text, fill, stroke, color, width){
+    $('tokT').textContent = text;
+    $('tokBg').setAttribute('fill', fill);
+    $('tokBg').setAttribute('stroke', stroke);
+    $('tokT').setAttribute('fill', color);
+    var w = Math.max(110, text.length*7.4 + 20);
+    $('tokBg').setAttribute('x', String(-w/2));
+    $('tokBg').setAttribute('width', String(w));
+  }
+
+  function pulseDanger(id){
+    var el = $(id); if(!el) return;
+    if(prm) return;
+    var c = el.querySelector('circle');
+    if(!c) return;
+    var t0 = performance.now();
+    function step(now){
+      var t = (now-t0)/600;
+      if(t>=1){ c.setAttribute('r','11'); return; }
+      var r = 11 + Math.sin(t*Math.PI)*3.5;
+      c.setAttribute('r', String(r));
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function reset(){
+    clearAll();
+    fade('token',0,0,0);
+    fade('readBugs',0,0,0);
+    fade('writeBugs',0,0,0);
+    $('outFile').setAttribute('opacity','0.4');
+    setToken('', '#1F2937', '#FBBF24', '#FBBF24');
+    $('cap').textContent = 'Same row in. Same row out. The middle is easy. Watch the edges.';
+  }
+
+  function run(){
+    reset();
+
+    // appear at far left as messy text
+    after(400, function(){
+      setToken('\\ufeffname,  amount ,', '#FEE2E2', '#F43F5E', '#991B1B');
+      $('token').setAttribute('transform','translate(120,300)');
+      fade('token',0,1,300);
+      $('cap').textContent = 'Row arrives messy: BOM, whitespace, empty cells. Welcome to real data.';
+    });
+
+    // float up onto the track
+    after(1100, function(){
+      move('token', 120,300, 120,190, 600);
+      fade('readBugs',0,1,400);
+      pulseDanger('dangerR');
+    });
+
+    // STAGE 1 → 2: cleanup happens
+    after(2200, function(){
+      $('cap').textContent = 'read: strip BOM, trim whitespace, parse rows. Boundary won.';
+      setToken('{name:"Ada", amount:""}', '#FEF3C7', '#F59E0B', '#92400E');
+      move('token', 120,190, 260,190, 700);
+    });
+
+    // STAGE 2 → 3: transform fills missing → 0 and types
+    after(3500, function(){
+      $('cap').textContent = 'transform: empty amount → 0. Coerce to int. Pure function, easy to test.';
+      setToken('{name:"Ada", amount:0}', '#FFFFFF', '#0EA5E9', '#0C4A6E');
+      move('token', 260,190, 400,190, 700);
+    });
+
+    // STAGE 3 → 4: summarize aggregates
+    after(4900, function(){
+      $('cap').textContent = 'summarize: fold rows into totals. Still pure. No I/O.';
+      setToken('{total:0, n:1}', '#ECFDF5', '#10B981', '#065F46');
+      move('token', 400,190, 540,190, 700);
+    });
+
+    // STAGE 4: write — danger again
+    after(6300, function(){
+      fade('writeBugs',0,1,400);
+      pulseDanger('dangerW');
+      $('cap').textContent = 'write: which encoding? does empty become "" or 0? did it fsync?';
+    });
+
+    // out → file
+    after(7300, function(){
+      setToken('{"total":0,"n":1}', '#D1FAE5', '#10B981', '#065F46');
+      move('token', 540,190, 658,202, 600, function(){
+        fade('token',1,0,300);
+        $('outFile').setAttribute('opacity','1');
+      });
+    });
+
+    // closing punch
+    after(8400, function(){
+      $('cap').textContent = 'Two boundary stages out of four — and they hold ~80% of the bugs.';
+    });
+
+    // hold + loop
+    after(11800, run);
+  }
+
+  $('reset').addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Tool-Fit · 3 axes</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ECFDF5;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#ECFDF5;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.7}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 540" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Animation of a 3D-style cube with axes for volume, stakes, and verifiability; five candidate AI features are plotted as dots and slot into ship, human-in-the-loop, or refuse zones based on their position in the cube">
+
+  <rect width="780" height="540" fill="#ECFDF5"/>
+
+  <text x="390" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Tool-fit cube</text>
+  <text x="390" y="48" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Volume × Stakes × Verifiability — where does the feature land?</text>
+
+  <!-- ═══ CUBE — isometric ═══ -->
+  <!-- Origin at (260, 380). x = volume (right), y = verifiability (up), z = stakes (back-up-right) -->
+  <!-- Cube edge length: 200 in x, 200 in y, depth offset: (90, -54) for z -->
+
+  <g id="cube">
+    <!-- Back face (faded) -->
+    <path d="M 350 326 L 550 326 L 550 126 L 350 126 Z" fill="#A7F3D0" fill-opacity="0.18" stroke="#10B981" stroke-width="1" stroke-dasharray="3 3"/>
+
+    <!-- Bottom face -->
+    <path d="M 260 380 L 460 380 L 550 326 L 350 326 Z" fill="#D1FAE5" fill-opacity="0.4" stroke="#10B981" stroke-width="1.5"/>
+
+    <!-- Right face -->
+    <path d="M 460 380 L 550 326 L 550 126 L 460 180 Z" fill="#A7F3D0" fill-opacity="0.32" stroke="#10B981" stroke-width="1.5"/>
+
+    <!-- Front edges -->
+    <line x1="260" y1="380" x2="460" y2="380" stroke="#065F46" stroke-width="2" stroke-linecap="round"/>
+    <line x1="260" y1="180" x2="260" y2="380" stroke="#065F46" stroke-width="2" stroke-linecap="round"/>
+    <line x1="260" y1="180" x2="460" y2="180" stroke="#065F46" stroke-width="2" stroke-linecap="round"/>
+    <line x1="460" y1="180" x2="460" y2="380" stroke="#065F46" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Sweet-spot corner glow (front-bottom-right of front face = high vol, low stakes [front], high verif... wait, mapping below) -->
+    <!-- Sweet spot: high vol + low stakes + high verif → x=460 (right), y=180 (top), z=front (no offset) → (460, 180) -->
+    <circle cx="460" cy="180" r="22" fill="#10B981" opacity="0.18">
+      <animate attributeName="r" values="18;26;18" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.12;0.32;0.12" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="460" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">SWEET SPOT</text>
+  </g>
+
+  <!-- Axis labels and arrows -->
+  <!-- Volume axis: along x (front bottom edge), arrow pointing right -->
+  <line x1="260" y1="396" x2="460" y2="396" stroke="#1F2937" stroke-width="1.6" marker-end="url(#arr1)"/>
+  <text x="360" y="412" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">VOLUME →</text>
+  <text x="263" y="412" text-anchor="start" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">low</text>
+  <text x="455" y="412" text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">high</text>
+
+  <!-- Verifiability axis: along y (front left edge), arrow up -->
+  <line x1="244" y1="380" x2="244" y2="180" stroke="#1F2937" stroke-width="1.6" marker-end="url(#arr1)"/>
+  <text x="234" y="280" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" transform="rotate(-90 234 280)">VERIFIABILITY ↑</text>
+
+  <!-- Stakes axis: along z (back into cube), arrow upper-right -->
+  <line x1="476" y1="386" x2="566" y2="332" stroke="#1F2937" stroke-width="1.6" marker-end="url(#arr1)"/>
+  <text x="552" y="350" text-anchor="start" font-size="11" font-weight="700" fill="#1F2937">STAKES ↗</text>
+
+  <defs>
+    <marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1F2937"/>
+    </marker>
+  </defs>
+
+  <!-- ═══ ZONE PANEL (right) ═══ -->
+  <g>
+    <text x="600" y="92" font-size="12" font-weight="700" fill="#9CA3AF">DECISION</text>
+
+    <!-- SHIP -->
+    <g id="zoneShip">
+      <rect x="595" y="100" width="170" height="74" rx="10" fill="white" stroke="#10B981" stroke-width="2"/>
+      <circle cx="612" cy="120" r="6" fill="#10B981"/>
+      <text x="626" y="124" font-size="13" font-weight="700" fill="#10B981">SHIP</text>
+      <text x="608" y="144" font-size="10" fill="#6B7280">High volume,</text>
+      <text x="608" y="158" font-size="10" fill="#6B7280">low stakes,</text>
+      <text x="608" y="172" font-size="10" fill="#6B7280">verifiable.</text>
+      <text id="cShip" x="755" y="124" text-anchor="end" font-size="13" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- HITL -->
+    <g id="zoneHITL">
+      <rect x="595" y="186" width="170" height="74" rx="10" fill="white" stroke="#F59E0B" stroke-width="2"/>
+      <circle cx="612" cy="206" r="6" fill="#F59E0B"/>
+      <text x="626" y="210" font-size="13" font-weight="700" fill="#F59E0B">HITL</text>
+      <text x="608" y="230" font-size="10" fill="#6B7280">Human-in-loop:</text>
+      <text x="608" y="244" font-size="10" fill="#6B7280">model drafts,</text>
+      <text x="608" y="258" font-size="10" fill="#6B7280">human signs off.</text>
+      <text id="cHITL" x="755" y="210" text-anchor="end" font-size="13" font-weight="700" fill="#F59E0B" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- REFUSE -->
+    <g id="zoneRefuse">
+      <rect x="595" y="272" width="170" height="74" rx="10" fill="white" stroke="#F43F5E" stroke-width="2"/>
+      <circle cx="612" cy="292" r="6" fill="#F43F5E"/>
+      <text x="626" y="296" font-size="13" font-weight="700" fill="#F43F5E">REFUSE</text>
+      <text x="608" y="316" font-size="10" fill="#6B7280">High stakes &amp;</text>
+      <text x="608" y="330" font-size="10" fill="#6B7280">unverifiable.</text>
+      <text x="608" y="344" font-size="10" fill="#6B7280">Don't ship.</text>
+      <text id="cRefuse" x="755" y="296" text-anchor="end" font-size="13" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">0</text>
+    </g>
+  </g>
+
+  <!-- ═══ CANDIDATE LIST (top right, then dots will fly into cube) ═══ -->
+  <!-- Active candidate display (below zones) -->
+  <g id="activeCand">
+    <rect x="595" y="358" width="170" height="60" rx="10" fill="#1F2937"/>
+    <text x="608" y="376" font-size="9" font-weight="700" fill="#9CA3AF">PLOTTING</text>
+    <text id="candName" x="608" y="394" font-size="11" font-weight="700" fill="white">—</text>
+    <text id="candDesc" x="608" y="408" font-size="9" fill="#A7F3D0" font-style="italic">—</text>
+  </g>
+
+  <!-- Verdict pill (below the cube) -->
+  <g id="verdictGrp" opacity="0">
+    <rect id="verdictBg" x="32" y="438" width="540" height="42" rx="10" fill="#10B981"/>
+    <text id="verdictText" x="302" y="464" text-anchor="middle" font-size="13" font-weight="700" fill="white">—</text>
+  </g>
+
+  <!-- Footer takeaway -->
+  <rect x="32" y="490" width="716" height="38" rx="8" fill="#1F2937"/>
+  <text x="390" y="514" text-anchor="middle" font-size="12" fill="white" font-weight="600">If you can't measure it and the cost of a wrong answer is high — don't ship.</text>
+
+  <!-- Dots layer (last so dots are on top) -->
+  <g id="dotsLayer"></g>
+
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+function $id(id){return document.getElementById(id);}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function lerp(a,b,t){return a+(b-a)*t;}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+
+const SVGNS='http://www.w3.org/2000/svg';
+
+// Cube origin & offsets:
+// Origin (0,0,0) → screen (260, 380)
+// +X (volume, 0..1)         → +200 right
+// +Y (verifiability, 0..1)  → -200 up
+// +Z (stakes, 0..1)         → +90 right, -54 up
+function project(v,k,vf){ // volume, staKes, verifiability all 0..1
+  const x = 260 + v*200 + k*90;
+  const y = 380 - vf*200 - k*54;
+  return {x,y};
+}
+
+const CANDS=[
+  { name:'Auto-tag photos',         desc:'tag user uploads with labels',           v:0.92, k:0.18, vf:0.86, zone:'ship'   },
+  { name:'Draft sales emails',      desc:'first draft, human edits',               v:0.74, k:0.55, vf:0.62, zone:'hitl'   },
+  { name:'Approve loan applications',desc:'auto-decision on credit risk',          v:0.48, k:0.95, vf:0.32, zone:'refuse' },
+  { name:'Summarise meeting notes', desc:'draft + meeting owner reviews',          v:0.82, k:0.42, vf:0.55, zone:'hitl'   },
+  { name:'Spam-filter inbox',       desc:'high-volume, well-measured',             v:0.96, k:0.22, vf:0.92, zone:'ship'   }
+];
+
+const ZONE_COLORS={
+  ship:'#10B981',
+  hitl:'#F59E0B',
+  refuse:'#F43F5E'
+};
+const ZONE_LABELS={
+  ship:'SHIP',
+  hitl:'HUMAN-IN-LOOP',
+  refuse:'REFUSE'
+};
+
+let counts={ship:0,hitl:0,refuse:0};
+
+function makeDot(){
+  const c=document.createElementNS(SVGNS,'circle');
+  c.setAttribute('r','8');
+  return c;
+}
+function makeText(){
+  const t=document.createElementNS(SVGNS,'text');
+  t.setAttribute('font-size','9');
+  t.setAttribute('font-weight','700');
+  t.setAttribute('text-anchor','middle');
+  t.setAttribute('fill','white');
+  return t;
+}
+
+function plotCandidate(idx,onDone){
+  const c=CANDS[idx];
+  $id('candName').textContent=c.name;
+  $id('candDesc').textContent=c.desc;
+
+  const tgt=project(c.v,c.k,c.vf);
+  // Start position: above the cube, drop down
+  const startX=tgt.x;
+  const startY=80;
+  const color=ZONE_COLORS[c.zone];
+
+  const dotsLayer=$id('dotsLayer');
+
+  const dot=makeDot();
+  dot.setAttribute('cx',startX);
+  dot.setAttribute('cy',startY);
+  dot.setAttribute('fill',color);
+  dot.setAttribute('opacity','0');
+  dot.setAttribute('stroke','#1F2937');
+  dot.setAttribute('stroke-width','1.5');
+  dotsLayer.appendChild(dot);
+
+  // Number label
+  const label=makeText();
+  label.textContent=String(idx+1);
+  label.setAttribute('x',startX);
+  label.setAttribute('y',startY+3);
+  label.setAttribute('opacity','0');
+  dotsLayer.appendChild(label);
+
+  // Fade in
+  const fadeStart=performance.now();
+  function fadeIn(now){
+    const t=Math.min((now-fadeStart)/300,1);
+    dot.setAttribute('opacity',String(t));
+    label.setAttribute('opacity',String(t));
+    if(t<1)requestAnimationFrame(fadeIn);
+  }
+  requestAnimationFrame(fadeIn);
+
+  // Drop into cube position
+  after(350,()=>{
+    const dropStart=performance.now();
+    const dur=750;
+    function drop(now){
+      const t=Math.min((now-dropStart)/dur,1),e=easeOut(t);
+      const x=lerp(startX,tgt.x,e);
+      const y=lerp(startY,tgt.y,e);
+      dot.setAttribute('cx',x);
+      dot.setAttribute('cy',y);
+      label.setAttribute('x',x);
+      label.setAttribute('y',y+3);
+      if(t<1)requestAnimationFrame(drop);
+    }
+    requestAnimationFrame(drop);
+  });
+
+  // After drop, show verdict + bump zone counter
+  after(1150,()=>{
+    counts[c.zone]++;
+    $id('c'+(c.zone==='ship'?'Ship':c.zone==='hitl'?'HITL':'Refuse')).textContent=String(counts[c.zone]);
+
+    // Verdict pill
+    $id('verdictBg').setAttribute('fill',color);
+    $id('verdictText').textContent='#'+(idx+1)+' '+c.name+' → '+ZONE_LABELS[c.zone];
+    fadeOp('verdictGrp',0,1,300);
+
+    // Pulse target zone card briefly
+    pulseZone(c.zone);
+  });
+
+  after(2050,()=>{
+    fadeOp('verdictGrp',1,0,300,onDone);
+  });
+}
+
+function pulseZone(zone){
+  const id=zone==='ship'?'zoneShip':zone==='hitl'?'zoneHITL':'zoneRefuse';
+  const g=$id(id);
+  const r=g.querySelector('rect');
+  const orig=r.getAttribute('stroke-width');
+  r.setAttribute('stroke-width','4');
+  after(500,()=>r.setAttribute('stroke-width',orig));
+}
+
+function fadeOp(id,from,to,dur,cb){
+  const e=$id(id);if(!e){if(cb)cb();return;}
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function reset(){
+  clearAll();
+  counts={ship:0,hitl:0,refuse:0};
+  $id('cShip').textContent='0';
+  $id('cHITL').textContent='0';
+  $id('cRefuse').textContent='0';
+  $id('candName').textContent='—';
+  $id('candDesc').textContent='—';
+  $id('dotsLayer').innerHTML='';
+  fadeOp('verdictGrp',1,0,1);
+
+  let i=0;
+  function next(){
+    if(i>=CANDS.length){
+      after(2200,reset);
+      return;
+    }
+    plotCandidate(i,()=>{i++;after(180,next);});
+  }
+  after(600,next);
+}
+
+$id('rb').addEventListener('click',reset);
+reset();
+
+})();
+</script>
+</body>
+</html>

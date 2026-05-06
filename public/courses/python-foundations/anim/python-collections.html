@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>list vs set — O(n) vs O(1) membership</title>
+<style>
+  :root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--paper:#FFFFFF;--rule:#E5E7EB;--good:#10B981;--bad:#F43F5E;--warn:#F59E0B;--blue:#0EA5E9;--purple:#8B5CF6;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:760px}
+  .frame{width:100%;aspect-ratio:16/9;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:8px;min-height:18px}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font:600 11px system-ui,sans-serif;cursor:pointer;opacity:.78}
+  .reset:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:0.001s !important;transition-duration:0.001s !important}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 720 405" aria-label="A race between list membership and set membership across one hundred thousand items. The list walks one item at a time; the set hashes directly to the target. The set finishes in one step.">
+      <defs>
+        <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#1F2937"/></marker>
+        <marker id="arrG" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#10B981"/></marker>
+      </defs>
+
+      <!-- title -->
+      <rect x="20" y="14" width="680" height="32" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="360" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2937">target in haystack — race across 100,000 items</text>
+
+      <!-- LIST track -->
+      <g>
+        <rect x="20" y="60" width="680" height="118" rx="14" fill="#FFFFFF" stroke="#FECACA" stroke-width="1.6"/>
+        <g>
+          <rect x="36" y="74" width="120" height="22" rx="6" fill="#FEE2E2"/>
+          <text x="96" y="89" text-anchor="middle" font-size="11" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">target in big_list</text>
+        </g>
+        <text x="170" y="89" font-size="11" fill="#6B7280" font-style="italic">walks one at a time…</text>
+        <!-- track -->
+        <rect x="36" y="118" width="648" height="22" rx="11" fill="#FFF1F2" stroke="#FECACA"/>
+        <!-- 25 cells representing the haystack (visual sample) -->
+        <g id="cells"></g>
+        <!-- runner (list) -->
+        <g id="runnerL">
+          <circle cx="0" cy="0" r="9" fill="#F43F5E"/>
+          <text x="0" y="3" text-anchor="middle" font-size="10" font-weight="700" fill="#FFF7ED">i</text>
+        </g>
+        <!-- counter -->
+        <text x="36" y="166" font-size="11" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">comparisons:</text>
+        <text id="listN" x="148" y="166" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">0</text>
+        <text id="listLabel" x="270" y="166" font-size="11" fill="#6B7280" font-family="ui-monospace,monospace">/ 100,000</text>
+        <text x="684" y="166" text-anchor="end" font-size="11" font-weight="700" fill="#991B1B" font-family="ui-monospace,monospace">O(n)</text>
+      </g>
+
+      <!-- SET track -->
+      <g>
+        <rect x="20" y="194" width="680" height="146" rx="14" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="1.6"/>
+        <g>
+          <rect x="36" y="208" width="120" height="22" rx="6" fill="#D1FAE5"/>
+          <text x="96" y="223" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">target in big_set</text>
+        </g>
+        <text x="170" y="223" font-size="11" fill="#6B7280" font-style="italic">hashes straight to the bucket.</text>
+
+        <!-- target value -->
+        <g id="srcVal">
+          <rect x="36" y="248" width="120" height="36" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.6"/>
+          <text x="96" y="262" text-anchor="middle" font-size="10" fill="#065F46" font-weight="700">target</text>
+          <text x="96" y="278" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="#1F2937" font-weight="700">42_017</text>
+        </g>
+        <!-- hash() box -->
+        <g id="hashBox">
+          <rect x="208" y="248" width="116" height="36" rx="8" fill="#1F2937"/>
+          <text x="266" y="262" text-anchor="middle" font-size="10" font-weight="700" fill="#FBBF24" font-family="ui-monospace,monospace">hash()</text>
+          <text x="266" y="278" text-anchor="middle" font-size="11" font-family="ui-monospace,monospace" fill="#FFF7ED">→ index 7</text>
+        </g>
+        <!-- arrow value -> hash -->
+        <path d="M158,266 L208,266" fill="none" stroke="#10B981" stroke-width="2" marker-end="url(#arrG)"/>
+
+        <!-- bucket array -->
+        <g id="buckets" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">
+          <g><rect x="370" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="386" y="270" text-anchor="middle">0</text></g>
+          <g><rect x="404" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="420" y="270" text-anchor="middle">1</text></g>
+          <g><rect x="438" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="454" y="270" text-anchor="middle">2</text></g>
+          <g><rect x="472" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="488" y="270" text-anchor="middle">3</text></g>
+          <g><rect x="506" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="522" y="270" text-anchor="middle">4</text></g>
+          <g><rect x="540" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="556" y="270" text-anchor="middle">5</text></g>
+          <g><rect x="574" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="590" y="270" text-anchor="middle">6</text></g>
+          <g id="b7"><rect x="608" y="252" width="32" height="28" rx="6" fill="#10B981" stroke="#065F46" stroke-width="1.8"/><text x="624" y="270" text-anchor="middle" fill="#FFFFFF" font-weight="700">7</text></g>
+          <g><rect x="642" y="252" width="32" height="28" rx="6" fill="#F0FDF4" stroke="#A7F3D0"/><text x="658" y="270" text-anchor="middle">8</text></g>
+        </g>
+        <!-- arrow hash -> bucket 7 -->
+        <path id="hashArrow" d="M324,266 L606,266" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="5 4" opacity="0" marker-end="url(#arrG)"/>
+
+        <!-- check -->
+        <g id="setCheck" opacity="0" transform="translate(624,302)">
+          <circle cx="0" cy="0" r="14" fill="#10B981"/>
+          <path d="M-7,0 L-2,5 L8,-7" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- counter -->
+        <text x="36" y="324" font-size="11" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">comparisons:</text>
+        <text id="setN" x="148" y="324" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0</text>
+        <text id="setLabel" x="180" y="324" font-size="11" fill="#6B7280" font-family="ui-monospace,monospace">(one hash, one lookup)</text>
+        <text x="684" y="324" text-anchor="end" font-size="11" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">O(1)</text>
+      </g>
+
+      <!-- score band -->
+      <rect x="20" y="356" width="680" height="36" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="40" y="378" font-size="12" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">list:</text>
+      <text id="finalL" x="80" y="378" font-size="12" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">walking…</text>
+      <text x="360" y="378" text-anchor="middle" font-size="12" font-weight="700" fill="#374151" font-family="ui-monospace,monospace">·</text>
+      <text x="384" y="378" font-size="12" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">set:</text>
+      <text id="finalS" x="424" y="378" font-size="12" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">done.</text>
+      <text id="ratio" x="684" y="378" text-anchor="end" font-size="11" font-style="italic" fill="#6B7280">~100,000× difference</text>
+    </svg>
+    <div class="caption" id="cap">Walking the haystack vs hashing straight to the needle.</div>
+    <button class="reset" id="reset" type="button" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var prm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(id){return document.getElementById(id);};
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var timers=[]; function after(ms,fn){timers.push(setTimeout(fn, prm?0:ms));}
+  function clearAll(){timers.forEach(clearTimeout); timers=[];}
+
+  // Build the visual list haystack (25 cells, last one is the target — implies "way further than visible")
+  var cellsG = $('cells');
+  var CELLS = 25;
+  var startX = 36, endX = 684, w = (endX-startX)/CELLS;
+  for(var i=0;i<CELLS;i++){
+    var r = document.createElementNS(SVGNS,'rect');
+    r.setAttribute('x', String(startX + i*w + 1));
+    r.setAttribute('y', '120');
+    r.setAttribute('width', String(w-2));
+    r.setAttribute('height', '18');
+    r.setAttribute('rx','3');
+    r.setAttribute('fill', i===CELLS-1 ? '#F59E0B' : '#FFFFFF');
+    r.setAttribute('stroke', i===CELLS-1 ? '#92400E' : '#FECACA');
+    r.setAttribute('stroke-width','1.2');
+    r.setAttribute('opacity','0.95');
+    cellsG.appendChild(r);
+  }
+  // small dots at the very right to imply continuation
+  var dotsT = document.createElementNS(SVGNS,'text');
+  dotsT.setAttribute('x','684'); dotsT.setAttribute('y','130');
+  dotsT.setAttribute('text-anchor','end'); dotsT.setAttribute('font-size','11');
+  dotsT.setAttribute('fill','#92400E'); dotsT.setAttribute('font-weight','700');
+  dotsT.setAttribute('font-family','ui-monospace,monospace');
+  dotsT.textContent = '★ target';
+  cellsG.appendChild(dotsT);
+
+  function fade(id,from,to,dur){
+    var el=$(id); if(!el) return;
+    if(prm){el.setAttribute('opacity',String(to));return;}
+    var t0=performance.now();
+    function step(now){var t=Math.min(1,(now-t0)/dur),k=1-Math.pow(1-t,3);
+      el.setAttribute('opacity',String(from+(to-from)*k));
+      if(t<1) requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+
+  function move(id, x0,y0, x1,y1, dur, cb){
+    var el=$(id); if(!el) return;
+    if(prm){el.setAttribute('transform','translate('+x1+','+y1+')'); if(cb) cb(); return;}
+    var t0=performance.now();
+    function step(now){var t=Math.min(1,(now-t0)/dur),k=t*t*(3-2*t);
+      el.setAttribute('transform','translate('+(x0+(x1-x0)*k)+','+(y0+(y1-y0)*k)+')');
+      if(t<1) requestAnimationFrame(step); else if(cb) cb();}
+    requestAnimationFrame(step);
+  }
+
+  function rampNumber(id, from, to, dur, suffix){
+    var el=$(id); if(!el) return;
+    if(prm){ el.textContent = String(to.toLocaleString()) + (suffix||''); return; }
+    var t0=performance.now();
+    function step(now){
+      var t=Math.min(1,(now-t0)/dur);
+      var k = 1 - Math.pow(1-t,2);
+      var v = Math.floor(from + (to-from)*k);
+      el.textContent = v.toLocaleString() + (suffix||'');
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function reset(){
+    clearAll();
+    $('listN').textContent = '0';
+    $('setN').textContent = '0';
+    $('finalL').textContent = 'walking…';
+    $('finalL').setAttribute('fill','#F43F5E');
+    $('finalS').textContent = 'done.';
+    $('ratio').textContent = '';
+    $('runnerL').setAttribute('transform','translate(48,129)');
+    $('hashArrow').setAttribute('opacity','0');
+    $('setCheck').setAttribute('opacity','0');
+    $('cap').textContent = 'Walking the haystack vs hashing straight to the needle.';
+  }
+
+  function run(){
+    reset();
+
+    // Both start. SET wins almost immediately.
+    after(400, function(){ $('cap').textContent = 'Both start the same instant…'; });
+
+    // SET path — fast
+    after(700, function(){
+      fade('hashArrow',0,1,300);
+    });
+    after(1100, function(){
+      fade('setCheck',0,1,300);
+      $('setN').textContent = '1';
+      $('finalS').textContent = '1 step (~50 ns)';
+      $('cap').textContent = 'set: hash → bucket 7 → found. One step.';
+    });
+
+    // LIST path — slow, walks across the visible track over many seconds
+    var startX = 48, endX = 678, listDur = 8000;
+    after(700, function(){
+      var t0 = performance.now();
+      function tick(now){
+        var t = Math.min(1, (now-t0)/listDur);
+        var x = startX + (endX-startX)*t;
+        $('runnerL').setAttribute('transform','translate('+x+',129)');
+        if(t<1) requestAnimationFrame(tick);
+      }
+      if(!prm) requestAnimationFrame(tick);
+      else $('runnerL').setAttribute('transform','translate('+endX+',129)');
+    });
+    // ramp comparison count from 0 to 100k over the same duration
+    after(700, function(){
+      rampNumber('listN', 0, 100000, listDur, '');
+    });
+
+    // mid-trip captions
+    after(2200, function(){ $('cap').textContent = 'list: still walking. Comparison after comparison.'; });
+    after(5200, function(){ $('cap').textContent = 'list: 60,000 comparisons in. The set finished 5 seconds ago.'; });
+
+    // list finishes (visually)
+    after(8800, function(){
+      $('finalL').textContent = '100,000 steps (~3 ms)';
+      $('finalL').setAttribute('fill','#F43F5E');
+      $('cap').textContent = 'Same answer. 100,000× more work. Pick the right container.';
+      $('ratio').textContent = '~100,000× difference';
+    });
+
+    // hold + loop
+    after(12200, run);
+  }
+
+  $('reset').addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

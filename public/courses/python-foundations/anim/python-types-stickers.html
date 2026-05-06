@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python names are stickers</title>
+<style>
+  :root{--bg:#FAF5FF;--ink:#1F2937;--muted:#6B7280;--a:#F59E0B;--b:#0EA5E9;--good:#10B981;--bad:#F43F5E;--paper:#FFFFFF;--rule:#E5E7EB;--mono:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:760px}
+  .frame{width:100%;aspect-ratio:16/9;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:8px;min-height:18px}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font:600 11px system-ui,sans-serif;cursor:pointer;opacity:.78}
+  .reset:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:0.001s !important;transition-duration:0.001s !important}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 720 405" aria-label="Two name stickers a and b stuck onto the same Python list. Mutating with append changes both. Rebinding b creates a new list, leaving a unchanged.">
+      <defs>
+        <marker id="arrA" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="#F59E0B"/>
+        </marker>
+        <marker id="arrB" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+          <path d="M0,0 L9,4.5 L0,9 Z" fill="#0EA5E9"/>
+        </marker>
+      </defs>
+
+      <!-- title strip -->
+      <rect x="20" y="14" width="680" height="34" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="360" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2937">Names are stickers. Lists are objects.</text>
+
+      <!-- code strip -->
+      <g id="codeRow">
+        <rect x="20" y="60" width="680" height="36" rx="10" fill="#1F2937"/>
+        <text id="codeT" x="38" y="84" font-family="ui-monospace,monospace" font-size="14" fill="#FBBF24"></text>
+        <text id="codeC" x="38" y="84" font-family="ui-monospace,monospace" font-size="14" fill="#9CA3AF" opacity="0"></text>
+      </g>
+
+      <!-- left list (object 1) -->
+      <g id="obj1">
+        <text x="180" y="130" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">list object @0x A1</text>
+        <rect x="80" y="140" width="200" height="80" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+        <!-- cells -->
+        <g font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="#1F2937">
+          <g id="c1"><rect x="96" y="160" width="40" height="40" rx="8" fill="#FEF3C7" stroke="#1F2937" stroke-width="1.5"/><text x="116" y="187" text-anchor="middle">1</text></g>
+          <g id="c2"><rect x="146" y="160" width="40" height="40" rx="8" fill="#FEF3C7" stroke="#1F2937" stroke-width="1.5"/><text x="166" y="187" text-anchor="middle">2</text></g>
+          <g id="c3"><rect x="196" y="160" width="40" height="40" rx="8" fill="#FEF3C7" stroke="#1F2937" stroke-width="1.5"/><text x="216" y="187" text-anchor="middle">3</text></g>
+          <g id="c4" opacity="0"><rect x="246" y="160" width="40" height="40" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="1.8"/><text x="266" y="187" text-anchor="middle" fill="#065F46">4</text></g>
+        </g>
+      </g>
+
+      <!-- right list (object 2 — appears in stage 4) -->
+      <g id="obj2" opacity="0">
+        <text x="540" y="130" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">new list @0x B7</text>
+        <rect x="380" y="140" width="280" height="80" rx="14" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2"/>
+        <g font-family="ui-monospace,monospace" font-size="18" font-weight="700" fill="#1F2937">
+          <rect x="396" y="160" width="40" height="40" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/><text x="416" y="187" text-anchor="middle">1</text>
+          <rect x="446" y="160" width="40" height="40" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/><text x="466" y="187" text-anchor="middle">2</text>
+          <rect x="496" y="160" width="40" height="40" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/><text x="516" y="187" text-anchor="middle">3</text>
+          <rect x="546" y="160" width="40" height="40" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/><text x="566" y="187" text-anchor="middle">4</text>
+          <rect x="596" y="160" width="40" height="40" rx="8" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.5"/><text x="616" y="187" text-anchor="middle">5</text>
+        </g>
+      </g>
+
+      <!-- sticker A -->
+      <g id="stickA" transform="translate(60,290)" opacity="0">
+        <path d="M0,0 L70,0 L70,40 L60,50 L0,50 Z" fill="#FDE68A" stroke="#F59E0B" stroke-width="2"/>
+        <path d="M70,40 L60,40 L60,50 Z" fill="#FBBF24" stroke="#F59E0B" stroke-width="2"/>
+        <text x="35" y="32" text-anchor="middle" font-family="ui-monospace,monospace" font-size="22" font-weight="700" fill="#92400E">a</text>
+      </g>
+      <path id="arrowA" d="M130,310 Q150,265 178,232" fill="none" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrA)" opacity="0"/>
+
+      <!-- sticker B -->
+      <g id="stickB" transform="translate(220,290)" opacity="0">
+        <path d="M0,0 L70,0 L70,40 L60,50 L0,50 Z" fill="#BAE6FD" stroke="#0EA5E9" stroke-width="2"/>
+        <path d="M70,40 L60,40 L60,50 Z" fill="#7DD3FC" stroke="#0EA5E9" stroke-width="2"/>
+        <text x="35" y="32" text-anchor="middle" font-family="ui-monospace,monospace" font-size="22" font-weight="700" fill="#075985">b</text>
+      </g>
+      <path id="arrowB" d="M290,310 Q260,265 220,232" fill="none" stroke="#0EA5E9" stroke-width="2.4" stroke-linecap="round" marker-end="url(#arrB)" opacity="0"/>
+
+      <!-- step chip -->
+      <g id="chip" opacity="0">
+        <rect x="20" y="260" width="120" height="22" rx="11" fill="#1F2937"/>
+        <text id="chipT" x="80" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="#FFF7ED" font-family="ui-monospace,monospace">step 1 / 4</text>
+      </g>
+
+      <!-- footer ledger -->
+      <rect x="20" y="358" width="680" height="34" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+      <text x="40" y="380" font-size="12" fill="#374151" font-family="ui-monospace,monospace">a is b →</text>
+      <text id="isb" x="115" y="380" font-size="12" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">True</text>
+      <text x="200" y="380" font-size="12" fill="#374151" font-family="ui-monospace,monospace">id(a) →</text>
+      <text id="ida" x="265" y="380" font-size="12" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">A1</text>
+      <text x="320" y="380" font-size="12" fill="#374151" font-family="ui-monospace,monospace">id(b) →</text>
+      <text id="idb" x="385" y="380" font-size="12" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">A1</text>
+      <text id="note" x="700" y="380" text-anchor="end" font-size="12" font-style="italic" fill="#6B7280">same object</text>
+    </svg>
+    <div class="caption" id="cap">Two names. One object. Until you make a new one.</div>
+    <button class="reset" id="reset" type="button" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var prm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(id){return document.getElementById(id);};
+  var timers = [];
+  function after(ms,fn){ timers.push(setTimeout(fn, prm?0:ms)); }
+  function clearAll(){ timers.forEach(clearTimeout); timers=[]; }
+
+  function set(el,attr,val){ if(el) el.setAttribute(attr,val); }
+  function fade(id, from, to, dur){
+    var el = $(id); if(!el) return;
+    if(prm){ el.setAttribute('opacity', String(to)); return; }
+    var t0 = performance.now();
+    function step(now){
+      var t = Math.min(1,(now-t0)/dur);
+      var k = 1 - Math.pow(1-t,3);
+      el.setAttribute('opacity', String(from + (to-from)*k));
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function slide(id, x0, y0, x1, y1, dur){
+    var el = $(id); if(!el) return;
+    if(prm){ el.setAttribute('transform','translate('+x1+','+y1+')'); return; }
+    var t0 = performance.now();
+    function step(now){
+      var t = Math.min(1,(now-t0)/dur);
+      var k = 1 - Math.pow(1-t,3);
+      el.setAttribute('transform','translate('+(x0+(x1-x0)*k)+','+(y0+(y1-y0)*k)+')');
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function setPath(id, d){ var el=$(id); if(el) el.setAttribute('d', d); }
+
+  function chip(text){
+    $('chipT').textContent = text;
+    fade('chip',0,1,300);
+  }
+
+  function setLedger(isB, ida, idb, note, isBcolor){
+    $('isb').textContent = isB; $('isb').setAttribute('fill', isBcolor||'#10B981');
+    $('ida').textContent = ida;
+    $('idb').textContent = idb;
+    $('note').textContent = note;
+  }
+
+  function typeCode(plain, comment){
+    $('codeT').textContent = plain;
+    $('codeC').textContent = comment || '';
+    fade('codeC', 0, comment?1:0, 280);
+    // re-flow comment after plain text
+    var bbox = $('codeT').getComputedTextLength ? $('codeT').getComputedTextLength() : plain.length*8.4;
+    $('codeC').setAttribute('x', String(38 + bbox + 18));
+  }
+
+  function reset(){
+    clearAll();
+    set($('stickA'),'opacity',0); set($('stickA'),'transform','translate(60,290)');
+    set($('stickB'),'opacity',0); set($('stickB'),'transform','translate(220,290)');
+    set($('arrowA'),'opacity',0); set($('arrowB'),'opacity',0);
+    set($('obj2'),'opacity',0);
+    set($('c4'),'opacity',0);
+    set($('chip'),'opacity',0);
+    typeCode('', '');
+    setLedger('—','—','—','','#6B7280');
+    $('cap').textContent = 'Two names. One object. Until you make a new one.';
+  }
+
+  function run(){
+    reset();
+
+    // 1. a = [1,2,3]
+    after(350, function(){
+      chip('step 1 / 4');
+      typeCode('a = [1, 2, 3]', '# new list, sticker a stuck on it');
+      $('cap').textContent = 'a = [1, 2, 3] — a brand-new list, sticker a stuck on it.';
+      fade('stickA',0,1,360);
+      slide('stickA', 60,290, 130,235, 700);
+      after(380, function(){ fade('arrowA',0,1,360); });
+      setLedger('—', 'A1', '—', 'a points at @A1', '#6B7280');
+    });
+
+    // 2. b = a
+    after(2400, function(){
+      chip('step 2 / 4');
+      typeCode('b = a', '# same object, second sticker');
+      $('cap').textContent = 'b = a — no copy. b is just a second sticker on the same list.';
+      fade('stickB',0,1,360);
+      slide('stickB', 220,290, 220,235, 700);
+      after(380, function(){
+        fade('arrowB',0,1,360);
+        setPath('arrowB','M250,250 Q235,235 232,232');
+      });
+      setLedger('True', 'A1', 'A1', 'same object', '#10B981');
+    });
+
+    // 3. b.append(4) — mutate
+    after(5000, function(){
+      chip('step 3 / 4');
+      typeCode('b.append(4)', '# mutates the shared list in place');
+      $('cap').textContent = 'b.append(4) — both a and b see the new 4. Same object, mutated.';
+      fade('c4',0,1,500);
+      // little wobble on the list to imply change
+      var box = $('obj1');
+      if(!prm){
+        var t0 = performance.now();
+        function wob(now){
+          var t = (now-t0)/420;
+          if(t>=1){ box.setAttribute('transform','translate(0,0)'); return; }
+          var k = Math.sin(t*Math.PI*2)*2*(1-t);
+          box.setAttribute('transform','translate(0,'+k+')');
+          requestAnimationFrame(wob);
+        }
+        requestAnimationFrame(wob);
+      }
+      setLedger('True', 'A1', 'A1', 'list now [1,2,3,4]', '#10B981');
+    });
+
+    // 4. b = b + [5] — rebind
+    after(7900, function(){
+      chip('step 4 / 4');
+      typeCode('b = b + [5]', '# new list! b sticker peels off, lands on it');
+      $('cap').textContent = 'b = b + [5] — a fresh list. b moves. a stays put on [1,2,3,4].';
+      fade('obj2',0,1,500);
+      // peel sticker b off and slide it to the new list
+      after(120, function(){
+        slide('stickB', 220,235, 470,235, 900);
+        // arrow b retargets
+        setPath('arrowB','M500,250 Q505,238 510,232');
+      });
+      setLedger('False', 'A1', 'B7', 'different objects', '#F43F5E');
+    });
+
+    // hold and loop
+    after(11800, function(){
+      $('cap').textContent = 'Mutation shares. Rebinding splits.';
+      after(prm?0:1600, run);
+    });
+  }
+
+  $('reset').addEventListener('click', function(){ run(); });
+  run();
+})();
+</script>
+</body>
+</html>

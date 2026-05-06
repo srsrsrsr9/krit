@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compounding — The Hockey Stick</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ECFDF5;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:8px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:14px;right:18px;background:#1F2937;color:#ECFDF5;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75;z-index:5}
+#rb:hover{opacity:1}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Compounding hockey stick: ten thousand rupees per month at 12 percent annual return grows to 3.5 crore over 30 years when started at age 25, but only 1.1 crore when started at age 35.">
+
+  <rect width="780" height="470" fill="#ECFDF5"/>
+
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Time, not amount, is the lever.</text>
+  <text x="390" y="52" text-anchor="middle" font-size="12" fill="#6B7280">₹10,000/month at 12% annual return.</text>
+
+  <!-- Chart frame: x 70..710, y 78..360 -->
+  <rect x="70" y="78" width="640" height="285" rx="10" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="1.4"/>
+
+  <!-- Y axis: 0..3.5Cr → y = 360 - val*70.857 (val in Cr) -->
+  <!-- gridlines at 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5 -->
+  <g stroke="#D1FAE5" stroke-width="1" stroke-dasharray="2 3">
+    <line x1="70" y1="324" x2="710" y2="324"/>
+    <line x1="70" y1="289" x2="710" y2="289"/>
+    <line x1="70" y1="254" x2="710" y2="254"/>
+    <line x1="70" y1="218" x2="710" y2="218"/>
+    <line x1="70" y1="183" x2="710" y2="183"/>
+    <line x1="70" y1="148" x2="710" y2="148"/>
+    <line x1="70" y1="113" x2="710" y2="113"/>
+  </g>
+  <g font-family="ui-monospace,monospace" font-size="10" fill="#9CA3AF">
+    <text x="64" y="364" text-anchor="end">0</text>
+    <text x="64" y="328" text-anchor="end">50L</text>
+    <text x="64" y="293" text-anchor="end">1Cr</text>
+    <text x="64" y="258" text-anchor="end">1.5</text>
+    <text x="64" y="222" text-anchor="end">2Cr</text>
+    <text x="64" y="187" text-anchor="end">2.5</text>
+    <text x="64" y="152" text-anchor="end">3Cr</text>
+    <text x="64" y="117" text-anchor="end">3.5</text>
+  </g>
+
+  <!-- X axis: years 0..30 → x = 70 + year*21.333 -->
+  <line x1="70" y1="360" x2="710" y2="360" stroke="#A7F3D0" stroke-width="1.5"/>
+  <g font-family="ui-monospace,monospace" font-size="10" fill="#9CA3AF">
+    <text x="70"  y="378" text-anchor="middle">0</text>
+    <text x="177" y="378" text-anchor="middle">5</text>
+    <text x="283" y="378" text-anchor="middle">10</text>
+    <text x="390" y="378" text-anchor="middle">15</text>
+    <text x="497" y="378" text-anchor="middle">20</text>
+    <text x="603" y="378" text-anchor="middle">25</text>
+    <text x="710" y="378" text-anchor="middle">30</text>
+  </g>
+  <text x="390" y="395" text-anchor="middle" font-size="11" fill="#6B7280">years investing</text>
+
+  <!-- Late starter line (starts at year 10 in absolute timeline → only 20 years) -->
+  <path id="lateLine" d="M 283 360 L 283 360" fill="none" stroke="#8B5CF6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
+  <circle id="lateDot" cx="283" cy="360" r="5" fill="#8B5CF6" opacity="0"/>
+
+  <!-- Early starter (filled area + line) -->
+  <path id="earlyArea" d="M 70 360 L 70 360 Z" fill="#10B981" fill-opacity="0.13"/>
+  <path id="earlyLine" d="M 70 360 L 70 360" fill="none" stroke="#10B981" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle id="earlyDot" cx="70" cy="360" r="5.5" fill="#10B981"/>
+
+  <!-- "Almost nothing" annotation phase 1 -->
+  <g id="phase1Note" opacity="0">
+    <line x1="170" y1="330" x2="170" y2="295" stroke="#9CA3AF" stroke-width="1.2"/>
+    <text x="170" y="288" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">decade 1: barely visible</text>
+  </g>
+
+  <!-- "Visible" annotation phase 2 -->
+  <g id="phase2Note" opacity="0">
+    <line x1="390" y1="290" x2="390" y2="240" stroke="#9CA3AF" stroke-width="1.2"/>
+    <text x="390" y="232" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">year 15: things shift</text>
+  </g>
+
+  <!-- Final values -->
+  <g id="finalEarly" opacity="0">
+    <rect x="595" y="86" width="110" height="46" rx="8" fill="#10B981"/>
+    <text x="650" y="104" text-anchor="middle" font-size="10" fill="#D1FAE5" letter-spacing="0.5">START AT 25</text>
+    <text x="650" y="124" text-anchor="middle" font-size="17" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">₹3.5Cr</text>
+  </g>
+  <g id="finalLate" opacity="0">
+    <rect x="595" y="234" width="110" height="46" rx="8" fill="#8B5CF6"/>
+    <text x="650" y="252" text-anchor="middle" font-size="10" fill="#EDE9FE" letter-spacing="0.5">START AT 35</text>
+    <text x="650" y="272" text-anchor="middle" font-size="17" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">₹1.1Cr</text>
+  </g>
+
+  <!-- Tile: Running corpus + age -->
+  <g transform="translate(80,90)">
+    <rect width="170" height="60" rx="10" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="1.4"/>
+    <text x="14" y="20" font-size="9" fill="#9CA3AF" letter-spacing="0.5">CORPUS</text>
+    <text id="tCorpus" x="14" y="44" font-size="22" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">₹0</text>
+  </g>
+  <g transform="translate(265,90)">
+    <rect width="100" height="60" rx="10" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="1.4"/>
+    <text x="14" y="20" font-size="9" fill="#9CA3AF" letter-spacing="0.5">AGE</text>
+    <text id="tAge" x="14" y="44" font-size="22" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">25</text>
+  </g>
+
+  <!-- Caption -->
+  <rect id="capBg" x="70" y="418" width="640" height="40" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="390" y="442" text-anchor="middle" font-size="13" fill="#FFFFFF" opacity="0"></text>
+
+  <!-- Final summary card -->
+  <g id="endCard" opacity="0">
+    <rect x="120" y="160" width="540" height="110" rx="14" fill="#1F2937"/>
+    <text x="390" y="198" text-anchor="middle" font-size="17" font-weight="700" fill="#FFFFFF">A 10-year head start ≈ ₹2.4Cr.</text>
+    <text x="390" y="226" text-anchor="middle" font-size="13" fill="#A7F3D0">Same monthly amount. Same return. Just earlier.</text>
+    <text x="390" y="250" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">The first decade does the unglamorous work.</text>
+  </g>
+
+</svg>
+<button id="rb">restart</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<0?0:t>1?1:1-Math.pow(1-t,3);}
+
+// SIP corpus formula: F = P*[((1+r)^n - 1)/r]*(1+r), monthly. r = 0.12/12 = 0.01
+const monthly = 10000;
+const r = 0.01;
+function corpusAtMonths(months){
+  if(months<=0) return 0;
+  return monthly * (((Math.pow(1+r,months)-1)/r)) * (1+r);
+}
+function corpusAtYears(years){
+  return corpusAtMonths(years*12);
+}
+
+// Chart math
+function X(year){return 70 + year*21.333;}
+// Map crore value (0..3.6) to y in 360..78 with 0 at y=360, 3.5Cr at y=113
+function Y(cr){
+  const yMax = 113, yMin = 360;
+  const v = Math.max(0, Math.min(cr, 3.6));
+  return yMin - (v/3.5)*(yMin-yMax);
+}
+
+// Format value
+function fmt(v){
+  // v in rupees
+  if(v < 100000) return '₹' + Math.round(v/1000) + 'K';
+  if(v < 10000000) return '₹' + (v/100000).toFixed(1) + 'L';
+  return '₹' + (v/10000000).toFixed(2) + 'Cr';
+}
+
+let timers=[], rafs=[];
+function after(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+// Sample early curve at every year 0..30
+function sampleEarly(){
+  const arr=[];
+  for(let y=0;y<=30;y+=0.5){
+    arr.push({y:y, v: corpusAtYears(y)/10000000});
+  }
+  return arr;
+}
+const earlyPts = sampleEarly();
+
+// Late: starts at "year 10" of timeline (age 35), invests 20 years
+function lateValueAtTimelineYear(timelineY){
+  if(timelineY<10) return 0;
+  return corpusAtYears(timelineY-10)/10000000;
+}
+
+function buildEarlyPath(uptoYear){
+  const pts = earlyPts.filter(p=>p.y<=uptoYear).map(p=>`${X(p.y).toFixed(1)},${Y(p.v).toFixed(1)}`);
+  // ensure last point at uptoYear
+  pts.push(`${X(uptoYear).toFixed(1)},${Y(corpusAtYears(uptoYear)/10000000).toFixed(1)}`);
+  return 'M ' + pts.join(' L ');
+}
+function buildEarlyArea(uptoYear){
+  const pts = earlyPts.filter(p=>p.y<=uptoYear).map(p=>`${X(p.y).toFixed(1)},${Y(p.v).toFixed(1)}`);
+  pts.push(`${X(uptoYear).toFixed(1)},${Y(corpusAtYears(uptoYear)/10000000).toFixed(1)}`);
+  return `M ${X(0).toFixed(1)} ${Y(0).toFixed(1)} L ` + pts.join(' L ') + ` L ${X(uptoYear).toFixed(1)} ${Y(0).toFixed(1)} Z`;
+}
+
+function buildLatePath(uptoYear){
+  if(uptoYear<10) return `M ${X(10)} ${Y(0)} L ${X(10)} ${Y(0)}`;
+  const pts=[];
+  for(let y=10;y<=uptoYear;y+=0.5){
+    pts.push(`${X(y).toFixed(1)},${Y(lateValueAtTimelineYear(y)).toFixed(1)}`);
+  }
+  pts.push(`${X(uptoYear).toFixed(1)},${Y(lateValueAtTimelineYear(uptoYear)).toFixed(1)}`);
+  return 'M ' + pts.join(' L ');
+}
+
+function showCap(text, dur){
+  dur = dur || 1900;
+  $('cap').textContent = text;
+  $('cap').setAttribute('opacity','1');
+  $('capBg').setAttribute('opacity','0.92');
+  after(dur, ()=>{
+    $('cap').setAttribute('opacity','0');
+    $('capBg').setAttribute('opacity','0');
+  });
+}
+
+function reset(){
+  clearAll();
+  $('earlyLine').setAttribute('d', `M ${X(0)} ${Y(0)} L ${X(0)} ${Y(0)}`);
+  $('earlyArea').setAttribute('d', `M ${X(0)} ${Y(0)} Z`);
+  $('lateLine').setAttribute('d', `M ${X(10)} ${Y(0)} L ${X(10)} ${Y(0)}`);
+  $('earlyDot').setAttribute('cx', X(0));
+  $('earlyDot').setAttribute('cy', Y(0));
+  $('lateDot').setAttribute('opacity','0');
+  $('phase1Note').setAttribute('opacity','0');
+  $('phase2Note').setAttribute('opacity','0');
+  $('finalEarly').setAttribute('opacity','0');
+  $('finalLate').setAttribute('opacity','0');
+  $('endCard').setAttribute('opacity','0');
+  $('tCorpus').textContent = '₹0';
+  $('tAge').textContent = '25';
+}
+
+function fadeIn(id, dur){
+  dur = dur || 500;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    $(id).setAttribute('opacity', String(ease(t)));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function animEarly(fromY, toY, dur, cb){
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    const e = ease(t);
+    const cy = lerp(fromY, toY, e);
+    $('earlyLine').setAttribute('d', buildEarlyPath(cy));
+    $('earlyArea').setAttribute('d', buildEarlyArea(cy));
+    const corpus = corpusAtYears(cy);
+    $('earlyDot').setAttribute('cx', X(cy));
+    $('earlyDot').setAttribute('cy', Y(corpus/10000000));
+    $('tCorpus').textContent = fmt(corpus);
+    $('tAge').textContent = String(Math.round(25 + cy));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else if(cb) cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function animLate(fromY, toY, dur, cb){
+  const start = performance.now();
+  $('lateDot').setAttribute('opacity','1');
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    const e = ease(t);
+    const cy = lerp(fromY, toY, e);
+    $('lateLine').setAttribute('d', buildLatePath(cy));
+    const v = lateValueAtTimelineYear(cy);
+    $('lateDot').setAttribute('cx', X(cy));
+    $('lateDot').setAttribute('cy', Y(v));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else if(cb) cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function run(){
+  reset();
+  // Phase 1: years 0..10 (slow)
+  after(400, ()=>{
+    showCap('Age 25–35: deposits add up. Returns? Sleeping.', 2400);
+    animEarly(0, 10, 2400, ()=>{
+      fadeIn('phase1Note', 500);
+    });
+  });
+  // Phase 2: years 10..15
+  after(3300, ()=>{
+    showCap('Year 15: the curve starts to bend.', 1800);
+    animEarly(10, 15, 1800, ()=>{
+      fadeIn('phase2Note', 500);
+    });
+  });
+  // Late starter joins at year 10 of timeline (age 35)
+  after(3300, ()=>{
+    animLate(10, 15, 1800, null);
+  });
+  // Phase 3: hockey stick takes off
+  after(5400, ()=>{
+    showCap('Years 15–30: the hockey stick happens.', 2400);
+    animEarly(15, 30, 2800, ()=>{
+      fadeIn('finalEarly', 500);
+    });
+    animLate(15, 30, 2800, ()=>{
+      fadeIn('finalLate', 500);
+    });
+  });
+  // End card
+  after(9000, ()=>{
+    fadeIn('endCard', 600);
+  });
+  after(13000, run);
+}
+
+$('rb').addEventListener('click', run);
+run();
+})();
+</script>
+</body>
+</html>

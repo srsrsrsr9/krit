@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Prompting Without the Cargo Culture — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Prompting Without the Cargo Culture</h1>
+  <p class="subtitle">Role + context + task + format + examples — that's the API</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most prompts on the internet are cargo cult. *'You are an expert.</p>
+  <div class="callout"><strong>Mental model: prompts are an API</strong><br/>Treat your prompt like an API contract, not a request to a person. The model is reading patterns; vague phrasing produces vague outputs that match the vagueness.</div>
+  
+<h2>Move 1 — The 5-part prompt structure</h2>
+<ul>
+<li>Worked example. **Vague prompt:** *Write a customer support reply.* Now with the 5 parts: ``` ROLE: You are a customer support agent for a SaaS company that sells project management tools to teams of 10-200.</li>
+<li>Bad version: Prompt: 'Classify these emails: billing, technical, sales, refund, other.' Output: ~70% accuracy on a held-out set.</li>
+<li>+ Role + Context: Prompt: 'You are a customer-ops triage agent for a SaaS company. The 5 categories route to different teams.' Adds clarity but minor lift.</li>
+<li>+ Format: Specify: 'Output JSON: {&quot;category&quot;: &quot;&lt;one of the 5&gt;&quot;, &quot;confidence&quot;: 0-1}.' Now machine-parseable. ~75% accuracy.</li>
+<li>+ 3 worked examples: Show 3 representative emails with their correct categories. THIS is where quality jumps to ~92%.</li>
+<li>+ 1 edge case: Show one tricky case and its correct handling. e.g. 'I want to upgrade and have a billing question' — pick *primary* category. ~94% accuracy. Diminishing returns from here.</li>
+</ul>
+<h2>Move 2 — Few-shot examples are the real cheat code</h2>
+<ul>
+<li>Among the 5 parts, examples are not first among equals — they are the **dominant** lever for structured tasks. - A prompt with no examples gets a generic answer in the most-probable register.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the 'just ask nicely' fallacy: Most teams' first prompts look like *'Hi! Could you please write me a really good [thing]? Thank you so much!'*</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Prompts are an API — Role + Context + Task + Format + Examples</div>
+<div class="takeaway">Examples are the dominant lever for structured tasks; 1-3 well-chosen examples beat all other tricks</div>
+<div class="takeaway">One BAD example showing what to avoid is often more useful than a second good example</div>
+<div class="takeaway">Cargo-cult phrases ('think step by step', tipping threats) move quality 0-5%; not the lever</div>
+<div class="takeaway">Politeness has zero effect on quality; specifications have all the effect</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

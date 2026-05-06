@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GROUP BY collapses many rows into a summary</title>
+<style>
+  :root{
+    --bg:#ECFDF5; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:720px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 720 405" aria-label="Fifty customer rows fall into four city buckets and collapse into one summary row each">
+    <defs>
+      <clipPath id="leftClip">
+        <rect x="20" y="56" width="200" height="324" rx="10"/>
+      </clipPath>
+    </defs>
+
+    <rect width="720" height="405" fill="#ECFDF5"/>
+
+    <!-- Title -->
+    <text x="360" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      <tspan font-family="ui-monospace,monospace" fill="#047857">GROUP BY</tspan>
+      <tspan> city</tspan>
+    </text>
+    <text x="360" y="44" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      50 rows in. 4 rows out. The intermediate state is the whole point.
+    </text>
+
+    <!-- ===================== LEFT: 50 raw rows ===================== -->
+    <g>
+      <rect x="20" y="56" width="200" height="324" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+      <text x="34" y="74" font-size="12" font-weight="700" fill="#1F2937">customers</text>
+      <text id="rawCounter" x="206" y="74" text-anchor="end" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">50 rows</text>
+
+      <!-- Header -->
+      <g transform="translate(30,82)">
+        <rect x="0" y="0" width="180" height="20" rx="3" fill="#D1FAE5"/>
+        <line x1="60"  y1="0" x2="60"  y2="20" stroke="#A7F3D0" stroke-width="0.7"/>
+        <line x1="120" y1="0" x2="120" y2="20" stroke="#A7F3D0" stroke-width="0.7"/>
+        <text x="30"  y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46">name</text>
+        <text x="90"  y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46">city</text>
+        <text x="150" y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46">amount</text>
+      </g>
+
+      <!-- Rows live here, clipped -->
+      <g clip-path="url(#leftClip)">
+        <g id="rawRows" transform="translate(30,108)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+
+      <!-- subtle bottom fade -->
+      <rect x="20" y="354" width="200" height="26" fill="url(#fadeGrad)" pointer-events="none"/>
+    </g>
+    <defs>
+      <linearGradient id="fadeGrad" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      </linearGradient>
+    </defs>
+
+    <!-- ===================== MIDDLE: bucketing arrows ===================== -->
+    <g transform="translate(244,68)">
+      <text x="98" y="0" text-anchor="middle" font-size="10" font-weight="700" fill="#6B7280">→ bucket by city →</text>
+    </g>
+
+    <!-- ===================== MIDDLE: 4 buckets stacked ===================== -->
+    <g id="buckets" transform="translate(244,82)"></g>
+
+    <!-- ===================== RIGHT: result table ===================== -->
+    <g transform="translate(496,56)">
+      <rect x="0" y="0" width="204" height="324" rx="10" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.5"/>
+      <text x="14" y="18" font-size="12" font-weight="700" fill="#1F2937">result</text>
+      <text x="14" y="32" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">SELECT city, COUNT(*), SUM, AVG</text>
+
+      <!-- Header -->
+      <g transform="translate(8,42)">
+        <rect x="0" y="0" width="188" height="22" rx="3" fill="#DBEAFE"/>
+        <line x1="60"  y1="0" x2="60"  y2="22" stroke="#BAE6FD" stroke-width="0.7"/>
+        <line x1="100" y1="0" x2="100" y2="22" stroke="#BAE6FD" stroke-width="0.7"/>
+        <line x1="140" y1="0" x2="140" y2="22" stroke="#BAE6FD" stroke-width="0.7"/>
+        <text x="30"  y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#075985">city</text>
+        <text x="80"  y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#075985">cnt</text>
+        <text x="120" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#075985">sum</text>
+        <text x="164" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#075985">avg</text>
+      </g>
+
+      <g id="resultRows" transform="translate(8,68)" font-family="ui-monospace,monospace" font-size="10"></g>
+
+      <!-- NULL note (appears in stage 3) -->
+      <g id="nullNote" transform="translate(14,234)" opacity="0">
+        <rect x="0" y="0" width="176" height="76" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.2"/>
+        <text x="8" y="16" font-size="9.5" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">NULL amounts found:</text>
+        <text x="8" y="32" font-size="9" fill="#92400E">  · COUNT(*) counts them</text>
+        <text x="8" y="46" font-size="9" fill="#92400E">  · COUNT(amount) skips them</text>
+        <text x="8" y="60" font-size="9" fill="#92400E">  · SUM/AVG quietly ignore</text>
+        <text x="8" y="71" font-size="8.5" fill="#92400E" font-style="italic">your "average" is over fewer rows.</text>
+      </g>
+    </g>
+
+    <!-- Stage label -->
+    <text id="stageLabel" x="360" y="394" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      stage 1 — 50 raw rows
+    </text>
+  </svg>
+  <div class="caption">
+    AVG silently skips NULLs. If half your "amount" cells are missing, you're averaging the half that wasn't.
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var rawRows=document.getElementById('rawRows');
+  var rawCounter=document.getElementById('rawCounter');
+  var buckets=document.getElementById('buckets');
+  var resultRows=document.getElementById('resultRows');
+  var nullNote=document.getElementById('nullNote');
+  var stageLabel=document.getElementById('stageLabel');
+  var resetBtn=document.getElementById('reset');
+
+  // 50 customers, deterministic
+  var CITIES=['Lagos','Berlin','São Paulo','Mumbai'];
+  var CITY_COLORS={
+    'Lagos':'#10B981',
+    'Berlin':'#0EA5E9',
+    'São Paulo':'#8B5CF6',
+    'Mumbai':'#F59E0B'
+  };
+  var NAMES=['Ada','Ben','Cai','Dia','Eli','Fia','Gio','Han','Ivy','Jad',
+             'Kai','Lin','Mae','Noa','Ona','Pia','Qiu','Ria','Sef','Tia',
+             'Uma','Vik','Wen','Xan','Yui','Zen','Aki','Bea','Cyn','Dax',
+             'Eda','Flo','Gus','Han','Ido','Jet','Ker','Lou','Mio','Nox',
+             'Owa','Pim','Qoi','Rin','Sol','Tov','Ulf','Vex','Wyn','Yuk'];
+
+  // Build the dataset with ~30% NULLs in amount, distributed to all cities
+  var data=[];
+  var seed=42;
+  function rnd(){ seed=(seed*9301+49297)%233280; return seed/233280; }
+  for(var i=0;i<50;i++){
+    var city = CITIES[i%CITIES.length];
+    var hasNull = (rnd()<0.18);
+    var amt = hasNull ? null : Math.round((10 + rnd()*180)*100)/100;
+    data.push({name:NAMES[i%NAMES.length], city:city, amount:amt});
+  }
+  // Shuffle for variety in left column display
+  var idxs=data.map(function(_,i){return i;});
+  for(var s=idxs.length-1;s>0;s--){ var j=Math.floor(rnd()*(s+1)); var tmp=idxs[s];idxs[s]=idxs[j];idxs[j]=tmp; }
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+  function pad(s,n){ s=String(s); while(s.length<n) s+=' '; return s; }
+
+  // ===== Left column: render raw rows scrolling slightly =====
+  function renderRawRows(highlightCity){
+    clear(rawRows);
+    var ROW_H=12;
+    // Show 21 rows visible (clip handles the rest), scroll virtually with a little wobble
+    var visible=22;
+    for(var i=0;i<visible;i++){
+      var d = data[idxs[i % data.length]];
+      var y=i*ROW_H;
+      var dim = highlightCity && d.city!==highlightCity;
+      var op = dim ? 0.18 : 1;
+      var bg=el('rect',{x:0,y:y-9,width:180,height:ROW_H-1,rx:2,
+        fill: highlightCity && d.city===highlightCity ? '#ECFDF5' : 'transparent'});
+      bg.setAttribute('opacity', op);
+      rawRows.appendChild(bg);
+
+      var dot=el('circle',{cx:6,cy:y-3,r:2.5,fill:CITY_COLORS[d.city]});
+      dot.setAttribute('opacity', op);
+      rawRows.appendChild(dot);
+
+      var t1=el('text',{x:14,y:y,'font-size':8.5,fill:'#1F2937'});
+      t1.textContent = d.name;
+      var t2=el('text',{x:62,y:y,'font-size':8.5,fill:'#1F2937'});
+      t2.textContent = d.city.length>9 ? d.city.slice(0,9) : d.city;
+      var t3=el('text',{x:178,y:y,'text-anchor':'end','font-size':8.5,
+        fill: d.amount===null?'#92400E':'#1F2937',
+        'font-style': d.amount===null?'italic':'normal',
+        'font-weight': d.amount===null?'700':'normal'});
+      t3.textContent = d.amount===null ? 'NULL' : d.amount.toFixed(2);
+      [t1,t2,t3].forEach(function(t){ t.setAttribute('opacity',op); rawRows.appendChild(t); });
+    }
+  }
+
+  // ===== Buckets =====
+  // 4 horizontal bucket bins stacked vertically
+  // Each bucket: header + a row of "tokens" (small dots) + count
+  function renderBuckets(stage){
+    clear(buckets);
+    var counts={'Lagos':0,'Berlin':0,'São Paulo':0,'Mumbai':0};
+    var sums  ={'Lagos':0,'Berlin':0,'São Paulo':0,'Mumbai':0};
+    var nulls ={'Lagos':0,'Berlin':0,'São Paulo':0,'Mumbai':0};
+    var realCnt={'Lagos':0,'Berlin':0,'São Paulo':0,'Mumbai':0};
+    data.forEach(function(d){
+      counts[d.city]++;
+      if(d.amount===null) nulls[d.city]++;
+      else { sums[d.city]+=d.amount; realCnt[d.city]++; }
+    });
+
+    var BUCKET_H=64, GAP=6;
+    for(var i=0;i<CITIES.length;i++){
+      var city=CITIES[i];
+      var c=CITY_COLORS[city];
+      var y=i*(BUCKET_H+GAP);
+      var grp=el('g',{transform:'translate(0,'+y+')'});
+
+      // Bin housing
+      grp.appendChild(el('rect',{x:0,y:0,width:200,height:BUCKET_H,rx:8,
+        fill:'#FFFFFF',stroke:c,'stroke-width':1.5}));
+      // Color tab
+      grp.appendChild(el('rect',{x:0,y:0,width:6,height:BUCKET_H,rx:3,fill:c}));
+
+      // Header
+      var nm=el('text',{x:14,y:14,'font-size':10.5,'font-weight':'700',fill:'#1F2937'});
+      nm.textContent=city;
+      grp.appendChild(nm);
+
+      // Tokens (one dot per row in this bucket)
+      var tokens = el('g',{transform:'translate(14,24)'});
+      var n=counts[city];
+      for(var k=0;k<n;k++){
+        var col=k%14, row=Math.floor(k/14);
+        var d = data.filter(function(d){return d.city===city;})[k];
+        var isN = d && d.amount===null;
+        var dot=el('circle',{cx:col*12, cy:row*10, r:isN?3.2:3, fill: isN?'#FFFFFF':c,
+          stroke:isN?'#F59E0B':'none','stroke-width':isN?1.5:0});
+        if(stage>=2 && !isN){ dot.setAttribute('opacity','0.4'); }
+        if(stage>=2 && isN){ dot.setAttribute('opacity','0.9'); }
+        tokens.appendChild(dot);
+      }
+      grp.appendChild(tokens);
+
+      // Stat strip (bottom)
+      var stat=el('text',{x:194,y:BUCKET_H-7,'text-anchor':'end','font-size':9.5,
+        fill:'#374151','font-family':'ui-monospace,monospace'});
+      var avg = realCnt[city]>0 ? (sums[city]/realCnt[city]) : 0;
+      var line='cnt '+counts[city];
+      if(stage>=2) line += '   sum '+sums[city].toFixed(0);
+      if(stage>=3) line += '   avg '+avg.toFixed(1);
+      stat.textContent = line;
+      grp.appendChild(stat);
+
+      // Null subtext
+      if(nulls[city]>0 && stage>=3){
+        var nul=el('text',{x:14,y:BUCKET_H-7,'font-size':8.5,
+          fill:'#92400E','font-style':'italic','font-family':'ui-monospace,monospace'});
+        nul.textContent = nulls[city]+' NULL skipped';
+        grp.appendChild(nul);
+      }
+
+      buckets.appendChild(grp);
+    }
+  }
+
+  // ===== Result table =====
+  function renderResult(stage){
+    clear(resultRows);
+    if(stage<2) return;
+    var totals={};
+    CITIES.forEach(function(c){ totals[c]={count:0,sum:0,real:0,nulls:0}; });
+    data.forEach(function(d){
+      var t=totals[d.city];
+      t.count++;
+      if(d.amount===null) t.nulls++;
+      else { t.sum+=d.amount; t.real++; }
+    });
+
+    var ROW_H=22;
+    CITIES.forEach(function(city, i){
+      var t=totals[city];
+      var y=i*ROW_H;
+      var bg=el('rect',{x:0,y:y,width:188,height:ROW_H-2,rx:3,
+        fill: i%2===0?'#FFFFFF':'#F0F9FF'});
+      resultRows.appendChild(bg);
+
+      var dot=el('circle',{cx:8,cy:y+11,r:3,fill:CITY_COLORS[city]});
+      resultRows.appendChild(dot);
+
+      var nm=el('text',{x:16,y:y+14,'font-size':9.5,fill:'#1F2937'});
+      nm.textContent = city.length>8 ? city.slice(0,7)+'…' : city;
+      resultRows.appendChild(nm);
+
+      var c=el('text',{x:80,y:y+14,'text-anchor':'middle','font-size':9.5,fill:'#1F2937'});
+      c.textContent = t.count;
+      resultRows.appendChild(c);
+
+      if(stage>=2){
+        var s=el('text',{x:120,y:y+14,'text-anchor':'middle','font-size':9.5,fill:'#1F2937'});
+        s.textContent = t.sum.toFixed(0);
+        resultRows.appendChild(s);
+      }
+      if(stage>=3){
+        var a=el('text',{x:164,y:y+14,'text-anchor':'middle','font-size':9.5,fill:'#1F2937'});
+        var avg = t.real>0 ? (t.sum/t.real) : 0;
+        a.textContent = avg.toFixed(1);
+        resultRows.appendChild(a);
+      }
+    });
+  }
+
+  // ===== Stage runner =====
+  // 0 = raw only
+  // 1 = bucketing (highlight one city, then all)
+  // 2 = COUNT+SUM appears
+  // 3 = AVG appears + NULL note
+  // 4 = pause then loop
+
+  function setStage(stage, opts){
+    opts=opts||{};
+    renderRawRows(opts.highlight||null);
+    renderBuckets(stage);
+    renderResult(stage);
+    rawCounter.textContent = '50 rows';
+    if(stage===0) stageLabel.textContent='stage 1 — 50 raw rows of mixed cities';
+    else if(stage===1) stageLabel.textContent='stage 2 — bucketing rows by city';
+    else if(stage===2) stageLabel.textContent='stage 3 — COUNT(*) and SUM(amount)';
+    else if(stage>=3) stageLabel.textContent='stage 4 — AVG(amount) — NULLs ignored';
+
+    nullNote.setAttribute('opacity', stage>=3?'1':'0');
+  }
+
+  function play(){
+    if(prefersReduce){
+      setStage(3);
+      return;
+    }
+    setStage(0);
+    setTimeout(function(){
+      // Cycle through highlights
+      var hi=0;
+      function highlightNext(){
+        if(hi>=CITIES.length){
+          setStage(1);
+          setTimeout(function(){
+            setStage(2);
+            setTimeout(function(){
+              setStage(3);
+              setTimeout(play, 4200); // loop
+            }, 1800);
+          }, 1500);
+          return;
+        }
+        setStage(1, {highlight:CITIES[hi]});
+        hi++;
+        setTimeout(highlightNext, 700);
+      }
+      highlightNext();
+    }, 1400);
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

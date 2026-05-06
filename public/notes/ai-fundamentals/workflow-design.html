@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Building an AI-Augmented Workflow — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Building an AI-Augmented Workflow</h1>
+  <p class="subtitle">Define output → prototype → evaluate → instrument → iterate</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 16 min read ~</span>
+  <p>Most teams treat 'use AI' as a one-shot prompt experiment. Production AI is a feedback loop: define output → prototype prompt → evaluate against ground truth → instrument in production → iterate.</p>
+  <div class="callout"><strong>Mental model: the loop, not the prompt</strong><br/>Most AI work is treated as 'engineer a prompt'. Production AI is treated as 'engineer a loop'.</div>
+  
+<h2>Move 1 — Define output, prototype prompt, evaluate</h2>
+<ul>
+<li>The first 3 stages of the loop, in detail. Define output spec.** Before any prompt: what *exactly* does the output look like?</li>
+<li>1. Define output: What does a 'good summary' look like? 5 bullets max, action items separated, decisions called out. Write the JSON schema.</li>
+<li>2. Prototype on real data: Take 10 actual meeting transcripts. Hand-write the 'right' summary for each. Iterate the prompt until output matches your hand-written for at least 7 of 10.</li>
+<li>3. Eval set: Take 50 different transcripts. Write 50 ground-truth summaries (~3-4 hours of work). Run the prompt; measure agreement.</li>
+<li>4. Bar: If hand-written-vs-AI agreement is &gt;85%, ship to a beta cohort. If &lt;85%, iterate the prompt or examples.</li>
+<li>5. Production data only AFTER eval: The eval set is your ground truth. Production traffic is your monitoring; you don't replace eval with production. Both stay in the loop forever.</li>
+</ul>
+<h2>Move 2 — The 14-day workflow audit</h2>
+<ul>
+<li>For AI workflows already in production, run a 14-day audit periodically. Three numbers, two minutes a week.</li>
+<li>Where you are now — Five lessons in. You walked in with hype and uncertainty. You walk out with: a model (LLMs are fast pattern-matchers), the prompt API (R-C-T-F-E), the hallucination fix (RAG with citations), the tool-fit framework (volume × stakes × verifiability), and a 14-day audit loop.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: ship and forget: Most rolled-back AI features were shipped without a monitoring loop. Quality drifted; users started complaining; the team scrambled to figure out what changed. By the time the post-mortem was written, the cause was 'we don't know what changed because we weren't measuring.'</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Production AI is a feedback loop, not a one-shot prompt — define output, prototype, evaluate, instrument, iterate</div>
+<div class="takeaway">Output spec before prompt — if you can't write the schema, you don't understand the use case</div>
+<div class="takeaway">Eval set on day 1 — 50-200 hand-labeled examples, frozen, used to measure every change</div>
+<div class="takeaway">14-day audit catches drift before users do — three numbers, weekly, with alert thresholds</div>
+<div class="takeaway">No eval = no launch, regardless of model quality or prompt sophistication</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

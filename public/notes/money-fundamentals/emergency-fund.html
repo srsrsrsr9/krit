@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Boring Cheat Code — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>The Boring Cheat Code</h1>
+  <p class="subtitle">Build the buffer that fixes everything downstream</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most personal-finance influencers spend their entire careers debating which fund to pick, which crypto to ride, which property to buy. They almost never lead with the move that has the highest expected return on the time it takes to set up: **build a 6-month emergency fund.** It's boring.</p>
+  <div class="callout"><strong>Mental model: the buffer is what makes everything else possible</strong><br/>Without an emergency fund, every other financial decision is contingent on nothing going wrong. The moment something goes wrong — job loss, medical bill, parent's surgery — the buffer-less version cascades: credit card debt at 36% interest, then forced selling of investments at the bottom of a crash, then five years to recover.</div>
+  
+<h2>Move 1 — How big, where parked</h2>
+<ul>
+<li>**Size**: 6 months of *essential expenses* (not 6 months of total spending). Essential = rent, food, utilities, EMIs, insurance premiums, school fees if applicable.</li>
+<li>Month 0 — set the target: Calculate essentials. Rent ₹35K + food ₹15K + EMI ₹10K + utilities ₹5K = ₹65K/month. Target: ₹65K × 6 = ₹3.9 lakh.</li>
+<li>Month 1 — open the account: Open a liquid-fund SIP for ₹20K/month. Use a low-cost direct plan (e.g. zero-broker apps); avoid 'regular' plans with 1% trail commission.</li>
+<li>Month 6 — first milestone: ₹1.2L accumulated + ~3K interest. About 1.8 months of essentials. Keep going; don't touch.</li>
+<li>Month 12 — psychological shift: ₹2.4L + ~12K interest. About 3.7 months. You'll notice you sleep slightly better; that's the actual return.</li>
+<li>Month 20 — done: ₹4L + ~25K interest = ₹4.25L. Six months of essentials covered. Now redirect the ₹20K/month SIP to equity. The buffer protects what comes next.</li>
+</ul>
+<h2>Move 2 — The risk-taking unlock</h2>
+<ul>
+<li>Here's the non-obvious part. Once your emergency fund exists, **every downstream financial decision becomes more rational**.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: 'I'll start the buffer after one more thing': *'After my next bonus.' 'After Diwali expenses.' 'After my friend's wedding.' 'After the house deposit.'*</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Emergency fund = 6 months of essential expenses, in a liquid fund or sweep-in FD</div>
+<div class="takeaway">It's the single highest-EV move for most professionals — boring math, decisive impact</div>
+<div class="takeaway">Credit-card limits and equity portfolios are not buffers; they're traps when you actually need cash</div>
+<div class="takeaway">With buffer in place, every downstream decision becomes more rational — that's the real return</div>
+<div class="takeaway">Pay off any debt above 12% APR before maxing out the buffer; both come before equity</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

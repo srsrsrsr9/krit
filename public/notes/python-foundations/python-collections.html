@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Pick the Right Container — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Pick the Right Container</h1>
+  <p class="subtitle">List, dict, set, tuple — and the dict-key-mutability trap</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most Python performance bugs you'll meet in your first year aren't algorithmic. They're container choice.</p>
+  <div class="callout"><strong>Mental model: shape matches the question</strong><br/>Each container exists because it answers a different question fast.</div>
+  
+<h2>Move 1 — Pick by access pattern, not by data type</h2>
+<ul>
+<li>Three diagnostic questions, in order: 1. **Do I need uniqueness?** → set 2.</li>
+<li>1. English: For each product, count how many distinct customers ordered it.</li>
+<li>2. Pick the outer container: We need a count *per product*, looked up by product. That's a dict keyed by product.</li>
+<li>3. Pick the inner container: Distinct customers — uniqueness — is a set. defaultdict(set) auto-creates an empty set the first time we touch a key.</li>
+<li>4. Compress to the answer: Convert each set to its size for the final report.</li>
+<li>5. The diagnostic: Why this shape? Outer dict because we look up by product. Inner set because we deduplicate customers. The shape of the data structure mirrors the shape of the question.</li>
+</ul>
+<h2>Move 2 — Comprehensions and the unhashable-key trap</h2>
+<ul>
+<li>Comprehensions are the idiomatic way to build all four containers from another iterable. Same shape, different brackets: ```python [x*2 for x in items] # list comprehension {x*2 for x in items} # set comprehension {x: x*2 for x in items} # dict comprehension (x*2 for x in items) # generator expression (lazy) ``` **The trap**: dict keys must be hashable, which means immutable.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: list as a dict key: Anytime you reach for `d = {[1,2]: 'a'}` or `d[some_list] = ...`, Python raises `TypeError: unhashable type: 'list'`. The fix is almost always to convert the key to a `tuple`:</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Pick a container by access pattern, not by data type — uniqueness → set, lookup-by-key → dict, ordered-with-dups → list</div>
+<div class="takeaway">`set` and `dict` membership is O(1); `list` and `tuple` are O(n). Wrong container = silent quadratic blow-up</div>
+<div class="takeaway">Comprehensions exist for all four shapes — `[]`, `{}` (dict), `{...}` (set), `()` (generator)</div>
+<div class="takeaway">Dict keys must be immutable — strings, ints, tuples, frozensets. Use `tuple()` when you need to key on what looks like a list</div>
+<div class="takeaway">Reach for `Counter`, `defaultdict`, and `frozenset` from `collections` before reinventing them</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

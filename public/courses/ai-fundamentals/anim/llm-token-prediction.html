@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LLM Token Prediction</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF5FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#FAF5FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.7}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 480" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Animation of an LLM generating the sentence the quick brown fox jumps over the lazy dog one token at a time, with probability bars next to each pick">
+
+  <rect width="760" height="480" fill="#FAF5FF"/>
+
+  <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Next-token prediction</text>
+  <text x="380" y="50" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">The model picks the most-probable continuation. Not the most-truthful.</text>
+
+  <!-- Sentence assembly area -->
+  <rect x="32" y="74" width="696" height="62" rx="10" fill="white" stroke="#E9D5FF" stroke-width="2"/>
+  <text x="48" y="98" font-size="11" fill="#9CA3AF" font-weight="600">GENERATED</text>
+  <text id="sentence" x="48" y="124" font-size="20" font-weight="600" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+  <text id="cursor" x="48" y="124" font-size="20" font-weight="600" fill="#8B5CF6" font-family="ui-monospace,monospace" opacity="0">▍</text>
+
+  <!-- Step indicator -->
+  <text x="48" y="166" font-size="12" fill="#6B7280">step</text>
+  <text id="stepNum" x="78" y="166" font-size="12" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace">0</text>
+  <text x="92" y="166" font-size="12" fill="#6B7280">of 9</text>
+
+  <!-- Candidate panel -->
+  <g id="panel">
+    <rect x="32" y="180" width="696" height="216" rx="12" fill="white" stroke="#DDD6FE" stroke-width="2"/>
+    <text x="48" y="206" font-size="12" font-weight="700" fill="#6B7280">TOP 3 CANDIDATES</text>
+    <text id="ctx" x="380" y="206" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">waiting for prompt…</text>
+
+    <!-- Three candidate rows; bar maxWidth=420, starts at x=210 -->
+    <!-- Row 1 -->
+    <g id="r0">
+      <text id="r0t" x="48" y="252" font-size="17" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+      <rect x="210" y="236" width="420" height="22" rx="5" fill="#F3F4F6"/>
+      <rect id="r0b" x="210" y="236" width="0" height="22" rx="5" fill="#8B5CF6"/>
+      <text id="r0p" x="650" y="252" font-size="14" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">0%</text>
+      <circle id="r0pick" cx="690" cy="247" r="9" fill="none" stroke="#10B981" stroke-width="2.5" opacity="0"/>
+      <path id="r0check" d="M685.5 247 l3 3 l6 -7" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
+    </g>
+    <!-- Row 2 -->
+    <g id="r1">
+      <text id="r1t" x="48" y="298" font-size="17" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+      <rect x="210" y="282" width="420" height="22" rx="5" fill="#F3F4F6"/>
+      <rect id="r1b" x="210" y="282" width="0" height="22" rx="5" fill="#C4B5FD"/>
+      <text id="r1p" x="650" y="298" font-size="14" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">0%</text>
+    </g>
+    <!-- Row 3 -->
+    <g id="r2">
+      <text id="r2t" x="48" y="344" font-size="17" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+      <rect x="210" y="328" width="420" height="22" rx="5" fill="#F3F4F6"/>
+      <rect id="r2b" x="210" y="328" width="0" height="22" rx="5" fill="#DDD6FE"/>
+      <text id="r2p" x="650" y="344" font-size="14" fill="#6B7280" font-weight="700" font-family="ui-monospace,monospace">0%</text>
+    </g>
+
+    <text x="48" y="378" font-size="11" fill="#9CA3AF" font-style="italic">argmax → highest-probability token wins.</text>
+  </g>
+
+  <!-- Footer note -->
+  <rect x="32" y="412" width="696" height="50" rx="10" fill="#1F2937"/>
+  <text x="380" y="436" text-anchor="middle" font-size="13" fill="white" font-weight="600">Probability of plausible completion ≠ truth.</text>
+  <text x="380" y="453" text-anchor="middle" font-size="11" fill="#C4B5FD">A confident model can be confidently wrong.</text>
+
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+const STEPS=[
+  {pick:'The',  alt1:'A',      alt2:'Some',   p:[64,21,9],  ctx:'<sentence start>'},
+  {pick:'quick',alt1:'big',    alt2:'old',    p:[58,18,11], ctx:'The'},
+  {pick:'brown',alt1:'red',    alt2:'gray',   p:[71,12,8],  ctx:'The quick'},
+  {pick:'fox',  alt1:'dog',    alt2:'cat',    p:[83,9,4],   ctx:'…quick brown'},
+  {pick:'jumps',alt1:'leaps',  alt2:'runs',   p:[68,14,9],  ctx:'…brown fox'},
+  {pick:'over', alt1:'across', alt2:'through',p:[79,11,5],  ctx:'…fox jumps'},
+  {pick:'the',  alt1:'a',      alt2:'one',    p:[88,7,3],   ctx:'…jumps over'},
+  {pick:'lazy', alt1:'sleepy', alt2:'tired',  p:[62,21,11], ctx:'…over the'},
+  {pick:'dog.', alt1:'cat.',   alt2:'wolf.',  p:[91,4,2],   ctx:'…the lazy'}
+];
+
+function $id(id){return document.getElementById(id);}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function lerp(a,b,t){return a+(b-a)*t;}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+
+function animBar(id,toW,dur){
+  const e=$id(id);if(!e)return;
+  const fromW=parseFloat(e.getAttribute('width'))||0;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('width',String(lerp(fromW,toW,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function animCount(id,from,to,dur,suffix){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),v=lerp(from,to,easeOut(t));
+    e.textContent=Math.round(v)+(suffix||'');
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function blinkCursor(){
+  const c=$id('cursor');
+  let v=1;
+  function loop(){
+    v=v?0:1;
+    c.setAttribute('opacity',String(v));
+    cursorTm=setTimeout(loop,500);
+  }
+  loop();
+}
+let cursorTm=null;
+function stopCursor(){clearTimeout(cursorTm);setOp('cursor',0);}
+
+function fadeRow(rowId,inOut,dur,cb){
+  const e=$id(rowId);if(!e)return;
+  const start=parseFloat(e.getAttribute('opacity')||'1');
+  const end=inOut?1:0;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(start,end,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+let sentence='';
+
+function clearRows(){
+  ['r0b','r1b','r2b'].forEach(id=>$id(id).setAttribute('width','0'));
+  ['r0p','r1p','r2p'].forEach(id=>$id(id).textContent='0%');
+  ['r0t','r1t','r2t'].forEach(id=>$id(id).textContent='—');
+  setOp('r0pick',0);setOp('r0check',0);
+}
+
+function step(i){
+  if(i>=STEPS.length){
+    after(1800,()=>{
+      // pause then loop
+      after(0,reset);
+    });
+    return;
+  }
+  const s=STEPS[i];
+  $id('stepNum').textContent=String(i+1);
+  $id('ctx').textContent='context: "'+s.ctx+'"';
+
+  // Set token labels
+  $id('r0t').textContent=s.pick;
+  $id('r1t').textContent=s.alt1;
+  $id('r2t').textContent=s.alt2;
+
+  // animate bars (max bar = 420)
+  const maxP=Math.max(s.p[0],s.p[1],s.p[2]);
+  const w0=420*(s.p[0]/100);
+  const w1=420*(s.p[1]/100);
+  const w2=420*(s.p[2]/100);
+
+  // reset bars instantly
+  ['r0b','r1b','r2b'].forEach(id=>$id(id).setAttribute('width','0'));
+
+  after(120,()=>{
+    animBar('r0b',w0,650);
+    animCount('r0p',0,s.p[0],650,'%');
+  });
+  after(220,()=>{
+    animBar('r1b',w1,650);
+    animCount('r1p',0,s.p[1],650,'%');
+  });
+  after(320,()=>{
+    animBar('r2b',w2,650);
+    animCount('r2p',0,s.p[2],650,'%');
+  });
+
+  // pick highlight
+  after(1100,()=>{
+    setOp('r0pick',1);
+    setOp('r0check',1);
+    // append token to sentence
+    sentence+=(sentence?' ':'')+s.pick;
+    $id('sentence').textContent=sentence;
+    // place cursor after sentence
+    const w=$id('sentence').getBBox().width;
+    $id('cursor').setAttribute('x',String(48+w+2));
+  });
+
+  after(1750,()=>step(i+1));
+}
+
+function reset(){
+  clearAll();
+  sentence='';
+  $id('sentence').textContent='';
+  $id('cursor').setAttribute('x','48');
+  $id('stepNum').textContent='0';
+  $id('ctx').textContent='waiting for prompt…';
+  clearRows();
+  stopCursor();
+  blinkCursor();
+  after(700,()=>step(0));
+}
+
+$id('rb').addEventListener('click',reset);
+reset();
+
+})();
+</script>
+</body>
+</html>

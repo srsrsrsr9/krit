@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Subqueries, CTEs, and the Read-Order Lie — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Subqueries, CTEs, and the Read-Order Lie</h1>
+  <p class="subtitle">How execution order differs from write order, and why CTEs win</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 16 min read ~</span>
+  <p>Until now we've written queries small enough that 'what you write' and 'what runs' looked the same. This lesson is the moment they diverge — and the moment SQL becomes a language you can actually compose.</p>
+  <div class="callout"><strong>Mental model: what you write vs what runs</strong><br/>Write order:  `SELECT … FROM … WHERE … GROUP BY … HAVING … ORDER BY … LIMIT`.</div>
+  
+<h2>Move 1 — CTEs over scalar subqueries</h2>
+<ul>
+<li>There are three ways to compose queries: subqueries in WHERE/SELECT, derived tables in FROM, and CTEs (`WITH`). Subqueries in SELECT — *scalar subqueries* — are tempting and almost always a smell: ```sql -- ❌ Scalar subquery; runs once per row of the outer query SELECT name, (SELECT COUNT(*) FROM orders WHERE customer_id = c.id) AS order_count FROM customers c; ``` **CTE form** — same logic, single pass, easier to read, easier to optimize: ```sql -- ✅ CTE; database can plan and reuse WITH order_counts AS ( SELECT customer_id, COUNT(*) AS n FROM orders GROUP BY customer_id ) SELECT c.name, COALESCE(oc.n, 0) AS order_count FROM customers c LEFT JOIN order_counts oc ON oc.customer_id = c.id; ``` The rule: **scalar subqueries in SELECT are a code smell — refactor to a CTE + JOIN.** This is one of the few things in SQL where you can take a confident position.</li>
+<li>1. English: Top 5 cities by revenue in Q1 2026 (paid orders only), with each city's average order size.</li>
+<li>2. Stage 1 — Filter to relevant orders: Pre-filter; this is the WHERE. CTE makes it reusable.</li>
+<li>3. Stage 2 — Aggregate by city: Group, sum, average.</li>
+<li>4. Stage 3 — Top 5: Sort and slice.</li>
+<li>5. The shape: Pipeline reads top-to-bottom in the order of the question. No nesting. No re-reading. Reviewers love it; future-you loves it.</li>
+</ul>
+<h2>Move 2 — Compose CTEs into a pipeline</h2>
+<ul>
+<li>The real power of CTEs is composition. Each CTE is a named stage.</li>
+<li>Where you are now — Five lessons in. You walked in copy-pasting SQL from Stack Overflow. You walk out with: the relational model (tables as spreadsheets with rules), three-valued logic, JOIN-by-intent, the fan-out trap, GROUP BY as controlled collapse, HAVING vs WHERE, the execution-order vs write-order divergence, and CTE pipelines.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: 'I'll just nest one more subquery': Each subquery you nest is a private, anonymous chunk of logic that can't be reused, can't be inspected with a partial run, and can't be named in a code review. The fourth one is always the breaking point.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Execution order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</div>
+<div class="takeaway">Scalar subqueries in SELECT are a smell; refactor to a CTE + LEFT JOIN</div>
+<div class="takeaway">CTEs are named stages — top-to-bottom pipeline, each name documents intent</div>
+<div class="takeaway">If you nest a subquery more than two deep, you wanted a CTE</div>
+<div class="takeaway">Plan in English first; translate to CTEs second; debug less</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

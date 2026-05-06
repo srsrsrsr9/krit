@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Measure Your Mind — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Measure Your Mind</h1>
+  <p class="subtitle">If you don't track it, you can't tell whether any of this worked</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 16 min read ~</span>
+  <p>You track your weight. You probably track your steps.</p>
+  <div class="callout"><strong>Mental model: just-enough observability</strong><br/>Treat your well-being like a small, well-instrumented system. You don't need a dashboard with 40 metrics; you need 3 numbers, captured cheaply, looked at weekly.</div>
+  
+<h2>Move 1 — The 3-number stack</h2>
+<ul>
+<li>There are exactly three numbers worth tracking weekly. Skip any of them and you will misdiagnose yourself.</li>
+</ul>
+<h2>Move 2 — Run a 14-day intervention</h2>
+<ul>
+<li>Tracking is necessary; tracking alone is not the experiment. The experiment is: pick one intervention from this course, run it for 14 days, compare your check-in numbers before and after.</li>
+<li>Where you are now — You walked in believing happiness was a feeling that happened to you. You are walking out with: a model (thermostat), four named bugs (miswanting, arrival, intensity arms race, G.I. Joe), two cheat codes (structured gratitude, engineered connection), and a 14-day experimental loop.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the dashboard delusion: You can spend a fun weekend building a Notion dashboard with 22 metrics, automated graphs, and a mood emoji column. You will check it twice and then never again.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Three numbers — PANAS, Cantril ladder, sleep — are enough; more is procrastination</div>
+<div class="takeaway">Positive and negative affect are not opposites; track both</div>
+<div class="takeaway">One intervention, 14 days, before-after; that's the loop</div>
+<div class="takeaway">A real effect shows up in 2 of 3 numbers, not just the one you hoped would move</div>
+<div class="takeaway">'Inconclusive' is a valid outcome and means run another 14 days, not panic</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

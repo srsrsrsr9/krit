@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>What an LLM Actually Is (And What It Isn't) — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>What an LLM Actually Is (And What It Isn't)</h1>
+  <p class="subtitle">Next-token prediction, not magic</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most people using LLMs treat them as oracles — *ask, receive*. Some treat them as pattern-matchers.</p>
+  <div class="callout"><strong>Mental model: a very fast pattern-matcher with no memory of yesterday</strong><br/>An LLM is a function that takes a sequence of tokens and produces probabilities for the next token. It does this by recognizing patterns it's seen during training across the internet's worth of text.</div>
+  
+<h2>Move 1 — Tokens, context, temperature in plain English</h2>
+<ul>
+<li>Three terms you'll meet constantly. In plain English: - **Tokens** — chunks of text the model sees.</li>
+<li>1. The question: You ask the same question twice and get different answers. Most people think the model is 'broken' or 'inconsistent'.</li>
+<li>2. Temperature is the lever: If temperature &gt; 0, the model samples from a probability distribution — the same input produces different outputs by design.</li>
+<li>3. The fix for facts: For factual or structured tasks, set temperature to 0 (or as low as your API allows). The same input now produces the same output every time.</li>
+<li>4. The fix for creative: For creative work, you actively want variation. Temperature 0.7-1.0 produces output that doesn't feel templated.</li>
+<li>5. The diagnostic: If your output is too random: lower temperature. If it's too templated: raise it. The dial is per-call, not per-model.</li>
+</ul>
+<h2>Move 2 — What it CAN and CANNOT do</h2>
+<ul>
+<li>**Can do well** (and reliably): summarize structured documents, transform format A to format B, classify text into categories you provide, draft text in a style you provide examples of, explain concepts in different vocabularies, generate plausible code given clear specs, follow a list of rules consistently when the rules are explicit. **Can do reasonably** (with verification): research questions where the answer is on the public internet, complex reasoning when the steps are written out, code that requires multiple files (with tooling), data extraction from unstructured text.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the 'magic black box': The single biggest source of bad AI features is treating the model as omniscient. Stakeholder asks 'can AI do X?' and the answer 'maybe, depends on…' gets compressed into 'yes' on the way to the demo.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">An LLM is a next-token predictor — confident but not omniscient</div>
+<div class="takeaway">Tokens, context window, temperature — three knobs that explain most of LLM behavior</div>
+<div class="takeaway">Reliably good: summarize, transform, classify, draft in style</div>
+<div class="takeaway">Cannot do reliably without retrieval: cite sources, exact math beyond ~5 digits, post-cutoff events</div>
+<div class="takeaway">The fit isn't 'AI is good or bad' — it's 'this specific use case fits the model, this one doesn't'</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

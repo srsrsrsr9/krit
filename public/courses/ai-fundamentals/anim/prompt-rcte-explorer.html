@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RCTFE Prompt Explorer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.7}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 520" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Animation showing the same task — classify a customer email — prompted with zero, one, three, then five RCTFE parts; output quality and structure improve with each addition">
+
+  <rect width="780" height="520" fill="#FFF7ED"/>
+
+  <!-- Title -->
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">RCTFE — five knobs that change everything</text>
+  <text x="390" y="50" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Same task: classify a customer email. Watch the output sharpen.</text>
+
+  <!-- Stage indicator dots -->
+  <g transform="translate(390 70)">
+    <g id="d0"><circle cx="-90" cy="0" r="6" fill="#FED7AA"/><text x="-90" y="22" text-anchor="middle" font-size="9" fill="#9CA3AF" font-weight="600">0 parts</text></g>
+    <g id="d1"><circle cx="-30" cy="0" r="6" fill="#FED7AA"/><text x="-30" y="22" text-anchor="middle" font-size="9" fill="#9CA3AF" font-weight="600">1 part</text></g>
+    <g id="d2"><circle cx="30" cy="0" r="6" fill="#FED7AA"/><text x="30" y="22" text-anchor="middle" font-size="9" fill="#9CA3AF" font-weight="600">3 parts</text></g>
+    <g id="d3"><circle cx="90" cy="0" r="6" fill="#FED7AA"/><text x="90" y="22" text-anchor="middle" font-size="9" fill="#9CA3AF" font-weight="600">5 parts</text></g>
+  </g>
+
+  <!-- ── LEFT: PROMPT BUILDER y=110 ── -->
+  <g>
+    <text x="48" y="124" font-size="12" font-weight="700" fill="#9CA3AF">PROMPT</text>
+    <rect x="32" y="134" width="340" height="280" rx="12" fill="white" stroke="#FED7AA" stroke-width="2"/>
+
+    <!-- 5 chip rows; each chip starts pale, lights up when added -->
+    <g id="chipR">
+      <rect x="48" y="148" width="38" height="22" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="67" y="163" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF" font-family="ui-monospace,monospace">R</text>
+      <text x="96" y="163" font-size="11" fill="#9CA3AF">Role</text>
+      <text id="chipRtxt" x="142" y="163" font-size="10.5" fill="#9CA3AF" font-style="italic">— support triage analyst</text>
+    </g>
+    <g id="chipC">
+      <rect x="48" y="180" width="38" height="22" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="67" y="195" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF" font-family="ui-monospace,monospace">C</text>
+      <text x="96" y="195" font-size="11" fill="#9CA3AF">Context</text>
+      <text id="chipCtxt" x="158" y="195" font-size="10.5" fill="#9CA3AF" font-style="italic">— B2B SaaS, billing tier</text>
+    </g>
+    <g id="chipT">
+      <rect x="48" y="212" width="38" height="22" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="67" y="227" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF" font-family="ui-monospace,monospace">T</text>
+      <text x="96" y="227" font-size="11" fill="#9CA3AF">Task</text>
+      <text id="chipTtxt" x="142" y="227" font-size="10.5" fill="#9CA3AF" font-style="italic">— classify into 5 buckets</text>
+    </g>
+    <g id="chipF">
+      <rect x="48" y="244" width="38" height="22" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="67" y="259" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF" font-family="ui-monospace,monospace">F</text>
+      <text x="96" y="259" font-size="11" fill="#9CA3AF">Format</text>
+      <text id="chipFtxt" x="153" y="259" font-size="10.5" fill="#9CA3AF" font-style="italic">— JSON {label, confidence}</text>
+    </g>
+    <g id="chipE">
+      <rect x="48" y="276" width="38" height="22" rx="6" fill="#F3F4F6" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="67" y="291" text-anchor="middle" font-size="10" font-weight="700" fill="#9CA3AF" font-family="ui-monospace,monospace">E</text>
+      <text x="96" y="291" font-size="11" fill="#9CA3AF">Examples</text>
+      <text id="chipEtxt" x="166" y="291" font-size="10.5" fill="#9CA3AF" font-style="italic">— 3 labeled samples</text>
+    </g>
+
+    <!-- The actual email input box (always visible) -->
+    <rect x="48" y="316" width="308" height="84" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+    <text x="58" y="332" font-size="9" fill="#92400E" font-weight="700">CUSTOMER EMAIL · INPUT</text>
+    <text x="58" y="352" font-size="11" fill="#78350F" font-family="ui-monospace,monospace">"Hi — we were charged twice this</text>
+    <text x="58" y="368" font-size="11" fill="#78350F" font-family="ui-monospace,monospace">month. Please refund and explain</text>
+    <text x="58" y="384" font-size="11" fill="#78350F" font-family="ui-monospace,monospace">what happened. Annoyed."</text>
+  </g>
+
+  <!-- ── RIGHT: OUTPUT y=110 ── -->
+  <g>
+    <text x="408" y="124" font-size="12" font-weight="700" fill="#9CA3AF">MODEL OUTPUT</text>
+    <rect x="392" y="134" width="356" height="200" rx="12" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+
+    <!-- output text — replaced per stage -->
+    <text id="outL1" x="408" y="158" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL2" x="408" y="178" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL3" x="408" y="198" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL4" x="408" y="218" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL5" x="408" y="238" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL6" x="408" y="258" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL7" x="408" y="278" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+    <text id="outL8" x="408" y="298" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace"></text>
+
+    <!-- output verdict tag -->
+    <rect id="vtagBg" x="408" y="306" width="120" height="20" rx="5" fill="#F3F4F6"/>
+    <text id="vtag" x="468" y="320" text-anchor="middle" font-size="10" font-weight="700" fill="#6B7280" font-family="ui-monospace,monospace">—</text>
+
+    <!-- ── QUALITY BAR ── -->
+    <text x="408" y="360" font-size="11" font-weight="700" fill="#9CA3AF">OUTPUT QUALITY</text>
+    <rect x="408" y="368" width="324" height="14" rx="4" fill="#F3F4F6"/>
+    <rect id="qbar" x="408" y="368" width="0" height="14" rx="4" fill="#10B981"/>
+    <text id="qpct" x="744" y="380" text-anchor="end" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">0%</text>
+    <text id="qlabel" x="408" y="402" font-size="11" font-style="italic" fill="#6B7280">no scaffolding — anything goes</text>
+  </g>
+
+  <!-- Caption strip -->
+  <rect x="32" y="436" width="716" height="58" rx="10" fill="#1F2937"/>
+  <text id="capLine1" x="390" y="460" text-anchor="middle" font-size="13" fill="white" font-weight="600">Each part you add is a constraint the model can lean on.</text>
+  <text id="capLine2" x="390" y="480" text-anchor="middle" font-size="11" fill="#FED7AA">Format and Examples do the heaviest lifting.</text>
+
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+function $id(id){return document.getElementById(id);}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function lerp(a,b,t){return a+(b-a)*t;}
+let tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+
+const STAGES=[
+  {
+    parts:[],
+    chipsLit:[],
+    out:[
+      'Sounds frustrating! It might be a',
+      'duplicate charge or maybe a renewal',
+      'mix-up — could be a few things. I\'d',
+      'check the billing portal first, then',
+      'reach out to support if needed. Hope',
+      'this helps!','',''
+    ],
+    tag:'unstructured',
+    tagBg:'#FEE2E2', tagFg:'#991B1B',
+    pct:18, qcolor:'#F43F5E',
+    label:'no scaffolding — vague, conversational, unactionable',
+    dot:'d0', dotColor:'#F43F5E'
+  },
+  {
+    parts:['T'],
+    chipsLit:['T'],
+    out:[
+      'This is a billing complaint about',
+      'a duplicate charge. The customer is',
+      'frustrated and wants a refund and',
+      'explanation.','','','',''
+    ],
+    tag:'partial',
+    tagBg:'#FEF3C7', tagFg:'#92400E',
+    pct:42, qcolor:'#F59E0B',
+    label:'task only — closer, but no class label, no format',
+    dot:'d1', dotColor:'#F59E0B'
+  },
+  {
+    parts:['R','C','T'],
+    chipsLit:['R','C','T'],
+    out:[
+      'Category: BILLING',
+      'Subcategory: duplicate_charge',
+      'Sentiment: frustrated',
+      'Suggested route: refund + RCA',
+      '','','',''
+    ],
+    tag:'structured',
+    tagBg:'#FEF3C7', tagFg:'#92400E',
+    pct:71, qcolor:'#F59E0B',
+    label:'role + context + task — usable, but format isn\'t parseable',
+    dot:'d2', dotColor:'#F59E0B'
+  },
+  {
+    parts:['R','C','T','F','E'],
+    chipsLit:['R','C','T','F','E'],
+    out:[
+      '{',
+      '  "label": "billing.duplicate_charge",',
+      '  "confidence": 0.94,',
+      '  "sentiment": "frustrated",',
+      '  "priority": "P2",',
+      '  "suggested_action": "refund_and_rca"',
+      '}',
+      ''
+    ],
+    tag:'parseable',
+    tagBg:'#D1FAE5', tagFg:'#065F46',
+    pct:96, qcolor:'#10B981',
+    label:'all five — drop straight into a workflow. No regex needed.',
+    dot:'d3', dotColor:'#10B981'
+  }
+];
+
+function setChip(letter,lit){
+  // chip rect is the first child <rect>, label text and tail text need recoloring
+  const map={
+    R:{bg:'#FEF3C7', stroke:'#F59E0B', fg:'#92400E', textFill:'#1F2937', tail:'chipRtxt', tailFill:'#6B7280'},
+    C:{bg:'#FEF3C7', stroke:'#F59E0B', fg:'#92400E', textFill:'#1F2937', tail:'chipCtxt', tailFill:'#6B7280'},
+    T:{bg:'#FEF3C7', stroke:'#F59E0B', fg:'#92400E', textFill:'#1F2937', tail:'chipTtxt', tailFill:'#6B7280'},
+    F:{bg:'#FEF3C7', stroke:'#F59E0B', fg:'#92400E', textFill:'#1F2937', tail:'chipFtxt', tailFill:'#6B7280'},
+    E:{bg:'#FEF3C7', stroke:'#F59E0B', fg:'#92400E', textFill:'#1F2937', tail:'chipEtxt', tailFill:'#6B7280'}
+  }[letter];
+  const g=$id('chip'+letter);
+  if(!g)return;
+  const rect=g.querySelector('rect');
+  const texts=g.querySelectorAll('text');
+  if(lit){
+    rect.setAttribute('fill',map.bg);
+    rect.setAttribute('stroke',map.stroke);
+    texts[0].setAttribute('fill',map.fg);
+    texts[1].setAttribute('fill',map.textFill);
+  }else{
+    rect.setAttribute('fill','#F3F4F6');
+    rect.setAttribute('stroke','#E5E7EB');
+    texts[0].setAttribute('fill','#9CA3AF');
+    texts[1].setAttribute('fill','#9CA3AF');
+  }
+  // tail (italic)
+  const tail=$id(map.tail);
+  if(tail) tail.setAttribute('fill', lit?map.tailFill:'#9CA3AF');
+}
+
+function animBar(toW,dur,color){
+  const e=$id('qbar');
+  const fromW=parseFloat(e.getAttribute('width'))||0;
+  e.setAttribute('fill',color);
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('width',String(lerp(fromW,toW,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function animPct(to,dur){
+  const e=$id('qpct');
+  const fromV=parseFloat(e.textContent)||0;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    const v=Math.round(lerp(fromV,to,easeOut(t)));
+    e.textContent=v+'%';
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function setStageDot(activeId){
+  ['d0','d1','d2','d3'].forEach(id=>{
+    const c=$id(id).querySelector('circle');
+    const t=$id(id).querySelector('text');
+    c.setAttribute('fill','#FED7AA');
+    c.setAttribute('r','6');
+    t.setAttribute('fill','#9CA3AF');
+  });
+  const c=$id(activeId).querySelector('circle');
+  const t=$id(activeId).querySelector('text');
+  c.setAttribute('fill','#F59E0B');
+  c.setAttribute('r','8');
+  t.setAttribute('fill','#1F2937');
+}
+
+function clearOutput(){
+  for(let i=1;i<=8;i++) $id('outL'+i).textContent='';
+}
+
+function typeOutput(lines,onDone){
+  clearOutput();
+  let li=0;
+  function nextLine(){
+    if(li>=lines.length){if(onDone)onDone();return;}
+    const e=$id('outL'+(li+1));
+    const text=lines[li];
+    if(!text){li++;nextLine();return;}
+    let ci=0;
+    function nextChar(){
+      if(ci>text.length){li++;after(40,nextLine);return;}
+      e.textContent=text.slice(0,ci);
+      ci+=2;
+      after(8,nextChar);
+    }
+    nextChar();
+  }
+  nextLine();
+}
+
+function applyStage(stageIdx,onDone){
+  const s=STAGES[stageIdx];
+  // chips
+  ['R','C','T','F','E'].forEach(L=>setChip(L, s.chipsLit.indexOf(L)>=0));
+  // dot
+  setStageDot(s.dot);
+  // bar
+  animBar(324*(s.pct/100), 700, s.qcolor);
+  animPct(s.pct, 700);
+  // verdict tag
+  $id('vtagBg').setAttribute('fill', s.tagBg);
+  $id('vtag').setAttribute('fill', s.tagFg);
+  $id('vtag').textContent = s.tag;
+  // label
+  $id('qlabel').textContent = s.label;
+  // type out
+  typeOutput(s.out, onDone);
+}
+
+function runCycle(){
+  let i=0;
+  function nextStage(){
+    if(i>=STAGES.length){
+      after(1600,()=>{
+        // small pause then loop
+        runCycle();
+      });
+      return;
+    }
+    applyStage(i,()=>{
+      after(1700,()=>{i++;nextStage();});
+    });
+  }
+  nextStage();
+}
+
+function reset(){
+  clearAll();
+  clearOutput();
+  ['R','C','T','F','E'].forEach(L=>setChip(L,false));
+  $id('qbar').setAttribute('width','0');
+  $id('qpct').textContent='0%';
+  $id('qlabel').textContent='no scaffolding — anything goes';
+  $id('vtag').textContent='—';
+  $id('vtagBg').setAttribute('fill','#F3F4F6');
+  $id('vtag').setAttribute('fill','#6B7280');
+  setStageDot('d0');
+  after(500,runCycle);
+}
+
+$id('rb').addEventListener('click',reset);
+reset();
+
+})();
+</script>
+</body>
+</html>

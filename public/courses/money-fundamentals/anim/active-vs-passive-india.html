@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Active vs Passive — India</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#EFF6FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:780px;padding:8px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:14px;right:18px;background:#1F2937;color:#EFF6FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75;z-index:5}
+#rb:hover{opacity:1}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 780 480" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Active versus passive India: about 80 percent of active large-cap funds finish below the Nifty 50 after fees over 20 years. Cumulative fee drag of 1.6 versus 0.2 percent erodes 95 lakh from a 1 crore portfolio over 30 years.">
+
+  <rect width="780" height="480" fill="#EFF6FF"/>
+
+  <text x="390" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Most active funds lose to the index. After fees.</text>
+  <text x="390" y="52" text-anchor="middle" font-size="12" fill="#6B7280">20 years of Indian large-cap data. Then watch fees eat your returns.</text>
+
+  <!-- ── PANEL A: scatter / bar of 100 funds ── -->
+  <g>
+    <text x="195" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#0EA5E9">100 ACTIVE FUNDS vs NIFTY 50</text>
+
+    <rect x="40" y="100" width="310" height="220" rx="10" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.4"/>
+
+    <!-- Index baseline label -->
+    <line id="indexLine" x1="50" y1="210" x2="340" y2="210" stroke="#1F2937" stroke-width="1.8" stroke-dasharray="0"/>
+    <text x="345" y="214" font-size="10" fill="#1F2937" font-weight="700" font-family="ui-monospace,monospace">NIFTY</text>
+
+    <!-- Dots will be appended here -->
+    <g id="fundDots"></g>
+
+    <!-- Counters -->
+    <g transform="translate(54,290)">
+      <text x="0" y="0" font-size="10" fill="#9CA3AF" letter-spacing="0.5">FINISHED ABOVE</text>
+      <text id="aboveCt" x="0" y="20" font-size="22" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0</text>
+    </g>
+    <g transform="translate(220,290)">
+      <text x="0" y="0" font-size="10" fill="#9CA3AF" letter-spacing="0.5">FINISHED BELOW</text>
+      <text id="belowCt" x="0" y="20" font-size="22" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <text x="195" y="338" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">% return relative to Nifty</text>
+  </g>
+
+  <!-- ── PANEL B: cumulative fee drag ── -->
+  <g>
+    <text x="585" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#8B5CF6">FEE DRAG OVER 30 YEARS</text>
+
+    <rect x="430" y="100" width="310" height="220" rx="10" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="1.4"/>
+
+    <!-- Y axis 0..2.5Cr → y = 300 - val*72 (val in Cr) -->
+    <g stroke="#EDE9FE" stroke-width="1" stroke-dasharray="2 3">
+      <line x1="430" y1="300" x2="740" y2="300"/>
+      <line x1="430" y1="264" x2="740" y2="264"/>
+      <line x1="430" y1="228" x2="740" y2="228"/>
+      <line x1="430" y1="192" x2="740" y2="192"/>
+      <line x1="430" y1="156" x2="740" y2="156"/>
+      <line x1="430" y1="120" x2="740" y2="120"/>
+    </g>
+    <g font-family="ui-monospace,monospace" font-size="9" fill="#9CA3AF">
+      <text x="426" y="304" text-anchor="end">0</text>
+      <text x="426" y="268" text-anchor="end">0.5</text>
+      <text x="426" y="232" text-anchor="end">1Cr</text>
+      <text x="426" y="196" text-anchor="end">1.5</text>
+      <text x="426" y="160" text-anchor="end">2Cr</text>
+      <text x="426" y="124" text-anchor="end">2.5</text>
+    </g>
+
+    <!-- X axis: years 0..30 → x = 450 + year*9.5 -->
+    <line x1="450" y1="300" x2="735" y2="300" stroke="#DDD6FE" stroke-width="1.5"/>
+    <g font-family="ui-monospace,monospace" font-size="9" fill="#9CA3AF">
+      <text x="450" y="316" text-anchor="middle">0</text>
+      <text x="545" y="316" text-anchor="middle">10y</text>
+      <text x="640" y="316" text-anchor="middle">20y</text>
+      <text x="735" y="316" text-anchor="middle">30y</text>
+    </g>
+
+    <!-- Passive area + line -->
+    <path id="passArea" d="M 450 300 L 450 300 Z" fill="#10B981" fill-opacity="0.15"/>
+    <path id="passLine" d="M 450 300 L 450 300" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Active line -->
+    <path id="activeArea" d="M 450 300 L 450 300 Z" fill="#F43F5E" fill-opacity="0.10"/>
+    <path id="activeLine" d="M 450 300 L 450 300" fill="none" stroke="#F43F5E" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 4"/>
+
+    <!-- Gap shading -->
+    <path id="gapArea" d="M 450 300 L 450 300 Z" fill="#F59E0B" fill-opacity="0.22"/>
+
+    <!-- Labels -->
+    <g font-size="10" font-family="ui-monospace,monospace">
+      <text id="passLbl" x="745" y="135" text-anchor="start" fill="#10B981" font-weight="700" opacity="0">passive</text>
+      <text id="activeLbl" x="745" y="195" text-anchor="start" fill="#F43F5E" font-weight="700" opacity="0">active</text>
+    </g>
+  </g>
+
+  <!-- ── PANEL B captions ── -->
+  <g transform="translate(440,338)" font-size="11">
+    <text x="0" y="0" fill="#6B7280">expense ratios:</text>
+    <text x="92" y="0" fill="#10B981" font-weight="700" font-family="ui-monospace,monospace">0.2%</text>
+    <text x="125" y="0" fill="#6B7280">passive  ·  </text>
+    <text x="190" y="0" fill="#F43F5E" font-weight="700" font-family="ui-monospace,monospace">1.6%</text>
+    <text x="223" y="0" fill="#6B7280">active</text>
+  </g>
+
+  <!-- Headline drag callout -->
+  <g id="dragNote" opacity="0">
+    <rect x="430" y="358" width="310" height="50" rx="10" fill="#1F2937"/>
+    <text x="585" y="378" text-anchor="middle" font-size="11" fill="#9CA3AF" letter-spacing="0.5">FEES EATEN OVER 30 YEARS</text>
+    <text id="dragVal" x="585" y="400" text-anchor="middle" font-size="20" font-weight="700" fill="#F59E0B" font-family="ui-monospace,monospace">₹0</text>
+  </g>
+
+  <!-- Caption -->
+  <rect id="capBg" x="40" y="430" width="700" height="40" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="390" y="454" text-anchor="middle" font-size="13" fill="#FFFFFF" opacity="0"></text>
+
+</svg>
+<button id="rb">restart</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<0?0:t>1?1:1-Math.pow(1-t,3);}
+function easeOutQuart(t){return 1-Math.pow(1-t,4);}
+
+let timers=[], rafs=[];
+function after(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+// ── Panel A: 100 funds ──
+// Each fund: relative return % vs Nifty (range -8 to +6, with 80% below 0)
+// dot location: x in 50..340, y based on relReturn (range -10..+10 → y 295..125, baseline 210)
+function genFunds(){
+  const arr=[];
+  // 80 below, 20 above
+  for(let i=0;i<80;i++){
+    // negative skew, normal-ish around -2.5
+    const r = -0.5 - Math.abs(Math.random()*Math.random()*7);
+    arr.push(r);
+  }
+  for(let i=0;i<20;i++){
+    const r = Math.random()*4 + 0.2;
+    arr.push(r);
+  }
+  // shuffle
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+let funds = genFunds();
+
+function dotXY(idx, ret){
+  // Spread x evenly: 10 cols × 10 rows
+  const col = idx % 20;
+  const x = 56 + col*15.5 + (Math.random()*4-2);
+  // y: baseline 210, ret in -8..+6, vertical scale 8 px/%
+  const y = 210 - ret*8;
+  return {x, y};
+}
+
+function clearDots(){
+  $('fundDots').innerHTML = '';
+}
+
+function spawnDots(){
+  // Place all dots near top first then fall? Simpler: appear staggered
+  for(let i=0;i<funds.length;i++){
+    after(i*22, ()=>{
+      const ret = funds[i];
+      const pos = dotXY(i, ret);
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', pos.x);
+      c.setAttribute('cy', 210); // start at baseline
+      c.setAttribute('r', 4.5);
+      c.setAttribute('fill', ret>=0 ? '#10B981' : '#F43F5E');
+      c.setAttribute('opacity', '0');
+      $('fundDots').appendChild(c);
+      // animate fade + drop into position
+      const start = performance.now();
+      function tick(now){
+        const t = Math.min((now-start)/450, 1);
+        const e = ease(t);
+        c.setAttribute('opacity', String(0.85*e));
+        c.setAttribute('cy', String(lerp(210, pos.y, e)));
+        if(t<1) rafs.push(requestAnimationFrame(tick));
+      }
+      rafs.push(requestAnimationFrame(tick));
+      // update counters
+      if(ret>=0){
+        const cur = parseInt($('aboveCt').textContent,10)||0;
+        $('aboveCt').textContent = String(cur+1);
+      } else {
+        const cur = parseInt($('belowCt').textContent,10)||0;
+        $('belowCt').textContent = String(cur+1);
+      }
+    });
+  }
+}
+
+// ── Panel B: fee drag ──
+// Initial principal contribution: investing 50000/month at 12%
+// Passive: net 11.8% (after 0.2% fee)
+// Active: net 10.4% (after 1.6% fee)
+const monthly = 50000;
+function corpusMonthly(months, annualRate){
+  const r = annualRate/12;
+  if(r===0) return monthly*months;
+  return monthly * (((Math.pow(1+r,months)-1)/r)) * (1+r);
+}
+
+function passiveAt(year){ return corpusMonthly(year*12, 0.118)/10000000; } // Cr
+function activeAt(year){ return corpusMonthly(year*12, 0.104)/10000000; }
+
+// Chart math
+function bx(y){return 450 + y*9.5;}
+function by(cr){
+  // 0..2.5Cr → 300..120
+  const v = Math.max(0, Math.min(cr, 2.7));
+  return 300 - (v/2.5)*180;
+}
+
+function buildBPath(fn, uptoY){
+  const pts=[];
+  for(let y=0;y<=uptoY;y+=0.5){
+    pts.push(`${bx(y).toFixed(1)},${by(fn(y)).toFixed(1)}`);
+  }
+  pts.push(`${bx(uptoY).toFixed(1)},${by(fn(uptoY)).toFixed(1)}`);
+  return 'M ' + pts.join(' L ');
+}
+function buildBArea(fn, uptoY){
+  const pts=[];
+  for(let y=0;y<=uptoY;y+=0.5){
+    pts.push(`${bx(y).toFixed(1)},${by(fn(y)).toFixed(1)}`);
+  }
+  pts.push(`${bx(uptoY).toFixed(1)},${by(fn(uptoY)).toFixed(1)}`);
+  return `M ${bx(0).toFixed(1)} ${by(0).toFixed(1)} L ` + pts.join(' L ') + ` L ${bx(uptoY).toFixed(1)} ${by(0).toFixed(1)} Z`;
+}
+function buildGapArea(uptoY){
+  // Gap between passive (top) and active (bottom)
+  const top=[], bot=[];
+  for(let y=0;y<=uptoY;y+=0.5){
+    top.push(`${bx(y).toFixed(1)},${by(passiveAt(y)).toFixed(1)}`);
+    bot.push(`${bx(y).toFixed(1)},${by(activeAt(y)).toFixed(1)}`);
+  }
+  return 'M ' + top.join(' L ') + ' L ' + bot.reverse().join(' L ') + ' Z';
+}
+
+function fmtRupees(v){
+  if(v < 100000) return '₹' + Math.round(v/1000) + 'K';
+  if(v < 10000000) return '₹' + (v/100000).toFixed(0) + 'L';
+  return '₹' + (v/10000000).toFixed(2) + 'Cr';
+}
+
+function animPanelB(fromY, toY, dur, cb){
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    const e = ease(t);
+    const cy = lerp(fromY, toY, e);
+    $('passLine').setAttribute('d', buildBPath(passiveAt, cy));
+    $('passArea').setAttribute('d', buildBArea(passiveAt, cy));
+    $('activeLine').setAttribute('d', buildBPath(activeAt, cy));
+    $('activeArea').setAttribute('d', buildBArea(activeAt, cy));
+    $('gapArea').setAttribute('d', buildGapArea(cy));
+
+    // Position labels
+    if(cy > 5){
+      $('passLbl').setAttribute('opacity','1');
+      $('passLbl').setAttribute('x', String(bx(cy)+5));
+      $('passLbl').setAttribute('y', String(by(passiveAt(cy))+4));
+      $('activeLbl').setAttribute('opacity','1');
+      $('activeLbl').setAttribute('x', String(bx(cy)+5));
+      $('activeLbl').setAttribute('y', String(by(activeAt(cy))+4));
+    }
+
+    // Drag value
+    const drag = (passiveAt(cy) - activeAt(cy)) * 10000000;
+    if(cy>=2){
+      $('dragVal').textContent = fmtRupees(drag);
+    }
+
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else if(cb) cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function showCap(text, dur){
+  dur = dur || 1700;
+  $('cap').textContent = text;
+  $('cap').setAttribute('opacity','1');
+  $('capBg').setAttribute('opacity','0.92');
+  after(dur, ()=>{
+    $('cap').setAttribute('opacity','0');
+    $('capBg').setAttribute('opacity','0');
+  });
+}
+
+function fadeIn(id, dur){
+  dur = dur || 500;
+  const start = performance.now();
+  function tick(now){
+    const t = Math.min((now-start)/dur, 1);
+    $(id).setAttribute('opacity', String(ease(t)));
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function reset(){
+  clearAll();
+  clearDots();
+  $('aboveCt').textContent = '0';
+  $('belowCt').textContent = '0';
+  $('passLine').setAttribute('d', `M ${bx(0)} ${by(0)}`);
+  $('passArea').setAttribute('d', `M ${bx(0)} ${by(0)} Z`);
+  $('activeLine').setAttribute('d', `M ${bx(0)} ${by(0)}`);
+  $('activeArea').setAttribute('d', `M ${bx(0)} ${by(0)} Z`);
+  $('gapArea').setAttribute('d', `M ${bx(0)} ${by(0)} Z`);
+  $('passLbl').setAttribute('opacity','0');
+  $('activeLbl').setAttribute('opacity','0');
+  $('dragNote').setAttribute('opacity','0');
+  $('dragVal').textContent = '₹0';
+  funds = genFunds();
+}
+
+function run(){
+  reset();
+  // Phase 1: scatter
+  after(400, ()=>{
+    showCap('Each dot is one large-cap fund. After 20 years.', 2400);
+    spawnDots();
+  });
+
+  // Phase 2: highlight
+  after(3500, ()=>{
+    showCap('80 below the index. 20 above. Predict next year? Coin flip.', 2600);
+  });
+
+  // Phase 3: fee chart kicks off
+  after(5800, ()=>{
+    showCap('Now the quiet killer: fee drag on a ₹50K/month SIP.', 2200);
+    animPanelB(0, 30, 4500, ()=>{
+      fadeIn('dragNote', 600);
+    });
+  });
+
+  // Phase 4: final
+  after(11000, ()=>{
+    showCap('1.4% extra fee for 30 years ≈ ₹95L gone. Quietly.', 3000);
+  });
+
+  after(14500, run);
+}
+
+$('rb').addEventListener('click', run);
+run();
+})();
+</script>
+</body>
+</html>
