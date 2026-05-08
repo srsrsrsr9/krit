@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Sparkles, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import type { ContentBlock } from "@/lib/content/blocks";
 import { BlockRenderer } from "./block-renderer";
 import { LessonMetaBar } from "./blocks/lesson-meta-bar";
 import { TutorSidebar } from "@/components/tutor/tutor-sidebar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSwipe } from "@/hooks/use-swipe";
+import { useGameSound, setGlobalMute } from "@/hooks/use-game-sound";
 
 interface Section {
   id: string;
@@ -15,47 +17,59 @@ interface Section {
   blocks: ContentBlock[];
 }
 
+// Block types that each deserve their own section in the player.
+const SOLO_SECTION_TYPES = new Set([
+  "fieldNotes",
+  "bossBattle",
+  "keyTakeaways",
+  "branchScenario",
+  "skillProof",
+  "hotspotReveal",
+  "timedChallenge",
+  "revealCard",
+]);
+
+// Block types the player strips out before grouping (handled elsewhere).
+const SKIP_TYPES = new Set(["lessonMeta"]);
+
 function groupIntoSections(blocks: ContentBlock[]): Section[] {
   const sections: Section[] = [];
   let current: Section = { id: "open", title: "Open", blocks: [] };
-  let openCount = 0;
 
   function commit() {
     if (current.blocks.length > 0) sections.push(current);
   }
 
   for (const b of blocks) {
-    if (b.type === "lessonMeta") continue;
+    if (SKIP_TYPES.has(b.type)) continue;
 
     if (b.type === "heading") {
       commit();
       current = { id: `h-${sections.length}`, title: b.text, blocks: [] };
       continue;
     }
-    if (b.type === "fieldNotes") {
+
+    if (SOLO_SECTION_TYPES.has(b.type)) {
       commit();
-      current = { id: `fn-${sections.length}`, title: "Field notes from production", blocks: [b] };
-      continue;
-    }
-    if (b.type === "bossBattle") {
-      commit();
-      current = { id: `bb-${sections.length}`, title: b.title || "Boss battle", blocks: [b] };
-      continue;
-    }
-    if (b.type === "keyTakeaways") {
-      commit();
-      current = { id: `kt-${sections.length}`, title: "Wrap up", blocks: [b] };
+      const title =
+        b.type === "fieldNotes" ? "Field notes from production" :
+        b.type === "bossBattle" ? ((b as Extract<ContentBlock, { type: "bossBattle" }>).title || "Boss battle") :
+        b.type === "keyTakeaways" ? "Wrap up" :
+        b.type === "branchScenario" ? ((b as Extract<ContentBlock, { type: "branchScenario" }>).title || "Branching scenario") :
+        b.type === "skillProof" ? ((b as Extract<ContentBlock, { type: "skillProof" }>).skill || "Prove it") :
+        b.type === "hotspotReveal" ? "Explore" :
+        b.type === "timedChallenge" ? "Timed challenge" :
+        b.type === "revealCard" ? "Reveal" :
+        b.type;
+      current = { id: `solo-${sections.length}`, title, blocks: [b] };
       continue;
     }
 
-    if (current.blocks.length === 0 && current.id === "open") openCount++;
     current.blocks.push(b);
   }
   commit();
 
-  // Adopt a friendlier title for the very first section if it stayed "Open".
   if (sections[0]?.id === "open") sections[0].title = "Get oriented";
-
   return sections;
 }
 
@@ -67,7 +81,6 @@ export interface LessonPlayerProps {
   pathTitle: string;
   skillHints: string[];
   savedReflections?: Record<string, string>;
-  /** What renders below the last section — typically the next/prev nav card. */
   footer?: React.ReactNode;
 }
 
@@ -85,14 +98,20 @@ export function LessonPlayer({
   const meta = blocks.find((b) => b.type === "lessonMeta");
   const [idx, setIdx] = useState(0);
   const [tutorOpen, setTutorOpen] = useState(false);
+  const [soundMuted, setSoundMuted] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
   const total = sections.length;
   const safeIdx = Math.min(idx, total - 1);
   const section = sections[safeIdx]!;
   const nextSection = sections[safeIdx + 1];
+  const playSound = useGameSound();
 
-  // When the active section changes, reset the stage scroll to the top so
-  // long sections don't open mid-way through.
+  // Sync global mute state whenever the toggle changes.
+  useEffect(() => {
+    setGlobalMute(soundMuted);
+  }, [soundMuted]);
+
+  // Reset stage scroll to top on section change.
   useEffect(() => {
     if (stageRef.current) stageRef.current.scrollTop = 0;
   }, [idx]);
@@ -108,25 +127,23 @@ export function LessonPlayer({
   }, [tutorOpen]);
 
   function go(delta: number) {
-    setIdx((i) => Math.max(0, Math.min(total - 1, i + delta)));
+    setIdx((i) => {
+      const next = Math.max(0, Math.min(total - 1, i + delta));
+      if (next !== i) playSound("transition");
+      return next;
+    });
   }
 
-  return (
-    <div className="relative">
-      {meta && meta.type === "lessonMeta" && (
-        <div className="mb-6">
-          <LessonMetaBar
-            audioUrl={meta.audioUrl}
-            audioDurationSec={meta.audioDurationSec}
-            audioChapters={meta.audioChapters}
-            notesPdfUrl={meta.notesPdfUrl}
-            notesByline={meta.notesByline}
-          />
-        </div>
-      )}
+  // Swipe left → next, swipe right → prev.
+  useSwipe(stageRef, {
+    onSwipeLeft: () => go(1),
+    onSwipeRight: () => go(-1),
+  });
 
-      {/* Section progress dots */}
-      <div className="mb-4 flex items-center justify-center gap-1.5">
+  return (
+    <div className="relative flex flex-col md:min-h-0 min-h-[calc(100dvh-4rem)]">
+      {/* Progress dots — anchored at the very top */}
+      <div className="mb-3 flex items-center justify-center gap-1.5 pt-1">
         {sections.map((s, i) => (
           <button
             key={s.id}
@@ -145,18 +162,42 @@ export function LessonPlayer({
         ))}
       </div>
 
+      {meta && meta.type === "lessonMeta" && (
+        <div className="mb-4">
+          <LessonMetaBar
+            audioUrl={meta.audioUrl}
+            audioDurationSec={meta.audioDurationSec}
+            audioChapters={meta.audioChapters}
+            notesPdfUrl={meta.notesPdfUrl}
+            notesByline={meta.notesByline}
+          />
+        </div>
+      )}
+
+      {/* Section label + controls row */}
       <div className="mb-3 flex items-center justify-between text-xs text-muted-foreground">
         <span>
-          Section {idx + 1} of {total}
+          {idx + 1} / {total}
         </span>
         <span className="font-medium">{section.title}</span>
+        {/* Global sound mute toggle */}
+        <button
+          type="button"
+          onClick={() => setSoundMuted((m) => !m)}
+          aria-label={soundMuted ? "Unmute game sounds" : "Mute game sounds"}
+          className="rounded-full p-1 hover:bg-muted transition-colors"
+        >
+          {soundMuted
+            ? <VolumeX className="h-3.5 w-3.5" />
+            : <Volume2 className="h-3.5 w-3.5" />}
+        </button>
       </div>
 
-      {/* Player stage — center column. The AI launcher floats off to the right. */}
-      <div className="relative grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
+      {/* Player stage + AI launcher */}
+      <div className="relative grid flex-1 gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
         <div
           ref={stageRef}
-          className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8"
+          className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8 touch-pan-y"
         >
           <BlockRenderer
             key={section.id}
@@ -166,7 +207,7 @@ export function LessonPlayer({
           />
         </div>
 
-        {/* AI launcher — big icon on the right. Opens the sidebar drawer. */}
+        {/* AI launcher — desktop pillar */}
         <button
           type="button"
           onClick={() => setTutorOpen(true)}
@@ -176,19 +217,9 @@ export function LessonPlayer({
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-md ring-4 ring-primary/15 transition-transform group-hover:scale-110">
             <Sparkles className="h-6 w-6" />
           </span>
-          <span className="leading-tight text-center max-w-[80px]">Ask Atlas</span>
+          <span className="max-w-[80px] text-center leading-tight">Ask Atlas</span>
         </button>
       </div>
-
-      {/* Mobile launcher: floating action button */}
-      <button
-        type="button"
-        onClick={() => setTutorOpen(true)}
-        className="fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-xl ring-4 ring-primary/20 lg:hidden"
-        aria-label="Open Atlas, your AI tutor"
-      >
-        <Sparkles className="h-6 w-6" />
-      </button>
 
       {/* Prev / Next */}
       <div className="mt-6 flex items-center justify-between gap-3">
@@ -200,11 +231,11 @@ export function LessonPlayer({
           className="gap-1.5"
         >
           <ChevronLeft className="h-4 w-4" />
-          Previous
+          <span className="hidden sm:inline">Previous</span>
         </Button>
         {nextSection ? (
           <Button type="button" onClick={() => go(1)} className="gap-1.5">
-            Next: {nextSection.title}
+            <span className="hidden sm:inline">Next:</span> {nextSection.title}
             <ChevronRight className="h-4 w-4" />
           </Button>
         ) : (
@@ -216,7 +247,17 @@ export function LessonPlayer({
 
       {idx === total - 1 && footer && <div className="mt-6">{footer}</div>}
 
-      {/* AI tutor drawer — slides in from the right */}
+      {/* Mobile AI FAB */}
+      <button
+        type="button"
+        onClick={() => setTutorOpen(true)}
+        className="fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-xl ring-4 ring-primary/20 lg:hidden"
+        aria-label="Open Atlas, your AI tutor"
+      >
+        <Sparkles className="h-6 w-6" />
+      </button>
+
+      {/* AI tutor drawer */}
       {tutorOpen && (
         <>
           <div

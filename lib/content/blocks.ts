@@ -275,6 +275,78 @@ export const FieldNotesBlock = z.object({
   takeaway: z.string(),
 });
 
+// ── Emotion-driven interactive block types ────────────────────────────────────
+
+/** CURIOSITY — image with clickable hotspot zones that reveal tooltip content. */
+export const HotspotRevealBlock = z.object({
+  type: z.literal("hotspotReveal"),
+  src: z.string(),
+  alt: z.string(),
+  width: z.number().int().min(120).max(1920).default(800),
+  height: z.number().int().min(120).max(1080).default(450),
+  hotspots: z.array(z.object({
+    id: z.string(),
+    xPct: z.number().min(0).max(100),
+    yPct: z.number().min(0).max(100),
+    label: z.string(),
+    body: z.string(),
+  })).min(1).max(20),
+  caption: z.string().optional(),
+});
+
+/** TENSION — quiz with a countdown timer; partial credit for slow correct answers. */
+export const TimedChallengeBlock = z.object({
+  type: z.literal("timedChallenge"),
+  prompt: z.string(),
+  choices: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+    correct: z.boolean(),
+    explain: z.string().optional(),
+  })).min(2).max(6),
+  timeLimitSec: z.number().int().min(5).max(120).default(30),
+  fastSec: z.number().int().min(3).max(60).default(10),
+  fullPoints: z.number().int().min(1).max(10).default(3),
+  partialPoints: z.number().int().min(0).max(9).default(1),
+});
+
+/** EXPLORATION — inline branching story (Twine-style); choices lead to other nodes. */
+export const BranchScenarioBlock = z.object({
+  type: z.literal("branchScenario"),
+  title: z.string().optional(),
+  startNodeId: z.string(),
+  nodes: z.array(z.object({
+    id: z.string(),
+    body: z.string(),
+    choices: z.array(z.object({
+      id: z.string(),
+      label: z.string(),
+      nextNodeId: z.string().optional(),
+      outcome: z.string().optional(),
+    })).min(1).max(4),
+  })).min(2).max(10),
+});
+
+/** SURPRISE — flip-card: front = provocative claim, back = nuanced truth. */
+export const RevealCardBlock = z.object({
+  type: z.literal("revealCard"),
+  front: z.string(),
+  back: z.string(),
+  hint: z.string().optional(),
+});
+
+/** MASTERY — "Prove it" challenge with rule-based eval and badge unlock. */
+export const SkillProofBlock = z.object({
+  type: z.literal("skillProof"),
+  skill: z.string(),
+  instruction: z.string(),
+  starter: z.string().optional(),
+  evalPattern: z.string().optional(),
+  referenceAnswer: z.string().optional(),
+  badgeLabel: z.string().default("Skill unlocked"),
+  lang: z.string().optional(),
+});
+
 export const ContentBlock = z.discriminatedUnion("type", [
   HeadingBlock,
   MarkdownBlock,
@@ -298,6 +370,11 @@ export const ContentBlock = z.discriminatedUnion("type", [
   LessonMetaBlock,
   BossBattleBlock,
   FieldNotesBlock,
+  HotspotRevealBlock,
+  TimedChallengeBlock,
+  BranchScenarioBlock,
+  RevealCardBlock,
+  SkillProofBlock,
 ]);
 
 export type ContentBlock = z.infer<typeof ContentBlock>;

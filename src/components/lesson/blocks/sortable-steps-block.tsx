@@ -23,6 +23,7 @@ import { CheckCircle2, GripVertical, RotateCcw, XCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useGameSound } from "@/hooks/use-game-sound";
 
 export interface SortableStepsBlockProps {
   prompt: string;
@@ -36,6 +37,7 @@ export function SortableStepsBlock({ prompt, items, hint }: SortableStepsBlockPr
   const [order, setOrder] = useState<string[]>(() => shuffle([...correctIds]));
   const [checked, setChecked] = useState<null | "right" | "wrong">(null);
   const byId = useMemo(() => Object.fromEntries(items.map((i) => [i.id, i])), [items]);
+  const playSound = useGameSound();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -53,6 +55,7 @@ export function SortableStepsBlock({ prompt, items, hint }: SortableStepsBlockPr
   function check() {
     const right = order.every((id, i) => id === correctIds[i]);
     setChecked(right ? "right" : "wrong");
+    playSound(right ? "correct" : "wrong");
   }
   function reset() {
     setOrder(shuffle([...correctIds]));

@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import { CheckCircle2, XCircle, MessagesSquare, ArrowRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useGameSound } from "@/hooks/use-game-sound";
 
 interface Bucket {
   id: string;
@@ -36,6 +37,7 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
   const [step, setStep] = useState(0);
   const [picks, setPicks] = useState<Record<string, string>>({});
   const reduced = useReducedMotion();
+  const playSound = useGameSound();
   const total = scenarios.length;
   const current = scenarios[step];
   const picked = current ? picks[current.id] : undefined;
@@ -46,6 +48,7 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
   function pick(bucketId: string) {
     if (!current || submitted) return;
     setPicks((p) => ({ ...p, [current.id]: bucketId }));
+    playSound(bucketId === current.correctBucketId ? "correct" : "wrong");
   }
   function next() {
     setStep((s) => s + 1);

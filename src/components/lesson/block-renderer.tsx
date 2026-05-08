@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
+import { useGameSound } from "@/hooks/use-game-sound";
 import remarkGfm from "remark-gfm";
 import { CheckCircle2, XCircle, Lightbulb, Info, AlertTriangle, PartyPopper, PlayCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,19 @@ import { ChatScenarioBlock } from "./blocks/chat-scenario-block";
 import { LessonMetaBar } from "./blocks/lesson-meta-bar";
 import { BossBattleBlock } from "./blocks/boss-battle-block";
 import { FieldNotesBlock } from "./blocks/field-notes-block";
+import { HotspotRevealBlock } from "./blocks/hotspot-reveal-block";
+import { RevealCardBlock } from "./blocks/reveal-card-block";
+import { TimedChallengeBlock } from "./blocks/timed-challenge-block";
+
+// Heavy new blocks — lazy-loaded to keep initial bundle slim.
+const BranchScenarioBlock = dynamic(
+  () => import("./blocks/branch-scenario-block").then((m) => m.BranchScenarioBlock),
+  { ssr: false, loading: () => <div className="h-48 w-full rounded-xl border border-border bg-card" /> },
+);
+const SkillProofBlock = dynamic(
+  () => import("./blocks/skill-proof-block").then((m) => m.SkillProofBlock),
+  { ssr: false, loading: () => <div className="h-32 w-full rounded-xl border border-border bg-card" /> },
+);
 
 // Lazy-load the heavy ones — Remotion + alasql shouldn't sit in the
 // initial lesson page bundle.
@@ -137,6 +151,16 @@ function BlockOne({
       return <BossBattleBlock title={block.title} setup={block.setup} coach={block.coach} stages={block.stages} outcomes={block.outcomes} />;
     case "fieldNotes":
       return <FieldNotesBlock title={block.title} source={block.source} date={block.date} story={block.story} takeaway={block.takeaway} />;
+    case "hotspotReveal":
+      return <HotspotRevealBlock src={block.src} alt={block.alt} width={block.width} height={block.height} hotspots={block.hotspots} caption={block.caption} />;
+    case "timedChallenge":
+      return <TimedChallengeBlock prompt={block.prompt} choices={block.choices} timeLimitSec={block.timeLimitSec} fastSec={block.fastSec} fullPoints={block.fullPoints} partialPoints={block.partialPoints} />;
+    case "branchScenario":
+      return <BranchScenarioBlock title={block.title} startNodeId={block.startNodeId} nodes={block.nodes} />;
+    case "revealCard":
+      return <RevealCardBlock front={block.front} back={block.back} hint={block.hint} />;
+    case "skillProof":
+      return <SkillProofBlock skill={block.skill} instruction={block.instruction} starter={block.starter} evalPattern={block.evalPattern} referenceAnswer={block.referenceAnswer} badgeLabel={block.badgeLabel} lang={block.lang} />;
   }
 }
 
@@ -195,6 +219,7 @@ function extractVimeoId(u: string): string {
 function InlineQuiz({ block }: { block: Extract<ContentBlock, { type: "quiz" }> }) {
   const [selected, setSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const playSound = useGameSound();
 
   const toggle = (id: string) => {
     if (submitted) return;
@@ -250,7 +275,13 @@ function InlineQuiz({ block }: { block: Extract<ContentBlock, { type: "quiz" }> 
           className="mt-4"
           size="sm"
           disabled={selected.length === 0}
-          onClick={() => setSubmitted(true)}
+          onClick={() => {
+            const isRight =
+              correctIds.length === selected.length &&
+              correctIds.every((id) => selected.includes(id));
+            setSubmitted(true);
+            playSound(isRight ? "correct" : "wrong");
+          }}
           type="button"
         >
           Check answer

@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import { Swords, Trophy, RefreshCw, ChevronRight, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useGameSound } from "@/hooks/use-game-sound";
 
 interface Option {
   id: string;
@@ -40,6 +41,7 @@ export function BossBattleBlock({ title, setup, coach, stages, outcomes }: BossB
   const [picks, setPicks] = useState<Record<string, string>>({});
   const [revealed, setRevealed] = useState(false);
   const reduced = useReducedMotion();
+  const playSound = useGameSound();
 
   const total = stages.length;
   const done = stageIdx >= total;
@@ -66,11 +68,15 @@ export function BossBattleBlock({ title, setup, coach, stages, outcomes }: BossB
 
   function pick(optionId: string) {
     if (!stage || revealed) return;
+    const opt = stage.options.find((o) => o.id === optionId);
     setPicks((p) => ({ ...p, [stage.id]: optionId }));
     setRevealed(true);
+    playSound(opt?.correct ? "correct" : "wrong");
   }
   function next() {
-    setStageIdx((i) => i + 1);
+    const nextIdx = stageIdx + 1;
+    if (nextIdx >= total) playSound("achievement");
+    setStageIdx(nextIdx);
     setRevealed(false);
   }
   function reset() {

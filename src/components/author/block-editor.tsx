@@ -36,6 +36,11 @@ const BLOCK_LABEL: Record<BlockType, string> = {
   lessonMeta: "Lesson meta",
   bossBattle: "Boss battle",
   fieldNotes: "Field notes",
+  hotspotReveal: "Hotspot reveal",
+  timedChallenge: "Timed challenge",
+  branchScenario: "Branching scenario",
+  revealCard: "Reveal card",
+  skillProof: "Skill proof",
 };
 
 function newBlock(type: BlockType): ContentBlock {
@@ -65,6 +70,11 @@ function newBlock(type: BlockType): ContentBlock {
     case "lessonMeta": return { type: "lessonMeta" };
     case "bossBattle": return { type: "bossBattle", title: "Boss Battle: …", setup: "Scenario opening.", coach: { name: "The Final Boss" }, stages: [{ id: "s1", prompt: "Pick the best move.", options: [{ id: "a", label: "Right answer", correct: true, explain: "Why this is correct.", points: 3 }, { id: "b", label: "Wrong answer", correct: false, explain: "Why this is wrong.", points: 0 }] }], outcomes: { perfect: "Perfect run.", good: "Strong run.", learn: "Worth a re-read." } };
     case "fieldNotes": return { type: "fieldNotes", title: "Field Notes: …", source: "Anonymous engineer at a Bengaluru fintech", date: "April 2026", story: "Story body.", takeaway: "What this proves." };
+    case "hotspotReveal": return { type: "hotspotReveal", src: "/placeholder.png", alt: "Diagram", width: 800, height: 450, hotspots: [{ id: "h1", xPct: 25, yPct: 40, label: "Point A", body: "Explanation of point A." }] };
+    case "timedChallenge": return { type: "timedChallenge", prompt: "What is the correct answer?", choices: [{ id: "a", label: "Option A", correct: true }, { id: "b", label: "Option B", correct: false }], timeLimitSec: 30, fastSec: 10, fullPoints: 3, partialPoints: 1 };
+    case "branchScenario": return { type: "branchScenario", title: "A fork in the road", startNodeId: "n1", nodes: [{ id: "n1", body: "You face a decision.", choices: [{ id: "c1", label: "Go left", nextNodeId: "n2" }, { id: "c2", label: "Go right", outcome: "You reached the end." }] }, { id: "n2", body: "You went left.", choices: [{ id: "c3", label: "Continue", outcome: "Journey complete." }] }] };
+    case "revealCard": return { type: "revealCard", front: "Provocative claim here.", back: "The nuanced truth that reframes it.", hint: "Tap to reveal" };
+    case "skillProof": return { type: "skillProof", skill: "Skill name", instruction: "Demonstrate this skill by doing X.", starter: "", badgeLabel: "Skill unlocked" };
   }
 }
 
