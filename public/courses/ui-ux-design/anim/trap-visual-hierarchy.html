@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: Mid-priority everything</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --line: #E5D9C7;
+    --amber: #F59E0B;
+    --green: #10B981;
+    --blue: #0EA5E9;
+    --violet: #8B5CF6;
+    --rose: #F43F5E;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+    min-height: 1.4em;
+  }
+  /* heatmap blobs */
+  .blob {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+  }
+  .gaze {
+    opacity: 0;
+    transform-origin: center;
+  }
+  .label {
+    font-size: 12px;
+    fill: var(--muted);
+    font-family: ui-monospace, monospace;
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+  .timer {
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    fill: var(--ink);
+  }
+  /* TRAP heatmap blobs (even spread) */
+  @keyframes blobBad {
+    0%   { opacity: 0; transform: scale(0.4); }
+    8%   { opacity: 0.85; transform: scale(1); }
+    20%  { opacity: 0.85; transform: scale(1); }
+    24%  { opacity: 0; transform: scale(0.4); }
+    100% { opacity: 0; transform: scale(0.4); }
+  }
+  /* Buttons fade out (trap) */
+  @keyframes badButtons {
+    0%, 22% { opacity: 1; transform: translateY(0); }
+    26%, 100% { opacity: 0; transform: translateY(-8px); }
+  }
+  /* FIXED layout entry */
+  @keyframes goodEnter {
+    0%, 26% { opacity: 0; transform: translateY(8px); }
+    32%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  /* Primary button focus heatmap */
+  @keyframes blobGood {
+    0%, 38% { opacity: 0; transform: scale(0.3); }
+    44% { opacity: 0.95; transform: scale(1.1); }
+    72% { opacity: 0.85; transform: scale(1); }
+    88% { opacity: 0.6; transform: scale(0.95); }
+    96%, 100% { opacity: 0; transform: scale(0.5); }
+  }
+  /* gaze dot path bad (jitters) */
+  @keyframes gazeBad {
+    0%   { opacity: 0; transform: translate(0,0); }
+    6%   { opacity: 1; transform: translate(0,0); }
+    9%   { transform: translate(120px, 0px); }
+    12%  { transform: translate(60px, 30px); }
+    15%  { transform: translate(180px, -10px); }
+    18%  { transform: translate(40px, 20px); }
+    21%  { transform: translate(150px, 40px); }
+    24%  { opacity: 0; transform: translate(150px, 40px); }
+    100% { opacity: 0; }
+  }
+  /* gaze dot good (snaps to primary) */
+  @keyframes gazeGood {
+    0%, 38% { opacity: 0; transform: translate(0,0); }
+    42% { opacity: 1; transform: translate(0, 0); }
+    46% { transform: translate(120px, 0); }
+    100% { opacity: 1; transform: translate(120px, 0); }
+  }
+  /* primary pulse */
+  @keyframes pulsePrimary {
+    0%, 32% { transform: scale(1); }
+    40% { transform: scale(1.04); }
+    50% { transform: scale(1); }
+    100% { transform: scale(1); }
+  }
+  /* timer */
+  @keyframes timerBad {
+    0%, 6% { opacity: 0; }
+    9% { opacity: 1; }
+    22% { opacity: 1; }
+    24%, 100% { opacity: 0; }
+  }
+  @keyframes timerGood {
+    0%, 42% { opacity: 0; }
+    46% { opacity: 1; }
+    96% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  /* phase label */
+  @keyframes phaseTrap {
+    0%, 22% { opacity: 1; }
+    24%, 100% { opacity: 0; }
+  }
+  @keyframes phaseFix {
+    0%, 26% { opacity: 0; }
+    32%, 96% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  /* divider sweep */
+  @keyframes sweep {
+    0%, 22% { transform: scaleX(0); }
+    28% { transform: scaleX(1); }
+    32% { transform: scaleX(1); opacity: 1; }
+    36%, 100% { opacity: 0; }
+  }
+  .DUR { animation-duration: 13s; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
+  .b1 { animation-name: blobBad; animation-delay: 0s; }
+  .b2 { animation-name: blobBad; animation-delay: 0.3s; }
+  .b3 { animation-name: blobBad; animation-delay: 0.55s; }
+  .b4 { animation-name: blobBad; animation-delay: 0.8s; }
+  .b5 { animation-name: blobBad; animation-delay: 1.05s; }
+  .badBtns { animation-name: badButtons; }
+  .goodLayer { animation-name: goodEnter; opacity: 0; }
+  .blobP { animation-name: blobGood; }
+  .gazeBad { animation-name: gazeBad; }
+  .gazeGood { animation-name: gazeGood; }
+  .primaryPulse { animation-name: pulsePrimary; transform-origin: center; transform-box: fill-box; }
+  .timerBad { animation-name: timerBad; }
+  .timerGood { animation-name: timerGood; }
+  .phaseTrap { animation-name: phaseTrap; }
+  .phaseFix { animation-name: phaseFix; opacity: 0; }
+  .sweep { animation-name: sweep; transform-origin: left center; transform-box: fill-box; }
+  @media (prefers-reduced-motion: reduce) {
+    .DUR { animation: none !important; }
+    .blob { opacity: 0.5; }
+    .gaze { opacity: 1; }
+    .goodLayer { opacity: 1; }
+    .badBtns { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="Trap: when every button has equal weight, the eye finds no winner. Fix: one primary, four secondaries.">
+      <!-- Browser chrome -->
+      <rect x="20" y="20" width="720" height="380" rx="14" fill="#FFFFFF" stroke="#E5D9C7" stroke-width="2"/>
+      <rect x="20" y="20" width="720" height="36" rx="14" fill="#FAF5EF" stroke="#E5D9C7" stroke-width="2"/>
+      <circle cx="40" cy="38" r="5" fill="#F43F5E"/>
+      <circle cx="58" cy="38" r="5" fill="#F59E0B"/>
+      <circle cx="76" cy="38" r="5" fill="#10B981"/>
+      <rect x="200" y="28" width="360" height="20" rx="10" fill="#FFF7ED" stroke="#E5D9C7"/>
+
+      <!-- Phase title (trap) -->
+      <g class="phaseTrap DUR">
+        <text x="380" y="86" text-anchor="middle" class="title">Visual democracy: every button matters equally</text>
+      </g>
+
+      <!-- Phase title (fix) -->
+      <g class="phaseFix DUR">
+        <text x="380" y="86" text-anchor="middle" class="title">Hierarchy restored: one wins, four support</text>
+      </g>
+
+      <!-- TRAP: 5 equal buttons -->
+      <g class="badBtns DUR">
+        <!-- Heading placeholder -->
+        <rect x="60" y="110" width="220" height="14" rx="4" fill="#E5D9C7"/>
+        <rect x="60" y="134" width="380" height="10" rx="3" fill="#EFE2D0"/>
+        <rect x="60" y="150" width="320" height="10" rx="3" fill="#EFE2D0"/>
+
+        <!-- 5 same-size grey-ish buttons -->
+        <g>
+          <rect x="60"  y="200" width="120" height="44" rx="10" fill="#E0E7EF" stroke="#C9D2DC" stroke-width="2"/>
+          <text x="120" y="228" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Save</text>
+        </g>
+        <g>
+          <rect x="190" y="200" width="120" height="44" rx="10" fill="#E0E7EF" stroke="#C9D2DC" stroke-width="2"/>
+          <text x="250" y="228" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Cancel</text>
+        </g>
+        <g>
+          <rect x="320" y="200" width="120" height="44" rx="10" fill="#E0E7EF" stroke="#C9D2DC" stroke-width="2"/>
+          <text x="380" y="228" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Export</text>
+        </g>
+        <g>
+          <rect x="450" y="200" width="120" height="44" rx="10" fill="#E0E7EF" stroke="#C9D2DC" stroke-width="2"/>
+          <text x="510" y="228" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Share</text>
+        </g>
+        <g>
+          <rect x="580" y="200" width="120" height="44" rx="10" fill="#E0E7EF" stroke="#C9D2DC" stroke-width="2"/>
+          <text x="640" y="228" text-anchor="middle" font-size="13" fill="#374151" font-weight="600">Help</text>
+        </g>
+
+        <!-- Even heatmap -->
+        <g>
+          <circle class="blob b1 DUR" cx="120" cy="222" r="46" fill="#F43F5E" opacity="0.55"/>
+          <circle class="blob b2 DUR" cx="250" cy="222" r="46" fill="#F43F5E" opacity="0.55"/>
+          <circle class="blob b3 DUR" cx="380" cy="222" r="46" fill="#F43F5E" opacity="0.55"/>
+          <circle class="blob b4 DUR" cx="510" cy="222" r="46" fill="#F43F5E" opacity="0.55"/>
+          <circle class="blob b5 DUR" cx="640" cy="222" r="46" fill="#F43F5E" opacity="0.55"/>
+        </g>
+
+        <!-- jittery gaze -->
+        <g class="gaze gazeBad DUR" style="transform-box: fill-box;">
+          <circle cx="120" cy="222" r="7" fill="#1F2937"/>
+          <circle cx="120" cy="222" r="14" fill="none" stroke="#1F2937" stroke-width="1.5" opacity="0.5"/>
+        </g>
+
+        <!-- timer -->
+        <g class="timerBad DUR">
+          <rect x="540" y="118" width="160" height="34" rx="8" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1.5"/>
+          <text x="620" y="140" text-anchor="middle" class="timer" fill="#9F1239">no winner found</text>
+        </g>
+      </g>
+
+      <!-- Sweep divider (transition flash) -->
+      <rect class="sweep DUR" x="20" y="20" width="720" height="380" rx="14" fill="#FFF7ED" opacity="0.85"/>
+
+      <!-- FIX: 1 primary, 4 secondary -->
+      <g class="goodLayer DUR">
+        <rect x="60" y="110" width="220" height="14" rx="4" fill="#E5D9C7"/>
+        <rect x="60" y="134" width="380" height="10" rx="3" fill="#EFE2D0"/>
+        <rect x="60" y="150" width="320" height="10" rx="3" fill="#EFE2D0"/>
+
+        <!-- Primary (large, amber) -->
+        <g class="primaryPulse DUR">
+          <rect x="60" y="200" width="160" height="56" rx="12" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+          <text x="140" y="234" text-anchor="middle" font-size="16" fill="#FFFFFF" font-weight="800">Save changes</text>
+        </g>
+
+        <!-- 4 secondaries (smaller, low contrast) -->
+        <g>
+          <rect x="240" y="208" width="100" height="40" rx="10" fill="#FFFFFF" stroke="#D6CCBA" stroke-width="1.5"/>
+          <text x="290" y="233" text-anchor="middle" font-size="12" fill="#6B7280">Cancel</text>
+        </g>
+        <g>
+          <rect x="350" y="208" width="100" height="40" rx="10" fill="#FFFFFF" stroke="#D6CCBA" stroke-width="1.5"/>
+          <text x="400" y="233" text-anchor="middle" font-size="12" fill="#6B7280">Export</text>
+        </g>
+        <g>
+          <rect x="460" y="208" width="100" height="40" rx="10" fill="#FFFFFF" stroke="#D6CCBA" stroke-width="1.5"/>
+          <text x="510" y="233" text-anchor="middle" font-size="12" fill="#6B7280">Share</text>
+        </g>
+        <g>
+          <rect x="570" y="208" width="100" height="40" rx="10" fill="#FFFFFF" stroke="#D6CCBA" stroke-width="1.5"/>
+          <text x="620" y="233" text-anchor="middle" font-size="12" fill="#6B7280">Help</text>
+        </g>
+
+        <!-- Heatmap concentrated -->
+        <circle class="blob blobP DUR" cx="140" cy="228" r="62" fill="#10B981" opacity="0.7"/>
+
+        <!-- gaze snaps to primary -->
+        <g class="gaze gazeGood DUR" style="transform-box: fill-box;">
+          <circle cx="20" cy="228" r="7" fill="#1F2937"/>
+          <circle cx="20" cy="228" r="14" fill="none" stroke="#1F2937" stroke-width="1.5" opacity="0.5"/>
+        </g>
+
+        <!-- timer good -->
+        <g class="timerGood DUR">
+          <rect x="540" y="118" width="160" height="34" rx="8" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
+          <text x="620" y="140" text-anchor="middle" class="timer" fill="#065F46">found in 0.6s</text>
+        </g>
+      </g>
+
+      <!-- Footer rule -->
+      <line x1="60" y1="350" x2="700" y2="350" stroke="#E5D9C7" stroke-width="1.5"/>
+      <text x="60" y="376" class="label">eye-tracking heatmap · gaze dot · time-to-decision</text>
+    </svg>
+    <div class="caption">When everything is primary, nothing is. Hierarchy is a kindness to the eye.</div>
+  </div>
+</main>
+</body>
+</html>

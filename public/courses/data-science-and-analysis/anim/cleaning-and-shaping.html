@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cleaning and shaping</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --amber:#F59E0B; --green:#10B981; --blue:#0EA5E9;
+    --violet:#8B5CF6; --rose:#F43F5E;
+    --paper:#FFFDF7;
+    --ease:cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+  .frame{width:100%;max-width:860px;aspect-ratio:16/10;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;max-width:820px;margin-left:auto;margin-right:auto;padding:0 12px}
+  text{font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  /* counter ticks downwards through 14s */
+  .stage-pill{transform-box:fill-box;transform-origin:center}
+  .pipe-stage rect.bg{fill:#FAF5FF;stroke:#E5D9C3;stroke-width:2}
+  .pipe-stage.active rect.bg{stroke:#1F2937}
+
+  .issue{transition:opacity .45s var(--ease), transform .45s var(--ease);
+    transform-box:fill-box;transform-origin:center}
+  .cleaned{opacity:0;transform:scale(.85)}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .issue{opacity:0}
+    .pipe-stage rect.bg{stroke:#1F2937}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+<div>
+<svg class="frame" viewBox="0 0 860 538" aria-label="A messy CSV with 47 issues being cleaned in five pipeline stages — schema, nulls, types, strings, deduplication — until it's ready for analysis.">
+  <rect x="0" y="0" width="860" height="538" fill="#FFF7ED"/>
+
+  <!-- title row -->
+  <text x="430" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Cleaning &amp; shaping</text>
+  <text x="430" y="52" text-anchor="middle" font-size="12" font-style="italic" fill="#6B7280">47 issues → 0, one stage at a time</text>
+
+  <!-- counter -->
+  <g transform="translate(720,68)">
+    <rect x="0" y="0" width="116" height="44" rx="10" fill="#FFFDF7" stroke="#1F2937" stroke-width="2"/>
+    <text x="58" y="20" text-anchor="middle" font-size="10" fill="#6B7280">issues remaining</text>
+    <text id="counter" x="58" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#F43F5E" class="mono">47</text>
+  </g>
+
+  <!-- left: messy CSV -->
+  <g id="csv" transform="translate(36,76)">
+    <rect x="0" y="0" width="316" height="386" rx="14" fill="#FFFDF7" stroke="#1F2937" stroke-width="2"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#1F2937">customers.csv</text>
+    <text x="14" y="38" font-size="10" font-style="italic" fill="#6B7280">a typical Tuesday export</text>
+
+    <!-- header row -->
+    <line x1="0" y1="50" x2="316" y2="50" stroke="#E5D9C3"/>
+    <text x="14" y="66" font-size="10" fill="#6B7280" class="mono">id  name           date         amount</text>
+    <line x1="0" y1="74" x2="316" y2="74" stroke="#E5D9C3"/>
+
+    <!-- data rows. each cell is either clean text or an "issue" group with a color flag -->
+    <!-- row 1 -->
+    <g transform="translate(0,86)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">001</text>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Aiko Tanaka</text>
+      <!-- date issue (amber) -->
+      <g class="issue" data-stage="3">
+        <rect x="138" y="-10" width="76" height="14" rx="3" fill="#FEF3C7"/>
+        <text x="142" y="0" font-size="10" class="mono" fill="#92400E">12/03/24</text>
+      </g>
+      <!-- currency issue (rose) -->
+      <g class="issue" data-stage="3">
+        <rect x="222" y="-10" width="78" height="14" rx="3" fill="#FFE4E6"/>
+        <text x="226" y="0" font-size="10" class="mono" fill="#9F1239">$1,240.00</text>
+      </g>
+    </g>
+
+    <!-- row 2 (null cell - blue) -->
+    <g transform="translate(0,108)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">002</text>
+      <g class="issue" data-stage="2">
+        <rect x="44" y="-10" width="86" height="14" rx="3" fill="#E0F2FE"/>
+        <text x="48" y="0" font-size="10" class="mono" fill="#075985">∅ null</text>
+      </g>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-13</text>
+      <g class="issue" data-stage="3">
+        <rect x="222" y="-10" width="78" height="14" rx="3" fill="#FFE4E6"/>
+        <text x="226" y="0" font-size="10" class="mono" fill="#9F1239">€890,50</text>
+      </g>
+    </g>
+
+    <!-- row 3 (capitalisation - violet) -->
+    <g transform="translate(0,130)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">003</text>
+      <g class="issue" data-stage="4">
+        <rect x="44" y="-10" width="86" height="14" rx="3" fill="#EDE9FE"/>
+        <text x="48" y="0" font-size="10" class="mono" fill="#5B21B6">PRIYA   patel</text>
+      </g>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-14</text>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">980.00</text>
+    </g>
+
+    <!-- row 4 (encoding bug - rose-ish) -->
+    <g transform="translate(0,152)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">004</text>
+      <g class="issue" data-stage="4">
+        <rect x="44" y="-10" width="86" height="14" rx="3" fill="#FFE4E6"/>
+        <text x="48" y="0" font-size="10" class="mono" fill="#9F1239">Bj√∂rn  Larsen</text>
+      </g>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-15</text>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">1100.00</text>
+    </g>
+
+    <!-- row 5 (mixed schema column - green) -->
+    <g transform="translate(0,174)">
+      <g class="issue" data-stage="1">
+        <rect x="10" y="-10" width="32" height="14" rx="3" fill="#DCFCE7"/>
+        <text x="14" y="0" font-size="10" class="mono" fill="#166534">A-005</text>
+      </g>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Marco Rossi</text>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-16</text>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">740.00</text>
+    </g>
+
+    <!-- row 6 (date format - amber) -->
+    <g transform="translate(0,196)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">006</text>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Lin Wei</text>
+      <g class="issue" data-stage="3">
+        <rect x="138" y="-10" width="76" height="14" rx="3" fill="#FEF3C7"/>
+        <text x="142" y="0" font-size="10" class="mono" fill="#92400E">Mar-17-2024</text>
+      </g>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">2300.00</text>
+    </g>
+
+    <!-- row 7 (duplicate - violet block) -->
+    <g transform="translate(0,218)">
+      <g class="issue" data-stage="5">
+        <rect x="10" y="-10" width="296" height="14" rx="3" fill="#FAF5FF"/>
+        <text x="14" y="0" font-size="10" class="mono" fill="#5B21B6">003  Priya Patel    2024-03-14   980.00 ← dup</text>
+      </g>
+    </g>
+
+    <!-- row 8 null amount -->
+    <g transform="translate(0,240)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">008</text>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Hana Kim</text>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-18</text>
+      <g class="issue" data-stage="2">
+        <rect x="222" y="-10" width="78" height="14" rx="3" fill="#E0F2FE"/>
+        <text x="226" y="0" font-size="10" class="mono" fill="#075985">∅ null</text>
+      </g>
+    </g>
+
+    <!-- row 9 numeric as string -->
+    <g transform="translate(0,262)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">009</text>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Sam Cohen</text>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-19</text>
+      <g class="issue" data-stage="3">
+        <rect x="222" y="-10" width="78" height="14" rx="3" fill="#FEF3C7"/>
+        <text x="226" y="0" font-size="10" class="mono" fill="#92400E">"1,540"</text>
+      </g>
+    </g>
+
+    <!-- row 10 -->
+    <g transform="translate(0,284)">
+      <text x="14" y="0" font-size="10" class="mono" fill="#1F2937">010</text>
+      <g class="issue" data-stage="4">
+        <rect x="44" y="-10" width="86" height="14" rx="3" fill="#EDE9FE"/>
+        <text x="48" y="0" font-size="10" class="mono" fill="#5B21B6">  ana   ALVES </text>
+      </g>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-20</text>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">2100.00</text>
+    </g>
+
+    <!-- row 11 schema id -->
+    <g transform="translate(0,306)">
+      <g class="issue" data-stage="1">
+        <rect x="10" y="-10" width="32" height="14" rx="3" fill="#DCFCE7"/>
+        <text x="14" y="0" font-size="10" class="mono" fill="#166534">x011</text>
+      </g>
+      <text x="46" y="0" font-size="10" class="mono" fill="#1F2937">Daria Volkov</text>
+      <text x="138" y="0" font-size="10" class="mono" fill="#1F2937">2024-03-21</text>
+      <text x="222" y="0" font-size="10" class="mono" fill="#1F2937">3200.00</text>
+    </g>
+
+    <!-- row 12 dup -->
+    <g transform="translate(0,328)">
+      <g class="issue" data-stage="5">
+        <rect x="10" y="-10" width="296" height="14" rx="3" fill="#FAF5FF"/>
+        <text x="14" y="0" font-size="10" class="mono" fill="#5B21B6">001  Aiko Tanaka  2024-03-12   1240.00 ← dup</text>
+      </g>
+    </g>
+
+    <!-- "and 35 more" -->
+    <text x="158" y="364" text-anchor="middle" font-size="11" font-style="italic" fill="#6B7280">… and 35 more like these</text>
+  </g>
+
+  <!-- right: pipeline -->
+  <g transform="translate(376,76)">
+    <text x="0" y="20" font-size="12" font-weight="700" fill="#1F2937">cleaning pipeline</text>
+
+    <!-- 5 stages -->
+    <g class="pipe-stage" id="p1" transform="translate(0,38)">
+      <rect class="bg" x="0" y="0" width="448" height="50" rx="10"/>
+      <circle cx="26" cy="25" r="14" fill="#DCFCE7" stroke="#10B981" stroke-width="2"/>
+      <text x="26" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#065F46">1</text>
+      <text x="52" y="22" font-size="13" font-weight="700" fill="#1F2937">schema check</text>
+      <text x="52" y="38" font-size="11" fill="#6B7280">column types &amp; required fields exist</text>
+      <text x="430" y="30" text-anchor="end" font-size="11" font-weight="700" fill="#10B981" class="mono" id="r1">−6</text>
+    </g>
+
+    <g class="pipe-stage" id="p2" transform="translate(0,98)">
+      <rect class="bg" x="0" y="0" width="448" height="50" rx="10"/>
+      <circle cx="26" cy="25" r="14" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+      <text x="26" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#075985">2</text>
+      <text x="52" y="22" font-size="13" font-weight="700" fill="#1F2937">null handling</text>
+      <text x="52" y="38" font-size="11" fill="#6B7280">drop, impute, or flag — never silently fill</text>
+      <text x="430" y="30" text-anchor="end" font-size="11" font-weight="700" fill="#0EA5E9" class="mono" id="r2">−9</text>
+    </g>
+
+    <g class="pipe-stage" id="p3" transform="translate(0,158)">
+      <rect class="bg" x="0" y="0" width="448" height="50" rx="10"/>
+      <circle cx="26" cy="25" r="14" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+      <text x="26" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#92400E">3</text>
+      <text x="52" y="22" font-size="13" font-weight="700" fill="#1F2937">type coercion</text>
+      <text x="52" y="38" font-size="11" fill="#6B7280">dates → ISO, currency → cents (int)</text>
+      <text x="430" y="30" text-anchor="end" font-size="11" font-weight="700" fill="#F59E0B" class="mono" id="r3">−14</text>
+    </g>
+
+    <g class="pipe-stage" id="p4" transform="translate(0,218)">
+      <rect class="bg" x="0" y="0" width="448" height="50" rx="10"/>
+      <circle cx="26" cy="25" r="14" fill="#EDE9FE" stroke="#8B5CF6" stroke-width="2"/>
+      <text x="26" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#5B21B6">4</text>
+      <text x="52" y="22" font-size="13" font-weight="700" fill="#1F2937">string normalize</text>
+      <text x="52" y="38" font-size="11" fill="#6B7280">trim · case · unicode (UTF-8 fix)</text>
+      <text x="430" y="30" text-anchor="end" font-size="11" font-weight="700" fill="#8B5CF6" class="mono" id="r4">−11</text>
+    </g>
+
+    <g class="pipe-stage" id="p5" transform="translate(0,278)">
+      <rect class="bg" x="0" y="0" width="448" height="50" rx="10"/>
+      <circle cx="26" cy="25" r="14" fill="#FFE4E6" stroke="#F43F5E" stroke-width="2"/>
+      <text x="26" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#9F1239">5</text>
+      <text x="52" y="22" font-size="13" font-weight="700" fill="#1F2937">de-duplication</text>
+      <text x="52" y="38" font-size="11" fill="#6B7280">key = (id, day) — keep latest write</text>
+      <text x="430" y="30" text-anchor="end" font-size="11" font-weight="700" fill="#F43F5E" class="mono" id="r5">−7</text>
+    </g>
+
+    <!-- final pill -->
+    <g id="finalPill" transform="translate(0,348)" opacity="0">
+      <rect x="0" y="0" width="448" height="42" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+      <text x="20" y="26" font-size="13" font-weight="700" fill="#065F46">clean dataset · ready for EDA</text>
+      <text x="430" y="26" text-anchor="end" font-size="13" font-weight="700" fill="#065F46" class="mono">0 issues</text>
+    </g>
+  </g>
+</svg>
+<div class="caption">Cleaning isn't glamorous, but a tidy schema, honest nulls, and ISO dates are the foundation of every honest chart that follows.</div>
+</div>
+</main>
+<script>
+(function(){
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const counter = document.getElementById('counter');
+  const finalPill = document.getElementById('finalPill');
+  const pipeStages = [1,2,3,4,5].map(i => document.getElementById('p'+i));
+  const remaining = [47,41,32,18,7];
+  const stageTotals = [47,41,32,18,7,0];
+  const stageDur = 2200;
+  const settle  = 600;
+  const pause   = 1200;
+  const totalCycle = stageDur*5 + settle + pause;
+
+  function setCounter(n){
+    counter.textContent = String(n);
+    counter.setAttribute('fill', n === 0 ? '#10B981' : (n < 20 ? '#F59E0B' : '#F43F5E'));
+  }
+
+  function clearStage(stage){
+    document.querySelectorAll('.issue[data-stage="'+stage+'"]').forEach(el => el.classList.add('cleaned'));
+  }
+  function resetAll(){
+    document.querySelectorAll('.issue').forEach(el => el.classList.remove('cleaned'));
+    pipeStages.forEach(el => el.classList.remove('active'));
+    finalPill.setAttribute('opacity','0');
+    setCounter(47);
+  }
+
+  if (reduce){
+    document.querySelectorAll('.issue').forEach(el => el.classList.add('cleaned'));
+    pipeStages.forEach(el => el.classList.add('active'));
+    finalPill.setAttribute('opacity','1');
+    setCounter(0);
+    return;
+  }
+
+  function runCycle(){
+    resetAll();
+    for (let i=0; i<5; i++){
+      const startAt = i*stageDur + 200;
+      setTimeout(() => {
+        pipeStages.forEach(el => el.classList.remove('active'));
+        pipeStages[i].classList.add('active');
+        clearStage(i+1);
+        animateCounter(stageTotals[i], stageTotals[i+1], 800);
+      }, startAt);
+    }
+    setTimeout(() => {
+      pipeStages.forEach(el => el.classList.remove('active'));
+      finalPill.setAttribute('opacity','1');
+    }, 5*stageDur + settle);
+    setTimeout(runCycle, totalCycle + 800);
+  }
+
+  function animateCounter(from, to, dur){
+    const start = performance.now();
+    function step(now){
+      const t = Math.min(1, (now-start)/dur);
+      const eased = 1 - Math.pow(1-t, 3);
+      const val = Math.round(from + (to-from)*eased);
+      setCounter(val);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  runCycle();
+})();
+</script>
+</body>
+</html>

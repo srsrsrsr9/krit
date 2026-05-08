@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI reconciliation</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--good:#10B981;--amber:#F59E0B;--bad:#F43F5E;--blue:#0EA5E9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:880px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+.rb{position:absolute;bottom:6px;right:6px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:inherit;opacity:.7}
+.rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="frame">
+<svg viewBox="0 0 880 540" aria-label="Bank statement on the left, ledger on the right. AI matches most pairs in green, flags slight mismatches in amber, and surfaces a missing entry in red.">
+  <rect width="880" height="540" fill="#FFF7ED"/>
+  <text x="440" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Reconciliation, but the AI does the boring 80%.</text>
+
+  <!-- Column headers -->
+  <text x="170" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#0EA5E9" letter-spacing="1.2">BANK STATEMENT</text>
+  <text x="710" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#8B5CF6" letter-spacing="1.2">LEDGER</text>
+
+  <!-- columns -->
+  <rect x="40" y="80" width="260" height="380" rx="12" fill="#FFFFFF" stroke="#BAE6FD" stroke-width="2"/>
+  <rect x="580" y="80" width="260" height="380" rx="12" fill="#FFFFFF" stroke="#DDD6FE" stroke-width="2"/>
+
+  <!-- Bank rows (left) -->
+  <g id="bankRows" font-family="ui-monospace,monospace" font-size="10.5" fill="#1F2937"></g>
+  <!-- Ledger rows (right) -->
+  <g id="ledgerRows" font-family="ui-monospace,monospace" font-size="10.5" fill="#1F2937"></g>
+
+  <!-- Match lines layer -->
+  <g id="matchLines"></g>
+
+  <!-- Legend -->
+  <g transform="translate(40,478)">
+    <circle cx="6" cy="6" r="5" fill="#10B981"/><text x="18" y="10" font-size="11" fill="#065F46" font-weight="600"><tspan id="okN" font-family="ui-monospace,monospace">0</tspan> matched</text>
+    <circle cx="118" cy="6" r="5" fill="#F59E0B"/><text x="130" y="10" font-size="11" fill="#7C2D12" font-weight="600"><tspan id="warnN" font-family="ui-monospace,monospace">0</tspan> needs review</text>
+    <circle cx="266" cy="6" r="5" fill="#F43F5E"/><text x="278" y="10" font-size="11" fill="#9F1239" font-weight="600"><tspan id="missN" font-family="ui-monospace,monospace">0</tspan> missing</text>
+  </g>
+
+  <!-- AI badge between -->
+  <g transform="translate(380,250)">
+    <rect x="0" y="0" width="120" height="40" rx="20" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="60" y="25" text-anchor="middle" font-size="12" font-weight="700" fill="#8B5CF6">AI MATCHER</text>
+  </g>
+
+  <!-- Status bar -->
+  <rect x="40" y="510" width="800" height="22" rx="11" fill="#1F2937"/>
+  <text x="440" y="525" text-anchor="middle" font-size="11" fill="#FFF7ED" font-weight="700"><tspan id="statusText">scanning…</tspan></text>
+</svg>
+<div class="cap" id="cap">The AI clears the obvious. You spend your hour on the 20% that bites.</div>
+<button class="rb" id="reset">restart</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Pairs: [bankDesc, bankAmt, bankDate, ledgerDesc, ledgerAmt, ledgerDate, status]
+// status: 'ok' green, 'warn' amber (slight diff), 'miss' red (no ledger)
+const pairs=[
+  ['NEFT INFOTECH','₹48,200','03-May','Infotech Pvt Ltd','₹48,200','03-May','ok'],
+  ['UPI ZOMATO','₹1,240','03-May','Zomato (meals)','₹1,240','03-May','ok'],
+  ['SAL JUNE Q','₹2,40,000','04-May','Salary - Quasim','₹2,40,000','04-May','ok'],
+  ['POS AMAZON','₹6,890','05-May','Amazon (stationery)','₹6,980','05-May','warn'],
+  ['NEFT VENDOR-77','₹15,000','05-May','Vendor 77 invoice','₹15,000','06-May','warn'],
+  ['ATM WD','₹10,000','06-May','—','—','—','miss'],
+  ['UPI OLA','₹486','07-May','Ola cabs','₹486','07-May','ok'],
+  ['NEFT RENT','₹85,000','07-May','Office rent','₹85,000','07-May','ok'],
+  ['IMPS REFUND','₹2,300','08-May','Customer refund','₹2,300','08-May','ok'],
+  ['POS SWIGGY','₹920','08-May','Swiggy (meals)','₹920','08-May','ok']
+];
+
+const bankG=document.getElementById('bankRows');
+const ledG=document.getElementById('ledgerRows');
+const linesG=document.getElementById('matchLines');
+const okN=document.getElementById('okN');
+const warnN=document.getElementById('warnN');
+const missN=document.getElementById('missN');
+const statusText=document.getElementById('statusText');
+
+let timers=[];
+function later(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+
+function buildRows(){
+  bankG.innerHTML='';ledG.innerHTML='';linesG.innerHTML='';
+  pairs.forEach((p,i)=>{
+    const y=100+i*34;
+    // bank row
+    const bg=document.createElementNS(NS,'g');
+    bg.setAttribute('transform',`translate(50,${y})`);
+    bg.setAttribute('opacity','0');
+    bg.setAttribute('id',`brow${i}`);
+    bg.innerHTML=
+      `<rect x="0" y="0" width="240" height="28" rx="6" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1"/>`+
+      `<text x="8" y="13" font-size="9" fill="#9CA3AF">${p[2]}</text>`+
+      `<text x="8" y="23" font-size="10" font-weight="600" fill="#1F2937">${p[0]}</text>`+
+      `<text x="232" y="19" text-anchor="end" font-size="11" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace">${p[1]}</text>`;
+    bankG.appendChild(bg);
+
+    // ledger row (or missing placeholder)
+    const lg=document.createElementNS(NS,'g');
+    lg.setAttribute('transform',`translate(590,${y})`);
+    lg.setAttribute('opacity','0');
+    lg.setAttribute('id',`lrow${i}`);
+    if(p[6]==='miss'){
+      lg.innerHTML=
+        `<rect x="0" y="0" width="240" height="28" rx="6" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.2" stroke-dasharray="3 3"/>`+
+        `<text x="120" y="19" text-anchor="middle" font-size="11" fill="#9F1239" font-weight="700" font-style="italic">— no entry —</text>`;
+    } else {
+      lg.innerHTML=
+        `<rect x="0" y="0" width="240" height="28" rx="6" fill="#FAF5FF" stroke="#DDD6FE" stroke-width="1"/>`+
+        `<text x="8" y="13" font-size="9" fill="#9CA3AF">${p[5]}</text>`+
+        `<text x="8" y="23" font-size="10" font-weight="600" fill="#1F2937">${p[3]}</text>`+
+        `<text x="232" y="19" text-anchor="end" font-size="11" font-weight="700" fill="#6D28D9" font-family="ui-monospace,monospace">${p[4]}</text>`;
+    }
+    ledG.appendChild(lg);
+  });
+}
+
+function color(s){return s==='ok'?'#10B981':s==='warn'?'#F59E0B':'#F43F5E';}
+
+function drawLine(i){
+  const p=pairs[i];
+  const y=100+i*34+14;
+  const ln=document.createElementNS(NS,'path');
+  const x1=290, x2=590;
+  // curve through center via AI box
+  const d=`M ${x1} ${y} C 380 ${y}, 500 ${y}, ${x2} ${y}`;
+  ln.setAttribute('d',d);
+  ln.setAttribute('stroke',color(p[6]));
+  ln.setAttribute('stroke-width','2');
+  ln.setAttribute('fill','none');
+  ln.setAttribute('stroke-linecap','round');
+  if(p[6]==='warn') ln.setAttribute('stroke-dasharray','5 4');
+  if(p[6]==='miss') ln.setAttribute('stroke-dasharray','2 4');
+  const len=320;
+  ln.setAttribute('stroke-dasharray',p[6]==='ok'? `${len} ${len}` : (p[6]==='warn'?'5 4':'2 4'));
+  if(p[6]==='ok'){ ln.setAttribute('stroke-dashoffset', len); }
+  linesG.appendChild(ln);
+
+  if(reduced){
+    if(p[6]==='ok') ln.setAttribute('stroke-dashoffset',0);
+    return;
+  }
+  // animate stroke draw for ok lines, fade for others
+  if(p[6]==='ok'){
+    const start=performance.now();
+    const dur=500;
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      ln.setAttribute('stroke-dashoffset', (len*(1-e)).toFixed(1));
+      if(t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  } else {
+    ln.setAttribute('opacity','0');
+    const start=performance.now();
+    const dur=500;
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      ln.setAttribute('opacity', (1-Math.pow(1-t,3)).toFixed(3));
+      if(t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // status badge near line midpoint
+  if(p[6]!=='ok'){
+    const badge=document.createElementNS(NS,'g');
+    badge.setAttribute('transform',`translate(440,${y-22})`);
+    const txt=p[6]==='warn'?'review':'missing';
+    const fill=p[6]==='warn'?'#FEF3C7':'#FFE4E6';
+    const stk=color(p[6]);
+    const fg=p[6]==='warn'?'#7C2D12':'#9F1239';
+    badge.innerHTML=
+      `<rect x="-32" y="0" width="64" height="16" rx="8" fill="${fill}" stroke="${stk}" stroke-width="1"/>`+
+      `<text x="0" y="11" text-anchor="middle" font-size="9" font-weight="700" fill="${fg}">${txt}</text>`;
+    badge.setAttribute('opacity','0');
+    linesG.appendChild(badge);
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/300,1);
+      badge.setAttribute('opacity', t.toFixed(3));
+      if(t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+}
+
+function fadeIn(id,delay){
+  const el=document.getElementById(id);
+  if(!el) return;
+  if(reduced){el.setAttribute('opacity',1);return;}
+  later(delay,()=>{
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/250,1);
+      el.setAttribute('opacity', t.toFixed(3));
+      if(t<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+let okCount=0,warnCount=0,missCount=0;
+function bumpCounter(s){
+  if(s==='ok'){okCount++;okN.textContent=okCount;}
+  if(s==='warn'){warnCount++;warnN.textContent=warnCount;}
+  if(s==='miss'){missCount++;missN.textContent=missCount;}
+}
+
+function run(){
+  clearAll();
+  okCount=0;warnCount=0;missCount=0;
+  okN.textContent=0;warnN.textContent=0;missN.textContent=0;
+  statusText.textContent='loading rows…';
+  buildRows();
+
+  // Stage 1: rows fade in
+  pairs.forEach((p,i)=>{
+    fadeIn(`brow${i}`, 200+i*60);
+    fadeIn(`lrow${i}`, 200+i*60);
+  });
+
+  // Stage 2: AI scans
+  later(900,()=>{statusText.textContent='AI matcher comparing…';});
+
+  // Stage 3: lines draw, easy ones first
+  const order=pairs.map((p,i)=>({p,i})).sort((a,b)=>{
+    const w={ok:0,warn:1,miss:2};return w[a.p[6]]-w[b.p[6]];
+  });
+  order.forEach((o,k)=>{
+    later(1400+k*350,()=>{drawLine(o.i);bumpCounter(o.p[6]);});
+  });
+
+  later(1400+order.length*350+400,()=>{
+    statusText.textContent='AI cleared 8/10. 2 need your eyes.';
+  });
+
+  later(13000,run);
+}
+
+document.getElementById('reset').addEventListener('click',run);
+run();
+})();
+</script>
+</body>
+</html>

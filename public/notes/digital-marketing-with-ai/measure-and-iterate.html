@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Measuring What Matters in 2026 — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Measuring What Matters in 2026</h1>
+  <p class="subtitle">One north-star, a 14-day loop, and a kill criterion that survives Friday night</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Open any marketing dashboard in 2026 and you'll find 47 widgets, 9 filters, 3 sparkline rails. Engagement.</p>
+  <div class="callout"><strong>Mental model: one north-star, attached to an action</strong><br/>A real north-star metric has three properties:</div>
+  
+<h2>Move 1 — The 14-day campaign loop</h2>
+<ul>
+<li>The right cadence for marketing iteration in 2026 is 14 days. Not weekly (too noisy, churns the team), not quarterly (too slow, kills agility).</li>
+<li>Day 0 — Pre-register: Launch AI-drafted Meta ads against current human-written control. Target: ₹40k spend per arm. North-star metric: paid-CAC over 14 days. Kill criterion: 'If by day 10, AI arm CAC is &gt; ₹1,200 (current control is ₹847), we kill.' Scale: 'If AI arm CAC is &lt; ₹720 by day 14 with n&gt;4,000 conversions, we shift 60% of budget.'</li>
+<li>Day 7 — Look: AI arm CAC at day 7: ₹980 (n=820 conversions). Control: ₹860. Note: AI is trending up but sample inside noise band. Don't act. Continue.</li>
+<li>Day 10 — Kill check: AI arm CAC: ₹1,090 (n=1,400). Below the kill threshold of ₹1,200, but only barely. Continue running by the rule. Note: temptation to kill early ('it's clearly trending bad') is also an unauthorized override of the rule. Honor the threshold.</li>
+<li>Day 14 — Decide: AI arm CAC: ₹1,140 (n=2,200). Control: ₹880. Result: AI arm is worse, but not catastrophically so. Decision: kill the AI arm; document the learning ('AI ads underperform our anchored human voice for this audience at this stage'); rerun the test on a different funnel stage where stakes per piece are lower.</li>
+<li>Wrap — Decision Doc: Write the one-paragraph 'what we learned' note. Without it, the loop is just churn. With it, the team has a memory and the next experiment is sharper.</li>
+</ul>
+<h2>Move 2 — The kill criterion that holds</h2>
+<ul>
+<li>A kill criterion that survives Friday night at 11pm has four properties: 1. **Pre-registered.** Written before launch, sent to the team, dated.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: vanity metrics dashboard: The trap is identifiable in a sentence: **a dashboard is a vanity dashboard if no number on it has a kill threshold attached.** Every metric without a threshold is decoration. The dashboard might look beautiful, cost money, and update nightly via an AI pipeline; without thresholds, it cannot drive a single decision.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">A north-star metric maps to economic outcome, moves on a 14-90 day timescale, and has a written kill threshold and scale threshold.</div>
+<div class="takeaway">If no number on your dashboard has a kill threshold attached, the dashboard is decoration — not measurement.</div>
+<div class="takeaway">Run on a 14-day campaign loop: pre-register day 0, look (don't act) day 7, kill-check day 10, decide day 14.</div>
+<div class="takeaway">A kill criterion that survives Friday night at 11pm is pre-registered, specific, cheap to honor, and pre-emptively immune to the three excuses (more time, creative tweak, switch attribution).</div>
+<div class="takeaway">Speed of learning beats speed of shipping; without the documented loop, you ship faster and learn nothing.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

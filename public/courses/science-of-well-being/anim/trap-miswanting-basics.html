@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Finish-Line Stack</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF5FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#FAF5FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+.lbl{font-size:13px;fill:#1F2937;font-weight:600}
+.cap{font-size:12px;fill:#6B7280;font-style:italic}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" aria-label="The finish-line stack: a person climbs stairs, each step a new goal, while the happiness meter stays flat.">
+  <rect width="760" height="470" fill="#FAF5FF"/>
+
+  <text x="380" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">The finish-line stack.</text>
+  <text x="380" y="54" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Each summit reveals a taller mountain. The meter doesn't notice.</text>
+
+  <!-- Stairs (5 steps, going up to the right). Step base y=400, stepHeight=42, stepWidth=78 -->
+  <!-- Step i: x = 80 + i*78, top y = 400 - (i+1)*42 -->
+  <g id="stairs" stroke="#8B5CF6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <!-- ground -->
+    <line x1="40" y1="400" x2="80" y2="400" stroke="#1F2937"/>
+    <!-- 5 steps as L-shaped polylines -->
+    <g fill="#EDE9FE">
+      <rect x="80"  y="358" width="78" height="42" rx="2"/>
+      <rect x="158" y="316" width="78" height="84" rx="2"/>
+      <rect x="236" y="274" width="78" height="126" rx="2"/>
+      <rect x="314" y="232" width="78" height="168" rx="2"/>
+      <rect x="392" y="190" width="78" height="210" rx="2"/>
+    </g>
+    <g fill="none">
+      <path d="M80,358 H158 V316 H236 V274 H314 V232 H392 V190 H470"/>
+    </g>
+  </g>
+
+  <!-- Goal flags above each step -->
+  <g id="flags" font-size="11" font-weight="600" fill="#1F2937">
+    <g id="flag0" opacity="0">
+      <line x1="119" y1="358" x2="119" y2="328" stroke="#1F2937" stroke-width="2"/>
+      <path d="M119,328 L154,335 L119,342 Z" fill="#F59E0B" stroke="#F59E0B" stroke-width="1"/>
+      <text x="156" y="338" font-size="10">Promotion!</text>
+    </g>
+    <g id="flag1" opacity="0">
+      <line x1="197" y1="316" x2="197" y2="284" stroke="#1F2937" stroke-width="2"/>
+      <path d="M197,284 L228,291 L197,298 Z" fill="#10B981" stroke="#10B981" stroke-width="1"/>
+      <text x="230" y="294" font-size="10">House!</text>
+    </g>
+    <g id="flag2" opacity="0">
+      <line x1="275" y1="274" x2="275" y2="240" stroke="#1F2937" stroke-width="2"/>
+      <path d="M275,240 L312,247 L275,254 Z" fill="#0EA5E9" stroke="#0EA5E9" stroke-width="1"/>
+      <text x="314" y="250" font-size="10">Kid's school!</text>
+    </g>
+    <g id="flag3" opacity="0">
+      <line x1="353" y1="232" x2="353" y2="196" stroke="#1F2937" stroke-width="2"/>
+      <path d="M353,196 L388,203 L353,210 Z" fill="#8B5CF6" stroke="#8B5CF6" stroke-width="1"/>
+      <text x="390" y="206" font-size="10">Bigger title!</text>
+    </g>
+    <g id="flag4" opacity="0">
+      <line x1="431" y1="190" x2="431" y2="152" stroke="#1F2937" stroke-width="2"/>
+      <path d="M431,152 L466,159 L431,166 Z" fill="#F43F5E" stroke="#F43F5E" stroke-width="1"/>
+      <text x="468" y="162" font-size="10">Retirement…?</text>
+    </g>
+  </g>
+
+  <!-- Climber (oval body) -->
+  <g id="climber" transform="translate(110,358)">
+    <!-- shadow -->
+    <ellipse cx="0" cy="-2" rx="18" ry="3" fill="#1F2937" opacity="0.1"/>
+    <!-- legs -->
+    <line x1="-4" y1="-4" x2="-7" y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="4"  y1="-4" x2="7"  y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- body -->
+    <ellipse cx="0" cy="-32" rx="11" ry="14" fill="#FDE68A" stroke="#1F2937" stroke-width="2"/>
+    <!-- head -->
+    <circle cx="0" cy="-52" r="9" fill="#FCD34D" stroke="#1F2937" stroke-width="2"/>
+    <!-- eyes -->
+    <circle cx="-3" cy="-53" r="1.2" fill="#1F2937"/>
+    <circle cx="3"  cy="-53" r="1.2" fill="#1F2937"/>
+    <!-- arms -->
+    <line x1="-9" y1="-34" x2="-15" y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="9"  y1="-34" x2="14"  y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Happiness meter (right side panel) -->
+  <g transform="translate(540,90)">
+    <text x="80" y="0" text-anchor="middle" font-size="12" font-weight="600" fill="#6B7280">HAPPINESS METER</text>
+    <rect x="0" y="14" width="160" height="280" rx="14" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="2"/>
+    <!-- ticks -->
+    <g stroke="#C4B5FD" stroke-width="1">
+      <line x1="0" y1="44"  x2="14" y2="44"/>
+      <line x1="0" y1="84"  x2="14" y2="84"/>
+      <line x1="0" y1="124" x2="14" y2="124"/>
+      <line x1="0" y1="164" x2="14" y2="164"/>
+      <line x1="0" y1="204" x2="14" y2="204"/>
+      <line x1="0" y1="244" x2="14" y2="244"/>
+    </g>
+    <text x="-6" y="48"  text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">10</text>
+    <text x="-6" y="148" text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">5</text>
+    <text x="-6" y="248" text-anchor="end" font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace">0</text>
+
+    <!-- baseline ghost line -->
+    <line x1="0" y1="158" x2="160" y2="158" stroke="#A78BFA" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+    <text x="166" y="161" font-size="10" fill="#A78BFA">setpoint</text>
+
+    <!-- liquid fill -->
+    <clipPath id="meterClip"><rect x="2" y="16" width="156" height="276" rx="12"/></clipPath>
+    <g clip-path="url(#meterClip)">
+      <rect id="liquid" x="2" y="158" width="156" height="136" fill="#A78BFA" opacity="0.9"/>
+      <rect id="liquidBlip" x="2" y="158" width="156" height="0" fill="#F59E0B" opacity="0.85"/>
+    </g>
+
+    <!-- needle pointer -->
+    <g id="ptr" transform="translate(0,158)">
+      <polygon points="-10,0 0,-6 0,6" fill="#1F2937"/>
+    </g>
+
+    <text x="80" y="316" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">unmoved.</text>
+  </g>
+
+  <!-- Caption / status -->
+  <rect id="capBg" x="40" y="430" width="680" height="28" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="380" y="448" text-anchor="middle" font-size="12" fill="white" opacity="0"></text>
+
+  <!-- End card -->
+  <g id="endCard" opacity="0">
+    <rect x="120" y="170" width="520" height="120" rx="14" fill="#1F2937"/>
+    <text x="380" y="212" text-anchor="middle" font-size="16" fill="white" font-weight="700">The finish line keeps moving.</text>
+    <text x="380" y="240" text-anchor="middle" font-size="13" fill="#C4B5FD">You can stop chasing it without quitting.</text>
+    <text x="380" y="266" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">— miswanting, decoded.</text>
+  </g>
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+let tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// step centers (where climber stands): step i height-top y = 400-(i+1)*42; stand at top center
+const STEPS=[
+  {x:110,y:358},
+  {x:197,y:316},
+  {x:275,y:274},
+  {x:353,y:232},
+  {x:431,y:190}
+];
+
+function moveClimber(fromIdx,toIdx,dur,cb){
+  const a=STEPS[fromIdx],b=STEPS[toIdx],s=performance.now();
+  const cl=$id('climber');
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    // arc: parabolic hop
+    const hop=Math.sin(t*Math.PI)*-14;
+    const x=lerp(a.x,b.x,e),y=lerp(a.y,b.y,e)+hop;
+    cl.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Liquid blip: temporary spike then settle
+function blip(){
+  // The blip rect goes from height 0 to ~30 above current liquid then collapses
+  const blip=$id('liquidBlip');
+  const startY=158, peakH=22;
+  const s=performance.now(), dur=900;
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    // up then down
+    const phase=t<0.4 ? t/0.4 : 1-(t-0.4)/0.6;
+    const h=easeOut(Math.max(0,Math.min(1,phase)))*peakH;
+    blip.setAttribute('y', (startY-h).toFixed(1));
+    blip.setAttribute('height', h.toFixed(1));
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else { blip.setAttribute('height','0'); }
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function setCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,350,null);
+  animOp('capBg',0,0.92,350,null);
+}
+function clearCap(cb){
+  animOp('cap',1,0,250,null);
+  animOp('capBg',0.92,0,250,cb);
+}
+
+function showFlag(i){ animOp('flag'+i,0,1,400,null); }
+
+function run(){
+  clearAll();
+  // reset
+  $id('climber').setAttribute('transform','translate(110,358)');
+  for(let i=0;i<5;i++) setOp('flag'+i,0);
+  setOp('cap',0); setOp('capBg',0); setOp('endCard',0);
+  $id('liquidBlip').setAttribute('height','0');
+
+  const STEP_DUR=900, PAUSE=600;
+
+  // Stage 0: opening caption
+  after(400,()=>setCap('"Once I get the X, then I\'ll be happy."'));
+  after(1900,()=>clearCap(null));
+
+  // 4 hops (1→4); flag at each top
+  const goals=['Promotion!','House!',"Kid's school!",'Bigger title!','Retirement…?'];
+  let t=2200;
+  // First flag for starting step? Show flag0 already at start
+  after(t-300,()=>showFlag(0));
+  for(let i=0;i<4;i++){
+    const from=i, to=i+1, when=t;
+    after(when,()=>{ blip(); });
+    after(when,()=>moveClimber(from,to,STEP_DUR,()=>{ showFlag(to); }));
+    after(when+200,()=>setCap('"'+goals[to]+' …then I\'ll be happy."'));
+    after(when+STEP_DUR+PAUSE-200,()=>clearCap(null));
+    t += STEP_DUR + PAUSE + 150;
+  }
+
+  // Pause and call out the meter
+  after(t,()=>setCap('Meter: unchanged.'));
+  after(t+1500,()=>clearCap(null));
+
+  // End card
+  after(t+1900,()=>animOp('endCard',0,1,500,null));
+  after(t+5400,()=>animOp('endCard',1,0,500,()=>{ after(400,run); }));
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

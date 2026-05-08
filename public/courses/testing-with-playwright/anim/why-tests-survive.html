@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why tests survive refactors</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+#rb{position:absolute;bottom:8px;right:16px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="Two parallel timelines showing how tests turn a four-hour debugging session into a five-minute fix">
+
+  <rect width="760" height="470" fill="#FFF7ED"/>
+
+  <!-- Title -->
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Refactor at month 6 — two timelines.</text>
+
+  <!-- ─────────── TOP LANE: NO TESTS ─────────── -->
+  <g>
+    <text x="32" y="72" font-size="13" font-weight="700" fill="#F43F5E">no tests</text>
+    <text x="86" y="72" font-size="11" fill="#6B7280">— hope is the strategy</text>
+
+    <!-- Timeline rail -->
+    <rect x="32" y="92" width="696" height="52" rx="10" fill="white" stroke="#FECACA" stroke-width="2"/>
+
+    <!-- Stage chips. x positions: 50, 200, 380, 540, 660 -->
+    <g id="n1" opacity="0">
+      <rect x="48" y="100" width="118" height="36" rx="7" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="107" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">refactor ships</text>
+      <text x="107" y="131" text-anchor="middle" font-size="9" fill="#92400E" font-family="ui-monospace,monospace">15:00</text>
+    </g>
+    <g id="n2" opacity="0">
+      <rect x="190" y="100" width="118" height="36" rx="7" fill="#FECACA" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="249" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">prod alert</text>
+      <text x="249" y="131" text-anchor="middle" font-size="9" fill="#9F1239" font-family="ui-monospace,monospace">19:42</text>
+    </g>
+    <g id="n3" opacity="0">
+      <rect x="332" y="100" width="158" height="36" rx="7" fill="white" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="411" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">grep · log dive · pray</text>
+      <text x="411" y="131" text-anchor="middle" font-size="9" fill="#9F1239" font-family="ui-monospace,monospace">22:10</text>
+    </g>
+    <g id="n4" opacity="0">
+      <rect x="514" y="100" width="118" height="36" rx="7" fill="white" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="573" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">repro at last</text>
+      <text x="573" y="131" text-anchor="middle" font-size="9" fill="#9F1239" font-family="ui-monospace,monospace">02:18</text>
+    </g>
+    <g id="n5" opacity="0">
+      <rect x="656" y="100" width="76" height="36" rx="7" fill="#FECACA" stroke="#F43F5E" stroke-width="2"/>
+      <text x="694" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#9F1239">fix</text>
+      <text x="694" y="131" text-anchor="middle" font-size="9" fill="#9F1239" font-family="ui-monospace,monospace">03:55</text>
+    </g>
+
+    <!-- Duration bracket -->
+    <g id="nbracket" opacity="0">
+      <line x1="48"  y1="158" x2="48"  y2="170" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+      <line x1="694" y1="158" x2="694" y2="170" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+      <line x1="48"  y1="170" x2="694" y2="170" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+      <rect x="320" y="174" width="100" height="22" rx="6" fill="#F43F5E"/>
+      <text id="ndur" x="370" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="ui-monospace,monospace">~ 4 hours</text>
+    </g>
+  </g>
+
+  <!-- Divider -->
+  <line x1="32" y1="232" x2="728" y2="232" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ─────────── BOTTOM LANE: WITH TESTS ─────────── -->
+  <g transform="translate(0,170)">
+    <text x="32" y="92" font-size="13" font-weight="700" fill="#10B981">with tests</text>
+    <text x="98" y="92" font-size="11" fill="#6B7280">— same code, same refactor</text>
+
+    <rect x="32" y="112" width="696" height="52" rx="10" fill="white" stroke="#A7F3D0" stroke-width="2"/>
+
+    <g id="t1" opacity="0">
+      <rect x="48" y="120" width="118" height="36" rx="7" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="107" y="140" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">refactor begins</text>
+      <text x="107" y="151" text-anchor="middle" font-size="9" fill="#92400E" font-family="ui-monospace,monospace">15:00</text>
+    </g>
+    <g id="t2" opacity="0">
+      <rect x="190" y="120" width="158" height="36" rx="7" fill="white" stroke="#10B981" stroke-width="1.5"/>
+      <text x="269" y="140" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">3 tests fail · 30 s</text>
+      <text x="269" y="151" text-anchor="middle" font-size="9" fill="#065F46" font-family="ui-monospace,monospace">15:00:30</text>
+    </g>
+    <g id="t3" opacity="0">
+      <rect x="372" y="120" width="158" height="36" rx="7" fill="white" stroke="#10B981" stroke-width="1.5"/>
+      <text x="451" y="140" text-anchor="middle" font-size="11" font-weight="600" fill="#1F2937">cause is in the diff</text>
+      <text x="451" y="151" text-anchor="middle" font-size="9" fill="#065F46" font-family="ui-monospace,monospace">15:01</text>
+    </g>
+    <g id="t4" opacity="0">
+      <rect x="554" y="120" width="178" height="36" rx="7" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+      <text x="643" y="140" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46">all green · ship</text>
+      <text x="643" y="151" text-anchor="middle" font-size="9" fill="#065F46" font-family="ui-monospace,monospace">15:05</text>
+    </g>
+
+    <!-- Duration bracket - small -->
+    <g id="tbracket" opacity="0">
+      <line x1="48"  y1="178" x2="48"  y2="190" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+      <line x1="643" y1="178" x2="643" y2="190" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+      <line x1="48"  y1="190" x2="643" y2="190" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+      <rect x="295" y="194" width="100" height="22" rx="6" fill="#10B981"/>
+      <text x="345" y="210" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="ui-monospace,monospace">5 minutes</text>
+    </g>
+  </g>
+
+  <!-- Delta callout -->
+  <g id="delta" opacity="0">
+    <rect x="200" y="424" width="360" height="34" rx="9" fill="#1F2937"/>
+    <text x="380" y="446" text-anchor="middle" font-size="13" fill="white">tests turned a 4-hour outage into a 5-minute change.</text>
+  </g>
+
+</svg>
+<div class="cap">Same bug. Same engineer. The test suite returns the time you spent writing it.</div>
+<button id="rb">reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+var tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function fade(id,from,to,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function run(){
+  clearAll();
+  ['n1','n2','n3','n4','n5','nbracket','t1','t2','t3','t4','tbracket','delta']
+    .forEach(function(id){setOp(id,0);});
+
+  // Top lane (slow, painful)
+  after(400,  function(){fade('n1',0,1,400);});
+  after(1100, function(){fade('n2',0,1,400);});
+  after(1900, function(){fade('n3',0,1,400);});
+  after(2700, function(){fade('n4',0,1,400);});
+  after(3500, function(){fade('n5',0,1,400);});
+  after(4300, function(){fade('nbracket',0,1,500);});
+
+  // Bottom lane (fast, contained)
+  after(5400, function(){fade('t1',0,1,400);});
+  after(5800, function(){fade('t2',0,1,400);});
+  after(6200, function(){fade('t3',0,1,400);});
+  after(6600, function(){fade('t4',0,1,400);});
+  after(7100, function(){fade('tbracket',0,1,500);});
+
+  // Delta callout
+  after(7900, function(){fade('delta',0,1,500);});
+
+  // Loop
+  after(13500, function(){
+    var ids=['n1','n2','n3','n4','n5','nbracket','t1','t2','t3','t4','tbracket','delta'];
+    ids.forEach(function(id){fade(id,1,0,500);});
+    after(700, run);
+  });
+}
+
+$('rb').addEventListener('click', function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>What Data Science Actually Is — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>What Data Science Actually Is</h1>
+  <p class="subtitle">Question first, dataset second; nothing else moves until that order is right</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most analyst careers begin the same way: a manager forwards an Excel file with the subject line *&quot;can you take a quick look at this?&quot;* and three minutes of context. You open the file, scroll, sigh, and start a pivot table.</p>
+  <div class="callout"><strong>Mental model: question becomes hypothesis becomes test</strong><br/>Hold this picture. Every piece of analysis is a chain of three things in this order: a vague human **question**, a testable **hypothesis** that converts the question into something the data can answer, and a **test** that produces yes / no / cannot tell. The chain only runs forwards.</div>
+  
+<h2>Move 1 — The noise-vs-signal lens</h2>
+<ul>
+<li>Every dataset is a stack of two things mashed together: **signal** (the underlying truth) and **noise** (random variation, measurement error, edge cases, holiday weeks, that one bug in event tracking last Tuesday). Your job is to separate them.</li>
+<li>Step 1 — Hear the question: CMO says 'why is churn up'. Resist the urge to open the dashboard. The question, as stated, has at least three definitions of 'churn' and no time window.</li>
+<li>Step 2 — Restate it: Write it down: 'Did the monthly churn rate (paid_users that did not renew within 30 days of contract end) increase from Q2 to Q3 by more than 1 percentage point?'</li>
+<li>Step 3 — Confirm with the asker: Send it to the CMO. Get her to say yes or correct the definition. This is the part most analysts skip and most analysts regret.</li>
+<li>Step 4 — Form a hypothesis: From the question, generate 2-3 testable hypotheses. e.g. 'Tier B users churned more in Q3 than Q2'. Each one is a comparison the data can run.</li>
+<li>Step 5 — Pick the test: For a comparison of two cohorts on a binary outcome, a chi-square or two-proportion z-test, with sample size and CI reported. Not a vibes-based eyeball.</li>
+<li>Step 6 — Run it, with the noise check first: Before reporting, ask: 'what could make this number look this way and not be churn?' Holiday week, data outage, definition change, billing migration. If any of those, the answer is 'data quality first, churn second'.</li>
+</ul>
+<h2>Move 2 — The always-state-the-question rule</h2>
+<ul>
+<li>If you cannot write the question on one line, you cannot answer it. The rule is brutal and non-negotiable: before you open the file, write the question down.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: p-hacking and confirmation bias: The two most common ways an analysis lies to the analyst:</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Data science is the discipline of converting a vague human question into a testable one, not the discipline of running tests on data you happen to have.</div>
+<div class="takeaway">If you cannot write the question on one line — metric, cohort, window, threshold, comparator — you cannot answer it.</div>
+<div class="takeaway">Every dataset is signal plus noise; before you report a number, ask what could make it look this way that has nothing to do with what you think it means.</div>
+<div class="takeaway">Write the hypothesis down before you open the data; spoken hypotheses drift to fit the chart, written ones get revised honestly.</div>
+<div class="takeaway">p-hacking and confirmation bias share one root — letting data search for the conclusion — and one cheap fix: pre-register the test and report what would change your mind.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

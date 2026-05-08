@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JOIN fan-out — averages quietly lie</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:760px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 760 430" aria-label="Aanya, age 28, has 5 orders. JOIN multiplies her one row into five duplicate rows. AVG of age, taken over the joined rows, becomes weighted by order count and produces a wrong number that lights up red.">
+    <rect width="760" height="430" fill="#FFF7ED"/>
+
+    <!-- Title -->
+    <text x="380" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      <tspan font-family="ui-monospace,monospace" fill="#7C3AED">JOIN</tspan>
+      <tspan> fan-out: one customer becomes five.</tspan>
+    </text>
+    <text id="subtitle" x="380" y="46" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      Stage 1: tidy. Aanya is one row. Her age is 28.
+    </text>
+
+    <!-- ===================== CUSTOMER (left) ===================== -->
+    <g transform="translate(36,72)">
+      <rect x="0" y="0" width="180" height="200" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#1F2937">customers</text>
+      <g transform="translate(10,28)">
+        <rect x="0" y="0" width="160" height="22" rx="4" fill="#DBEAFE"/>
+        <line x1="50" y1="0" x2="50" y2="22" stroke="#93C5FD" stroke-width="0.8"/>
+        <line x1="110" y1="0" x2="110" y2="22" stroke="#93C5FD" stroke-width="0.8"/>
+        <text x="25" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1E40AF">id</text>
+        <text x="80" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1E40AF">name</text>
+        <text x="135" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1E40AF">age</text>
+      </g>
+      <!-- Aanya row -->
+      <g transform="translate(10,52)">
+        <rect x="0" y="0" width="160" height="22" rx="3" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="1.5"/>
+        <text x="25" y="14" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#1F2937">#7</text>
+        <text x="80" y="14" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#1F2937">Aanya</text>
+        <text x="135" y="14" text-anchor="middle" font-size="11" font-family="ui-monospace,monospace" font-weight="700" fill="#0369A1">28</text>
+      </g>
+      <!-- Aanya avatar -->
+      <g transform="translate(60,98)" id="aanya">
+        <circle cx="30" cy="30" r="28" fill="#FED7AA" stroke="#9A3412" stroke-width="1.5"/>
+        <circle cx="22" cy="26" r="2" fill="#1F2937"/>
+        <circle cx="38" cy="26" r="2" fill="#1F2937"/>
+        <path d="M 22 36 q 8 5 16 0" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/>
+        <text x="30" y="74" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">Aanya, 28</text>
+      </g>
+    </g>
+
+    <!-- ===================== ORDERS (small, top middle) ===================== -->
+    <g transform="translate(244,72)">
+      <rect x="0" y="0" width="200" height="200" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#1F2937">orders</text>
+      <g transform="translate(10,28)">
+        <rect x="0" y="0" width="180" height="22" rx="4" fill="#FCE7F3"/>
+        <text x="30" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9D174D">id</text>
+        <text x="80" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9D174D">cust_id</text>
+        <text x="150" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9D174D">total</text>
+      </g>
+      <g id="ordersList" transform="translate(10,52)" font-family="ui-monospace,monospace" font-size="10"></g>
+    </g>
+
+    <!-- ===================== JOIN ARROW + LABEL ===================== -->
+    <g transform="translate(460,150)">
+      <text x="0" y="0" font-size="11" font-weight="700" fill="#7C3AED" font-family="ui-monospace,monospace">JOIN ON</text>
+      <text x="0" y="14" font-size="10" fill="#1F2937" font-family="ui-monospace,monospace">  c.id = o.cust_id</text>
+      <path id="arrow" d="M 0 32 q 18 12 36 0" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" marker-end="url(#arrowhead)"/>
+    </g>
+    <defs>
+      <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M 0 0 L 8 4 L 0 8 Z" fill="#8B5CF6"/>
+      </marker>
+    </defs>
+
+    <!-- ===================== JOINED RESULT (right) ===================== -->
+    <g transform="translate(508,72)">
+      <rect x="0" y="0" width="222" height="248" rx="10" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#5B21B6">customers ⋈ orders</text>
+      <g transform="translate(10,28)">
+        <rect x="0" y="0" width="200" height="22" rx="4" fill="#EDE9FE"/>
+        <text x="30" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#5B21B6">name</text>
+        <text x="80" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#5B21B6">age</text>
+        <text x="140" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#5B21B6">order_id</text>
+        <text x="190" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#5B21B6">total</text>
+      </g>
+      <g id="joinedRows" transform="translate(10,52)" font-family="ui-monospace,monospace" font-size="10"></g>
+    </g>
+
+    <!-- ===================== AVG CALC (bottom) ===================== -->
+    <g transform="translate(36,300)">
+      <rect x="0" y="0" width="694" height="80" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+
+      <!-- Left side: SELECT AVG(age) -->
+      <text x="20" y="24" font-size="12" font-family="ui-monospace,monospace" fill="#1F2937">
+        <tspan fill="#7C3AED">SELECT</tspan>
+        <tspan> AVG(age) </tspan>
+        <tspan fill="#7C3AED">FROM</tspan>
+        <tspan> customers c </tspan>
+        <tspan fill="#7C3AED">JOIN</tspan>
+        <tspan> orders o </tspan>
+        <tspan fill="#7C3AED">ON</tspan>
+        <tspan> c.id=o.cust_id;</tspan>
+      </text>
+
+      <!-- Computation strip -->
+      <text id="calcExpr" x="20" y="50" font-size="11" font-family="ui-monospace,monospace" fill="#6B7280">
+        average of {28} = 28.0
+      </text>
+
+      <!-- The big number, right side -->
+      <g transform="translate(530,18)">
+        <rect id="resultBox" x="0" y="0" width="148" height="50" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+        <text x="74" y="22" text-anchor="middle" font-size="9" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">AVG(age)</text>
+        <text id="resultNum" x="74" y="42" text-anchor="middle" font-size="20" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">28.0</text>
+      </g>
+
+      <text id="calcNote" x="20" y="70" font-size="10" fill="#92400E" font-style="italic" opacity="0">
+        Each Aanya row is counted once per order. The single 28 became five 28s.
+      </text>
+    </g>
+
+    <!-- Bug hint -->
+    <g id="bugHint" opacity="0">
+      <rect x="100" y="396" width="560" height="22" rx="11" fill="#FECACA" stroke="#F43F5E" stroke-width="1.2"/>
+      <text x="380" y="411" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9F1239">
+        the fan-out: AVG over a JOIN is weighted by row count, not customer count.
+      </text>
+    </g>
+  </svg>
+  <div class="caption">
+    Aggregate the dimension you mean. Use a subquery, or AVG(age) over DISTINCT customers.
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var orders=[
+    {id:1001, cust:7, total: 24.50},
+    {id:1002, cust:7, total: 12.00},
+    {id:1003, cust:7, total: 88.10},
+    {id:1004, cust:7, total:  6.95},
+    {id:1005, cust:7, total: 42.30}
+  ];
+
+  var ordersList=document.getElementById('ordersList');
+  var joinedRows=document.getElementById('joinedRows');
+  var subtitle=document.getElementById('subtitle');
+  var resultBox=document.getElementById('resultBox');
+  var resultNum=document.getElementById('resultNum');
+  var calcExpr=document.getElementById('calcExpr');
+  var calcNote=document.getElementById('calcNote');
+  var bugHint=document.getElementById('bugHint');
+  var resetBtn=document.getElementById('reset');
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+
+  function renderOrders(highlightCount){
+    clear(ordersList);
+    for(var i=0;i<orders.length;i++){
+      var o=orders[i], y=i*22, hl=(i<highlightCount);
+      var bg=el('rect',{x:0,y:y,width:180,height:20,rx:3,
+        fill:hl?'#FCE7F3':'#FFFFFF',
+        stroke:hl?'#F472B6':'#F3E8FF','stroke-width':hl?1.4:0.7});
+      ordersList.appendChild(bg);
+      var t1=el('text',{x:30,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t1.textContent='#'+o.id;
+      var t2=el('text',{x:80,y:y+13,'text-anchor':'middle','font-size':10,fill:'#9D174D','font-weight':'700'});
+      t2.textContent='7';
+      var t3=el('text',{x:150,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t3.textContent=o.total.toFixed(2);
+      ordersList.appendChild(t1);ordersList.appendChild(t2);ordersList.appendChild(t3);
+    }
+  }
+
+  function renderJoined(n){
+    clear(joinedRows);
+    for(var i=0;i<n;i++){
+      var o=orders[i], y=i*22;
+      var bg=el('rect',{x:0,y:y,width:200,height:20,rx:3,fill:i%2===0?'#FFFFFF':'#F5F3FF'});
+      joinedRows.appendChild(bg);
+      var t1=el('text',{x:30,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937','font-weight':'700'});
+      t1.textContent='Aanya';
+      var t2=el('text',{x:80,y:y+13,'text-anchor':'middle','font-size':10,fill:'#0369A1','font-weight':'700','font-family':'ui-monospace,monospace'});
+      t2.textContent='28';
+      var t3=el('text',{x:140,y:y+13,'text-anchor':'middle','font-size':9,fill:'#1F2937','font-family':'ui-monospace,monospace'});
+      t3.textContent='#'+o.id;
+      var t4=el('text',{x:190,y:y+13,'text-anchor':'middle','font-size':9,fill:'#6B7280','font-family':'ui-monospace,monospace'});
+      t4.textContent=o.total.toFixed(2);
+      joinedRows.appendChild(t1);joinedRows.appendChild(t2);joinedRows.appendChild(t3);joinedRows.appendChild(t4);
+    }
+  }
+
+  function setResult(num, ok){
+    resultNum.textContent = num;
+    if(ok){
+      resultBox.setAttribute('fill','#ECFDF5'); resultBox.setAttribute('stroke','#10B981');
+      resultNum.setAttribute('fill','#065F46');
+    } else {
+      resultBox.setAttribute('fill','#FEF2F2'); resultBox.setAttribute('stroke','#F43F5E');
+      resultNum.setAttribute('fill','#9F1239');
+    }
+  }
+
+  function fadeIn(node, dur){
+    if(prefersReduce){ node.setAttribute('opacity','1'); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/dur,1);
+      node.setAttribute('opacity', String(t));
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function play(){
+    // Reset
+    bugHint.setAttribute('opacity','0');
+    calcNote.setAttribute('opacity','0');
+    setResult('28.0', true);
+    calcExpr.textContent = 'average of {28} = 28.0';
+    subtitle.textContent='Stage 1: tidy. Aanya is one row. Her age is 28.';
+    renderOrders(0);
+    renderJoined(0);
+
+    if(prefersReduce){
+      renderOrders(orders.length);
+      renderJoined(orders.length);
+      setResult('28.0', false);
+      calcExpr.textContent = 'average of {28,28,28,28,28} = 28.0  (over 5 rows, not 1 person)';
+      calcNote.setAttribute('opacity','1');
+      subtitle.textContent='Stage 3: AVG(age) is "right" but means nothing.';
+      bugHint.setAttribute('opacity','1');
+      return;
+    }
+
+    // Stage A: orders appear (≈2.5s)
+    setTimeout(function(){
+      subtitle.textContent='Stage 2: she has 5 orders. The JOIN multiplies her.';
+    }, 1800);
+    var i=0;
+    var oid=setInterval(function(){
+      i++;
+      renderOrders(i);
+      if(i>=orders.length){ clearInterval(oid); }
+    }, 350);
+
+    // Stage B: joined rows fan out (≈4s)
+    setTimeout(function(){
+      var j=0;
+      var jid=setInterval(function(){
+        j++;
+        renderJoined(j);
+        // update calc expression
+        var arr=[];
+        for(var k=0;k<j;k++) arr.push('28');
+        calcExpr.textContent = 'average of {'+arr.join(',')+'} = 28.0';
+        if(j>=orders.length){
+          clearInterval(jid);
+          // final reveal
+          setTimeout(function(){
+            // Flip the result red — the value didn't change BUT the meaning did
+            setResult('28.0', false);
+            calcExpr.textContent = 'average of {28,28,28,28,28} = 28.0  (over 5 rows, not 1 person)';
+            fadeIn(calcNote, 500);
+            subtitle.textContent='Stage 3: same number, wrong meaning. (Imagine 100 customers.)';
+            setTimeout(function(){
+              fadeIn(bugHint, 500);
+              setTimeout(play, 4000);
+            }, 1400);
+          }, 600);
+        }
+      }, 380);
+    }, 4000);
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

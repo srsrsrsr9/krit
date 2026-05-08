@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI detection and academic honesty</title>
+<style>
+  :root{--bg:#FFF7ED;--ink:#1F2937;--mute:#6B7280;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:840px;}
+  svg{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--mute);margin-top:8px;padding:0 8px;}
+  #rb{position:absolute;bottom:8px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78;}
+  #rb:hover{opacity:1;}
+  .gtxt{font-family:ui-monospace,"SFMono-Regular",monospace;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="wrap">
+<svg viewBox="0 0 840 510" aria-label="An AI detector flags five essays. Two are genuinely AI-written; three are false positives — a non-native English speaker, a debater, an autistic student. Better assignment design follows: oral defense, in-class draft, process journal.">
+  <rect width="840" height="510" fill="#FFF7ED"/>
+
+  <!-- title -->
+  <text x="420" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">The detector flagged five. Two were AI. Three were students.</text>
+
+  <!-- ── DETECTOR PANEL TOP ─────────────────────── -->
+  <g transform="translate(32,52)">
+    <rect x="0" y="0" width="776" height="180" rx="14" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+    <text x="14" y="18" font-size="10.5" font-weight="700" fill="#92400E" letter-spacing="0.8">AI DETECTOR · scanned 32 essays</text>
+    <rect x="640" y="6" width="120" height="20" rx="10" fill="white" stroke="#FCD34D" stroke-width="1"/>
+    <text x="700" y="20" text-anchor="middle" font-size="10" fill="#92400E" font-weight="700" class="gtxt">5 flagged</text>
+
+    <!-- 5 flagged cards -->
+    <g id="cards"></g>
+
+    <!-- legend -->
+    <g transform="translate(14,156)">
+      <rect x="0" y="-9" width="14" height="14" rx="3" fill="#F43F5E"/>
+      <text x="20" y="2" font-size="10.5" fill="#1F2937">flagged red</text>
+      <rect x="120" y="-9" width="14" height="14" rx="3" fill="#10B981"/>
+      <text x="140" y="2" font-size="10.5" fill="#1F2937">actually AI · 2</text>
+      <rect x="260" y="-9" width="14" height="14" rx="3" fill="#0EA5E9"/>
+      <text x="280" y="2" font-size="10.5" fill="#1F2937">false positive · 3</text>
+    </g>
+  </g>
+
+  <!-- arrow down -->
+  <g id="downArrow" opacity="0">
+    <line x1="420" y1="244" x2="420" y2="266" stroke="#1F2937" stroke-width="2"/>
+    <polygon points="414,262 426,262 420,272" fill="#1F2937"/>
+    <text x="420" y="258" text-anchor="middle" font-size="10" fill="#1F2937" font-style="italic">detection ≠ honesty. design the assignment instead.</text>
+  </g>
+
+  <!-- ── BOTTOM: BETTER ASSIGNMENT DESIGN ─────────── -->
+  <g id="designs" opacity="0">
+    <rect x="32" y="282" width="776" height="184" rx="14" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="46" y="304" font-size="11" font-weight="700" fill="#065F46" letter-spacing="0.8">DESIGN OUT THE PROBLEM · what AI cannot fake</text>
+
+    <!-- card 1: oral defense -->
+    <g transform="translate(50,318)">
+      <rect x="0" y="0" width="240" height="130" rx="10" fill="white" stroke="#10B981" stroke-width="1.4"/>
+      <!-- icon: two heads talking -->
+      <g transform="translate(40,46)">
+        <circle cx="-12" cy="0" r="14" fill="#FBBF24" stroke="#1F2937" stroke-width="1.4"/>
+        <circle cx="-15" cy="-2" r="1.5" fill="#1F2937"/>
+        <circle cx="-9" cy="-2" r="1.5" fill="#1F2937"/>
+        <path d="M-16,4 Q-12,7 -8,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/>
+        <circle cx="14" cy="0" r="14" fill="#A7F3D0" stroke="#1F2937" stroke-width="1.4"/>
+        <circle cx="11" cy="-2" r="1.5" fill="#1F2937"/>
+        <circle cx="17" cy="-2" r="1.5" fill="#1F2937"/>
+        <path d="M10,4 Q14,7 18,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- chat bubbles -->
+        <path d="M-30,-22 Q-30,-30 -22,-30 L-2,-30 Q4,-30 4,-22 L4,-18 Q4,-14 -2,-14 L-22,-14 Z" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+        <text x="-13" y="-19" text-anchor="middle" font-size="8" fill="#92400E">why this?</text>
+        <path d="M0,16 Q0,8 8,8 L28,8 Q34,8 34,16 L34,20 Q34,24 28,24 L18,24 L14,28 L16,24 L8,24 Q0,24 0,20 Z" fill="#A7F3D0" stroke="#10B981" stroke-width="1"/>
+        <text x="17" y="20" text-anchor="middle" font-size="8" fill="#065F46">because…</text>
+      </g>
+      <text x="120" y="98" text-anchor="middle" font-size="11.5" font-weight="700" fill="#065F46">Oral defense · 3 min</text>
+      <text x="120" y="114" text-anchor="middle" font-size="9.5" fill="#6B7280">"defend any paragraph at random"</text>
+    </g>
+
+    <!-- card 2: in-class draft -->
+    <g transform="translate(300,318)">
+      <rect x="0" y="0" width="240" height="130" rx="10" fill="white" stroke="#0EA5E9" stroke-width="1.4"/>
+      <!-- icon: classroom + clock -->
+      <g transform="translate(120,52)">
+        <rect x="-44" y="-22" width="88" height="44" rx="6" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="1.2"/>
+        <!-- desks -->
+        <rect x="-36" y="-2" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="-18" y="-2" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="0" y="-2" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="18" y="-2" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="-36" y="10" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="-18" y="10" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="0" y="10" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <rect x="18" y="10" width="14" height="6" rx="1" fill="#0EA5E9"/>
+        <!-- clock -->
+        <circle cx="0" cy="-32" r="11" fill="white" stroke="#0EA5E9" stroke-width="1.4"/>
+        <line x1="0" y1="-32" x2="0" y2="-39" stroke="#0EA5E9" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="0" y1="-32" x2="6" y2="-32" stroke="#0EA5E9" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <text x="120" y="98" text-anchor="middle" font-size="11.5" font-weight="700" fill="#075985">First draft in class</text>
+      <text x="120" y="114" text-anchor="middle" font-size="9.5" fill="#6B7280">opening + thesis · paper + pen</text>
+    </g>
+
+    <!-- card 3: process journal -->
+    <g transform="translate(550,318)">
+      <rect x="0" y="0" width="240" height="130" rx="10" fill="white" stroke="#8B5CF6" stroke-width="1.4"/>
+      <g transform="translate(120,52)">
+        <!-- journal -->
+        <rect x="-30" y="-26" width="60" height="50" rx="4" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1.3"/>
+        <line x1="-22" y1="-15" x2="22" y2="-15" stroke="#8B5CF6" stroke-width="1.2"/>
+        <line x1="-22" y1="-7" x2="22" y2="-7" stroke="#A78BFA" stroke-width="1"/>
+        <line x1="-22" y1="1" x2="14" y2="1" stroke="#A78BFA" stroke-width="1"/>
+        <line x1="-22" y1="9" x2="22" y2="9" stroke="#A78BFA" stroke-width="1"/>
+        <line x1="-22" y1="17" x2="6" y2="17" stroke="#A78BFA" stroke-width="1"/>
+        <!-- timestamp dots -->
+        <circle cx="-36" cy="-10" r="2" fill="#8B5CF6"/>
+        <circle cx="-36" cy="2" r="2" fill="#8B5CF6"/>
+        <circle cx="-36" cy="14" r="2" fill="#8B5CF6"/>
+      </g>
+      <text x="120" y="98" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5B21B6">Process journal</text>
+      <text x="120" y="114" text-anchor="middle" font-size="9.5" fill="#6B7280">3 dated entries · 1 dead end · 1 surprise</text>
+    </g>
+
+  </g>
+
+  <!-- footer line -->
+  <g id="ft" opacity="0">
+    <rect x="32" y="476" width="776" height="22" rx="6" fill="#1F2937"/>
+    <text x="420" y="492" text-anchor="middle" font-size="11" fill="#FCD34D" font-weight="700">Design the assignment so AI can't shortcut it. Trust replaces surveillance.</text>
+  </g>
+
+</svg>
+<div class="caption" id="cap">Detectors guess. Better assignments don't have to.</div>
+<button id="rb" type="button" aria-label="Reset animation">reset</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const SVG_NS='http://www.w3.org/2000/svg';
+let timers=[];
+const after=(ms,fn)=>timers.push(setTimeout(fn,ms));
+const clearAll=()=>{timers.forEach(clearTimeout);timers=[];};
+const reduced=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const cap=$('cap');
+
+// 5 cards: 2 AI (kind=ai) + 3 false positives (kind=fp)
+const CARDS=[
+  {name:'Aarav K.', tag:"essay #07", kind:'ai',  hint:'tone shifts mid-paragraph'},
+  {name:'Mira S.',  tag:"essay #11", kind:'fp',  hint:'non-native English · structured prose'},
+  {name:'Idris R.', tag:"essay #18", kind:'fp',  hint:'competitive debater · formal cadence'},
+  {name:'Joel M.',  tag:"essay #24", kind:'ai',  hint:'echoes a known model phrase'},
+  {name:'Ria T.',   tag:"essay #29", kind:'fp',  hint:'autistic student · precise diction'}
+];
+
+function buildCards(){
+  const g=$('cards');g.innerHTML='';
+  const padX=14, gap=12, w=146, h=104;
+  const startX=padX, y=42;
+  CARDS.forEach((c,i)=>{
+    const grp=document.createElementNS(SVG_NS,'g');
+    grp.setAttribute('id','card'+i);
+    grp.setAttribute('transform',`translate(${startX+i*(w+gap)},${y})`);
+    grp.setAttribute('opacity','0');
+    // base card
+    const r=document.createElementNS(SVG_NS,'rect');
+    r.setAttribute('x',0);r.setAttribute('y',0);r.setAttribute('width',w);r.setAttribute('height',h);
+    r.setAttribute('rx',8);r.setAttribute('fill','white');
+    r.setAttribute('stroke','#FCA5A5');r.setAttribute('stroke-width','1.6');
+    r.setAttribute('id','cr'+i);
+    grp.appendChild(r);
+    // halo for flag
+    const halo=document.createElementNS(SVG_NS,'rect');
+    halo.setAttribute('x',-3);halo.setAttribute('y',-3);halo.setAttribute('width',w+6);halo.setAttribute('height',h+6);
+    halo.setAttribute('rx',11);halo.setAttribute('fill','none');
+    halo.setAttribute('stroke','#F43F5E');halo.setAttribute('stroke-width','2');
+    halo.setAttribute('opacity','0');
+    halo.setAttribute('id','halo'+i);
+    grp.appendChild(halo);
+    // lines (essay shimmer)
+    for(let j=0;j<5;j++){
+      const ln=document.createElementNS(SVG_NS,'line');
+      ln.setAttribute('x1',12);ln.setAttribute('x2',w-12-(j%2?20:8));
+      ln.setAttribute('y1',16+j*9);ln.setAttribute('y2',16+j*9);
+      ln.setAttribute('stroke','#E5E7EB');ln.setAttribute('stroke-width','3');
+      ln.setAttribute('stroke-linecap','round');
+      grp.appendChild(ln);
+    }
+    // name
+    const nm=document.createElementNS(SVG_NS,'text');
+    nm.setAttribute('x',12);nm.setAttribute('y',76);
+    nm.setAttribute('font-size','11');nm.setAttribute('font-weight','700');nm.setAttribute('fill','#1F2937');
+    nm.textContent=c.name;
+    grp.appendChild(nm);
+    // tag
+    const tg=document.createElementNS(SVG_NS,'text');
+    tg.setAttribute('x',12);tg.setAttribute('y',90);
+    tg.setAttribute('font-size','9');tg.setAttribute('fill','#6B7280');
+    tg.setAttribute('font-family','ui-monospace,monospace');
+    tg.textContent=c.tag;
+    grp.appendChild(tg);
+    // verdict pill (later)
+    const pill=document.createElementNS(SVG_NS,'g');
+    pill.setAttribute('id','verdict'+i);
+    pill.setAttribute('opacity','0');
+    pill.setAttribute('transform',`translate(${w-46},78)`);
+    const pr=document.createElementNS(SVG_NS,'rect');
+    pr.setAttribute('x',0);pr.setAttribute('y',0);pr.setAttribute('width',38);pr.setAttribute('height',16);
+    pr.setAttribute('rx',8);
+    pr.setAttribute('fill', c.kind==='ai' ? '#10B981':'#0EA5E9');
+    pill.appendChild(pr);
+    const pt=document.createElementNS(SVG_NS,'text');
+    pt.setAttribute('x',19);pt.setAttribute('y',12);
+    pt.setAttribute('text-anchor','middle');pt.setAttribute('font-size','9');
+    pt.setAttribute('font-weight','700');pt.setAttribute('fill','white');
+    pt.textContent= c.kind==='ai' ? 'AI' : 'NOT AI';
+    pill.appendChild(pt);
+    grp.appendChild(pill);
+    // hint reveal
+    const hint=document.createElementNS(SVG_NS,'text');
+    hint.setAttribute('x',w/2);hint.setAttribute('y', h+16);
+    hint.setAttribute('text-anchor','middle');hint.setAttribute('font-size','9');
+    hint.setAttribute('fill', c.kind==='ai' ? '#065F46' : '#075985');
+    hint.setAttribute('font-style','italic');
+    hint.setAttribute('id','hint'+i);
+    hint.setAttribute('opacity','0');
+    hint.textContent=c.hint;
+    grp.appendChild(hint);
+
+    g.appendChild(grp);
+  });
+}
+
+function fade(id,a,b,dur){
+  return new Promise(res=>{
+    const el=$(id);if(!el){res();return;}
+    if(reduced){el.setAttribute('opacity',String(b));res();return;}
+    const s=performance.now();
+    function tick(now){
+      const t=Math.min((now-s)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.setAttribute('opacity',String(a+(b-a)*e));
+      if(t<1)requestAnimationFrame(tick);else res();
+    }
+    requestAnimationFrame(tick);
+  });
+}
+const sleep=ms=>new Promise(r=>{timers.push(setTimeout(r,ms));});
+
+async function run(){
+  cap.textContent='An AI detector returns five red flags.';
+  // fade in cards quickly
+  for(let i=0;i<5;i++){fade('card'+i,0,1,260);await sleep(reduced?0:140);}
+  await sleep(reduced?0:300);
+  // halo all five red
+  cap.textContent='All five glow red. The detector cannot tell us why.';
+  for(let i=0;i<5;i++){fade('halo'+i,0,1,250);await sleep(reduced?0:90);}
+  await sleep(reduced?0:900);
+  // reveal truths one by one
+  cap.textContent='Two were truly AI. Three were students who write structured prose.';
+  for(let i=0;i<5;i++){
+    await fade('verdict'+i,0,1,260);
+    await fade('hint'+i,0,1,260);
+    await sleep(reduced?0:240);
+  }
+  await sleep(reduced?0:600);
+  // dim halos for false positives
+  cap.textContent='False positives cost trust. So design the assignment differently.';
+  for(let i=0;i<5;i++){
+    if(CARDS[i].kind==='fp'){fade('halo'+i,1,0.18,380);}
+  }
+  await sleep(reduced?0:600);
+  await fade('downArrow',0,1,400);
+  await fade('designs',0,1,500);
+  await sleep(reduced?0:400);
+  await fade('ft',0,1,400);
+  cap.textContent='Trust the design, not the detector.';
+  if(!reduced){await sleep(4500);reset();}
+}
+
+function reset(){
+  clearAll();
+  buildCards();
+  ['downArrow','designs','ft'].forEach(id=>$(id).setAttribute('opacity','0'));
+  run();
+}
+
+buildCards();
+$('rb').addEventListener('click',reset);
+run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brittle CSS vs role-based selectors</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+#rb{position:absolute;bottom:8px;right:16px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="A brittle CSS selector breaks after a class rename, while a role-based locator continues to find the same Submit button">
+
+  <rect width="760" height="470" fill="#FFF7ED"/>
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Two ways to find the same button.</text>
+
+  <!-- ─────── LEFT COLUMN: BRITTLE ─────── -->
+  <g>
+    <text x="195" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#F43F5E">brittle CSS path</text>
+
+    <!-- Selector card -->
+    <rect x="32" y="84" width="326" height="58" rx="9" fill="#1F2937"/>
+    <text x="48" y="106" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">page.locator(</text>
+    <text id="sel-css" x="48" y="124" font-size="11.5" fill="#FCD34D" font-family="ui-monospace,monospace">'.btn-primary &gt; span:nth-child(2)'</text>
+    <text x="48" y="138" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">)</text>
+
+    <!-- UI mock card -->
+    <rect x="32" y="156" width="326" height="180" rx="10" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="48" y="178" font-size="11" font-weight="700" fill="#6B7280">checkout.html</text>
+    <line x1="48" y1="186" x2="342" y2="186" stroke="#F3F4F6" stroke-width="1"/>
+
+    <!-- Form skeleton -->
+    <rect x="48" y="200" width="294" height="20" rx="4" fill="#F3F4F6"/>
+    <rect x="48" y="228" width="294" height="20" rx="4" fill="#F3F4F6"/>
+
+    <!-- The submit button (mock) -->
+    <g id="lbtn">
+      <rect id="lbtn-rect" x="48" y="262" width="148" height="42" rx="8" fill="#0EA5E9"/>
+      <text x="122" y="288" text-anchor="middle" font-size="13" font-weight="700" fill="white">Submit</text>
+    </g>
+
+    <!-- Class label that morphs -->
+    <text id="lbtn-class" x="208" y="288" font-size="10.5" fill="#9CA3AF" font-family="ui-monospace,monospace">.btn-primary</text>
+
+    <!-- Result chip -->
+    <g id="lresult" opacity="0">
+      <rect id="lresult-bg" x="32" y="356" width="326" height="46" rx="9" fill="#FEE2E2" stroke="#F43F5E" stroke-width="2"/>
+      <circle id="lresult-dot" cx="58" cy="379" r="9" fill="#F43F5E"/>
+      <text id="lresult-mark" x="58" y="383" text-anchor="middle" font-size="13" font-weight="700" fill="white">×</text>
+      <text id="lresult-txt" x="78" y="376" font-size="11.5" font-weight="700" fill="#9F1239">selector did not match</text>
+      <text id="lresult-sub" x="78" y="392" font-size="10" fill="#9F1239" font-family="ui-monospace,monospace">0 elements found</text>
+    </g>
+  </g>
+
+  <!-- Vertical divider -->
+  <line x1="380" y1="60" x2="380" y2="430" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ─────── RIGHT COLUMN: ROLE-BASED ─────── -->
+  <g>
+    <text x="565" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#10B981">role-based locator</text>
+
+    <!-- Selector card -->
+    <rect x="402" y="84" width="326" height="58" rx="9" fill="#1F2937"/>
+    <text x="418" y="106" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">page.</text>
+    <text x="450" y="106" font-size="10" fill="#86EFAC" font-family="ui-monospace,monospace">getByRole</text>
+    <text x="510" y="106" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">(</text>
+    <text x="418" y="124" font-size="11.5" fill="#FCD34D" font-family="ui-monospace,monospace">'button', { name: 'Submit' }</text>
+    <text x="418" y="138" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">)</text>
+
+    <!-- UI mock card -->
+    <rect x="402" y="156" width="326" height="180" rx="10" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="418" y="178" font-size="11" font-weight="700" fill="#6B7280">checkout.html</text>
+    <line x1="418" y1="186" x2="712" y2="186" stroke="#F3F4F6" stroke-width="1"/>
+
+    <rect x="418" y="200" width="294" height="20" rx="4" fill="#F3F4F6"/>
+    <rect x="418" y="228" width="294" height="20" rx="4" fill="#F3F4F6"/>
+
+    <g id="rbtn">
+      <rect id="rbtn-rect" x="418" y="262" width="148" height="42" rx="8" fill="#0EA5E9"/>
+      <text x="492" y="288" text-anchor="middle" font-size="13" font-weight="700" fill="white">Submit</text>
+    </g>
+
+    <text id="rbtn-class" x="578" y="288" font-size="10.5" fill="#9CA3AF" font-family="ui-monospace,monospace">.btn-primary</text>
+
+    <g id="rresult" opacity="0">
+      <rect x="402" y="356" width="326" height="46" rx="9" fill="#DCFCE7" stroke="#10B981" stroke-width="2"/>
+      <circle cx="428" cy="379" r="9" fill="#10B981"/>
+      <text x="428" y="383" text-anchor="middle" font-size="13" font-weight="700" fill="white">✓</text>
+      <text x="448" y="376" font-size="11.5" font-weight="700" fill="#065F46">located</text>
+      <text x="448" y="392" font-size="10" fill="#065F46" font-family="ui-monospace,monospace">role survives the rename</text>
+    </g>
+  </g>
+
+  <!-- Bottom note -->
+  <g id="bottomnote" opacity="0">
+    <rect x="80" y="426" width="600" height="32" rx="9" fill="#1F2937"/>
+    <text x="380" y="447" text-anchor="middle" font-size="12.5" fill="white">a class rename should not break a test that asks for "the Submit button".</text>
+  </g>
+
+</svg>
+<div class="cap">Selectors are contracts. The fewer implementation details you depend on, the longer your tests live.</div>
+<button id="rb">reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',String(v));}
+function setAttr(id,attr,v){var e=$(id);if(e)e.setAttribute(attr,String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+var tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function fade(id,from,to,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+function setText(id,s){var e=$(id);if(e)e.textContent=s;}
+
+function run(){
+  clearAll();
+  // Reset
+  setOp('lresult',0);
+  setOp('rresult',0);
+  setOp('bottomnote',0);
+  setText('lbtn-class','.btn-primary');
+  setText('rbtn-class','.btn-primary');
+  setAttr('lbtn-rect','fill','#0EA5E9');
+  setAttr('rbtn-rect','fill','#0EA5E9');
+
+  // Stage 1 — both tests pass with the original markup.
+  after(500, function(){
+    fade('lresult',0,1,400);
+    setAttr('lresult-bg','fill','#DCFCE7');
+    setAttr('lresult-bg','stroke','#10B981');
+    setAttr('lresult-dot','fill','#10B981');
+    setText('lresult-mark','✓');
+    setText('lresult-txt','located');
+    setAttr('lresult-txt','fill','#065F46');
+    setText('lresult-sub','1 element matched');
+    setAttr('lresult-sub','fill','#065F46');
+    fade('rresult',0,1,400);
+  });
+
+  // Stage 2 — designer renames .btn-primary to .ds-Action_root_3xq
+  after(3200, function(){
+    setText('lbtn-class','.ds-Action_root_3xq');
+    setText('rbtn-class','.ds-Action_root_3xq');
+    // Brittle path now broken — flash red.
+    setAttr('lresult-bg','fill','#FEE2E2');
+    setAttr('lresult-bg','stroke','#F43F5E');
+    setAttr('lresult-dot','fill','#F43F5E');
+    setText('lresult-mark','×');
+    setText('lresult-txt','selector did not match');
+    setAttr('lresult-txt','fill','#9F1239');
+    setText('lresult-sub','0 elements found');
+    setAttr('lresult-sub','fill','#9F1239');
+  });
+
+  // Stage 3 — show the takeaway
+  after(5400, function(){fade('bottomnote',0,1,500);});
+
+  // Loop
+  after(11500, function(){
+    fade('lresult',1,0,500);
+    fade('rresult',1,0,500);
+    fade('bottomnote',1,0,500);
+    after(700, run);
+  });
+}
+
+$('rb').addEventListener('click', function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI Detection vs AI Literacy — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>AI Detection vs AI Literacy</h1>
+  <p class="subtitle">Stop policing the output; start designing the process</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Every staff room in India is currently arguing the same fight. &quot;We need a better AI detector.&quot; &quot;Ban phones in homework.&quot; &quot;Make them write in class.&quot; These are downstream symptoms of one upstream design failure: the assignment, as written, can be done by AI in 90 seconds.</p>
+  <div class="callout"><strong>Mental model: don't fight the output, design the process</strong><br/>When you write an assignment, you implicitly assume something about *how* a student will produce the answer. The traditional essay assumes 5 hours of solitary thinking. AI breaks that assumption; the answer can now be produced in 90 seconds with no thinking at all.</div>
+  
+<h2>Move 1 — Assignments that require process</h2>
+<ul>
+<li>The first move is structural: rewrite the assignment so the *only* way to submit is to produce process artefacts. AI cannot produce these.</li>
+<li>Step 1 — The vulnerable original: &quot;Class 11 English: write a 600-word essay on whether technology has improved education in India. Submit Friday.&quot; 90-second AI job. Zero learning.</li>
+<li>Step 2 — Add a local context anchor: &quot;Begin with last week's class debate where Karan argued the opposite of what most of the class thought. Take Karan's side or rebut it; either way, name his actual argument.&quot; AI doesn't know what Karan said.</li>
+<li>Step 3 — Add a draft requirement: &quot;Submit a 200-word draft Monday with one paragraph and three rough notes for the others. Submit revised full draft Friday.&quot; Two artefacts. One missing = points off.</li>
+<li>Step 4 — Add the process bibliography: &quot;Append a 100-word note: 'what I tried first, what I changed, what I cut.' Honest answers welcome — saying 'I tried two terrible openings' is fine; saying 'I asked ChatGPT' is also fine if you say *what you did with* what it gave you.&quot; The note is itself the assessment of process.</li>
+<li>Step 5 — Reserve a 5-minute oral check on Friday: &quot;Random sample of 5 students will explain one of their paragraphs to me on submission day. Be ready to talk for 90 seconds.&quot; Just the *threat* of this changes behaviour.</li>
+<li>Step 6 — Mark with the new rubric: Marks for: process artefacts present, local context engaged, voice consistent across drafts, oral defence credible. The final document is one of five things you grade, not the only thing.</li>
+</ul>
+<h2>Move 2 — The oral-defence move</h2>
+<ul>
+<li>The single most powerful tool in your honesty toolkit takes 5 minutes per student and costs nothing: **the oral defence.** Mechanic: pick a paragraph from the student's submission. Ask them to explain *why they made one specific edit, why they chose that example, what they considered and rejected*.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: false positives ruin a good student: The detector said 92%. You marked the zero. The student's parents come in. The student is your strongest English writer; her writing has always been formal and clean.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Detection is an arms race you cannot win; honesty design is one-time work that holds.</div>
+<div class="takeaway">Stack two or more moves — drafts over time, local anchor, in-class write, process bibliography. Two layers is enough.</div>
+<div class="takeaway">The 5-minute oral defence resolves 90% of suspicions. It tests ownership of edits, which AI cannot fake.</div>
+<div class="takeaway">Detector scores are hints, never verdicts. Always have the conversation before the consequence touches a student's record.</div>
+<div class="takeaway">False positives concentrate on your strongest writers. Marking zero on a probability score is how you damage a top student's year.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

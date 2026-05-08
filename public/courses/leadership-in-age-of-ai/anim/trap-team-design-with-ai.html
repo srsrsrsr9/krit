@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap — Tools without training</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --accent: #F59E0B;
+    --good: #10B981;
+    --bad: #F43F5E;
+    --blue: #0EA5E9;
+    --purple: #8B5CF6;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px;
+    min-height: 1.4em;
+  }
+  .num { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 700; }
+
+  .scene { opacity: 0; }
+  .s1 { animation: s1 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s2 { animation: s2 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s3 { animation: s3 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s4 { animation: s4 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+
+  @keyframes s1 { 0%,16% { opacity: 1; } 20%,100% { opacity: 0; } }
+  @keyframes s2 { 0%,20% { opacity: 0; } 24%,52% { opacity: 1; } 56%,100% { opacity: 0; } }
+  @keyframes s3 { 0%,56% { opacity: 0; } 60%,76% { opacity: 1; } 80%,100% { opacity: 0; } }
+  @keyframes s4 { 0%,80% { opacity: 0; } 84%,98% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* dot field stagger — 47 trivia / 14 work / 0 sharing */
+  .dot { opacity: 0; transform-origin: center; }
+  .dot.trivia { animation: dotIn 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .dot.work { animation: dotIn 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .dot.idle { animation: dotIn 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes dotIn {
+    0%,30% { opacity: 0; transform: scale(0.6); }
+    36% { opacity: 1; transform: scale(1); }
+    52% { opacity: 1; transform: scale(1); }
+    56%,100% { opacity: 0; transform: scale(1); }
+  }
+
+  /* counter ticking */
+  .ctr { animation: ctr 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes ctr { 0%,52% { opacity: 1; } 56%,100% { opacity: 0; } }
+
+  /* the bored license meter */
+  .priceTick {
+    transform-origin: 90px 90px;
+    animation: tick 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes tick {
+    0%,60% { transform: rotate(-90deg); }
+    70% { transform: rotate(60deg); }
+    100% { transform: rotate(60deg); }
+  }
+
+  .caption span { display: none; }
+  .c1 { animation: c1 14s steps(1,end) infinite; }
+  .c2 { animation: c2 14s steps(1,end) infinite; }
+  .c3 { animation: c3 14s steps(1,end) infinite; }
+  .c4 { animation: c4 14s steps(1,end) infinite; }
+  @keyframes c1 { 0%,15% { display: inline; } 16%,100% { display: none; } }
+  @keyframes c2 { 0%,19% { display: none; } 20%,52% { display: inline; } 53%,100% { display: none; } }
+  @keyframes c3 { 0%,55% { display: none; } 56%,76% { display: inline; } 77%,100% { display: none; } }
+  @keyframes c4 { 0%,79% { display: none; } 80%,99% { display: inline; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .scene { opacity: 1; }
+    .dot { opacity: 1; }
+    .caption .c1 { display: none; } .caption .c4 { display: inline; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="A company buys 200 ChatGPT Enterprise seats with no training. 47 use it for trivia, 14 for actual work, 0 share patterns. Output is unchanged. Fix: weekly demos, paired training, public mistakes.">
+      <defs>
+        <pattern id="dotGrid" patternUnits="userSpaceOnUse" width="38" height="38">
+          <circle cx="19" cy="19" r="11" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
+        </pattern>
+      </defs>
+
+      <!-- ============ SCENE 1: the email ============ -->
+      <g class="scene s1">
+        <!-- email card -->
+        <g transform="translate(150,80)">
+          <rect width="460" height="280" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <line x1="0" y1="48" x2="460" y2="48" stroke="var(--line)" stroke-width="2"/>
+          <text x="20" y="32" font-size="13" fill="var(--muted)">From: it@company · To: all-staff (200)</text>
+          <text x="440" y="32" text-anchor="end" font-size="13" fill="var(--muted)">Re: AI rollout</text>
+
+          <text x="20" y="84" font-size="20" font-weight="700">You have ChatGPT Enterprise!</text>
+          <text x="20" y="120" font-size="14">Hi all,</text>
+          <text x="20" y="144" font-size="14">We're excited to announce that everyone now has</text>
+          <text x="20" y="164" font-size="14">access to ChatGPT Enterprise. Just sign in with</text>
+          <text x="20" y="184" font-size="14">SSO. Have fun!</text>
+          <text x="20" y="220" font-size="14">— IT</text>
+
+          <!-- attachment row -->
+          <rect x="20" y="240" width="180" height="28" rx="6" fill="#FEF3C7" stroke="var(--accent)" stroke-width="2"/>
+          <text x="35" y="259" font-size="12" fill="var(--ink)">200 seats · $60/mo each</text>
+        </g>
+        <text x="380" y="430" text-anchor="middle" font-size="13" fill="var(--muted)">Day 1. The plan, in full.</text>
+      </g>
+
+      <!-- ============ SCENE 2: dot field of users ============ -->
+      <g class="scene s2">
+        <text x="380" y="64" text-anchor="middle" font-size="19" font-weight="700">Three months later — what 200 seats actually did</text>
+
+        <!-- legend -->
+        <g transform="translate(120,90)">
+          <circle cx="0" cy="0" r="8" fill="var(--accent)" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="14" y="4" font-size="12">Trivia / curiosity</text>
+          <circle cx="170" cy="0" r="8" fill="var(--good)" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="184" y="4" font-size="12">Real work</text>
+          <circle cx="290" cy="0" r="8" fill="#E5E7EB" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="304" y="4" font-size="12">Logged in once, never again</text>
+        </g>
+
+        <!-- 200 dots in a 20×10 grid -->
+        <g transform="translate(120,130)" id="grid">
+          <!-- We render 200 dots; first 14 = work (good), next 47 = trivia (accent), rest = idle -->
+          <!-- Generated inline below: 20 cols × 10 rows, dot pitch 26px, radius 9 -->
+        </g>
+
+        <!-- counters -->
+        <g class="ctr" transform="translate(120,400)">
+          <text x="0" y="0" font-size="13" fill="var(--muted)">Curious:</text>
+          <text x="55" y="0" font-size="14" class="num" fill="var(--accent)">47</text>
+          <text x="120" y="0" font-size="13" fill="var(--muted)">Real work:</text>
+          <text x="190" y="0" font-size="14" class="num" fill="var(--good)">14</text>
+          <text x="240" y="0" font-size="13" fill="var(--muted)">Sharing patterns:</text>
+          <text x="350" y="0" font-size="14" class="num" fill="var(--bad)">0</text>
+          <text x="380" y="0" font-size="13" fill="var(--muted)">Idle:</text>
+          <text x="415" y="0" font-size="14" class="num" fill="var(--ink)">139</text>
+        </g>
+      </g>
+
+      <!-- ============ SCENE 3: bill vs output ============ -->
+      <g class="scene s3">
+        <text x="380" y="64" text-anchor="middle" font-size="19" font-weight="700">A quarter in: license expensive, output unchanged</text>
+
+        <!-- left: bill -->
+        <g transform="translate(120,110)">
+          <text x="0" y="0" font-size="13" font-weight="600" fill="var(--ink)">Quarterly bill</text>
+          <rect x="0" y="14" width="220" height="200" rx="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="110" y="60" text-anchor="middle" font-size="12" fill="var(--muted)">200 seats × $60 × 3 mo</text>
+          <text x="110" y="120" text-anchor="middle" font-size="42" class="num" fill="var(--bad)">$36,000</text>
+          <text x="110" y="170" text-anchor="middle" font-size="12" fill="var(--muted)">+ admin time, change-mgmt</text>
+        </g>
+
+        <!-- right: output flat line -->
+        <g transform="translate(380,110)">
+          <text x="0" y="0" font-size="13" font-weight="600" fill="var(--ink)">Team output (story points / wk)</text>
+          <rect x="0" y="14" width="260" height="200" rx="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <!-- chart area -->
+          <line x1="20" y1="180" x2="240" y2="180" stroke="var(--ink)" stroke-width="1.5"/>
+          <line x1="20" y1="40" x2="20" y2="180" stroke="var(--ink)" stroke-width="1.5"/>
+          <!-- flat line -->
+          <path d="M20 110 Q60 108 100 112 T180 110 T240 109" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"/>
+          <!-- annotation -->
+          <text x="130" y="80" text-anchor="middle" font-size="12" font-style="italic" fill="var(--muted)">"are we sure it's plugged in?"</text>
+          <!-- x-axis labels -->
+          <text x="40" y="200" font-size="10" fill="var(--muted)">M1</text>
+          <text x="125" y="200" font-size="10" fill="var(--muted)">M2</text>
+          <text x="220" y="200" font-size="10" fill="var(--muted)">M3</text>
+        </g>
+
+        <text x="380" y="380" text-anchor="middle" font-size="13" font-style="italic" fill="var(--muted)">Tools don't make a team productive. Practice does.</text>
+      </g>
+
+      <!-- ============ SCENE 4: the fix ============ -->
+      <g class="scene s4">
+        <text x="380" y="64" text-anchor="middle" font-size="19" font-weight="700">The fix: rituals, not licenses</text>
+
+        <!-- three cards -->
+        <g transform="translate(80,110)">
+          <rect width="190" height="220" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="40" cy="50" r="22" fill="#DBEAFE" stroke="var(--ink)" stroke-width="2"/>
+          <text x="40" y="56" text-anchor="middle" font-size="20">📺</text>
+          <text x="20" y="100" font-size="15" font-weight="700">Weekly demos</text>
+          <text x="20" y="130" font-size="12" fill="var(--muted)">30 min, Friday.</text>
+          <text x="20" y="148" font-size="12" fill="var(--muted)">Two people show</text>
+          <text x="20" y="166" font-size="12" fill="var(--muted)">a real workflow they</text>
+          <text x="20" y="184" font-size="12" fill="var(--muted)">used AI for this week.</text>
+        </g>
+
+        <g transform="translate(285,110)">
+          <rect width="190" height="220" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="40" cy="50" r="22" fill="#D1FAE5" stroke="var(--ink)" stroke-width="2"/>
+          <text x="40" y="56" text-anchor="middle" font-size="20">👥</text>
+          <text x="20" y="100" font-size="15" font-weight="700">Paired training</text>
+          <text x="20" y="130" font-size="12" fill="var(--muted)">Senior + junior,</text>
+          <text x="20" y="148" font-size="12" fill="var(--muted)">one real task,</text>
+          <text x="20" y="166" font-size="12" fill="var(--muted)">screen shared.</text>
+          <text x="20" y="184" font-size="12" fill="var(--muted)">Beats any LMS.</text>
+        </g>
+
+        <g transform="translate(490,110)">
+          <rect width="190" height="220" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="40" cy="50" r="22" fill="#FEE2E2" stroke="var(--ink)" stroke-width="2"/>
+          <text x="40" y="56" text-anchor="middle" font-size="20">💥</text>
+          <text x="20" y="100" font-size="15" font-weight="700">Public mistakes</text>
+          <text x="20" y="130" font-size="12" fill="var(--muted)">Channel for</text>
+          <text x="20" y="148" font-size="12" fill="var(--muted)">"ways AI got it wrong</text>
+          <text x="20" y="166" font-size="12" fill="var(--muted)">this week." Fastest</text>
+          <text x="20" y="184" font-size="12" fill="var(--muted)">org-wide learning.</text>
+        </g>
+
+        <text x="380" y="370" text-anchor="middle" font-size="13" fill="var(--muted)">Same 200 seats. Different outcome.</text>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <span class="c1">"You have access now!" — sent to 200 inboxes.</span>
+      <span class="c2">200 seats. 14 used for real work. 0 patterns shared.</span>
+      <span class="c3">$36k spent. Output flat. The deck does not look great.</span>
+      <span class="c4">Tools without rituals are decoration. Add demos, pairs, mistakes.</span>
+    </div>
+  </div>
+</main>
+<script>
+  // Build the 200-dot grid: 20 cols × 10 rows, classify first 14 as work, next 47 as trivia, rest idle.
+  // Uses CSS animations with per-dot delays for the staggered reveal.
+  (function () {
+    var grid = document.getElementById("grid");
+    if (!grid) return;
+    var svgNS = "http://www.w3.org/2000/svg";
+    var cols = 20, rows = 10, pitch = 26, r = 9;
+    var totalWork = 14, totalTrivia = 47;
+    var idx = 0;
+    // Pre-pick "real work" and "trivia" indices so they're scattered but reproducible.
+    var workSet = new Set([3, 17, 24, 51, 67, 82, 95, 108, 121, 134, 149, 162, 178, 191]);
+    var triviaSet = new Set();
+    var triviaCandidates = [];
+    for (var k = 0; k < 200; k++) if (!workSet.has(k)) triviaCandidates.push(k);
+    // pseudo-random spread, deterministic
+    var seed = 42;
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    for (var t = 0; t < totalTrivia; t++) {
+      var pick = Math.floor(rnd() * triviaCandidates.length);
+      triviaSet.add(triviaCandidates.splice(pick, 1)[0]);
+    }
+    for (var row = 0; row < rows; row++) {
+      for (var col = 0; col < cols; col++) {
+        var cx = col * pitch + r;
+        var cy = row * pitch + r;
+        var c = document.createElementNS(svgNS, "circle");
+        c.setAttribute("cx", cx);
+        c.setAttribute("cy", cy);
+        c.setAttribute("r", r - 1);
+        c.setAttribute("stroke", "#1F2937");
+        c.setAttribute("stroke-width", "1.5");
+        var cls = "dot ";
+        if (workSet.has(idx)) {
+          c.setAttribute("fill", "#10B981");
+          cls += "work";
+        } else if (triviaSet.has(idx)) {
+          c.setAttribute("fill", "#F59E0B");
+          cls += "trivia";
+        } else {
+          c.setAttribute("fill", "#E5E7EB");
+          cls += "idle";
+        }
+        c.setAttribute("class", cls);
+        // Stagger delay: small jitter so they pop in waves
+        var delay = -14 + 2 + (idx % 50) * 0.04;
+        c.style.animationDelay = delay.toFixed(2) + "s";
+        grid.appendChild(c);
+        idx++;
+      }
+    }
+  })();
+</script>
+</body>
+</html>

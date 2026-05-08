@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Why Tests Are Worth It (Even When They Slow You Down) — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Why Tests Are Worth It (Even When They Slow You Down)</h1>
+  <p class="subtitle">Tests are documentation for future-you, written in a language the runtime can verify</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Every engineer has a test they wish they had written. It is usually the one they didn't, the night before the bug shipped, in the code path they were sure couldn't break.</p>
+  <div class="callout"><strong>Mental model: tests are documentation for future-you</strong><br/>Stop thinking of tests as a *safety net*. That metaphor makes them sound like insurance: boring, optional, paid for in case of disaster.</div>
+  
+<h2>Move 1 — The regression bargain</h2>
+<ul>
+<li>Here is the bargain a test makes with you: *I will cost you 20 minutes today, and in exchange I will catch one specific bug forever, automatically, without you having to remember it exists.* That's it. That's the entire deal.</li>
+<li>1. Bug arrives in prod: On-call gets paged. Customer screenshot. Stack trace points to a `null` in checkout.</li>
+<li>2. Reproduce locally: Spend 15 min finding the input that triggers it. This is the expensive part. Don't waste it.</li>
+<li>3. Write the failing test FIRST: Before the fix. Same input. Watch it go red. This proves you actually understood the bug.</li>
+<li>4. Apply the fix: Now the fix is obvious because the test pinned down the exact behaviour you want.</li>
+<li>5. Watch the test go green: And it stays green forever. Future-you, refactoring this in 2027, gets a red CI before the bug ever ships again.</li>
+</ul>
+<h2>Move 2 — The coverage bait</h2>
+<ul>
+<li>Now the trap. Most teams who *do* invest in tests fall for **the coverage bait**: chasing a number — 80%, 90%, the magical 100% — instead of chasing the property the test should prove.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: confusing coverage with confidence: A 92% coverage badge on your README does not mean your product works. It means 92% of your lines were *executed* by some test, somewhere, at some point. Whether those tests asserted anything meaningful is a different question, and the badge will not tell you. Teams that optimise for coverage end up with brittle, low-value tests; teams that optimise for *catching the bugs that would actually ship* end up with fewer tests that pull more weight.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Tests are documentation for future-you, written in a language the runtime can verify.</div>
+<div class="takeaway">The regression bargain: pay 5-20 minutes today for ~1,800 free CI passes per year. The math only looks bad if you assume the bug will never come back.</div>
+<div class="takeaway">When fixing a bug, write the failing test *first*. The fix becomes obvious and the bug is locked out forever.</div>
+<div class="takeaway">The coverage bait is the trap of optimising for a 92% number while shipping zero real signal. Coverage is necessary, not sufficient.</div>
+<div class="takeaway">For every test, ask: *what specific bug would this catch?* If you can't answer in one sentence, it's theatre.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

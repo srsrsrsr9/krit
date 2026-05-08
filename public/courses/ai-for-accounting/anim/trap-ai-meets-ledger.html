@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: Letting AI auto-classify the whole ledger</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --accent: #F59E0B;
+    --good: #10B981;
+    --bad: #F43F5E;
+    --sky: #0EA5E9;
+    --violet: #8B5CF6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif; }
+  .stage { width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .wrap { width: 100%; max-width: 760px; }
+  svg.frame { width: 100%; height: auto; display: block; }
+  .caption { text-align: center; font-size: 13px; font-style: italic; color: var(--muted); margin-top: 10px; min-height: 18px; transition: opacity .4s; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 460" aria-label="A CA hands an entire ledger to an AI on full auto. Audit later finds compounded errors. The fix is an 80 20 split with humans on uncertain rows.">
+      <defs>
+        <pattern id="rowLines" width="40" height="14" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="13" x2="40" y2="13" stroke="#E5E7EB" stroke-width="1"/>
+        </pattern>
+        <clipPath id="ledgerClip">
+          <rect x="60" y="120" width="260" height="220" rx="10"/>
+        </clipPath>
+        <clipPath id="ledger2Clip">
+          <rect x="440" y="120" width="260" height="220" rx="10"/>
+        </clipPath>
+      </defs>
+
+      <!-- title -->
+      <text id="title" x="380" y="42" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Stage 1 · CA hands the entire ledger to AI</text>
+      <text id="sub" x="380" y="64" text-anchor="middle" font-size="13" fill="#6B7280">12,00,000 rows · auto-classify, no review</text>
+
+      <!-- LEFT: ledger panel -->
+      <g id="ledgerPanel">
+        <rect x="60" y="120" width="260" height="220" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+        <rect x="60" y="120" width="260" height="26" rx="10" fill="#FEF3C7" stroke="#1F2937" stroke-width="2"/>
+        <text x="74" y="138" font-size="12" font-weight="700" fill="#1F2937">ledger.csv</text>
+        <text x="300" y="138" text-anchor="end" font-size="11" class="mono" fill="#6B7280">12,00,000</text>
+        <g clip-path="url(#ledgerClip)">
+          <rect x="60" y="146" width="260" height="194" fill="url(#rowLines)"/>
+          <!-- a few hint rows -->
+          <g font-size="9" class="mono" fill="#6B7280">
+            <text x="72" y="160">2026-04-01  HDFC  ₹  48,200  …</text>
+            <text x="72" y="174">2026-04-01  ICICI  ₹  12,900  …</text>
+            <text x="72" y="188">2026-04-02  RENT   ₹  85,000  …</text>
+            <text x="72" y="202">2026-04-02  GST     ₹  74,310  …</text>
+            <text x="72" y="216">2026-04-03  PAYR   ₹3,40,000 …</text>
+            <text x="72" y="230">2026-04-03  REIMB  ₹  6,250  …</text>
+            <text x="72" y="244">2026-04-03  STRIPE ₹  18,415 …</text>
+            <text x="72" y="258">2026-04-04  RAZOR  ₹  92,108 …</text>
+            <text x="72" y="272">2026-04-04  AWS     ₹  41,210 …</text>
+            <text x="72" y="286">2026-04-04  ZOHO    ₹   1,499 …</text>
+            <text x="72" y="300">2026-04-05  GST     ₹  74,310 …</text>
+            <text x="72" y="314">2026-04-05  RENT    ₹  85,000 …</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- arrow / pipe -->
+      <g id="pipe">
+        <path d="M 326 230 L 432 230" stroke="#1F2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <polygon points="432,230 422,224 422,236" fill="#1F2937"/>
+      </g>
+
+      <!-- RIGHT: AI box -->
+      <g id="aiBox">
+        <rect x="440" y="120" width="260" height="220" rx="10" fill="#FAF5FF" stroke="#1F2937" stroke-width="2"/>
+        <rect x="440" y="120" width="260" height="26" rx="10" fill="#EDE9FE" stroke="#1F2937" stroke-width="2"/>
+        <text x="454" y="138" font-size="12" font-weight="700" fill="#1F2937">model · auto-classify</text>
+        <circle cx="690" cy="133" r="5" fill="#8B5CF6"/>
+        <!-- animated processing rows -->
+        <g id="aiRows" clip-path="url(#ledger2Clip)">
+          <g font-size="9" class="mono" fill="#1F2937">
+            <text x="452" y="172">→ Rent expense</text>
+            <text x="452" y="186">→ Bank charge</text>
+            <text x="452" y="200">→ GST output</text>
+            <text x="452" y="214">→ Payroll</text>
+            <text x="452" y="228">→ Reimbursement</text>
+            <text x="452" y="242">→ Software · SaaS</text>
+            <text x="452" y="256">→ Card receipt</text>
+            <text x="452" y="270">→ Cloud · infra</text>
+            <text x="452" y="284">→ Subscription</text>
+            <text x="452" y="298">→ GST output</text>
+            <text x="452" y="312">→ Rent expense</text>
+            <text x="452" y="326">→ Software · SaaS</text>
+          </g>
+          <rect id="aiSweep" x="440" y="146" width="260" height="22" fill="rgba(139,92,246,0.18)"/>
+        </g>
+      </g>
+
+      <!-- confidence dial -->
+      <g id="dial" transform="translate(380,388)">
+        <rect x="-150" y="-22" width="300" height="44" rx="22" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+        <rect id="dialFill" x="-148" y="-20" width="0" height="40" rx="20" fill="#10B981"/>
+        <text x="-138" y="5" font-size="12" font-weight="700" fill="#1F2937">AI confidence</text>
+        <text id="dialPct" x="138" y="5" text-anchor="end" font-size="13" font-weight="700" class="mono" fill="#1F2937">0%</text>
+      </g>
+
+      <!-- audit overlay (hidden initially) -->
+      <g id="auditOverlay" opacity="0">
+        <rect x="40" y="100" width="680" height="260" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+        <text x="380" y="138" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Year-end audit · 6% errors compounded</text>
+        <text x="380" y="160" text-anchor="middle" font-size="12" fill="#6B7280">94% confident sounded fine. Six in every hundred rows wasn't.</text>
+
+        <!-- 100 dots, 6 red -->
+        <g id="dots" transform="translate(120,184)"></g>
+
+        <g transform="translate(380,330)">
+          <rect x="-160" y="-22" width="320" height="40" rx="10" fill="#FEE2E2" stroke="#F43F5E" stroke-width="2"/>
+          <text x="0" y="4" text-anchor="middle" font-size="14" font-weight="700" fill="#9F1239">Misstatement: ₹47,00,000</text>
+        </g>
+      </g>
+
+      <!-- fix overlay -->
+      <g id="fixOverlay" opacity="0">
+        <rect x="40" y="100" width="680" height="260" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+        <text x="380" y="136" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">The fix · 80/20 split</text>
+
+        <!-- 80% bar -->
+        <g transform="translate(80,170)">
+          <rect x="0" y="0" width="600" height="38" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+          <rect x="0" y="0" width="480" height="38" rx="8" fill="#10B981"/>
+          <text x="240" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">80% · AI auto · high confidence</text>
+          <text x="540" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#92400E">20% · human</text>
+        </g>
+
+        <!-- queue -->
+        <g transform="translate(80,234)">
+          <text x="0" y="0" font-size="12" font-weight="700" fill="#1F2937">Human-in-the-loop queue</text>
+          <g font-size="11" class="mono" fill="#1F2937">
+            <rect x="0" y="10" width="600" height="22" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="10" y="26">conf 0.61 · vendor "ABC Ent" · payroll? reimbursement?</text>
+            <rect x="0" y="38" width="600" height="22" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="10" y="54">conf 0.48 · GST input · split rate suspected</text>
+            <rect x="0" y="66" width="600" height="22" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="10" y="82">conf 0.53 · cross-entity transfer · capex vs opex</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- stage label bottom -->
+      <text id="stageLabel" x="60" y="448" font-size="11" fill="#6B7280">stage 1 of 4</text>
+      <text x="700" y="448" text-anchor="end" font-size="11" fill="#6B7280">Krit · AI for Accounting</text>
+    </svg>
+    <div class="caption" id="cap">94% confident is not the same as 94% correct.</div>
+  </div>
+</main>
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (id) => document.getElementById(id);
+
+  // build dot grid (10x10, six red)
+  const dots = $('dots');
+  const redIdx = new Set([7, 23, 41, 58, 76, 92]);
+  for (let i = 0; i < 100; i++) {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const cx = (i % 20) * 22;
+    const cy = Math.floor(i / 20) * 22;
+    c.setAttribute('cx', cx);
+    c.setAttribute('cy', cy);
+    c.setAttribute('r', 6);
+    c.setAttribute('fill', redIdx.has(i) ? '#F43F5E' : '#A7F3D0');
+    c.setAttribute('stroke', redIdx.has(i) ? '#9F1239' : '#10B981');
+    c.setAttribute('stroke-width', 1.2);
+    c.setAttribute('opacity', 0);
+    c.dataset.i = i;
+    dots.appendChild(c);
+  }
+
+  const cap = $('cap');
+  const title = $('title');
+  const sub = $('sub');
+  const stageLabel = $('stageLabel');
+  const dialFill = $('dialFill');
+  const dialPct = $('dialPct');
+  const aiSweep = $('aiSweep');
+  const ledgerPanel = $('ledgerPanel');
+  const aiBox = $('aiBox');
+  const pipe = $('pipe');
+  const auditOverlay = $('auditOverlay');
+  const fixOverlay = $('fixOverlay');
+
+  const ease = (t) => {
+    // approximate cubic-bezier(0.22, 0.61, 0.36, 1)
+    return 1 - Math.pow(1 - t, 3);
+  };
+
+  function setDial(pct) {
+    dialFill.setAttribute('width', Math.round((pct/100) * 296));
+    dialPct.textContent = Math.round(pct) + '%';
+    if (pct < 70) dialFill.setAttribute('fill', '#F59E0B');
+    else dialFill.setAttribute('fill', '#10B981');
+  }
+
+  function setStage(n, t, s, c) {
+    stageLabel.textContent = 'stage ' + n + ' of 4';
+    title.textContent = t;
+    sub.textContent = s;
+    cap.style.opacity = 0;
+    setTimeout(() => { cap.textContent = c; cap.style.opacity = 1; }, 200);
+  }
+
+  let raf;
+  function tween(from, to, ms, fn, done) {
+    if (reduced) { fn(to); done && done(); return; }
+    const t0 = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - t0) / ms);
+      fn(from + (to - from) * ease(t));
+      if (t < 1) raf = requestAnimationFrame(step); else done && done();
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  function showOnly(which) {
+    [ledgerPanel, aiBox, pipe].forEach(el => el.style.opacity = (which === 'main' ? 1 : 0.15));
+    auditOverlay.setAttribute('opacity', which === 'audit' ? 1 : 0);
+    fixOverlay.setAttribute('opacity', which === 'fix' ? 1 : 0);
+  }
+
+  function sweepAi(ms, done) {
+    if (reduced) { aiSweep.setAttribute('y', 318); done && done(); return; }
+    const t0 = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - t0) / ms);
+      const y = 146 + ease(t) * 172;
+      aiSweep.setAttribute('y', y);
+      if (t < 1) requestAnimationFrame(step); else done && done();
+    }
+    requestAnimationFrame(step);
+  }
+
+  function revealDots(ms, done) {
+    if (reduced) {
+      dots.querySelectorAll('circle').forEach(c => c.setAttribute('opacity', 1));
+      done && done();
+      return;
+    }
+    const cs = Array.from(dots.querySelectorAll('circle'));
+    let i = 0;
+    const per = ms / cs.length;
+    const tick = () => {
+      if (i >= cs.length) { done && done(); return; }
+      cs[i].setAttribute('opacity', 1);
+      i++;
+      setTimeout(tick, per);
+    };
+    tick();
+  }
+
+  let timers = [];
+  const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+  function run() {
+    timers.forEach(clearTimeout); timers = [];
+    showOnly('main');
+    aiSweep.setAttribute('y', 146);
+    setDial(0);
+    dots.querySelectorAll('circle').forEach(c => c.setAttribute('opacity', 0));
+
+    // Stage 1
+    setStage(1, 'Stage 1 · CA hands the entire ledger to AI', '12,00,000 rows · auto-classify, no review',
+      'No human in the loop. Just speed.');
+
+    // Stage 2 — sweep + dial climb to 94
+    at(2400, () => {
+      setStage(2, 'Stage 2 · AI returns 94% confidence', 'looks great in the demo', 'Confidence is the model’s opinion of itself.');
+      sweepAi(reduced ? 0 : 3200);
+      tween(0, 94, reduced ? 0 : 3000, setDial);
+    });
+
+    // Stage 3 — audit overlay
+    at(6400, () => {
+      setStage(3, 'Stage 3 · Year-end audit', '6% of rows misclassified · ₹47L misstatement', '6% sounds small until it compounds across 12 lakh rows.');
+      showOnly('audit');
+      revealDots(reduced ? 0 : 1800);
+    });
+
+    // Stage 4 — fix overlay
+    at(10800, () => {
+      setStage(4, 'Stage 4 · The fix · 80/20 split', 'AI auto on confident rows · humans on the rest', 'AI as a triage layer, not a final answer.');
+      showOnly('fix');
+    });
+
+    // loop
+    at(15000, run);
+  }
+
+  run();
+})();
+</script>
+</body>
+</html>

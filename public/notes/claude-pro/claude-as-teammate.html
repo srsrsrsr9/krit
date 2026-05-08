@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Long-Running Workflows: Subagents, Background Jobs, Memory — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Long-Running Workflows: Subagents, Background Jobs, Memory</h1>
+  <p class="subtitle">Break work into small bounded tasks; orchestrate the rest</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Up to now, every Claude interaction in this course has been you and one Claude in a tight loop. This lesson is about the next level: workflows where multiple Claudes run in parallel, in the background, across hours, with handoffs between them.</p>
+  <div class="callout"><strong>Mental model: Claude works best in small bounded tasks</strong><br/>A 4-hour Claude run is not 240 1-minute Claude runs in a row. It is 240 chances for context to drift, an assumption to harden, or an early mistake to compound. The mental model: **break every long workflow into small bounded tasks with explicit handoffs**. Each task knows its input, its scope, its expected output, and its hard stop. Each handoff is a small artifact a human or another agent can read in 60 seconds. This is exactly how you would run a real engineering team, and Claude responds to the same shape.</div>
+  
+<h2>Move 1: The Parallel Fan-Out Pattern</h2>
+<ul>
+<li>When you have a task that decomposes into N independent sub-tasks, do not run them in sequence. Fan out N subagents in parallel, each with a bounded brief, each writing a small artifact, and merge at the end.</li>
+<li>Decompose: Independent slices: auth code, database queries, API routes, env-var usage, third-party deps.</li>
+<li>Brief each subagent: Each gets one slice + a hard scope + the 5-bullet artifact format + a 10-minute soft cap.</li>
+<li>Launch in parallel: 5 Task tool calls in one message. Each runs in its own context window with bounded budget.</li>
+<li>Wait for artifacts: Each writes to docs/audit/&lt;area&gt;.md. The orchestrator does not babysit — it waits for the deliverables.</li>
+<li>Merge: The orchestrator reads 5 artifacts (5 short docs), produces one ranked findings doc with severity.</li>
+<li>Human review: You read the merged doc. The 5 raw artifacts are there for drill-down. The whole audit took 12 minutes.</li>
+</ul>
+<h2>Move 2: The Artifact-Handoff Protocol</h2>
+<ul>
+<li>Long workflows fail because context dies. A 4-hour run accumulates 200K tokens of stdout, of which maybe 5K are signal and the rest is noise.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the runaway loop: The single most expensive mistake in orchestration is **the runaway loop**: an agent that keeps going past its useful scope because the stop condition was vague. A loop told to *'fix the test failures'* with no scope might decide that fixing tests requires refactoring the test framework. Forty minutes later it has touched the test runner, the CI config and your package.json. Defenses: every loop needs a hard scope (*'only files matching tests/auth/**'*), a budget (*'stop after 8 tool calls'*), and a deliverable (*'write a 5-bullet summary at the end'*). Without all three, you are gambling.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Long unsupervised Claude loops drift; break work into small bounded tasks with explicit handoffs.</div>
+<div class="takeaway">Parallel fan-out: independent sub-tasks run in parallel subagents, merge at the end. One-quarter wall clock, higher quality.</div>
+<div class="takeaway">Artifact handoff: every agent writes a 500-word structured deliverable. The next agent reads only the artifact, never the stream.</div>
+<div class="takeaway">Every long-running brief needs three constraints: scope, budget, deliverable. Without them you are gambling.</div>
+<div class="takeaway">MCP and tool integrations expand power and risk together; never combine two unsafe capabilities without a human review gate.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

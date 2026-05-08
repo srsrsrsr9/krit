@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude for cowork — drafts; you sign</title>
+<style>
+  :root{--bg:#FAF5FF;--ink:#1F2937;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:760px}
+  svg{width:100%;height:auto;display:block}
+  #rb{position:absolute;bottom:-4px;right:8px;background:#1F2937;color:#FAF5FF;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+  #rb:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  .stp{opacity:0}
+  @keyframes glowy{0%,100%{filter:drop-shadow(0 0 0 #10B981)}50%{filter:drop-shadow(0 0 8px #10B981)}}
+  .glow{animation:glowy 1.4s ease-in-out infinite}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg viewBox="0 0 760 480" aria-label="An inbox shows a vague request. Claude drafts a reply in a gray box. The human edits it, with yellow highlights on changes. The send button glows.">
+      <rect width="760" height="480" fill="#FAF5FF"/>
+      <text x="380" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Claude drafts. You sign.</text>
+
+      <!-- Inbox card (left) -->
+      <g id="inbox" class="stp">
+        <rect x="40" y="60" width="240" height="158" rx="12" fill="#fff" stroke="#8B5CF6" stroke-width="2"/>
+        <rect x="40" y="60" width="240" height="26" rx="12" fill="#8B5CF6"/>
+        <text x="56" y="78" font-size="11" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">INBOX · slack</text>
+        <circle cx="60" cy="108" r="11" fill="#FBBF24"/>
+        <text x="60" y="112" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">M</text>
+        <text x="80" y="106" font-size="11" font-weight="700" fill="#1F2937">Maya · 9:14 am</text>
+        <text x="80" y="120" font-size="10" fill="#6B7280">#design</text>
+        <text x="56" y="146" font-size="11" fill="#374151">"hey can you take a look at</text>
+        <text x="56" y="162" font-size="11" fill="#374151">the homepage thing? need it</text>
+        <text x="56" y="178" font-size="11" fill="#374151">soon-ish, lmk"</text>
+        <text x="56" y="200" font-size="9.5" fill="#6B7280" font-style="italic">(vague request, no deadline, no scope)</text>
+      </g>
+
+      <!-- Arrow inbox → claude -->
+      <g id="a1" class="stp"><path d="M284,140 L320,140" stroke="#8B5CF6" stroke-width="2.4" stroke-linecap="round" marker-end="url(#aP)"/></g>
+
+      <!-- Claude badge -->
+      <g id="claude" class="stp">
+        <circle cx="362" cy="140" r="28" fill="#fff" stroke="#F59E0B" stroke-width="2.5"/>
+        <text x="362" y="138" text-anchor="middle" font-size="10" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">claude</text>
+        <text x="362" y="152" text-anchor="middle" font-size="9" fill="#B45309">drafts</text>
+      </g>
+      <g id="a2" class="stp"><path d="M392,140 L432,140" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round" marker-end="url(#aA)"/></g>
+
+      <!-- Draft card (right, gray = unsent) -->
+      <g id="draft" class="stp">
+        <rect x="436" y="60" width="284" height="200" rx="12" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="6 4"/>
+        <rect x="436" y="60" width="284" height="26" rx="12" fill="#6B7280"/>
+        <text x="452" y="78" font-size="11" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">DRAFT · not sent</text>
+        <text x="452" y="106" font-size="11" fill="#374151">Hi Maya — happy to help.</text>
+        <text x="452" y="124" font-size="11" fill="#374151">Quick clarifying qs so I can</text>
+        <text x="452" y="142" font-size="11" fill="#374151">size it:</text>
+        <text x="452" y="162" font-size="11" fill="#374151">1. Hero copy or layout?</text>
+        <text x="452" y="180" font-size="11" fill="#374151">2. Hard deadline this week?</text>
+        <text x="452" y="198" font-size="11" fill="#374151">3. Should I loop in Sam?</text>
+        <text x="452" y="222" font-size="11" fill="#374151">Cheers,</text>
+        <text x="452" y="240" font-size="11" fill="#374151">— [you]</text>
+      </g>
+
+      <!-- Human reviews — yellow highlight overlays appear over edits -->
+      <g id="hl1" class="stp">
+        <rect x="448" y="94" width="200" height="18" rx="3" fill="#FEF3C7" opacity="0.85"/>
+        <text x="452" y="106" font-size="11" font-weight="600" fill="#92400E">Hey Maya — totally, on it.</text>
+      </g>
+      <g id="hl2" class="stp">
+        <rect x="448" y="170" width="220" height="18" rx="3" fill="#FEF3C7" opacity="0.85"/>
+        <text x="452" y="182" font-size="11" font-weight="600" fill="#92400E">2. Need it by Thursday EOD?</text>
+      </g>
+      <g id="hl3" class="stp">
+        <rect x="448" y="230" width="160" height="18" rx="3" fill="#FEF3C7" opacity="0.85"/>
+        <text x="452" y="242" font-size="11" font-weight="600" fill="#92400E">— Priya</text>
+      </g>
+
+      <!-- Cursor / pencil indicator -->
+      <g id="pencil" class="stp" transform="translate(660,98)">
+        <path d="M0,0 L14,-4 L18,0 L4,14 Z" fill="#F59E0B" stroke="#92400E" stroke-width="1.3"/>
+        <path d="M14,-4 L18,0" stroke="#92400E" stroke-width="1.3"/>
+      </g>
+
+      <!-- Stage labels (top of draft area) -->
+      <g id="labelDraft" class="stp">
+        <text x="578" y="48" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">first pass — gray, unsigned</text>
+      </g>
+      <g id="labelEdit" class="stp">
+        <text x="578" y="48" text-anchor="middle" font-size="11" fill="#92400E" font-style="italic">your edits — yellow = your voice</text>
+      </g>
+
+      <!-- Send button (bottom right) -->
+      <g id="send" class="stp" transform="translate(620,310)">
+        <rect x="-60" y="-22" width="120" height="44" rx="22" fill="#10B981" stroke="#065F46" stroke-width="2"/>
+        <text x="0" y="6" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">▶ Send</text>
+      </g>
+      <g id="sendGlow" class="stp" transform="translate(620,310)">
+        <circle r="40" fill="none" stroke="#10B981" stroke-width="2" opacity="0.5"/>
+        <circle r="52" fill="none" stroke="#10B981" stroke-width="1.5" opacity="0.3"/>
+      </g>
+
+      <!-- Caption on left below inbox -->
+      <text x="160" y="252" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">vague in</text>
+      <text x="160" y="268" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">→ structured out</text>
+
+      <!-- Bottom annotation -->
+      <rect x="60" y="356" width="640" height="92" rx="14" fill="#fff" stroke="#8B5CF6" stroke-width="2"/>
+      <text x="380" y="384" text-anchor="middle" font-size="13" font-weight="700" fill="#5B21B6">"Claude drafts; you sign."</text>
+      <text x="380" y="406" text-anchor="middle" font-size="11" fill="#374151">The draft is fast. The signature is yours — name, judgement, accountability.</text>
+      <text x="380" y="426" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">Two minutes of editing beats ten minutes of writing from a blank cursor.</text>
+
+      <defs>
+        <marker id="aP" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#8B5CF6"/></marker>
+        <marker id="aA" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F59E0B"/></marker>
+      </defs>
+    </svg>
+    <button id="rb">↺ reset</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timers=[];
+  function clearAll(){timers.forEach(clearTimeout);timers=[];}
+  function fade(id,dur,target){
+    const el=document.getElementById(id);if(!el)return;
+    const start=performance.now();const from=parseFloat(el.style.opacity||0);
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.style.opacity=String(from+(target-from)*e);
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function movePencil(toX,toY,dur){
+    const el=document.getElementById('pencil');
+    const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(el.getAttribute('transform'));
+    const fx=parseFloat(m[1]),fy=parseFloat(m[2]);
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.setAttribute('transform','translate('+(fx+(toX-fx)*e)+','+(fy+(toY-fy)*e)+')');
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function reset(){
+    clearAll();
+    ['inbox','a1','claude','a2','draft','hl1','hl2','hl3','pencil','labelDraft','labelEdit','send','sendGlow']
+      .forEach(id=>document.getElementById(id).style.opacity='0');
+    document.getElementById('pencil').setAttribute('transform','translate(660,98)');
+    document.getElementById('send').classList.remove('glow');
+    if(reduced){
+      ['inbox','claude','draft','hl1','hl2','hl3','send','sendGlow','a1','a2','labelEdit'].forEach(id=>document.getElementById(id).style.opacity='1');
+      return;
+    }
+    run();
+  }
+  function run(){
+    timers.push(setTimeout(()=>fade('inbox',450,1),200));
+    timers.push(setTimeout(()=>fade('a1',300,1),900));
+    timers.push(setTimeout(()=>fade('claude',400,1),1200));
+    timers.push(setTimeout(()=>fade('a2',300,1),1900));
+    timers.push(setTimeout(()=>fade('draft',500,1),2200));
+    timers.push(setTimeout(()=>fade('labelDraft',300,1),2400));
+    // human steps in
+    timers.push(setTimeout(()=>{fade('labelDraft',300,0);fade('labelEdit',300,1);fade('pencil',300,1);},4500));
+    timers.push(setTimeout(()=>{movePencil(656,104,500);fade('hl1',300,1);},5000));
+    timers.push(setTimeout(()=>{movePencil(672,180,800);fade('hl2',300,1);},6300));
+    timers.push(setTimeout(()=>{movePencil(612,240,800);fade('hl3',300,1);},7600));
+    // send glow
+    timers.push(setTimeout(()=>{fade('send',400,1);fade('sendGlow',400,1);document.getElementById('send').classList.add('glow');},9000));
+    // hold + reset
+    timers.push(setTimeout(reset,13500));
+  }
+  document.getElementById('rb').addEventListener('click',reset);
+  reset();
+})();
+</script>
+</body>
+</html>

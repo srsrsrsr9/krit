@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: Russian-doll subqueries</title>
+<style>
+:root { --bg:#FAF5FF; --ink:#1F2937; --bad:#F43F5E; --good:#10B981; --accent:#8B5CF6; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes nest{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade{0%,55%{opacity:1}100%{opacity:.15}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.l1{animation:nest .4s ease .2s both,fade 12s linear forwards}
+.l2{animation:nest .4s ease 1.0s both,fade 12s linear forwards}
+.l3{animation:nest .4s ease 1.8s both,fade 12s linear forwards}
+.l4{animation:nest .4s ease 2.6s both,fade 12s linear forwards}
+.label{animation:pop .4s ease 3.4s both,fade 12s linear forwards}
+.cte-stage1{animation:pop .5s ease 6s both}
+.cte-stage2{animation:pop .5s ease 7s both}
+.cte-stage3{animation:pop .5s ease 8s both}
+.cte-arrow1{animation:pop .3s ease 7s both}
+.cte-arrow2{animation:pop .3s ease 8s both}
+.cte-label{animation:pop .4s ease 9s both}
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="Four levels of nested subqueries flattening into a clean three-stage CTE pipeline">
+<rect width="720" height="405" rx="14" fill="#FAF5FF"/>
+
+<!-- LEFT: Russian-doll subqueries -->
+<g transform="translate(40 40)">
+<rect class="l1" width="280" height="200" rx="8" fill="#F43F5E" opacity=".15" stroke="#9D174D" stroke-width="2"/>
+<rect class="l2" x="20" y="30" width="240" height="150" rx="8" fill="#F43F5E" opacity=".25" stroke="#9D174D" stroke-width="2"/>
+<rect class="l3" x="40" y="60" width="200" height="100" rx="8" fill="#F43F5E" opacity=".4" stroke="#9D174D" stroke-width="2"/>
+<rect class="l4" x="60" y="90" width="160" height="50" rx="8" fill="#F43F5E" opacity=".7" stroke="#9D174D" stroke-width="2"/>
+<text class="l4" x="140" y="118" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="#FFF" font-weight="bold">SELECT * FROM ...</text>
+<text class="label" x="140" y="195" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#7F1D1D" font-weight="bold">4 levels deep · unreadable</text>
+</g>
+
+<!-- ARROW: collapse to CTE -->
+<g class="cte-stage1" style="animation-delay:5.5s">
+<line x1="340" y1="140" x2="380" y2="140" stroke="#1F2937" stroke-width="2"/>
+<polygon points="380,140 372,134 372,146" fill="#1F2937"/>
+<text x="360" y="125" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1F2937">refactor</text>
+</g>
+
+<!-- RIGHT: clean CTE pipeline -->
+<g transform="translate(390 40)" font-family="ui-monospace,monospace" font-size="11">
+<g class="cte-stage1">
+<rect width="290" height="50" rx="6" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="14" y="22" fill="#065F46" font-weight="bold">WITH paid_q1 AS (...)</text>
+<text x="14" y="40" fill="#064E3B">filter to Q1 paid orders</text>
+</g>
+<g class="cte-arrow1"><line x1="145" y1="50" x2="145" y2="68" stroke="#065F46" stroke-width="2"/><polygon points="145,68 140,60 150,60" fill="#065F46"/></g>
+<g class="cte-stage2">
+<rect y="68" width="290" height="50" rx="6" fill="#6EE7B7" stroke="#065F46" stroke-width="2"/>
+<text x="14" y="90" fill="#065F46" font-weight="bold">, city_revenue AS (...)</text>
+<text x="14" y="108" fill="#064E3B">group by city, sum amount</text>
+</g>
+<g class="cte-arrow2"><line x1="145" y1="118" x2="145" y2="136" stroke="#065F46" stroke-width="2"/><polygon points="145,136 140,128 150,128" fill="#065F46"/></g>
+<g class="cte-stage3">
+<rect y="136" width="290" height="50" rx="6" fill="#34D399" stroke="#065F46" stroke-width="2"/>
+<text x="14" y="158" fill="#FFF" font-weight="bold">SELECT * FROM city_revenue</text>
+<text x="14" y="176" fill="#FFF">ORDER BY rev DESC LIMIT 10</text>
+</g>
+<text class="cte-label" x="145" y="208" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#065F46" font-weight="bold">3 named stages · reviewable</text>
+</g>
+
+<text x="360" y="320" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1F2937" font-weight="bold">Same query plan · vastly different reading experience</text>
+<text x="360" y="345" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6B7280" font-style="italic">If you're nesting more than 2 deep, you wanted a CTE.</text>
+</svg>
+<div class="caption">Names are documentation. CTEs let your reviewer ask "what does paid_q1 do?" instead of guessing.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

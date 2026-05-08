@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Hiring for the AI Era — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Hiring for the AI Era</h1>
+  <p class="subtitle">Execution went to zero; judgment is the only thing left to filter on</p>
+  <p class="byline">notes by Meera ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Your hiring loop was designed for an era where execution was the moat. *Can you write the SQL?* *Can you draft the brief?* *Can you build the model?* The candidate who could execute fastest, cleanest, with the most polish, was the candidate to hire.</p>
+  <div class="callout"><strong>Mental model: hire for judgment, because execution went to zero</strong><br/>Hold this picture every time you walk into an interview. Execution skill — the ability to do the well-defined thing well — is now a commodity AI provides. Judgment — the ability to tell when a plausible answer is the wrong answer, when to push back, when to escalate, when to refuse — is the only thing left for a human to be senior at.</div>
+  
+<h2>Move 1 — The new T-shape</h2>
+<ul>
+<li>The classical T-shape was a hiring metaphor invented at IDEO and spread across every tech company in the 2010s: broad surface knowledge across many areas, with deep expertise in one. It's still useful — but the *what* of the depth has changed.</li>
+<li>Step 1 — Name the judgment moments: List 5 decisions a senior PM on this team made last quarter that an AI would not have made well. Be specific: 'said no to the founder's pet feature', 'caught the wrong dashboard metric before launch', 'pulled a deadline because engineering was hiding burnout'.</li>
+<li>Step 2 — Convert each into a behavioral question: Each judgment moment becomes a 'tell me about a time' question. Avoid hypotheticals — those reward articulate liars. Past behavior is the only signal that ports.</li>
+<li>Step 3 — Define the AI-supervisor probe: One question: 'Tell me about a time AI gave you a confident answer that turned out to be wrong. How did you catch it?' If they cannot answer, they have not actually used AI as a senior; they've used it as a junior.</li>
+<li>Step 4 — Define the restraint probe: One question: 'Walk me through a decision where you chose not to use AI even though you could have.' The strongest seniors say no to AI sometimes. Those who never have, haven't been supervising it.</li>
+<li>Step 5 — Set the rubric, calibrate the panel: Three levels per question: clear example with the failure mode named (4 points); plausible example without specifics (2 points); vague or absent (0 points). Calibrate the panel against three real candidates from the past quarter so the bar isn't drifting.</li>
+</ul>
+<h2>Move 2 — Behavioral interview design</h2>
+<ul>
+<li>Behavioral interviews work because past specific behavior predicts future behavior much better than hypothetical questions. *'Tell me about a time'* &gt; *'what would you do if'*.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: hire for AI fluency, not for the actual job: The most common 2026 hiring mistake: a candidate's resume looks like an AI tool buffet, the recruiter is impressed, and the interview drifts into 'how do you use Cursor/Claude/Copilot' territory. Two rounds later, you've hired someone who can talk about AI but cannot actually do product strategy, financial analysis, or whatever the role is supposed to do.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Execution skill went to zero in 2024; judgment is the only thing left for a senior to be filtered on.</div>
+<div class="takeaway">The new T-shape is broad-top, AI-orchestration band, deep-judgment-in-one-domain bottom.</div>
+<div class="takeaway">The hiring squeeze is in the middle layer; mid-level pure-execution roles evaporate while senior judgment roles get more valuable.</div>
+<div class="takeaway">Four behavioral questions cover most of what you need: the catch, the restraint, the hand-off, the disagreement.</div>
+<div class="takeaway">'Hire for AI fluency, not the actual job' is the trap that fills your team with people who can talk about AI but cannot do the work.</div>
+  <div class="signoff">— Meera, on the bus, again</div>
+</main>
+</body>
+</html>

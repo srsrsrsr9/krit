@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The PM as Translator</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--eng:#0EA5E9;--des:#8B5CF6;--biz:#10B981;--pm:#F59E0B;--card:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.wrap{position:relative;width:100%;max-width:760px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+#rb{position:absolute;top:8px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="wrap">
+<svg viewBox="0 0 760 460" aria-label="Product manager translates incoming requests from engineering, design, and business into a single prioritized list">
+  <rect width="760" height="460" fill="#FFF7ED"/>
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">The PM is a translator.</text>
+
+  <!-- Three stakeholder bubbles -->
+  <g id="eng">
+    <rect x="20" y="70" width="150" height="64" rx="12" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="2"/>
+    <text x="95" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#0EA5E9">ENGINEERING</text>
+    <text x="95" y="116" text-anchor="middle" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace">"bytes"</text>
+  </g>
+  <g id="des">
+    <rect x="20" y="200" width="150" height="64" rx="12" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="95" y="224" text-anchor="middle" font-size="12" font-weight="700" fill="#8B5CF6">DESIGN</text>
+    <text x="95" y="246" text-anchor="middle" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace">"mockups"</text>
+  </g>
+  <g id="biz">
+    <rect x="20" y="330" width="150" height="64" rx="12" fill="#FFFFFF" stroke="#10B981" stroke-width="2"/>
+    <text x="95" y="354" text-anchor="middle" font-size="12" font-weight="700" fill="#10B981">BUSINESS</text>
+    <text x="95" y="376" text-anchor="middle" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace">"revenue"</text>
+  </g>
+
+  <!-- PM hub -->
+  <g id="pm">
+    <circle cx="370" cy="232" r="56" fill="#FEF3C7" stroke="#F59E0B" stroke-width="3"/>
+    <text x="370" y="228" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2937">PM</text>
+    <text x="370" y="246" text-anchor="middle" font-size="10" fill="#6B7280">translator</text>
+  </g>
+
+  <!-- Output list area -->
+  <g id="out">
+    <rect x="540" y="80" width="200" height="320" rx="12" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+    <text x="640" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#6B7280">PRIORITIZED LIST</text>
+    <line x1="558" y1="116" x2="722" y2="116" stroke="#E5E7EB" stroke-width="1"/>
+  </g>
+
+  <!-- Tokens travelling: created via JS -->
+  <g id="tokens"></g>
+
+  <!-- Output items appear here -->
+  <g id="items"></g>
+
+  <!-- Bottom caption bar -->
+</svg>
+<div class="cap" id="cap">incoming requests, in three different languages</div>
+<button id="rb">reset</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+var svgNS='http://www.w3.org/2000/svg';
+var prefersReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,prefersReduce?0:ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function ease(t){return 1-Math.pow(1-t,3);}
+
+function cap(t){document.getElementById('cap').textContent=t;}
+
+var SOURCES=[
+  {x:170,y:102,color:'#0EA5E9',label:'API'},
+  {x:170,y:232,color:'#8B5CF6',label:'UX'},
+  {x:170,y:362,color:'#10B981',label:'$$$'},
+  {x:170,y:102,color:'#0EA5E9',label:'perf'},
+  {x:170,y:232,color:'#8B5CF6',label:'flow'},
+  {x:170,y:362,color:'#10B981',label:'churn'}
+];
+var OUTPUTS=[
+  {label:'1. Fix checkout drop-off',color:'#10B981'},
+  {label:'2. Cache product API',color:'#0EA5E9'},
+  {label:'3. New onboarding flow',color:'#8B5CF6'},
+  {label:'4. Email re-engagement',color:'#10B981'},
+  {label:'5. Dashboard perf pass',color:'#0EA5E9'},
+  {label:'6. Empty states',color:'#8B5CF6'}
+];
+
+function makeToken(src){
+  var g=document.createElementNS(svgNS,'g');
+  var c=document.createElementNS(svgNS,'circle');
+  c.setAttribute('r',14);c.setAttribute('fill',src.color);c.setAttribute('opacity','0.92');
+  var t=document.createElementNS(svgNS,'text');
+  t.setAttribute('text-anchor','middle');t.setAttribute('y',4);
+  t.setAttribute('font-size','9');t.setAttribute('fill','#FFFFFF');
+  t.setAttribute('font-weight','700');t.setAttribute('font-family','ui-monospace,monospace');
+  t.textContent=src.label;
+  g.appendChild(c);g.appendChild(t);
+  g.setAttribute('transform','translate('+src.x+','+src.y+')');
+  document.getElementById('tokens').appendChild(g);
+  return g;
+}
+function moveToken(g,fromX,fromY,toX,toY,dur,cb){
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1),e=ease(t);
+    var x=fromX+(toX-fromX)*e,y=fromY+(toY-fromY)*e;
+    g.setAttribute('transform','translate('+x+','+y+')');
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function pulsePM(){
+  var pm=document.getElementById('pm').firstChild;
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/350,1);
+    var r=56+6*Math.sin(t*Math.PI);
+    pm.setAttribute('r',r);
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function fadeOutToken(g,dur,cb){
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    g.setAttribute('opacity',String(1-t));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else{g.remove();if(cb)cb();}
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function addItem(i){
+  var item=OUTPUTS[i];
+  var y=130+i*42;
+  var g=document.createElementNS(svgNS,'g');
+  g.setAttribute('opacity','0');
+  var r=document.createElementNS(svgNS,'rect');
+  r.setAttribute('x',558);r.setAttribute('y',y);r.setAttribute('width',164);r.setAttribute('height',32);
+  r.setAttribute('rx',6);r.setAttribute('fill','#FAF5FF');r.setAttribute('stroke',item.color);r.setAttribute('stroke-width','1.5');
+  var t=document.createElementNS(svgNS,'text');
+  t.setAttribute('x',570);t.setAttribute('y',y+20);t.setAttribute('font-size','11');t.setAttribute('fill','#1F2937');t.setAttribute('font-weight','600');
+  t.textContent=item.label;
+  g.appendChild(r);g.appendChild(t);
+  document.getElementById('items').appendChild(g);
+  var s=performance.now();
+  function tick(now){
+    var tt=Math.min((now-s)/300,1);
+    g.setAttribute('opacity',String(ease(tt)));
+    if(tt<1)rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function run(){
+  clearAll();
+  document.getElementById('tokens').innerHTML='';
+  document.getElementById('items').innerHTML='';
+  cap('incoming requests, in three different languages');
+
+  // Send 6 tokens in over 4s
+  for(var i=0;i<SOURCES.length;i++){
+    (function(idx){
+      after(400+idx*450,function(){
+        var src=SOURCES[idx];
+        var g=makeToken(src);
+        moveToken(g,src.x,src.y,314,232,700,function(){
+          pulsePM();
+          after(120,function(){
+            // emerge as output item
+            moveToken(g,314,232,560,148+idx*42,500,function(){
+              fadeOutToken(g,200,function(){addItem(idx);});
+            });
+          });
+        });
+      });
+    })(i);
+  }
+
+  after(2400,function(){cap('the PM listens, sequences, translates');});
+  after(5200,function(){cap('output: one coherent list everyone can build from');});
+
+  // Loop
+  after(11500,function(){
+    cap('reset');
+    after(700,run);
+  });
+}
+
+document.getElementById('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

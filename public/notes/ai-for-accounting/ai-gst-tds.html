@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>GST, TDS, and Indian Tax Workflows with AI — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>GST, TDS, and Indian Tax Workflows with AI</h1>
+  <p class="subtitle">Tax laws are knowable; AI shouldn't guess</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Two months ago, an articled assistant in a Hyderabad firm filed a GSTR-3B based on ChatGPT's summary of the input tax credit position. ChatGPT confidently cited &quot;Notification 24/2023-Central Tax&quot; as the basis for a partial reversal.</p>
+  <div class="callout"><strong>Mental model: tax laws are knowable; AI shouldn't guess</strong><br/>Indian tax law is finite. Every notification, every circular, every section is published, dated, indexed. There is no good reason for an AI to *guess* a section number when the actual document is one retrieval away.</div>
+  
+<h2>Move 1 — RAG against the actual GST/IT Act</h2>
+<ul>
+<li>First named move. Build (or buy) a **RAG (retrieval-augmented generation) pipeline** indexed over the actual primary sources.</li>
+<li>Step 1 — The question arrives: Client asks: 'Can we claim ITC on the new Mahindra Bolero we bought for our sales team?' Plain English, full of context the model needs.</li>
+<li>Step 2 — Retrieve: The retriever scans the corpus and returns: Section 17(5)(a) CGST Act (the blocked-credit list), Circular 156/12/2021, the relevant ITAT decision on motor vehicles for sales staff, and any state-specific notification.</li>
+<li>Step 3 — Ground: The retrieved passages are stuffed into the model's context with the instruction: 'Answer only based on these passages. Quote verbatim. If the passages do not address the question, say so.'</li>
+<li>Step 4 — Generate with citation: Model returns: 'Section 17(5)(a) blocks ITC on motor vehicles for transportation of persons with seating capacity of 13 or fewer, except when used for further supply of such vehicles, transportation of passengers, or driving training. The Bolero, used for sales staff transport, falls within the blocked list. ITC is not available.' Cites Section 17(5)(a) verbatim and the circular.</li>
+<li>Step 5 — CA verifies: You open Section 17(5)(a) on the CBIC site or your bare-act subscription, confirm the quote is exact, and confirm the conclusion. Two minutes; high signal.</li>
+<li>Step 6 — Eval log: Question, retrieved passages, model response, your verification note, and your final advice all logged with timestamp and reviewer name. If a notice arrives in 2028, you can defend the position.</li>
+</ul>
+<h2>Move 2 — The never-ship rule for filings</h2>
+<ul>
+<li>Second named move, and the most important rule in this entire course. **The never-ship rule: AI never produces the version of a statutory filing that is filed.** Not GSTR-1, not GSTR-3B, not Form 26Q, not Form 3CD, not the income tax return, not the audit report.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the rubber-stamp review: The most common failure mode is not skipping review entirely; it is doing review badly. A senior who 'reviews' a GSTR-3B by clicking through it in 90 seconds and signing has not reviewed it.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Indian tax law is finite and indexed; there is no excuse for asking AI to recall when retrieval is one query away.</div>
+<div class="takeaway">RAG against the actual GST/IT acts, rules, circulars, and case law turns the model from a hallucinator into a reader.</div>
+<div class="takeaway">The never-ship rule: AI never produces the version of a statutory filing that is filed; the CA does, after substantive review.</div>
+<div class="takeaway">Substantive review is measured by changes made; a review that catches nothing is not a review.</div>
+<div class="takeaway">Every citation is verified against the source by a human whose name is in the eval log; no exceptions, no shortcuts.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

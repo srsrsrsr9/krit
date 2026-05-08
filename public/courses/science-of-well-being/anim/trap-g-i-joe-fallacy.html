@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Willpower Tax</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ECFDF5;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#ECFDF5;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" aria-label="The willpower tax: a battery drains while resisting cues; redesigning the environment keeps it full.">
+  <rect width="760" height="470" fill="#ECFDF5"/>
+
+  <text x="380" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">The willpower tax.</text>
+  <text x="380" y="54" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Knowing isn't half the battle. Environment is.</text>
+
+  <!-- Divider -->
+  <line x1="380" y1="80" x2="380" y2="430" stroke="#A7F3D0" stroke-width="2" stroke-dasharray="4 6"/>
+  <text x="190" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#F43F5E">SCENE A · resist the room</text>
+  <text x="570" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#10B981">SCENE B · redesign the room</text>
+
+  <!-- ─────── LEFT SCENE ─────── -->
+  <g id="sceneA">
+    <!-- Room -->
+    <rect x="40" y="110" width="300" height="200" rx="10" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+    <line x1="40" y1="280" x2="340" y2="280" stroke="#FCA5A5" stroke-width="1"/>
+
+    <!-- Tempting phone on couch -->
+    <g id="aPhone">
+      <rect x="240" y="232" width="36" height="56" rx="6" fill="#1F2937"/>
+      <rect x="244" y="238" width="28" height="40" rx="2" fill="#0EA5E9"/>
+      <text x="258" y="262" text-anchor="middle" font-size="13" fill="white">📱</text>
+      <!-- attention waves -->
+      <g id="aWaves" stroke="#F43F5E" stroke-width="1.5" fill="none" opacity="0">
+        <path d="M286,250 Q298,254 286,266"/>
+        <path d="M292,244 Q310,254 292,272"/>
+      </g>
+    </g>
+
+    <!-- Snack jar on counter -->
+    <g id="aSnack">
+      <rect x="60" y="240" width="40" height="48" rx="4" fill="#FCD34D" stroke="#1F2937" stroke-width="1.5"/>
+      <rect x="58" y="234" width="44" height="10" rx="2" fill="#92400E"/>
+      <text x="80" y="270" text-anchor="middle" font-size="12">🍪</text>
+    </g>
+
+    <!-- Person -->
+    <g id="aPerson" transform="translate(170,240)">
+      <line x1="-4" y1="0"  x2="-7" y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="4"  y1="0"  x2="7"  y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="-32" rx="12" ry="15" fill="#FECACA" stroke="#1F2937" stroke-width="2"/>
+      <circle cx="0" cy="-54" r="10" fill="#FCA5A5" stroke="#1F2937" stroke-width="2"/>
+      <!-- frowning eyes/mouth (sweat shows later) -->
+      <circle cx="-3" cy="-55" r="1.3" fill="#1F2937"/>
+      <circle cx="3"  cy="-55" r="1.3" fill="#1F2937"/>
+      <path d="M-4,-49 Q0,-51 4,-49" stroke="#1F2937" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <line x1="-9" y1="-34" x2="-15" y2="-26" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="9"  y1="-34" x2="15"  y2="-26" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- sweat -->
+      <g id="aSweat" opacity="0">
+        <ellipse cx="-12" cy="-58" rx="2" ry="3" fill="#0EA5E9"/>
+        <ellipse cx="12"  cy="-58" rx="2" ry="3" fill="#0EA5E9"/>
+      </g>
+    </g>
+
+    <!-- Battery -->
+    <g transform="translate(60,330)">
+      <text x="130" y="-4" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">WILLPOWER</text>
+      <rect x="0" y="6" width="240" height="28" rx="6" fill="white" stroke="#1F2937" stroke-width="2"/>
+      <rect x="240" y="14" width="6" height="12" rx="2" fill="#1F2937"/>
+      <rect id="aFill" x="3" y="9" width="234" height="22" rx="4" fill="#10B981"/>
+      <text id="aPct" x="130" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="ui-monospace,monospace">100%</text>
+    </g>
+
+    <text id="aCap" x="190" y="408" text-anchor="middle" font-size="11" font-style="italic" fill="#6B7280" opacity="0">"don't pick up the phone…"</text>
+  </g>
+
+  <!-- ─────── RIGHT SCENE ─────── -->
+  <g id="sceneB">
+    <!-- Room -->
+    <rect x="420" y="110" width="300" height="200" rx="10" fill="#F0FDF4" stroke="#6EE7B7" stroke-width="1.5"/>
+    <line x1="420" y1="280" x2="720" y2="280" stroke="#6EE7B7" stroke-width="1"/>
+
+    <!-- Phone in drawer (away) -->
+    <g id="bDrawer" transform="translate(440,250)">
+      <rect x="0" y="0" width="60" height="40" rx="4" fill="#FCFCE0" stroke="#1F2937" stroke-width="1.5"/>
+      <rect x="22" y="18" width="16" height="3" rx="1" fill="#1F2937"/>
+      <text x="30" y="58" text-anchor="middle" font-size="9" fill="#6B7280">phone in drawer</text>
+    </g>
+
+    <!-- Shoes by door -->
+    <g id="bShoes" transform="translate(670,278)">
+      <ellipse cx="-8" cy="0" rx="14" ry="5" fill="#10B981"/>
+      <ellipse cx="14" cy="0" rx="14" ry="5" fill="#10B981"/>
+      <text x="3" y="20" text-anchor="middle" font-size="9" fill="#6B7280">shoes by door</text>
+    </g>
+
+    <!-- Water bottle on table (cue for hydration) -->
+    <g transform="translate(580,232)">
+      <rect x="-7" y="0" width="14" height="32" rx="3" fill="#0EA5E9" opacity="0.85"/>
+      <rect x="-5" y="-6" width="10" height="8" rx="2" fill="#1F2937"/>
+      <text x="0" y="50" text-anchor="middle" font-size="9" fill="#6B7280">water out</text>
+    </g>
+
+    <!-- Person calm -->
+    <g id="bPerson" transform="translate(540,260)">
+      <line x1="-4" y1="0"  x2="-7" y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="4"  y1="0"  x2="7"  y2="-22" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="0" cy="-32" rx="12" ry="15" fill="#A7F3D0" stroke="#1F2937" stroke-width="2"/>
+      <circle cx="0" cy="-54" r="10" fill="#6EE7B7" stroke="#1F2937" stroke-width="2"/>
+      <circle cx="-3" cy="-55" r="1.3" fill="#1F2937"/>
+      <circle cx="3"  cy="-55" r="1.3" fill="#1F2937"/>
+      <path d="M-4,-50 Q0,-46 4,-50" stroke="#1F2937" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <line x1="-9" y1="-34" x2="-15" y2="-26" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="9"  y1="-34" x2="15"  y2="-26" stroke="#1F2937" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Battery B -->
+    <g transform="translate(440,330)">
+      <text x="130" y="-4" text-anchor="middle" font-size="11" font-weight="600" fill="#6B7280">WILLPOWER</text>
+      <rect x="0" y="6" width="240" height="28" rx="6" fill="white" stroke="#1F2937" stroke-width="2"/>
+      <rect x="240" y="14" width="6" height="12" rx="2" fill="#1F2937"/>
+      <rect id="bFill" x="3" y="9" width="234" height="22" rx="4" fill="#10B981"/>
+      <text id="bPct" x="130" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="ui-monospace,monospace">100%</text>
+    </g>
+
+    <text id="bCap" x="570" y="408" text-anchor="middle" font-size="11" font-style="italic" fill="#6B7280" opacity="0">"oh — easy."</text>
+  </g>
+
+  <!-- Big caption -->
+  <rect id="capBg" x="40" y="438" width="680" height="24" rx="6" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="380" y="454" text-anchor="middle" font-size="12" fill="white" opacity="0"></text>
+
+  <!-- End card -->
+  <g id="endCard" opacity="0">
+    <rect x="120" y="170" width="520" height="120" rx="14" fill="#1F2937"/>
+    <text x="380" y="212" text-anchor="middle" font-size="16" fill="white" font-weight="700">Knowing is not half the battle.</text>
+    <text x="380" y="240" text-anchor="middle" font-size="13" fill="#A7F3D0">Redesigning the room is.</text>
+    <text x="380" y="266" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">— G.I. Joe fallacy, decoded.</text>
+  </g>
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+let tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function setCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,350,null);
+  animOp('capBg',0,0.92,350,null);
+}
+function clearCap(cb){
+  animOp('cap',1,0,250,null);
+  animOp('capBg',0.92,0,250,cb);
+}
+
+// Drain battery from fromPct to toPct
+function drain(fillId,pctId,fromPct,toPct,dur,cb){
+  const fill=$id(fillId), pct=$id(pctId);
+  const s=performance.now(), maxW=234;
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const v=lerp(fromPct,toPct,e);
+    fill.setAttribute('width',(maxW*v/100).toFixed(1));
+    pct.textContent=Math.round(v)+'%';
+    // color transitions
+    let c='#10B981';
+    if(v<60) c='#F59E0B';
+    if(v<30) c='#F43F5E';
+    fill.setAttribute('fill',c);
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Phone wave pulse
+function pulseWaves(times){
+  let n=0;
+  function once(){
+    if(n>=times) return;
+    n++;
+    setOp('aWaves',1);
+    after(400,()=>{ animOp('aWaves',1,0,400,()=>{ after(120,once); }); });
+  }
+  once();
+}
+
+// Person micro-shake
+function shake(id,dur,amp){
+  const el=$id(id);
+  const orig=el.getAttribute('transform')||'translate(0,0)';
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    const dx=Math.sin(t*40)*amp*(1-t);
+    el.setAttribute('transform',orig+` translate(${dx.toFixed(2)},0)`);
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else el.setAttribute('transform',orig);
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function run(){
+  clearAll();
+  // Reset batteries
+  $id('aFill').setAttribute('width','234');$id('aFill').setAttribute('fill','#10B981');$id('aPct').textContent='100%';
+  $id('bFill').setAttribute('width','234');$id('bFill').setAttribute('fill','#10B981');$id('bPct').textContent='100%';
+  setOp('aSweat',0); setOp('aWaves',0); setOp('aCap',0); setOp('bCap',0);
+  setOp('cap',0); setOp('capBg',0); setOp('endCard',0);
+
+  // Stage 1: Scene A — phone calls; willpower drops
+  after(600,()=>setCap('Same person. Same goals. Two rooms.'));
+  after(2300,()=>clearCap(null));
+
+  after(2700,()=>{ setCap('Scene A — phone in sight, snacks on counter.'); animOp('aCap',0,1,400,null); });
+  after(3100,()=>{ pulseWaves(2); shake('aPerson',900,2); drain('aFill','aPct',100,72,1500,null); });
+  after(4400,()=>{ animOp('aSweat',0,1,400,null); pulseWaves(2); shake('aPerson',900,2); drain('aFill','aPct',72,42,1500,null); });
+  after(6100,()=>{ pulseWaves(2); shake('aPerson',900,3); drain('aFill','aPct',42,16,1500,null); });
+  after(7700,()=>clearCap(null));
+  after(7900,()=>{ setCap('Resisting drained 84% — and she still might cave.'); });
+  after(9700,()=>clearCap(null));
+  after(9900,()=>animOp('aCap',1,0,400,null));
+
+  // Stage 2: Scene B — redesigned room; willpower steady
+  after(10300,()=>{ setCap('Scene B — phone away, shoes by door, water out.'); animOp('bCap',0,1,400,null); });
+  // small jitters but battery stays
+  after(11000,()=>drain('bFill','bPct',100,98,800,null));
+  after(12000,()=>drain('bFill','bPct',98,96,800,null));
+  after(13000,()=>drain('bFill','bPct',96,94,800,null));
+  after(13800,()=>clearCap(null));
+  after(14000,()=>setCap('No fight. The cue isn\'t there.'));
+  after(15700,()=>clearCap(null));
+  after(15900,()=>animOp('bCap',1,0,400,null));
+
+  // End card
+  after(16300,()=>animOp('endCard',0,1,500,null));
+  after(19400,()=>animOp('endCard',1,0,500,()=>{ after(400,run); }));
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

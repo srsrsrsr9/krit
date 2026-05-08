@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team Design with AI</title>
+<style>
+  :root {
+    --bg: #EFF6FF;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --human: #0EA5E9;
+    --ai: #8B5CF6;
+    --good: #10B981;
+    --accent: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px; padding: 0 12px;
+  }
+  .reset {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .reset:hover { background: #DBEAFE; }
+  text { font-family: inherit; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="A team of four humans gains a fifth member, an AI shown as translucent with an A I badge. The handoff loop runs: human drafts, AI reviews, human approves. As eval data accumulates, AI's auto-approve threshold rises from low to high.">
+      <!-- Title -->
+      <text x="380" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Designing a team with AI as a member</text>
+      <text x="380" y="56" text-anchor="middle" font-size="13" font-style="italic" fill="#6B7280">handoffs, evals, and a slowly-rising trust threshold</text>
+
+      <!-- Team area -->
+      <g id="team">
+        <!-- 4 humans -->
+        <g class="member human" transform="translate(150,150)">
+          <circle r="28" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2.4"/>
+          <circle cx="0" cy="-7" r="9" fill="#FFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M -14 12 Q -14 0 0 0 Q 14 0 14 12 L 12 22 L -12 22 Z" fill="#FFF" stroke="#1F2937" stroke-width="1.8" stroke-linejoin="round"/>
+          <text y="50" text-anchor="middle" font-size="11" fill="#0369A1" font-weight="600">Mira</text>
+          <text y="63" text-anchor="middle" font-size="9" fill="#6B7280">drafter</text>
+        </g>
+        <g class="member human" transform="translate(280,135)">
+          <circle r="28" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2.4"/>
+          <circle cx="0" cy="-7" r="9" fill="#FFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M -14 12 Q -14 0 0 0 Q 14 0 14 12 L 12 22 L -12 22 Z" fill="#FFF" stroke="#1F2937" stroke-width="1.8" stroke-linejoin="round"/>
+          <text y="50" text-anchor="middle" font-size="11" fill="#0369A1" font-weight="600">Theo</text>
+          <text y="63" text-anchor="middle" font-size="9" fill="#6B7280">reviewer</text>
+        </g>
+        <g class="member human" transform="translate(150,260)">
+          <circle r="28" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2.4"/>
+          <circle cx="0" cy="-7" r="9" fill="#FFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M -14 12 Q -14 0 0 0 Q 14 0 14 12 L 12 22 L -12 22 Z" fill="#FFF" stroke="#1F2937" stroke-width="1.8" stroke-linejoin="round"/>
+          <text y="50" text-anchor="middle" font-size="11" fill="#0369A1" font-weight="600">Jin</text>
+          <text y="63" text-anchor="middle" font-size="9" fill="#6B7280">approver</text>
+        </g>
+        <g class="member human" transform="translate(280,275)">
+          <circle r="28" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2.4"/>
+          <circle cx="0" cy="-7" r="9" fill="#FFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M -14 12 Q -14 0 0 0 Q 14 0 14 12 L 12 22 L -12 22 Z" fill="#FFF" stroke="#1F2937" stroke-width="1.8" stroke-linejoin="round"/>
+          <text y="50" text-anchor="middle" font-size="11" fill="#0369A1" font-weight="600">Ada</text>
+          <text y="63" text-anchor="middle" font-size="9" fill="#6B7280">specialist</text>
+        </g>
+
+        <!-- AI member appears later -->
+        <g id="aiMember" class="member ai" transform="translate(220,205)" opacity="0">
+          <circle r="32" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2.4" stroke-dasharray="4 3" opacity="0.85"/>
+          <circle cx="0" cy="-7" r="9" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1.8"/>
+          <path d="M -14 12 Q -14 0 0 0 Q 14 0 14 12 L 12 22 L -12 22 Z" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1.8" stroke-linejoin="round" opacity="0.9"/>
+          <!-- AI badge -->
+          <g transform="translate(18,-16)">
+            <rect x="-13" y="-9" width="26" height="16" rx="8" fill="#8B5CF6"/>
+            <text y="3" text-anchor="middle" font-size="10" font-weight="700" fill="#FFFFFF">AI</text>
+          </g>
+          <text y="55" text-anchor="middle" font-size="11" fill="#7C3AED" font-weight="600">Vega</text>
+          <text y="68" text-anchor="middle" font-size="9" fill="#7C3AED" font-style="italic">5th member</text>
+        </g>
+      </g>
+
+      <!-- Handoff loop visualization (right side) -->
+      <g id="loop" transform="translate(420,90)" opacity="0">
+        <text x="155" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#1F2937">handoff loop</text>
+
+        <!-- three nodes in a triangle -->
+        <g transform="translate(40,80)">
+          <circle r="26" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#0369A1" font-weight="600">human</text>
+          <text y="15" text-anchor="middle" font-size="9" fill="#0369A1">draft</text>
+        </g>
+        <g transform="translate(270,80)">
+          <circle r="26" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="3 3"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#7C3AED" font-weight="600">AI</text>
+          <text y="15" text-anchor="middle" font-size="9" fill="#7C3AED">review</text>
+        </g>
+        <g transform="translate(155,200)">
+          <circle r="26" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#047857" font-weight="600">human</text>
+          <text y="15" text-anchor="middle" font-size="9" fill="#047857">approve</text>
+        </g>
+
+        <!-- arrows -->
+        <path d="M 65 75 Q 155 30 248 75" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round" marker-end="url(#arr)"/>
+        <path d="M 270 105 Q 245 175 175 195" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round" marker-end="url(#arr)"/>
+        <path d="M 135 195 Q 60 175 45 105" fill="none" stroke="#9CA3AF" stroke-width="1.8" stroke-linecap="round" marker-end="url(#arr)"/>
+
+        <!-- moving packet -->
+        <circle id="packet" cx="40" cy="80" r="6" fill="#F59E0B"/>
+      </g>
+
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M 0 0 L 7 4 L 0 8 z" fill="#9CA3AF"/>
+        </marker>
+      </defs>
+
+      <!-- Trust threshold gauge (bottom) -->
+      <g id="threshold" transform="translate(60,360)" opacity="0">
+        <text font-size="12" font-weight="700" fill="#1F2937">AI auto-approve threshold</text>
+        <text x="0" y="16" font-size="10" fill="#6B7280" font-style="italic">rises as eval data accumulates</text>
+        <!-- track -->
+        <rect x="0" y="30" width="640" height="14" rx="7" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <!-- ticks 0% and 100% -->
+        <text x="0" y="62" font-size="9" fill="#9CA3AF" class="mono">low risk</text>
+        <text x="640" y="62" text-anchor="end" font-size="9" fill="#9CA3AF" class="mono">high stakes</text>
+        <!-- moving fill -->
+        <rect id="fill" x="2" y="32" width="60" height="10" rx="5" fill="#10B981"/>
+        <!-- caret with cycle label -->
+        <g id="caret" transform="translate(60,30)">
+          <polygon points="0,-6 -6,-14 6,-14" fill="#1F2937"/>
+          <rect x="-22" y="-32" width="44" height="16" rx="4" fill="#1F2937"/>
+          <text y="-21" text-anchor="middle" font-size="10" fill="#FFF7ED" class="mono" id="cycleLabel">cycle 1</text>
+        </g>
+      </g>
+
+      <!-- annotation -->
+      <g id="ann" opacity="0">
+        <rect x="220" y="440" width="320" height="22" rx="11" fill="#1F2937"/>
+        <text x="380" y="455" text-anchor="middle" font-size="12" font-weight="600" fill="#FFF7ED">trust is calibrated, not declared</text>
+      </g>
+    </svg>
+    <div class="caption">A team is a routing diagram. Add AI as a member, define handoffs, and let evals — not vibes — set the trust threshold.</div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+<script>
+(function () {
+  var aiMember = document.getElementById('aiMember');
+  var loop = document.getElementById('loop');
+  var packet = document.getElementById('packet');
+  var threshold = document.getElementById('threshold');
+  var fill = document.getElementById('fill');
+  var caret = document.getElementById('caret');
+  var cycleLabel = document.getElementById('cycleLabel');
+  var ann = document.getElementById('ann');
+  var resetBtn = document.getElementById('resetBtn');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+  // packet path: triangle around the loop nodes (in loop's local coord, then offset by 420,90)
+  // We'll animate cx/cy in a loop of three legs.
+  var legs = [
+    { from: [40, 80], to: [270, 80], mid: [155, 50] },
+    { from: [270, 80], to: [155, 200], mid: [245, 165] },
+    { from: [155, 200], to: [40, 80], mid: [60, 165] }
+  ];
+
+  function moveAlongLeg(leg, duration, callback) {
+    var start = performance.now();
+    function frame(t) {
+      var k = Math.min(1, (t - start) / duration);
+      // ease
+      var e = 1 - Math.pow(1 - k, 3);
+      // quadratic bezier
+      var x = (1 - e) * (1 - e) * leg.from[0] + 2 * (1 - e) * e * leg.mid[0] + e * e * leg.to[0];
+      var y = (1 - e) * (1 - e) * leg.from[1] + 2 * (1 - e) * e * leg.mid[1] + e * e * leg.to[1];
+      packet.setAttribute('cx', x);
+      packet.setAttribute('cy', y);
+      // color shifts with leg
+      if (k < 0.5) {
+        packet.setAttribute('fill', '#F59E0B');
+      }
+      if (k >= 1) {
+        callback && callback();
+      } else {
+        requestAnimationFrame(frame);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function runCycle(cycle, totalCycles, onDone) {
+    cycleLabel.textContent = 'cycle ' + cycle;
+    var legIdx = 0;
+    function nextLeg() {
+      if (legIdx >= legs.length) {
+        onDone && onDone();
+        return;
+      }
+      var leg = legs[legIdx];
+      // change packet color per leg
+      if (legIdx === 0) packet.setAttribute('fill', '#F59E0B');
+      if (legIdx === 1) packet.setAttribute('fill', '#8B5CF6');
+      if (legIdx === 2) packet.setAttribute('fill', '#10B981');
+      moveAlongLeg(leg, 700, function () {
+        legIdx++;
+        setTimeout(nextLeg, 120);
+      });
+    }
+    nextLeg();
+  }
+
+  function setThreshold(pct) {
+    var maxW = 638;
+    var w = Math.max(20, Math.round(maxW * pct));
+    fill.setAttribute('width', w);
+    caret.setAttribute('transform', 'translate(' + (2 + w) + ',30)');
+    // color goes from amber to green as it rises
+    if (pct < 0.4) fill.setAttribute('fill', '#F59E0B');
+    else if (pct < 0.75) fill.setAttribute('fill', '#0EA5E9');
+    else fill.setAttribute('fill', '#10B981');
+  }
+
+  function reset() {
+    aiMember.style.transition = 'opacity 800ms ' + EASE + ', transform 800ms ' + EASE;
+    aiMember.style.opacity = '0';
+    aiMember.setAttribute('transform', 'translate(220,205) scale(0.7)');
+    loop.style.transition = 'opacity 600ms ease';
+    loop.style.opacity = '0';
+    threshold.style.transition = 'opacity 600ms ease';
+    threshold.style.opacity = '0';
+    ann.style.transition = 'opacity 600ms ease';
+    ann.style.opacity = '0';
+    setThreshold(0.1);
+    cycleLabel.textContent = 'cycle 1';
+    packet.setAttribute('cx', 40);
+    packet.setAttribute('cy', 80);
+  }
+
+  function run() {
+    reset();
+    if (prefersReduced) {
+      aiMember.style.opacity = '1';
+      aiMember.setAttribute('transform', 'translate(220,205) scale(1)');
+      loop.style.opacity = '1';
+      threshold.style.opacity = '1';
+      ann.style.opacity = '1';
+      setThreshold(0.85);
+      cycleLabel.textContent = 'cycle 4';
+      return;
+    }
+    // 1. AI member fades in
+    setTimeout(function () {
+      aiMember.style.opacity = '1';
+      aiMember.setAttribute('transform', 'translate(220,205) scale(1)');
+    }, 600);
+    // 2. Handoff loop appears
+    setTimeout(function () { loop.style.opacity = '1'; }, 1500);
+    // 3. Threshold appears
+    setTimeout(function () { threshold.style.opacity = '1'; }, 2100);
+    // 4. Run 4 cycles, raising threshold after each
+    var thresholds = [0.18, 0.42, 0.62, 0.85];
+    var cycles = 4;
+    var startCycle = function (i) {
+      if (i >= cycles) {
+        setTimeout(function () { ann.style.opacity = '1'; }, 400);
+        // loop after pause
+        setTimeout(run, 3500);
+        return;
+      }
+      runCycle(i + 1, cycles, function () {
+        // bump threshold on cycle complete
+        setThreshold(thresholds[i]);
+        setTimeout(function () { startCycle(i + 1); }, 350);
+      });
+    };
+    setTimeout(function () { startCycle(0); }, 2700);
+  }
+
+  resetBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

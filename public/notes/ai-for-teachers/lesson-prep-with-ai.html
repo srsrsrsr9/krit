@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Lesson Prep That Actually Saves Time — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Lesson Prep That Actually Saves Time</h1>
+  <p class="subtitle">Brief AI like you'd brief a student teacher</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Here is the dirty secret of teacher AI use. Most teachers who say &quot;AI saves me hours&quot; are actually saving *minutes*, and losing the rest in iteration.</p>
+  <div class="callout"><strong>Mental model: brief AI like you'd brief a student teacher who flies in tomorrow</strong><br/>Imagine a student teacher arriving at 7 AM Tuesday to deliver your second period. You have one WhatsApp message worth of words to brief them with before they walk in.</div>
+  
+<h2>Move 1 — Outcome-first prompts</h2>
+<ul>
+<li>Most teachers' AI prompts start with the *topic* (&quot;photosynthesis&quot;). The good ones start with the *outcome* (&quot;by the end, students should be able to label inputs and outputs of photosynthesis on a leaf diagram&quot;).</li>
+<li>Step 1 — Resist the topic: You think &quot;I have to teach the French Revolution.&quot; That is a topic. AI can do anything with a topic, which means it does nothing useful with a topic.</li>
+<li>Step 2 — Pick the outcome verb: What should students be able to *do* at the end? Not &quot;understand the French Revolution&quot; (untestable). Try: *explain what 'liberty, equality, fraternity' looked like to a 1789 Parisian baker*. Concrete. Testable in one paragraph.</li>
+<li>Step 3 — Add the audience and constraint: Class 9 ICSE, 38 students, 35-minute period, no projector. The baker example will land harder than the Robespierre name-drop.</li>
+<li>Step 4 — Add the format you want back: &quot;Hand back: a timed lesson outline, one primary-source extract under 80 words, three quick-check questions at the end.&quot; Format spec keeps AI from giving you 8 paragraphs of prose you don't have time to read.</li>
+<li>Step 5 — Read the draft, then iterate once: First draft will have one weak section. Don't redo the whole prompt. Say: &quot;replace the hook with one tied to a present-day Indian protest students will recognise.&quot; Targeted edit.</li>
+<li>Step 6 — Stop iterating: Two iterations is the budget. After two, you're polishing fingerprints. Print it, walk in, teach. Quality threshold: would a junior colleague find it usable? Yes? Done.</li>
+</ul>
+<h2>Move 2 — The 'rewrite for class X' move</h2>
+<ul>
+<li>Here is a tiny, specific move that pays for itself within an hour: **the 'rewrite for class X' move.** You wrote a beautiful Class 10 lesson plan last year. This year you have a Class 8 section and a Class 11 section.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the generic-worksheet-from-generic-prompt loop: You write &quot;give me a worksheet on integers.&quot; AI returns a passable, generic worksheet. You print it. You walk into class. You realise the worksheet doesn't match what your kids actually struggled with last week. You write another vague prompt. Repeat.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Brief AI like a student teacher arriving at 7 AM: audience, outcome, time, format, constraint, context. Five-line brief; 50-word minimum.</div>
+<div class="takeaway">Outcome-first beats topic-first. Pick one concrete verb (label, identify, contrast) before you open the AI window.</div>
+<div class="takeaway">Reuse your own old plans as the seed. AI is a much better editor than inventor; your originals are the only thing AI can't fake.</div>
+<div class="takeaway">Two iterations is the iteration budget. After that, finish by hand.</div>
+<div class="takeaway">Generic prompts produce average outputs that are just good enough to print — and that's the trap. 50-word minimum keeps you honest.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

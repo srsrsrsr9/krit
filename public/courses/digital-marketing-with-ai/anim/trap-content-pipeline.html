@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: AI-generated SEO slop</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --amber:#F59E0B; --good:#10B981; --sky:#0EA5E9; --violet:#8B5CF6; --rose:#F43F5E;
+    --paper:#FFFFFF;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{width:100%;max-width:820px}
+  .frame{width:100%;aspect-ratio:16/10;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.45}
+  .reset{position:fixed;right:14px;bottom:14px;background:var(--paper);border:1.5px solid #E5E7EB;color:var(--ink);
+    font:600 12px/1 system-ui,sans-serif;padding:8px 12px;border-radius:999px;cursor:pointer}
+  .reset:hover{border-color:var(--ink)}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg id="svg" class="frame" viewBox="0 0 820 510" aria-label="An agency floods the internet with 100 AI-generated articles. Three weeks later, a Google spam-content update collapses their rankings. The fix: brief plus brand-voice anchor plus three-pass review yields ten great articles instead.">
+      <defs>
+        <pattern id="paper" width="6" height="6" patternUnits="userSpaceOnUse">
+          <rect width="6" height="6" fill="#FFFFFF"/>
+          <circle cx="3" cy="3" r="0.6" fill="#E5E7EB"/>
+        </pattern>
+        <clipPath id="boxClip"><rect x="40" y="100" width="360" height="220" rx="12"/></clipPath>
+        <clipPath id="rankClip"><rect x="440" y="100" width="340" height="220" rx="12"/></clipPath>
+      </defs>
+
+      <rect width="820" height="510" fill="var(--bg)"/>
+      <rect x="20" y="20" width="780" height="470" rx="14" fill="#FFFDF8" stroke="#EADFCB" stroke-width="1.5"/>
+
+      <text x="40" y="58" font-size="18" font-weight="700">100 articles in a week</text>
+      <text x="40" y="78" font-size="12" fill="var(--muted)">Volume strategy meets a spam-content update.</text>
+
+      <!-- LEFT: Article factory -->
+      <g id="left">
+        <rect x="40" y="100" width="360" height="220" rx="12" fill="url(#paper)" stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="56" y="124" font-size="12" font-weight="700" fill="var(--ink)">Pipeline</text>
+        <g transform="translate(60,140)">
+          <rect x="0" y="0" width="74" height="40" rx="9" fill="var(--violet)" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="37" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#FFF">prompt</text>
+          <text x="37" y="32" text-anchor="middle" font-size="9" fill="#FFF">"write SEO"</text>
+        </g>
+        <path d="M138,160 L168,160" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#1F2937"/>
+          </marker>
+        </defs>
+        <g transform="translate(168,140)">
+          <rect x="0" y="0" width="74" height="40" rx="9" fill="var(--sky)" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="37" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#FFF">LLM</text>
+          <text x="37" y="32" text-anchor="middle" font-size="9" fill="#FFF">no review</text>
+        </g>
+        <path d="M246,160 L276,160" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(276,140)">
+          <rect x="0" y="0" width="100" height="40" rx="9" fill="var(--amber)" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="50" y="18" text-anchor="middle" font-size="10" font-weight="700" fill="#1F2937">publish ↑↑↑</text>
+          <text x="50" y="32" text-anchor="middle" font-size="9" fill="#1F2937">→ live</text>
+        </g>
+
+        <!-- Pages stack -->
+        <g id="stack" clip-path="url(#boxClip)">
+          <g id="pages"></g>
+        </g>
+        <g id="counter">
+          <rect x="285" y="280" width="100" height="32" rx="16" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+          <text id="countNum" x="335" y="301" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)" font-family="ui-monospace,monospace">0 / 100</text>
+        </g>
+      </g>
+
+      <!-- RIGHT: Rankings chart -->
+      <g id="right">
+        <rect x="440" y="100" width="340" height="220" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="456" y="124" font-size="12" font-weight="700" fill="var(--ink)">Organic rankings</text>
+        <text x="456" y="140" font-size="10" fill="var(--muted)" font-family="ui-monospace,monospace">avg position (lower = better)</text>
+
+        <line x1="460" y1="160" x2="460" y2="290" stroke="#9CA3AF" stroke-width="1"/>
+        <line x1="460" y1="290" x2="770" y2="290" stroke="#9CA3AF" stroke-width="1"/>
+        <text x="450" y="174" text-anchor="end" font-size="9" fill="var(--muted)">#1</text>
+        <text x="450" y="290" text-anchor="end" font-size="9" fill="var(--muted)">#50</text>
+
+        <!-- Update flag -->
+        <g id="updateFlag" opacity="0">
+          <line x1="608" y1="160" x2="608" y2="290" stroke="var(--rose)" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <rect x="572" y="146" width="84" height="20" rx="10" fill="var(--rose)"/>
+          <text x="614" y="160" text-anchor="middle" font-size="10" font-weight="700" fill="#FFF">spam update</text>
+        </g>
+
+        <!-- Ranking line: good then collapses -->
+        <path id="rankLine" d="M 462 200 L 490 198 L 520 196 L 550 192 L 580 188 L 608 186"
+              fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linecap="round"
+              stroke-dasharray="320" stroke-dashoffset="320"/>
+        <path id="rankFall" d="M 608 186 L 638 230 L 668 268 L 698 282 L 728 286 L 758 285"
+              fill="none" stroke="var(--rose)" stroke-width="2.5" stroke-linecap="round"
+              stroke-dasharray="240" stroke-dashoffset="240"/>
+
+        <!-- Recovery dotted -->
+        <path id="recover" d="M 608 285 Q 680 280 760 220" fill="none" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 4" opacity="0"/>
+
+        <text x="466" y="306" font-size="9" fill="var(--muted)">wk 0</text>
+        <text x="600" y="306" font-size="9" fill="var(--muted)">wk 3</text>
+        <text x="752" y="306" font-size="9" fill="var(--muted)">wk 7</text>
+      </g>
+
+      <!-- BOTTOM Fix banner -->
+      <g id="fix" opacity="0">
+        <rect x="40" y="345" width="740" height="130" rx="14" fill="#ECFDF5" stroke="var(--good)" stroke-width="2"/>
+        <text x="60" y="370" font-size="13" font-weight="700" fill="#065F46">The fix — slow down. Ship 10, not 100.</text>
+
+        <g transform="translate(60,388)">
+          <rect width="160" height="74" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="11" font-weight="700">brief</text>
+          <text x="80" y="40" text-anchor="middle" font-size="10" fill="var(--muted)">audience · job</text>
+          <text x="80" y="56" text-anchor="middle" font-size="10" fill="var(--muted)">to be done</text>
+          <text x="80" y="68" text-anchor="middle" font-size="10" fill="var(--muted)">key sources</text>
+        </g>
+        <path d="M226,425 l16,0" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(252,388)">
+          <rect width="160" height="74" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="11" font-weight="700">brand-voice anchor</text>
+          <text x="80" y="40" text-anchor="middle" font-size="10" fill="var(--muted)">3 sample pieces</text>
+          <text x="80" y="56" text-anchor="middle" font-size="10" fill="var(--muted)">do/don't list</text>
+          <text x="80" y="68" text-anchor="middle" font-size="10" fill="var(--muted)">tone scale</text>
+        </g>
+        <path d="M418,425 l16,0" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(444,388)">
+          <rect width="160" height="74" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="80" y="22" text-anchor="middle" font-size="11" font-weight="700">3-pass review</text>
+          <text x="80" y="40" text-anchor="middle" font-size="10" fill="var(--muted)">facts · voice · cuts</text>
+          <text x="80" y="56" text-anchor="middle" font-size="10" fill="var(--muted)">human eyes only</text>
+          <text x="80" y="68" text-anchor="middle" font-size="10" fill="var(--muted)">ship if it's true</text>
+        </g>
+        <path d="M610,425 l16,0" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+        <g transform="translate(636,388)">
+          <rect width="124" height="74" rx="10" fill="var(--good)" stroke="#1F2937" stroke-width="1.5"/>
+          <text x="62" y="28" text-anchor="middle" font-size="22" font-weight="700" fill="#FFF" font-family="ui-monospace,monospace">10</text>
+          <text x="62" y="46" text-anchor="middle" font-size="10" fill="#FFF">great articles</text>
+          <text x="62" y="62" text-anchor="middle" font-size="10" fill="#FFF">that survive</text>
+        </g>
+      </g>
+
+      <text id="stageLabel" x="410" y="497" text-anchor="middle" font-size="12" font-style="italic" fill="var(--muted)">Stage 1 — output rising fast</text>
+    </svg>
+    <div class="caption">Volume is not strategy. Brief, brand-voice anchor, 3-pass review = ten that earn rank. Slop only earns the next algo update.</div>
+    <button class="reset" id="resetBtn" type="button" aria-label="Replay animation">Replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pages = document.getElementById('pages');
+  const countNum = document.getElementById('countNum');
+  const rankLine = document.getElementById('rankLine');
+  const rankFall = document.getElementById('rankFall');
+  const updateFlag = document.getElementById('updateFlag');
+  const recover = document.getElementById('recover');
+  const fix = document.getElementById('fix');
+  const stageLabel = document.getElementById('stageLabel');
+  const svg = document.getElementById('svg');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let timers = [];
+  function schedule(fn, ms){ timers.push(setTimeout(fn, ms)); }
+  function clearAll(){ timers.forEach(clearTimeout); timers = []; }
+
+  const palette = ['#FCD9B6','#BFDBFE','#DDD6FE','#FECACA','#A7F3D0','#FDE68A'];
+  function buildPages(){
+    pages.innerHTML='';
+    // Pre-create 100 little page rectangles, hidden initially
+    for(let i=0;i<100;i++){
+      const col = i % 10;
+      const row = Math.floor(i/10);
+      const x = 60 + col*30;
+      const y = 200 + row*10 - row*1;
+      const ns = 'http://www.w3.org/2000/svg';
+      const g = document.createElementNS(ns,'g');
+      g.setAttribute('transform', `translate(${x},${y}) rotate(${(Math.random()*8-4).toFixed(1)})`);
+      g.style.opacity = 0;
+      const r = document.createElementNS(ns,'rect');
+      r.setAttribute('x',-10); r.setAttribute('y',-12);
+      r.setAttribute('width',24); r.setAttribute('height',28);
+      r.setAttribute('rx',2);
+      r.setAttribute('fill', palette[i%palette.length]);
+      r.setAttribute('stroke','#1F2937'); r.setAttribute('stroke-width','1');
+      g.appendChild(r);
+      const l1 = document.createElementNS(ns,'line');
+      l1.setAttribute('x1',-6); l1.setAttribute('y1',-4);
+      l1.setAttribute('x2',10); l1.setAttribute('y2',-4);
+      l1.setAttribute('stroke','#1F2937'); l1.setAttribute('stroke-width','0.7');
+      g.appendChild(l1);
+      const l2 = document.createElementNS(ns,'line');
+      l2.setAttribute('x1',-6); l2.setAttribute('y1',1);
+      l2.setAttribute('x2',8); l2.setAttribute('y2',1);
+      l2.setAttribute('stroke','#1F2937'); l2.setAttribute('stroke-width','0.7');
+      g.appendChild(l2);
+      pages.appendChild(g);
+    }
+  }
+
+  function reset(){
+    clearAll();
+    buildPages();
+    countNum.textContent='0 / 100';
+    rankLine.setAttribute('stroke-dashoffset','320');
+    rankLine.style.transition='none';
+    rankFall.setAttribute('stroke-dashoffset','240');
+    rankFall.style.transition='none';
+    updateFlag.style.transition='none';
+    updateFlag.style.opacity=0;
+    recover.style.transition='none';
+    recover.style.opacity=0;
+    fix.style.transition='none';
+    fix.style.opacity=0;
+    stageLabel.textContent='Stage 1 — output rising fast';
+    void svg.getBoundingClientRect();
+    if(reduce){ runReduced(); } else { run(); }
+  }
+
+  function runReduced(){
+    [...pages.children].forEach(c => c.style.opacity = 1);
+    countNum.textContent='100 / 100';
+    rankLine.setAttribute('stroke-dashoffset','0');
+    rankFall.setAttribute('stroke-dashoffset','0');
+    updateFlag.style.opacity=1;
+    recover.style.opacity=1;
+    fix.style.opacity=1;
+    stageLabel.textContent='Slow down. Ship 10, not 100.';
+  }
+
+  function run(){
+    // Stage 1: pages appear (0 — 3.0s), counter ticks
+    const total = 100;
+    const t1 = 3000;
+    let i = 0;
+    function tick(){
+      if(i>=total) return;
+      const child = pages.children[i];
+      child.style.transition='opacity 200ms cubic-bezier(0.22,0.61,0.36,1)';
+      child.style.opacity=1;
+      countNum.textContent = (i+1) + ' / 100';
+      i++;
+      schedule(tick, t1/total);
+    }
+    tick();
+
+    // Stage 1b: rank line draws (rises) (1.0s — 4.0s)
+    schedule(()=>{
+      rankLine.style.transition='stroke-dashoffset 2200ms cubic-bezier(0.22,0.61,0.36,1)';
+      rankLine.setAttribute('stroke-dashoffset','0');
+    }, 1000);
+
+    // Stage 2: spam update flag (4.5s)
+    schedule(()=>{
+      stageLabel.textContent='Stage 2 — spam-content update lands';
+      updateFlag.style.transition='opacity 400ms ease';
+      updateFlag.style.opacity=1;
+    }, 4400);
+
+    // Stage 3: rank collapse (5.0s — 6.5s)
+    schedule(()=>{
+      rankFall.style.transition='stroke-dashoffset 1500ms cubic-bezier(0.22,0.61,0.36,1)';
+      rankFall.setAttribute('stroke-dashoffset','0');
+      stageLabel.textContent='rankings collapse · 100 articles removed';
+    }, 5000);
+
+    // Stage 3b: pages flicker red and fade
+    schedule(()=>{
+      [...pages.children].forEach((c,idx)=>{
+        schedule(()=>{
+          c.style.transition='opacity 600ms ease';
+          c.style.opacity=0.15;
+        }, idx*8);
+      });
+    }, 6200);
+
+    // Stage 4: recovery dotted line (7.5s)
+    schedule(()=>{
+      recover.style.transition='opacity 600ms ease';
+      recover.style.opacity=0.7;
+      stageLabel.textContent='+1 month to recover';
+    }, 7500);
+
+    // Stage 5: fix banner (9.0s)
+    schedule(()=>{
+      fix.style.transition='opacity 700ms ease';
+      fix.style.opacity=1;
+      stageLabel.textContent='Brief → voice → 3-pass review → ship 10 that earn rank.';
+    }, 9000);
+
+    // Loop reset
+    schedule(()=>{ reset(); }, 13800);
+  }
+
+  resetBtn.addEventListener('click', reset);
+  reset();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: PRD that didn't define done</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.ask{animation:fade .4s ease .3s both}
+.eng{animation:pop .5s ease 1.5s both}
+.gap{animation:pop .5s ease 3s both}
+.fix-prd{animation:fade .5s ease 5s both}
+.fix-eng{animation:pop .5s ease 6.5s both}
+.match{animation:pop .5s ease 8s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A vague PRD producing engineering output that doesn't match intent, vs a tight PRD producing a matching ship">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- BAD: vague PRD -->
+<g class="ask" transform="translate(40 30)">
+<rect width="300" height="80" rx="10" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">PRD: "improve checkout"</text>
+<text x="20" y="46" font-size="11" fill="#7F1D1D">- make it better</text>
+<text x="20" y="62" font-size="11" fill="#7F1D1D">- faster</text>
+<text x="20" y="78" font-size="11" fill="#7F1D1D" font-style="italic">"engineering will figure it out"</text>
+</g>
+
+<g class="eng" transform="translate(40 130)">
+<rect width="300" height="80" rx="10" fill="#FED7AA" stroke="#9A3412" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#9A3412" font-weight="bold">Engineering shipped:</text>
+<text x="20" y="46" font-size="11" fill="#9A3412">- new card animation</text>
+<text x="20" y="62" font-size="11" fill="#9A3412">- emoji on success</text>
+<text x="20" y="78" font-size="11" fill="#9A3412">- redesigned profile page</text>
+</g>
+
+<g class="gap" transform="translate(40 230)">
+<rect width="300" height="80" rx="10" fill="#7F1D1D"/>
+<text x="150" y="24" text-anchor="middle" font-size="13" fill="#FCA5A5" font-weight="bold">2-week rebuild</text>
+<text x="150" y="44" text-anchor="middle" font-size="11" fill="#FCA5A5">"that's not what I meant"</text>
+<text x="150" y="62" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">PM and engineering ship different things</text>
+</g>
+
+<!-- GOOD: tight PRD -->
+<g class="fix-prd" transform="translate(380 30)">
+<rect width="300" height="80" rx="10" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">PRD: explicit done criteria</text>
+<text x="20" y="40" font-family="ui-monospace,monospace" font-size="9" fill="#065F46">- p95 checkout &lt; 1.2s</text>
+<text x="20" y="54" font-family="ui-monospace,monospace" font-size="9" fill="#065F46">- conversion ≥ 76% (baseline 71%)</text>
+<text x="20" y="68" font-family="ui-monospace,monospace" font-size="9" fill="#065F46">- no UI changes outside checkout</text>
+<text x="20" y="82" font-family="ui-monospace,monospace" font-size="9" fill="#065F46">- 1-week rollback plan documented</text>
+</g>
+
+<g class="fix-eng" transform="translate(380 130)">
+<rect width="300" height="80" rx="10" fill="#6EE7B7" stroke="#065F46" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">Engineering shipped:</text>
+<text x="20" y="40" font-size="11" fill="#065F46">- async OTP validation</text>
+<text x="20" y="56" font-size="11" fill="#065F46">- pre-loaded saved cards</text>
+<text x="20" y="72" font-size="11" fill="#065F46" font-weight="bold">→ p95 = 0.9s · conversion = 78%</text>
+</g>
+
+<g class="match" transform="translate(380 230)">
+<rect width="300" height="80" rx="10" fill="#065F46"/>
+<text x="150" y="24" text-anchor="middle" font-size="13" fill="#A7F3D0" font-weight="bold">Ship matched intent · day 1</text>
+<text x="150" y="44" text-anchor="middle" font-size="11" fill="#A7F3D0">no rebuild · zero rework</text>
+<text x="150" y="62" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">PRD = contract with future you</text>
+</g>
+
+<g transform="translate(40 330)">
+<rect width="640" height="60" rx="10" fill="#1F2937"/>
+<text x="320" y="24" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">A PRD without explicit "done" is fiction · engineering ships their best guess</text>
+<text x="320" y="44" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">If you can't write the success metric, the team can't ship the right thing</text>
+</g>
+</svg>
+<div class="caption">Done criteria are the only thing standing between intent and ship.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

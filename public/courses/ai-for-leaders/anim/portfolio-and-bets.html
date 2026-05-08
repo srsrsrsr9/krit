@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio of AI bets</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--good:#10B981;--warn:#F59E0B;--bad:#F43F5E;--purple:#8B5CF6}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:780px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-family:inherit}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}
+@keyframes drop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slash{from{stroke-dashoffset:120}to{stroke-dashoffset:0}}
+@keyframes reflow{0%,72%{opacity:0;transform:translateX(0)}88%,100%{opacity:1;transform:translateX(0)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}.crossX{stroke-dashoffset:0 !important}}
+.title{animation:fade .4s cubic-bezier(0.22,0.61,0.36,1) .1s both}
+.bet{animation:drop .5s cubic-bezier(0.22,0.61,0.36,1) both}
+.b1{animation-delay:.4s}.b2{animation-delay:.7s}.b3{animation-delay:1s}
+.day0{animation:fade .4s cubic-bezier(0.22,0.61,0.36,1) 1.4s both}
+.result1{animation:pop .5s cubic-bezier(0.22,0.61,0.36,1) 2.4s both}
+.result2{animation:pop .5s cubic-bezier(0.22,0.61,0.36,1) 2.9s both}
+.result3{animation:pop .5s cubic-bezier(0.22,0.61,0.36,1) 3.4s both}
+.crossX{stroke-dasharray:120;stroke-dashoffset:120;animation:slash .4s cubic-bezier(0.22,0.61,0.36,1) 4.6s both}
+.kill-stamp{animation:pop .4s cubic-bezier(0.22,0.61,0.36,1) 4.8s both}
+.realloc{animation:reflow 12s cubic-bezier(0.22,0.61,0.36,1) infinite}
+.foot{animation:fade .5s cubic-bezier(0.22,0.61,0.36,1) 6s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 780 470" aria-label="Three AI bets at day 0 with kill criteria. At day 30 the safe bet hits green, the stretch bet misses yellow, and the moonshot fails red and is killed. Budget reallocates from the killed bet.">
+<rect width="780" height="470" rx="14" fill="#FAF5FF"/>
+
+<g class="title">
+<text x="390" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#1F2937">Three AI bets · 90-day kill criteria</text>
+<text x="390" y="50" text-anchor="middle" font-size="12" fill="#6B7280">a portfolio is only a portfolio if you actually kill things</text>
+</g>
+
+<!-- Day 0 banner -->
+<g class="day0" transform="translate(40 70)">
+<rect width="700" height="22" rx="6" fill="#EDE9FE"/>
+<text x="350" y="16" text-anchor="middle" font-size="11" font-weight="bold" fill="#5B21B6">DAY 0 · place the bets</text>
+</g>
+
+<!-- BET 1: SAFE -->
+<g class="bet b1" transform="translate(40 102)">
+<rect width="220" height="180" rx="12" fill="#fff" stroke="#10B981" stroke-width="2"/>
+<rect width="220" height="26" rx="12" fill="#10B981"/>
+<rect y="14" width="220" height="12" fill="#10B981"/>
+<text x="110" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFFFF">SAFE BET · $80k</text>
+<text x="14" y="48" font-size="13" font-weight="bold" fill="#065F46">RAG over docs</text>
+<text x="14" y="64" font-size="10" fill="#374151">support reads internal kb</text>
+<rect x="14" y="76" width="192" height="60" rx="8" fill="#ECFDF5" stroke="#A7F3D0"/>
+<text x="22" y="92" font-size="10" font-weight="bold" fill="#065F46">KILL IF (day 90):</text>
+<text x="22" y="108" font-size="10" fill="#065F46" font-family="ui-monospace,monospace">deflection &lt; 30%</text>
+<text x="22" y="122" font-size="10" fill="#065F46" font-family="ui-monospace,monospace">CSAT drop &gt; 4 pts</text>
+<text x="14" y="156" font-size="9" fill="#6B7280" font-style="italic">known tech · short loop</text>
+</g>
+
+<!-- BET 2: STRETCH -->
+<g class="bet b2" transform="translate(280 102)">
+<rect width="220" height="180" rx="12" fill="#fff" stroke="#F59E0B" stroke-width="2"/>
+<rect width="220" height="26" rx="12" fill="#F59E0B"/>
+<rect y="14" width="220" height="12" fill="#F59E0B"/>
+<text x="110" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFFFF">STRETCH · $220k</text>
+<text x="14" y="48" font-size="13" font-weight="bold" fill="#92400E">Autonomous workflow</text>
+<text x="14" y="64" font-size="10" fill="#374151">invoice triage end-to-end</text>
+<rect x="14" y="76" width="192" height="60" rx="8" fill="#FEF3C7" stroke="#FDE68A"/>
+<text x="22" y="92" font-size="10" font-weight="bold" fill="#92400E">KILL IF (day 90):</text>
+<text x="22" y="108" font-size="10" fill="#92400E" font-family="ui-monospace,monospace">accuracy &lt; 92%</text>
+<text x="22" y="122" font-size="10" fill="#92400E" font-family="ui-monospace,monospace">ops cost &gt; $0.40/doc</text>
+<text x="14" y="156" font-size="9" fill="#6B7280" font-style="italic">novel · multi-step risk</text>
+</g>
+
+<!-- BET 3: MOONSHOT -->
+<g class="bet b3" transform="translate(520 102)">
+<rect width="220" height="180" rx="12" fill="#fff" stroke="#8B5CF6" stroke-width="2"/>
+<rect width="220" height="26" rx="12" fill="#8B5CF6"/>
+<rect y="14" width="220" height="12" fill="#8B5CF6"/>
+<text x="110" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFFFF">MOONSHOT · $500k</text>
+<text x="14" y="48" font-size="13" font-weight="bold" fill="#5B21B6">Vertical AI agent</text>
+<text x="14" y="64" font-size="10" fill="#374151">replaces a whole role</text>
+<rect x="14" y="76" width="192" height="60" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+<text x="22" y="92" font-size="10" font-weight="bold" fill="#5B21B6">KILL IF (day 90):</text>
+<text x="22" y="108" font-size="10" fill="#5B21B6" font-family="ui-monospace,monospace">2 pilots not signed</text>
+<text x="22" y="122" font-size="10" fill="#5B21B6" font-family="ui-monospace,monospace">unit econ negative</text>
+<text x="14" y="156" font-size="9" fill="#6B7280" font-style="italic">huge upside · long fuse</text>
+</g>
+
+<!-- DAY 30 readouts -->
+<g class="result1" transform="translate(40 296)">
+<rect width="220" height="64" rx="10" fill="#10B981"/>
+<text x="14" y="22" font-size="11" font-weight="bold" fill="#ECFDF5">DAY 30 · ON TRACK</text>
+<text x="14" y="40" font-size="12" fill="#fff" font-family="ui-monospace,monospace">deflection: 34%  ✓</text>
+<text x="14" y="56" font-size="11" fill="#D1FAE5" font-style="italic">double the budget</text>
+</g>
+
+<g class="result2" transform="translate(280 296)">
+<rect width="220" height="64" rx="10" fill="#F59E0B"/>
+<text x="14" y="22" font-size="11" font-weight="bold" fill="#FFFBEB">DAY 30 · MISS · ADJUST</text>
+<text x="14" y="40" font-size="12" fill="#fff" font-family="ui-monospace,monospace">accuracy: 84% (target 92)</text>
+<text x="14" y="56" font-size="11" fill="#FEF3C7" font-style="italic">narrow scope · re-test</text>
+</g>
+
+<g class="result3" transform="translate(520 296)">
+<rect width="220" height="64" rx="10" fill="#F43F5E"/>
+<text x="14" y="22" font-size="11" font-weight="bold" fill="#FEE2E2">DAY 30 · DEAD</text>
+<text x="14" y="40" font-size="12" fill="#fff" font-family="ui-monospace,monospace">0 pilots · econ negative</text>
+<text x="14" y="56" font-size="11" fill="#FECACA" font-style="italic">trigger pulled</text>
+</g>
+
+<!-- KILL on bet 3 -->
+<g>
+<line class="crossX" x1="535" y1="115" x2="725" y2="270" stroke="#9F1239" stroke-width="3" stroke-linecap="round"/>
+<line class="crossX" x1="725" y1="115" x2="535" y2="270" stroke="#9F1239" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g class="kill-stamp" transform="translate(560 175) rotate(-12)">
+<rect x="0" y="0" width="120" height="34" rx="6" fill="#9F1239" opacity=".95"/>
+<text x="60" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#FEE2E2" font-family="ui-monospace,monospace">KILLED</text>
+</g>
+
+<!-- Reallocation arrow -->
+<g class="realloc">
+<path d="M 630 350 C 560 400, 360 410, 230 380" fill="none" stroke="#5B21B6" stroke-width="2" stroke-dasharray="4 4"/>
+<polygon points="230,374 218,378 224,388" fill="#5B21B6"/>
+<rect x="296" y="394" width="200" height="22" rx="6" fill="#1F2937"/>
+<text x="396" y="409" text-anchor="middle" font-size="11" font-weight="bold" fill="#FCD34D">$500k → SAFE + STRETCH</text>
+</g>
+
+<!-- footer -->
+<g class="foot" transform="translate(40 422)">
+<rect width="700" height="32" rx="8" fill="#1F2937"/>
+<text x="350" y="20" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">"The kill criterion was the discipline."</text>
+</g>
+</svg>
+<div class="caption">A portfolio without kill rules is just three pet projects sharing a deck.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

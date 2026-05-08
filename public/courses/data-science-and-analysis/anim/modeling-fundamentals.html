@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modeling fundamentals</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --amber:#F59E0B; --green:#10B981; --blue:#0EA5E9;
+    --violet:#8B5CF6; --rose:#F43F5E;
+    --paper:#FFFDF7;
+    --ease:cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px}
+  .frame{width:100%;max-width:880px;aspect-ratio:16/10;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;max-width:820px;margin-left:auto;margin-right:auto;padding:0 12px}
+  text{font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  .bar{
+    transform-box:fill-box;transform-origin:bottom center;
+    transform:scaleY(0);
+    animation: barRise 14s var(--ease) infinite;
+  }
+  @keyframes barRise{
+    0%,4%   {transform:scaleY(0)}
+    14%,90% {transform:scaleY(1)}
+    96%,100%{transform:scaleY(0)}
+  }
+
+  .num-pop{opacity:0; animation: pop 14s var(--ease) infinite}
+  @keyframes pop{
+    0%,8%{opacity:0; transform:translateY(4px)}
+    18%,90%{opacity:1; transform:translateY(0)}
+    96%,100%{opacity:0}
+  }
+
+  /* the held-out crash for model 2: a dramatic drop applied later */
+  .bar-crash{
+    transform-box:fill-box;transform-origin:bottom center;
+    transform:scaleY(0);
+    animation: crash 14s var(--ease) infinite;
+  }
+  @keyframes crash{
+    0%,4%{transform:scaleY(0)}
+    14%,40%{transform:scaleY(1)}        /* rises like the others */
+    52%,90%{transform:scaleY(0.71)}     /* test bar drops to 71% on holdout */
+    96%,100%{transform:scaleY(0)}
+  }
+
+  .crash-flag{opacity:0; animation: flag 14s var(--ease) infinite}
+  @keyframes flag{
+    0%,42%{opacity:0; transform:translateY(-4px)}
+    52%,90%{opacity:1; transform:translateY(0)}
+    96%,100%{opacity:0}
+  }
+
+  .holdout-badge{opacity:0; animation: badge 14s var(--ease) infinite}
+  @keyframes badge{
+    0%,40%{opacity:0; transform:scale(.9)}
+    50%,90%{opacity:1; transform:scale(1)}
+    96%,100%{opacity:0}
+  }
+  .holdout-badge{transform-box:fill-box;transform-origin:center}
+
+  /* model 1's lines: small simple line */
+  .line-trace{
+    stroke-dasharray: 200; stroke-dashoffset: 200;
+    animation: draw 14s var(--ease) infinite;
+  }
+  @keyframes draw{
+    0%,4%{stroke-dashoffset:200}
+    24%,90%{stroke-dashoffset:0}
+    96%,100%{stroke-dashoffset:200}
+  }
+
+  /* model 2's overfit zigzag */
+  .zigzag{
+    stroke-dasharray: 600; stroke-dashoffset: 600;
+    animation: drawZ 14s var(--ease) infinite;
+  }
+  @keyframes drawZ{
+    0%,4%{stroke-dashoffset:600}
+    34%,90%{stroke-dashoffset:0}
+    96%,100%{stroke-dashoffset:600}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important}
+    .bar{transform:scaleY(1)}
+    .bar-crash{transform:scaleY(0.71)}
+    .num-pop,.crash-flag,.holdout-badge{opacity:1}
+    .line-trace,.zigzag{stroke-dashoffset:0}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+<div>
+<svg class="frame" viewBox="0 0 880 550" aria-label="Two models on the same dataset. Model 1 (linear) holds steady around 75% across train, val, test. Model 2 (random forest with 47 features) hits 99% on train but crashes on a held-out cohort.">
+  <rect x="0" y="0" width="880" height="550" fill="#FFF7ED"/>
+
+  <text x="440" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Two models, same data, different futures</text>
+  <text x="440" y="52" text-anchor="middle" font-size="12" font-style="italic" fill="#6B7280">overfit on the bench, broken in the wild</text>
+
+  <!-- divider -->
+  <line x1="440" y1="80" x2="440" y2="500" stroke="#E5D9C3" stroke-width="2" stroke-dasharray="4 6"/>
+
+  <!-- =========== LEFT: Model 1 - Linear =========== -->
+  <g transform="translate(40,86)">
+    <rect x="0" y="0" width="376" height="404" rx="14" fill="#FFFDF7" stroke="#1F2937" stroke-width="2"/>
+    <text x="20" y="28" font-size="13" font-weight="700" fill="#1F2937">Model 1 · linear regression</text>
+    <text x="20" y="46" font-size="11" fill="#6B7280">2 features · transparent · honest</text>
+
+    <!-- mini scatter with line -->
+    <g transform="translate(20,62)">
+      <rect x="0" y="0" width="336" height="120" rx="8" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="1.5"/>
+      <!-- scatter dots -->
+      <g fill="#1F2937">
+        <circle cx="40"  cy="98" r="2.5"/><circle cx="60"  cy="86" r="2.5"/>
+        <circle cx="84"  cy="84" r="2.5"/><circle cx="108" cy="74" r="2.5"/>
+        <circle cx="132" cy="68" r="2.5"/><circle cx="160" cy="60" r="2.5"/>
+        <circle cx="184" cy="58" r="2.5"/><circle cx="212" cy="48" r="2.5"/>
+        <circle cx="240" cy="44" r="2.5"/><circle cx="268" cy="36" r="2.5"/>
+        <circle cx="296" cy="30" r="2.5"/><circle cx="316" cy="26" r="2.5"/>
+      </g>
+      <!-- regression line -->
+      <line class="line-trace" x1="30" y1="100" x2="320" y2="22" stroke="#0EA5E9" stroke-width="2.5" stroke-linecap="round"/>
+      <text x="14" y="14" font-size="10" fill="#075985" font-weight="700">a sensible line</text>
+    </g>
+
+    <!-- bars: train/val/test -->
+    <g transform="translate(20,210)">
+      <text x="0" y="0" font-size="11" font-weight="700" fill="#1F2937">accuracy</text>
+      <!-- gridlines -->
+      <line x1="0" y1="20" x2="336" y2="20" stroke="#E5D9C3"/>
+      <line x1="0" y1="60" x2="336" y2="60" stroke="#E5D9C3"/>
+      <line x1="0" y1="100" x2="336" y2="100" stroke="#E5D9C3"/>
+      <line x1="0" y1="140" x2="336" y2="140" stroke="#1F2937" stroke-width="1.5"/>
+      <text x="-8" y="22"  text-anchor="end" font-size="9" fill="#6B7280" class="mono">100</text>
+      <text x="-8" y="62"  text-anchor="end" font-size="9" fill="#6B7280" class="mono">75</text>
+      <text x="-8" y="102" text-anchor="end" font-size="9" fill="#6B7280" class="mono">50</text>
+
+      <!-- bars: scaleY origin = bottom (y=140), drawn upward. heights 78,76,75 (of 140 max for 100%) -->
+      <!-- bar group A train -->
+      <g transform="translate(40,140)">
+        <rect class="bar" x="-26" y="-109.2" width="52" height="109.2" rx="4" fill="#0EA5E9" style="animation-delay:0s"/>
+        <text class="num-pop" x="0" y="-118" text-anchor="middle" font-size="12" font-weight="700" fill="#075985" class="mono num-pop">78%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">train</text>
+      </g>
+      <!-- val -->
+      <g transform="translate(168,140)">
+        <rect class="bar" x="-26" y="-106.4" width="52" height="106.4" rx="4" fill="#0EA5E9" style="animation-delay:.15s"/>
+        <text class="num-pop" x="0" y="-115" text-anchor="middle" font-size="12" font-weight="700" fill="#075985" class="mono">76%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">val</text>
+      </g>
+      <!-- test -->
+      <g transform="translate(296,140)">
+        <rect class="bar" x="-26" y="-105" width="52" height="105" rx="4" fill="#0EA5E9" style="animation-delay:.3s"/>
+        <text class="num-pop" x="0" y="-114" text-anchor="middle" font-size="12" font-weight="700" fill="#075985" class="mono">75%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">test</text>
+      </g>
+    </g>
+
+    <!-- verdict -->
+    <g transform="translate(20,376)">
+      <rect x="0" y="-22" width="336" height="32" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+      <text x="168" y="-3" text-anchor="middle" font-size="11" fill="#065F46">
+        gap = 3 pts · generalises · ship-quality
+      </text>
+    </g>
+  </g>
+
+  <!-- =========== RIGHT: Model 2 - Forest =========== -->
+  <g transform="translate(464,86)">
+    <rect x="0" y="0" width="376" height="404" rx="14" fill="#FFFDF7" stroke="#1F2937" stroke-width="2"/>
+    <text x="20" y="28" font-size="13" font-weight="700" fill="#1F2937">Model 2 · 47-feature random forest</text>
+    <text x="20" y="46" font-size="11" fill="#6B7280">memorised the training set</text>
+
+    <!-- scatter with overfit zigzag -->
+    <g transform="translate(20,62)">
+      <rect x="0" y="0" width="336" height="120" rx="8" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1.5"/>
+      <g fill="#1F2937">
+        <circle cx="40"  cy="98" r="2.5"/><circle cx="60"  cy="86" r="2.5"/>
+        <circle cx="84"  cy="84" r="2.5"/><circle cx="108" cy="74" r="2.5"/>
+        <circle cx="132" cy="68" r="2.5"/><circle cx="160" cy="60" r="2.5"/>
+        <circle cx="184" cy="58" r="2.5"/><circle cx="212" cy="48" r="2.5"/>
+        <circle cx="240" cy="44" r="2.5"/><circle cx="268" cy="36" r="2.5"/>
+        <circle cx="296" cy="30" r="2.5"/><circle cx="316" cy="26" r="2.5"/>
+      </g>
+      <!-- zigzag overfit -->
+      <path class="zigzag"
+            d="M 30 100 L 40 98 L 52 92 L 60 86 L 72 90 L 84 84 L 96 80 L 108 74 L 120 78 L 132 68 L 148 64 L 160 60 L 172 64 L 184 58 L 198 52 L 212 48 L 226 50 L 240 44 L 252 40 L 268 36 L 282 32 L 296 30 L 310 28 L 320 22"
+            fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="14" y="14" font-size="10" fill="#5B21B6" font-weight="700">a curve that hugs every dot</text>
+    </g>
+
+    <!-- bars: train/val/test, with crash on test bar -->
+    <g transform="translate(20,210)">
+      <text x="0" y="0" font-size="11" font-weight="700" fill="#1F2937">accuracy</text>
+      <line x1="0" y1="20" x2="336" y2="20" stroke="#E5D9C3"/>
+      <line x1="0" y1="60" x2="336" y2="60" stroke="#E5D9C3"/>
+      <line x1="0" y1="100" x2="336" y2="100" stroke="#E5D9C3"/>
+      <line x1="0" y1="140" x2="336" y2="140" stroke="#1F2937" stroke-width="1.5"/>
+      <text x="-8" y="22"  text-anchor="end" font-size="9" fill="#6B7280" class="mono">100</text>
+      <text x="-8" y="62"  text-anchor="end" font-size="9" fill="#6B7280" class="mono">75</text>
+      <text x="-8" y="102" text-anchor="end" font-size="9" fill="#6B7280" class="mono">50</text>
+
+      <!-- train 99% -->
+      <g transform="translate(40,140)">
+        <rect class="bar" x="-26" y="-138.6" width="52" height="138.6" rx="4" fill="#8B5CF6" style="animation-delay:0s"/>
+        <text class="num-pop" x="0" y="-148" text-anchor="middle" font-size="12" font-weight="700" fill="#5B21B6" class="mono">99%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">train</text>
+      </g>
+      <!-- val 82% -->
+      <g transform="translate(168,140)">
+        <rect class="bar" x="-26" y="-114.8" width="52" height="114.8" rx="4" fill="#8B5CF6" style="animation-delay:.15s"/>
+        <text class="num-pop" x="0" y="-124" text-anchor="middle" font-size="12" font-weight="700" fill="#5B21B6" class="mono">82%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">val</text>
+      </g>
+      <!-- test bar starts ~99% then crashes to 71% -->
+      <g transform="translate(296,140)">
+        <rect class="bar-crash" x="-26" y="-138.6" width="52" height="138.6" rx="4" fill="#F43F5E" style="animation-delay:.3s"/>
+        <text class="num-pop" x="0" y="-105" text-anchor="middle" font-size="12" font-weight="700" fill="#9F1239" class="mono">71%</text>
+        <text x="0" y="22" text-anchor="middle" font-size="11" fill="#6B7280">test (held-out)</text>
+        <!-- crash arrow -->
+        <g class="crash-flag" transform="translate(0,-100)">
+          <path d="M 30 -34 L 30 0" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 24 -8 L 30 0 L 36 -8" fill="none" stroke="#F43F5E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="50" y="-8" font-size="10" font-weight="700" fill="#9F1239">−28 pts</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- holdout badge -->
+    <g class="holdout-badge" transform="translate(192,388)">
+      <rect x="-160" y="-22" width="320" height="32" rx="8" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="0" y="-3" text-anchor="middle" font-size="11" fill="#9F1239">
+        new cohort → reality check fails · overfit
+      </text>
+    </g>
+  </g>
+
+  <!-- bottom note -->
+  <g transform="translate(80,508)">
+    <text x="0" y="14" font-size="11" font-style="italic" fill="#6B7280">
+      The simpler model wasn't worse. It was honest about what it didn't know.
+    </text>
+  </g>
+</svg>
+<div class="caption">A model that aces training and stumbles on held-out data has memorised, not learned. Watch the gap, not the headline.</div>
+</div>
+</main>
+</body>
+</html>

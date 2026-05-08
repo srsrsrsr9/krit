@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>14-day AI classroom experiment</title>
+<style>
+  :root{--bg:#FFF7ED;--ink:#1F2937;--mute:#6B7280;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:840px;}
+  svg{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--mute);margin-top:8px;padding:0 8px;}
+  #rb{position:absolute;bottom:8px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78;}
+  #rb:hover{opacity:1;}
+  .gtxt{font-family:ui-monospace,"SFMono-Regular",monospace;}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="wrap">
+<svg viewBox="0 0 840 510" aria-label="A 14-day classroom experiment with AI-drafted exit tickets. Day 0 baseline, days 1-13 intervention, day 14 post-test. Three numbers update — scores plus 12%, engagement plus 8%, prep time minus 47%. A decision card at the end: keep, modify, drop.">
+  <rect width="840" height="510" fill="#FFF7ED"/>
+
+  <!-- title -->
+  <text x="420" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">Don't argue. Run a 14-day experiment.</text>
+
+  <!-- ── TIMELINE ─────────────────────────────────── -->
+  <g>
+    <text x="32" y="68" font-size="11" font-weight="700" fill="#92400E" letter-spacing="0.8">PROTOCOL · one class · two weeks · one variable</text>
+    <!-- track -->
+    <rect x="32" y="80" width="776" height="56" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
+    <!-- intervention shading -->
+    <rect id="intvShade" x="86" y="80" width="0" height="56" rx="0" fill="#10B981" opacity="0.14"/>
+    <!-- 15 day ticks (0..14) -->
+    <g id="dayTicks"></g>
+    <!-- markers -->
+    <g id="dayMarker">
+      <circle id="dayDot" cx="32" cy="108" r="9" fill="#F59E0B" stroke="#1F2937" stroke-width="1.5"/>
+      <text id="dayLabel" x="32" y="112" text-anchor="middle" font-size="10" font-weight="700" fill="white" class="gtxt">0</text>
+    </g>
+    <text x="32" y="156" text-anchor="middle" font-size="9.5" fill="#92400E" font-weight="700">DAY 0</text>
+    <text x="32" y="167" text-anchor="middle" font-size="9" fill="#92400E">baseline</text>
+    <text x="420" y="156" text-anchor="middle" font-size="9.5" fill="#065F46" font-weight="700">DAYS 1–13</text>
+    <text x="420" y="167" text-anchor="middle" font-size="9" fill="#065F46">AI-drafted exit tickets, reviewed nightly</text>
+    <text x="808" y="156" text-anchor="middle" font-size="9.5" fill="#5B21B6" font-weight="700">DAY 14</text>
+    <text x="808" y="167" text-anchor="middle" font-size="9" fill="#5B21B6">post-test</text>
+  </g>
+
+  <!-- ── THREE METRIC PANELS ──────────────────────── -->
+  <!-- Scores -->
+  <g transform="translate(32,194)">
+    <rect x="0" y="0" width="248" height="170" rx="14" fill="white" stroke="#FCD34D" stroke-width="1.5"/>
+    <text x="14" y="20" font-size="10" font-weight="700" fill="#92400E" letter-spacing="0.6">UNIT TEST AVERAGE</text>
+    <text id="mScores" x="124" y="74" text-anchor="middle" font-size="38" font-weight="700" fill="#F59E0B" class="gtxt">68%</text>
+    <text id="mScoresLabel" x="124" y="94" text-anchor="middle" font-size="11" fill="#6B7280">baseline</text>
+    <!-- mini bar chart -->
+    <g id="scoreBars" transform="translate(20,108)">
+      <rect x="0" y="0" width="208" height="50" rx="6" fill="#FEF3C7"/>
+      <rect id="scoreBarBase" x="14" y="14" width="80" height="32" rx="3" fill="#F59E0B"/>
+      <rect id="scoreBarPost" x="114" y="14" width="80" height="32" rx="3" fill="#FCD34D"/>
+      <text x="54" y="34" text-anchor="middle" font-size="10" fill="white" font-weight="700">68</text>
+      <text id="scoreBarPostT" x="154" y="34" text-anchor="middle" font-size="10" fill="#92400E" font-weight="700">68</text>
+    </g>
+  </g>
+
+  <!-- Engagement -->
+  <g transform="translate(296,194)">
+    <rect x="0" y="0" width="248" height="170" rx="14" fill="white" stroke="#6EE7B7" stroke-width="1.5"/>
+    <text x="14" y="20" font-size="10" font-weight="700" fill="#065F46" letter-spacing="0.6">CLASS ENGAGEMENT INDEX</text>
+    <text id="mEng" x="124" y="74" text-anchor="middle" font-size="38" font-weight="700" fill="#10B981" class="gtxt">62</text>
+    <text id="mEngLabel" x="124" y="94" text-anchor="middle" font-size="11" fill="#6B7280">on-task minutes / 40</text>
+    <!-- 5 face row -->
+    <g id="engFaces" transform="translate(28,118)">
+      <g><circle cx="20" cy="0" r="14" fill="#FEF3C7" stroke="#10B981" stroke-width="1.4"/>
+        <circle cx="16" cy="-3" r="1.5" fill="#1F2937"/><circle cx="24" cy="-3" r="1.5" fill="#1F2937"/>
+        <path id="ef1" d="M14,4 Q20,7 26,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/></g>
+      <g transform="translate(50,0)"><circle cx="20" cy="0" r="14" fill="#FEF3C7" stroke="#10B981" stroke-width="1.4"/>
+        <circle cx="16" cy="-3" r="1.5" fill="#1F2937"/><circle cx="24" cy="-3" r="1.5" fill="#1F2937"/>
+        <path id="ef2" d="M14,4 Q20,7 26,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/></g>
+      <g transform="translate(100,0)"><circle cx="20" cy="0" r="14" fill="#FEF3C7" stroke="#10B981" stroke-width="1.4"/>
+        <circle cx="16" cy="-3" r="1.5" fill="#1F2937"/><circle cx="24" cy="-3" r="1.5" fill="#1F2937"/>
+        <path id="ef3" d="M14,4 Q20,5 26,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/></g>
+      <g transform="translate(150,0)"><circle cx="20" cy="0" r="14" fill="#FEF3C7" stroke="#10B981" stroke-width="1.4"/>
+        <circle cx="16" cy="-3" r="1.5" fill="#1F2937"/><circle cx="24" cy="-3" r="1.5" fill="#1F2937"/>
+        <path id="ef4" d="M14,4 Q20,3 26,4" fill="none" stroke="#1F2937" stroke-width="1.4" stroke-linecap="round"/></g>
+    </g>
+  </g>
+
+  <!-- Prep time -->
+  <g transform="translate(560,194)">
+    <rect x="0" y="0" width="248" height="170" rx="14" fill="white" stroke="#A78BFA" stroke-width="1.5"/>
+    <text x="14" y="20" font-size="10" font-weight="700" fill="#5B21B6" letter-spacing="0.6">PREP TIME / WEEK</text>
+    <text id="mPrep" x="124" y="74" text-anchor="middle" font-size="38" font-weight="700" fill="#8B5CF6" class="gtxt">9.0 h</text>
+    <text id="mPrepLabel" x="124" y="94" text-anchor="middle" font-size="11" fill="#6B7280">teacher hours</text>
+    <!-- shrinking jar -->
+    <g transform="translate(124,140)">
+      <!-- jar outline -->
+      <path d="M-30,-22 L30,-22 L26,18 L-26,18 Z" fill="none" stroke="#8B5CF6" stroke-width="1.4"/>
+      <rect id="jarFill" x="-26" y="-12" width="52" height="30" fill="#A78BFA" opacity="0.7"/>
+      <line x1="-30" y1="-22" x2="30" y2="-22" stroke="#8B5CF6" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- ── DECISION CARD ───────────────────────────── -->
+  <g id="decision" opacity="0" transform="translate(32,388)">
+    <rect x="0" y="0" width="776" height="100" rx="14" fill="#1F2937"/>
+    <text x="22" y="26" font-size="11" font-weight="700" fill="#FCD34D" letter-spacing="0.8">DECISION · DAY 14</text>
+    <text x="22" y="50" font-size="13" fill="white">Scores +12 · engagement +8 · prep −47%. Strong signal. Next call:</text>
+
+    <!-- Three options -->
+    <g transform="translate(22,64)">
+      <!-- KEEP (highlighted) -->
+      <g id="optKeep">
+        <rect x="0" y="0" width="208" height="28" rx="8" fill="#10B981"/>
+        <text x="104" y="18" text-anchor="middle" font-size="11" fill="white" font-weight="700">KEEP · roll out to next unit</text>
+        <circle cx="186" cy="14" r="6" fill="white"/>
+        <path d="M183,14 L186,17 L191,11" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g transform="translate(228,0)">
+        <rect x="0" y="0" width="208" height="28" rx="8" fill="#374151" stroke="#6B7280" stroke-width="1"/>
+        <text x="104" y="18" text-anchor="middle" font-size="11" fill="#D1D5DB">MODIFY · keep, drop nightly review</text>
+      </g>
+      <g transform="translate(456,0)">
+        <rect x="0" y="0" width="208" height="28" rx="8" fill="#374151" stroke="#6B7280" stroke-width="1"/>
+        <text x="104" y="18" text-anchor="middle" font-size="11" fill="#D1D5DB">DROP · revert to prior method</text>
+      </g>
+    </g>
+  </g>
+
+</svg>
+<div class="caption" id="cap">Theory is cheap. A two-week experiment is gold.</div>
+<button id="rb" type="button" aria-label="Reset animation">reset</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const SVG_NS='http://www.w3.org/2000/svg';
+let timers=[];
+const after=(ms,fn)=>timers.push(setTimeout(fn,ms));
+const clearAll=()=>{timers.forEach(clearTimeout);timers=[];};
+const reduced=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const cap=$('cap');
+
+// Build day ticks 0..14
+function buildTicks(){
+  const g=$('dayTicks');g.innerHTML='';
+  for(let d=0;d<=14;d++){
+    const x=32+(776)*(d/14);
+    const ln=document.createElementNS(SVG_NS,'line');
+    ln.setAttribute('x1',x);ln.setAttribute('x2',x);
+    ln.setAttribute('y1',128);ln.setAttribute('y2',136);
+    ln.setAttribute('stroke','#92400E');
+    ln.setAttribute('stroke-width', d%7===0 ? '1.4' : '0.8');
+    g.appendChild(ln);
+    if(d%7===0){
+      const t=document.createElementNS(SVG_NS,'text');
+      t.setAttribute('x',x);t.setAttribute('y',146);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','#92400E');t.setAttribute('font-family','ui-monospace,monospace');
+      t.textContent='d'+d;
+      g.appendChild(t);
+    }
+  }
+}
+
+function easeOut(t){return 1-Math.pow(1-t,3);}
+const sleep=ms=>new Promise(r=>{timers.push(setTimeout(r,ms));});
+
+function fade(id,a,b,dur){
+  return new Promise(res=>{
+    const el=$(id);if(!el){res();return;}
+    if(reduced){el.setAttribute('opacity',String(b));res();return;}
+    const s=performance.now();
+    function tick(now){
+      const t=Math.min((now-s)/dur,1);
+      const e=easeOut(t);
+      el.setAttribute('opacity',String(a+(b-a)*e));
+      if(t<1)requestAnimationFrame(tick);else res();
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+function animateExperiment(durMs){
+  return new Promise(res=>{
+    if(reduced){
+      // jump to final
+      $('dayDot').setAttribute('cx',808);
+      $('dayLabel').setAttribute('x',808);
+      $('dayLabel').textContent='14';
+      $('intvShade').setAttribute('x',86);
+      $('intvShade').setAttribute('width',668);
+      $('mScores').textContent='80%';$('mScoresLabel').textContent='+12 vs baseline';
+      $('mEng').textContent='67';$('mEngLabel').textContent='+8 on-task min';
+      $('mPrep').textContent='4.8 h';$('mPrepLabel').textContent='-47% prep time';
+      $('scoreBarPost').setAttribute('width',96);$('scoreBarPost').setAttribute('fill','#10B981');
+      $('scoreBarPostT').textContent='80';$('scoreBarPostT').setAttribute('fill','white');
+      $('jarFill').setAttribute('y',6);$('jarFill').setAttribute('height',12);
+      res();return;
+    }
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/durMs,1);
+      const e=easeOut(t);
+      const day=e*14;
+      // dot moves
+      const dotX=32+(776)*(day/14);
+      $('dayDot').setAttribute('cx',dotX);
+      $('dayLabel').setAttribute('x',dotX);
+      $('dayLabel').textContent=String(Math.round(day));
+      // intervention shading reveals between day 1 and 13
+      const shadeStart=32+(776)*(1/14);
+      const shadeEnd=Math.min(32+(776)*(Math.min(day,13)/14), 32+(776)*(13/14));
+      $('intvShade').setAttribute('x',shadeStart);
+      $('intvShade').setAttribute('width',Math.max(0,shadeEnd-shadeStart));
+      // metric updates ramp from day 1
+      const ramp = day<=1 ? 0 : Math.min((day-1)/13, 1);
+      const re=easeOut(ramp);
+      const score = 68 + 12*re;
+      $('mScores').textContent=Math.round(score)+'%';
+      const eng = 62 + 5*re;
+      $('mEng').textContent=Math.round(eng);
+      const prep = 9.0 - 4.2*re;
+      $('mPrep').textContent=prep.toFixed(1)+' h';
+      // labels post day 1
+      if(ramp>0.05){
+        $('mScoresLabel').textContent='+'+Math.round(12*re)+' vs baseline';
+        $('mEngLabel').textContent='+'+Math.round(8*re)+' on-task min';
+        $('mPrepLabel').textContent='-'+Math.round(47*re)+'% prep time';
+      }
+      // score post bar grow
+      const postW = 80 + 16*re;
+      $('scoreBarPost').setAttribute('width',postW);
+      $('scoreBarPost').setAttribute('fill', re>0.6 ? '#10B981' : '#FCD34D');
+      $('scoreBarPostT').textContent=Math.round(score);
+      $('scoreBarPostT').setAttribute('fill', re>0.6 ? 'white' : '#92400E');
+      // jar shrinks
+      const fillH = 30 - 18*re;
+      const fillY = -12 + (30-fillH);
+      $('jarFill').setAttribute('y',fillY);
+      $('jarFill').setAttribute('height',fillH);
+      // captions
+      if(day<0.5) cap.textContent='Day 0: take the baseline. Test, engagement check, prep clock.';
+      else if(day<7) cap.textContent='Days 1–'+Math.round(day)+': AI-drafted exit tickets, reviewed nightly.';
+      else if(day<13) cap.textContent='Days 1–'+Math.round(day)+': trends emerging — keep collecting.';
+      else if(day<14) cap.textContent='Day 14: post-test. The numbers settle.';
+      if(t<1)requestAnimationFrame(tick);else res();
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+async function run(){
+  cap.textContent='Pick one variable. Hold the rest still. Two weeks.';
+  await sleep(reduced?0:600);
+  await animateExperiment(reduced?0:7500);
+  await sleep(reduced?0:300);
+  cap.textContent='Three numbers told you what to do next.';
+  await fade('decision',0,1,500);
+  await sleep(reduced?0:800);
+  // pulse KEEP
+  if(!reduced){
+    const k=$('optKeep');
+    let p=0;
+    function pulse(){
+      const s=performance.now(),DUR=900;
+      function tick(now){
+        const t=Math.min((now-s)/DUR,1);
+        const v=Math.sin(t*Math.PI);
+        k.setAttribute('opacity',String(0.85+0.15*v));
+        if(t<1)requestAnimationFrame(tick);else if(p<2){p++;pulse();}
+      }
+      requestAnimationFrame(tick);
+    }
+    pulse();
+  }
+  cap.textContent='Theory is cheap. A two-week experiment is gold.';
+  if(!reduced){await sleep(4500);reset();}
+}
+
+function reset(){
+  clearAll();
+  buildTicks();
+  $('dayDot').setAttribute('cx',32);
+  $('dayLabel').setAttribute('x',32);
+  $('dayLabel').textContent='0';
+  $('intvShade').setAttribute('width',0);
+  $('mScores').textContent='68%';$('mScoresLabel').textContent='baseline';
+  $('mEng').textContent='62';$('mEngLabel').textContent='on-task minutes / 40';
+  $('mPrep').textContent='9.0 h';$('mPrepLabel').textContent='teacher hours';
+  $('scoreBarPost').setAttribute('width',80);$('scoreBarPost').setAttribute('fill','#FCD34D');
+  $('scoreBarPostT').textContent='68';$('scoreBarPostT').setAttribute('fill','#92400E');
+  $('jarFill').setAttribute('y',-12);$('jarFill').setAttribute('height',30);
+  $('decision').setAttribute('opacity','0');
+  $('optKeep').setAttribute('opacity','1');
+  run();
+}
+
+buildTicks();
+$('rb').addEventListener('click',reset);
+run();
+})();
+</script>
+</body>
+</html>

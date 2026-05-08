@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Off-by-one with range()</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --bad: #F43F5E;
+    --good: #10B981;
+    --warn: #F59E0B;
+    --line: #E5E7EB;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+  .frame {
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 16/10;
+    display: block;
+  }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 760px;
+  }
+  text { font-family: system-ui, -apple-system, sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @keyframes pulseRed {
+    0%, 100% { fill: #FECACA; }
+    50% { fill: #FCA5A5; }
+  }
+  .alarm { animation: pulseRed 700ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg class="frame" viewBox="0 0 760 475" aria-label="Animation contrasting range(0,5) and range(1,5) to illustrate Python's half-open interval and how an off-by-one slip in a discount engine gives every Nth user 100% off.">
+      <defs></defs>
+
+      <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">
+        range() stops one short
+      </text>
+      <text x="380" y="52" text-anchor="middle" font-size="13" fill="#6B7280">
+        Half-open intervals: stop is exclusive. Always.
+      </text>
+
+      <!-- TOP: range(0, 5) -->
+      <g transform="translate(40,80)">
+        <text x="0" y="-2" font-size="14" font-weight="700" fill="#1F2937" class="mono">range(0, 5)</text>
+        <text x="120" y="-2" font-size="13" fill="#10B981" font-weight="600">correct</text>
+
+        <!-- number line -->
+        <line x1="20" y1="40" x2="660" y2="40" stroke="#1F2937" stroke-width="2" stroke-linecap="round"/>
+        <g id="goodTicks">
+          <!-- ticks -->
+          <g transform="translate(60,40)" id="g0">
+            <circle r="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#065F46" font-weight="700">0</text>
+          </g>
+          <g transform="translate(180,40)" id="g1">
+            <circle r="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#065F46" font-weight="700">1</text>
+          </g>
+          <g transform="translate(300,40)" id="g2">
+            <circle r="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#065F46" font-weight="700">2</text>
+          </g>
+          <g transform="translate(420,40)" id="g3">
+            <circle r="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#065F46" font-weight="700">3</text>
+          </g>
+          <g transform="translate(540,40)" id="g4">
+            <circle r="18" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#065F46" font-weight="700">4</text>
+          </g>
+          <!-- 5 is the boundary -->
+          <g transform="translate(640,40)" id="g5stop">
+            <circle r="18" fill="#fff" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="3 3"/>
+            <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#9CA3AF">5</text>
+          </g>
+          <text x="640" y="80" text-anchor="middle" font-size="11" fill="#9CA3AF">stop (excluded)</text>
+        </g>
+      </g>
+
+      <!-- MIDDLE: range(1, 5) -->
+      <g transform="translate(40,200)">
+        <text x="0" y="-2" font-size="14" font-weight="700" fill="#1F2937" class="mono">range(1, 5)</text>
+        <text x="120" y="-2" font-size="13" fill="#F43F5E" font-weight="600" id="badLabel" opacity="0">dev expected 1..5 — got 1..4</text>
+
+        <line x1="20" y1="40" x2="660" y2="40" stroke="#1F2937" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- 0 is excluded -->
+        <g transform="translate(60,40)">
+          <circle r="18" fill="#fff" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="3 3"/>
+          <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#9CA3AF">0</text>
+        </g>
+        <g transform="translate(180,40)" id="b1">
+          <circle r="18" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+          <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#92400E" font-weight="700">1</text>
+        </g>
+        <g transform="translate(300,40)" id="b2">
+          <circle r="18" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+          <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#92400E" font-weight="700">2</text>
+        </g>
+        <g transform="translate(420,40)" id="b3">
+          <circle r="18" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+          <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#92400E" font-weight="700">3</text>
+        </g>
+        <g transform="translate(540,40)" id="b4">
+          <circle r="18" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+          <text y="6" text-anchor="middle" font-size="16" class="mono" fill="#92400E" font-weight="700">4</text>
+        </g>
+
+        <!-- the missing 5 -->
+        <g transform="translate(640,40)" id="missing5" opacity="0">
+          <circle r="22" fill="#FEE2E2" stroke="#F43F5E" stroke-width="3"/>
+          <text y="6" text-anchor="middle" font-size="18" class="mono" fill="#9F1239" font-weight="700">5</text>
+          <line x1="-16" y1="-16" x2="16" y2="16" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+          <line x1="-16" y1="16" x2="16" y2="-16" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <text x="640" y="80" text-anchor="middle" font-size="11" fill="#F43F5E" id="missingLabel" opacity="0" font-weight="600">missing!</text>
+      </g>
+
+      <!-- BOTTOM: discount catastrophe -->
+      <g transform="translate(40,310)" id="discountGroup" opacity="0">
+        <rect width="680" height="140" rx="12" fill="#fff" stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="20" y="28" font-size="14" font-weight="700" fill="#1F2937">Discount engine — every Nth user gets 100% off</text>
+        <text x="20" y="48" class="mono" font-size="12" fill="#6B7280">for i in range(1, len(users)):  # ← off-by-one slip</text>
+
+        <!-- row of users -->
+        <g transform="translate(20,68)">
+          <g transform="translate(0,0)" id="u0">
+            <rect width="60" height="60" rx="8" fill="#FEE2E2" stroke="#F43F5E" stroke-width="2" class="alarm"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#9F1239">user[0]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#9F1239">100%</text>
+            <text x="30" y="54" text-anchor="middle" font-size="10" fill="#9F1239">OFF</text>
+          </g>
+          <g transform="translate(72,0)">
+            <rect width="60" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#065F46">user[1]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#065F46">10%</text>
+          </g>
+          <g transform="translate(144,0)">
+            <rect width="60" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#065F46">user[2]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#065F46">10%</text>
+          </g>
+          <g transform="translate(216,0)">
+            <rect width="60" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#065F46">user[3]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#065F46">10%</text>
+          </g>
+          <g transform="translate(288,0)">
+            <rect width="60" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#065F46">user[4]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#065F46">10%</text>
+          </g>
+          <g transform="translate(360,0)">
+            <rect width="60" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+            <text x="30" y="22" text-anchor="middle" font-size="11" fill="#065F46">user[5]</text>
+            <text x="30" y="40" text-anchor="middle" font-size="14" font-weight="700" class="mono" fill="#065F46">10%</text>
+          </g>
+          <text x="450" y="36" font-size="13" fill="#9F1239" font-weight="600">user[0] never reset →</text>
+          <text x="450" y="52" font-size="11" fill="#6B7280">$214,000 in unintended refunds</text>
+        </g>
+      </g>
+    </svg>
+    <div class="caption">Python ranges are half-open. Read range(start, stop) as "start through stop minus one." Off-by-one is the most expensive kind of typo.</div>
+  </div>
+</main>
+<script>
+(function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+  var stages = [
+    { id: 'g0', delay: 400, mode: 'pop' },
+    { id: 'g1', delay: 600, mode: 'pop' },
+    { id: 'g2', delay: 800, mode: 'pop' },
+    { id: 'g3', delay: 1000, mode: 'pop' },
+    { id: 'g4', delay: 1200, mode: 'pop' },
+    { id: 'b1', delay: 2400, mode: 'pop' },
+    { id: 'b2', delay: 2600, mode: 'pop' },
+    { id: 'b3', delay: 2800, mode: 'pop' },
+    { id: 'b4', delay: 3000, mode: 'pop' },
+    { id: 'badLabel', delay: 3500 },
+    { id: 'missing5', delay: 4200, mode: 'shake' },
+    { id: 'missingLabel', delay: 4400 },
+    { id: 'discountGroup', delay: 5800 }
+  ];
+
+  function show(id, mode) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.transition = 'opacity 500ms ' + EASE + ', transform 500ms ' + EASE;
+    el.style.opacity = '1';
+    if (mode === 'pop') {
+      el.style.transformBox = 'fill-box';
+      el.style.transformOrigin = 'center';
+    }
+  }
+
+  function init() {
+    var ids = ['g0','g1','g2','g3','g4','b1','b2','b3','b4','badLabel','missing5','missingLabel','discountGroup'];
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transition = 'none';
+      }
+    });
+  }
+
+  function run() {
+    if (prefersReduced) {
+      ['g0','g1','g2','g3','g4','b1','b2','b3','b4','badLabel','missing5','missingLabel','discountGroup'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.opacity = '1';
+      });
+      return;
+    }
+    init();
+    stages.forEach(function (s) {
+      setTimeout(function () { show(s.id, s.mode); }, s.delay);
+    });
+    setTimeout(run, 12000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
+</body>
+</html>

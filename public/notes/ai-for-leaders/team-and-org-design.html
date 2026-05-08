@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Team Topologies for AI — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Team Topologies for AI</h1>
+  <p class="subtitle">AI cell or AI factory? Pick the wrong one and the program dies in queue</p>
+  <p class="byline">notes by Meera ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Six months in, your AI program has 14 ideas, 3 ships, and a 17-week backlog at the central AI team. Product managers have stopped bringing new ideas.</p>
+  <div class="callout"><strong>Mental model: AI cell vs AI factory</strong><br/>Two clean patterns; everything in between is debt.</div>
+  
+<h2>Move 1 — The thin governance layer</h2>
+<ul>
+<li>If you build an AI factory, you also build a governance layer. The mistake is building it thick.</li>
+<li>Step 1 — The English question: Board director: 'We need an AI ethics policy.' True. But 'AI ethics policy' decays into 47 pages and zero blocked launches without translation.</li>
+<li>Step 2 — Pick what the policy actually blocks: Translate to: 'What concrete things should never reach a user?' Answer: model that fails &gt; X% on the eval set, no red-team report, no named owner, no kill switch, no per-inference logging. Five things.</li>
+<li>Step 3 — Pick the eval set: Name it: 'fintech-eval-v3, 1,200 prompts, last red-teamed 18 March 2026.' If the eval set does not exist, that is the first thing to build, not the policy doc.</li>
+<li>Step 4 — Pick the override: One named human can override the threshold (e.g. CTO). The override produces a written log entry, automatically. No committee, no slide deck. Override is rare; record-keeping is mandatory.</li>
+<li>Step 5 — Sign the page: CTO signs. CISO signs. Date stamped. Lives in version control. The 47-page policy doc, if it ever existed, is now an appendix that no one reads, and that is fine.</li>
+</ul>
+<h2>Move 2 — The 'where does the why live?' question</h2>
+<ul>
+<li>When you walk into a struggling AI program, ask one question: &gt; *&quot;Who, outside this AI team, can articulate the user problem this team is solving in one sentence, without me prompting?&quot;* If the answer is 'no one' — the program is rudderless. The 'why' lives only in the AI team's slide deck, and slide decks are not strategy.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: centralise too early or decentralise too late: Both directions kill programs. Centralising before three concurrent product teams need the same capability turns the central team into a queue, and product teams stop bringing ideas. Decentralising past four concurrent product teams produces duplicated eval pipelines, inconsistent kill switches, and an audit that takes 14 weeks to reconstruct.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">AI cell and AI factory are the only two clean structures; everything in between is debt.</div>
+<div class="takeaway">Start as a cell; graduate to a factory when at least three concurrent product teams need the same capability.</div>
+<div class="takeaway">Thin governance is a single page that blocks releases; thick policy is 47 pages that block nothing.</div>
+<div class="takeaway">Where the 'why' lives tells you whether the program will survive a leadership change. Three external articulators, minimum.</div>
+<div class="takeaway">Centralise too early and the council becomes a queue; decentralise too late and the audit becomes a scavenger hunt.</div>
+  <div class="signoff">— Meera, on the bus, again</div>
+</main>
+</body>
+</html>

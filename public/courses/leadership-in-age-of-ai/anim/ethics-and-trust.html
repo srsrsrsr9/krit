@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ethics and Trust</title>
+<style>
+  :root {
+    --bg: #FEF3C7;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --good: #10B981;
+    --accent: #F59E0B;
+    --bad: #F43F5E;
+    --human: #8B5CF6;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 800px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px; padding: 0 12px;
+  }
+  .reset {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .reset:hover { background: #FDE68A; }
+  text { font-family: inherit; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 800 500" aria-label="Two scenes side by side. On the left, a values poster on a wall stays inert while a flat trust score sits at thirty. On the right, a leader runs a public post-mortem; a writeup appears, and the trust score climbs steadily to ninety-two.">
+      <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Where trust actually comes from</text>
+      <text x="400" y="52" text-anchor="middle" font-size="13" font-style="italic" fill="#6B7280">a poster on the wall vs a leader at a whiteboard</text>
+
+      <!-- LEFT scene: poster on wall -->
+      <g transform="translate(40,80)">
+        <!-- wall -->
+        <rect width="350" height="280" rx="12" fill="#FFF7ED" stroke="#E5E7EB" stroke-width="1.5"/>
+        <!-- floor line -->
+        <line x1="0" y1="240" x2="350" y2="240" stroke="#E5E7EB" stroke-width="1.5"/>
+        <!-- frame -->
+        <g transform="translate(75,40)">
+          <rect width="200" height="160" rx="6" fill="#1F2937"/>
+          <rect x="6" y="6" width="188" height="148" rx="3" fill="#FFFFFF"/>
+          <text x="100" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">OUR VALUES</text>
+          <line x1="40" y1="42" x2="160" y2="42" stroke="#F59E0B" stroke-width="1.5"/>
+          <text x="100" y="64" text-anchor="middle" font-size="10" fill="#6B7280">• Integrity</text>
+          <text x="100" y="80" text-anchor="middle" font-size="10" fill="#6B7280">• Excellence</text>
+          <text x="100" y="96" text-anchor="middle" font-size="10" fill="#6B7280">• Innovation</text>
+          <text x="100" y="112" text-anchor="middle" font-size="10" fill="#6B7280">• One Team</text>
+          <text x="100" y="128" text-anchor="middle" font-size="10" fill="#6B7280">• Customer First</text>
+          <text x="100" y="146" text-anchor="middle" font-size="9" fill="#9CA3AF" font-style="italic">— laminated, 2019</text>
+        </g>
+        <!-- a small dust circle -->
+        <g id="dust" opacity="0.6">
+          <circle cx="60" cy="220" r="2" fill="#D1D5DB"/>
+          <circle cx="74" cy="226" r="1.5" fill="#D1D5DB"/>
+          <circle cx="290" cy="222" r="2" fill="#D1D5DB"/>
+          <circle cx="305" cy="232" r="1.4" fill="#D1D5DB"/>
+        </g>
+        <!-- inert label -->
+        <g transform="translate(175,266)">
+          <rect x="-70" y="-12" width="140" height="20" rx="10" fill="#FEF2F2" stroke="#F43F5E" stroke-width="1"/>
+          <text y="2" text-anchor="middle" font-size="11" fill="#9F1239" font-weight="600">decorative · inert</text>
+        </g>
+      </g>
+
+      <!-- RIGHT scene: leader at whiteboard, post-mortem -->
+      <g transform="translate(410,80)">
+        <rect width="350" height="280" rx="12" fill="#FAF5FF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <line x1="0" y1="240" x2="350" y2="240" stroke="#E5E7EB" stroke-width="1.5"/>
+
+        <!-- whiteboard -->
+        <g transform="translate(20,30)">
+          <rect width="220" height="160" rx="4" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+          <text x="110" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">post-mortem · the call I missed</text>
+          <line x1="20" y1="30" x2="200" y2="30" stroke="#E5E7EB" stroke-width="1"/>
+          <!-- handwriting lines that "appear" -->
+          <g id="writing" font-size="9" fill="#1F2937">
+            <text class="hw" x="20" y="46" opacity="0">1. what i decided →</text>
+            <text class="hw" x="20" y="62" opacity="0">2. what i missed →</text>
+            <text class="hw" x="20" y="78" opacity="0">3. cost in days / dollars →</text>
+            <text class="hw" x="20" y="94" opacity="0">4. what i'd do differently →</text>
+            <text class="hw" x="20" y="110" opacity="0">5. shared with everyone →</text>
+            <text class="hw" x="20" y="132" opacity="0" font-weight="700" fill="#047857">— signed: the leader</text>
+          </g>
+        </g>
+
+        <!-- leader figure standing beside the whiteboard -->
+        <g transform="translate(280,160)">
+          <!-- head -->
+          <circle cx="0" cy="-32" r="11" fill="#FFF" stroke="#1F2937" stroke-width="2"/>
+          <!-- body -->
+          <path d="M -16 -10 Q -16 -22 0 -22 Q 16 -22 16 -10 L 14 24 L -14 24 Z" fill="#FAF5FF" stroke="#1F2937" stroke-width="2" stroke-linejoin="round"/>
+          <!-- arm pointing -->
+          <line id="leaderArm" x1="-12" y1="-12" x2="-30" y2="-2" stroke="#1F2937" stroke-width="3" stroke-linecap="round"/>
+          <!-- marker -->
+          <rect id="marker" x="-36" y="-8" width="10" height="4" rx="1" fill="#10B981"/>
+          <!-- eyes -->
+          <circle cx="-3" cy="-33" r="1.2" fill="#1F2937"/>
+          <circle cx="3" cy="-33" r="1.2" fill="#1F2937"/>
+        </g>
+
+        <!-- writeup floating to "everyone" -->
+        <g id="writeup" transform="translate(150,210)" opacity="0">
+          <rect x="-40" y="-10" width="80" height="20" rx="4" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#047857" font-weight="600">writeup.md</text>
+        </g>
+
+        <!-- label -->
+        <g transform="translate(175,266)">
+          <rect x="-78" y="-12" width="156" height="20" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1"/>
+          <text y="2" text-anchor="middle" font-size="11" fill="#047857" font-weight="600">behavior · written down</text>
+        </g>
+      </g>
+
+      <!-- Trust scoreboard at bottom -->
+      <g transform="translate(40,380)">
+        <text x="0" y="0" font-size="13" font-weight="700" fill="#1F2937">trust over the same quarter</text>
+
+        <!-- LEFT score: flat -->
+        <g transform="translate(0,12)">
+          <text x="0" y="0" font-size="10" fill="#9F1239">poster only</text>
+          <rect x="0" y="8" width="350" height="14" rx="7" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.2"/>
+          <rect id="leftBar" x="2" y="10" width="100" height="10" rx="5" fill="#F43F5E"/>
+          <text id="leftScore" x="358" y="20" font-size="13" font-weight="700" fill="#9F1239" class="mono">30</text>
+        </g>
+
+        <!-- RIGHT score: rising -->
+        <g transform="translate(0,40)">
+          <text x="0" y="0" font-size="10" fill="#047857">post-mortem in public</text>
+          <rect x="0" y="8" width="350" height="14" rx="7" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.2"/>
+          <rect id="rightBar" x="2" y="10" width="100" height="10" rx="5" fill="#10B981"/>
+          <text id="rightScore" x="358" y="20" font-size="13" font-weight="700" fill="#047857" class="mono">30</text>
+        </g>
+
+        <!-- repeat ticks for sense of compounding -->
+        <g transform="translate(420,18)" opacity="0.85">
+          <text x="0" y="0" font-size="10" fill="#6B7280">incidents this quarter</text>
+          <g id="ticks"></g>
+        </g>
+      </g>
+
+      <!-- annotation -->
+      <g id="ann" opacity="0">
+        <rect x="180" y="473" width="440" height="22" rx="11" fill="#1F2937"/>
+        <text x="400" y="488" text-anchor="middle" font-size="12" font-weight="600" fill="#FFF7ED">behavior compounds; posters don't</text>
+      </g>
+    </svg>
+    <div class="caption">Values aren't on the wall. They're in the next post-mortem you write down and circulate.</div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+<script>
+(function () {
+  var hwLines = document.querySelectorAll('.hw');
+  var writeup = document.getElementById('writeup');
+  var leftBar = document.getElementById('leftBar');
+  var rightBar = document.getElementById('rightBar');
+  var leftScore = document.getElementById('leftScore');
+  var rightScore = document.getElementById('rightScore');
+  var ticks = document.getElementById('ticks');
+  var ann = document.getElementById('ann');
+  var resetBtn = document.getElementById('resetBtn');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function reset() {
+    hwLines.forEach(function (l) {
+      l.style.transition = 'opacity 500ms ease';
+      l.setAttribute('opacity', '0');
+    });
+    writeup.style.transition = 'opacity 600ms ease, transform 800ms cubic-bezier(0.22, 0.61, 0.36, 1)';
+    writeup.setAttribute('opacity', '0');
+    writeup.setAttribute('transform', 'translate(150,210)');
+    leftBar.setAttribute('width', '100');
+    rightBar.setAttribute('width', '100');
+    leftBar.setAttribute('fill', '#F43F5E');
+    rightBar.setAttribute('fill', '#10B981');
+    leftScore.textContent = '30';
+    rightScore.textContent = '30';
+    while (ticks.firstChild) ticks.removeChild(ticks.firstChild);
+    ann.style.transition = 'opacity 600ms ease';
+    ann.style.opacity = '0';
+  }
+
+  function rampBar(barEl, scoreEl, fromW, toW, fromV, toV, ms) {
+    var start = performance.now();
+    function frame(t) {
+      var k = Math.min(1, (t - start) / ms);
+      var ease = 1 - Math.pow(1 - k, 3);
+      var w = fromW + (toW - fromW) * ease;
+      var v = Math.round(fromV + (toV - fromV) * ease);
+      barEl.setAttribute('width', w);
+      scoreEl.textContent = v;
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function addTick(idx, color) {
+    var x = idx * 34;
+    var g = document.createElementNS(SVG_NS, 'g');
+    g.setAttribute('transform', 'translate(' + x + ',12)');
+    var r = document.createElementNS(SVG_NS, 'rect');
+    r.setAttribute('x', 0);
+    r.setAttribute('y', 0);
+    r.setAttribute('width', 28);
+    r.setAttribute('height', 28);
+    r.setAttribute('rx', 4);
+    r.setAttribute('fill', '#FFFFFF');
+    r.setAttribute('stroke', color);
+    r.setAttribute('stroke-width', 1.5);
+    g.appendChild(r);
+    var t = document.createElementNS(SVG_NS, 'text');
+    t.setAttribute('x', 14);
+    t.setAttribute('y', 19);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('font-size', '13');
+    t.setAttribute('font-weight', '700');
+    t.setAttribute('fill', color);
+    t.textContent = '✓';
+    t.style.fontFamily = 'system-ui, -apple-system, sans-serif';
+    g.appendChild(t);
+    g.style.opacity = '0';
+    g.style.transition = 'opacity 400ms ease, transform 400ms cubic-bezier(0.22,0.61,0.36,1)';
+    ticks.appendChild(g);
+    requestAnimationFrame(function () {
+      g.style.opacity = '1';
+    });
+  }
+
+  function run() {
+    reset();
+    if (prefersReduced) {
+      hwLines.forEach(function (l) { l.setAttribute('opacity', '1'); });
+      writeup.setAttribute('opacity', '1');
+      writeup.setAttribute('transform', 'translate(50,260)');
+      leftBar.setAttribute('width', '102');
+      leftScore.textContent = '30';
+      rightBar.setAttribute('width', '320');
+      rightScore.textContent = '92';
+      for (var i = 0; i < 3; i++) addTick(i, '#10B981');
+      ann.style.opacity = '1';
+      return;
+    }
+
+    // 1. Lines of the post-mortem appear sequentially
+    hwLines.forEach(function (l, i) {
+      setTimeout(function () { l.setAttribute('opacity', '1'); }, 600 + i * 600);
+    });
+
+    // 2. writeup.md card emerges from whiteboard, drifts down
+    setTimeout(function () {
+      writeup.setAttribute('opacity', '1');
+      writeup.setAttribute('transform', 'translate(50,260)');
+    }, 600 + hwLines.length * 600 + 200);
+
+    // 3. Trust bars: left flat (slight wobble), right climbs
+    setTimeout(function () {
+      // tiny dip then back
+      rampBar(leftBar, leftScore, 100, 90, 30, 27, 400);
+      setTimeout(function () { rampBar(leftBar, leftScore, 90, 102, 27, 30, 600); }, 500);
+    }, 600 + hwLines.length * 600 + 800);
+
+    setTimeout(function () {
+      rampBar(rightBar, rightScore, 100, 320, 30, 92, 1800);
+    }, 600 + hwLines.length * 600 + 1300);
+
+    // 4. ticks (incidents handled in public)
+    [0, 1, 2].forEach(function (i) {
+      setTimeout(function () { addTick(i, '#10B981'); }, 600 + hwLines.length * 600 + 1600 + i * 400);
+    });
+
+    setTimeout(function () { ann.style.opacity = '1'; }, 600 + hwLines.length * 600 + 3300);
+
+    // loop
+    setTimeout(run, 600 + hwLines.length * 600 + 5600);
+  }
+
+  resetBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

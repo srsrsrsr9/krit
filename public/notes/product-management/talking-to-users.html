@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Talking to Users Without Getting Lied To — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Talking to Users Without Getting Lied To</h1>
+  <p class="subtitle">They tell you what they want; your job is to hear what they need</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Users will lie to you. Not maliciously — politely, helpfully, with smiles.</p>
+  <div class="callout"><strong>Mental model: users tell you what they want, not what they need</strong><br/>Treat every user statement as having two channels:</div>
+  
+<h2>Move 1 — 'Tell me about the last time…'</h2>
+<ul>
+<li>The single most useful sentence in user research is **'Tell me about the last time you…'** It does three things at once. First, it forces past-tense.</li>
+<li>Step 1 — Stop asking 'would you': Strike every future-tense question from your interview script. If you have 'would you use', 'would you pay', 'how often would you', delete them. They don't survive contact with reality.</li>
+<li>Step 2 — Replace with 'tell me about the last time': Convert every aspiration into a memory probe. 'Would you use an export feature?' becomes 'Tell me about the last time you needed to get data out of the dashboard.'</li>
+<li>Step 3 — Follow the workaround: When they describe what they did, ask what tool they used, what was annoying, how long it took. Workarounds are revealed need with a price tag attached.</li>
+<li>Step 4 — Probe for absence: If they cannot recall a single instance in the last 30-90 days, that is data, not failure. Note it. Ask 'when do you think the last time was?' and let them sit with it.</li>
+<li>Step 5 — Count the workarounds, not the wishes: When you tally interviews, count specific past-tense instances of the underlying behavior. If 8 out of 10 users had a workaround in the last 30 days, you have a feature. If 8 out of 10 said 'I would use it,' you have nothing.</li>
+</ul>
+<h2>Move 2 — The silence move</h2>
+<ul>
+<li>After a user finishes their first answer, **wait three to five seconds before saying anything**. Do not nod, do not 'mm-hmm', do not move on.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: leading questions disguised as innocent ones: Watch for sentences that start with **'Don't you think…?'** or **'Wouldn't it be nice if…?'** These are not questions. They are statements with a question mark stapled on. The user almost always agrees, because disagreeing is rude.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Users tell you what they want; their behavior tells you what they need. Tune for behavior, discount aspiration.</div>
+<div class="takeaway">Replace every future-tense question with 'tell me about the last time…' — past tense produces stories, future tense produces fiction.</div>
+<div class="takeaway">After the user's first answer, count to five before speaking. The second answer is the one you came for.</div>
+<div class="takeaway">Workarounds are demand with a price tag attached; a side-built Google Sheet is the highest-signal artifact in B2B research.</div>
+<div class="takeaway">If your question implies the answer you hope for, the answer is worthless. Test by flipping it — would the question feel just as natural with the opposite answer?</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

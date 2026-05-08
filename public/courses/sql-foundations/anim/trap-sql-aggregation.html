@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: WHERE on aggregate</title>
+<style>
+:root { --bg:#FFF7ED; --ink:#1F2937; --bad:#F43F5E; --good:#10B981; --warn:#F59E0B; }
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+.stage { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+.frame { width:100%; max-width:720px; }
+.caption { text-align:center; font-size:13px; font-style:italic; color:#6B7280; margin-top:8px; }
+.reset { position:fixed; right:12px; bottom:12px; padding:6px 10px; font-size:11px; background:#fff; border:1px solid #d1d5db; border-radius:6px; cursor:pointer; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+@keyframes errFlash { 0%,100%{opacity:1} 50%{opacity:.5} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+@keyframes glow { 0%,100%{filter:drop-shadow(0 0 0 #10B981)} 50%{filter:drop-shadow(0 0 8px #10B981)} }
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+.bad-query { animation: fadeIn .5s ease both; }
+.error-stamp { animation: fadeIn .4s ease 4s both, errFlash 1.2s ease 4.4s 2 both; }
+.shaking-row { animation: shake .25s ease 5.5s 3 both; }
+.fix-query { animation: fadeIn .6s ease 7s both, glow 2s ease 9s 2 both; }
+.where-strike { animation: fadeIn .3s ease 4s both; }
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A WHERE clause on an aggregate function erroring out, then a fix using HAVING after GROUP BY">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- BAD QUERY -->
+<g class="bad-query">
+<rect x="40" y="40" width="640" height="120" rx="8" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="60" y="68" font-family="ui-monospace,monospace" font-size="14" fill="#7F1D1D">SELECT city, COUNT(*) AS n</text>
+<text x="60" y="90" font-family="ui-monospace,monospace" font-size="14" fill="#7F1D1D">FROM orders</text>
+<g class="shaking-row">
+<text x="60" y="112" font-family="ui-monospace,monospace" font-size="14" fill="#7F1D1D">WHERE COUNT(*) &gt; 100</text>
+<line class="where-strike" x1="60" y1="108" x2="280" y2="108" stroke="#7F1D1D" stroke-width="3"/>
+</g>
+<text x="60" y="136" font-family="ui-monospace,monospace" font-size="14" fill="#7F1D1D">GROUP BY city;</text>
+</g>
+
+<!-- ERROR STAMP -->
+<g class="error-stamp">
+<rect x="180" y="180" width="360" height="60" rx="10" fill="#1F2937"/>
+<text x="360" y="206" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="#FCA5A5" font-weight="bold">ERROR: aggregate functions are not</text>
+<text x="360" y="225" text-anchor="middle" font-family="ui-monospace,monospace" font-size="13" fill="#FCA5A5" font-weight="bold">allowed in WHERE</text>
+</g>
+
+<!-- ARROW DOWN -->
+<g class="error-stamp" style="animation-delay:6s">
+<line x1="360" y1="246" x2="360" y2="276" stroke="#1F2937" stroke-width="2"/>
+<polygon points="360,282 354,272 366,272" fill="#1F2937"/>
+</g>
+
+<!-- FIX QUERY -->
+<g class="fix-query">
+<rect x="40" y="290" width="640" height="100" rx="8" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="60" y="318" font-family="ui-monospace,monospace" font-size="14" fill="#064E3B">SELECT city, COUNT(*) AS n</text>
+<text x="60" y="340" font-family="ui-monospace,monospace" font-size="14" fill="#064E3B">FROM orders</text>
+<text x="60" y="362" font-family="ui-monospace,monospace" font-size="14" fill="#064E3B">GROUP BY city</text>
+<text x="60" y="384" font-family="ui-monospace,monospace" font-size="14" fill="#065F46" font-weight="bold">HAVING COUNT(*) &gt; 100;</text>
+<text x="540" y="384" font-family="sans-serif" font-size="11" fill="#065F46" font-style="italic">runs in 12ms ✓</text>
+</g>
+</svg>
+<div class="caption">WHERE filters rows; HAVING filters groups. Aggregates only exist after GROUP BY.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

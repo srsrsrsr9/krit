@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prompting for financials</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--good:#10B981;--bad:#F43F5E;--blue:#0EA5E9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:880px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+.rb{position:absolute;bottom:6px;right:6px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:inherit;opacity:.7}
+.rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="frame">
+<svg viewBox="0 0 880 540" aria-label="Two prompts compared. A vague prompt yields a hallucinated EBITDA without citations in red. A structured prompt yields JSON with each figure citing a source row in green.">
+  <rect width="880" height="540" fill="#FFF7ED"/>
+  <text x="440" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Two prompts. Same data. Very different trust.</text>
+  <text x="440" y="48" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">left = hallucination · right = audit trail</text>
+
+  <!-- Divider -->
+  <line x1="440" y1="68" x2="440" y2="500" stroke="#E7E5E4" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- LEFT: BAD PROMPT -->
+  <g id="badSide">
+    <text x="220" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#F43F5E" letter-spacing="1.5">VAGUE PROMPT</text>
+    <rect x="40" y="96" width="360" height="60" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="2"/>
+    <text x="56" y="118" font-size="12" font-family="ui-monospace,monospace" fill="#1F2937">"Summarize this P&amp;L."</text>
+    <text x="56" y="138" font-size="10" fill="#9CA3AF" font-style="italic">no role · no format · no verify rule</text>
+
+    <!-- arrow -->
+    <path d="M220 162 L220 184" stroke="#F43F5E" stroke-width="2" marker-end="url(#arrR)"/>
+
+    <!-- LLM box -->
+    <g transform="translate(120,194)">
+      <rect x="0" y="0" width="200" height="38" rx="8" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="100" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#9F1239">LLM (no constraints)</text>
+    </g>
+
+    <!-- arrow -->
+    <path d="M220 238 L220 260" stroke="#F43F5E" stroke-width="2" marker-end="url(#arrR)"/>
+
+    <!-- Output card -->
+    <rect x="40" y="270" width="360" height="200" rx="10" fill="#FFFFFF" stroke="#FECDD3" stroke-width="2"/>
+    <text x="56" y="292" font-size="11" font-weight="700" fill="#9F1239" letter-spacing="1">OUTPUT</text>
+    <line x1="40" y1="300" x2="400" y2="300" stroke="#FECDD3"/>
+
+    <g id="badText" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">
+      <text x="56" y="320" id="b1" opacity="0">Revenue grew nicely.</text>
+      <text x="56" y="340" id="b2" opacity="0">EBITDA margin: <tspan font-weight="700" fill="#F43F5E">23.4%</tspan></text>
+      <text x="56" y="360" id="b3" opacity="0">Cash flow looks healthy.</text>
+      <text x="56" y="380" id="b4" opacity="0">Net income: <tspan font-weight="700" fill="#F43F5E">₹4.2 Cr</tspan></text>
+    </g>
+    <!-- Hallucination callout -->
+    <g id="badCallout" opacity="0">
+      <rect x="56" y="400" width="328" height="56" rx="8" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="68" y="418" font-size="11" font-weight="700" fill="#9F1239">⚠ HALLUCINATED</text>
+      <text x="68" y="434" font-size="10" fill="#1F2937">EBITDA never appears in source. Net</text>
+      <text x="68" y="448" font-size="10" fill="#1F2937">income of ₹4.2 Cr is fabricated.</text>
+    </g>
+
+    <text x="220" y="488" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E">CITATIONS: 0</text>
+  </g>
+
+  <!-- RIGHT: GOOD PROMPT -->
+  <g id="goodSide">
+    <text x="660" y="84" text-anchor="middle" font-size="12" font-weight="700" fill="#10B981" letter-spacing="1.5">STRUCTURED PROMPT</text>
+    <rect x="480" y="96" width="360" height="84" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="2"/>
+    <text x="496" y="116" font-size="11" font-family="ui-monospace,monospace" fill="#1F2937">role: senior CA</text>
+    <text x="496" y="132" font-size="11" font-family="ui-monospace,monospace" fill="#1F2937">format: JSON {label, value, src}</text>
+    <text x="496" y="148" font-size="11" font-family="ui-monospace,monospace" fill="#1F2937">rule: cite source row for</text>
+    <text x="496" y="162" font-size="11" font-family="ui-monospace,monospace" fill="#1F2937">      every number; refuse if absent</text>
+
+    <path d="M660 186 L660 208" stroke="#10B981" stroke-width="2" marker-end="url(#arrG)"/>
+
+    <g transform="translate(560,218)">
+      <rect x="0" y="0" width="200" height="38" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+      <text x="100" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46">LLM + verify rule</text>
+    </g>
+
+    <path d="M660 262 L660 284" stroke="#10B981" stroke-width="2" marker-end="url(#arrG)"/>
+
+    <rect x="480" y="294" width="360" height="180" rx="10" fill="#FFFFFF" stroke="#A7F3D0" stroke-width="2"/>
+    <text x="496" y="316" font-size="11" font-weight="700" fill="#065F46" letter-spacing="1">OUTPUT (JSON)</text>
+    <line x1="480" y1="324" x2="840" y2="324" stroke="#A7F3D0"/>
+
+    <g id="goodText" font-family="ui-monospace,monospace" font-size="10.5" fill="#1F2937">
+      <text x="496" y="342" id="g1" opacity="0">{ "revenue": <tspan fill="#065F46" font-weight="700">12.40 Cr</tspan>, src: <tspan fill="#0EA5E9">row 4</tspan> },</text>
+      <text x="496" y="360" id="g2" opacity="0">{ "cogs":    <tspan fill="#065F46" font-weight="700"> 7.10 Cr</tspan>, src: <tspan fill="#0EA5E9">row 9</tspan> },</text>
+      <text x="496" y="378" id="g3" opacity="0">{ "opex":    <tspan fill="#065F46" font-weight="700"> 2.60 Cr</tspan>, src: <tspan fill="#0EA5E9">rows 11-15</tspan> },</text>
+      <text x="496" y="396" id="g4" opacity="0">{ "ebitda":  <tspan fill="#065F46" font-weight="700"> 2.70 Cr</tspan>, src: <tspan fill="#0EA5E9">computed</tspan> },</text>
+      <text x="496" y="414" id="g5" opacity="0">{ "margin":  <tspan fill="#065F46" font-weight="700">21.8 %</tspan>, src: <tspan fill="#0EA5E9">computed</tspan> }</text>
+    </g>
+
+    <g id="goodCallout" opacity="0">
+      <rect x="496" y="430" width="328" height="36" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+      <text x="508" y="447" font-size="11" font-weight="700" fill="#065F46">✓ EVERY NUMBER TRACES TO SOURCE</text>
+      <text x="508" y="460" font-size="10" fill="#1F2937">A junior auditor can verify in 90 seconds.</text>
+    </g>
+
+    <text x="660" y="492" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981">CITATIONS: 5/5</text>
+  </g>
+
+  <defs>
+    <marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F43F5E"/>
+    </marker>
+    <marker id="arrG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#10B981"/>
+    </marker>
+  </defs>
+
+  <!-- bottom rule -->
+  <rect x="40" y="510" width="800" height="22" rx="11" fill="#1F2937"/>
+  <text x="440" y="525" text-anchor="middle" font-size="11" fill="#FFF7ED" font-weight="700">RULE: if a number can't cite a source row, refuse to print it.</text>
+</svg>
+<div class="cap" id="cap">A prompt without a verify rule is a roulette wheel with your audit license on it.</div>
+<button class="rb" id="reset">restart</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ids={bad:['b1','b2','b3','b4'],good:['g1','g2','g3','g4','g5']};
+let timers=[];
+function later(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
+function clearAll(){timers.forEach(clearTimeout);timers=[];}
+function fade(id,from,to,dur){
+  const el=document.getElementById(id); if(!el) return;
+  if(reduced){el.setAttribute('opacity',to);return;}
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min((now-start)/dur,1);
+    const e=1-Math.pow(1-t,3);
+    el.setAttribute('opacity',(from+(to-from)*e).toFixed(3));
+    if(t<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function reset(){
+  ids.bad.forEach(i=>document.getElementById(i).setAttribute('opacity',0));
+  ids.good.forEach(i=>document.getElementById(i).setAttribute('opacity',0));
+  document.getElementById('badCallout').setAttribute('opacity',0);
+  document.getElementById('goodCallout').setAttribute('opacity',0);
+}
+
+function run(){
+  clearAll();
+  reset();
+  if(reduced){
+    ids.bad.forEach(i=>document.getElementById(i).setAttribute('opacity',1));
+    ids.good.forEach(i=>document.getElementById(i).setAttribute('opacity',1));
+    document.getElementById('badCallout').setAttribute('opacity',1);
+    document.getElementById('goodCallout').setAttribute('opacity',1);
+    return;
+  }
+  let t=400;
+  ids.bad.forEach((id,k)=>{ later(t+k*420,()=>fade(id,0,1,360)); });
+  ids.good.forEach((id,k)=>{ later(t+k*420,()=>fade(id,0,1,360)); });
+  later(t+ids.bad.length*420+200,()=>fade('badCallout',0,1,500));
+  later(t+ids.good.length*420+200,()=>fade('goodCallout',0,1,500));
+  later(11000,run);
+}
+
+document.getElementById('reset').addEventListener('click',run);
+run();
+})();
+</script>
+</body>
+</html>

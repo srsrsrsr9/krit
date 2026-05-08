@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Value vs Effort</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--good:#10B981;--bad:#F43F5E;--warn:#F59E0B;--info:#0EA5E9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.wrap{position:relative;width:100%;max-width:780px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+#rb{position:absolute;top:8px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="wrap">
+<svg viewBox="0 0 780 480" aria-label="A two by two value vs effort matrix. Twelve features are plotted; the high-value low-effort quadrant lights up green and the low-value high-effort quadrant fades red. A prioritized list materializes on the right.">
+  <rect width="780" height="480" fill="#FFF7ED"/>
+  <text x="390" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Plot before you pitch.</text>
+
+  <!-- Matrix area: x 60..440, y 60..440 -->
+  <g id="matrix">
+    <!-- Quadrant fills -->
+    <rect id="q-tl" x="60" y="60" width="190" height="190" fill="#10B981" opacity="0.06"/>
+    <rect id="q-tr" x="250" y="60" width="190" height="190" fill="#F59E0B" opacity="0.06"/>
+    <rect id="q-bl" x="60" y="250" width="190" height="190" fill="#0EA5E9" opacity="0.06"/>
+    <rect id="q-br" x="250" y="250" width="190" height="190" fill="#F43F5E" opacity="0.06"/>
+
+    <!-- Outer frame -->
+    <rect x="60" y="60" width="380" height="380" fill="none" stroke="#1F2937" stroke-width="1.5" rx="6"/>
+    <line x1="250" y1="60" x2="250" y2="440" stroke="#1F2937" stroke-width="1" opacity="0.3"/>
+    <line x1="60" y1="250" x2="440" y2="250" stroke="#1F2937" stroke-width="1" opacity="0.3"/>
+
+    <!-- Axis labels -->
+    <text x="250" y="455" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">EFFORT →</text>
+    <text x="48" y="250" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" transform="rotate(-90 48 250)">VALUE →</text>
+
+    <!-- Quadrant labels -->
+    <text x="155" y="78" text-anchor="middle" font-size="10" fill="#10B981" font-weight="700">QUICK WINS</text>
+    <text x="345" y="78" text-anchor="middle" font-size="10" fill="#F59E0B" font-weight="700">BIG BETS</text>
+    <text x="155" y="432" text-anchor="middle" font-size="10" fill="#0EA5E9" font-weight="700">FILL-INS</text>
+    <text x="345" y="432" text-anchor="middle" font-size="10" fill="#F43F5E" font-weight="700">MONEY PITS</text>
+  </g>
+
+  <!-- Plotted features go here -->
+  <g id="dots"></g>
+
+  <!-- Right list -->
+  <g id="list">
+    <text x="600" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#6B7280">PRIORITIZED</text>
+    <line x1="475" y1="62" x2="725" y2="62" stroke="#E5E7EB" stroke-width="1"/>
+  </g>
+  <g id="listItems"></g>
+</svg>
+<div class="cap" id="cap">12 feature ideas. Some better than others.</div>
+<button id="rb">reset</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+var svgNS='http://www.w3.org/2000/svg';
+var prefersReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,prefersReduce?0:ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function ease(t){return 1-Math.pow(1-t,3);}
+
+// effort 0..1, value 0..1 → x 60..440, y 440..60
+function px(eff){return 60+eff*380;}
+function py(val){return 440-val*380;}
+
+// 12 features
+// Each: {label, eff, val, color hint by quadrant}
+var FEATURES=[
+  {l:'login fix',     e:0.12,v:0.86,q:'tl'},
+  {l:'export CSV',    e:0.18,v:0.72,q:'tl'},
+  {l:'dark mode',     e:0.20,v:0.50,q:'tl'},
+  {l:'bulk actions',  e:0.32,v:0.78,q:'tl'},
+  {l:'AI recsys',     e:0.86,v:0.82,q:'tr'},
+  {l:'team accts',    e:0.78,v:0.66,q:'tr'},
+  {l:'mobile app',    e:0.92,v:0.58,q:'tr'},
+  {l:'tooltips',      e:0.10,v:0.22,q:'bl'},
+  {l:'changelog',     e:0.16,v:0.28,q:'bl'},
+  {l:'3D logo',       e:0.74,v:0.18,q:'br'},
+  {l:'animated bg',   e:0.66,v:0.10,q:'br'},
+  {l:'CMS rewrite',   e:0.94,v:0.22,q:'br'}
+];
+var QCOLOR={tl:'#10B981',tr:'#F59E0B',bl:'#0EA5E9',br:'#F43F5E'};
+
+function plotDot(f,delay){
+  after(delay,function(){
+    var g=document.createElementNS(svgNS,'g');
+    g.setAttribute('opacity','0');
+    var c=document.createElementNS(svgNS,'circle');
+    var x=px(f.e),y=py(f.v);
+    c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',7);
+    c.setAttribute('fill',QCOLOR[f.q]);c.setAttribute('stroke','#FFFFFF');c.setAttribute('stroke-width','1.5');
+    var t=document.createElementNS(svgNS,'text');
+    t.setAttribute('x',x+10);t.setAttribute('y',y+3);t.setAttribute('font-size','9');t.setAttribute('fill','#1F2937');
+    t.textContent=f.l;
+    g.appendChild(c);g.appendChild(t);
+    document.getElementById('dots').appendChild(g);
+    var s=performance.now();
+    function tick(now){
+      var tt=Math.min((now-s)/280,1);
+      g.setAttribute('opacity',String(ease(tt)));
+      if(tt<1)rafs.push(requestAnimationFrame(tick));
+    }
+    rafs.push(requestAnimationFrame(tick));
+  });
+}
+
+function pulseQuad(id,toOp){
+  var el=document.getElementById(id);
+  var s=performance.now();var startOp=parseFloat(el.getAttribute('opacity')||'0.06');
+  function tick(now){
+    var tt=Math.min((now-s)/600,1),e=ease(tt);
+    el.setAttribute('opacity',String(startOp+(toOp-startOp)*e));
+    if(tt<1)rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function addListItem(rank,label,color,delay){
+  after(delay,function(){
+    var y=72+rank*32;
+    var g=document.createElementNS(svgNS,'g');
+    g.setAttribute('opacity','0');g.setAttribute('transform','translate(20,0)');
+    var r=document.createElementNS(svgNS,'rect');
+    r.setAttribute('x',475);r.setAttribute('y',y);r.setAttribute('width',250);r.setAttribute('height',26);
+    r.setAttribute('rx',6);r.setAttribute('fill','#FFFFFF');r.setAttribute('stroke',color);r.setAttribute('stroke-width','1.5');
+    var t=document.createElementNS(svgNS,'text');
+    t.setAttribute('x',488);t.setAttribute('y',y+17);t.setAttribute('font-size','11');t.setAttribute('fill','#1F2937');t.setAttribute('font-weight','600');
+    t.textContent=(rank+1)+'.  '+label;
+    g.appendChild(r);g.appendChild(t);
+    document.getElementById('listItems').appendChild(g);
+    var s=performance.now();
+    function tick(now){
+      var tt=Math.min((now-s)/350,1),e=ease(tt);
+      g.setAttribute('opacity',String(e));
+      g.setAttribute('transform','translate('+(20-20*e)+',0)');
+      if(tt<1)rafs.push(requestAnimationFrame(tick));
+    }
+    rafs.push(requestAnimationFrame(tick));
+  });
+}
+
+function cap(t){document.getElementById('cap').textContent=t;}
+
+function run(){
+  clearAll();
+  document.getElementById('dots').innerHTML='';
+  document.getElementById('listItems').innerHTML='';
+  document.getElementById('q-tl').setAttribute('opacity','0.06');
+  document.getElementById('q-br').setAttribute('opacity','0.06');
+  cap('12 feature ideas. Some better than others.');
+
+  // Plot features one by one
+  for(var i=0;i<FEATURES.length;i++){
+    plotDot(FEATURES[i],400+i*240);
+  }
+
+  after(3500,function(){cap('the upper-left lights up — quick wins');pulseQuad('q-tl',0.32);});
+  after(5200,function(){cap('the lower-right sinks — money pits');pulseQuad('q-br',0.22);});
+
+  // Build prioritized list (only quick wins + best big bets)
+  after(6400,function(){cap('and the build order writes itself');});
+  addListItem(0,'login fix',           '#10B981', 6800);
+  addListItem(1,'export CSV',          '#10B981', 7150);
+  addListItem(2,'bulk actions',        '#10B981', 7500);
+  addListItem(3,'dark mode',           '#10B981', 7850);
+  addListItem(4,'AI recsys',           '#F59E0B', 8200);
+  addListItem(5,'team accts',          '#F59E0B', 8550);
+
+  after(10800,function(){cap('value/effort: not a science. But beats the gut alone.');});
+
+  after(13500,run);
+}
+document.getElementById('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

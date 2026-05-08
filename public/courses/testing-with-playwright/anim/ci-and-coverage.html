@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CI shards, flake budget, coverage</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+#rb{position:absolute;bottom:8px;right:16px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="A CI pipeline split into four parallel shards finishes in seven minutes; a two-percent flake budget is tripped and the suite stops the line; coverage climbs as more tests are added">
+
+  <rect width="760" height="470" fill="#FFF7ED"/>
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Parallel shards. Hard limits. Honest coverage.</text>
+
+  <!-- ─────── SECTION A: SHARDS ─────── -->
+  <text x="32" y="64" font-size="12" font-weight="700" fill="#6B7280">CI run · 4 shards in parallel</text>
+
+  <!-- Time axis 0..28 min, x=80..720 -->
+  <g font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace" text-anchor="middle">
+    <text x="80"  y="200">0</text>
+    <text x="240" y="200">7</text>
+    <text x="400" y="200">14</text>
+    <text x="560" y="200">21</text>
+    <text x="720" y="200">28 min</text>
+  </g>
+  <g stroke="#E5E7EB" stroke-width="1">
+    <line x1="80" y1="190" x2="720" y2="190"/>
+    <line x1="80"  y1="184" x2="80"  y2="190"/>
+    <line x1="240" y1="184" x2="240" y2="190"/>
+    <line x1="400" y1="184" x2="400" y2="190"/>
+    <line x1="560" y1="184" x2="560" y2="190"/>
+    <line x1="720" y1="184" x2="720" y2="190"/>
+  </g>
+
+  <!-- Shards 1-4: each a bar that fills from x=80 to x=240 (160 px = 7 min). -->
+  <g>
+    <text x="74" y="91"  text-anchor="end" font-size="10" font-weight="700" fill="#1F2937">shard 1</text>
+    <rect x="80" y="80" width="160" height="18" rx="5" fill="#E5E7EB"/>
+    <rect id="s1" x="80" y="80" width="0" height="18" rx="5" fill="#0EA5E9"/>
+  </g>
+  <g>
+    <text x="74" y="116" text-anchor="end" font-size="10" font-weight="700" fill="#1F2937">shard 2</text>
+    <rect x="80" y="105" width="160" height="18" rx="5" fill="#E5E7EB"/>
+    <rect id="s2" x="80" y="105" width="0" height="18" rx="5" fill="#0EA5E9"/>
+  </g>
+  <g>
+    <text x="74" y="141" text-anchor="end" font-size="10" font-weight="700" fill="#1F2937">shard 3</text>
+    <rect x="80" y="130" width="160" height="18" rx="5" fill="#E5E7EB"/>
+    <rect id="s3" x="80" y="130" width="0" height="18" rx="5" fill="#0EA5E9"/>
+  </g>
+  <g>
+    <text x="74" y="166" text-anchor="end" font-size="10" font-weight="700" fill="#1F2937">shard 4</text>
+    <rect x="80" y="155" width="160" height="18" rx="5" fill="#E5E7EB"/>
+    <rect id="s4" x="80" y="155" width="0" height="18" rx="5" fill="#0EA5E9"/>
+  </g>
+
+  <!-- Wall-clock marker -->
+  <g id="wallclock" opacity="0">
+    <line x1="240" y1="74" x2="240" y2="178" stroke="#10B981" stroke-width="2" stroke-dasharray="4 3"/>
+    <rect x="248" y="78" width="120" height="36" rx="7" fill="#10B981"/>
+    <text x="308" y="94" text-anchor="middle" font-size="11" font-weight="700" fill="white">wall-clock</text>
+    <text x="308" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="ui-monospace,monospace">7 min</text>
+  </g>
+  <!-- Sequential ghost marker -->
+  <g id="ghost" opacity="0">
+    <line x1="720" y1="74" x2="720" y2="178" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="714" y="92" text-anchor="end" font-size="10" fill="#6B7280">sequential would be</text>
+    <text x="714" y="106" text-anchor="end" font-size="11" font-weight="700" fill="#6B7280" font-family="ui-monospace,monospace">28 min</text>
+  </g>
+
+  <!-- ─────── SECTION B: FLAKE BUDGET ─────── -->
+  <text x="32" y="240" font-size="12" font-weight="700" fill="#6B7280">flake budget · ceiling 2 %</text>
+
+  <!-- Gauge: rectangle 0..6%, x=32..360, y=252..276 -->
+  <rect x="32" y="252" width="328" height="24" rx="6" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+  <!-- Safe zone 0..2% (32..32+328*(2/6)=32+109=141) -->
+  <rect x="32" y="252" width="109" height="24" rx="6" fill="#DCFCE7"/>
+  <!-- Threshold marker -->
+  <line x1="141" y1="247" x2="141" y2="281" stroke="#10B981" stroke-width="2"/>
+  <text x="141" y="245" text-anchor="middle" font-size="9" fill="#065F46" font-weight="700" font-family="ui-monospace,monospace">2%</text>
+  <!-- Fill -->
+  <rect id="fbar" x="32" y="252" width="0" height="24" rx="6" fill="#0EA5E9"/>
+  <!-- Read-out -->
+  <text id="fnum" x="376" y="270" font-size="14" font-weight="700" fill="#0EA5E9" font-family="ui-monospace,monospace">0.0%</text>
+
+  <!-- Stop-the-line alert -->
+  <g id="stop" opacity="0">
+    <rect x="430" y="246" width="298" height="36" rx="8" fill="#F43F5E"/>
+    <circle cx="450" cy="264" r="9" fill="white"/>
+    <text x="450" y="268" text-anchor="middle" font-size="13" font-weight="700" fill="#F43F5E">!</text>
+    <text x="468" y="262" font-size="11" font-weight="700" fill="white">budget exceeded — stop the line</text>
+    <text x="468" y="275" font-size="9.5" fill="#FECACA" font-family="ui-monospace,monospace">no merges until the flake is fixed</text>
+  </g>
+
+  <!-- ─────── SECTION C: COVERAGE CLIMB ─────── -->
+  <text x="32" y="316" font-size="12" font-weight="700" fill="#6B7280">coverage · over a sprint</text>
+
+  <!-- Chart frame -->
+  <rect x="32" y="328" width="556" height="116" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+  <!-- y-axis labels -->
+  <g font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace" text-anchor="end">
+    <text x="58" y="345">100</text>
+    <text x="58" y="377">66</text>
+    <text x="58" y="409">33</text>
+    <text x="58" y="441">0</text>
+  </g>
+  <!-- gridlines -->
+  <g stroke="#F3F4F6" stroke-width="1">
+    <line x1="64" y1="342" x2="582" y2="342"/>
+    <line x1="64" y1="374" x2="582" y2="374"/>
+    <line x1="64" y1="406" x2="582" y2="406"/>
+    <line x1="64" y1="438" x2="582" y2="438"/>
+  </g>
+
+  <!-- Coverage path: animate stroke-dashoffset.
+       Path traces a rising line from (64,438) to (582,348). -->
+  <path id="covpath"
+        d="M 64 438 L 130 432 L 196 420 L 262 405 L 328 388 L 394 374 L 460 364 L 526 354 L 582 348"
+        fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+
+  <!-- Coverage read-out -->
+  <rect x="608" y="328" width="120" height="116" rx="9" fill="#1F2937"/>
+  <text x="668" y="350" text-anchor="middle" font-size="10" fill="#9CA3AF">coverage</text>
+  <text id="cov-num" x="668" y="386" text-anchor="middle" font-size="28" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0%</text>
+  <text x="668" y="408" text-anchor="middle" font-size="9" fill="#6B7280">tests added</text>
+  <text id="cov-tests" x="668" y="428" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="ui-monospace,monospace">0</text>
+
+</svg>
+<div class="cap">Sharding buys time. The flake budget defends it. Coverage tells you whether the spend is paying off.</div>
+<button id="rb">reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',String(v));}
+function setAttr(id,attr,v){var e=$(id);if(e)e.setAttribute(attr,String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+var tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+
+function fade(id,from,to,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+function animW(id,fromW,toW,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('width',String(lerp(fromW,toW,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+function animFlake(toPct,dur,cb){
+  // 6% range maps to 328 px wide.
+  var e=$('fbar');var label=$('fnum');
+  var s=performance.now();
+  var fromW = parseFloat(e.getAttribute('width'))||0;
+  var fromPct = (fromW/328)*6;
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    var pct = lerp(fromPct,toPct,easeOut(t));
+    var w = (pct/6)*328;
+    e.setAttribute('width', String(w));
+    e.setAttribute('fill', pct>2 ? '#F43F5E' : '#0EA5E9');
+    label.textContent = pct.toFixed(1)+'%';
+    label.setAttribute('fill', pct>2 ? '#F43F5E' : '#0EA5E9');
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+function animCoverage(toPct,toTests,dur,cb){
+  var path=$('covpath');
+  var num=$('cov-num');
+  var tests=$('cov-tests');
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    var p=easeOut(t);
+    var off = lerp(900, 900*(1-toPct/100), p);
+    path.setAttribute('stroke-dashoffset', String(off));
+    num.textContent = Math.round(lerp(0,toPct,p))+'%';
+    tests.textContent = Math.round(lerp(0,toTests,p)).toString();
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+function run(){
+  clearAll();
+  // Reset
+  ['s1','s2','s3','s4'].forEach(function(id){setAttr(id,'width',0);});
+  setOp('wallclock',0);
+  setOp('ghost',0);
+  setOp('stop',0);
+  setAttr('fbar','width',0);
+  setAttr('fbar','fill','#0EA5E9');
+  $('fnum').textContent='0.0%';
+  setAttr('fnum','fill','#0EA5E9');
+  setAttr('covpath','stroke-dashoffset','900');
+  $('cov-num').textContent='0%';
+  $('cov-tests').textContent='0';
+
+  // Stage 1: shards fill in parallel.
+  after(400, function(){
+    animW('s1', 0, 160, 1800);
+    animW('s2', 0, 160, 1800);
+    animW('s3', 0, 160, 1800);
+    animW('s4', 0, 160, 1800);
+  });
+  after(2300, function(){fade('wallclock',0,1,500);});
+  after(2900, function(){fade('ghost',0,1,500);});
+
+  // Stage 2: flake budget creeps from 0% → 1.4% → 2.7% (tripping).
+  after(4400, function(){animFlake(1.4, 1300);});
+  after(5900, function(){animFlake(2.7, 800, function(){fade('stop',0,1,400);});});
+
+  // Stage 3: coverage climbs from 0 → 78% as 240 tests get added.
+  after(7800, function(){animCoverage(78, 240, 2400);});
+
+  // Loop
+  after(13800, function(){
+    ['s1','s2','s3','s4'].forEach(function(id){setAttr(id,'width',0);});
+    fade('wallclock',1,0,400);
+    fade('ghost',1,0,400);
+    fade('stop',1,0,400);
+    after(700, run);
+  });
+}
+
+$('rb').addEventListener('click', function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

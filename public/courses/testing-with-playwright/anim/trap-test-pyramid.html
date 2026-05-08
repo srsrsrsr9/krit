@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: inverted pyramid</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.bad-pyr{animation:fade .5s ease .3s both}
+.bad-time{animation:pop .5s ease 2s both}
+.fix-pyr{animation:fade .5s ease 4.5s both}
+.fix-time{animation:pop .5s ease 6.5s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="Inverted test pyramid with 200 e2e tests and only 3 unit tests producing a 4-hour CI, vs the proper pyramid with CI dropping to 22 minutes">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- BAD: inverted pyramid -->
+<g transform="translate(40 30)">
+<text x="160" y="14" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">BEFORE · inverted (top-heavy)</text>
+
+<g class="bad-pyr">
+<polygon points="0,180 320,180 200,30 120,30" fill="#FCA5A5" stroke="#7F1D1D" stroke-width="2"/>
+<text x="160" y="60" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">200 e2e</text>
+<text x="160" y="76" text-anchor="middle" font-size="10" fill="#7F1D1D">slow · brittle · expensive</text>
+
+<polygon points="40,180 280,180 230,130 90,130" fill="#FED7AA" stroke="#9A3412" stroke-width="2"/>
+<text x="160" y="158" text-anchor="middle" font-size="11" fill="#7C2D12" font-weight="bold">12 integration</text>
+
+<polygon points="120,180 200,180 190,170 130,170" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="160" y="176" text-anchor="middle" font-size="9" fill="#065F46" font-weight="bold">3 unit</text>
+</g>
+</g>
+
+<g class="bad-time" transform="translate(40 230)">
+<rect width="320" height="60" rx="10" fill="#7F1D1D"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">CI: 4 hours · 14% flake</text>
+<text x="160" y="40" text-anchor="middle" font-size="10" fill="#FCA5A5">devs stop running tests locally</text>
+<text x="160" y="54" text-anchor="middle" font-size="9" fill="#FCA5A5" font-style="italic">bugs slip through · "tests are slow"</text>
+</g>
+
+<!-- FIX: proper pyramid -->
+<g transform="translate(380 30)">
+<text x="150" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">AFTER · proper pyramid</text>
+
+<g class="fix-pyr">
+<polygon points="120,30 180,30 170,50 130,50" fill="#FCA5A5" stroke="#7F1D1D" stroke-width="2"/>
+<text x="150" y="44" text-anchor="middle" font-size="9" fill="#7F1D1D" font-weight="bold">20 e2e</text>
+
+<polygon points="80,50 220,50 200,110 100,110" fill="#FED7AA" stroke="#9A3412" stroke-width="2"/>
+<text x="150" y="86" text-anchor="middle" font-size="11" fill="#7C2D12" font-weight="bold">100 integration</text>
+
+<polygon points="0,110 300,110 280,180 20,180" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="150" y="148" text-anchor="middle" font-size="14" fill="#065F46" font-weight="bold">1000 unit</text>
+<text x="150" y="166" text-anchor="middle" font-size="10" fill="#065F46">fast · reliable · cheap</text>
+</g>
+</g>
+
+<g class="fix-time" transform="translate(380 230)">
+<rect width="300" height="60" rx="10" fill="#065F46"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">CI: 22 minutes · 0.6% flake</text>
+<text x="150" y="40" text-anchor="middle" font-size="10" fill="#A7F3D0">unit tests run locally · sub-second</text>
+<text x="150" y="54" text-anchor="middle" font-size="9" fill="#A7F3D0" font-style="italic">e2e covers only critical paths</text>
+</g>
+
+<g transform="translate(40 305)">
+<rect width="640" height="80" rx="10" fill="#1F2937"/>
+<text x="320" y="24" text-anchor="middle" font-size="13" fill="#FCD34D" font-weight="bold">Tests live at three altitudes · use each for what it's good at</text>
+<text x="320" y="44" text-anchor="middle" font-size="11" fill="#9CA3AF">unit = fast feedback · integration = layer boundaries · e2e = critical paths</text>
+<text x="320" y="62" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">200 e2e tests is a confession that you couldn't write the unit tests</text>
+</g>
+</svg>
+<div class="caption">Every e2e test is paying you back at 0.05× per second of CI. Unit tests pay 50×.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

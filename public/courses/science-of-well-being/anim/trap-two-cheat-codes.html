@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Spontaneity Myth</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#EFF6FF;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#EFF6FF;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" aria-label="The spontaneity myth: vague catch-up texts drift into space; a specific time slot lands on a calendar.">
+  <rect width="760" height="470" fill="#EFF6FF"/>
+
+  <text x="380" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">"Let's catch up sometime!"</text>
+  <text x="380" y="54" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Floats away. Never lands.</text>
+
+  <!-- Calendar (bottom-right area). Drawn upfront, but the slot lights up only at end. -->
+  <g id="calendar" transform="translate(420,250)">
+    <rect x="0" y="0" width="300" height="170" rx="10" fill="white" stroke="#BFDBFE" stroke-width="1.5"/>
+    <!-- Header bar -->
+    <rect x="0" y="0" width="300" height="28" rx="10" fill="#0EA5E9"/>
+    <rect x="0" y="18" width="300" height="10" fill="#0EA5E9"/>
+    <text x="150" y="19" text-anchor="middle" font-size="12" font-weight="700" fill="white">CALENDAR · this week</text>
+    <!-- Day columns header -->
+    <g font-size="10" fill="#6B7280" font-weight="600" font-family="ui-monospace,monospace">
+      <text x="35"  y="44" text-anchor="middle">MON</text>
+      <text x="78"  y="44" text-anchor="middle">TUE</text>
+      <text x="121" y="44" text-anchor="middle">WED</text>
+      <text x="164" y="44" text-anchor="middle">THU</text>
+      <text x="207" y="44" text-anchor="middle">FRI</text>
+      <text x="250" y="44" text-anchor="middle">SAT</text>
+    </g>
+    <!-- Grid cells: 6 cols x 4 rows; col w=43, row h=28; start x=14, y=52 -->
+    <g stroke="#E5E7EB" stroke-width="1" fill="#F9FAFB">
+      <!-- Row 1 -->
+      <rect x="14"  y="52" width="43" height="28"/>
+      <rect x="57"  y="52" width="43" height="28"/>
+      <rect x="100" y="52" width="43" height="28"/>
+      <rect x="143" y="52" width="43" height="28"/>
+      <rect x="186" y="52" width="43" height="28"/>
+      <rect x="229" y="52" width="43" height="28"/>
+      <!-- Row 2 -->
+      <rect x="14"  y="80" width="43" height="28"/>
+      <rect x="57"  y="80" width="43" height="28"/>
+      <rect x="100" y="80" width="43" height="28"/>
+      <rect x="143" y="80" width="43" height="28"/>
+      <rect x="186" y="80" width="43" height="28"/>
+      <rect x="229" y="80" width="43" height="28"/>
+      <!-- Row 3 -->
+      <rect x="14"  y="108" width="43" height="28"/>
+      <rect x="57"  y="108" width="43" height="28"/>
+      <rect x="100" y="108" width="43" height="28"/>
+      <rect x="143" y="108" width="43" height="28"/>
+      <rect x="186" y="108" width="43" height="28"/>
+      <rect x="229" y="108" width="43" height="28"/>
+      <!-- Row 4 -->
+      <rect x="14"  y="136" width="43" height="28"/>
+      <rect x="57"  y="136" width="43" height="28"/>
+      <rect x="100" y="136" width="43" height="28"/>
+      <rect x="143" y="136" width="43" height="28"/>
+      <rect x="186" y="136" width="43" height="28"/>
+      <rect x="229" y="136" width="43" height="28"/>
+    </g>
+    <!-- Time labels for hint -->
+    <text x="6" y="70" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">10</text>
+    <text x="6" y="98" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">11</text>
+    <text x="6" y="126" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">12</text>
+    <text x="6" y="154" text-anchor="end" font-size="8" fill="#9CA3AF" font-family="ui-monospace,monospace">1p</text>
+
+    <!-- Glow target (Thursday 11) — col 4 (x=143), row 2 (y=80) -->
+    <rect id="glow" x="143" y="80" width="43" height="28" fill="#10B981" opacity="0"/>
+
+    <!-- The block that lands -->
+    <g id="block" transform="translate(560,-240) scale(1.4)" opacity="0">
+      <rect x="0" y="0" width="43" height="28" rx="3" fill="#10B981"/>
+      <text x="21.5" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="white">Maya</text>
+      <text x="21.5" y="22" text-anchor="middle" font-size="6" fill="#D1FAE5">11:00–11:30</text>
+    </g>
+  </g>
+
+  <!-- Phone (left) showing chat -->
+  <g id="phone" transform="translate(60,90)">
+    <rect x="0" y="0" width="170" height="290" rx="22" fill="#1F2937"/>
+    <rect x="6" y="14" width="158" height="266" rx="14" fill="#FAFAFA"/>
+    <rect x="65" y="6" width="40" height="6" rx="3" fill="#0F172A"/>
+    <!-- Chat header -->
+    <rect x="6" y="14" width="158" height="22" fill="#0EA5E9"/>
+    <text x="85" y="29" text-anchor="middle" font-size="10" font-weight="700" fill="white">Maya</text>
+    <!-- Chat bubbles area -->
+    <g id="bubbles">
+      <!-- received bubble -->
+      <g id="recv1" opacity="0">
+        <rect x="14" y="48" width="120" height="22" rx="10" fill="#E5E7EB"/>
+        <text x="20" y="62" font-size="9" fill="#1F2937">"hey stranger! 👋"</text>
+      </g>
+      <g id="sent1" opacity="0">
+        <rect x="40" y="78" width="120" height="22" rx="10" fill="#0EA5E9"/>
+        <text x="46" y="92" font-size="9" fill="white">"omg yes let's catch up!"</text>
+      </g>
+      <g id="recv2" opacity="0">
+        <rect x="14" y="108" width="140" height="22" rx="10" fill="#E5E7EB"/>
+        <text x="20" y="122" font-size="9" fill="#1F2937">"yesss soon — sometime!"</text>
+      </g>
+      <g id="sent2" opacity="0">
+        <rect x="34" y="138" width="120" height="22" rx="10" fill="#0EA5E9"/>
+        <text x="40" y="152" font-size="9" fill="white">"definitely soon ❤️"</text>
+      </g>
+    </g>
+
+    <!-- The new specific message bubble (appears after the float-aways) -->
+    <g id="finalSent" opacity="0">
+      <rect x="20" y="190" width="140" height="40" rx="10" fill="#10B981"/>
+      <text x="27" y="206" font-size="9" fill="white" font-weight="700">"Thu 11am, 30 min,</text>
+      <text x="27" y="220" font-size="9" fill="white" font-weight="700">my place ☕ — work?"</text>
+    </g>
+    <g id="finalRecv" opacity="0">
+      <rect x="14" y="240" width="80" height="22" rx="10" fill="#E5E7EB"/>
+      <text x="20" y="254" font-size="9" fill="#1F2937">"booked it ✅"</text>
+    </g>
+  </g>
+
+  <!-- Floating "sometime!" bubbles container (drawn dynamically) -->
+  <g id="floaters"></g>
+
+  <!-- Caption -->
+  <rect id="capBg" x="40" y="430" width="680" height="28" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="380" y="448" text-anchor="middle" font-size="12" fill="white" opacity="0"></text>
+
+  <!-- End card -->
+  <g id="endCard" opacity="0">
+    <rect x="120" y="170" width="520" height="120" rx="14" fill="#1F2937"/>
+    <text x="380" y="212" text-anchor="middle" font-size="16" fill="white" font-weight="700">"Soon" never happens.</text>
+    <text x="380" y="240" text-anchor="middle" font-size="13" fill="#A7F3D0">A specific time on a calendar does.</text>
+    <text x="380" y="266" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">— spontaneity myth, decoded.</text>
+  </g>
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+let tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function setCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,350,null);
+  animOp('capBg',0,0.92,350,null);
+}
+function clearCap(cb){
+  animOp('cap',1,0,250,null);
+  animOp('capBg',0.92,0,250,cb);
+}
+
+// Spawn a floating "sometime!" bubble that drifts up and away from chat
+function floatBubble(text,startX,startY,delay){
+  after(delay,()=>{
+    const ns='http://www.w3.org/2000/svg';
+    const g=document.createElementNS(ns,'g');
+    g.setAttribute('opacity','0');
+    const w=Math.max(64,text.length*5+22);
+    const rect=document.createElementNS(ns,'rect');
+    rect.setAttribute('x','0');rect.setAttribute('y','0');
+    rect.setAttribute('width',String(w));rect.setAttribute('height','22');
+    rect.setAttribute('rx','11');rect.setAttribute('fill','#0EA5E9');
+    rect.setAttribute('opacity','0.85');
+    const t=document.createElementNS(ns,'text');
+    t.setAttribute('x',String(w/2));t.setAttribute('y','15');
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+    t.setAttribute('fill','white');t.textContent=text;
+    g.appendChild(rect);g.appendChild(t);
+    $id('floaters').appendChild(g);
+
+    const s=performance.now(), dur=2400;
+    const endX=startX+220+Math.random()*60, endY=startY-160-Math.random()*40;
+    function tick(now){
+      const tt=Math.min((now-s)/dur,1),e=easeOut(tt);
+      const x=lerp(startX,endX,e), y=lerp(startY,endY,e);
+      // tiny drift wobble
+      const wob=Math.sin(tt*6)*4;
+      g.setAttribute('transform',`translate(${(x+wob).toFixed(1)},${y.toFixed(1)}) rotate(${(e*15).toFixed(1)})`);
+      // fade in then out
+      let op=0;
+      if(tt<0.15) op=tt/0.15;
+      else if(tt>0.7) op=1-(tt-0.7)/0.3;
+      else op=1;
+      g.setAttribute('opacity',String(op*0.92));
+      if(tt<1)rafs.push(requestAnimationFrame(tick));
+      else g.remove();
+    }
+    rafs.push(requestAnimationFrame(tick));
+  });
+}
+
+// Drop the calendar block from above into target slot
+function dropBlock(cb){
+  const block=$id('block');
+  setOp('block',1);
+  // Start position: relative to calendar group origin (420,250). Target: (143,80).
+  const s=performance.now(), dur=900;
+  // We control transform via translate + scale
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const x=lerp(560,143,e);
+    const y=lerp(-240,80,e);
+    const sc=lerp(1.4,1.0,e);
+    // small bounce at the end
+    let bounceY=0;
+    if(t>0.85){ const bt=(t-0.85)/0.15; bounceY=Math.sin(bt*Math.PI)*-4; }
+    block.setAttribute('transform',`translate(${x.toFixed(1)},${(y+bounceY).toFixed(1)}) scale(${sc.toFixed(3)})`);
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else{
+      // glow flash
+      animOp('glow',0,0.55,200,()=>animOp('glow',0.55,0.25,400,null));
+      if(cb)cb();
+    }
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function run(){
+  clearAll();
+  // Reset
+  ['recv1','sent1','recv2','sent2','finalSent','finalRecv','block','glow'].forEach(id=>setOp(id,0));
+  setOp('cap',0);setOp('capBg',0);setOp('endCard',0);
+  $id('floaters').innerHTML='';
+
+  // Stage 1: vague chat
+  after(500,()=>setCap('Two friends. A familiar exchange.'));
+  after(1700,()=>animOp('recv1',0,1,300,null));
+  after(2300,()=>animOp('sent1',0,1,300,null));
+  after(2900,()=>animOp('recv2',0,1,300,null));
+  after(3500,()=>animOp('sent2',0,1,300,null));
+  after(4200,()=>clearCap(null));
+
+  // Stage 2: words float away
+  after(4400,()=>setCap('"Soon!" "Sometime!" — drifting into the void.'));
+  // float bubbles from chat area into space (origin: phone is at 60,90; chat bubbles roughly y=58..152)
+  floatBubble('"sometime!"',180, 162, 4600);
+  floatBubble('"soon!"',180, 200, 5000);
+  floatBubble('"we should!"',180, 230, 5400);
+  floatBubble('"definitely!"',180, 200, 5800);
+  floatBubble('"let\'s!"',180, 170, 6200);
+  after(7400,()=>clearCap(null));
+
+  // Stage 3: a specific proposal lands
+  after(7700,()=>setCap('Try this: a real time, a real day.'));
+  after(9000,()=>animOp('finalSent',0,1,400,null));
+  after(9600,()=>dropBlock(null));
+  after(10800,()=>animOp('finalRecv',0,1,400,null));
+  after(11400,()=>clearCap(null));
+  after(11700,()=>setCap('It landed. Because it had coordinates.'));
+  after(13500,()=>clearCap(null));
+
+  after(13800,()=>animOp('endCard',0,1,500,null));
+  after(16800,()=>animOp('endCard',1,0,500,()=>{ after(400,run); }));
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Personalization Without Creepiness — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Personalization Without Creepiness</h1>
+  <p class="subtitle">Segments, not individuals — and the would-you-tell-them test</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>There are two stories about personalization. The vendor story: 'AI lets you treat every customer like a unique individual.' The reality: when you actually try, the cost goes up, the conversion ticks down, and a tenth of your audience unsubscribes the day they realise you saw them browse a sensitive product category at 11pm last Tuesday.</p>
+  <div class="callout"><strong>Mental model: segments not individuals</strong><br/>True 1:1 personalization is a story marketing tools sell. In practice you almost never see it; what you see is **segment personalization disguised as individual personalization** — and when it actually drifts toward individual, customers notice and recoil.</div>
+  
+<h2>Move 1 — The consent ladder</h2>
+<ul>
+<li>Not all signals are equal. The **consent ladder** ranks the data you might use, from highest trust to lowest.</li>
+<li>Step 1 — List the signals you have: Inventory: declared preferences, on-site behaviour, purchase history, channel engagement. Don't reach for inferred or third-party signals yet.</li>
+<li>Step 2 — Filter by ladder rung: Drop everything below rung 3 (cohort). What remains is your honest signal pool.</li>
+<li>Step 3 — Group into 4-8 segments: Each segment: n &gt; 200 customers, behaviourally distinct, paired with a clear hypothesis ('cart abandoners after accessories view → respond to social proof').</li>
+<li>Step 4 — Craft segment-level content: AI drafts 4-8 versions, one per segment. Voice anchor applied. 3-pass review.</li>
+<li>Step 5 — Set a creepy-meter check: Final pass: 'If we showed this email to the customer with the line attached: &quot;we sent this because you did X&quot;, would they nod or recoil?' If recoil, scale back the signal.</li>
+</ul>
+<h2>Move 2 — The would-you-tell-them test</h2>
+<ul>
+<li>The simplest creepy-meter check is also the most honest one: **for every personalised piece, write the line you'd say if the customer asked 'how did you know?' If you can say it without flinching, you're fine. If you'd want to dodge, you're over the line.** Three examples: - 'You favourited this kurta last week, so we wanted to let you know it's back in stock.' — *would say.* The customer earned that signal by clicking favourite.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: creepy 1:1 personalization that backfires: The trap is seductive because vendors sell it as the dream: 'AI lets you treat every customer like an individual.' What this becomes in practice is an email pipeline trained on every signal you can scrape, regulated and unregulated, until one of them shows up in a customer's inbox in a way they didn't expect.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Personalize at the segment level, not the individual level — segments scale, individuals creep.</div>
+<div class="takeaway">The consent ladder ranks signals by trust earned; never operate below the consent floor (third-party enrichment, fingerprinting).</div>
+<div class="takeaway">The would-you-tell-them test is the cheapest creepy-meter you have: if you'd flinch saying the 'we sent this because…' line, redesign.</div>
+<div class="takeaway">Most personalization disasters come from feeding AI signals it shouldn't have access to, not from AI itself.</div>
+<div class="takeaway">By 2026, India's DPDPA is teeth-bearing; brand cost of a privacy story is bigger than the legal cost, and both are real.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

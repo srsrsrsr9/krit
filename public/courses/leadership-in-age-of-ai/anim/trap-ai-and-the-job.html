@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap — Automate everything, replace people</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --accent: #F59E0B;
+    --good: #10B981;
+    --bad: #F43F5E;
+    --blue: #0EA5E9;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px;
+    min-height: 1.4em;
+  }
+  .num { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  /* Stage transitions controlled via CSS keyframes — single 14s cycle, looped */
+  .scene { opacity: 0; }
+  .s1 { animation: s1 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s2 { animation: s2 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s3 { animation: s3 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s4 { animation: s4 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+
+  @keyframes s1 { 0%,18% { opacity: 1; } 22%,100% { opacity: 0; } }
+  @keyframes s2 { 0%,22% { opacity: 0; } 26%,46% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes s3 { 0%,50% { opacity: 0; } 54%,72% { opacity: 1; } 76%,100% { opacity: 0; } }
+  @keyframes s4 { 0%,76% { opacity: 0; } 80%,96% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* The bar fills */
+  .barFill {
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: barIn 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes barIn {
+    0%,28% { transform: scaleX(0); }
+    44% { transform: scaleX(0.4); }
+    100% { transform: scaleX(0.4); }
+  }
+  .gapBar {
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: gapIn 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes gapIn {
+    0%,54% { transform: scaleX(0); }
+    70%,100% { transform: scaleX(0.6); }
+  }
+
+  /* People wobble (overload) */
+  .person { transform-origin: center bottom; }
+  .overloaded { animation: wobble 1.4s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+  }
+  .quit {
+    animation: quit 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes quit {
+    0%, 78% { transform: translate(0,0); opacity: 1; }
+    88% { transform: translate(80px, -10px); opacity: 0; }
+    100% { transform: translate(80px, -10px); opacity: 0; }
+  }
+
+  .caption span { display: none; }
+  .c1 { animation: c1 14s steps(1,end) infinite; }
+  .c2 { animation: c2 14s steps(1,end) infinite; }
+  .c3 { animation: c3 14s steps(1,end) infinite; }
+  .c4 { animation: c4 14s steps(1,end) infinite; }
+  @keyframes c1 { 0%,17% { display: inline; } 18%,100% { display: none; } }
+  @keyframes c2 { 0%,21% { display: none; } 22%,46% { display: inline; } 47%,100% { display: none; } }
+  @keyframes c3 { 0%,49% { display: none; } 50%,72% { display: inline; } 73%,100% { display: none; } }
+  @keyframes c4 { 0%,75% { display: none; } 76%,99% { display: inline; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .scene { opacity: 1; }
+    .barFill { transform: scaleX(0.4); }
+    .gapBar { transform: scaleX(0.6); }
+    .caption .c1 { display: none; } .caption .c4 { display: inline; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="A leader announces 40 percent headcount cuts because AI will do the work. Six months later, AI automated 40 percent of tasks, but jobs still need humans. The remaining team is overloaded, quality drops, senior people quit.">
+      <defs>
+        <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="6" stroke="#F59E0B" stroke-width="2" opacity="0.5"/>
+        </pattern>
+      </defs>
+
+      <!-- ============ SCENE 1: announcement ============ -->
+      <g class="scene s1">
+        <!-- stage / podium -->
+        <rect x="120" y="320" width="520" height="14" rx="4" fill="#FDE68A"/>
+        <rect x="320" y="240" width="120" height="80" rx="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+        <line x1="380" y1="240" x2="380" y2="320" stroke="var(--ink)" stroke-width="2"/>
+        <!-- leader oval -->
+        <g transform="translate(380,200)">
+          <circle r="22" fill="#FED7AA" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="-7" cy="-3" r="2" fill="var(--ink)"/>
+          <circle cx="7" cy="-3" r="2" fill="var(--ink)"/>
+          <path d="M-6 6 Q0 10 6 6" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- speech bubble -->
+        <g transform="translate(80,80)">
+          <rect width="380" height="110" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <path d="M260 110 L290 145 L295 110 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="190" y="48" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">"We're cutting 40% headcount.</text>
+          <text x="190" y="76" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">AI will do their work."</text>
+        </g>
+        <text x="380" y="430" text-anchor="middle" font-size="13" fill="var(--muted)">All-hands · Day 0</text>
+      </g>
+
+      <!-- ============ SCENE 2: 6 months in — tasks bar ============ -->
+      <g class="scene s2">
+        <text x="380" y="80" text-anchor="middle" font-size="20" font-weight="700">Six months in</text>
+        <text x="380" y="108" text-anchor="middle" font-size="13" fill="var(--muted)">AI automated tasks. The leader high-fives the deck.</text>
+
+        <!-- bar: tasks -->
+        <text x="120" y="180" font-size="14" font-weight="600">Tasks automated by AI</text>
+        <rect x="120" y="195" width="520" height="40" rx="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <rect class="barFill" x="120" y="195" width="520" height="40" rx="8" fill="var(--good)"/>
+        <text x="380" y="221" text-anchor="middle" font-size="16" font-weight="700" fill="var(--paper)" class="num">40%</text>
+
+        <!-- bar: jobs needed (full) -->
+        <text x="120" y="290" font-size="14" font-weight="600">But the jobs still need humans for</text>
+        <rect x="120" y="305" width="520" height="40" rx="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="120" y="305" width="520" height="40" rx="8" fill="url(#hatch)"/>
+        <text x="380" y="331" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)" class="num">100% of the job</text>
+
+        <text x="380" y="400" text-anchor="middle" font-size="13" font-style="italic" fill="var(--muted)">Tasks ≠ jobs. The other 60% is judgment, context, taste.</text>
+      </g>
+
+      <!-- ============ SCENE 3: gap reveals ============ -->
+      <g class="scene s3">
+        <text x="380" y="80" text-anchor="middle" font-size="20" font-weight="700">The gap shows up</text>
+
+        <!-- shrunken team (5 people, wobbling) -->
+        <g transform="translate(140,170)">
+          <text x="0" y="-12" font-size="13" font-weight="600">Remaining 60% team</text>
+          <g class="person overloaded" transform="translate(20,40)">
+            <ellipse cx="0" cy="40" rx="20" ry="6" fill="#FECACA"/>
+            <rect x="-14" y="0" width="28" height="40" rx="10" fill="#FCA5A5" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-10" r="11" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <!-- stack of files on head -->
+            <rect x="-12" y="-26" width="24" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-14" y="-30" width="28" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-11" y="-34" width="22" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          </g>
+          <g class="person overloaded" transform="translate(70,40)" style="animation-delay:-0.3s">
+            <ellipse cx="0" cy="40" rx="20" ry="6" fill="#FECACA"/>
+            <rect x="-14" y="0" width="28" height="40" rx="10" fill="#FCA5A5" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-10" r="11" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="-12" y="-26" width="24" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-14" y="-30" width="28" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          </g>
+          <g class="person overloaded" transform="translate(120,40)" style="animation-delay:-0.6s">
+            <ellipse cx="0" cy="40" rx="20" ry="6" fill="#FECACA"/>
+            <rect x="-14" y="0" width="28" height="40" rx="10" fill="#FCA5A5" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-10" r="11" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="-12" y="-26" width="24" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-14" y="-30" width="28" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-11" y="-34" width="22" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+            <rect x="-13" y="-38" width="26" height="4" fill="var(--accent)" stroke="var(--ink)" stroke-width="1"/>
+          </g>
+        </g>
+
+        <!-- The gap, visualized as a widening rift -->
+        <g transform="translate(120,310)">
+          <text x="0" y="-12" font-size="13" font-weight="600">Gap: work needed minus team capacity</text>
+          <rect x="0" y="0" width="520" height="40" rx="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+          <rect class="gapBar" x="0" y="0" width="520" height="40" rx="8" fill="var(--bad)"/>
+          <text x="260" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="var(--paper)" class="num">overload</text>
+        </g>
+
+        <text x="380" y="400" text-anchor="middle" font-size="13" font-style="italic" fill="var(--muted)">Quality drops. Tickets pile up. Calendars fill at 200%.</text>
+      </g>
+
+      <!-- ============ SCENE 4: senior person quits ============ -->
+      <g class="scene s4">
+        <text x="380" y="80" text-anchor="middle" font-size="20" font-weight="700">And then your senior people leave</text>
+
+        <!-- office floor -->
+        <rect x="80" y="320" width="600" height="2" fill="var(--ink)"/>
+
+        <!-- remaining team -->
+        <g transform="translate(180,260)">
+          <g class="person" transform="translate(0,0)">
+            <ellipse cx="0" cy="60" rx="22" ry="6" fill="#FECACA"/>
+            <rect x="-16" y="10" width="32" height="50" rx="10" fill="#FCA5A5" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-2" r="13" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <path d="M-5 0 Q0 -3 5 0" stroke="var(--ink)" stroke-width="2" fill="none"/>
+          </g>
+          <g class="person" transform="translate(60,0)">
+            <ellipse cx="0" cy="60" rx="22" ry="6" fill="#FECACA"/>
+            <rect x="-16" y="10" width="32" height="50" rx="10" fill="#FCA5A5" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-2" r="13" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <path d="M-5 0 Q0 -3 5 0" stroke="var(--ink)" stroke-width="2" fill="none"/>
+          </g>
+        </g>
+
+        <!-- senior person leaving with briefcase -->
+        <g class="quit" transform="translate(420,260)">
+          <g class="person">
+            <ellipse cx="0" cy="60" rx="22" ry="6" fill="#FECACA"/>
+            <rect x="-16" y="10" width="32" height="50" rx="10" fill="var(--blue)" stroke="var(--ink)" stroke-width="2"/>
+            <circle cx="0" cy="-2" r="13" fill="#FED7AA" stroke="var(--ink)" stroke-width="2"/>
+            <!-- gray hair / temples -->
+            <path d="M-12 -4 Q-13 -8 -10 -10" stroke="var(--muted)" stroke-width="2" fill="none"/>
+            <path d="M12 -4 Q13 -8 10 -10" stroke="var(--muted)" stroke-width="2" fill="none"/>
+            <path d="M-4 4 Q0 2 4 4" stroke="var(--ink)" stroke-width="2" fill="none"/>
+            <!-- briefcase -->
+            <rect x="20" y="32" width="22" height="18" rx="2" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+            <rect x="28" y="28" width="6" height="4" fill="none" stroke="var(--ink)" stroke-width="2"/>
+          </g>
+        </g>
+
+        <!-- door -->
+        <g transform="translate(580,210)">
+          <rect width="60" height="110" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5" rx="3"/>
+          <circle cx="50" cy="265" r="3" fill="var(--ink)" transform="translate(0,-200)"/>
+          <text x="30" y="135" text-anchor="middle" font-size="11" fill="var(--muted)">EXIT</text>
+        </g>
+
+        <!-- summary card -->
+        <g transform="translate(110,110)">
+          <rect width="540" height="100" rx="12" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="20" y="32" font-size="14" font-weight="700">The trap, named:</text>
+          <text x="20" y="58" font-size="13" fill="var(--ink)">AI automated tasks. The job — and its accountability —</text>
+          <text x="20" y="78" font-size="13" fill="var(--ink)">stayed put. You shrank the team that owned it.</text>
+        </g>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <span class="c1">A confident announcement.</span>
+      <span class="c2">AI did 40% of the tasks. The job is still 100%.</span>
+      <span class="c3">Five people doing nine people's work.</span>
+      <span class="c4">Tasks ≠ jobs. Cut tasks, not teams.</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

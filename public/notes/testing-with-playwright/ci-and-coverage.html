@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>CI, Coverage, and the Maintenance Discipline — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>CI, Coverage, and the Maintenance Discipline</h1>
+  <p class="subtitle">Tests rot without a maintenance loop. Build the loop or accept the rot.</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Every team that has ever shipped software has a story about *the suite that ate two engineers*: a Playwright project that started healthy in 2024, accumulated entropy through 2025, and by 2026 employed two full-time SDETs who did nothing but keep CI from going red. Their teammates called them maintenance heroes.</p>
+  <div class="callout"><strong>Mental model: tests rot without a maintenance loop</strong><br/>A test suite is not a deliverable; it's a **living artifact**. Every PR that lands changes the surface the tests cover. Every dependency upgrade changes the runtime. Every product pivot changes which flows are critical. Without an active maintenance loop, your suite gets slower, flakier, and less relevant *every single week*.</div>
+  
+<h2>Move 1 — The failure-budget rule</h2>
+<ul>
+<li>Borrow from SRE: set an explicit **failure budget** for your suite, expressed as a maximum acceptable flake rate. A reasonable starting target for a healthy CI is **&lt;1% flake rate over a rolling 30 days** — meaning fewer than 1 in 100 test runs fails for non-deterministic reasons.</li>
+<li>1. CFO: 'Why are we paying 2 SDETs ₹24L/yr on test maintenance?': The wrong answer: 'tests are important.' The right answer: a chart with a budget line.</li>
+<li>2. Define the SLO: Flake rate &lt;1% over 30 days. Suite runtime p95 &lt;12 minutes. Critical-path coverage 100% of revenue flows.</li>
+<li>3. Build the dashboard: Per-test pass/fail counts, sorted by flake rate × duration. Updated nightly. Visible to engineering + finance.</li>
+<li>4. Define the failure-budget rule: When flake &gt;1% for 7 consecutive days: feature work pauses, top-5 flaky tests get triaged, decisions logged in DECISIONS.md.</li>
+<li>5. Show the trend two quarters later: Flake 0.4%, runtime 8 min, no SDET burnout, no surprise outages. CFO closes the meeting in 15 minutes.</li>
+</ul>
+<h2>Move 2 — Sharding, not skipping</h2>
+<ul>
+<li>When CI takes 28 minutes, every team has the same dumb instinct: *delete some tests*. This is wrong.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: skipping tests to make CI green: Every flaky test you `test.skip()` is a small lie you've told future-you. The skip survives the merge. The skip survives the next refactor. The skip is *still there in 2027* when someone else inherits the codebase and assumes it's intentional.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Tests rot without a maintenance loop. Treat your suite like a service: SLOs, on-call, budget, deprecation policy.</div>
+<div class="takeaway">The failure-budget rule: a 1% flake rate target. When breached, feature work pauses until the top-5 are fixed.</div>
+<div class="takeaway">Sharding, not skipping: parallelise CI before deleting tests. 4 shards turns a 28-min serial run into ~7 min for the same coverage.</div>
+<div class="takeaway">`test.skip()` is allowed for one sprint with a tracked issue. Beyond that, the skip itself is a bug.</div>
+<div class="takeaway">The Monday morning maintenance ritual — measure, identify, diagnose, decide, bound, document — keeps a suite alive for years.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

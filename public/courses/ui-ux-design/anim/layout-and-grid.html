@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Layout & 8-point grid</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--mute:#6B7280;--accent:#8B5CF6;--good:#10B981;--cool:#0EA5E9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
+.wrap{width:100%;max-width:740px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--mute);margin-top:10px}
+#rb{position:absolute;bottom:-6px;right:6px;background:var(--ink);color:#FAF5FF;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+ <div class="wrap">
+  <svg viewBox="0 0 740 460" aria-label="A messy layout snaps to an 8-point baseline grid. Spacing values jump from 7, 13, 22 pixels to clean multiples of 8. The result is calmer visual rhythm.">
+   <rect width="740" height="460" fill="#FAF5FF"/>
+   <text x="370" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Snap to 8.</text>
+
+   <!-- canvas -->
+   <rect x="40" y="60" width="660" height="340" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+
+   <!-- 8-pt grid lines (drawn but invisible at start) -->
+   <g id="grid" opacity="0">
+    <g stroke="#8B5CF6" stroke-width="0.5" opacity=".35">
+     <!-- horizontal every 16 px in design space -->
+    </g>
+   </g>
+
+   <!-- elements (start: chaotic positions). They have data attrs for messy/clean coords -->
+   <!-- We will use CSS custom transforms via JS -->
+   <g id="el-title">
+    <rect x="0" y="0" width="220" height="22" rx="4" fill="#1F2937"/>
+    <rect x="0" y="28" width="160" height="8" rx="3" fill="#1F2937" opacity=".4"/>
+   </g>
+   <g id="el-card1">
+    <rect x="0" y="0" width="180" height="80" rx="8" fill="#EDE9FE" stroke="#8B5CF6" stroke-width="1.4"/>
+    <rect x="14" y="14" width="100" height="10" rx="3" fill="#1F2937" opacity=".7"/>
+    <rect x="14" y="32" width="140" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="46" width="120" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="60" width="60"  height="14" rx="4" fill="#8B5CF6"/>
+   </g>
+   <g id="el-card2">
+    <rect x="0" y="0" width="180" height="80" rx="8" fill="#DBEAFE" stroke="#0EA5E9" stroke-width="1.4"/>
+    <rect x="14" y="14" width="100" height="10" rx="3" fill="#1F2937" opacity=".7"/>
+    <rect x="14" y="32" width="140" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="46" width="110" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="60" width="60"  height="14" rx="4" fill="#0EA5E9"/>
+   </g>
+   <g id="el-card3">
+    <rect x="0" y="0" width="180" height="80" rx="8" fill="#D1FAE5" stroke="#10B981" stroke-width="1.4"/>
+    <rect x="14" y="14" width="100" height="10" rx="3" fill="#1F2937" opacity=".7"/>
+    <rect x="14" y="32" width="140" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="46" width="100" height="6" rx="3" fill="#1F2937" opacity=".4"/>
+    <rect x="14" y="60" width="60"  height="14" rx="4" fill="#10B981"/>
+   </g>
+   <g id="el-foot">
+    <rect x="0" y="0" width="240" height="14" rx="4" fill="#1F2937" opacity=".25"/>
+   </g>
+
+   <!-- spacing call-outs -->
+   <g id="spacing">
+    <g id="sp1" opacity="0">
+     <text x="0" y="0" font-size="11" font-family="ui-monospace,monospace" fill="#F43F5E" id="sp1t">7px</text>
+    </g>
+    <g id="sp2" opacity="0">
+     <text x="0" y="0" font-size="11" font-family="ui-monospace,monospace" fill="#F43F5E" id="sp2t">13px</text>
+    </g>
+    <g id="sp3" opacity="0">
+     <text x="0" y="0" font-size="11" font-family="ui-monospace,monospace" fill="#F43F5E" id="sp3t">22px</text>
+    </g>
+   </g>
+
+   <!-- legend / state -->
+   <g id="state">
+    <rect x="40" y="412" width="660" height="34" rx="10" fill="#FFFFFF" stroke="#E5E7EB"/>
+    <circle id="dotS" cx="62" cy="429" r="6" fill="#F43F5E"/>
+    <text id="stateT" x="76" y="433" font-size="13" font-weight="700" fill="#1F2937">no grid · spacing in chaos</text>
+    <text id="stateN" x="690" y="433" text-anchor="end" font-size="12" font-family="ui-monospace,monospace" fill="#6B7280">0 / 0 aligned</text>
+   </g>
+  </svg>
+  <div class="cap">An 8-point grid is not aesthetics. It's a shared coordinate system the eye can predict.</div>
+  <button id="rb">↺ replay</button>
+ </div>
+</main>
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+var EASE=function(t){return 1-Math.pow(1-t,3);};
+var rafs=[],tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',v);}
+function setT(id,x,y){$(id).setAttribute('transform','translate('+x+','+y+')');}
+function fade(id,a,b,dur,cb){
+ var e=$(id);if(!e)return;
+ var s=performance.now();
+ function tick(now){var t=Math.min((now-s)/dur,1);e.setAttribute('opacity',(a+(b-a)*EASE(t)).toFixed(3));if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();}
+ rafs.push(requestAnimationFrame(tick));
+}
+function moveTo(id,fx,fy,tx,ty,dur,cb){
+ var s=performance.now();
+ function tick(now){var t=Math.min((now-s)/dur,1),e=EASE(t);
+  var x=fx+(tx-fx)*e,y=fy+(ty-fy)*e;
+  setT(id,x,y);
+  if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+/* messy and clean coordinates */
+var MESSY={
+ 'el-title':[55,82],
+ 'el-card1':[63,135],
+ 'el-card2':[262,148],
+ 'el-card3':[470,127],
+ 'el-foot':[71,372]
+};
+var CLEAN={
+ 'el-title':[64,80],   // x=64, y=80 (multiples of 8)
+ 'el-card1':[64,144],
+ 'el-card2':[264,144], // gap 200=8*25
+ 'el-card3':[464,144], // gap 200
+ 'el-foot':[64,376]
+};
+
+/* draw 8-pt grid lines */
+function drawGrid(){
+ var g=$('grid'),h='';
+ // vertical lines every 8 in design space (740 wide). limit to canvas x 40-700
+ for(var x=40;x<=700;x+=8){h+='<line x1="'+x+'" y1="60" x2="'+x+'" y2="400" stroke="#8B5CF6" stroke-width="0.4" opacity="0.18"/>';}
+ for(var y=60;y<=400;y+=8){h+='<line x1="40" y1="'+y+'" x2="700" y2="'+y+'" stroke="#8B5CF6" stroke-width="0.4" opacity="0.18"/>';}
+ // emphasize 16-multiples
+ for(var x2=40;x2<=700;x2+=64){h+='<line x1="'+x2+'" y1="60" x2="'+x2+'" y2="400" stroke="#8B5CF6" stroke-width="0.6" opacity="0.32"/>';}
+ g.innerHTML=h;
+}
+drawGrid();
+
+function setMessy(){
+ Object.keys(MESSY).forEach(function(k){var p=MESSY[k];setT(k,p[0],p[1]);});
+}
+function setClean(){
+ Object.keys(CLEAN).forEach(function(k){var p=CLEAN[k];setT(k,p[0],p[1]);});
+}
+
+function showSpacing(){
+ // sp1: between title and card1 (vertical) — messy gap
+ setT('sp1', 250, 132);  $('sp1t').textContent='13 px';
+ setT('sp2', 240, 235);  $('sp2t').textContent='7 px';
+ setT('sp3', 60, 360);  $('sp3t').textContent='22 px';
+ fade('sp1',0,1,400,null);fade('sp2',0,1,500,null);fade('sp3',0,1,600,null);
+}
+function morphSpacing(){
+ // change to clean numbers
+ var s=performance.now();
+ function tick(now){
+  var t=Math.min((now-s)/700,1),e=EASE(t);
+  $('sp1t').textContent=Math.round(13+(16-13)*e)+' px';
+  $('sp2t').textContent=Math.round(7+(16-7)*e)+' px';
+  $('sp3t').textContent=Math.round(22+(24-22)*e)+' px';
+  // recolor
+  var col=t<0.5?'#F43F5E':'#10B981';
+  ['sp1t','sp2t','sp3t'].forEach(function(id){$(id).setAttribute('fill',col);});
+  if(t<1)rafs.push(requestAnimationFrame(tick));
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function snapAll(cb){
+ var keys=Object.keys(MESSY),done=0;
+ keys.forEach(function(k,i){
+  var f=MESSY[k],t=CLEAN[k];
+  after(80*i,function(){moveTo(k,f[0],f[1],t[0],t[1],520,function(){done++;if(done===keys.length&&cb)cb();});});
+ });
+}
+
+function setState(text,col,n){
+ $('stateT').textContent=text;
+ $('dotS').setAttribute('fill',col);
+ $('stateN').textContent=n;
+}
+
+function run(){
+ clearAll();
+ setOp('grid',0);
+ ['sp1','sp2','sp3'].forEach(function(id){setOp(id,0);});
+ setMessy();
+ setState('no grid · spacing in chaos','#F43F5E','0 / 5 aligned');
+
+ after(700,showSpacing);
+ after(2200,function(){
+  fade('grid',0,1,700,null);
+  setState('8-point grid revealed','#8B5CF6','0 / 5 aligned');
+ });
+ after(3500,function(){
+  setState('snapping…','#F59E0B','snapping');
+  morphSpacing();
+  snapAll(function(){
+   setState('clean rhythm · all on grid','#10B981','5 / 5 aligned');
+  });
+ });
+ after(7200,function(){
+  fade('grid',1,0.25,800,null);
+ });
+ after(10800,function(){
+  ['sp1','sp2','sp3'].forEach(function(id){fade(id,1,0,500,null);});
+  after(700,run);
+ });
+}
+$('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

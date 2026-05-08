@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Test Pyramid and What to Test Where — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>The Test Pyramid and What to Test Where</h1>
+  <p class="subtitle">Three altitudes, three different jobs, one bill at the end of the month</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most teams have an *ice-cream cone* test suite, not a pyramid: 800 e2e tests on top, 14 integration tests in the middle, 6 unit tests at the bottom (left over from when they used Jest in 2019). The CI run takes 28 minutes, the flake rate is 14%, and nobody can tell you what would actually break if a specific function changed.</p>
+  <div class="callout"><strong>Mental model: tests live at three altitudes</strong><br/>Think of your suite as **three altitudes of flight**:</div>
+  
+<h2>Move 1 — Unit-as-fast-feedback</h2>
+<ul>
+<li>The first job of unit tests is *not coverage*. It is **fast feedback while you are still holding the problem in your head**.</li>
+<li>1. The customer report: &quot;When I check out with a UPI ID that has a dot, like sneha.s@okhdfc, the total shows ₹0.&quot;</li>
+<li>2. Where does the logic live?: The bug is in the `formatUpiId()` function. Pure input → output. No network, no DOM. This screams unit test.</li>
+<li>3. Write the unit test: Three lines. Runs in 4ms. No browser, no DB.</li>
+<li>4. Resist the urge to write an e2e: An e2e test for this would take 90 seconds, hit a real Razorpay sandbox, and prove the same thing as the 4ms unit test.</li>
+<li>5. Add ONE e2e for the critical path: Yes — *one* test that proves checkout end-to-end works for a UPI user. The unit test catches the formatting bug; the e2e catches the wiring.</li>
+</ul>
+<h2>Move 2 — E2E for the critical path</h2>
+<ul>
+<li>Now the top of the pyramid. **End-to-end tests are not for everything**.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the inverted pyramid (the ice-cream cone): Teams build the cone for one of two reasons: either they hired a contractor who wrote 800 Selenium tests in 2019 and called it a day, or they confused *e2e* with *real testing* and treated unit tests as second-class citizens. Both end in the same place: 28-minute CI runs, 14% flake rates, and devs who learn to ignore the suite.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Tests live at three altitudes — unit, integration, e2e — each with a different cost-to-confidence ratio.</div>
+<div class="takeaway">Unit-as-fast-feedback: if your unit test makes a network call, it isn't a unit test. It's a slow integration test in costume.</div>
+<div class="takeaway">E2E for the critical path: the question is *who calls if this breaks?* If the answer is 'nobody', push the test down.</div>
+<div class="takeaway">The ice-cream cone (lots of e2e, few unit) is the most common shape and the most expensive one. The fix is to rewrite, not delete.</div>
+<div class="takeaway">Measure (duration × flake rate) before triaging. Deleting tests blind is how teams lose real coverage.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

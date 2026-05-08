@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>What a PM Actually Does — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>What a PM Actually Does</h1>
+  <p class="subtitle">You're not the boss of engineering; you're the translator between rooms</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>On day one, every new PM thinks the job is to write JIRA tickets, run standups, and chase engineers. By month six, the good ones realise the job is something else entirely.</p>
+  <div class="callout"><strong>Mental model: PM is a translator plus a sequencer</strong><br/>Picture three rooms — **Users**, **Engineers**, **Sales/CEO**. Each room speaks a different language and has different incentives. The PM is the door between them; the PM's value is whatever loss in translation they prevent.</div>
+  
+<h2>Move 1 — Outcome over output</h2>
+<ul>
+<li>**Output** is what you ship. **Outcome** is what changes for the user.</li>
+<li>Step 1 — The original ask: CEO Slack: 'We need to build a referral program.' This is an output disguised as a strategy. Six engineers could spend two months on it and you would still not know if it worked.</li>
+<li>Step 2 — Find the implied user behavior: Ask: what behavior change would make the CEO happy? Probably 'more new signups from existing customers without us paying Google.' Now you have a direction.</li>
+<li>Step 3 — Pick a measurable target: Frame it: 'Increase organic signups attributed to existing-customer referral from 4 percent to 12 percent of monthly new signups, by end of Q2.' Specific. Measurable. Time-boxed.</li>
+<li>Step 4 — Then, and only then, brainstorm outputs: Now you can compare options: a referral code, a friend-invite flow, a public testimonials page, a customer-advocacy program. Each is a hypothesis about how to move the outcome. The cheapest one to test wins.</li>
+<li>Step 5 — Ship the cheapest test, measure, decide: Ship a copy-link referral in 1 sprint. Measure for 4 weeks. If the metric moves, double down. If not, kill it before you build the loyalty programme that the CEO actually pictured.</li>
+</ul>
+<h2>Move 2 — The 3-question scope test</h2>
+<ul>
+<li>Vague asks are the PM's daily reality. The CEO forwards an email at 11 PM: 'simple feature, just let admins export to Excel.' Sales asks for 'a Hindi version, our Tier-2 customers want it.' Support escalates 'better notifications, users keep complaining.' None of these are scoped.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: confusing 'I am busy' with 'I am useful': First-time PMs default to motion. They write tickets, run meetings, send updates, edit Confluence pages. The output looks productive. The team's actual velocity, measured by outcome, is often unchanged or worse.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">The PM is a translator between users, engineers, and sales/CEO — and a sequencer of finite engineering against infinite asks.</div>
+<div class="takeaway">Output is what you ship; outcome is what changes for the user. Frame every initiative as an outcome before deciding the output.</div>
+<div class="takeaway">The 3-question scope test (Who? What changes in their day? What if we do nothing?) separates real features from feelings.</div>
+<div class="takeaway">The JIRA-monkey trap: high motion, low decisions. Every Friday, name the one decision only you could have made this week.</div>
+<div class="takeaway">If you only ever echo the founder, you are not adding value — you are adding latency. Push back is part of the job description.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

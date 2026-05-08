@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Modeling Fundamentals (and When Not to) — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Modeling Fundamentals (and When Not to)</h1>
+  <p class="subtitle">Simplest model first; bigger model only if it pays for itself</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most analyst projects do not need a model. They need a number, a clean comparison, and a memo.</p>
+  <div class="callout"><strong>Mental model: simplest model first</strong><br/>Hold this picture. Modeling is a staircase, and each step costs roughly 10× more time and adds roughly 10× less accuracy than the step before it. The first two steps usually pay for themselves; the rest usually do not.</div>
+  
+<h2>Move 1 — The train / val / test split</h2>
+<ul>
+<li>Three datasets, three jobs: - **Train**: the data the model fits on. - **Validation**: the data you check after each tweak.</li>
+<li>Step 1 — Compute the baseline: Always-predict-no on a churn dataset where 13% churn → 87% accuracy. That is your floor. Anything you build must beat 87%, and beat it by enough to justify the maintenance cost.</li>
+<li>Step 2 — Split: train (70%) / val (15%) / test (15%): Split by user, not by row. Stratify on the outcome (so churn rate is similar in each split). Save test to a separate file you literally do not load.</li>
+<li>Step 3 — Fit logistic regression on train, evaluate on val: Standard scaler + logistic regression on engineered features. Look at the val accuracy, AUC, and the top 10 coefficients. Most of the model's reasoning should be human-defensible.</li>
+<li>Step 4 — Try one or two more model classes (RF, XGBoost on defaults): Compare on val. If the lift over logistic regression is &lt; 1pp, stop — the simpler model wins on operations cost.</li>
+<li>Step 5 — Check for overfitting on the validation set: Run on a small held-out validation slice that you also haven't peeked at, or use cross-validation. If val accuracy mysteriously drops, you have been tuning on a leaderboard, not learning generalisation.</li>
+<li>Step 6 — Run ONCE on test, report the number, do not tune further: Open the test file, evaluate, write the number in the memo. If the number is materially worse than val, report that gap honestly — it is the most useful piece of information about how the model will behave in production.</li>
+</ul>
+<h2>Move 2 — The OK-line</h2>
+<ul>
+<li>Before you start modeling, define the **OK-line**: the level of performance below which the model is not worth shipping, and above which more accuracy is not worth chasing. The OK-line is set by business cost and by the cost of the next-best alternative (often: a rule of thumb, or doing nothing).</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: overfitting on the validation set: Most analysts know not to peek at the test set. Almost no analyst notices when they are *overfitting on the validation set* — and that is the trap that quietly poisons production models.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Most analyst questions do not need a model; they need a clean comparison and a memo. Reach for a model only when ranking or scoring at scale is genuinely the job.</div>
+<div class="takeaway">The modeling staircase is logarithmic in cost: each step costs roughly 10× more and adds roughly 10× less than the step before it.</div>
+<div class="takeaway">Train, val, test — and the test set is the audit; touch it once, at the end, or you have no test set.</div>
+<div class="takeaway">Overfitting on the validation set is the trap nobody warns you about; cap your tweaks at 5-10 distinct variants and stop on schedule.</div>
+<div class="takeaway">Define the OK-line at the start; the question is 'have I crossed it?', not 'how high can I go?'.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

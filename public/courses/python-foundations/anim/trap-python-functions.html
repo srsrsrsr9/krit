@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UnboundLocalError trap</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --bad: #F43F5E;
+    --good: #10B981;
+    --warn: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+  .frame {
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 16/10;
+    display: block;
+  }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 760px;
+  }
+  text { font-family: system-ui, -apple-system, sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @keyframes flashRed {
+    0%, 100% { fill: #FEE2E2; }
+    50% { fill: #FCA5A5; }
+  }
+  .flash { animation: flashRed 600ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg class="frame" viewBox="0 0 760 475" aria-label="Animation showing how Python's compile-time scope analysis pre-scans a function, marks count as local because of an assignment, then raises UnboundLocalError when the print statement runs.">
+      <defs></defs>
+
+      <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">
+        Python pre-scans before it runs
+      </text>
+      <text x="380" y="52" text-anchor="middle" font-size="13" fill="#6B7280">
+        One assignment anywhere in the body marks the name local for the whole function
+      </text>
+
+      <!-- LEFT: code panel -->
+      <g transform="translate(40,80)">
+        <rect width="340" height="220" rx="12" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2"/>
+        <text x="20" y="28" font-size="13" class="mono" fill="#6B7280"># module level</text>
+        <text x="20" y="48" font-size="14" class="mono" fill="#1F2937" font-weight="600">count = 0</text>
+
+        <text x="20" y="80" font-size="14" class="mono" fill="#1F2937" font-weight="600">def tick():</text>
+
+        <!-- highlighted lines -->
+        <g id="line1">
+          <rect x="40" y="92" width="290" height="22" rx="4" fill="transparent"/>
+          <text x="50" y="108" font-size="14" class="mono" fill="#1F2937">print(count)</text>
+        </g>
+        <g id="line2">
+          <rect x="40" y="120" width="290" height="22" rx="4" fill="transparent"/>
+          <text x="50" y="136" font-size="14" class="mono" fill="#1F2937">count = count + 1</text>
+        </g>
+
+        <text x="20" y="172" font-size="14" class="mono" fill="#1F2937" font-weight="600">tick()</text>
+
+        <!-- scanner indicator -->
+        <g id="scannerGroup" opacity="0">
+          <text x="20" y="200" font-size="12" font-style="italic" fill="#8B5CF6">compile-time scan in progress…</text>
+        </g>
+      </g>
+
+      <!-- RIGHT: scope analysis -->
+      <g transform="translate(400,80)">
+        <rect width="320" height="220" rx="12" fill="#fff" stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="20" y="28" font-size="14" font-weight="700" fill="#1F2937">Scope analysis for tick()</text>
+
+        <!-- step 1 -->
+        <g id="scan1" opacity="0">
+          <circle cx="32" cy="58" r="10" fill="#8B5CF6"/>
+          <text x="32" y="62" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">1</text>
+          <text x="50" y="62" font-size="13" fill="#1F2937">Pre-scan body for assignments</text>
+        </g>
+
+        <!-- step 2 -->
+        <g id="scan2" opacity="0">
+          <circle cx="32" cy="98" r="10" fill="#8B5CF6"/>
+          <text x="32" y="102" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">2</text>
+          <text x="50" y="102" font-size="13" fill="#1F2937">Found:</text>
+          <text x="100" y="102" class="mono" font-size="13" fill="#F43F5E" font-weight="700">count = …</text>
+        </g>
+
+        <!-- step 3 -->
+        <g id="scan3" opacity="0">
+          <circle cx="32" cy="138" r="10" fill="#8B5CF6"/>
+          <text x="32" y="142" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">3</text>
+          <text x="50" y="142" font-size="13" fill="#1F2937">Mark</text>
+          <text x="86" y="142" class="mono" font-size="13" fill="#F43F5E" font-weight="700">count</text>
+          <text x="130" y="142" font-size="13" fill="#1F2937">as LOCAL</text>
+        </g>
+
+        <!-- step 4 -->
+        <g id="scan4" opacity="0">
+          <circle cx="32" cy="178" r="10" fill="#F43F5E"/>
+          <text x="32" y="182" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">4</text>
+          <text x="50" y="182" font-size="13" fill="#1F2937">Now run:</text>
+          <text x="116" y="182" class="mono" font-size="13" fill="#1F2937">print(count)</text>
+        </g>
+
+        <text id="scan5label" x="50" y="204" font-size="12" font-style="italic" fill="#9F1239" opacity="0">
+          local count not yet assigned →
+        </text>
+      </g>
+
+      <!-- ERROR BOX -->
+      <g transform="translate(40,330)" id="errorBox" opacity="0">
+        <rect width="680" height="120" rx="12" fill="#FEE2E2" stroke="#F43F5E" stroke-width="3" class="flash"/>
+        <text x="20" y="32" font-size="14" font-weight="700" fill="#9F1239" class="mono">Traceback (most recent call last):</text>
+        <text x="20" y="54" font-size="13" class="mono" fill="#9F1239">  File "main.py", line 5, in tick</text>
+        <text x="20" y="74" font-size="13" class="mono" fill="#9F1239">    print(count)</text>
+        <text x="20" y="100" font-size="14" font-weight="700" class="mono" fill="#9F1239">UnboundLocalError: cannot access local variable 'count' before assignment</text>
+      </g>
+
+      <!-- FIX -->
+      <g transform="translate(40,330)" id="fixBox" opacity="0">
+        <rect width="680" height="120" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+        <text x="20" y="30" font-size="14" font-weight="700" fill="#065F46">Two fixes</text>
+
+        <text x="20" y="58" font-size="13" class="mono" fill="#1F2937">def tick(count):  # pass it in</text>
+        <text x="20" y="78" font-size="13" class="mono" fill="#1F2937">    return count + 1</text>
+
+        <text x="380" y="58" font-size="13" class="mono" fill="#1F2937">def tick():</text>
+        <text x="380" y="78" font-size="13" class="mono" fill="#1F2937">    global count   # opt-in to module scope</text>
+        <text x="380" y="98" font-size="13" class="mono" fill="#1F2937">    count = count + 1</text>
+      </g>
+
+      <!-- highlight overlays for code -->
+      <rect id="hl1" x="80" y="200" width="290" height="22" rx="4" fill="#F43F5E" opacity="0"/>
+      <rect id="hl2" x="80" y="172" width="290" height="22" rx="4" fill="#FCD34D" opacity="0"/>
+    </svg>
+    <div class="caption">The error happens at runtime, but the cause is compile-time. Python decided count was local before it ran a single line.</div>
+  </div>
+</main>
+<script>
+(function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+  var stages = [
+    { id: 'scannerGroup', delay: 600 },
+    { id: 'hl2', delay: 1100, op: '0.35' },
+    { id: 'scan1', delay: 1400 },
+    { id: 'scan2', delay: 2200 },
+    { id: 'scan3', delay: 3000 },
+    { id: 'scan4', delay: 3800 },
+    { id: 'hl1', delay: 4000, op: '0.35' },
+    { id: 'scan5label', delay: 4400 },
+    { id: 'errorBox', delay: 5200 },
+    { id: 'errorBox', delay: 8500, op: '0', mode: 'hide' },
+    { id: 'fixBox', delay: 8800 }
+  ];
+
+  function show(id, op) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.transition = 'opacity 500ms ' + EASE;
+    el.style.opacity = op || '1';
+  }
+
+  function init() {
+    ['scannerGroup','scan1','scan2','scan3','scan4','scan5label','errorBox','fixBox','hl1','hl2'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transition = 'none';
+      }
+    });
+  }
+
+  function run() {
+    if (prefersReduced) {
+      ['scannerGroup','scan1','scan2','scan3','scan4','scan5label','errorBox','fixBox'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.opacity = '1';
+      });
+      return;
+    }
+    init();
+    stages.forEach(function (s) {
+      setTimeout(function () { show(s.id, s.op); }, s.delay);
+    });
+    setTimeout(run, 12500);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
+</body>
+</html>

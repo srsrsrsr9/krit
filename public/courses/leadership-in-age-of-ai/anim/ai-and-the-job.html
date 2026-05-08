@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI and the Job</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --accent: #F59E0B;
+    --good: #10B981;
+    --human: #8B5CF6;
+    --sky: #0EA5E9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px; padding: 0 12px;
+  }
+  .reset {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .reset:hover { background: #FEF3C7; }
+  text { font-family: inherit; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .task { opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="A job is shown as a constellation of twelve tasks. AI takes over eight tasks, turning them green; four human-only tasks remain — judgment, presence, accountability, and care. The job's shape changes but persists.">
+      <defs>
+        <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="0.6"/>
+        </filter>
+      </defs>
+
+      <!-- Title -->
+      <text x="380" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">A job is a bundle of tasks</text>
+      <text x="380" y="58" text-anchor="middle" font-size="13" font-style="italic" fill="#6B7280">watch what happens when AI gets handed half of them</text>
+
+      <!-- Person silhouette in center -->
+      <g id="person" transform="translate(380,255)">
+        <circle r="92" fill="#FAF5FF" stroke="#E5E7EB" stroke-width="1.5" stroke-dasharray="3 4"/>
+        <!-- head -->
+        <circle cx="0" cy="-22" r="18" fill="#FFF7ED" stroke="#1F2937" stroke-width="2.2"/>
+        <!-- body -->
+        <path d="M -22 22 Q -22 -2 0 -2 Q 22 -2 22 22 L 18 38 L -18 38 Z" fill="#FFF7ED" stroke="#1F2937" stroke-width="2.2" stroke-linejoin="round"/>
+        <!-- eyes -->
+        <circle cx="-5" cy="-23" r="1.4" fill="#1F2937"/>
+        <circle cx="5" cy="-23" r="1.4" fill="#1F2937"/>
+        <!-- mouth -->
+        <path d="M -4 -16 Q 0 -14 4 -16" fill="none" stroke="#1F2937" stroke-width="1.6" stroke-linecap="round"/>
+        <text x="0" y="62" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">the same person</text>
+      </g>
+
+      <!-- 12 task nodes around the constellation -->
+      <!-- Tasks 1-8 will be taken by AI (green). Tasks 9-12 stay human (purple). -->
+      <g id="tasks">
+        <!-- positions roughly evenly spaced around an ellipse -->
+        <!-- AI tasks -->
+        <g class="task" data-i="0" transform="translate(380,120)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">draft email</text>
+        </g>
+        <g class="task" data-i="1" transform="translate(490,140)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">format slide</text>
+        </g>
+        <g class="task" data-i="2" transform="translate(575,200)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">SQL query</text>
+        </g>
+        <g class="task" data-i="3" transform="translate(605,290)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">summarize</text>
+        </g>
+        <g class="task" data-i="4" transform="translate(155,140)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">research</text>
+        </g>
+        <g class="task" data-i="5" transform="translate(70,200)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">first draft</text>
+        </g>
+        <g class="task" data-i="6" transform="translate(40,290)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">schedule</text>
+        </g>
+        <g class="task" data-i="7" transform="translate(265,120)">
+          <circle r="18" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">notes</text>
+        </g>
+
+        <!-- Human-only tasks -->
+        <g class="task human" data-i="8" transform="translate(545,375)">
+          <circle r="22" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">judgment</text>
+        </g>
+        <g class="task human" data-i="9" transform="translate(420,415)">
+          <circle r="22" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">presence</text>
+        </g>
+        <g class="task human" data-i="10" transform="translate(265,415)">
+          <circle r="22" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="-1" text-anchor="middle" font-size="10" fill="#6B7280">account-</text>
+          <text y="11" text-anchor="middle" font-size="10" fill="#6B7280">ability</text>
+        </g>
+        <g class="task human" data-i="11" transform="translate(140,375)">
+          <circle r="22" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="2"/>
+          <text y="3" text-anchor="middle" font-size="10" fill="#6B7280">care</text>
+        </g>
+      </g>
+
+      <!-- Annotation bands -->
+      <g id="annotations" opacity="0">
+        <rect x="540" y="345" width="200" height="92" rx="8" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1" stroke-dasharray="2 3" opacity="0.85"/>
+        <text x="640" y="335" text-anchor="middle" font-size="11" fill="#7C3AED" font-weight="600">human-only</text>
+      </g>
+
+      <!-- Bottom annotation -->
+      <g id="finalAnnotation" opacity="0">
+        <rect x="180" y="445" width="400" height="22" rx="11" fill="#1F2937"/>
+        <text x="380" y="460" text-anchor="middle" font-size="12" font-weight="600" fill="#FFF7ED">tasks shift, jobs persist</text>
+      </g>
+
+      <!-- Counter -->
+      <g transform="translate(40,40)">
+        <text font-size="11" fill="#6B7280">tasks done by AI</text>
+        <text id="counter" y="22" font-size="22" font-weight="700" fill="#10B981" class="mono">0 / 12</text>
+      </g>
+    </svg>
+    <div class="caption">A job is a bundle of tasks. The bundle changes; the job — the human responsibility — remains.</div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+<script>
+(function () {
+  var tasks = document.querySelectorAll('#tasks .task');
+  var counter = document.getElementById('counter');
+  var annotations = document.getElementById('annotations');
+  var finalAnnotation = document.getElementById('finalAnnotation');
+  var person = document.getElementById('person');
+  var resetBtn = document.getElementById('resetBtn');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Order in which AI absorbs tasks (the first 8 indices)
+  var aiSequence = [0, 7, 4, 1, 5, 2, 6, 3];
+  var EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+  function reset() {
+    tasks.forEach(function (t) {
+      var circle = t.querySelector('circle');
+      circle.setAttribute('fill', '#FFFFFF');
+      circle.setAttribute('stroke', '#9CA3AF');
+      t.querySelectorAll('text').forEach(function (txt) { txt.setAttribute('fill', '#6B7280'); });
+      t.style.transition = 'transform 600ms ' + EASE + ', opacity 400ms ease';
+      t.style.transformOrigin = '50% 50%';
+      t.style.transform = '';
+      t.style.opacity = '1';
+      // remove any check
+      var check = t.querySelector('.check');
+      if (check) check.remove();
+    });
+    counter.textContent = '0 / 12';
+    annotations.style.transition = 'opacity 600ms ease';
+    annotations.style.opacity = '0';
+    finalAnnotation.style.transition = 'opacity 600ms ease';
+    finalAnnotation.style.opacity = '0';
+    person.style.transition = 'transform 800ms ' + EASE;
+    person.setAttribute('transform', 'translate(380,255)');
+  }
+
+  function turnGreen(taskEl, count) {
+    var circle = taskEl.querySelector('circle');
+    circle.style.transition = 'fill 600ms ' + EASE + ', stroke 600ms ' + EASE;
+    circle.setAttribute('fill', '#ECFDF5');
+    circle.setAttribute('stroke', '#10B981');
+    taskEl.querySelectorAll('text').forEach(function (txt) {
+      txt.style.transition = 'fill 600ms ease';
+      txt.setAttribute('fill', '#047857');
+    });
+    // add a small check mark
+    var check = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    check.setAttribute('class', 'check');
+    check.setAttribute('d', 'M -7 -4 L -2 1 L 7 -8');
+    check.setAttribute('fill', 'none');
+    check.setAttribute('stroke', '#10B981');
+    check.setAttribute('stroke-width', '2');
+    check.setAttribute('stroke-linecap', 'round');
+    check.setAttribute('stroke-linejoin', 'round');
+    check.setAttribute('opacity', '0');
+    check.setAttribute('transform', 'translate(0,18)');
+    check.style.transition = 'opacity 400ms ease, transform 500ms ' + EASE;
+    taskEl.appendChild(check);
+    requestAnimationFrame(function () {
+      check.setAttribute('opacity', '0');
+      check.style.opacity = '1';
+      check.setAttribute('transform', 'translate(0,2)');
+    });
+    counter.textContent = count + ' / 12';
+  }
+
+  function pulseHumans() {
+    var humans = document.querySelectorAll('#tasks .task.human');
+    humans.forEach(function (h, i) {
+      setTimeout(function () {
+        var circle = h.querySelector('circle');
+        circle.style.transition = 'fill 500ms ' + EASE + ', stroke 500ms ' + EASE + ', r 500ms ' + EASE;
+        circle.setAttribute('fill', '#FAF5FF');
+        circle.setAttribute('stroke', '#8B5CF6');
+        h.querySelectorAll('text').forEach(function (txt) {
+          txt.style.transition = 'fill 500ms ease';
+          txt.setAttribute('fill', '#7C3AED');
+        });
+        h.style.transition = 'transform 700ms ' + EASE;
+        h.style.transformBox = 'fill-box';
+        h.style.transformOrigin = 'center';
+        // emphasize by slight scale via attribute transform manipulation
+        var current = h.getAttribute('transform');
+        var match = current.match(/translate\(([^,]+),([^)]+)\)/);
+        if (match) {
+          var x = parseFloat(match[1]), y = parseFloat(match[2]);
+          h.setAttribute('transform', 'translate(' + x + ',' + y + ') scale(1.12)');
+          setTimeout(function () {
+            h.setAttribute('transform', 'translate(' + x + ',' + y + ') scale(1.0)');
+          }, 400);
+        }
+      }, i * 200);
+    });
+  }
+
+  function run() {
+    reset();
+    if (prefersReduced) {
+      // instant final state
+      aiSequence.forEach(function (idx, i) {
+        turnGreen(tasks[idx], i + 1);
+      });
+      pulseHumans();
+      annotations.style.opacity = '1';
+      finalAnnotation.style.opacity = '1';
+      return;
+    }
+    var done = 0;
+    aiSequence.forEach(function (idx, i) {
+      setTimeout(function () {
+        done = i + 1;
+        turnGreen(tasks[idx], done);
+      }, 600 + i * 700);
+    });
+    setTimeout(pulseHumans, 600 + aiSequence.length * 700 + 200);
+    setTimeout(function () { annotations.style.opacity = '1'; }, 600 + aiSequence.length * 700 + 1200);
+    setTimeout(function () { finalAnnotation.style.opacity = '1'; }, 600 + aiSequence.length * 700 + 1900);
+    // small breathing of the person when annotation appears
+    setTimeout(function () {
+      person.setAttribute('transform', 'translate(380,255) scale(1.04)');
+      setTimeout(function () { person.setAttribute('transform', 'translate(380,255) scale(1.0)'); }, 500);
+    }, 600 + aiSequence.length * 700 + 1900);
+
+    // loop
+    setTimeout(run, 600 + aiSequence.length * 700 + 4500);
+  }
+
+  resetBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

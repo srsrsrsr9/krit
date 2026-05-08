@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Ads, A/B Tests, and the Statistical Reality — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Ads, A/B Tests, and the Statistical Reality</h1>
+  <p class="subtitle">Why your day-2 'winner' is almost always noise</p>
+  <p class="byline">notes by Meera ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Day 2 of an A/B test. Variant B is showing a 14% lift in click-through rate.</p>
+  <div class="callout"><strong>Mental model: sample size is the unit, not days</strong><br/>Marketing teams measure experiments in *days* because the dashboard shows days. Statistics measures experiments in *sample size*. They are not the same.</div>
+  
+<h2>Move 1 — The no-conclusion-yet rule</h2>
+<ul>
+<li>The no-conclusion-yet rule is two sentences: 1. Before launch, compute the minimum sample size needed to detect the *minimum lift you'd act on*, with 80% statistical power and 95% confidence.</li>
+<li>Step 1 — Decide what would matter: Ask: 'What lift would change our decision?' If a 1% lift wouldn't change anything, don't run a test that needs 100k+ impressions to detect it. Pick the lift you'd act on; usually 5-10%.</li>
+<li>Step 2 — Compute the sample size: For your baseline rate and minimum detectable lift, get the per-variant sample size. Free calculators do this in 30 seconds. Write the number down where the team can see it.</li>
+<li>Step 3 — Estimate test duration honestly: Sample size needed / daily impressions per variant = honest minimum days. If that exceeds your patience, either pick a bigger lift to detect, or run the test on a higher-traffic asset.</li>
+<li>Step 4 — Pre-register the kill criteria: Write down: 'We will not declare a winner before day X. If by day X the lift is &lt; 3%, we'll continue running A.' This is the no-conclusion-yet rule, on paper, before launch.</li>
+<li>Step 5 — On the date, look at the data and act: Not before. Not after seeing day-2 numbers. The point of pre-registration is to bind your future self.</li>
+</ul>
+<h2>Move 2 — Lift vs noise</h2>
+<ul>
+<li>The second move is a habit of seeing. Every time you look at a 'lift' number, ask: *what's the noise band?* If the lift is inside the noise band, the result is statistically indistinguishable from chance — even if the dashboard makes it look heroic.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: declared winner at day 2, still noise: The trap is structural, not personal. Dashboards show daily numbers; daily numbers feel meaningful; meaningful-feeling numbers get acted on. The cure is a habit, not a tool.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Sample size is the unit of an A/B test, not days — measuring in days is confusing time with information.</div>
+<div class="takeaway">The no-conclusion-yet rule: until you hit the pre-registered minimum sample, the answer to 'who's winning?' is no conclusion yet.</div>
+<div class="takeaway">Every 'lift' has a noise band; if the lift is inside the band, the result is indistinguishable from chance.</div>
+<div class="takeaway">Pre-registration binds your future self to honest decisions before you know the result; without it, you'll find a story for whatever happened.</div>
+<div class="takeaway">If your campaign volume cannot deliver an honest sample within an honest timeframe, either pick a bigger lift to detect, or skip the test entirely.</div>
+  <div class="signoff">— Meera, on the bus, again</div>
+</main>
+</body>
+</html>

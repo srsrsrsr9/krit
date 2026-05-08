@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Learning and Development</title>
+<style>
+  :root {
+    --bg: #ECFDF5;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --old: #F43F5E;
+    --new: #10B981;
+    --accent: #F59E0B;
+    --sky: #0EA5E9;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 800px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px; padding: 0 12px;
+  }
+  .reset {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .reset:hover { background: #D1FAE5; }
+  text { font-family: inherit; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 800 500" aria-label="Two L and D models compared. The annual compliance training watched at 2x speed shows a flat capability line. Weekly sprints with public mistakes, demos, and peer review show a steadily rising capability line.">
+      <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Two L&amp;D models, fifty-two weeks each</text>
+      <text x="400" y="52" text-anchor="middle" font-size="13" font-style="italic" fill="#6B7280">one ticks a box; the other compounds capability</text>
+
+      <!-- LEFT: annual compliance -->
+      <g transform="translate(40,80)">
+        <rect width="350" height="190" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect width="350" height="32" rx="14" fill="#FEF2F2"/>
+        <rect y="20" width="350" height="12" fill="#FEF2F2"/>
+        <text x="16" y="22" font-size="12" font-weight="700" fill="#9F1239">annual compliance training</text>
+        <text x="334" y="22" text-anchor="end" font-size="10" fill="#9F1239" class="mono">4 hrs · once</text>
+
+        <!-- calendar grid (52 weeks, one cell of "training" near month 1) -->
+        <g transform="translate(16,46)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">52 weeks</text>
+          <g id="leftCal"></g>
+          <!-- Single training mark -->
+          <g transform="translate(0,8)">
+            <circle id="trainMark" cx="14" cy="14" r="6" fill="#F43F5E" opacity="0"/>
+          </g>
+        </g>
+
+        <!-- video player illustration -->
+        <g transform="translate(20,116)">
+          <rect width="312" height="58" rx="8" fill="#1F2937"/>
+          <!-- play triangle dimming -->
+          <polygon id="playTri" points="22,18 22,40 44,29" fill="#FFF7ED" opacity="0.85"/>
+          <!-- progress bar -->
+          <rect x="58" y="40" width="240" height="6" rx="3" fill="#374151"/>
+          <rect id="playBar" x="58" y="40" width="0" height="6" rx="3" fill="#F59E0B"/>
+          <!-- speed badge -->
+          <g transform="translate(254,12)">
+            <rect width="44" height="18" rx="9" fill="#F59E0B"/>
+            <text x="22" y="13" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" class="mono">2× spd</text>
+          </g>
+          <text x="58" y="22" font-size="11" fill="#FFF7ED">module 4 of 7 · "compliance"</text>
+          <text id="playStatus" x="58" y="36" font-size="9" fill="#9CA3AF" font-style="italic">never applied at work</text>
+        </g>
+      </g>
+
+      <!-- RIGHT: weekly sprints -->
+      <g transform="translate(410,80)">
+        <rect width="350" height="190" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect width="350" height="32" rx="14" fill="#ECFDF5"/>
+        <rect y="20" width="350" height="12" fill="#ECFDF5"/>
+        <text x="16" y="22" font-size="12" font-weight="700" fill="#047857">weekly learning sprints</text>
+        <text x="334" y="22" text-anchor="end" font-size="10" fill="#047857" class="mono">52× · public</text>
+
+        <g transform="translate(16,46)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">52 weeks</text>
+          <g id="rightCal"></g>
+        </g>
+
+        <!-- ritual stack -->
+        <g transform="translate(20,116)" font-size="11" fill="#374151">
+          <g>
+            <circle cx="10" cy="10" r="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.6"/>
+            <text x="22" y="14">small mistake shared, in public</text>
+          </g>
+          <g transform="translate(0,18)">
+            <circle cx="10" cy="10" r="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.6"/>
+            <text x="22" y="14">friday demo, 4 minutes max</text>
+          </g>
+          <g transform="translate(0,36)">
+            <circle cx="10" cy="10" r="6" fill="#FFFFFF" stroke="#10B981" stroke-width="1.6"/>
+            <text x="22" y="14">peer review by someone outside team</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Capability chart -->
+      <g transform="translate(40,300)">
+        <text x="0" y="0" font-size="13" font-weight="700" fill="#1F2937">capability over 52 weeks</text>
+        <text x="0" y="16" font-size="10" fill="#6B7280" font-style="italic">same person · same year · two regimes</text>
+
+        <!-- plot box -->
+        <g transform="translate(0,28)">
+          <rect width="720" height="140" rx="8" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+          <!-- gridlines -->
+          <line x1="0" y1="35" x2="720" y2="35" stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="70" x2="720" y2="70" stroke="#F3F4F6" stroke-width="1"/>
+          <line x1="0" y1="105" x2="720" y2="105" stroke="#F3F4F6" stroke-width="1"/>
+          <!-- axis labels -->
+          <text x="-4" y="14" text-anchor="end" font-size="9" fill="#9CA3AF">high</text>
+          <text x="-4" y="135" text-anchor="end" font-size="9" fill="#9CA3AF">low</text>
+          <text x="0" y="155" font-size="9" fill="#9CA3AF">wk 1</text>
+          <text x="360" y="155" text-anchor="middle" font-size="9" fill="#9CA3AF">wk 26</text>
+          <text x="720" y="155" text-anchor="end" font-size="9" fill="#9CA3AF">wk 52</text>
+
+          <!-- flat compliance line -->
+          <path id="flatLine" d="M 4 120 L 4 120" fill="none" stroke="#F43F5E" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0 1"/>
+          <!-- rising sprint line -->
+          <path id="riseLine" d="M 4 120 L 4 120" fill="none" stroke="#10B981" stroke-width="2.6" stroke-linecap="round"/>
+
+          <!-- legend -->
+          <g transform="translate(540,18)">
+            <line x1="0" y1="6" x2="20" y2="6" stroke="#F43F5E" stroke-width="2.4"/>
+            <text x="26" y="10" font-size="10" fill="#9F1239">compliance</text>
+            <line x1="0" y1="22" x2="20" y2="22" stroke="#10B981" stroke-width="2.6"/>
+            <text x="26" y="26" font-size="10" fill="#047857">sprints</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- annotation -->
+      <g id="ann" opacity="0">
+        <rect x="190" y="473" width="420" height="22" rx="11" fill="#1F2937"/>
+        <text x="400" y="488" text-anchor="middle" font-size="12" font-weight="600" fill="#FFF7ED">small public reps · weekly · forever</text>
+      </g>
+    </svg>
+    <div class="caption">Learning isn't a course you completed. It's a ritual you compound. The chart catches up with the calendar.</div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+<script>
+(function () {
+  var leftCal = document.getElementById('leftCal');
+  var rightCal = document.getElementById('rightCal');
+  var trainMark = document.getElementById('trainMark');
+  var playBar = document.getElementById('playBar');
+  var playStatus = document.getElementById('playStatus');
+  var flatLine = document.getElementById('flatLine');
+  var riseLine = document.getElementById('riseLine');
+  var ann = document.getElementById('ann');
+  var resetBtn = document.getElementById('resetBtn');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function buildCalendar(parent, weeks, cellSize, cols) {
+    while (parent.firstChild) parent.removeChild(parent.firstChild);
+    for (var i = 0; i < weeks; i++) {
+      var col = i % cols;
+      var row = Math.floor(i / cols);
+      var x = col * (cellSize + 1);
+      var y = 8 + row * (cellSize + 1);
+      var r = document.createElementNS(SVG_NS, 'rect');
+      r.setAttribute('x', x);
+      r.setAttribute('y', y);
+      r.setAttribute('width', cellSize);
+      r.setAttribute('height', cellSize);
+      r.setAttribute('rx', 1.5);
+      r.setAttribute('fill', '#F3F4F6');
+      r.setAttribute('stroke', '#E5E7EB');
+      r.setAttribute('stroke-width', '0.6');
+      r.setAttribute('data-i', i);
+      parent.appendChild(r);
+    }
+  }
+
+  function reset() {
+    buildCalendar(leftCal, 52, 5.4, 26);
+    buildCalendar(rightCal, 52, 5.4, 26);
+    trainMark.setAttribute('opacity', '0');
+    playBar.setAttribute('width', '0');
+    playStatus.textContent = 'never applied at work';
+    flatLine.setAttribute('d', 'M 4 120 L 4 120');
+    riseLine.setAttribute('d', 'M 4 120 L 4 120');
+    ann.style.transition = 'opacity 600ms ease';
+    ann.style.opacity = '0';
+  }
+
+  function markRightCells(targets, color) {
+    targets.forEach(function (i, idx) {
+      setTimeout(function () {
+        var cell = rightCal.querySelector('rect[data-i="' + i + '"]');
+        if (cell) {
+          cell.style.transition = 'fill 300ms ease';
+          cell.setAttribute('fill', color);
+          cell.setAttribute('stroke', '#10B981');
+          cell.setAttribute('stroke-width', '0.8');
+        }
+      }, idx * 60);
+    });
+  }
+
+  function rampLine(pathEl, segments, totalMs) {
+    // segments is array of [x,y] points; we draw a line that grows segment by segment
+    var d = 'M ' + segments[0][0] + ' ' + segments[0][1];
+    var perSegment = totalMs / (segments.length - 1);
+    var i = 1;
+    function next() {
+      if (i >= segments.length) return;
+      d += ' L ' + segments[i][0] + ' ' + segments[i][1];
+      pathEl.setAttribute('d', d);
+      i++;
+      setTimeout(next, perSegment);
+    }
+    next();
+  }
+
+  function run() {
+    reset();
+    if (prefersReduced) {
+      // Show end states immediately
+      trainMark.setAttribute('opacity', '1');
+      playBar.setAttribute('width', '240');
+      playStatus.textContent = 'forgotten by week 6';
+      // mark sprints
+      var marks = [];
+      for (var i = 0; i < 52; i++) marks.push(i);
+      markRightCells(marks, '#A7F3D0');
+      // lines
+      flatLine.setAttribute('d', 'M 4 120 L 716 120');
+      riseLine.setAttribute('d', 'M 4 120 L 180 100 L 360 70 L 540 42 L 716 18');
+      ann.style.opacity = '1';
+      return;
+    }
+
+    // 1. compliance: training mark appears, video plays at 2x
+    setTimeout(function () {
+      trainMark.style.transition = 'opacity 400ms ease';
+      trainMark.setAttribute('opacity', '1');
+      // mark a single cell on the left calendar
+      var cell = leftCal.querySelector('rect[data-i="3"]');
+      if (cell) {
+        cell.setAttribute('fill', '#FECACA');
+        cell.setAttribute('stroke', '#F43F5E');
+      }
+    }, 500);
+
+    // video bar fills (representing 2x speed)
+    setTimeout(function () {
+      var start = performance.now();
+      function frame(t) {
+        var k = Math.min(1, (t - start) / 1100);
+        var ease = 1 - Math.pow(1 - k, 3);
+        playBar.setAttribute('width', 240 * ease);
+        if (k < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }, 900);
+
+    setTimeout(function () { playStatus.textContent = 'forgotten by week 6'; }, 2300);
+
+    // 2. sprint cells light up across 52 weeks
+    setTimeout(function () {
+      var marks = [];
+      for (var i = 0; i < 52; i++) marks.push(i);
+      markRightCells(marks, '#A7F3D0');
+    }, 2800);
+
+    // 3. plot lines draw
+    setTimeout(function () {
+      // flat line: jump to ~120 then stay
+      flatLine.setAttribute('d', 'M 4 120 L 716 122');
+    }, 5800);
+
+    setTimeout(function () {
+      // rising line: smooth curve climbing
+      var pts = [];
+      for (var i = 0; i <= 52; i++) {
+        var x = 4 + (716 - 4) * (i / 52);
+        // exponential-ish ramp from 120 to ~18
+        var y = 120 - 102 * Math.pow(i / 52, 0.85);
+        pts.push([x, y]);
+      }
+      // animate by appending a few points at a time
+      var d = 'M ' + pts[0][0] + ' ' + pts[0][1];
+      var idx = 1;
+      var step = 2;
+      var iv = setInterval(function () {
+        for (var k = 0; k < step && idx < pts.length; k++, idx++) {
+          d += ' L ' + pts[idx][0] + ' ' + pts[idx][1];
+        }
+        riseLine.setAttribute('d', d);
+        if (idx >= pts.length) clearInterval(iv);
+      }, 60);
+    }, 6100);
+
+    setTimeout(function () { ann.style.opacity = '1'; }, 8500);
+
+    // loop
+    setTimeout(run, 11500);
+  }
+
+  resetBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

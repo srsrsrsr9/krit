@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: long unsupervised loop</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes growBar{from{width:0}to{width:240px}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.bar{animation:growBar 4s linear forwards}
+.bad-pr{animation:pop .5s ease 4.5s both}
+.fanout{animation:fade .4s ease both}
+.merge{animation:pop .5s ease 9s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A 6-hour unsupervised Claude loop produces a 200-file PR no one can review, vs a parallel-fanout into 4 small bounded subagents">
+<rect width="720" height="405" rx="14" fill="#FAF5FF"/>
+
+<!-- BAD: long loop -->
+<g transform="translate(40 30)">
+<rect width="320" height="170" rx="10" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">BEFORE · "fix everything, go" · 6h run</text>
+
+<g transform="translate(20 38)">
+<text x="0" y="14" font-size="10" fill="#7F1D1D" font-weight="bold">single agent · single bar</text>
+<rect x="0" y="22" width="280" height="14" rx="3" fill="#FECACA" stroke="#7F1D1D"/>
+<rect class="bar" x="0" y="22" height="14" rx="3" fill="#7F1D1D"/>
+<text x="0" y="56" font-size="9" fill="#7F1D1D">file 1 → file 14 → file 47 → file 122 → file 200</text>
+<text x="0" y="72" font-size="9" fill="#7F1D1D" font-style="italic">no checkpoints · no human review</text>
+</g>
+
+<text x="160" y="124" text-anchor="middle" font-size="11" fill="#7F1D1D" font-weight="bold">200 files · 14 folders · ~8000 LOC</text>
+<text x="160" y="142" text-anchor="middle" font-size="10" fill="#7F1D1D" font-style="italic">"some of this is good, some isn't"</text>
+<text x="160" y="158" text-anchor="middle" font-size="10" fill="#7F1D1D" font-style="italic">no one can tell which</text>
+</g>
+
+<g class="bad-pr" transform="translate(40 215)">
+<rect width="320" height="80" rx="10" fill="#7F1D1D"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">PR closed without merging</text>
+<text x="160" y="42" text-anchor="middle" font-size="10" fill="#FCA5A5">reviewer: "I cannot review 200 files"</text>
+<text x="160" y="62" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">6 hours of compute · 0 lines shipped</text>
+</g>
+
+<!-- FIX: parallel fanout -->
+<g transform="translate(380 30)">
+<text x="150" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">AFTER · parallel-fanout into bounded subagents</text>
+
+<!-- main agent -->
+<g transform="translate(110 30)">
+<rect width="80" height="34" rx="6" fill="#065F46"/>
+<text x="40" y="22" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">main agent</text>
+</g>
+
+<!-- arrows down -->
+<line x1="80" y1="74" x2="40" y2="92" stroke="#065F46" stroke-width="1.5"/>
+<line x1="130" y1="74" x2="120" y2="92" stroke="#065F46" stroke-width="1.5"/>
+<line x1="180" y1="74" x2="200" y2="92" stroke="#065F46" stroke-width="1.5"/>
+<line x1="230" y1="74" x2="280" y2="92" stroke="#065F46" stroke-width="1.5"/>
+
+<!-- 4 subagents -->
+<g class="fanout" style="animation-delay:6s" transform="translate(0 92)">
+<rect width="60" height="80" rx="6" fill="#A7F3D0" stroke="#065F46"/>
+<text x="30" y="16" text-anchor="middle" font-size="9" fill="#065F46" font-weight="bold">sub 1</text>
+<text x="30" y="34" text-anchor="middle" font-size="8" fill="#065F46">read</text>
+<text x="30" y="48" text-anchor="middle" font-size="8" fill="#065F46">3 files</text>
+<text x="30" y="68" text-anchor="middle" font-size="8" fill="#065F46" font-style="italic">~8 min</text>
+</g>
+<g class="fanout" style="animation-delay:6.4s" transform="translate(80 92)">
+<rect width="60" height="80" rx="6" fill="#A7F3D0" stroke="#065F46"/>
+<text x="30" y="16" text-anchor="middle" font-size="9" fill="#065F46" font-weight="bold">sub 2</text>
+<text x="30" y="34" text-anchor="middle" font-size="8" fill="#065F46">refactor</text>
+<text x="30" y="48" text-anchor="middle" font-size="8" fill="#065F46">2 files</text>
+<text x="30" y="68" text-anchor="middle" font-size="8" fill="#065F46" font-style="italic">~6 min</text>
+</g>
+<g class="fanout" style="animation-delay:6.8s" transform="translate(160 92)">
+<rect width="60" height="80" rx="6" fill="#A7F3D0" stroke="#065F46"/>
+<text x="30" y="16" text-anchor="middle" font-size="9" fill="#065F46" font-weight="bold">sub 3</text>
+<text x="30" y="34" text-anchor="middle" font-size="8" fill="#065F46">write</text>
+<text x="30" y="48" text-anchor="middle" font-size="8" fill="#065F46">tests</text>
+<text x="30" y="68" text-anchor="middle" font-size="8" fill="#065F46" font-style="italic">~7 min</text>
+</g>
+<g class="fanout" style="animation-delay:7.2s" transform="translate(240 92)">
+<rect width="60" height="80" rx="6" fill="#A7F3D0" stroke="#065F46"/>
+<text x="30" y="16" text-anchor="middle" font-size="9" fill="#065F46" font-weight="bold">sub 4</text>
+<text x="30" y="34" text-anchor="middle" font-size="8" fill="#065F46">verify</text>
+<text x="30" y="48" text-anchor="middle" font-size="8" fill="#065F46">+ docs</text>
+<text x="30" y="68" text-anchor="middle" font-size="8" fill="#065F46" font-style="italic">~5 min</text>
+</g>
+
+<!-- merge -->
+<g class="merge" transform="translate(80 188)">
+<rect width="140" height="34" rx="6" fill="#065F46"/>
+<text x="70" y="22" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">main · assembles</text>
+</g>
+</g>
+
+<g class="merge" transform="translate(380 250)">
+<rect width="300" height="60" rx="10" fill="#065F46"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">4 small reviewable PRs</text>
+<text x="150" y="40" text-anchor="middle" font-size="10" fill="#A7F3D0">parallel · 12 min wall-clock · all merged</text>
+<text x="150" y="56" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">artifact handoff between subagents</text>
+</g>
+
+<g transform="translate(40 320)">
+<rect width="640" height="60" rx="10" fill="#1F2937"/>
+<text x="320" y="24" text-anchor="middle" font-size="13" fill="#FCD34D" font-weight="bold">Claude works best in small bounded tasks · 5-10 min · reviewable artifacts</text>
+<text x="320" y="44" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">long unsupervised runs are a debugging tax future-you pays</text>
+</g>
+</svg>
+<div class="caption">A 6-hour autonomous run with no checkpoints is just a fancy way to lose a day.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

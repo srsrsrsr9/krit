@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Did It Work?</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--good:#10B981;--bad:#F43F5E;--warn:#F59E0B;--info:#0EA5E9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.wrap{position:relative;width:100%;max-width:780px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+#rb{position:absolute;top:8px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="wrap">
+<svg viewBox="0 0 780 480" aria-label="Day-by-day usage chart after a feature launch. Usage rises, then flatlines. On day seven the PM checks DAU, retention, and NPS to see if the feature actually worked.">
+  <rect width="780" height="480" fill="#FFF7ED"/>
+  <text x="390" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Shipping is the start, not the finish.</text>
+
+  <!-- Chart frame: x 60..520, y 70..330 -->
+  <rect x="60" y="70" width="460" height="260" rx="8" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+  <text x="290" y="60" text-anchor="middle" font-size="11" font-weight="700" fill="#6B7280">USAGE since launch</text>
+
+  <!-- Y axis grid lines -->
+  <g stroke="#F0F9FF" stroke-width="1">
+    <line x1="60" y1="120" x2="520" y2="120"/>
+    <line x1="60" y1="170" x2="520" y2="170"/>
+    <line x1="60" y1="220" x2="520" y2="220"/>
+    <line x1="60" y1="270" x2="520" y2="270"/>
+  </g>
+  <!-- X axis day ticks -->
+  <g stroke="#E5E7EB" stroke-width="1">
+    <line x1="120" y1="330" x2="120" y2="335"/>
+    <line x1="180" y1="330" x2="180" y2="335"/>
+    <line x1="245" y1="330" x2="245" y2="335"/>
+    <line x1="310" y1="330" x2="310" y2="335"/>
+    <line x1="375" y1="330" x2="375" y2="335"/>
+    <line x1="440" y1="330" x2="440" y2="335"/>
+    <line x1="505" y1="330" x2="505" y2="335"/>
+  </g>
+  <g font-size="9" fill="#9CA3AF" font-family="ui-monospace,monospace" text-anchor="middle">
+    <text x="120" y="348">D0</text>
+    <text x="180" y="348">D1</text>
+    <text x="245" y="348">D2</text>
+    <text x="310" y="348">D3</text>
+    <text x="375" y="348">D4</text>
+    <text x="440" y="348">D5</text>
+    <text x="505" y="348">D7</text>
+  </g>
+
+  <!-- Launch marker -->
+  <line x1="120" y1="80" x2="120" y2="320" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.8"/>
+  <text x="120" y="78" text-anchor="middle" font-size="9" fill="#10B981" font-weight="700">SHIP</text>
+
+  <!-- Plotline -->
+  <polyline id="line" points="120,310" fill="none" stroke="#0EA5E9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle id="dot" cx="120" cy="310" r="5" fill="#0EA5E9"/>
+
+  <!-- Annotation labels  -->
+  <g id="annoClimb" opacity="0">
+    <text x="200" y="148" font-size="11" fill="#10B981" font-weight="700">climbing!</text>
+  </g>
+  <g id="annoFlat" opacity="0">
+    <text x="380" y="190" font-size="11" fill="#F43F5E" font-weight="700">…flat.</text>
+  </g>
+
+  <!-- Right panel: PM question + 3 metrics -->
+  <g id="ask" opacity="0">
+    <rect x="555" y="70" width="170" height="60" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+    <text x="640" y="94" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">"did it work?"</text>
+    <text x="640" y="112" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">— PM, day 7</text>
+  </g>
+
+  <!-- DAU -->
+  <g id="mDAU" opacity="0">
+    <rect x="555" y="146" width="170" height="50" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+    <text x="568" y="167" font-size="10" font-weight="700" fill="#10B981">DAU</text>
+    <text id="vDAU" x="715" y="172" text-anchor="end" font-size="18" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+    <text x="568" y="186" font-size="9" fill="#6B7280">vs. last week</text>
+    <text id="dDAU" x="715" y="190" text-anchor="end" font-size="10" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace"></text>
+  </g>
+
+  <!-- Retention -->
+  <g id="mRet" opacity="0">
+    <rect x="555" y="206" width="170" height="50" rx="10" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.5"/>
+    <text x="568" y="227" font-size="10" font-weight="700" fill="#0EA5E9">D7 RETENTION</text>
+    <text id="vRet" x="715" y="232" text-anchor="end" font-size="18" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+    <text x="568" y="246" font-size="9" fill="#6B7280">vs. control</text>
+    <text id="dRet" x="715" y="250" text-anchor="end" font-size="10" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace"></text>
+  </g>
+
+  <!-- NPS -->
+  <g id="mNPS" opacity="0">
+    <rect x="555" y="266" width="170" height="50" rx="10" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="1.5"/>
+    <text x="568" y="287" font-size="10" font-weight="700" fill="#8B5CF6">NPS</text>
+    <text id="vNPS" x="715" y="292" text-anchor="end" font-size="18" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">—</text>
+    <text x="568" y="306" font-size="9" fill="#6B7280">vs. last quarter</text>
+    <text id="dNPS" x="715" y="310" text-anchor="end" font-size="10" font-weight="700" fill="#F59E0B" font-family="ui-monospace,monospace"></text>
+  </g>
+
+  <!-- Verdict -->
+  <g id="verdict" opacity="0">
+    <rect x="60" y="378" width="665" height="56" rx="10" fill="#1F2937"/>
+    <text x="392" y="402" text-anchor="middle" font-size="13" fill="#FFFFFF" font-weight="700">Mixed: usage spiked, but stickiness didn't move.</text>
+    <text x="392" y="422" text-anchor="middle" font-size="12" fill="#9CA3AF" font-style="italic">→ next week: investigate the day-3 cliff. The follow-up loop continues.</text>
+  </g>
+</svg>
+<div class="cap" id="cap">Day 0. The feature ships.</div>
+<button id="rb">reset</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+var prefersReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,prefersReduce?0:ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function ease(t){return 1-Math.pow(1-t,3);}
+
+// Chart: x maps day [0..7] → [120..505]; y maps val [0..100] → [310..90]
+var chartX=function(d){return 120+(d/7)*385;};
+var chartY=function(v){return 310-(v/100)*220;};
+
+// Data points (day, value)
+var DATA=[
+  {d:0,v:5},{d:1,v:62},{d:2,v:74},{d:3,v:78},{d:4,v:79},{d:5,v:78},{d:7,v:78}
+];
+
+var pts=[{d:0,v:5}];
+function setPts(){
+  var s=pts.map(function(p){return chartX(p.d).toFixed(1)+','+chartY(p.v).toFixed(1);}).join(' ');
+  document.getElementById('line').setAttribute('points',s);
+  var last=pts[pts.length-1];
+  document.getElementById('dot').setAttribute('cx',chartX(last.d));
+  document.getElementById('dot').setAttribute('cy',chartY(last.v));
+}
+function animSeg(fromD,fromV,toD,toV,dur,cb){
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1),e=ease(t);
+    var d=fromD+(toD-fromD)*e,v=fromV+(toV-fromV)*e;
+    var arr=pts.slice();arr.push({d:d,v:v});
+    var str=arr.map(function(p){return chartX(p.d).toFixed(1)+','+chartY(p.v).toFixed(1);}).join(' ');
+    document.getElementById('line').setAttribute('points',str);
+    document.getElementById('dot').setAttribute('cx',chartX(d));
+    document.getElementById('dot').setAttribute('cy',chartY(v));
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+    else{pts.push({d:toD,v:toV});if(cb)cb();}
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function fadeIn(id,dur){
+  var el=document.getElementById(id);
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    el.setAttribute('opacity',String(ease(t)));
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function fadeOut(id,dur){
+  var el=document.getElementById(id);
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    el.setAttribute('opacity',String(1-ease(t)));
+    if(t<1)rafs.push(requestAnimationFrame(tick));
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function countUp(id,from,to,dur,suffix,cb){
+  var el=document.getElementById(id);
+  var s=performance.now();suffix=suffix||'';
+  function tick(now){
+    var t=Math.min((now-s)/dur,1),e=ease(t);
+    var v=from+(to-from)*e;
+    el.textContent=Math.round(v).toString()+suffix;
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+function cap(t){document.getElementById('cap').textContent=t;}
+
+function reset(){
+  pts=[{d:0,v:5}];
+  setPts();
+  ['annoClimb','annoFlat','ask','mDAU','mRet','mNPS','verdict'].forEach(function(id){document.getElementById(id).setAttribute('opacity','0');});
+  document.getElementById('vDAU').textContent='—';
+  document.getElementById('vRet').textContent='—';
+  document.getElementById('vNPS').textContent='—';
+  document.getElementById('dDAU').textContent='';
+  document.getElementById('dRet').textContent='';
+  document.getElementById('dNPS').textContent='';
+}
+
+function run(){
+  clearAll();reset();
+  cap('Day 0. The feature ships.');
+
+  // Day 1: climb to 62
+  after(900,function(){cap('Day 1: usage climbs');animSeg(0,5,1,62,800,null);});
+  after(1750,function(){fadeIn('annoClimb',400);});
+
+  // Day 2-3: continue rising slightly
+  after(2400,function(){animSeg(1,62,2,74,500,null);});
+  after(2950,function(){animSeg(2,74,3,78,500,null);});
+
+  // Day 4-7: flatlines
+  after(3700,function(){cap('Day 3: it… flatlines.');animSeg(3,78,4,79,400,null);});
+  after(4150,function(){animSeg(4,79,5,78,400,null);});
+  after(4600,function(){animSeg(5,78,7,78,800,null);});
+  after(4900,function(){fadeIn('annoFlat',400);});
+
+  // Day 7: PM asks did it work
+  after(6000,function(){cap('Day 7: the only question that matters');fadeIn('ask',500);});
+
+  // Three metrics light up
+  after(7000,function(){
+    fadeIn('mDAU',400);
+    after(200,function(){
+      countUp('vDAU',0,3420,900,null);
+      document.getElementById('dDAU').textContent='+18% ▲';
+    });
+  });
+  after(8200,function(){
+    fadeIn('mRet',400);
+    after(200,function(){
+      countUp('vRet',0,38,900,'%',null);
+      document.getElementById('dRet').textContent='-2pp ▼';
+    });
+  });
+  after(9400,function(){
+    fadeIn('mNPS',400);
+    after(200,function(){
+      countUp('vNPS',0,42,900,null);
+      document.getElementById('dNPS').textContent='flat ▬';
+    });
+  });
+
+  // Verdict
+  after(11000,function(){fadeIn('verdict',500);cap('the launch was the easy part.');});
+
+  // Loop
+  after(14500,function(){
+    fadeOut('annoClimb',400);fadeOut('annoFlat',400);fadeOut('ask',400);fadeOut('mDAU',400);fadeOut('mRet',400);fadeOut('mNPS',400);fadeOut('verdict',400);
+    after(900,run);
+  });
+}
+document.getElementById('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

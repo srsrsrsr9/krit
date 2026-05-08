@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Color and Typography Without the Cargo Cult — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Color and Typography Without the Cargo Cult</h1>
+  <p class="subtitle">Type is a hierarchy of voices; color is a system of meanings</p>
+  <p class="byline">notes by Meera ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Two design crimes happen on every junior team. The first: a designer picks 14 distinct font sizes 'because we need flexibility.' The second: an engineer pastes #FF0000 into the error toast component because Stack Overflow said red means error.</p>
+  <div class="callout"><strong>Mental model: type is a hierarchy of voices</strong><br/>Imagine your interface is a stage play. The H1 is the lead actor's line. The H2 is supporting cast. The body is dialogue. The caption is the stage direction nobody reads. **A type scale is the casting of voices for that play.** Six voices is a manageable cast; fourteen is a riot. Pick a ratio, derive the sizes, and refuse to add more without rewriting the whole script.</div>
+  
+<h2>Move 1 — Pick a ratio, derive the scale</h2>
+<ul>
+<li>A type scale is built by multiplying. Pick a base size (16px is the universal default for body text on web; the world has agreed) and a ratio.</li>
+<li>Step 1 — Set body size: 16px on web. 17 on iOS-influenced apps. Don't overthink.</li>
+<li>Step 2 — Pick the ratio: 1.25 for SaaS, 1.333 for marketing, 1.2 for dense data tools. If you can't decide, ship 1.25.</li>
+<li>Step 3 — Generate 5-6 sizes: Multiply, round to nearest pixel. Stop at 5-6; one for each H level plus body and caption.</li>
+<li>Step 4 — Name them semantically: text-display, text-h1, text-h2, text-h3, text-body, text-caption. Numbers are tempting; names survive a redesign.</li>
+<li>Step 5 — Document the line-heights: Use a separate scale for line-height: 1.5 for body, 1.3 for headings. The single biggest readability lever you have.</li>
+</ul>
+<h2>Move 2 — Tokens, not hex codes</h2>
+<ul>
+<li>Hex codes are technical debt. Every #3B82F6 you paste into a component is a future bug — when the brand changes, when dark mode lands, when accessibility fails, when a designer 'tweaks' it to #3D80F4 in one screen and forgets to update the others.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: branding the token names: Junior designers love naming tokens after the brand: `mahindra-orange`, `swiggy-red`, `paytm-blue`. It feels personal. It is also a guaranteed rebrand catastrophe. **Never name a token after a colour or a brand. Name it after the role it plays.** `interaction-default` could be navy today and saffron next year; `paytm-blue` is just a lie waiting to be found.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Pick a type-scale ratio (1.25 for SaaS) and derive 5-6 sizes. Six voices, not fourteen.</div>
+<div class="takeaway">Body text on web is 16px. Anything below 14 is hostile to anyone over 35.</div>
+<div class="takeaway">Line-height is the single biggest readability lever. 1.5 for body, 1.3 for headings.</div>
+<div class="takeaway">Hex codes are technical debt. Use semantic tokens (interaction-default, feedback-error) so rebrands cost one diff.</div>
+<div class="takeaway">Never name a token after a colour or brand. Name it after the role it plays.</div>
+  <div class="signoff">— Meera, on the bus, again</div>
+</main>
+</body>
+</html>

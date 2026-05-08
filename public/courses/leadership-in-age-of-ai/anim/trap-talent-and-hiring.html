@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap — Hire for AI fluency, not the actual job</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --accent: #F59E0B;
+    --good: #10B981;
+    --bad: #F43F5E;
+    --blue: #0EA5E9;
+    --purple: #8B5CF6;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px;
+    min-height: 1.4em;
+  }
+  .num { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-weight: 700; }
+
+  .scene { opacity: 0; }
+  .s1 { animation: s1 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s2 { animation: s2 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s3 { animation: s3 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  .s4 { animation: s4 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+
+  @keyframes s1 { 0%,18% { opacity: 1; } 22%,100% { opacity: 0; } }
+  @keyframes s2 { 0%,22% { opacity: 0; } 26%,52% { opacity: 1; } 56%,100% { opacity: 0; } }
+  @keyframes s3 { 0%,56% { opacity: 0; } 60%,76% { opacity: 1; } 80%,100% { opacity: 0; } }
+  @keyframes s4 { 0%,80% { opacity: 0; } 84%,98% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* Resumes flying through filter */
+  .resume {
+    transform-origin: center;
+    animation: fly 1.6s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes fly {
+    0% { transform: translate(-280px, 0) rotate(-4deg); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(280px, 0) rotate(4deg); opacity: 0; }
+  }
+
+  /* Counter animation */
+  .counter4700 {
+    animation: count 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes count { 0%,22% { opacity: 0; } 30%,52% { opacity: 1; } 56%,100% { opacity: 0; } }
+
+  /* Highlight pulse on buzzwords */
+  .pulse {
+    animation: pulse 2s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Day 90 calendar fills */
+  .calBar {
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: calBar 14s cubic-bezier(0.22,0.61,0.36,1) infinite;
+  }
+  @keyframes calBar {
+    0%,60% { transform: scaleX(0); }
+    72%,100% { transform: scaleX(0.05); }
+  }
+
+  .caption span { display: none; }
+  .c1 { animation: c1 14s steps(1,end) infinite; }
+  .c2 { animation: c2 14s steps(1,end) infinite; }
+  .c3 { animation: c3 14s steps(1,end) infinite; }
+  .c4 { animation: c4 14s steps(1,end) infinite; }
+  @keyframes c1 { 0%,17% { display: inline; } 18%,100% { display: none; } }
+  @keyframes c2 { 0%,21% { display: none; } 22%,52% { display: inline; } 53%,100% { display: none; } }
+  @keyframes c3 { 0%,55% { display: none; } 56%,76% { display: inline; } 77%,100% { display: none; } }
+  @keyframes c4 { 0%,79% { display: none; } 80%,99% { display: inline; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .scene { opacity: 1; }
+    .resume { opacity: 1; transform: translate(0,0); }
+    .counter4700 { opacity: 1; }
+    .caption .c1 { display: none; } .caption .c4 { display: inline; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="A job description full of AI buzzwords attracts 4700 keyword-matched applicants. The hire can recite buzzwords but can't ship in 90 days. Fix: hire for judgment plus a writing sample.">
+      <defs>
+        <pattern id="lines" patternUnits="userSpaceOnUse" width="6" height="6">
+          <line x1="0" y1="3" x2="6" y2="3" stroke="#E5E7EB" stroke-width="1"/>
+        </pattern>
+      </defs>
+
+      <!-- ============ SCENE 1: the JD ============ -->
+      <g class="scene s1">
+        <text x="380" y="60" text-anchor="middle" font-size="19" font-weight="700">The job description (drafted in 6 minutes)</text>
+
+        <g transform="translate(160,90)">
+          <rect width="440" height="320" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <!-- header -->
+          <rect x="0" y="0" width="440" height="50" rx="14" fill="#FEF3C7"/>
+          <text x="20" y="32" font-size="16" font-weight="700">Senior AI Product Engineer</text>
+          <text x="420" y="32" text-anchor="end" font-size="12" fill="var(--muted)">Full-time · Remote</text>
+
+          <text x="20" y="84" font-size="13" font-weight="600">Must have hands-on experience with:</text>
+
+          <!-- buzzword chips -->
+          <g transform="translate(20,100)">
+            <rect class="pulse" x="0" y="0" width="120" height="28" rx="14" fill="#DBEAFE" stroke="var(--blue)" stroke-width="2"/>
+            <text x="60" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">prompt engineering</text>
+
+            <rect class="pulse" x="130" y="0" width="50" height="28" rx="14" fill="#EDE9FE" stroke="var(--purple)" stroke-width="2" style="animation-delay:-0.5s"/>
+            <text x="155" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">RAG</text>
+
+            <rect class="pulse" x="190" y="0" width="100" height="28" rx="14" fill="#D1FAE5" stroke="var(--good)" stroke-width="2" style="animation-delay:-1s"/>
+            <text x="240" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">vector DBs</text>
+
+            <rect class="pulse" x="300" y="0" width="100" height="28" rx="14" fill="#FED7AA" stroke="var(--accent)" stroke-width="2" style="animation-delay:-1.5s"/>
+            <text x="350" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">fine-tuning</text>
+          </g>
+
+          <g transform="translate(20,142)">
+            <rect class="pulse" x="0" y="0" width="80" height="28" rx="14" fill="#FCE7F3" stroke="var(--bad)" stroke-width="2" style="animation-delay:-0.2s"/>
+            <text x="40" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">LangChain</text>
+
+            <rect class="pulse" x="110" y="0" width="100" height="28" rx="14" fill="#DBEAFE" stroke="var(--blue)" stroke-width="2" style="animation-delay:-0.7s"/>
+            <text x="160" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">agentic flows</text>
+
+            <rect class="pulse" x="220" y="0" width="120" height="28" rx="14" fill="#EDE9FE" stroke="var(--purple)" stroke-width="2" style="animation-delay:-1.2s"/>
+            <text x="280" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">multi-modal LLMs</text>
+
+            <rect class="pulse" x="350" y="0" width="60" height="28" rx="14" fill="#D1FAE5" stroke="var(--good)" stroke-width="2" style="animation-delay:-1.7s"/>
+            <text x="380" y="19" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">MoE</text>
+          </g>
+
+          <text x="20" y="208" font-size="13" font-weight="600">Nice to have:</text>
+          <line x1="20" y1="220" x2="380" y2="220" stroke="var(--line)" stroke-width="2"/>
+          <line x1="20" y1="240" x2="320" y2="240" stroke="var(--line)" stroke-width="2"/>
+          <line x1="20" y1="260" x2="360" y2="260" stroke="var(--line)" stroke-width="2"/>
+
+          <text x="20" y="296" font-size="12" font-style="italic" fill="var(--muted)">[ no mention of: shipping, judgment, writing, debugging ]</text>
+        </g>
+      </g>
+
+      <!-- ============ SCENE 2: the funnel — 4700 applicants ============ -->
+      <g class="scene s2">
+        <text x="380" y="55" text-anchor="middle" font-size="19" font-weight="700">The funnel: keyword-matching all the way down</text>
+
+        <!-- Resume stack feeding from left -->
+        <g transform="translate(60,180)">
+          <rect class="resume" x="0" y="-20" width="50" height="60" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+          <line class="resume" x1="6" y1="-10" x2="44" y2="-10" stroke="var(--line)" stroke-width="2"/>
+          <line class="resume" x1="6" y1="0" x2="38" y2="0" stroke="var(--line)" stroke-width="2"/>
+          <line class="resume" x1="6" y1="10" x2="44" y2="10" stroke="var(--line)" stroke-width="2"/>
+        </g>
+
+        <g transform="translate(60,180)" style="animation-delay:-0.4s">
+          <rect class="resume" x="0" y="-20" width="50" height="60" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2" style="animation-delay:-0.4s"/>
+        </g>
+        <g transform="translate(60,180)" style="animation-delay:-0.8s">
+          <rect class="resume" x="0" y="-20" width="50" height="60" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2" style="animation-delay:-0.8s"/>
+        </g>
+        <g transform="translate(60,180)" style="animation-delay:-1.2s">
+          <rect class="resume" x="0" y="-20" width="50" height="60" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2" style="animation-delay:-1.2s"/>
+        </g>
+
+        <!-- ATS filter machine -->
+        <g transform="translate(290,140)">
+          <rect width="180" height="120" rx="14" fill="#FEF3C7" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="90" y="34" text-anchor="middle" font-size="13" font-weight="700">ATS keyword filter</text>
+          <!-- magnifier -->
+          <circle cx="65" cy="76" r="20" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <line x1="80" y1="91" x2="100" y2="111" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+          <text x="65" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="var(--accent)">RAG</text>
+          <text x="135" y="76" font-size="10" fill="var(--muted)">match score</text>
+          <text x="135" y="92" font-size="14" class="num" fill="var(--good)">0.94</text>
+        </g>
+
+        <!-- output: shortlist -->
+        <g transform="translate(560,180)">
+          <rect x="0" y="-20" width="50" height="60" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="6" y="-14" width="38" height="6" rx="2" fill="var(--accent)"/>
+          <text x="25" y="55" text-anchor="middle" font-size="11" fill="var(--muted)">shortlist</text>
+        </g>
+
+        <!-- counter -->
+        <g class="counter4700" transform="translate(380,340)">
+          <text x="0" y="0" text-anchor="middle" font-size="14" fill="var(--muted)">Applicants who matched all keywords</text>
+          <text x="0" y="40" text-anchor="middle" font-size="44" class="num" fill="var(--bad)">4,700</text>
+          <text x="0" y="68" text-anchor="middle" font-size="12" fill="var(--muted)">none of them have shipped your kind of product</text>
+        </g>
+      </g>
+
+      <!-- ============ SCENE 3: the hire — 90 days ============ -->
+      <g class="scene s3">
+        <text x="380" y="55" text-anchor="middle" font-size="19" font-weight="700">The hire is technically perfect on paper.</text>
+
+        <!-- the candidate -->
+        <g transform="translate(140,150)">
+          <ellipse cx="0" cy="120" rx="40" ry="8" fill="#FECACA"/>
+          <rect x="-30" y="50" width="60" height="70" rx="14" fill="var(--blue)" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="0" cy="30" r="26" fill="#FED7AA" stroke="var(--ink)" stroke-width="2.5"/>
+          <circle cx="-9" cy="26" r="2.5" fill="var(--ink)"/>
+          <circle cx="9" cy="26" r="2.5" fill="var(--ink)"/>
+          <path d="M-7 38 Q0 42 7 38" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <text x="0" y="155" text-anchor="middle" font-size="12" font-weight="600">23 · "AI native"</text>
+        </g>
+
+        <!-- speech bubble: buzzwords -->
+        <g transform="translate(220,90)">
+          <rect width="220" height="100" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <path d="M0 60 L-22 75 L8 80 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width="2.5"/>
+          <text x="110" y="32" text-anchor="middle" font-size="12" fill="var(--ink)">"It's basically a tree of</text>
+          <text x="110" y="50" text-anchor="middle" font-size="12" fill="var(--ink)">RAG-augmented agents</text>
+          <text x="110" y="68" text-anchor="middle" font-size="12" fill="var(--ink)">with reflexive memory</text>
+          <text x="110" y="86" text-anchor="middle" font-size="12" fill="var(--ink)">across modalities..."</text>
+        </g>
+
+        <!-- 90-day calendar -->
+        <g transform="translate(480,90)">
+          <text x="100" y="0" text-anchor="middle" font-size="13" font-weight="600">First 90 days · feature shipped</text>
+          <rect x="0" y="14" width="200" height="40" rx="8" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+          <rect class="calBar" x="0" y="14" width="200" height="40" rx="8" fill="var(--bad)"/>
+          <text x="100" y="40" text-anchor="middle" font-size="14" class="num" fill="var(--ink)">0 features</text>
+
+          <text x="100" y="92" text-anchor="middle" font-size="12" fill="var(--muted)">Lots of meetings about meetings</text>
+          <text x="100" y="110" text-anchor="middle" font-size="12" fill="var(--muted)">about how to architect the agent</text>
+        </g>
+
+        <!-- floor -->
+        <line x1="80" y1="290" x2="680" y2="290" stroke="var(--ink)" stroke-width="2"/>
+
+        <text x="380" y="350" text-anchor="middle" font-size="13" font-style="italic" fill="var(--muted)">Buzzwords are cheap. Shipping isn't.</text>
+      </g>
+
+      <!-- ============ SCENE 4: the fix ============ -->
+      <g class="scene s4">
+        <text x="380" y="55" text-anchor="middle" font-size="19" font-weight="700">Hire for judgment — and ask for a writing sample.</text>
+
+        <!-- before/after split -->
+        <g transform="translate(70,100)">
+          <text x="0" y="0" font-size="13" font-weight="700" fill="var(--bad)">BEFORE — keyword JD</text>
+          <rect width="290" height="240" rx="12" fill="var(--paper)" stroke="var(--bad)" stroke-width="2.5"/>
+          <text x="20" y="40" font-size="13" font-weight="600">Required:</text>
+          <text x="20" y="62" font-size="12" fill="var(--muted)">• Prompt eng., RAG, vector DBs</text>
+          <text x="20" y="82" font-size="12" fill="var(--muted)">• Fine-tuning, LangChain, agents</text>
+          <text x="20" y="102" font-size="12" fill="var(--muted)">• 5+ years ML, PhD preferred</text>
+          <text x="20" y="124" font-size="13" font-weight="600">Screen:</text>
+          <text x="20" y="146" font-size="12" fill="var(--muted)">• Resume keyword match</text>
+          <text x="20" y="166" font-size="12" fill="var(--muted)">• Whiteboard transformer math</text>
+          <text x="20" y="200" font-size="12" font-style="italic" fill="var(--bad)">Outcome: hires reciters, not shippers.</text>
+        </g>
+
+        <!-- arrow -->
+        <g transform="translate(370,200)">
+          <path d="M0 20 L40 20 M30 10 L40 20 L30 30" stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <g transform="translate(420,100)">
+          <text x="0" y="0" font-size="13" font-weight="700" fill="var(--good)">AFTER — judgment JD</text>
+          <rect width="290" height="240" rx="12" fill="var(--paper)" stroke="var(--good)" stroke-width="2.5"/>
+          <text x="20" y="40" font-size="13" font-weight="600">Required:</text>
+          <text x="20" y="62" font-size="12" fill="var(--muted)">• Has shipped a real product</text>
+          <text x="20" y="82" font-size="12" fill="var(--muted)">• Writes clearly under uncertainty</text>
+          <text x="20" y="102" font-size="12" fill="var(--muted)">• Knows when not to use AI</text>
+          <text x="20" y="124" font-size="13" font-weight="600">Screen:</text>
+          <text x="20" y="146" font-size="12" fill="var(--muted)">• 1-page memo on a real problem</text>
+          <text x="20" y="166" font-size="12" fill="var(--muted)">• Pair-debug a half-broken repo</text>
+          <text x="20" y="200" font-size="12" font-style="italic" fill="var(--good)">Outcome: smaller pool. Better hires.</text>
+        </g>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <span class="c1">A JD that reads like a vendor catalogue.</span>
+      <span class="c2">4,700 keyword-matched applicants. The filter loved it.</span>
+      <span class="c3">90 days in: zero shipped. Fluent in jargon, not delivery.</span>
+      <span class="c4">Hire for judgment. Read what they write. Watch them ship.</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

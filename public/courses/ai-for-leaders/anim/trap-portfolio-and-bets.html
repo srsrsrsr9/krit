@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: all-in on one flagship feature</title>
+<style>
+  :root {
+    --bg: #EFF6FF;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --accent: #0EA5E9;
+    --bad: #F43F5E;
+    --good: #10B981;
+    --warm: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .frame-wrap { width:100%; max-width:780px; }
+  .frame { width:100%; aspect-ratio: 16/10; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; padding:0 12px; }
+  .num { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    .anim, .anim * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame-wrap">
+    <svg class="frame anim" viewBox="0 0 780 488" aria-label="Animation: betting four crores on one AI feature versus splitting into a three-bet portfolio. The single bet collapses; in the portfolio, two bets fail safely while one succeeds enough to fund the next round." role="img">
+      <defs>
+        <linearGradient id="ts" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#FBA74A"/><stop offset="1" stop-color="#F59E0B"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Title strip -->
+      <text x="40" y="42" font-size="13" font-weight="700" fill="#0369A1" letter-spacing="1.5">SCENE 1 — ALL-IN ON ONE BET</text>
+      <text x="430" y="42" font-size="13" font-weight="700" fill="#065F46" letter-spacing="1.5">SCENE 2 — A 3-BET PORTFOLIO</text>
+
+      <!-- ============ LEFT: single bet ============ -->
+      <g>
+        <!-- table base -->
+        <rect x="40" y="350" width="320" height="6" rx="3" fill="#BFDBFE"/>
+
+        <!-- the giant chip stack labelled ₹4 cr -->
+        <g style="animation: stackShake 9s cubic-bezier(0.22,0.61,0.36,1) infinite;">
+          <!-- coins -->
+          <g>
+            <ellipse cx="200" cy="346" rx="62" ry="10" fill="#B45309"/>
+            <rect x="138" y="324" width="124" height="22" fill="url(#ts)"/>
+            <ellipse cx="200" cy="324" rx="62" ry="10" fill="#FBBF24"/>
+          </g>
+          <g>
+            <ellipse cx="200" cy="316" rx="58" ry="9" fill="#B45309"/>
+            <rect x="142" y="296" width="116" height="20" fill="url(#ts)"/>
+            <ellipse cx="200" cy="296" rx="58" ry="9" fill="#FBBF24"/>
+          </g>
+          <g>
+            <ellipse cx="200" cy="288" rx="52" ry="8" fill="#B45309"/>
+            <rect x="148" y="270" width="104" height="18" fill="url(#ts)"/>
+            <ellipse cx="200" cy="270" rx="52" ry="8" fill="#FBBF24"/>
+          </g>
+          <g>
+            <ellipse cx="200" cy="262" rx="46" ry="7" fill="#B45309"/>
+            <rect x="154" y="246" width="92" height="16" fill="url(#ts)"/>
+            <ellipse cx="200" cy="246" rx="46" ry="7" fill="#FBBF24"/>
+          </g>
+          <g>
+            <ellipse cx="200" cy="240" rx="40" ry="6" fill="#B45309"/>
+            <rect x="160" y="226" width="80" height="14" fill="url(#ts)"/>
+            <ellipse cx="200" cy="226" rx="40" ry="6" fill="#FBBF24"/>
+          </g>
+          <text x="200" y="288" text-anchor="middle" font-size="14" font-weight="700" fill="#1F2937" class="num">4 cr</text>
+        </g>
+        <text x="200" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#0369A1">"OUR AI AGENT WILL REPLACE SUPPORT"</text>
+        <text x="200" y="216" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">the only bet</text>
+
+        <!-- Crash: stack tilts and tumbles -->
+        <g style="animation: stackFall 9s cubic-bezier(0.22,0.61,0.36,1) infinite;">
+          <!-- this group rides on top of the stack visually after fall -->
+        </g>
+
+        <!-- Tumbled coins on the floor -->
+        <g style="animation: rubbleAppear 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <ellipse cx="80"  cy="372" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+          <ellipse cx="120" cy="378" rx="20" ry="5.5" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+          <ellipse cx="160" cy="372" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+          <ellipse cx="240" cy="372" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+          <ellipse cx="280" cy="378" rx="20" ry="5.5" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+          <ellipse cx="320" cy="372" rx="22" ry="6" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+        </g>
+
+        <!-- Verdict for left -->
+        <g style="animation: leftVerdict 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <rect x="60" y="400" width="280" height="46" rx="10" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+          <circle cx="84" cy="423" r="12" fill="#F43F5E"/>
+          <path d="M79,418 l10,10 M89,418 l-10,10" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+          <text x="200" y="420" text-anchor="middle" font-size="12" font-weight="700" fill="#B91C1C">NOTHING TO FALL BACK ON</text>
+          <text x="200" y="436" text-anchor="middle" font-size="11" fill="#1F2937">one bet, one outcome — the org is exposed</text>
+        </g>
+      </g>
+
+      <!-- divider -->
+      <line x1="380" y1="80" x2="380" y2="420" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="4 5"/>
+
+      <!-- ============ RIGHT: 3-bet portfolio ============ -->
+      <g>
+        <!-- shelf -->
+        <rect x="420" y="350" width="320" height="6" rx="3" fill="#A7F3D0"/>
+
+        <!-- 3 buckets, each ~1.3cr -->
+        <!-- BET A — fail safely -->
+        <g>
+          <rect x="436" y="240" width="80" height="110" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="476" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">BET A</text>
+          <text x="476" y="368" text-anchor="middle" font-size="10" fill="#6B7280" class="num">~1.3 cr</text>
+          <!-- fill -->
+          <rect x="440" y="262" width="72" height="86" rx="6" fill="#FEF3C7"/>
+          <!-- "killed early" stamp -->
+          <g style="animation: betAfail 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+            <rect x="440" y="262" width="72" height="86" rx="6" fill="#FEE2E2" opacity="0.85"/>
+            <line x1="446" y1="268" x2="510" y2="344" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+            <line x1="510" y1="268" x2="446" y2="344" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+            <text x="476" y="312" text-anchor="middle" font-size="10" font-weight="700" fill="#B91C1C">killed</text>
+            <text x="476" y="324" text-anchor="middle" font-size="10" font-weight="700" fill="#B91C1C">early</text>
+          </g>
+        </g>
+
+        <!-- BET B — fail safely -->
+        <g>
+          <rect x="540" y="240" width="80" height="110" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="580" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">BET B</text>
+          <text x="580" y="368" text-anchor="middle" font-size="10" fill="#6B7280" class="num">~1.3 cr</text>
+          <rect x="544" y="262" width="72" height="86" rx="6" fill="#FEF3C7"/>
+          <g style="animation: betBfail 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+            <rect x="544" y="262" width="72" height="86" rx="6" fill="#FEE2E2" opacity="0.85"/>
+            <line x1="550" y1="268" x2="614" y2="344" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+            <line x1="614" y1="268" x2="550" y2="344" stroke="#F43F5E" stroke-width="2" stroke-linecap="round"/>
+            <text x="580" y="312" text-anchor="middle" font-size="10" font-weight="700" fill="#B91C1C">killed</text>
+            <text x="580" y="324" text-anchor="middle" font-size="10" font-weight="700" fill="#B91C1C">early</text>
+          </g>
+        </g>
+
+        <!-- BET C — succeed -->
+        <g>
+          <rect x="644" y="240" width="80" height="110" rx="10" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+          <text x="684" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">BET C</text>
+          <text x="684" y="368" text-anchor="middle" font-size="10" fill="#6B7280" class="num">~1.3 cr</text>
+          <rect x="648" y="262" width="72" height="86" rx="6" fill="#FEF3C7"/>
+          <!-- growth fill -->
+          <g style="animation: betCwin 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+            <rect x="648" y="262" width="72" height="86" rx="6" fill="#A7F3D0" opacity="0.95"/>
+            <polyline points="654,338 668,318 684,300 700,280 716,266"
+                      fill="none" stroke="#065F46" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="684" y="316" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46">wins</text>
+          </g>
+        </g>
+
+        <!-- arrow: returns fund next round -->
+        <g style="animation: nextRound 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <path d="M684 220 C 684 196, 600 196, 580 196 L 460 196" stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="3 4"/>
+          <polyline points="466,192 460,196 466,200" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="572" y="186" text-anchor="middle" font-size="11" fill="#065F46" font-weight="700">funds next round</text>
+        </g>
+
+        <!-- Verdict for right -->
+        <g style="animation: rightVerdict 9s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <rect x="436" y="400" width="288" height="46" rx="10" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1.5"/>
+          <circle cx="460" cy="423" r="12" fill="#10B981"/>
+          <path d="M453,423 l5,5 l10,-10" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="580" y="420" text-anchor="middle" font-size="12" font-weight="700" fill="#065F46">2 / 3 FAIL — AND THAT'S FINE</text>
+          <text x="580" y="436" text-anchor="middle" font-size="11" fill="#1F2937">one win is enough; survival is preserved</text>
+        </g>
+      </g>
+
+      <style>
+        @keyframes stackShake {
+          0%,30%   { transform: translateX(0) rotate(0deg); }
+          34%      { transform: translateX(-2px) rotate(-1.2deg); }
+          37%      { transform: translateX(2px) rotate(1.2deg); }
+          40%      { transform: translateX(-3px) rotate(-2deg); }
+          44%      { transform: translateX(0) rotate(0deg); }
+          48%      { opacity: 1; }
+          52%      { opacity: 0; transform: translateY(20px) rotate(8deg); }
+          100%     { opacity: 0; transform: translateY(20px) rotate(8deg); }
+        }
+        @keyframes rubbleAppear {
+          0%,48%   { opacity: 0; }
+          54%,100% { opacity: 1; }
+        }
+        @keyframes leftVerdict {
+          0%,55%   { opacity: 0; transform: translateY(6px); }
+          62%,100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes betAfail {
+          0%,40%   { opacity: 0; }
+          50%,100% { opacity: 1; }
+        }
+        @keyframes betBfail {
+          0%,52%   { opacity: 0; }
+          62%,100% { opacity: 1; }
+        }
+        @keyframes betCwin {
+          0%,64%   { opacity: 0; }
+          74%,100% { opacity: 1; }
+        }
+        @keyframes nextRound {
+          0%,76%   { opacity: 0; }
+          86%,100% { opacity: 1; }
+        }
+        @keyframes rightVerdict {
+          0%,80%   { opacity: 0; transform: translateY(6px); }
+          90%,100% { opacity: 1; transform: translateY(0); }
+        }
+      </style>
+    </svg>
+    <div class="caption">One big bet looks bold — until it fails. Three smaller bets bake in survival; you only need one to work.</div>
+  </div>
+</main>
+</body>
+</html>

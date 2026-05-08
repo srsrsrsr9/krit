@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude as teammate — parallel fanout</title>
+<style>
+  :root{--bg:#FEF3C7;--ink:#1F2937;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:780px}
+  svg{width:100%;height:auto;display:block}
+  #rb{position:absolute;bottom:-4px;right:8px;background:#1F2937;color:#FEF3C7;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+  #rb:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  .stp{opacity:0}
+  @keyframes pulse{0%,100%{r:34}50%{r:38}}
+  .pulse{animation:pulse 1.6s ease-in-out infinite}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg viewBox="0 0 780 510" aria-label="A main agent at the top spawns four subagents in parallel. Each does a small bounded task. Their results return and merge into a final assembled output.">
+      <rect width="780" height="510" fill="#FEF3C7"/>
+      <text x="390" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Parallel fanout: one main, four subs, one result.</text>
+
+      <!-- Main agent at top -->
+      <g id="main" class="stp">
+        <circle cx="390" cy="80" r="34" fill="#1F2937"/>
+        <text x="390" y="76" text-anchor="middle" font-size="12" font-weight="700" fill="#FBBF24" font-family="ui-monospace,monospace">main</text>
+        <text x="390" y="92" text-anchor="middle" font-size="9" fill="#D1D5DB">orchestrator</text>
+      </g>
+
+      <!-- Task statement -->
+      <g id="task" class="stp">
+        <rect x="280" y="128" width="220" height="32" rx="8" fill="#fff" stroke="#1F2937" stroke-width="1.6"/>
+        <text x="390" y="148" text-anchor="middle" font-size="11" fill="#1F2937" font-family="ui-monospace,monospace">"draft the launch checklist"</text>
+      </g>
+
+      <!-- 4 fanout lines -->
+      <g id="fan" class="stp">
+        <path d="M390,114 L130,210"  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M390,114 L300,210"  stroke="#10B981" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M390,114 L480,210"  stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M390,114 L650,210"  stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Subagent 1 (amber) -->
+      <g id="s1" class="stp">
+        <circle cx="130" cy="240" r="30" fill="#fff" stroke="#F59E0B" stroke-width="3"/>
+        <text x="130" y="237" text-anchor="middle" font-size="10" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">sub · 1</text>
+        <text x="130" y="252" text-anchor="middle" font-size="8.5" fill="#92400E">copy</text>
+        <rect x="60" y="282" width="140" height="76" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="130" y="300" text-anchor="middle" font-size="10" font-weight="700" fill="#92400E">draft headline copy</text>
+        <text x="130" y="316" text-anchor="middle" font-size="9" fill="#374151">3 variants, 60 chars</text>
+        <text x="130" y="334" text-anchor="middle" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">~6 min</text>
+        <rect id="b1" x="74" y="346" width="0" height="6" rx="3" fill="#F59E0B"/>
+        <rect x="74" y="346" width="112" height="6" rx="3" fill="none" stroke="#F59E0B" stroke-width="1"/>
+      </g>
+
+      <!-- Subagent 2 (green) -->
+      <g id="s2" class="stp">
+        <circle cx="300" cy="240" r="30" fill="#fff" stroke="#10B981" stroke-width="3"/>
+        <text x="300" y="237" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">sub · 2</text>
+        <text x="300" y="252" text-anchor="middle" font-size="8.5" fill="#065F46">data</text>
+        <rect x="230" y="282" width="140" height="76" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+        <text x="300" y="300" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">pull last week's signups</text>
+        <text x="300" y="316" text-anchor="middle" font-size="9" fill="#374151">SQL → top-5 cohorts</text>
+        <text x="300" y="334" text-anchor="middle" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">~4 min</text>
+        <rect id="b2" x="244" y="346" width="0" height="6" rx="3" fill="#10B981"/>
+        <rect x="244" y="346" width="112" height="6" rx="3" fill="none" stroke="#10B981" stroke-width="1"/>
+      </g>
+
+      <!-- Subagent 3 (blue) -->
+      <g id="s3" class="stp">
+        <circle cx="480" cy="240" r="30" fill="#fff" stroke="#0EA5E9" stroke-width="3"/>
+        <text x="480" y="237" text-anchor="middle" font-size="10" font-weight="700" fill="#075985" font-family="ui-monospace,monospace">sub · 3</text>
+        <text x="480" y="252" text-anchor="middle" font-size="8.5" fill="#075985">qa</text>
+        <rect x="410" y="282" width="140" height="76" rx="8" fill="#EFF6FF" stroke="#0EA5E9" stroke-width="1.5"/>
+        <text x="480" y="300" text-anchor="middle" font-size="10" font-weight="700" fill="#075985">smoke-test the staging build</text>
+        <text x="480" y="316" text-anchor="middle" font-size="9" fill="#374151">4 critical paths</text>
+        <text x="480" y="334" text-anchor="middle" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">~9 min</text>
+        <rect id="b3" x="424" y="346" width="0" height="6" rx="3" fill="#0EA5E9"/>
+        <rect x="424" y="346" width="112" height="6" rx="3" fill="none" stroke="#0EA5E9" stroke-width="1"/>
+      </g>
+
+      <!-- Subagent 4 (purple) -->
+      <g id="s4" class="stp">
+        <circle cx="650" cy="240" r="30" fill="#fff" stroke="#8B5CF6" stroke-width="3"/>
+        <text x="650" y="237" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6" font-family="ui-monospace,monospace">sub · 4</text>
+        <text x="650" y="252" text-anchor="middle" font-size="8.5" fill="#5B21B6">comms</text>
+        <rect x="580" y="282" width="140" height="76" rx="8" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="1.5"/>
+        <text x="650" y="300" text-anchor="middle" font-size="10" font-weight="700" fill="#5B21B6">draft the launch tweet</text>
+        <text x="650" y="316" text-anchor="middle" font-size="9" fill="#374151">280 chars + thread</text>
+        <text x="650" y="334" text-anchor="middle" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">~5 min</text>
+        <rect id="b4" x="594" y="346" width="0" height="6" rx="3" fill="#8B5CF6"/>
+        <rect x="594" y="346" width="112" height="6" rx="3" fill="none" stroke="#8B5CF6" stroke-width="1"/>
+      </g>
+
+      <!-- Return arrows -->
+      <g id="r1" class="stp"><path d="M130,358 Q130,400 320,420" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" fill="none" marker-end="url(#mA)"/></g>
+      <g id="r2" class="stp"><path d="M300,358 Q300,395 360,418" stroke="#10B981" stroke-width="2" stroke-linecap="round" fill="none" marker-end="url(#mG)"/></g>
+      <g id="r3" class="stp"><path d="M480,358 Q480,395 420,418" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" fill="none" marker-end="url(#mB)"/></g>
+      <g id="r4" class="stp"><path d="M650,358 Q650,400 460,420" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" fill="none" marker-end="url(#mP)"/></g>
+
+      <!-- Assembled output -->
+      <g id="merge" class="stp">
+        <rect x="280" y="424" width="220" height="58" rx="10" fill="#1F2937"/>
+        <text x="390" y="445" text-anchor="middle" font-size="12" font-weight="700" fill="#FBBF24">launch checklist v1</text>
+        <text x="390" y="464" text-anchor="middle" font-size="10" fill="#D1D5DB">copy + data + qa + comms — assembled by main</text>
+        <g transform="translate(485,440)"><circle r="11" fill="#10B981"/><path d="M-5,0 l3,3 l7,-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g>
+
+      <!-- Annotation: parallel -->
+      <text x="390" y="184" text-anchor="middle" font-size="10.5" fill="#92400E" font-style="italic">4 streams launch in parallel — each bounded ~5–10 min</text>
+      <text x="390" y="498" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">Subagents return summaries. Main never sees their full transcripts.</text>
+
+      <defs>
+        <marker id="mA" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F59E0B"/></marker>
+        <marker id="mG" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
+        <marker id="mB" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#0EA5E9"/></marker>
+        <marker id="mP" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#8B5CF6"/></marker>
+      </defs>
+    </svg>
+    <button id="rb">↺ reset</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timers=[];
+  function clearAll(){timers.forEach(clearTimeout);timers=[];}
+  function fade(id,dur,target){
+    const el=document.getElementById(id);if(!el)return;
+    const start=performance.now();const from=parseFloat(el.style.opacity||0);
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.style.opacity=String(from+(target-from)*e);
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function bar(id,toW,dur){
+    const el=document.getElementById(id);if(!el)return;
+    const start=performance.now();
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.setAttribute('width',String(toW*e));
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function reset(){
+    clearAll();
+    ['main','task','fan','s1','s2','s3','s4','r1','r2','r3','r4','merge'].forEach(id=>document.getElementById(id).style.opacity='0');
+    ['b1','b2','b3','b4'].forEach(id=>document.getElementById(id).setAttribute('width','0'));
+    if(reduced){
+      ['main','task','fan','s1','s2','s3','s4','r1','r2','r3','r4','merge'].forEach(id=>document.getElementById(id).style.opacity='1');
+      ['b1','b2','b3','b4'].forEach(id=>document.getElementById(id).setAttribute('width','112'));
+      return;
+    }
+    run();
+  }
+  function run(){
+    timers.push(setTimeout(()=>fade('main',400,1),200));
+    timers.push(setTimeout(()=>fade('task',400,1),900));
+    timers.push(setTimeout(()=>fade('fan',500,1),1700));
+    // subs appear together — parallel
+    timers.push(setTimeout(()=>{['s1','s2','s3','s4'].forEach(id=>fade(id,400,1));},2400));
+    // bars fill at slightly different speeds, all in parallel
+    timers.push(setTimeout(()=>{
+      bar('b1',112,3600);
+      bar('b2',112,2600);
+      bar('b3',112,4400);
+      bar('b4',112,3000);
+    },3100));
+    // returns staggered as each completes
+    timers.push(setTimeout(()=>fade('r2',300,1),5800));
+    timers.push(setTimeout(()=>fade('r4',300,1),6300));
+    timers.push(setTimeout(()=>fade('r1',300,1),6900));
+    timers.push(setTimeout(()=>fade('r3',300,1),7700));
+    timers.push(setTimeout(()=>fade('merge',500,1),8200));
+    timers.push(setTimeout(reset,13000));
+  }
+  document.getElementById('rb').addEventListener('click',reset);
+  reset();
+})();
+</script>
+</body>
+</html>

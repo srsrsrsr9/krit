@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: skip the critique</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.t1{animation:fade .4s ease .2s both}
+.t2{animation:fade .4s ease 2s both}
+.t3{animation:fade .4s ease 3.5s both}
+.tickets{animation:fade .4s ease 5s both}
+.r1{animation:pop .35s ease 6s both}
+.r2{animation:pop .35s ease 7s both}
+.r3{animation:pop .35s ease 8s both}
+.tally{animation:pop .5s ease 9s both,pulse 1.2s ease 9.5s 2 both;transform-origin:center}
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A designer skipping critique and shipping a launch that requires three emergency redesigns">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- TIMELINE -->
+<line x1="60" y1="100" x2="660" y2="100" stroke="#9A3412" stroke-width="3"/>
+
+<!-- Designer pushes back -->
+<g class="t1">
+<circle cx="120" cy="100" r="14" fill="#F59E0B" stroke="#92400E" stroke-width="2"/>
+<text x="120" y="80" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">"no time for critique"</text>
+<g transform="translate(60 130)">
+<rect width="140" height="44" rx="6" fill="#FCD34D"/>
+<text x="70" y="20" text-anchor="middle" font-size="10" fill="#7C2D12" font-weight="bold">designer pushes back</text>
+<text x="70" y="36" text-anchor="middle" font-size="9" fill="#7C2D12">"we have to ship Friday"</text>
+</g>
+</g>
+
+<!-- Day 0: launch -->
+<g class="t2">
+<circle cx="280" cy="100" r="14" fill="#10B981" stroke="#065F46" stroke-width="2"/>
+<text x="280" y="80" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 0 · Launch 🎉</text>
+<g transform="translate(220 130)">
+<rect width="140" height="44" rx="6" fill="#A7F3D0"/>
+<text x="70" y="20" text-anchor="middle" font-size="10" fill="#065F46" font-weight="bold">v1 ships</text>
+<text x="70" y="36" text-anchor="middle" font-size="9" fill="#065F46">applause; tweet pinned</text>
+</g>
+</g>
+
+<!-- Day 3: tickets -->
+<g class="t3">
+<circle cx="440" cy="100" r="14" fill="#F59E0B" stroke="#92400E" stroke-width="2"/>
+<text x="440" y="80" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 3 · 47 tickets</text>
+</g>
+<g class="tickets" transform="translate(380 130)">
+<rect width="140" height="44" rx="6" fill="#FED7AA"/>
+<text x="70" y="20" text-anchor="middle" font-size="10" fill="#7C2D12" font-weight="bold">customer support</text>
+<text x="70" y="36" text-anchor="middle" font-size="9" fill="#7C2D12">"where's the save button?"</text>
+</g>
+
+<!-- Day 7: emergency redesign -->
+<g class="r1">
+<circle cx="600" cy="100" r="18" fill="#F43F5E" stroke="#7F1D1D" stroke-width="3"/>
+<text x="600" y="105" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">×3</text>
+<text x="600" y="80" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 7-21</text>
+</g>
+
+<!-- Three redesign cards -->
+<g transform="translate(540 130)">
+<g class="r1">
+<rect width="120" height="40" rx="6" fill="#FECACA" stroke="#7F1D1D"/>
+<text x="60" y="18" text-anchor="middle" font-size="10" fill="#7F1D1D" font-weight="bold">Redesign #1</text>
+<text x="60" y="32" text-anchor="middle" font-size="9" fill="#7F1D1D">primary CTA hidden</text>
+</g>
+<g class="r2" transform="translate(0 50)">
+<rect width="120" height="40" rx="6" fill="#FECACA" stroke="#7F1D1D"/>
+<text x="60" y="18" text-anchor="middle" font-size="10" fill="#7F1D1D" font-weight="bold">Redesign #2</text>
+<text x="60" y="32" text-anchor="middle" font-size="9" fill="#7F1D1D">empty state missing</text>
+</g>
+<g class="r3" transform="translate(0 100)">
+<rect width="120" height="40" rx="6" fill="#FECACA" stroke="#7F1D1D"/>
+<text x="60" y="18" text-anchor="middle" font-size="10" fill="#7F1D1D" font-weight="bold">Redesign #3</text>
+<text x="60" y="32" text-anchor="middle" font-size="9" fill="#7F1D1D">error copy alarming</text>
+</g>
+</g>
+
+<!-- TALLY -->
+<g class="tally" transform="translate(60 290)">
+<rect width="420" height="100" rx="10" fill="#1F2937"/>
+<text x="210" y="28" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">Total cost of skipping critique:</text>
+<text x="210" y="58" text-anchor="middle" font-size="22" fill="#FCA5A5" font-weight="bold">3 redesigns + 47 support tickets</text>
+<text x="210" y="80" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">+ designer credibility — silently spent</text>
+</g>
+
+<g transform="translate(500 290)">
+<rect width="180" height="100" rx="10" fill="#065F46"/>
+<text x="90" y="28" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">Cost of critique:</text>
+<text x="90" y="58" text-anchor="middle" font-size="22" fill="#fff" font-weight="bold">90 minutes</text>
+<text x="90" y="80" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">would have caught all three</text>
+</g>
+</svg>
+<div class="caption">Critique is the second design step, not the last. Shipping without it is the most expensive shortcut.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

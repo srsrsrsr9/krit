@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI strategy mental model</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--accent:#F59E0B;--good:#10B981;--blue:#0EA5E9;--purple:#8B5CF6}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:760px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-family:inherit}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes shiftCost{0%,18%{stroke-dashoffset:600}38%,100%{stroke-dashoffset:0}}
+@keyframes shiftCap{0%,38%{stroke-dashoffset:600}58%,100%{stroke-dashoffset:0}}
+@keyframes glow{0%,60%{opacity:0;transform:scale(.7)}80%,100%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}.curve-cost,.curve-cap{stroke-dashoffset:0 !important}}
+.label-axis{animation:fade .4s cubic-bezier(0.22,0.61,0.36,1) .2s both}
+.curve-old-cost{animation:fade .5s cubic-bezier(0.22,0.61,0.36,1) .4s both}
+.curve-old-cap{animation:fade .5s cubic-bezier(0.22,0.61,0.36,1) .6s both}
+.curve-cost{stroke-dasharray:600;stroke-dashoffset:600;animation:shiftCost 9s cubic-bezier(0.22,0.61,0.36,1) infinite}
+.curve-cap{stroke-dasharray:600;stroke-dashoffset:600;animation:shiftCap 9s cubic-bezier(0.22,0.61,0.36,1) infinite}
+.tag-cost{animation:drop .5s cubic-bezier(0.22,0.61,0.36,1) 2s both}
+.tag-cap{animation:drop .5s cubic-bezier(0.22,0.61,0.36,1) 4s both}
+.zone{animation:glow 9s cubic-bezier(0.22,0.61,0.36,1) infinite}
+.zone-label{animation:pop .5s cubic-bezier(0.22,0.61,0.36,1) 5.6s both}
+.foot{animation:fade .6s cubic-bezier(0.22,0.61,0.36,1) 6.4s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 760 460" aria-label="A two-curve chart. Curve A: cost of producing X drops 47 percent as AI is applied. Curve B: capability of producing Y rises into newly feasible territory. The intersection is the AI strategy zone where both curves shift the business.">
+<rect width="760" height="460" rx="14" fill="#FFF7ED"/>
+
+<text x="380" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#1F2937">The two curves that decide your AI strategy</text>
+<text x="380" y="50" text-anchor="middle" font-size="12" fill="#6B7280">cost of doing today's work · capability of doing tomorrow's</text>
+
+<!-- chart frame -->
+<g class="label-axis">
+<rect x="60" y="80" width="640" height="280" rx="10" fill="#FFFBF2" stroke="#E5D5B8" stroke-width="1.5"/>
+<line x1="60" y1="360" x2="700" y2="360" stroke="#1F2937" stroke-width="2"/>
+<line x1="60" y1="80" x2="60" y2="360" stroke="#1F2937" stroke-width="2"/>
+<text x="60" y="378" font-size="11" fill="#6B7280">today</text>
+<text x="700" y="378" text-anchor="end" font-size="11" fill="#6B7280">+ AI applied →</text>
+<text x="46" y="92" text-anchor="end" font-size="11" fill="#6B7280" transform="rotate(-90 46 92)">value</text>
+
+<!-- light grid -->
+<line x1="60" y1="150" x2="700" y2="150" stroke="#F5E6CC" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="60" y1="220" x2="700" y2="220" stroke="#F5E6CC" stroke-width="1" stroke-dasharray="3 4"/>
+<line x1="60" y1="290" x2="700" y2="290" stroke="#F5E6CC" stroke-width="1" stroke-dasharray="3 4"/>
+</g>
+
+<!-- ghost old curves (where things sat before AI) -->
+<path class="curve-old-cost" d="M 80 130 C 200 130, 360 132, 700 134" fill="none" stroke="#FCA5A5" stroke-width="1.5" stroke-dasharray="4 5" opacity=".7"/>
+<path class="curve-old-cap" d="M 80 320 C 200 320, 360 318, 700 316" fill="none" stroke="#A7C9F2" stroke-width="1.5" stroke-dasharray="4 5" opacity=".7"/>
+<text class="curve-old-cost" x="86" y="122" font-size="9" fill="#9F1239" font-style="italic">cost (pre-AI)</text>
+<text class="curve-old-cap" x="86" y="335" font-size="9" fill="#1E40AF" font-style="italic">capability (pre-AI)</text>
+
+<!-- AI strategy zone (shaded intersection) -->
+<g class="zone">
+<path d="M 360 145 C 460 165, 530 200, 600 240 L 600 240 C 530 220, 460 200, 360 215 Z" fill="#FEF3C7" opacity=".55"/>
+<circle cx="480" cy="200" r="58" fill="#FCD34D" opacity=".25"/>
+</g>
+
+<!-- new cost curve (drops 47%) -->
+<path class="curve-cost" d="M 80 130 C 220 132, 320 168, 480 200 C 580 220, 640 235, 700 248" fill="none" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/>
+<!-- new capability curve (rises) -->
+<path class="curve-cap" d="M 80 320 C 220 316, 320 270, 480 200 C 580 165, 640 138, 700 118" fill="none" stroke="#0EA5E9" stroke-width="3" stroke-linecap="round"/>
+
+<!-- start dots -->
+<circle class="curve-old-cost" cx="80" cy="130" r="4.5" fill="#F43F5E"/>
+<circle class="curve-old-cap" cx="80" cy="320" r="4.5" fill="#0EA5E9"/>
+<!-- end dots -->
+<circle class="tag-cost" cx="700" cy="248" r="5" fill="#F43F5E"/>
+<circle class="tag-cap" cx="700" cy="118" r="5" fill="#0EA5E9"/>
+
+<!-- cost label -->
+<g class="tag-cost">
+<rect x="540" y="258" width="156" height="44" rx="8" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.5"/>
+<text x="618" y="276" text-anchor="middle" font-size="12" font-weight="bold" fill="#9F1239">cost of producing X</text>
+<text x="618" y="292" text-anchor="middle" font-size="11" fill="#9F1239" font-family="ui-monospace,monospace">−47% · same output</text>
+</g>
+
+<!-- capability label -->
+<g class="tag-cap">
+<rect x="540" y="74" width="156" height="44" rx="8" fill="#DBEAFE" stroke="#0EA5E9" stroke-width="1.5"/>
+<text x="618" y="92" text-anchor="middle" font-size="12" font-weight="bold" fill="#1E40AF">capability for Y</text>
+<text x="618" y="108" text-anchor="middle" font-size="11" fill="#1E40AF" font-family="ui-monospace,monospace">+ work that wasn't possible</text>
+</g>
+
+<!-- intersection annotation -->
+<g class="zone-label">
+<line x1="480" y1="200" x2="380" y2="118" stroke="#92400E" stroke-width="1.5" stroke-dasharray="3 3"/>
+<rect x="180" y="98" width="200" height="44" rx="10" fill="#1F2937"/>
+<text x="280" y="118" text-anchor="middle" font-size="12" font-weight="bold" fill="#FCD34D">AI strategy zone</text>
+<text x="280" y="134" text-anchor="middle" font-size="10" fill="#FED7AA" font-style="italic">where both curves shift</text>
+<circle cx="480" cy="200" r="6" fill="#F59E0B" stroke="#1F2937" stroke-width="2"/>
+</g>
+
+<!-- footer -->
+<g class="foot" transform="translate(40 388)">
+<rect width="680" height="56" rx="10" fill="#1F2937"/>
+<text x="340" y="22" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">Most leaders chase one curve · the strategy lives in the overlap</text>
+<text x="340" y="40" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">cheaper today + new things possible tomorrow = a real bet, not a press release</text>
+</g>
+</svg>
+<div class="caption">Both curves bend. If your AI plan only moves one, you're leaving the other half on the table.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

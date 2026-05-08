@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Color tokens & type scale</title>
+<style>
+:root{--bg:#ECFDF5;--ink:#1F2937;--mute:#6B7280;--accent:#10B981;--cool:#0EA5E9;--purple:#8B5CF6;--bad:#F43F5E;--warm:#F59E0B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
+.wrap{width:100%;max-width:760px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--mute);margin-top:10px}
+#rb{position:absolute;bottom:-6px;right:6px;background:var(--ink);color:#ECFDF5;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+ <div class="wrap">
+  <svg viewBox="0 0 760 470" aria-label="Two transformations side by side. A type scale builds upward in steps of a 1.25 ratio. A pile of unrelated hex colors collapses into named design tokens.">
+   <rect width="760" height="470" fill="#ECFDF5"/>
+   <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Two ratios that do most of the work.</text>
+
+   <!-- DIVIDER -->
+   <line x1="380" y1="60" x2="380" y2="450" stroke="#A7F3D0" stroke-width="1" stroke-dasharray="3 4"/>
+
+   <!-- LEFT: type scale -->
+   <g id="left">
+    <text x="180" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#10B981">TYPE SCALE · ratio 1.25</text>
+    <!-- baseline rail -->
+    <line id="rail" x1="60" y1="380" x2="320" y2="380" stroke="#10B981" stroke-width="1.4" opacity="0"/>
+    <!-- 6 type samples sitting on the rail. y is baseline. We start with all opacity 0 and pop in. -->
+    <text id="t1" x="60"  y="380" font-size="12" fill="#1F2937" opacity="0" font-weight="500">Aa</text>
+    <text id="t2" x="100" y="380" font-size="15" fill="#1F2937" opacity="0" font-weight="500">Aa</text>
+    <text id="t3" x="142" y="380" font-size="19" fill="#1F2937" opacity="0" font-weight="500">Aa</text>
+    <text id="t4" x="190" y="380" font-size="24" fill="#1F2937" opacity="0" font-weight="600">Aa</text>
+    <text id="t5" x="240" y="380" font-size="30" fill="#1F2937" opacity="0" font-weight="600">Aa</text>
+    <text id="t6" x="296" y="380" font-size="38" fill="#1F2937" opacity="0" font-weight="700">Aa</text>
+
+    <!-- numeric tags (px values) -->
+    <g font-family="ui-monospace,monospace" font-size="10" fill="#6B7280" text-anchor="middle">
+     <text id="n1" x="68"  y="400" opacity="0">12</text>
+     <text id="n2" x="108" y="400" opacity="0">15</text>
+     <text id="n3" x="152" y="400" opacity="0">19</text>
+     <text id="n4" x="201" y="400" opacity="0">24</text>
+     <text id="n5" x="253" y="400" opacity="0">30</text>
+     <text id="n6" x="312" y="400" opacity="0">38</text>
+    </g>
+
+    <!-- formula -->
+    <g id="formula" opacity="0">
+     <rect x="60" y="84" width="240" height="28" rx="8" fill="#FFFFFF" stroke="#A7F3D0"/>
+     <text x="180" y="103" text-anchor="middle" font-size="12" fill="#1F2937" font-family="ui-monospace,monospace">size<tspan fill="#10B981">ₙ</tspan> = base × 1.25<tspan fill="#10B981">ⁿ</tspan></text>
+    </g>
+
+    <!-- ratio brackets -->
+    <g id="brackets" opacity="0" stroke="#10B981" stroke-width="1.2" fill="none">
+     <path d="M 70 420 L 70 425 L 110 425 L 110 420"/>
+     <path d="M 113 420 L 113 425 L 152 425 L 152 420"/>
+     <path d="M 156 420 L 156 425 L 200 425 L 200 420"/>
+    </g>
+    <g id="brktxt" opacity="0" font-family="ui-monospace,monospace" font-size="9" fill="#10B981" text-anchor="middle">
+     <text x="90"  y="438">×1.25</text>
+     <text x="132" y="438">×1.25</text>
+     <text x="178" y="438">×1.25</text>
+    </g>
+   </g>
+
+   <!-- RIGHT: hex chaos → tokens -->
+   <g id="right">
+    <text x="570" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#8B5CF6">COLOR · hex chaos → tokens</text>
+
+    <!-- chaotic hex pile -->
+    <g id="pile">
+     <g id="ch1"><circle cx="448" cy="120" r="14" fill="#0EA8FF"/><text x="448" y="146" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#0EA8FF</text></g>
+     <g id="ch2"><circle cx="492" cy="142" r="14" fill="#0EA5E9"/><text x="492" y="168" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#0EA5E9</text></g>
+     <g id="ch3"><circle cx="538" cy="116" r="14" fill="#0EB1F2"/><text x="538" y="142" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#0EB1F2</text></g>
+     <g id="ch4"><circle cx="582" cy="148" r="14" fill="#10B488"/><text x="582" y="174" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#10B488</text></g>
+     <g id="ch5"><circle cx="628" cy="120" r="14" fill="#10B981"/><text x="628" y="146" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#10B981</text></g>
+     <g id="ch6"><circle cx="672" cy="142" r="14" fill="#13C08A"/><text x="672" y="168" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#13C08A</text></g>
+     <g id="ch7"><circle cx="450" cy="200" r="14" fill="#F0524E"/><text x="450" y="226" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#F0524E</text></g>
+     <g id="ch8"><circle cx="496" cy="226" r="14" fill="#F43F5E"/><text x="496" y="252" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#F43F5E</text></g>
+     <g id="ch9"><circle cx="544" cy="200" r="14" fill="#EE4257"/><text x="544" y="226" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#6B7280">#EE4257</text></g>
+    </g>
+
+    <!-- token chips (clean grid) -->
+    <g id="tokens" opacity="0">
+     <g transform="translate(440,290)">
+      <rect width="140" height="44" rx="10" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.4"/>
+      <circle cx="22" cy="22" r="12" fill="#0EA5E9"/>
+      <text x="42" y="20" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">--c-primary</text>
+      <text x="42" y="34" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">#0EA5E9</text>
+     </g>
+     <g transform="translate(595,290)">
+      <rect width="135" height="44" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.4"/>
+      <circle cx="22" cy="22" r="12" fill="#10B981"/>
+      <text x="42" y="20" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">--c-success</text>
+      <text x="42" y="34" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">#10B981</text>
+     </g>
+     <g transform="translate(440,346)">
+      <rect width="140" height="44" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="1.4"/>
+      <circle cx="22" cy="22" r="12" fill="#F43F5E"/>
+      <text x="42" y="20" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">--c-danger</text>
+      <text x="42" y="34" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">#F43F5E</text>
+     </g>
+     <g transform="translate(595,346)">
+      <rect width="135" height="44" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.4"/>
+      <circle cx="22" cy="22" r="12" fill="#1F2937"/>
+      <text x="42" y="20" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace">--c-ink</text>
+      <text x="42" y="34" font-size="9" fill="#6B7280" font-family="ui-monospace,monospace">#1F2937</text>
+     </g>
+    </g>
+
+    <!-- count badge -->
+    <g id="badge">
+     <rect x="440" y="80" width="240" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B"/>
+     <text id="bdgT" x="560" y="95" text-anchor="middle" font-size="11" font-family="ui-monospace,monospace" fill="#92400E">9 hex values · 0 tokens</text>
+    </g>
+   </g>
+
+   <!-- bottom legend -->
+   <text x="180" y="450" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">Predictable steps. The eye learns the rhythm.</text>
+   <text x="570" y="450" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">Names beat hex codes. Always.</text>
+  </svg>
+  <div class="cap">A type scale and a token system carry more design weight than your favourite font.</div>
+  <button id="rb">↺ replay</button>
+ </div>
+</main>
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+var EASE=function(t){return 1-Math.pow(1-t,3);};
+var rafs=[],tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function fade(id,a,b,dur,cb){
+ var e=$(id);if(!e)return;
+ var s=performance.now();
+ function tick(now){var t=Math.min((now-s)/dur,1);e.setAttribute('opacity',(a+(b-a)*EASE(t)).toFixed(3));if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();}
+ rafs.push(requestAnimationFrame(tick));
+}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',v);}
+
+function moveCh(id,fromX,fromY,toX,toY,dur,fadeOut){
+ var s=performance.now();
+ var el=$(id);
+ var circ=el.querySelector('circle');
+ var txt=el.querySelector('text');
+ var initOp=1;
+ function tick(now){
+  var t=Math.min((now-s)/dur,1),e=EASE(t);
+  var x=fromX+(toX-fromX)*e,y=fromY+(toY-fromY)*e;
+  circ.setAttribute('cx',x);circ.setAttribute('cy',y);
+  txt.setAttribute('x',x);txt.setAttribute('y',y+26);
+  if(fadeOut){var op=initOp-e;el.setAttribute('opacity',op.toFixed(3));}
+  if(t<1)rafs.push(requestAnimationFrame(tick));
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function popType(id,nid,delay){
+ after(delay,function(){
+  fade(id,0,1,360,null);
+  fade(nid,0,1,360,null);
+ });
+}
+
+function setBadge(text){
+ $('bdgT').textContent=text;
+}
+
+function run(){
+ clearAll();
+ ['rail','t1','t2','t3','t4','t5','t6','n1','n2','n3','n4','n5','n6','formula','brackets','brktxt','tokens'].forEach(function(id){setOp(id,0);});
+ // restore initial pile positions
+ var initial=[
+  ['ch1',448,120],['ch2',492,142],['ch3',538,116],['ch4',582,148],['ch5',628,120],['ch6',672,142],
+  ['ch7',450,200],['ch8',496,226],['ch9',544,200]
+ ];
+ initial.forEach(function(p){
+  var el=$(p[0]);el.setAttribute('opacity','1');
+  var circ=el.querySelector('circle');var txt=el.querySelector('text');
+  circ.setAttribute('cx',p[1]);circ.setAttribute('cy',p[2]);
+  txt.setAttribute('x',p[1]);txt.setAttribute('y',p[2]+26);
+ });
+ setBadge('9 hex values · 0 tokens');
+
+ // LEFT: rail then steps
+ after(500,function(){fade('rail',0,1,400,null);});
+ after(900,function(){fade('formula',0,1,500,null);});
+ popType('t1','n1',1100);
+ popType('t2','n2',1450);
+ popType('t3','n3',1800);
+ popType('t4','n4',2150);
+ popType('t5','n5',2500);
+ popType('t6','n6',2850);
+ after(3300,function(){fade('brackets',0,1,500,null);fade('brktxt',0,1,500,null);});
+
+ // RIGHT: chips collapse into tokens
+ // Phase 1 (start ~1.4s): blue family → primary slot
+ after(1400,function(){
+  setBadge('clustering blues…');
+  moveCh('ch1',448,120,510,312,700,true);
+  after(120,function(){moveCh('ch3',538,116,510,312,650,true);});
+  after(220,function(){moveCh('ch2',492,142,510,312,650,false);}); // canonical
+ });
+ after(2300,function(){
+  setBadge('clustering greens…');
+  moveCh('ch4',582,148,665,312,650,true);
+  after(120,function(){moveCh('ch6',672,142,665,312,650,true);});
+  after(220,function(){moveCh('ch5',628,120,665,312,650,false);});
+ });
+ after(3200,function(){
+  setBadge('clustering reds…');
+  moveCh('ch7',450,200,510,368,650,true);
+  after(120,function(){moveCh('ch9',544,200,510,368,650,true);});
+  after(220,function(){moveCh('ch8',496,226,510,368,650,false);});
+ });
+ after(4100,function(){
+  fade('tokens',0,1,600,null);
+  // fade remaining circles (canonicals) since tokens now show them
+  fade('ch2',1,0,500,null);fade('ch5',1,0,500,null);fade('ch8',1,0,500,null);
+  setBadge('4 named tokens · 0 hex in code');
+ });
+
+ after(8500,function(){after(800,run);});
+}
+$('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

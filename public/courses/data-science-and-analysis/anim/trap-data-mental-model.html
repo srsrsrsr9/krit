@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: p-hacking</title>
+<style>
+  :root {
+    --bg: #FAF5FF;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --grid: #E9D5FF;
+    --accent: #8B5CF6;
+    --bad: #F43F5E;
+    --good: #10B981;
+    --amber: #F59E0B;
+    --paper: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .frame-wrap { width:100%; max-width:780px; }
+  svg.frame { width:100%; height:auto; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; padding:0 12px; }
+  text { font-family: system-ui,-apple-system,"Inter",sans-serif; fill: var(--ink); }
+  .mono { font-family: ui-monospace, "SF Mono", monospace; }
+  .label { font-size: 13px; }
+  .tiny { font-size: 11px; fill: var(--muted); }
+  .head { font-size: 17px; font-weight: 700; }
+  .stage-cap { font-size: 12px; font-style: italic; fill: var(--muted); }
+
+  .test { transition: opacity 0.5s cubic-bezier(0.22,0.61,0.36,1); }
+
+  .panel { animation: panelFade 13s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity: 0; }
+  .panel.p1 { animation-delay: 0s; }
+  .panel.p2 { animation-delay: 3.2s; }
+  .panel.p3 { animation-delay: 6.4s; }
+  .panel.p4 { animation-delay: 9.6s; }
+  @keyframes panelFade {
+    0% { opacity: 0; }
+    3% { opacity: 1; }
+    22% { opacity: 1; }
+    27% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .dot-pop { animation: dotPop 13s cubic-bezier(0.22,0.61,0.36,1) infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes dotPop {
+    0%, 24% { transform: scale(1); }
+    26% { transform: scale(1.6); }
+    32% { transform: scale(1.4); }
+    100% { transform: scale(1.4); }
+  }
+
+  .winner-pulse { animation: winPulse 13s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes winPulse {
+    0%, 25% { opacity: 0; }
+    27% { opacity: 1; }
+    49% { opacity: 1; }
+    51% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .ship-truck { animation: shipMove 13s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes shipMove {
+    0%, 49% { transform: translateX(-200px); opacity: 0; }
+    52% { transform: translateX(-200px); opacity: 1; }
+    72% { transform: translateX(20px); opacity: 1; }
+    76% { transform: translateX(20px); opacity: 0; }
+    100% { transform: translateX(20px); opacity: 0; }
+  }
+
+  .crash-x { animation: crashX 13s cubic-bezier(0.22,0.61,0.36,1) infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes crashX {
+    0%, 73% { opacity: 0; transform: scale(0.4); }
+    78% { opacity: 1; transform: scale(1.1); }
+    96% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .panel { opacity: 1; }
+    .ship-truck, .crash-x, .winner-pulse { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame-wrap">
+    <svg class="frame" viewBox="0 0 720 460" aria-label="An analyst runs forty-seven statistical tests and ships the only one that crossed p less than 0.05; replication on new data fails. The fix is to pre-register a hypothesis before looking at the data.">
+      <defs>
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#F3E8FF" stroke-width="1"/>
+        </pattern>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#1F2937"/>
+        </marker>
+      </defs>
+
+      <!-- frame border -->
+      <rect x="0.5" y="0.5" width="719" height="459" rx="14" fill="var(--paper)" stroke="#E5E7EB"/>
+
+      <!-- ====== PANEL 1: 47 tests ====== -->
+      <g class="panel p1">
+        <text class="head" x="360" y="48" text-anchor="middle">An analyst runs 47 tests on the same dataset.</text>
+        <text class="tiny" x="360" y="68" text-anchor="middle">Each dot is one hypothesis test. Y-axis: p-value.</text>
+
+        <!-- chart frame -->
+        <rect x="80" y="100" width="560" height="280" fill="url(#grid)"/>
+        <rect x="80" y="100" width="560" height="280" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
+
+        <!-- p=0.05 line -->
+        <line x1="80" y1="248" x2="640" y2="248" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <text class="tiny mono" x="648" y="252" fill="var(--bad)">p = 0.05</text>
+
+        <!-- y-axis labels -->
+        <text class="tiny mono" x="74" y="106" text-anchor="end">1.0</text>
+        <text class="tiny mono" x="74" y="252" text-anchor="end">0.05</text>
+        <text class="tiny mono" x="74" y="384" text-anchor="end">0</text>
+        <text class="tiny" x="36" y="244" text-anchor="middle" transform="rotate(-90 36 244)">p-value</text>
+
+        <!-- 47 dots, one below the line (the lucky winner at index 23) -->
+        <g>
+          <!-- procedurally placed via fixed coords; one dot at p<0.05 highlighted -->
+          <circle cx="98" cy="160" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="110" cy="220" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="122" cy="180" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="134" cy="290" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="146" cy="135" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="158" cy="200" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="170" cy="265" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="182" cy="155" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="194" cy="230" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="206" cy="310" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="218" cy="170" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="230" cy="240" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="242" cy="190" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="254" cy="280" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="266" cy="210" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="278" cy="145" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="290" cy="225" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="302" cy="320" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="314" cy="165" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="326" cy="260" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="338" cy="195" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="350" cy="125" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="362" cy="245" r="5" fill="var(--accent)" opacity="0.85"/>
+          <!-- the lucky winner -->
+          <circle id="winnerDot" class="dot-pop" cx="374" cy="310" r="5" fill="var(--bad)" stroke="#9F1239" stroke-width="0.5"/>
+          <circle cx="386" cy="175" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="398" cy="205" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="410" cy="270" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="422" cy="150" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="434" cy="230" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="446" cy="295" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="458" cy="185" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="470" cy="255" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="482" cy="140" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="494" cy="215" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="506" cy="285" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="518" cy="160" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="530" cy="235" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="542" cy="305" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="554" cy="170" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="566" cy="250" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="578" cy="195" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="590" cy="120" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="602" cy="225" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="614" cy="275" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="626" cy="155" r="5" fill="var(--accent)" opacity="0.85"/>
+          <circle cx="638" cy="200" r="5" fill="var(--accent)" opacity="0.85"/>
+        </g>
+        <text class="mono tiny" x="640" y="392" text-anchor="end" fill="var(--muted)">tests 1 ... 47</text>
+      </g>
+
+      <!-- ====== PANEL 2: pick the winner ====== -->
+      <g class="panel p2">
+        <text class="head" x="360" y="48" text-anchor="middle">One sneaks under p &lt; 0.05. The other 46 are dismissed as noise.</text>
+
+        <!-- big magnifier -->
+        <g transform="translate(360 230)">
+          <circle r="105" fill="#FEF3C7" stroke="var(--amber)" stroke-width="3"/>
+          <line x1="74" y1="74" x2="135" y2="135" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="74" y1="74" x2="135" y2="135" stroke="var(--amber)" stroke-width="3" stroke-linecap="round"/>
+          <!-- inside magnifier: one dot, "p = 0.04" -->
+          <circle cx="0" cy="-10" r="9" fill="var(--bad)"/>
+          <text class="mono" font-size="22" font-weight="700" x="0" y="40" text-anchor="middle" fill="var(--ink)">p = 0.04</text>
+          <text class="tiny" x="0" y="62" text-anchor="middle" fill="var(--muted)">"the finding"</text>
+        </g>
+
+        <!-- discarded pile -->
+        <g transform="translate(110 340)">
+          <text class="tiny" x="0" y="0" fill="var(--muted)">discarded:</text>
+          <g opacity="0.5">
+            <circle cx="60" cy="-4" r="4" fill="var(--accent)"/>
+            <circle cx="74" cy="-4" r="4" fill="var(--accent)"/>
+            <circle cx="88" cy="-4" r="4" fill="var(--accent)"/>
+            <circle cx="102" cy="-4" r="4" fill="var(--accent)"/>
+            <circle cx="116" cy="-4" r="4" fill="var(--accent)"/>
+            <circle cx="130" cy="-4" r="4" fill="var(--accent)"/>
+            <text class="tiny mono" x="142" y="0" fill="var(--muted)">× 46</text>
+          </g>
+        </g>
+        <text class="stage-cap" x="360" y="408" text-anchor="middle">If you fish in 47 ponds, one will bite by chance.</text>
+      </g>
+
+      <!-- ====== PANEL 3: ship + replication fail ====== -->
+      <g class="panel p3">
+        <text class="head" x="360" y="48" text-anchor="middle">Ship the finding. Replicate on new data.</text>
+
+        <!-- left: ship truck moving right with "FINDING" box -->
+        <g class="ship-truck" transform="translate(120 130)">
+          <rect x="0" y="20" width="160" height="80" rx="10" fill="#10B981" opacity="0.15" stroke="var(--good)" stroke-width="2"/>
+          <text class="head" x="80" y="68" text-anchor="middle" fill="var(--good)">"THE FINDING"</text>
+          <text class="tiny" x="80" y="86" text-anchor="middle" fill="var(--muted)">p = 0.04 · n = 47 tests</text>
+          <line x1="160" y1="60" x2="210" y2="60" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow)"/>
+        </g>
+
+        <!-- right: replication chart -->
+        <g transform="translate(380 130)">
+          <text class="label" x="120" y="0" text-anchor="middle" font-weight="600">Replication on new data</text>
+          <rect x="0" y="20" width="240" height="180" fill="url(#grid)"/>
+          <rect x="0" y="20" width="240" height="180" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
+          <line x1="0" y1="115" x2="240" y2="115" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text class="tiny mono" x="246" y="119" fill="var(--bad)">0.05</text>
+          <!-- dots, all above the line -->
+          <circle cx="20" cy="60" r="4" fill="var(--accent)"/>
+          <circle cx="40" cy="80" r="4" fill="var(--accent)"/>
+          <circle cx="60" cy="50" r="4" fill="var(--accent)"/>
+          <circle cx="80" cy="95" r="4" fill="var(--accent)"/>
+          <circle cx="100" cy="70" r="4" fill="var(--accent)"/>
+          <circle cx="120" cy="85" r="4" fill="var(--accent)"/>
+          <circle cx="140" cy="55" r="4" fill="var(--accent)"/>
+          <circle cx="160" cy="105" r="4" fill="var(--accent)"/>
+          <circle cx="180" cy="75" r="4" fill="var(--accent)"/>
+          <circle cx="200" cy="90" r="4" fill="var(--accent)"/>
+          <circle cx="220" cy="65" r="4" fill="var(--accent)"/>
+          <text class="mono" font-size="14" x="120" y="160" text-anchor="middle" fill="var(--muted)">p = 0.41</text>
+        </g>
+
+        <!-- big red X -->
+        <g class="crash-x" transform="translate(500 200)">
+          <circle r="38" fill="var(--bad)" opacity="0.15"/>
+          <line x1="-18" y1="-18" x2="18" y2="18" stroke="var(--bad)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="18" y1="-18" x2="-18" y2="18" stroke="var(--bad)" stroke-width="5" stroke-linecap="round"/>
+        </g>
+        <text class="stage-cap" x="360" y="380" text-anchor="middle">The "finding" was the data set's lucky tail. Gone.</text>
+      </g>
+
+      <!-- ====== PANEL 4: fix ====== -->
+      <g class="panel p4">
+        <text class="head" x="360" y="50" text-anchor="middle">The fix: pre-register the hypothesis before looking at the data.</text>
+
+        <!-- envelope / form -->
+        <g transform="translate(150 100)">
+          <rect x="0" y="0" width="200" height="240" rx="10" fill="#ECFDF5" stroke="var(--good)" stroke-width="2.5"/>
+          <text class="label" x="100" y="28" text-anchor="middle" font-weight="700" fill="var(--good)">Pre-registration</text>
+          <line x1="20" y1="44" x2="180" y2="44" stroke="var(--good)" stroke-width="1" opacity="0.4"/>
+          <text class="tiny mono" x="20" y="68" fill="var(--ink)">Hypothesis:</text>
+          <text class="tiny" x="20" y="84" fill="var(--ink)">"X causes Y"</text>
+          <text class="tiny mono" x="20" y="112" fill="var(--ink)">Test:</text>
+          <text class="tiny" x="20" y="128" fill="var(--ink)">two-sample t, α=0.05</text>
+          <text class="tiny mono" x="20" y="156" fill="var(--ink)">N (power):</text>
+          <text class="tiny" x="20" y="172" fill="var(--ink)">2400</text>
+          <text class="tiny mono" x="20" y="200" fill="var(--ink)">Filed:</text>
+          <text class="tiny" x="20" y="216" fill="var(--ink)">2026-05-04 · before data</text>
+          <!-- stamp -->
+          <g transform="translate(140 200) rotate(-12)">
+            <rect x="-30" y="-12" width="60" height="24" fill="none" stroke="var(--bad)" stroke-width="2" rx="3"/>
+            <text class="mono" font-size="11" font-weight="700" x="0" y="4" text-anchor="middle" fill="var(--bad)">SEALED</text>
+          </g>
+        </g>
+
+        <!-- arrow then data -->
+        <g transform="translate(370 220)">
+          <line x1="0" y1="0" x2="60" y2="0" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrow)"/>
+          <text class="tiny" x="30" y="-8" text-anchor="middle" fill="var(--muted)">then</text>
+        </g>
+
+        <g transform="translate(450 130)">
+          <rect x="0" y="0" width="180" height="180" rx="10" fill="#FFF7ED" stroke="var(--amber)" stroke-width="2"/>
+          <text class="label" x="90" y="26" text-anchor="middle" font-weight="700">Look at data</text>
+          <!-- single dot, at p~0.04 -->
+          <line x1="20" y1="100" x2="160" y2="100" stroke="var(--bad)" stroke-width="1" stroke-dasharray="3 3"/>
+          <text class="tiny mono" x="166" y="104" fill="var(--bad)">0.05</text>
+          <circle cx="90" cy="125" r="6" fill="var(--good)"/>
+          <text class="mono" font-size="13" x="90" y="156" text-anchor="middle" fill="var(--good)" font-weight="700">p = 0.038</text>
+          <text class="tiny" x="90" y="172" text-anchor="middle" fill="var(--muted)">honest, not fished</text>
+        </g>
+
+        <text class="stage-cap" x="360" y="382" text-anchor="middle">One hypothesis, one test, written down before the data is touched.</text>
+      </g>
+
+      <!-- progress dots -->
+      <g transform="translate(360 432)">
+        <circle cx="-30" cy="0" r="3.5" fill="var(--accent)"/>
+        <circle cx="-10" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+        <circle cx="10" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+        <circle cx="30" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+      </g>
+    </svg>
+    <div class="caption">If you torture the data long enough, it confesses. Pre-registering the hypothesis is the only handcuff that holds.</div>
+  </div>
+</main>
+</body>
+</html>

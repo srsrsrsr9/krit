@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: ship and forget (PM)</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes draw{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.line-bad{stroke-dasharray:600;animation:draw 5s linear forwards}
+.line-good{stroke-dasharray:600;animation:draw 5s linear 5.5s forwards}
+.day0-confetti{animation:fade .5s ease 5.5s both}
+.flatline-label{animation:fade .5s ease 4s both}
+.late-discover{animation:pop .5s ease 5s both}
+.audit-marker{animation:pop .4s ease 7.5s both}
+.fix-banner{animation:fade .5s ease 11s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A feature shipped on day 0 with applause, usage flatlining unnoticed for 6 months, vs the same feature with a 7-day post-launch loop">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- AXES -->
+<g transform="translate(60 50)">
+<line x1="0" y1="240" x2="600" y2="240" stroke="#7C2D12" stroke-width="2"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#7C2D12" stroke-width="2"/>
+<text x="-8" y="6" text-anchor="end" font-size="9" fill="#7C2D12">100%</text>
+<text x="-8" y="245" text-anchor="end" font-size="9" fill="#7C2D12">0</text>
+<text x="0" y="258" font-size="9" fill="#7C2D12">D0 launch</text>
+<text x="100" y="258" font-size="9" fill="#7C2D12">D14</text>
+<text x="220" y="258" font-size="9" fill="#7C2D12">D60</text>
+<text x="340" y="258" font-size="9" fill="#7C2D12">D120</text>
+<text x="460" y="258" font-size="9" fill="#7C2D12">D180</text>
+<text x="588" y="258" font-size="9" fill="#7C2D12">D240</text>
+<text x="300" y="278" font-size="11" fill="#7C2D12" font-style="italic">days since launch · usage</text>
+
+<!-- BAD: spike + flatline -->
+<polyline class="line-bad" points="0,40 30,30 60,55 100,140 160,205 240,225 340,228 480,230 600,232" stroke="#F43F5E" stroke-width="3" fill="none"/>
+<g class="day0-confetti">
+<circle cx="0" cy="40" r="5" fill="#10B981"/>
+<text x="6" y="34" font-size="10" fill="#065F46">launch 🎉</text>
+</g>
+<g class="flatline-label" style="animation-delay:3s">
+<text x="240" y="218" font-size="10" fill="#7F1D1D" font-weight="bold">flatlines · no one notices</text>
+</g>
+<g class="late-discover">
+<circle cx="480" cy="230" r="6" fill="#7F1D1D"/>
+<text x="488" y="220" font-size="10" fill="#7F1D1D" font-weight="bold">D180: someone finally checks</text>
+<text x="488" y="235" font-size="9" fill="#7F1D1D" font-style="italic">"this has been dead since week 3"</text>
+</g>
+
+<!-- GOOD: caught at D9 -->
+<polyline class="line-good" points="0,40 30,30 60,38 90,52 110,42 140,38 200,40 280,42 360,38 440,36 520,38 600,40" stroke="#10B981" stroke-width="3" fill="none"/>
+<g class="audit-marker">
+<circle cx="50" cy="40" r="6" fill="#F59E0B" stroke="#92400E" stroke-width="2"/>
+<text x="50" y="22" text-anchor="middle" font-size="10" fill="#92400E" font-weight="bold">D7 post-launch loop</text>
+</g>
+<g class="audit-marker" style="animation-delay:8.5s">
+<circle cx="100" cy="42" r="5" fill="#F59E0B"/>
+<text x="105" y="55" font-size="9" fill="#92400E">D9: noticed dip · pivoted</text>
+</g>
+<text x="540" y="46" text-anchor="end" font-size="10" fill="#065F46" font-style="italic">held at 92%</text>
+</g>
+
+<!-- BANNER -->
+<g class="fix-banner" transform="translate(40 320)">
+<rect width="640" height="70" rx="10" fill="#1F2937"/>
+<text x="320" y="22" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">Ship-day is day zero, not the end · the 7-day post-launch loop is the system</text>
+<text x="320" y="42" text-anchor="middle" font-size="11" fill="#9CA3AF">Pre-mortem before launch · 3-number check on D7 · iterate or kill on D14</text>
+<text x="320" y="60" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">most dead features die loud at launch · the dangerous ones die silent</text>
+</g>
+</svg>
+<div class="caption">A feature with no follow-up loop is a feature that ships into the void.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

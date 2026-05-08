@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: confident liar</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes flash{0%,100%{fill:#FCA5A5}50%{fill:#7F1D1D}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.q{animation:fade .5s ease both}
+.a{animation:pop .5s ease 1.5s both}
+.copy{animation:fade .5s ease 4s both}
+.review{animation:fade .5s ease 7s both}
+.stamp{animation:pop .5s ease 8.5s both;transform-origin:center}
+.stamp-flash{animation:flash 1s ease 9s 2 both}
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="An LLM producing a fabricated RBI circular citation that is copied into a presentation, then caught at legal review three weeks later">
+<rect width="720" height="405" rx="14" fill="#FAF5FF"/>
+
+<!-- USER QUESTION -->
+<g class="q" transform="translate(40 30)">
+<rect width="640" height="42" rx="8" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/>
+<text x="20" y="26" font-size="13" fill="#1E3A8A">User: <tspan font-style="italic">"Cite the RBI circular on UPI merchant fees."</tspan></text>
+</g>
+
+<!-- LLM ANSWER -->
+<g class="a" transform="translate(40 88)">
+<rect width="640" height="80" rx="8" fill="#FFFFFF" stroke="#5B21B6" stroke-width="2"/>
+<text x="20" y="22" font-size="11" fill="#5B21B6" font-weight="bold">Claude (no RAG):</text>
+<text x="20" y="44" font-family="ui-monospace,monospace" font-size="12" fill="#1F2937">Per RBI Circular RBI/2024-25/47 dated June 12, 2024,</text>
+<text x="20" y="62" font-family="ui-monospace,monospace" font-size="12" fill="#1F2937">Section 3.2 mandates zero MDR for UPI transactions...</text>
+<g transform="translate(560 50)"><circle r="14" fill="#10B981"/><text y="5" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">✓</text></g>
+</g>
+
+<!-- COPIED INTO SLIDES -->
+<g class="copy" transform="translate(40 184)">
+<rect width="300" height="80" rx="8" fill="#FCD34D" stroke="#92400E" stroke-width="2"/>
+<text x="150" y="20" text-anchor="middle" font-size="11" fill="#7C2D12" font-weight="bold">board-deck.pptx · slide 14</text>
+<line x1="20" y1="28" x2="280" y2="28" stroke="#92400E"/>
+<text x="20" y="46" font-size="11" fill="#1F2937">"Per Circular RBI/2024-25/47 ..."</text>
+<text x="20" y="64" font-size="10" fill="#1F2937" font-style="italic">copy-pasted, looks legit</text>
+</g>
+
+<!-- LEGAL REVIEW -->
+<g class="review" transform="translate(380 184)">
+<rect width="300" height="80" rx="8" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="150" y="20" text-anchor="middle" font-size="11" fill="#7F1D1D" font-weight="bold">3 weeks later · legal review</text>
+<line x1="20" y1="28" x2="280" y2="28" stroke="#7F1D1D"/>
+<text x="20" y="46" font-size="11" fill="#7F1D1D">"This circular doesn't exist."</text>
+<text x="20" y="64" font-size="10" fill="#7F1D1D" font-style="italic">RBI search returns nothing</text>
+</g>
+
+<!-- HALLUCINATION STAMP -->
+<g class="stamp" transform="translate(220 290)">
+<rect width="280" height="56" rx="10" fill="#FCA5A5" stroke="#7F1D1D" stroke-width="3" class="stamp-flash"/>
+<text x="140" y="26" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">CONFIDENT  ≠  CORRECT</text>
+<text x="140" y="44" text-anchor="middle" font-size="10" fill="#7F1D1D">the model was good at fluency, not facts</text>
+</g>
+
+<!-- FIX -->
+<g class="review" style="animation-delay:11s" transform="translate(40 360)">
+<text x="360" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">Fix: RAG with citations · ground answers in retrieved documents · refuse if not found</text>
+</g>
+</svg>
+<div class="caption">In regulated domains, RAG with citations is the price of admission — never optional.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

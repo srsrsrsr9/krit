@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Picking AI Bets That Won't Sink — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Picking AI Bets That Won't Sink</h1>
+  <p class="subtitle">Three bets, pre-committed kill criteria, one slot you can't fill yet</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Your VP of Product walks in with a 14-page deck for The Flagship AI Feature. It will cost ₹2.4 crore.</p>
+  <div class="callout"><strong>Mental model: a 3-bet portfolio with one slot you cannot yet fill</strong><br/>AI bets are not equities. Returns are not continuous; they are mostly binary at the 90-day mark. **Concentration is therefore worse, not better, than diversification.** One bet means one shot at learning; if it fails, you have spent a year and learned only that this team, on this problem, with this scope, did not work. Three independent bets give you three signals.</div>
+  
+<h2>Move 1 — The hypothesis register</h2>
+<ul>
+<li>A hypothesis register is the single page that holds your AI program together. Every bet has one row.</li>
+<li>Step 1 — The English question: VP of Operations: 'We want to use AI in claims processing.' The deck has 11 slides. The register has zero rows so far.</li>
+<li>Step 2 — The bet column: Forced into one sentence: 'Pre-fill the claim form for motor claims under ₹50,000 in our top-3 distributor cities.' Notice what got cut: 'fully automate claims' was the original ask. The register said no.</li>
+<li>Step 3 — The capability shift column: 'Multimodal OCR on damage photos passed 92% accuracy on our internal eval as of February 2026.' One phrase. If this column is hand-wavy, the bet is research, not a bet.</li>
+<li>Step 4 — The cost ratio column: Manual coder ₹180/claim. LLM ₹4/claim. Ratio 45:1. Anything under ~5:1 should make you nervous; anything under 1:1 should kill the bet on the spot.</li>
+<li>Step 5 — The kill criterion column: 'If auto-approval rate on the cohort is below 40% by 21 September 2026, sunset the pilot. Do not extend.' Cohort, threshold, action, date.</li>
+<li>Step 6 — Owner and review: 'Rohan owns it. Reviewed 21 September.' Not 'the AI team.' Not 'Q3.' One human, one date.</li>
+</ul>
+<h2>Move 2 — The 90-day milestone gate</h2>
+<ul>
+<li>A 12-month AI roadmap is fiction. Capability shifts every quarter; vendor pricing shifts every month; your assumptions about user adoption are wrong almost every time.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: all-in on one flagship feature: If your AI program has exactly one flagship and your year is built around its launch, you have not built a portfolio; you have built a single point of failure with a budget. The flagship trap survives because it is *legible* — easier to explain to a board, easier to celebrate at all-hands, easier to put on a deck.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Concentration is worse than diversification for AI bets; binary 90-day outcomes punish single-bet programs.</div>
+<div class="takeaway">The 3-bet portfolio with one reserved slot is the only structure that buys you a second cycle.</div>
+<div class="takeaway">The hypothesis register is one page; empty cells are visible debt; the page is the program.</div>
+<div class="takeaway">A 90-day kill criterion missed by 25% is missed; 'momentum' and 'next month's model' are the two phrases that should make you suspicious.</div>
+<div class="takeaway">If a bet exceeds 50% of total program budget, you have a flagship in disguise; split it before the gate, not after.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

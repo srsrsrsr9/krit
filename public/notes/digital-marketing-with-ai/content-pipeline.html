@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI-Powered Content Pipeline — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>AI-Powered Content Pipeline</h1>
+  <p class="subtitle">Brief, draft, review, ship — and where AI fits in each</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most teams adopt AI for content the same way: turn it on, ship 10x volume, watch traffic die six months later, blame Google. The pattern has a name now — *AI-generated SEO slop* — and the search engines have been training on it for two years.</p>
+  <div class="callout"><strong>Mental model: brief → draft → review → ship</strong><br/>Every piece of content should pass through four stages, in order, no skipping.</div>
+  
+<h2>Move 1 — The brand-voice anchor</h2>
+<ul>
+<li>AI defaults to a tone called *generic LinkedIn earnest*. You can spot it in three sentences: short paragraphs, lots of em-dashes, em-dashes used as commas, vague affirmations, and a closing call-to-action that says 'embrace the journey'.</li>
+<li>Step 1 — Find your three voice anchors: Open the three highest-performing pieces of content from the last 12 months. Highlight the lines a customer would quote. Those are your voice anchors. Real sentences, not vibes.</li>
+<li>Step 2 — Write a Do/Don't list: From those highlights, extract patterns. 'Do say: specific timeframes, ratio numbers, named customer types.' 'Don't say: aspirational verbs without a noun behind them, journey metaphors, glow.'</li>
+<li>Step 3 — Attach 3 full sample paragraphs: Tell AI: 'Write in the voice of these three paragraphs.' Paste them. AI is a pattern-matcher; it pattern-matches what you give it.</li>
+<li>Step 4 — Lock it in the system prompt: Don't paste the anchor into every chat. Wire it into your tooling — Notion AI, Claude project, whatever you use. The anchor should be persistent infrastructure, not a per-task copy-paste.</li>
+<li>Step 5 — Audit drift monthly: Take 5 random pieces shipped this month. Compare to anchor. Score each on a 1-5 voice match. If average drops below 4, refresh the samples.</li>
+</ul>
+<h2>Move 2 — The 3-pass review</h2>
+<ul>
+<li>Once a draft exists, three passes — in order, by name. Each pass has one job.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: AI-generated SEO slop: The slop pattern: high volume + no voice anchor + no fact pass + 'rank-first, value-second'. Search engines have been trained on this exact signature for two years; they spot it within weeks of indexing.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">AI is a draft engine, not a content factory — the pipeline is the protection.</div>
+<div class="takeaway">Without a brand-voice anchor, AI defaults to 'generic LinkedIn earnest' and your content becomes interchangeable with competitors'.</div>
+<div class="takeaway">The 3-pass review (voice, fact, slop — in that order) is the cheapest insurance against the SEO-slop trap.</div>
+<div class="takeaway">Volume without voice + fact + slop discipline does not raise your brand; it lowers your search trust.</div>
+<div class="takeaway">Three real high-performing paragraphs beat any number of style-guide adjectives when training AI on your voice.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

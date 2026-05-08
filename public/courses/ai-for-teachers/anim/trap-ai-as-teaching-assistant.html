@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: AI as teaching assistant</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --amber: #F59E0B;
+    --rose: #F43F5E;
+    --emerald: #10B981;
+    --sky: #0EA5E9;
+    --violet: #8B5CF6;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .wrap { width:100%; max-width:760px; }
+  .frame { width:100%; aspect-ratio: 16/9; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; min-height: 18px; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .reset {
+    position:absolute; right:14px; bottom:14px;
+    background:var(--paper); border:2px solid var(--ink); color:var(--ink);
+    border-radius:999px; padding:6px 12px; font: 12px system-ui, sans-serif; cursor:pointer;
+  }
+  .reset:hover { background: var(--ink); color: var(--paper); }
+
+  /* Stage timing — total 13s loop */
+  @keyframes pageIn {
+    0%, 5% { opacity:0; transform: translateY(10px); }
+    10%, 100% { opacity:1; transform: translateY(0); }
+  }
+  @keyframes typeIn {
+    0%, 8% { stroke-dashoffset: 320; opacity:0; }
+    20%, 100% { stroke-dashoffset: 0; opacity:1; }
+  }
+  @keyframes gradeStamp {
+    0%, 30% { transform: scale(0) rotate(-18deg); opacity: 0; }
+    34% { transform: scale(1.25) rotate(-8deg); opacity: 1; }
+    40%, 60% { transform: scale(1) rotate(-8deg); opacity: 1; }
+    62%, 100% { opacity: 1; transform: scale(1) rotate(-8deg); }
+  }
+  @keyframes phoneRing {
+    0%, 60% { transform: rotate(0deg); }
+    63% { transform: rotate(-12deg); }
+    66% { transform: rotate(12deg); }
+    69% { transform: rotate(-10deg); }
+    72% { transform: rotate(8deg); }
+    75% { transform: rotate(-6deg); }
+    78%, 100% { transform: rotate(0deg); }
+  }
+  @keyframes redFlash {
+    0%, 60% { opacity: 0; }
+    62% { opacity: 0.45; }
+    66% { opacity: 0.05; }
+    70% { opacity: 0.5; }
+    74% { opacity: 0.05; }
+    78% { opacity: 0.4; }
+    82%, 100% { opacity: 0; }
+  }
+  @keyframes warningIn {
+    0%, 64% { opacity: 0; transform: scale(0.6); }
+    70%, 88% { opacity: 1; transform: scale(1); }
+    92%, 100% { opacity: 0; transform: scale(1); }
+  }
+  @keyframes fixIn {
+    0%, 86% { opacity: 0; transform: translateY(8px); }
+    90%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes capSwap {
+    0%, 8% { opacity: 0; }
+    12%, 28% { opacity: 1; }
+    32%, 44% { opacity: 0; }
+    48%, 60% { opacity: 1; }
+    64%, 76% { opacity: 0; }
+    80%, 96% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .cap { animation: capSwap 13s var(--ease) infinite; }
+  .cap.c1 { animation-delay: 0s; }
+  .cap.c2 { animation-delay: -8.6s; }
+  .cap.c3 { animation-delay: -4.3s; }
+
+  .essay { animation: pageIn 13s var(--ease) infinite; }
+  .line { stroke-dasharray: 320; stroke-dashoffset: 320; animation: typeIn 13s var(--ease) infinite; }
+  .line.l1 { animation-delay: 0s; }
+  .line.l2 { animation-delay: 0.4s; }
+  .line.l3 { animation-delay: 0.8s; }
+  .line.l4 { animation-delay: 1.2s; }
+  .stamp { transform-origin: 540px 95px; animation: gradeStamp 13s var(--ease) infinite; }
+  .phone { transform-origin: 130px 270px; animation: phoneRing 13s var(--ease) infinite; }
+  .flash { animation: redFlash 13s linear infinite; }
+  .warn { transform-origin: 380px 200px; animation: warningIn 13s var(--ease) infinite; }
+  .fix { animation: fixIn 13s var(--ease) infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .essay, .line, .stamp, .phone, .warn, .fix { opacity: 1 !important; transform: none !important; stroke-dashoffset: 0 !important; }
+    .cap.c1 { opacity: 1 !important; }
+    .cap.c2, .cap.c3 { opacity: 0 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap" style="position:relative;">
+    <svg class="frame" viewBox="0 0 760 428" aria-label="An AI grader stamps an A on a beautifully written but factually wrong essay; a parent calls; the fix is to have AI grade structure while a teacher checks meaning.">
+      <defs>
+        <pattern id="dots" x="0" y="0" width="14" height="14" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="#FDE68A" opacity="0.7"/>
+        </pattern>
+      </defs>
+
+      <!-- Background -->
+      <rect x="0" y="0" width="760" height="428" fill="#FFF7ED"/>
+      <rect x="0" y="0" width="760" height="428" fill="url(#dots)"/>
+
+      <!-- Title bar -->
+      <text x="40" y="42" font-size="14" font-weight="700" fill="#1F2937" letter-spacing="0.5">UNSUPERVISED AI GRADER</text>
+      <line x1="40" y1="52" x2="200" y2="52" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Essay paper -->
+      <g class="essay" transform="translate(40, 70)">
+        <rect x="0" y="0" width="430" height="320" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="2.5"/>
+        <!-- Header on essay -->
+        <text x="20" y="32" font-size="13" font-weight="700" fill="#1F2937">Photosynthesis — by Ananya, Class 7</text>
+        <line x1="20" y1="42" x2="410" y2="42" stroke="#E5E7EB" stroke-width="1.5"/>
+
+        <!-- Body lines -->
+        <g stroke="#1F2937" stroke-width="2" stroke-linecap="round" fill="none">
+          <path class="line l1" d="M20 70 L390 70"/>
+          <path class="line l1" d="M20 88 L350 88"/>
+          <path class="line l2" d="M20 116 L400 116"/>
+          <path class="line l2" d="M20 134 L360 134"/>
+          <path class="line l3" d="M20 162 L370 162"/>
+          <path class="line l3" d="M20 180 L390 180"/>
+          <path class="line l4" d="M20 208 L380 208"/>
+          <path class="line l4" d="M20 226 L320 226"/>
+        </g>
+
+        <!-- Highlighted wrong claim -->
+        <rect x="18" y="155" width="370" height="32" rx="4" fill="#FEE2E2" opacity="0.0">
+          <animate attributeName="opacity" values="0;0;0.85;0.85;0.85;0;0" keyTimes="0;0.45;0.55;0.7;0.85;0.92;1" dur="13s" repeatCount="indefinite"/>
+        </rect>
+        <text x="22" y="174" font-size="11" font-weight="700" fill="#991B1B" opacity="0">
+          "...occurs in the mitochondria of plant cells..."
+          <animate attributeName="opacity" values="0;0;1;1;1;0;0" keyTimes="0;0.45;0.55;0.7;0.85;0.92;1" dur="13s" repeatCount="indefinite"/>
+        </text>
+
+        <!-- Footer note -->
+        <text x="20" y="290" font-size="11" font-style="italic" fill="#6B7280">Beautifully structured. Five paragraphs. Clear thesis.</text>
+      </g>
+
+      <!-- Grade stamp -->
+      <g class="stamp">
+        <circle cx="540" cy="95" r="58" fill="#FFFFFF" stroke="#10B981" stroke-width="4"/>
+        <circle cx="540" cy="95" r="48" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="3 4"/>
+        <text x="540" y="108" text-anchor="middle" font-size="56" font-weight="800" fill="#10B981" font-family="ui-monospace, monospace">A</text>
+        <text x="540" y="135" text-anchor="middle" font-size="9" font-weight="700" fill="#10B981" letter-spacing="2">AI · GRADED</text>
+      </g>
+
+      <!-- Robot grader -->
+      <g transform="translate(560, 180)">
+        <rect x="0" y="0" width="78" height="68" rx="14" fill="#EFF6FF" stroke="#1F2937" stroke-width="2.5"/>
+        <circle cx="26" cy="28" r="6" fill="#0EA5E9"/>
+        <circle cx="52" cy="28" r="6" fill="#0EA5E9"/>
+        <rect x="22" y="44" width="34" height="6" rx="3" fill="#1F2937"/>
+        <line x1="39" y1="-12" x2="39" y2="0" stroke="#1F2937" stroke-width="2"/>
+        <circle cx="39" cy="-14" r="3" fill="#F59E0B"/>
+      </g>
+      <text x="599" y="270" text-anchor="middle" font-size="10" font-weight="600" fill="#6B7280" letter-spacing="0.5">AI</text>
+
+      <!-- Phone (rings later) -->
+      <g class="phone" transform="translate(60, 240)">
+        <rect x="0" y="0" width="120" height="60" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="2.5"/>
+        <circle cx="22" cy="30" r="10" fill="#F43F5E"/>
+        <path d="M16 30 a6 6 0 0 0 12 0" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+        <text x="42" y="26" font-size="11" font-weight="700" fill="#1F2937">Parent calling</text>
+        <text x="42" y="42" font-size="10" fill="#6B7280">Ananya's mum · 4:12 PM</text>
+        <!-- ringing waves -->
+        <g stroke="#F43F5E" stroke-width="2" fill="none" opacity="0">
+          <path d="M-10 24 Q -16 30 -10 36"/>
+          <path d="M-18 18 Q -28 30 -18 42"/>
+          <animate attributeName="opacity" values="0;0;0;1;0;1;0;1;0" keyTimes="0;0.45;0.6;0.65;0.7;0.75;0.8;0.85;1" dur="13s" repeatCount="indefinite"/>
+        </g>
+      </g>
+
+      <!-- Warning toast (mid-flash) -->
+      <g class="warn" transform="translate(330, 180)">
+        <rect x="0" y="0" width="100" height="36" rx="10" fill="#1F2937"/>
+        <text x="50" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#FECACA" letter-spacing="1">FACT ERROR</text>
+      </g>
+
+      <!-- Fix block (final stage) -->
+      <g class="fix" transform="translate(40, 320)" opacity="0">
+        <rect x="0" y="0" width="680" height="80" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2.5"/>
+        <circle cx="34" cy="40" r="14" fill="#10B981"/>
+        <path d="M27 40 L33 46 L42 35" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="62" y="34" font-size="13" font-weight="700" fill="#065F46">The fix</text>
+        <text x="62" y="54" font-size="12" fill="#1F2937">AI grades structure. The teacher checks meaning.</text>
+        <text x="62" y="70" font-size="11" font-style="italic" fill="#6B7280">Two passes. One catches grammar. One catches "mitochondria."</text>
+      </g>
+
+      <!-- Red flash overlay on top of everything else but below caption -->
+      <rect class="flash" x="0" y="0" width="760" height="428" fill="#F43F5E" opacity="0" pointer-events="none"/>
+    </svg>
+
+    <div class="caption">
+      <span class="cap c1">Stage 1 · Beautiful structure, broken biology. AI grades it an A.</span>
+      <span class="cap c2">Stage 2 · A week later, the parent calls. Mitochondria do not photosynthesize.</span>
+      <span class="cap c3">Stage 3 · The fix is not less AI. It is teacher-on-meaning, AI-on-form.</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

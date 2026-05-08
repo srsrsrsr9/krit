@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Talent and Hiring</title>
+<style>
+  :root {
+    --bg: #FAF5FF;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --old: #F43F5E;
+    --new: #10B981;
+    --accent: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 800px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center; font-size: 13px; font-style: italic;
+    color: var(--muted); margin-top: 10px; padding: 0 12px;
+  }
+  .reset {
+    position: fixed; bottom: 12px; right: 12px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 12px; font-size: 12px; font-family: inherit;
+    cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .reset:hover { background: #EDE9FE; }
+  text { font-family: inherit; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 800 500" aria-label="Two job descriptions side by side. The 2024-style JD asks for skill keywords and produces 4700 noisy applicants. The 2026-style JD asks for defending a decision when AI is wrong and produces 47 high-signal applicants. Funnels visualise the difference.">
+      <!-- Title -->
+      <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Hiring before vs after AI did the keyword-matching</text>
+      <text x="400" y="52" text-anchor="middle" font-size="13" font-style="italic" fill="#6B7280">when everyone passes the filter, the filter is the noise</text>
+
+      <!-- LEFT: 2024-style JD card -->
+      <g transform="translate(40,80)">
+        <rect width="340" height="170" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect width="340" height="34" rx="14" fill="#FEF2F2"/>
+        <rect y="20" width="340" height="14" fill="#FEF2F2"/>
+        <text x="16" y="22" font-size="12" font-weight="700" fill="#9F1239">JD · 2024</text>
+        <text x="324" y="22" text-anchor="end" font-size="10" fill="#9F1239" class="mono">v.legacy</text>
+        <!-- bullets -->
+        <text x="16" y="56" font-size="13" font-weight="700" fill="#1F2937">Senior Analyst (m/f/d)</text>
+        <g font-size="11" fill="#374151">
+          <text x="16" y="78">• must know Python, SQL, JIRA</text>
+          <text x="16" y="96">• 5+ years in BI tooling</text>
+          <text x="16" y="114">• Tableau certified preferred</text>
+          <text x="16" y="132">• Excel power user</text>
+          <text x="16" y="150">• "communication skills" required</text>
+        </g>
+        <!-- keyword highlights -->
+        <g id="kw2024">
+          <rect x="71" y="69" width="38" height="13" rx="3" fill="#FECDD3" opacity="0.7"/>
+          <rect x="115" y="69" width="22" height="13" rx="3" fill="#FECDD3" opacity="0.7"/>
+          <rect x="143" y="69" width="32" height="13" rx="3" fill="#FECDD3" opacity="0.7"/>
+        </g>
+      </g>
+
+      <!-- RIGHT: 2026-style JD card -->
+      <g transform="translate(420,80)">
+        <rect width="340" height="170" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect width="340" height="34" rx="14" fill="#ECFDF5"/>
+        <rect y="20" width="340" height="14" fill="#ECFDF5"/>
+        <text x="16" y="22" font-size="12" font-weight="700" fill="#047857">JD · 2026</text>
+        <text x="324" y="22" text-anchor="end" font-size="10" fill="#047857" class="mono">v.signal</text>
+        <text x="16" y="56" font-size="13" font-weight="700" fill="#1F2937">Senior Analyst (any background)</text>
+        <g font-size="11" fill="#374151">
+          <text x="16" y="78">• can defend a decision when AI</text>
+          <text x="34" y="92">gives you the wrong answer</text>
+          <text x="16" y="112">• one prior call you reversed and why</text>
+          <text x="16" y="130">• show a working artifact, not a CV</text>
+          <text x="16" y="148">• comfortable being wrong in public</text>
+        </g>
+      </g>
+
+      <!-- Funnels -->
+      <!-- LEFT funnel 4700 -> 4700 noise -->
+      <g transform="translate(40,275)">
+        <text x="170" y="0" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937">applicants</text>
+        <!-- funnel shape -->
+        <path d="M 20 18 L 320 18 L 220 110 L 120 110 Z" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.5"/>
+        <!-- noise dots inside funnel -->
+        <g id="noise" clip-path="url(#leftClip)"></g>
+        <clipPath id="leftClip">
+          <path d="M 20 18 L 320 18 L 220 110 L 120 110 Z"/>
+        </clipPath>
+        <!-- output strip -->
+        <rect x="120" y="115" width="100" height="22" rx="4" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.2"/>
+        <text x="170" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#9F1239" class="mono">all 4700 pass</text>
+
+        <!-- counters -->
+        <g transform="translate(0,160)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">received</text>
+          <text id="leftCount" x="0" y="22" font-size="22" font-weight="700" fill="#F43F5E" class="mono">0</text>
+          <text x="0" y="40" font-size="10" fill="#6B7280" font-style="italic">no signal in any of them</text>
+        </g>
+        <g transform="translate(220,160)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">signal</text>
+          <text id="leftSignal" x="0" y="22" font-size="22" font-weight="700" fill="#F43F5E" class="mono">0%</text>
+        </g>
+      </g>
+
+      <!-- RIGHT funnel 47 -> 47 signal -->
+      <g transform="translate(420,275)">
+        <text x="170" y="0" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937">applicants</text>
+        <path d="M 20 18 L 320 18 L 220 110 L 120 110 Z" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.5"/>
+        <g id="signal" clip-path="url(#rightClip)"></g>
+        <clipPath id="rightClip">
+          <path d="M 20 18 L 320 18 L 220 110 L 120 110 Z"/>
+        </clipPath>
+        <rect x="120" y="115" width="100" height="22" rx="4" fill="#ECFDF5" stroke="#86EFAC" stroke-width="1.2"/>
+        <text x="170" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#047857" class="mono">all 47 worth talking to</text>
+
+        <g transform="translate(0,160)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">received</text>
+          <text id="rightCount" x="0" y="22" font-size="22" font-weight="700" fill="#10B981" class="mono">0</text>
+          <text x="0" y="40" font-size="10" fill="#6B7280" font-style="italic">each one a real artifact</text>
+        </g>
+        <g transform="translate(220,160)">
+          <text x="0" y="0" font-size="10" fill="#6B7280">signal</text>
+          <text id="rightSignal" x="0" y="22" font-size="22" font-weight="700" fill="#10B981" class="mono">0%</text>
+        </g>
+      </g>
+
+      <!-- bottom line -->
+      <g id="footer" opacity="0">
+        <rect x="200" y="473" width="400" height="22" rx="11" fill="#1F2937"/>
+        <text x="400" y="488" text-anchor="middle" font-size="12" font-weight="600" fill="#FFF7ED">filter on signal AI cannot fake</text>
+      </g>
+    </svg>
+    <div class="caption">Job descriptions are filters. AI made keyword filters useless. Filter on what AI cannot fake — judgment under uncertainty.</div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+<script>
+(function () {
+  var leftCount = document.getElementById('leftCount');
+  var rightCount = document.getElementById('rightCount');
+  var leftSignal = document.getElementById('leftSignal');
+  var rightSignal = document.getElementById('rightSignal');
+  var noise = document.getElementById('noise');
+  var signal = document.getElementById('signal');
+  var footer = document.getElementById('footer');
+  var resetBtn = document.getElementById('resetBtn');
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  function dot(x, y, r, color, opacity) {
+    var c = document.createElementNS(SVG_NS, 'circle');
+    c.setAttribute('cx', x);
+    c.setAttribute('cy', y);
+    c.setAttribute('r', r);
+    c.setAttribute('fill', color);
+    if (opacity != null) c.setAttribute('opacity', opacity);
+    return c;
+  }
+
+  function pointInTrapezoid(t) {
+    // Sample a point inside the trapezoid:
+    //   top:    (20,18) -> (320,18)
+    //   bottom: (120,110) -> (220,110)
+    var ty = rand(18, 110);
+    var tFrac = (ty - 18) / (110 - 18);
+    // Interpolate left/right edges at this y
+    var lx = 20 + (120 - 20) * tFrac;
+    var rx = 320 + (220 - 320) * tFrac;
+    var tx = rand(lx + 2, rx - 2);
+    return { x: tx, y: ty };
+  }
+
+  function reset() {
+    while (noise.firstChild) noise.removeChild(noise.firstChild);
+    while (signal.firstChild) signal.removeChild(signal.firstChild);
+    leftCount.textContent = '0';
+    rightCount.textContent = '0';
+    leftSignal.textContent = '0%';
+    rightSignal.textContent = '0%';
+    footer.style.transition = 'opacity 600ms ease';
+    footer.style.opacity = '0';
+  }
+
+  function rampNumber(el, target, ms, suffix) {
+    var start = performance.now();
+    function frame(t) {
+      var k = Math.min(1, (t - start) / ms);
+      var ease = 1 - Math.pow(1 - k, 3);
+      var v = Math.round(target * ease);
+      el.textContent = v + (suffix || '');
+      if (k < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function fillNoise(target) {
+    // Add ~80 dots representing 4700 noise applicants
+    var displayCount = 80;
+    var added = 0;
+    function addOne() {
+      if (added >= displayCount) return;
+      var p = pointInTrapezoid();
+      var d = dot(p.x, p.y, rand(1.4, 2.6), '#F43F5E', 0);
+      d.style.transition = 'opacity 300ms ease';
+      noise.appendChild(d);
+      requestAnimationFrame(function () { d.setAttribute('opacity', rand(0.35, 0.8).toFixed(2)); });
+      added++;
+      setTimeout(addOne, 25);
+    }
+    addOne();
+  }
+
+  function fillSignal(target) {
+    // Add ~22 well-spaced green dots representing 47 high-signal applicants
+    var displayCount = 22;
+    var added = 0;
+    function addOne() {
+      if (added >= displayCount) return;
+      var p = pointInTrapezoid();
+      var d = dot(p.x, p.y, 3.6, '#10B981', 0);
+      d.style.transition = 'opacity 400ms ease, r 400ms cubic-bezier(0.22,0.61,0.36,1)';
+      signal.appendChild(d);
+      requestAnimationFrame(function () { d.setAttribute('opacity', '0.95'); });
+      added++;
+      setTimeout(addOne, 90);
+    }
+    addOne();
+  }
+
+  function run() {
+    reset();
+    if (prefersReduced) {
+      // Final state without motion
+      for (var i = 0; i < 80; i++) {
+        var p = pointInTrapezoid();
+        var d = dot(p.x, p.y, 2, '#F43F5E', 0.6);
+        noise.appendChild(d);
+      }
+      for (var j = 0; j < 22; j++) {
+        var q = pointInTrapezoid();
+        var dd = dot(q.x, q.y, 3.6, '#10B981', 0.95);
+        signal.appendChild(dd);
+      }
+      leftCount.textContent = '4700';
+      rightCount.textContent = '47';
+      leftSignal.textContent = '~0%';
+      rightSignal.textContent = '100%';
+      footer.style.opacity = '1';
+      return;
+    }
+    // 2024 fills first
+    setTimeout(function () { fillNoise(); }, 400);
+    setTimeout(function () { rampNumber(leftCount, 4700, 2200); }, 400);
+    setTimeout(function () { leftSignal.textContent = '~0%'; }, 2700);
+
+    // 2026 fills second
+    setTimeout(function () { fillSignal(); }, 3400);
+    setTimeout(function () { rampNumber(rightCount, 47, 2000); }, 3400);
+    setTimeout(function () { rightSignal.textContent = '100%'; }, 5500);
+
+    setTimeout(function () { footer.style.opacity = '1'; }, 6300);
+    // loop
+    setTimeout(run, 9500);
+  }
+
+  resetBtn.addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

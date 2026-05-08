@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: 'Guaranteed' is a marketing word</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981;--warn:#F59E0B}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes grow{from{height:0}to{height:var(--h)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.brochure{animation:fade .5s ease both}
+.calc-step{animation:fade .4s ease both}
+.bar-lic{animation:pop .8s ease 4s both}
+.bar-nifty{animation:pop .8s ease 5s both}
+.gap-label{animation:fade .5s ease 7s both}
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="An LIC endowment policy promising 15 lakh on 7.5 lakh invested versus a Nifty index alternative averaging 26 lakh">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- LIC brochure -->
+<g class="brochure">
+<rect x="40" y="30" width="280" height="160" rx="8" fill="#FCD34D" stroke="#92400E" stroke-width="2"/>
+<text x="180" y="58" text-anchor="middle" font-size="14" fill="#7C2D12" font-weight="bold">"GUARANTEED" Endowment</text>
+<line x1="60" y1="70" x2="300" y2="70" stroke="#92400E"/>
+<text x="60" y="92" font-family="ui-monospace,monospace" font-size="12" fill="#1F2937">Premium:  ₹50,000/yr × 15 yrs</text>
+<text x="60" y="112" font-family="ui-monospace,monospace" font-size="12" fill="#1F2937">Total in:  ₹7.5 lakh</text>
+<text x="60" y="132" font-family="ui-monospace,monospace" font-size="12" fill="#1F2937">Sum on maturity:  ₹15 lakh</text>
+<text x="60" y="156" font-family="sans-serif" font-size="11" fill="#7C2D12" font-style="italic">"doubles your money — guaranteed!"</text>
+<text x="60" y="178" font-family="sans-serif" font-size="10" fill="#7C2D12">+ life cover + 80C tax benefit</text>
+</g>
+
+<!-- IRR calculator -->
+<g class="calc-step" style="animation-delay:1.5s" transform="translate(360 30)">
+<rect width="320" height="160" rx="8" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+<text x="160" y="24" text-anchor="middle" font-size="12" fill="#1F2937" font-weight="bold">Run the IRR</text>
+<line x1="20" y1="34" x2="300" y2="34" stroke="#1F2937"/>
+<text x="20" y="56" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">₹7.5L → ₹15L over 15 yrs</text>
+<text x="20" y="78" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">IRR ≈ 6.7% nominal</text>
+<text x="20" y="100" font-family="ui-monospace,monospace" font-size="11" fill="#9A3412">− inflation 6.0%</text>
+<text x="20" y="120" font-family="ui-monospace,monospace" font-size="13" fill="#7F1D1D" font-weight="bold">= 0.7% real return</text>
+<text x="160" y="146" text-anchor="middle" font-size="11" fill="#7F1D1D" font-style="italic">"guaranteed" was the bait</text>
+</g>
+
+<!-- Comparison bars -->
+<g transform="translate(80 230)">
+<text x="280" y="18" text-anchor="middle" font-size="13" fill="#1F2937" font-weight="bold">Same ₹50K/year for 15 years, two destinations</text>
+
+<!-- LIC bar -->
+<g class="bar-lic">
+<rect x="40" y="40" width="120" height="100" fill="#F59E0B" stroke="#92400E" stroke-width="2"/>
+<text x="100" y="76" text-anchor="middle" font-size="22" fill="#fff" font-weight="bold">₹15L</text>
+<text x="100" y="100" text-anchor="middle" font-size="11" fill="#fff">LIC endowment</text>
+<text x="100" y="116" text-anchor="middle" font-size="10" fill="#fff" font-style="italic">"guaranteed"</text>
+</g>
+
+<!-- Nifty bar -->
+<g class="bar-nifty">
+<rect x="240" y="-15" width="120" height="155" fill="#10B981" stroke="#065F46" stroke-width="2"/>
+<text x="300" y="36" text-anchor="middle" font-size="22" fill="#fff" font-weight="bold">₹26L</text>
+<text x="300" y="60" text-anchor="middle" font-size="11" fill="#fff">Nifty 50 index</text>
+<text x="300" y="76" text-anchor="middle" font-size="10" fill="#fff" font-style="italic">~12% historical avg</text>
+</g>
+
+<!-- Gap -->
+<g class="gap-label">
+<rect x="400" y="40" width="160" height="60" rx="6" fill="#7F1D1D"/>
+<text x="480" y="65" text-anchor="middle" font-size="22" fill="#fff" font-weight="bold">₹11L gap</text>
+<text x="480" y="84" text-anchor="middle" font-size="10" fill="#FCA5A5">agent's commission +</text>
+<text x="480" y="96" text-anchor="middle" font-size="10" fill="#FCA5A5">your peer pressure</text>
+</g>
+</g>
+</svg>
+<div class="caption">"Guaranteed" tells you nothing about real return. Run the IRR — every time.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

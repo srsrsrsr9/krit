@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: vague prompt invents number</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes flash{0%,100%{opacity:1}50%{opacity:.5}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.bad-prompt{animation:fade .4s ease .2s both}
+.bad-output{animation:pop .5s ease 1.5s both}
+.alarm{animation:pop .5s ease 4s both,flash 1s ease 4.5s 2 both}
+.fix-prompt{animation:fade .5s ease 6s both}
+.fix-output{animation:pop .5s ease 7.5s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A vague prompt invents a phantom 2.4 crore line item; a structured prompt forces every figure to cite a source row">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- BAD PROMPT -->
+<g class="bad-prompt" transform="translate(40 30)">
+<rect width="640" height="50" rx="8" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="20" y="22" font-size="11" fill="#7F1D1D" font-weight="bold">prompt:</text>
+<text x="80" y="22" font-family="ui-monospace,monospace" font-size="11" fill="#7F1D1D">"summarize this P&L"</text>
+<text x="80" y="40" font-size="10" fill="#7F1D1D" font-style="italic">no role, no format, no citation rule</text>
+</g>
+
+<!-- BAD OUTPUT -->
+<g class="bad-output" transform="translate(40 100)">
+<rect width="640" height="120" rx="8" fill="#FFFFFF" stroke="#7F1D1D" stroke-width="2"/>
+<text x="20" y="22" font-size="11" fill="#7F1D1D" font-weight="bold">AI output:</text>
+<text x="20" y="42" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">Total revenue: ₹47.2 crore (FY24)</text>
+<text x="20" y="60" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">Operating expense: ₹38.1 crore</text>
+<text x="20" y="78" font-family="ui-monospace,monospace" font-size="11" fill="#7F1D1D" font-weight="bold">Forex adjustment: ₹2.4 crore   ⚠ INVENTED</text>
+<text x="20" y="96" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">Net profit: ₹6.7 crore</text>
+<text x="20" y="114" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937">EBITDA margin: 18.4%</text>
+</g>
+
+<!-- ALARM -->
+<g class="alarm" transform="translate(140 240)">
+<rect width="440" height="50" rx="8" fill="#7F1D1D"/>
+<text x="220" y="22" text-anchor="middle" font-size="13" fill="#FCA5A5" font-weight="bold">CA pasted into board pack · audit caught 3 weeks later</text>
+<text x="220" y="40" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">no Forex line existed in the source ledger</text>
+</g>
+
+<!-- FIX PROMPT -->
+<g class="fix-prompt" transform="translate(40 310)">
+<rect width="640" height="48" rx="8" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="20" y="20" font-size="11" fill="#065F46" font-weight="bold">prompt:</text>
+<text x="80" y="20" font-family="ui-monospace,monospace" font-size="10" fill="#065F46">"You're a CA reviewing a P&L. Output JSON {line_item, amount, source_row}.</text>
+<text x="80" y="36" font-family="ui-monospace,monospace" font-size="10" fill="#065F46">Every figure must cite the row it came from. If unsure, return null."</text>
+</g>
+
+<!-- FIX OUTPUT (compact) -->
+<g class="fix-output" transform="translate(40 366)">
+<text x="20" y="14" font-family="ui-monospace,monospace" font-size="10" fill="#065F46" font-weight="bold">{"revenue":{"value":47.2,"source":"row 14"}, "opex":{"value":38.1,"source":"row 32"}, "net":{"value":6.7,"source":"row 47"}}</text>
+<text x="320" y="34" text-anchor="middle" font-size="11" fill="#065F46" font-style="italic">→ every figure traceable, audit-friendly</text>
+</g>
+</svg>
+<div class="caption">In financials, "show your sources" must be in the prompt — never optional.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

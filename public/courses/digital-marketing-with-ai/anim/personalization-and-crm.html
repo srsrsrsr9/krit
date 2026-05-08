@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Personalization: creepy vs delightful</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFDF8;
+    --bad:#F43F5E; --bad-bg:#FECDD3;
+    --good:#10B981; --good-bg:#D1FAE5;
+    --warm:#F59E0B;
+    --ease:cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .frame{width:100%;max-width:860px;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;max-width:780px;line-height:1.5;}
+  .reset{position:fixed;bottom:14px;right:14px;background:#1F2937;color:#FFF7ED;border:none;border-radius:999px;
+    font:600 12px system-ui;padding:8px 14px;cursor:pointer;letter-spacing:.02em}
+  .reset:hover{background:#374151}
+  .num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  [data-s] .layer{opacity:0;transition:opacity .5s var(--ease);}
+  [data-s="0"] .l-0,
+  [data-s="1"] .l-0,[data-s="1"] .l-1,
+  [data-s="2"] .l-0,[data-s="2"] .l-1,[data-s="2"] .l-2,
+  [data-s="3"] .layer{opacity:1;}
+
+  /* face transitions */
+  .face-neutral, .face-shock, .face-smile{transition: opacity .4s var(--ease);}
+  [data-s="0"] .face-shock, [data-s="0"] .face-smile,
+  [data-s="1"] .face-shock, [data-s="1"] .face-smile{opacity:0}
+  [data-s="2"] .face-neutral{opacity:0}
+  [data-s="2"] .face-shock{opacity:1}
+  [data-s="2"] .face-smile{opacity:1}
+  [data-s="3"] .face-neutral{opacity:0}
+  [data-s="3"] .face-shock{opacity:1}
+  [data-s="3"] .face-smile{opacity:1}
+
+  /* reaction labels appear on stage 3 */
+  .reaction{opacity:0; transition: opacity .5s var(--ease) .2s, transform .6s var(--ease) .2s;}
+  [data-s="3"] .reaction{opacity:1;}
+  [data-s="3"] .reaction.left{transform: translate(0,-4px)}
+  [data-s="3"] .reaction.right{transform: translate(0,-4px)}
+
+  .typing line{stroke-dasharray:160; stroke-dashoffset:160;}
+  [data-s="1"] .typing.l line, [data-s="2"] .typing.l line, [data-s="3"] .typing.l line{
+    animation: typeReveal 1.6s var(--ease) forwards;
+  }
+  [data-s="1"] .typing.r line, [data-s="2"] .typing.r line, [data-s="3"] .typing.r line{
+    animation: typeReveal 1.6s var(--ease) forwards;
+  }
+  @keyframes typeReveal{ to { stroke-dashoffset: 0; } }
+
+  .stamp{transform-origin:center; transform:scale(0); opacity:0;}
+  [data-s="3"] .stamp{ animation: stampIn .55s var(--ease) forwards; animation-delay: .35s;}
+  @keyframes stampIn{ 0%{transform:scale(2.4) rotate(-8deg); opacity:0} 70%{transform:scale(.92) rotate(-6deg); opacity:1} 100%{transform:scale(1) rotate(-6deg); opacity:1}}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg id="root" class="frame" viewBox="0 0 860 500" data-s="3"
+      aria-label="Two emails to the same user. The left is creepy 1-to-1 personalization and gets reported as spam. The right is segment-based and gets a click.">
+
+      <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="700">Same user. Two emails. Two reactions.</text>
+      <text x="430" y="54" text-anchor="middle" font-size="13" fill="#6B7280">Personalization is a dial, not a slider. There's a creepy line and you don't want to cross it.</text>
+
+      <!-- divider down the middle -->
+      <line x1="430" y1="80" x2="430" y2="430" stroke="#1F2937" stroke-width="1.2" stroke-dasharray="3 5" opacity=".35"/>
+
+      <!-- ============ LEFT: CREEPY ============ -->
+      <g class="layer l-0" transform="translate(20, 90)">
+        <rect x="0" y="0" width="392" height="340" rx="14" fill="#FECDD3" stroke="#F43F5E" stroke-width="2"/>
+        <text x="196" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#9F1239">1:1 ULTRA-PERSONAL · creepy</text>
+
+        <!-- envelope -->
+        <g transform="translate(20, 50)">
+          <rect x="0" y="0" width="352" height="206" rx="10" fill="#FFFDF8" stroke="#9F1239" stroke-width="1.6"/>
+          <!-- header bar -->
+          <rect x="0" y="0" width="352" height="34" rx="10" fill="#FECDD3" stroke="#9F1239" stroke-width="1.4"/>
+          <circle cx="14" cy="17" r="3.5" fill="#9F1239"/>
+          <circle cx="26" cy="17" r="3.5" fill="#9F1239" opacity=".55"/>
+          <circle cx="38" cy="17" r="3.5" fill="#9F1239" opacity=".25"/>
+          <text x="58" y="20" font-size="10" font-weight="700" fill="#9F1239">From: Brand &lt;noreply@brand.com&gt;</text>
+
+          <!-- email body -->
+          <text x="20" y="58" font-size="12" font-weight="700" fill="#1F2937">Hi Priya,</text>
+
+          <g class="typing l" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937" stroke="none">
+            <text x="20" y="80">we noticed you spent 47 minutes on the</text>
+            <text x="20" y="98">kurta page last Tuesday at 9:14pm IST,</text>
+            <text x="20" y="116">scrolled past the burgundy one twice,</text>
+            <text x="20" y="134">paused on the linen kurta for 9 minutes,</text>
+            <text x="20" y="152">and didn't buy. Here's a 12% off code...</text>
+          </g>
+          <!-- a fake "reveal" overlay using stroke lines so animation reads as typing -->
+          <g class="typing l" stroke="#FFFDF8" stroke-width="14" stroke-linecap="butt">
+            <line x1="20" y1="80" x2="180" y2="80"/>
+            <line x1="20" y1="98" x2="180" y2="98"/>
+            <line x1="20" y1="116" x2="180" y2="116"/>
+            <line x1="20" y1="134" x2="180" y2="134"/>
+            <line x1="20" y1="152" x2="180" y2="152"/>
+          </g>
+
+          <!-- weird tracking footer -->
+          <line x1="20" y1="170" x2="332" y2="170" stroke="#9F1239" stroke-width=".6" opacity=".3"/>
+          <text x="20" y="184" font-size="9" fill="#6B7280" font-style="italic">tracking ID: u-2847 · session_replay enabled · device fp: 0xB73A2C</text>
+          <text x="20" y="196" font-size="9" fill="#6B7280" font-style="italic">your behavior on 14 unrelated sites contributed to this email</text>
+        </g>
+
+        <!-- user reaction LEFT -->
+        <g transform="translate(70, 280)">
+          <!-- shoulders -->
+          <rect x="-30" y="22" width="60" height="34" rx="14" fill="#FECDD3" stroke="#9F1239" stroke-width="1.6"/>
+          <!-- head -->
+          <circle cx="0" cy="0" r="22" fill="#FFFDF8" stroke="#1F2937" stroke-width="2"/>
+          <!-- neutral face (default) -->
+          <g class="face-neutral">
+            <circle cx="-7" cy="-3" r="2" fill="#1F2937"/>
+            <circle cx="7" cy="-3" r="2" fill="#1F2937"/>
+            <line x1="-5" y1="9" x2="5" y2="9" stroke="#1F2937" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+          <!-- shocked / disgust -->
+          <g class="face-shock">
+            <!-- wide eyes -->
+            <circle cx="-7" cy="-3" r="4" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.6"/>
+            <circle cx="-7" cy="-3" r="1.6" fill="#1F2937"/>
+            <circle cx="7" cy="-3" r="4" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.6"/>
+            <circle cx="7" cy="-3" r="1.6" fill="#1F2937"/>
+            <!-- frown -->
+            <path d="M-6 12 Q0 6 6 12" stroke="#1F2937" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <!-- sweat drop -->
+            <path d="M14 -10 Q18 -2 14 2 Q10 -2 14 -10 Z" fill="#0EA5E9" stroke="#1F2937" stroke-width="1.2"/>
+          </g>
+        </g>
+
+        <!-- spam button -->
+        <g class="reaction left" transform="translate(220, 290)">
+          <rect x="-50" y="-18" width="120" height="36" rx="10" fill="#9F1239" stroke="#1F2937" stroke-width="1.8"/>
+          <text x="10" y="6" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFDF8">REPORT SPAM</text>
+          <!-- pointer hand -->
+          <g transform="translate(-50,-30)">
+            <path d="M0 0 L10 -2 L14 6 L8 14 L-2 14 Z" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.4"/>
+          </g>
+        </g>
+
+        <!-- big SPAM stamp -->
+        <g class="stamp" transform="translate(330, 50)">
+          <circle r="32" fill="none" stroke="#9F1239" stroke-width="3"/>
+          <text text-anchor="middle" y="6" font-size="16" font-weight="700" fill="#9F1239">SPAM</text>
+        </g>
+      </g>
+
+      <!-- ============ RIGHT: SEGMENT ============ -->
+      <g class="layer l-1" transform="translate(448, 90)">
+        <rect x="0" y="0" width="392" height="340" rx="14" fill="#D1FAE5" stroke="#10B981" stroke-width="2"/>
+        <text x="196" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">SEGMENT-BASED · delightful</text>
+
+        <!-- envelope -->
+        <g transform="translate(20, 50)">
+          <rect x="0" y="0" width="352" height="206" rx="10" fill="#FFFDF8" stroke="#065F46" stroke-width="1.6"/>
+          <rect x="0" y="0" width="352" height="34" rx="10" fill="#D1FAE5" stroke="#065F46" stroke-width="1.4"/>
+          <circle cx="14" cy="17" r="3.5" fill="#065F46"/>
+          <circle cx="26" cy="17" r="3.5" fill="#065F46" opacity=".55"/>
+          <circle cx="38" cy="17" r="3.5" fill="#065F46" opacity=".25"/>
+          <text x="58" y="20" font-size="10" font-weight="700" fill="#065F46">From: Anokhi Kurtas &lt;hello@anokhi.in&gt;</text>
+
+          <text x="20" y="58" font-size="12" font-weight="700" fill="#1F2937">Hi Priya,</text>
+
+          <g class="typing r" font-family="ui-monospace,monospace" font-size="11" fill="#1F2937" stroke="none">
+            <text x="20" y="80">it's your favourite kurta brand 👋</text>
+            <text x="20" y="98">based on your last few visits, here are</text>
+            <text x="20" y="116">3 you might like — all in your size,</text>
+            <text x="20" y="134">all under ₹2,000.</text>
+            <text x="20" y="152">happy browsing.</text>
+          </g>
+          <g class="typing r" stroke="#FFFDF8" stroke-width="14" stroke-linecap="butt">
+            <line x1="20" y1="80" x2="180" y2="80"/>
+            <line x1="20" y1="98" x2="180" y2="98"/>
+            <line x1="20" y1="116" x2="180" y2="116"/>
+            <line x1="20" y1="134" x2="180" y2="134"/>
+            <line x1="20" y1="152" x2="180" y2="152"/>
+          </g>
+
+          <!-- 3 product chips -->
+          <g transform="translate(20,170)">
+            <rect x="0" y="0" width="100" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
+            <circle cx="12" cy="11" r="6" fill="#F59E0B"/>
+            <text x="26" y="15" font-size="10" font-weight="700" fill="#92400E">linen · M</text>
+
+            <rect x="110" y="0" width="100" height="22" rx="11" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="1.2"/>
+            <circle cx="122" cy="11" r="6" fill="#0EA5E9"/>
+            <text x="136" y="15" font-size="10" font-weight="700" fill="#0C4A6E">cotton · M</text>
+
+            <rect x="220" y="0" width="100" height="22" rx="11" fill="#F3E8FF" stroke="#8B5CF6" stroke-width="1.2"/>
+            <circle cx="232" cy="11" r="6" fill="#8B5CF6"/>
+            <text x="246" y="15" font-size="10" font-weight="700" fill="#5B21B6">silk · M</text>
+          </g>
+        </g>
+
+        <!-- user reaction RIGHT -->
+        <g transform="translate(70, 280)">
+          <rect x="-30" y="22" width="60" height="34" rx="14" fill="#D1FAE5" stroke="#065F46" stroke-width="1.6"/>
+          <circle cx="0" cy="0" r="22" fill="#FFFDF8" stroke="#1F2937" stroke-width="2"/>
+          <g class="face-neutral">
+            <circle cx="-7" cy="-3" r="2" fill="#1F2937"/>
+            <circle cx="7" cy="-3" r="2" fill="#1F2937"/>
+            <line x1="-5" y1="9" x2="5" y2="9" stroke="#1F2937" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+          <g class="face-smile">
+            <!-- happy eyes (curve up) -->
+            <path d="M-11 -4 Q-7 -8 -3 -4" stroke="#1F2937" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M3 -4 Q7 -8 11 -4" stroke="#1F2937" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <!-- big smile -->
+            <path d="M-9 6 Q0 14 9 6" stroke="#1F2937" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <!-- blush -->
+            <circle cx="-12" cy="6" r="2.5" fill="#FBA4AF" opacity=".8"/>
+            <circle cx="12" cy="6" r="2.5" fill="#FBA4AF" opacity=".8"/>
+          </g>
+        </g>
+
+        <!-- click button -->
+        <g class="reaction right" transform="translate(220, 290)">
+          <rect x="-50" y="-18" width="120" height="36" rx="10" fill="#10B981" stroke="#1F2937" stroke-width="1.8"/>
+          <text x="10" y="6" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFDF8">CLICK</text>
+          <g transform="translate(60,-22)">
+            <path d="M0 0 L10 -2 L14 6 L8 14 L-2 14 Z" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.4"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- ============ BOTTOM RULE ============ -->
+      <g class="layer l-2" transform="translate(20, 446)">
+        <rect x="0" y="0" width="820" height="40" rx="10" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.6"/>
+        <text x="14" y="17" font-size="11" font-weight="700">Rule of thumb:</text>
+        <text x="98" y="17" font-size="11" fill="#1F2937">show you remember <tspan font-style="italic">the brand they love</tspan>, not <tspan font-style="italic">the minute they hovered</tspan>.</text>
+        <text x="14" y="32" font-size="10.5" fill="#6B7280" font-style="italic">If your email reads like a forensic transcript, it is one — and people delete forensic transcripts.</text>
+      </g>
+    </svg>
+    <div class="caption">Segment-based feels like a friend who remembers what you like. 1:1 surveillance feels like, well, surveillance.</div>
+  </div>
+</main>
+<button class="reset" id="reset" aria-label="Restart animation">Restart</button>
+
+<script>
+(function(){
+  const root = document.getElementById('root');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seq = [0,1,2,3];
+  let i = 0, t;
+  function step(){
+    root.dataset.s = seq[i];
+    const dwell = (seq[i]===3) ? 4500 : 1700;
+    i = (i+1) % seq.length;
+    t = setTimeout(step, dwell);
+  }
+  function start(){
+    if(reduced){ root.dataset.s = 3; return; }
+    clearTimeout(t); i = 0; step();
+  }
+  document.getElementById('reset').addEventListener('click', start);
+  start();
+})();
+</script>
+</body>
+</html>

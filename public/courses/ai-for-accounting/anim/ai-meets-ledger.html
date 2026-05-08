@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI meets the ledger</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--muted:#6B7280;--good:#10B981;--amber:#F59E0B;--blue:#0EA5E9;--violet:#8B5CF6;--bad:#F43F5E}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:860px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;min-height:18px}
+.rb{position:absolute;bottom:6px;right:6px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:inherit;opacity:.7}
+.rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="frame">
+<svg viewBox="0 0 860 500" aria-label="A 1000-row ledger flowing through an AI classifier; high-confidence rows pass through green, low-confidence rows route to a human CA in amber.">
+  <rect width="860" height="500" fill="#FFF7ED"/>
+  <text x="430" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">1,000 rows in. Most leave on their own.</text>
+
+  <!-- LEDGER STACK (left) -->
+  <g transform="translate(40,80)">
+    <rect x="0" y="0" width="190" height="340" rx="12" fill="#FFFFFF" stroke="#E7E5E4" stroke-width="2"/>
+    <text x="95" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#6B7280" letter-spacing="1.2">LEDGER · 1000 ROWS</text>
+    <line x1="14" y1="32" x2="176" y2="32" stroke="#E7E5E4"/>
+    <g id="rows" font-family="ui-monospace,monospace" font-size="10" fill="#1F2937"></g>
+    <rect x="6" y="306" width="178" height="28" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="95" y="324" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="600">+ <tspan id="rowCount" font-family="ui-monospace,monospace">0</tspan> processed</text>
+  </g>
+
+  <!-- AI CLASSIFIER (center) -->
+  <g transform="translate(335,170)">
+    <rect x="0" y="0" width="190" height="160" rx="14" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2.5"/>
+    <text x="95" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#8B5CF6" letter-spacing="1.5">AI CLASSIFIER</text>
+    <!-- nodes -->
+    <g id="brain" stroke="#8B5CF6" stroke-width="1.5" fill="#FFFFFF">
+      <circle cx="40" cy="68" r="9"/><circle cx="95" cy="58" r="9"/><circle cx="150" cy="68" r="9"/>
+      <circle cx="55" cy="108" r="9"/><circle cx="135" cy="108" r="9"/>
+      <line x1="40" y1="68" x2="95" y2="58"/><line x1="95" y1="58" x2="150" y2="68"/>
+      <line x1="40" y1="68" x2="55" y2="108"/><line x1="150" y1="68" x2="135" y2="108"/>
+      <line x1="55" y1="108" x2="135" y2="108"/>
+    </g>
+    <text x="95" y="142" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">tags + confidence</text>
+  </g>
+
+  <!-- AUTO LANE label -->
+  <text x="700" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#10B981" letter-spacing="1.2">AUTO · CONF ≥ 0.92</text>
+  <rect x="600" y="170" width="220" height="100" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+  <text x="710" y="200" text-anchor="middle" font-size="11" fill="#065F46" font-weight="600">straight to books</text>
+
+  <!-- HUMAN LANE label -->
+  <text x="700" y="306" text-anchor="middle" font-size="12" font-weight="700" fill="#F59E0B" letter-spacing="1.2">HUMAN CA · CONF &lt; 0.92</text>
+  <rect x="600" y="316" width="220" height="100" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+  <g transform="translate(640,348)">
+    <circle cx="14" cy="14" r="11" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.8"/>
+    <circle cx="14" cy="11" r="4" fill="#F59E0B"/>
+    <path d="M4 26 Q14 18 24 26" fill="#F59E0B"/>
+  </g>
+  <text x="710" y="370" text-anchor="middle" font-size="11" fill="#7C2D12" font-weight="600">flagged for review</text>
+
+  <!-- FLOW PARTICLES container -->
+  <g id="particles"></g>
+
+  <!-- COUNTERS -->
+  <g transform="translate(610,220)">
+    <text x="0" y="0" font-size="28" font-weight="800" fill="#10B981" font-family="ui-monospace,monospace" id="autoN">0</text>
+    <text x="0" y="18" font-size="10" fill="#065F46" font-weight="600">auto-posted</text>
+  </g>
+  <g transform="translate(610,366)">
+    <text x="0" y="0" font-size="28" font-weight="800" fill="#F59E0B" font-family="ui-monospace,monospace" id="humanN">0</text>
+    <text x="0" y="18" font-size="10" fill="#7C2D12" font-weight="600">to review</text>
+  </g>
+
+  <!-- BAR SPLIT -->
+  <g transform="translate(40,448)">
+    <rect x="0" y="0" width="780" height="20" rx="10" fill="#E7E5E4"/>
+    <rect id="autoBar" x="0" y="0" width="0" height="20" rx="10" fill="#10B981"/>
+    <rect id="humanBar" x="0" y="0" width="0" height="20" fill="#F59E0B"/>
+    <text x="0" y="-8" font-size="11" font-weight="700" fill="#6B7280" letter-spacing="1">SHARE OF WORK</text>
+  </g>
+</svg>
+<div class="cap" id="cap">AI takes 80%. The 20% you keep is the 20% that matters.</div>
+<button class="rb" id="reset">restart</button>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tags=['REV','COGS','EXP','AST','LIA'];
+const tagColor={REV:'#0EA5E9',COGS:'#F59E0B',EXP:'#8B5CF6',AST:'#10B981',LIA:'#F43F5E'};
+const rowsG=document.getElementById('rows');
+const partG=document.getElementById('particles');
+const autoN=document.getElementById('autoN');
+const humanN=document.getElementById('humanN');
+const rowCount=document.getElementById('rowCount');
+const autoBar=document.getElementById('autoBar');
+const humanBar=document.getElementById('humanBar');
+
+let timers=[],rafs=[],running=false;
+function later(ms,fn){const t=setTimeout(fn,ms);timers.push(t);return t;}
+function clearAll(){timers.forEach(clearTimeout);timers=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+function rng(s){return Math.floor(Math.random()*s);}
+function rand(a,b){return a+Math.random()*(b-a);}
+
+function buildRows(){
+  rowsG.innerHTML='';
+  const rows=12;
+  for(let i=0;i<rows;i++){
+    const y=44+i*22;
+    const tag=tags[rng(tags.length)];
+    const amt=(rand(120,9999)).toFixed(2);
+    const t=document.createElementNS(NS,'g');
+    t.setAttribute('transform',`translate(14,${y})`);
+    t.innerHTML=
+      `<rect x="0" y="-12" width="162" height="18" rx="4" fill="#FAFAF9"/>`+
+      `<text x="4" y="1" font-size="9" fill="#9CA3AF">#${(1248+i).toString().padStart(4,'0')}</text>`+
+      `<rect x="38" y="-9" width="28" height="13" rx="3" fill="${tagColor[tag]}" opacity="0.18"/>`+
+      `<text x="52" y="1" font-size="9" font-weight="700" fill="${tagColor[tag]}" text-anchor="middle">${tag}</text>`+
+      `<text x="156" y="1" font-size="9" font-family="ui-monospace,monospace" fill="#1F2937" text-anchor="end">₹${amt}</text>`;
+    rowsG.appendChild(t);
+  }
+}
+
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function ease(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,3)/2;}
+
+function shootParticle(highConf){
+  const tag=tags[rng(tags.length)];
+  const startX=230, startY=170+Math.random()*240;
+  const midX=430, midY=250+rand(-20,20);
+  const endX=highConf?620:620;
+  const endY=highConf?220+rand(-20,20):360+rand(-20,20);
+  const conf=(highConf?rand(0.92,0.99):rand(0.55,0.91)).toFixed(2);
+
+  const g=document.createElementNS(NS,'g');
+  const dot=document.createElementNS(NS,'rect');
+  dot.setAttribute('x','-26');dot.setAttribute('y','-7');
+  dot.setAttribute('width','52');dot.setAttribute('height','14');
+  dot.setAttribute('rx','3');
+  dot.setAttribute('fill',tagColor[tag]);
+  dot.setAttribute('opacity','0.18');
+  const stroke=document.createElementNS(NS,'rect');
+  stroke.setAttribute('x','-26');stroke.setAttribute('y','-7');
+  stroke.setAttribute('width','52');stroke.setAttribute('height','14');
+  stroke.setAttribute('rx','3');stroke.setAttribute('fill','none');
+  stroke.setAttribute('stroke',tagColor[tag]);stroke.setAttribute('stroke-width','1.2');
+  const tx=document.createElementNS(NS,'text');
+  tx.setAttribute('x','0');tx.setAttribute('y','3');
+  tx.setAttribute('text-anchor','middle');tx.setAttribute('font-size','9');
+  tx.setAttribute('font-weight','700');tx.setAttribute('fill',tagColor[tag]);
+  tx.textContent=tag;
+  g.appendChild(dot);g.appendChild(stroke);g.appendChild(tx);
+  g.setAttribute('transform',`translate(${startX},${startY})`);
+  partG.appendChild(g);
+
+  // confidence pill appears at midpoint
+  const pill=document.createElementNS(NS,'g');
+  pill.setAttribute('opacity','0');
+  pill.innerHTML=
+    `<rect x="-22" y="-9" width="44" height="14" rx="7" fill="${highConf?'#10B981':'#F59E0B'}" opacity="0.18"/>`+
+    `<text x="0" y="1" text-anchor="middle" font-size="8" font-weight="700" fill="${highConf?'#065F46':'#7C2D12'}" font-family="ui-monospace,monospace">${conf}</text>`;
+  pill.setAttribute('transform',`translate(${midX},${midY-14})`);
+  partG.appendChild(pill);
+
+  const dur=reduced?0:1100;
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min((now-start)/Math.max(dur,1),1);
+    let x,y;
+    if(t<0.5){
+      const k=ease(t/0.5);
+      x=startX+(midX-startX)*k;
+      y=startY+(midY-startY)*k;
+    }else{
+      const k=ease((t-0.5)/0.5);
+      x=midX+(endX-midX)*k;
+      y=midY+(endY-midY)*k;
+      if((t-0.5)<0.18){pill.setAttribute('opacity',String((t-0.5)/0.18));}
+      else if(t>0.85){pill.setAttribute('opacity',String(Math.max(0,(1-t)/0.15)));}
+      else pill.setAttribute('opacity','1');
+    }
+    g.setAttribute('transform',`translate(${x.toFixed(1)},${y.toFixed(1)})`);
+    if(t<1) rafs.push(requestAnimationFrame(tick));
+    else{
+      if(highConf){dot.setAttribute('fill','#10B981');dot.setAttribute('opacity','0.25');stroke.setAttribute('stroke','#10B981');tx.setAttribute('fill','#065F46');tx.textContent='✓';}
+      else{dot.setAttribute('fill','#F59E0B');dot.setAttribute('opacity','0.25');stroke.setAttribute('stroke','#F59E0B');tx.setAttribute('fill','#7C2D12');tx.textContent='?';}
+      later(1200,()=>{if(g.parentNode)g.parentNode.removeChild(g);if(pill.parentNode)pill.parentNode.removeChild(pill);});
+    }
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+let processed=0,autoCnt=0,humanCnt=0;
+function tickCounters(){
+  const inc=Math.floor(rand(8,16));
+  processed=Math.min(1000,processed+inc);
+  rowCount.textContent=processed;
+  // 80/20 with slight jitter
+  autoCnt=Math.round(processed*0.81);
+  humanCnt=processed-autoCnt;
+  autoN.textContent=autoCnt;
+  humanN.textContent=humanCnt;
+  const totalW=780;
+  autoBar.setAttribute('width', (totalW*autoCnt/1000).toFixed(1));
+  humanBar.setAttribute('x', (totalW*autoCnt/1000).toFixed(1));
+  humanBar.setAttribute('width', (totalW*humanCnt/1000).toFixed(1));
+}
+
+function run(){
+  clearAll();
+  partG.innerHTML='';
+  processed=0;autoCnt=0;humanCnt=0;
+  autoN.textContent=0;humanN.textContent=0;rowCount.textContent=0;
+  autoBar.setAttribute('width',0);humanBar.setAttribute('width',0);
+  buildRows();
+
+  if(reduced){
+    processed=1000;autoCnt=810;humanCnt=190;
+    autoN.textContent=810;humanN.textContent=190;rowCount.textContent=1000;
+    autoBar.setAttribute('width',780*0.81);
+    humanBar.setAttribute('x',780*0.81);humanBar.setAttribute('width',780*0.19);
+    return;
+  }
+
+  // emit particles
+  let i=0;
+  function emit(){
+    if(i>=70){later(1400,run);return;}
+    const high=Math.random()<0.81;
+    shootParticle(high);
+    if(i%4===0) tickCounters();
+    i++;
+    later(140,emit);
+  }
+  emit();
+}
+
+document.getElementById('reset').addEventListener('click',()=>{clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

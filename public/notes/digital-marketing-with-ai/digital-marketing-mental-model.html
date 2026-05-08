@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Marketing Math, Then Marketing AI — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Marketing Math, Then Marketing AI</h1>
+  <p class="subtitle">Your CAC is not a creative problem</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>There are two tribes of marketers in 2026. Tribe A refuses to touch AI; their writers ship four blogs a week, their CAC is ₹847, and they're losing share to Tribe B.</p>
+  <div class="callout"><strong>Mental model: CAC/LTV first, AI second</strong><br/>Before any tool, any agency, any prompt: know two numbers.</div>
+  
+<h2>Move 1 — The funnel-stage lens</h2>
+<ul>
+<li>Pick any marketing activity. Ask one question: *which stage of the funnel does this serve?* You will discover that 'we should use AI' is not a strategy — it's a tool reaching for an unspecified problem.</li>
+<li>Step 1 — Refuse the abstract: 'Use AI for marketing' is unanswerable. Say back: 'Which funnel stage are we trying to move, and which metric will we know it by?' Don't move until you have an answer.</li>
+<li>Step 2 — Pick the stage: Founder says: 'Lower CAC.' That's BOFU territory (or a positioning fix; see Step 4). Now we know what we're optimising.</li>
+<li>Step 3 — Pick the metric: CAC has many cousins: blended CAC, paid CAC, CAC by channel, CAC by cohort. Pick one and write it down: 'Paid CAC for new D2C buyers acquired this month.'</li>
+<li>Step 4 — Diagnose before tooling: Is the math broken (LTV/CAC &lt; 3)? AI won't fix that. Is the creative tired? AI can help. Is the audience wrong? AI can help find a better one. Different diagnosis, different tool.</li>
+<li>Step 5 — Pick the AI ratio: TOFU drafts at 80% AI, voice review human. BOFU emails 50/50, cart-recovery copy human-led. Crisis PR — human only. The ratio comes from the diagnosis, not the tool catalogue.</li>
+</ul>
+<h2>Move 2 — Which stage gets AI?</h2>
+<ul>
+<li>Once you can name the stage, the AI question becomes specific instead of philosophical. Here is the rule of thumb that holds across D2C, SaaS, and edtech: **as the stakes per piece rise, the human ratio rises with them.** A crisp number from a Pune D2C wellness brand scaling to Tier-2 cities last March: when they shifted ad-creative drafting from 100% human to 80% AI / 20% human review, output went 4x and CAC moved from ₹920 to ₹910 (within noise).</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: AI tactics without metrics: The single most common failure mode in 2026: someone writes 'AI ad copy' on a Q-plan, ships 200 variants, and reports 'we shipped 200 variants' as if shipping were the goal.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">If LTV/CAC is under 3, you don't have a marketing engine — you have a fundraising plan, and AI cannot rescue the math.</div>
+<div class="takeaway">'Use AI for marketing' is not a strategy; it's a tool reaching for an unspecified problem.</div>
+<div class="takeaway">The funnel-stage lens decides everything: TOFU absorbs AI variance, BOFU pays for it in lost sales.</div>
+<div class="takeaway">Diagnose before tooling: math, audience, creative, or product — each points to a different AI ratio.</div>
+<div class="takeaway">If your AI plan has no 'we will move metric X to Y by date Z, or do A', you have an activity plan, not a strategy.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

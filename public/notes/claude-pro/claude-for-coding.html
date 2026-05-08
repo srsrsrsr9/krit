@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Claude Code: Your Pair Engineer — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Claude Code: Your Pair Engineer</h1>
+  <p class="subtitle">Plan-then-execute teammate, not autocomplete</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most engineers meet Claude Code expecting fancy autocomplete. They open the terminal, type *'add a login button'*, watch it run for forty minutes, and either get something brilliant or something that touched 14 files including the build config.</p>
+  <div class="callout"><strong>Mental model: Claude Code is a plan-then-execute teammate</strong><br/>Picture a junior engineer pair-programming with you. Before they touch a file they say *'so the plan is: change the User type, then update three call sites, then add a migration, then run the tests'*. You nod or push back. Then they execute, narrating as they go. If you skip the plan step you are not pair-programming; you are watching a junior wing it on the keyboard. Claude Code is exactly the same. **The plan is not a bureaucratic step; the plan is what makes the execution sane**.</div>
+  
+<h2>Move 1: The Planner-Doer Split</h2>
+<ul>
+<li>Every non-trivial task should start with a planning subagent that reads code and writes a plan, **without modifying anything**. The built-in `Plan` subagent does exactly this.</li>
+<li>/plan: Ask Claude Code to produce a plan: which routes, which DB tables, which env vars, which idempotency strategy, which retry behaviour, which test cases.</li>
+<li>Review: Read the PLAN.md. Push back: 'we already have an events table, reuse it' or 'do not add a new env var'.</li>
+<li>/implement: Run the doer. Sonnet 4.6 with the plan as context. Tell it to follow the plan strictly and stop if it deviates.</li>
+<li>Inline review: Read every diff. The plan said 4 files; if 7 changed, ask why before approving.</li>
+<li>Test: Tests run automatically in a pre-commit hook (configured in CLAUDE.md). Failed test = stop.</li>
+<li>Commit: You commit, not Claude. The kernel hook blocks autonomous commits anyway.</li>
+</ul>
+<h2>Move 2: CLAUDE.md as Kernel</h2>
+<ul>
+<li>CLAUDE.md is a markdown file at the root of your repo that Claude Code reads at the start of every session. It is your **kernel** in the Linux sense: a small, durable, always-loaded set of rules that constrain everything else.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the unbounded subagent: Subagents are powerful: `general-purpose` for multi-step research, `Plan` for read-only planning, `bug-hunter` for finding the root cause of a failure, `pr-reviewer` for reading a diff, `Explore` for codebase orientation. The trap: launching a subagent without a bounded brief and a hard stop. *'Investigate why the build is slow'* is unbounded; *'investigate why the build is slow, focus on the webpack config and the test pipeline, return a 5-bullet diagnosis'* is bounded. Unbounded subagents drift, cost more, and produce essays you have to read. Always give them a brief and a deliverable.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Claude Code without CLAUDE.md is expensive autocomplete; with a kernel it is a teammate.</div>
+<div class="takeaway">Always /plan before /implement for anything 3+ files, auth, payments, or migrations.</div>
+<div class="takeaway">The plan is reviewable in 2 minutes; the diff is reviewable in 2 hours. Cheaper to be wrong on the plan.</div>
+<div class="takeaway">Subagents need bounded briefs and a deliverable; unbounded subagents drift.</div>
+<div class="takeaway">Hooks enforce the rules you would otherwise have to enforce in code review.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

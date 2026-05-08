@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Governance Without Theatre — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Governance Without Theatre</h1>
+  <p class="subtitle">Real eval gates beat policy docs every audit, every quarter</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Your Compliance head walks in with a 47-page AI ethics policy. Legal has signed off.</p>
+  <div class="callout"><strong>Mental model: real eval gates beat policy docs, every time</strong><br/>A **policy doc** describes what the company aspires to. It contains nouns: 'fairness', 'accountability', 'transparency.' It can be 47 pages long and approved by Legal. It blocks nothing.</div>
+  
+<h2>Move 1 — The kill switch</h2>
+<ul>
+<li>A kill switch is the smallest, cheapest, highest-leverage piece of AI governance you can build. The complete spec fits in three lines: 1.</li>
+<li>Step 1 — The English question: CEO in a postmortem: 'We should be able to turn it off.' Everyone nods. Nothing changes.</li>
+<li>Step 2 — Pick the named on-call: Translate to: 'Priya, Anika, Rohan rotate weekly. PagerDuty escalation. Backup: head of platform.' If you cannot name three humans, you have a one-person dependency.</li>
+<li>Step 3 — Pick the time-to-disable: '15 minutes from page to feature-flag-off.' This forces engineering to wire a feature flag to a single button — not a deploy, not a config push, a flag.</li>
+<li>Step 4 — Pick the fallback: 'Form-based claim entry; estimated processing time 24 hrs; show banner explaining the AI flow is paused.' If the fallback is 'show error', users will assume the company is broken.</li>
+<li>Step 5 — Run a fire drill: Quarterly. The on-call pulls the switch on a low-traffic feature, you measure time-to-disable. If you have never run a drill, you do not have a kill switch; you have a screenshot of one.</li>
+</ul>
+<h2>Move 2 — What to write down</h2>
+<ul>
+<li>There are exactly four artefacts that must be written down before any AI feature touches money, identity, or health. Anything more is bureaucracy; anything less is theatre.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: policy doc, no enforcement: The most common, most expensive failure mode in 2024-26 AI governance: a polished policy document that is approved, circulated, never converted to enforceable artefacts, and never updated until the next incident.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Real eval gates beat policy docs because they are testable; anything that cannot fail cannot govern.</div>
+<div class="takeaway">A kill switch is three lines: who, in how many minutes, with what fallback. If you cannot answer all three, you do not have one.</div>
+<div class="takeaway">The four artefacts that gate every sensitive AI feature: eval card, kill switch spec, logging schema, named owner. Four pages, four signatures.</div>
+<div class="takeaway">If a line of policy cannot convert to an eval / log / kill / owner artefact, delete it. The doc collapses; the program improves.</div>
+<div class="takeaway">Auditors do not measure policy by weight; they measure it by the last enforced action.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

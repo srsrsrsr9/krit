@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: p &lt; 0.05 ergo true</title>
+<style>
+  :root {
+    --bg: #EFF6FF;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --accent: #0EA5E9;
+    --good: #10B981;
+    --bad: #F43F5E;
+    --amber: #F59E0B;
+    --violet: #8B5CF6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .frame-wrap { width:100%; max-width:780px; }
+  svg.frame { width:100%; height:auto; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; padding:0 12px; }
+  text { font-family: system-ui,-apple-system,"Inter",sans-serif; fill: var(--ink); }
+  .mono { font-family: ui-monospace, "SF Mono", monospace; }
+  .label { font-size: 13px; }
+  .tiny { font-size: 11px; fill: var(--muted); }
+  .head { font-size: 17px; font-weight: 700; }
+  .stage-cap { font-size: 12px; font-style: italic; fill: var(--muted); }
+
+  .panel { animation: panelFade 14s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity: 0; }
+  .panel.p1 { animation-delay: 0s; }
+  .panel.p2 { animation-delay: 3.5s; }
+  .panel.p3 { animation-delay: 7s; }
+  .panel.p4 { animation-delay: 10.5s; }
+  @keyframes panelFade {
+    0% { opacity: 0; }
+    3% { opacity: 1; }
+    22% { opacity: 1; }
+    27% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .gavel { animation: gavel 14s cubic-bezier(0.22,0.61,0.36,1) infinite; transform-origin: 50% 100%; transform-box: fill-box; }
+  @keyframes gavel {
+    0%, 12% { transform: rotate(0deg); }
+    16% { transform: rotate(-30deg); }
+    20% { transform: rotate(0deg); }
+    23% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .ci-narrow { animation: ciNarrow 14s cubic-bezier(0.22,0.61,0.36,1) infinite; }
+  @keyframes ciNarrow {
+    0%, 51% { transform: scaleX(1); }
+    62% { transform: scaleX(0.06); }
+    100% { transform: scaleX(0.06); }
+  }
+
+  .reality-line { animation: realLine 14s cubic-bezier(0.22,0.61,0.36,1) infinite; stroke-dasharray: 200; stroke-dashoffset: 200; }
+  @keyframes realLine {
+    0%, 62% { stroke-dashoffset: 200; }
+    72% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  .reality-dot { animation: realDot 14s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity: 0; }
+  @keyframes realDot {
+    0%, 72% { opacity: 0; transform: scale(0.4); transform-origin: center; transform-box: fill-box; }
+    76% { opacity: 1; transform: scale(1.3); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .panel { opacity: 1; }
+    .ci-narrow { transform: scaleX(0.06); }
+    .reality-line { stroke-dashoffset: 0; }
+    .reality-dot { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame-wrap">
+    <svg class="frame" viewBox="0 0 720 460" aria-label="An A/B test on 47 users shows variant B beating A by 12 percent at p equals 0.04. The manager declares B the winner. Rolled out to 47000 users, the lift is actually negative 2 percent. The fix is to do power analysis before the test, not after.">
+      <defs>
+        <pattern id="gridB" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#DBEAFE" stroke-width="1"/>
+        </pattern>
+        <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#1F2937"/>
+        </marker>
+      </defs>
+
+      <rect x="0.5" y="0.5" width="719" height="459" rx="14" fill="var(--paper)" stroke="#E5E7EB"/>
+
+      <!-- ====== PANEL 1: A/B test, n=47 ====== -->
+      <g class="panel p1">
+        <text class="head" x="360" y="46" text-anchor="middle">A/B test on 47 users. B beats A by 12%. p = 0.04.</text>
+
+        <!-- two bars -->
+        <g transform="translate(140 100)">
+          <rect x="0" y="200" width="140" height="80" rx="10" fill="#E0F2FE" stroke="var(--accent)" stroke-width="2.5"/>
+          <text class="mono" font-size="22" font-weight="700" x="70" y="248" text-anchor="middle" fill="var(--accent)">A</text>
+          <text class="tiny" x="70" y="268" text-anchor="middle" fill="var(--muted)">control · n=23</text>
+          <text class="mono" font-size="13" x="70" y="194" text-anchor="middle" font-weight="700">8.4%</text>
+          <text class="tiny" x="70" y="178" text-anchor="middle">conv.</text>
+        </g>
+
+        <g transform="translate(440 100)">
+          <rect x="0" y="160" width="140" height="120" rx="10" fill="#ECFDF5" stroke="var(--good)" stroke-width="2.5"/>
+          <text class="mono" font-size="22" font-weight="700" x="70" y="228" text-anchor="middle" fill="var(--good)">B</text>
+          <text class="tiny" x="70" y="248" text-anchor="middle" fill="var(--muted)">variant · n=24</text>
+          <text class="mono" font-size="13" x="70" y="154" text-anchor="middle" font-weight="700">9.4%</text>
+          <text class="tiny" x="70" y="138" text-anchor="middle">conv.</text>
+        </g>
+
+        <!-- p-value badge -->
+        <g transform="translate(360 360)">
+          <rect x="-70" y="-20" width="140" height="40" rx="20" fill="#FEF3C7" stroke="var(--amber)" stroke-width="2"/>
+          <text class="mono" font-size="14" font-weight="700" x="0" y="6" text-anchor="middle" fill="var(--ink)">+12% · p = 0.04</text>
+        </g>
+
+        <text class="stage-cap" x="360" y="408" text-anchor="middle">Looks decisive. Two bars. One number. Click "ship."</text>
+      </g>
+
+      <!-- ====== PANEL 2: manager declares winner ====== -->
+      <g class="panel p2">
+        <text class="head" x="360" y="46" text-anchor="middle">Manager declares: "B wins. Roll out to all users."</text>
+
+        <!-- gavel -->
+        <g transform="translate(360 230)">
+          <!-- block -->
+          <rect x="-90" y="60" width="180" height="20" rx="4" fill="#92400E"/>
+          <rect x="-100" y="80" width="200" height="14" rx="3" fill="#78350F"/>
+
+          <!-- gavel itself -->
+          <g class="gavel">
+            <rect x="-12" y="-90" width="24" height="60" rx="6" fill="#78350F"/>
+            <rect x="-50" y="-110" width="100" height="40" rx="8" fill="#92400E" stroke="#451A03" stroke-width="2"/>
+            <rect x="-50" y="-110" width="100" height="6" fill="#451A03" opacity="0.5"/>
+          </g>
+        </g>
+
+        <!-- speech -->
+        <g transform="translate(120 100)">
+          <rect x="0" y="0" width="180" height="50" rx="10" fill="#EFF6FF" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M 30 50 L 38 66 L 50 50 Z" fill="#EFF6FF" stroke="var(--accent)" stroke-width="2"/>
+          <text class="label" x="90" y="30" text-anchor="middle" font-style="italic">"Significant! Ship it."</text>
+        </g>
+
+        <text class="stage-cap" x="360" y="408" text-anchor="middle">p &lt; 0.05 is not "true." It's "loud enough to print."</text>
+      </g>
+
+      <!-- ====== PANEL 3: CI was huge, reality is flat ====== -->
+      <g class="panel p3">
+        <text class="head" x="360" y="46" text-anchor="middle">What n=47 actually said vs. what 47,000 users showed.</text>
+
+        <!-- chart frame -->
+        <rect x="80" y="100" width="560" height="220" fill="url(#gridB)"/>
+        <rect x="80" y="100" width="560" height="220" fill="none" stroke="#D1D5DB" stroke-width="1.5"/>
+
+        <!-- zero line -->
+        <line x1="80" y1="210" x2="640" y2="210" stroke="var(--ink)" stroke-width="1.5"/>
+        <text class="tiny mono" x="74" y="214" text-anchor="end">0%</text>
+        <text class="tiny mono" x="74" y="124" text-anchor="end">+30%</text>
+        <text class="tiny mono" x="74" y="296" text-anchor="end">−30%</text>
+        <text class="tiny" x="36" y="210" text-anchor="middle" transform="rotate(-90 36 210)">lift over A</text>
+
+        <!-- huge CI for n=47 -->
+        <g transform="translate(220 178)">
+          <line x1="-130" y1="0" x2="130" y2="0" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          <line x1="-130" y1="-12" x2="-130" y2="12" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          <line x1="130" y1="-12" x2="130" y2="12" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+          <circle r="6" fill="var(--accent)"/>
+          <text class="mono" font-size="12" x="0" y="-22" text-anchor="middle" font-weight="700" fill="var(--accent)">+12%</text>
+          <text class="tiny" x="0" y="32" text-anchor="middle" fill="var(--muted)">n = 47 · 95% CI: [−18%, +42%]</text>
+        </g>
+
+        <!-- narrowing CI for n=47000 -->
+        <g transform="translate(530 178)">
+          <line class="ci-narrow" x1="-130" y1="0" x2="130" y2="0" stroke="var(--bad)" stroke-width="3" stroke-linecap="round"/>
+          <circle class="reality-dot" cx="0" cy="0" r="6" fill="var(--bad)" transform="translate(-4 16)"/>
+          <text class="tiny" x="0" y="38" text-anchor="middle" fill="var(--muted)">n = 47,000 · 95% CI: [−3%, −1%]</text>
+        </g>
+
+        <!-- reality dot/text on -2 line -->
+        <text class="mono" font-size="12" x="530" y="200" text-anchor="middle" font-weight="700" fill="var(--bad)" opacity="0.001">.</text>
+
+        <!-- divider label -->
+        <text class="tiny" x="220" y="92" text-anchor="middle" fill="var(--muted)">test</text>
+        <text class="tiny" x="530" y="92" text-anchor="middle" fill="var(--muted)">rollout reality</text>
+
+        <text class="stage-cap" x="360" y="408" text-anchor="middle">The original interval included −18%. p = 0.04 didn't rule out "B is worse."</text>
+      </g>
+
+      <!-- ====== PANEL 4: fix — power analysis ====== -->
+      <g class="panel p4">
+        <text class="head" x="360" y="46" text-anchor="middle">Fix: power analysis before, not after.</text>
+
+        <g transform="translate(110 90)">
+          <rect x="0" y="0" width="500" height="280" rx="12" fill="#ECFDF5" stroke="var(--good)" stroke-width="2"/>
+          <text class="label" x="250" y="32" text-anchor="middle" font-weight="700" fill="var(--good)">Sample size = f(effect, variance, power, α)</text>
+
+          <g class="mono" font-size="12" fill="var(--ink)">
+            <text x="40" y="78">minimum detectable effect:</text>
+            <text x="280" y="78" font-weight="700" fill="var(--good)">2%</text>
+            <text x="40" y="106">baseline variance:</text>
+            <text x="280" y="106" font-weight="700" fill="var(--good)">σ = 0.28</text>
+            <text x="40" y="134">power (1 − β):</text>
+            <text x="280" y="134" font-weight="700" fill="var(--good)">0.80</text>
+            <text x="40" y="162">α:</text>
+            <text x="280" y="162" font-weight="700" fill="var(--good)">0.05</text>
+          </g>
+
+          <line x1="40" y1="184" x2="460" y2="184" stroke="var(--good)" stroke-width="1" opacity="0.4"/>
+
+          <text class="mono" font-size="13" x="40" y="216">required n per arm:</text>
+          <text class="mono" font-size="22" font-weight="700" x="280" y="220" fill="var(--good)">≈ 6,200</text>
+
+          <text class="tiny" x="250" y="252" text-anchor="middle" fill="var(--muted)" font-style="italic">If you can't get the sample, you can't get the answer. Stop pretending you did.</text>
+        </g>
+
+        <text class="stage-cap" x="360" y="408" text-anchor="middle">A test that can't see −18% from +18% can't tell you who's winning.</text>
+      </g>
+
+      <!-- progress dots -->
+      <g transform="translate(360 432)">
+        <circle cx="-30" cy="0" r="3.5" fill="var(--accent)"/>
+        <circle cx="-10" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+        <circle cx="10" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+        <circle cx="30" cy="0" r="3.5" fill="var(--accent)" opacity="0.5"/>
+      </g>
+    </svg>
+    <div class="caption">"Statistically significant" only means "the noise didn't quite swallow it." It does not mean "real," and it really doesn't mean "big."</div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: Magic-box thinking</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --amber: #F59E0B;
+    --good: #10B981;
+    --blue: #0EA5E9;
+    --violet: #8B5CF6;
+    --rose: #F43F5E;
+    --line: #1F2937;
+    --paper: #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .frame {
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 16/9;
+    display: block;
+  }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 760px;
+  }
+  .reset {
+    position: fixed; right: 14px; bottom: 14px;
+    background: var(--paper); color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 999px; padding: 6px 12px;
+    font: 600 12px system-ui, sans-serif;
+    cursor: pointer;
+  }
+  .reset:hover { background: var(--amber); color: #fff; }
+  .mono { font-family: ui-monospace, "SFMono-Regular", monospace; }
+  text { font-family: system-ui, -apple-system, "Inter", sans-serif; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg id="svg" class="frame" viewBox="0 0 800 450" aria-label="Animation: Claude confidently invents a Bitcoin price; with a web-search tool, it returns a real cited number.">
+      <defs>
+        <pattern id="dotsPat" width="14" height="14" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="#1F2937" opacity="0.07"/>
+        </pattern>
+      </defs>
+
+      <rect x="0" y="0" width="800" height="450" fill="url(#dotsPat)"/>
+
+      <!-- Stage label -->
+      <g id="stageLabel">
+        <rect id="stageBox" x="320" y="14" width="160" height="26" rx="13" fill="#1F2937"/>
+        <text id="stageText" x="400" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#FFF7ED">Stage 1 / 3</text>
+      </g>
+
+      <!-- USER bubble -->
+      <g id="userBubble" opacity="0" transform="translate(40,72)">
+        <rect width="300" height="64" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="2.5"/>
+        <circle cx="-14" cy="32" r="14" fill="#0EA5E9" stroke="#1F2937" stroke-width="2.5"/>
+        <text x="-14" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">U</text>
+        <text x="18" y="28" font-size="13" font-weight="600" fill="#1F2937">user</text>
+        <text x="18" y="48" font-size="14" fill="#1F2937">what's the live BTC price?</text>
+      </g>
+
+      <!-- CLAUDE box -->
+      <g id="claudeBox" transform="translate(440,90)">
+        <rect width="320" height="240" rx="16" fill="#FFFFFF" stroke="#1F2937" stroke-width="2.5"/>
+        <circle cx="32" cy="30" r="14" fill="#F59E0B" stroke="#1F2937" stroke-width="2.5"/>
+        <text x="32" y="34" text-anchor="middle" font-size="13" font-weight="700" fill="#1F2937">C</text>
+        <text x="56" y="34" font-size="13" font-weight="700" fill="#1F2937">Claude</text>
+
+        <!-- Thinking dots -->
+        <g id="thinking" opacity="0">
+          <circle cx="40" cy="120" r="5" fill="#1F2937">
+            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.1s" repeatCount="indefinite" begin="0s"/>
+          </circle>
+          <circle cx="60" cy="120" r="5" fill="#1F2937">
+            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.1s" repeatCount="indefinite" begin="0.25s"/>
+          </circle>
+          <circle cx="80" cy="120" r="5" fill="#1F2937">
+            <animate attributeName="opacity" values="0.2;1;0.2" dur="1.1s" repeatCount="indefinite" begin="0.5s"/>
+          </circle>
+        </g>
+
+        <!-- Fake answer (Stage 2) -->
+        <g id="fakeAnswer" opacity="0">
+          <text x="24" y="86" font-size="13" fill="#1F2937">Sure!</text>
+          <text x="24" y="120" class="mono" font-size="26" font-weight="800" fill="#F43F5E">$67,432.18</text>
+          <g id="confidentTag">
+            <rect x="24" y="138" width="118" height="22" rx="11" fill="#FEE2E2" stroke="#F43F5E" stroke-width="1.6"/>
+            <text x="83" y="153" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E">confident tone</text>
+          </g>
+          <text x="24" y="184" font-size="12" fill="#6B7280">As of right now.</text>
+          <text x="24" y="202" font-size="12" fill="#6B7280">No source cited.</text>
+        </g>
+
+        <!-- Real answer (Stage 3) -->
+        <g id="realAnswer" opacity="0">
+          <text x="24" y="86" font-size="13" fill="#1F2937">Let me check.</text>
+          <g>
+            <rect x="24" y="98" width="158" height="22" rx="11" fill="#ECFDF5" stroke="#10B981" stroke-width="1.6"/>
+            <circle cx="36" cy="109" r="5" fill="#10B981"/>
+            <text x="46" y="113" font-size="11" font-weight="700" fill="#10B981">tool: web_search</text>
+          </g>
+          <text x="24" y="148" class="mono" font-size="26" font-weight="800" fill="#10B981" id="realPrice">$71,208.40</text>
+          <text x="24" y="172" font-size="12" fill="#1F2937">source:</text>
+          <text x="24" y="190" font-size="12" fill="#0EA5E9" text-decoration="underline">coindesk.com · 14:02 UTC</text>
+          <text x="24" y="212" font-size="12" fill="#6B7280">fresh · cited · honest</text>
+        </g>
+      </g>
+
+      <!-- Reality strip (Stage 2) -->
+      <g id="reality" opacity="0" transform="translate(40,180)">
+        <rect width="370" height="160" rx="14" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2.5"/>
+        <text x="20" y="32" font-size="13" font-weight="700" fill="#1F2937">behind the curtain</text>
+
+        <!-- Brain box -->
+        <g transform="translate(20,46)">
+          <rect width="100" height="86" rx="10" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+          <text x="50" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">training</text>
+          <text x="50" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">data</text>
+          <text x="50" y="58" text-anchor="middle" font-size="11" fill="#6B7280">cutoff</text>
+          <text x="50" y="74" text-anchor="middle" class="mono" font-size="12" font-weight="700" fill="#F43F5E">2024-04</text>
+        </g>
+
+        <!-- Arrow -->
+        <g transform="translate(126,86)">
+          <path d="M0,0 L34,0" stroke="#1F2937" stroke-width="2" fill="none"/>
+          <path d="M30,-5 L40,0 L30,5 Z" fill="#1F2937"/>
+        </g>
+
+        <!-- Pattern guess -->
+        <g transform="translate(170,46)">
+          <rect width="180" height="86" rx="10" fill="#FFFFFF" stroke="#F43F5E" stroke-width="2"/>
+          <text x="90" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E">plausible-looking guess</text>
+          <text x="90" y="42" text-anchor="middle" class="mono" font-size="13" font-weight="700" fill="#1F2937">$67,432.18</text>
+          <text x="90" y="62" text-anchor="middle" font-size="10" fill="#6B7280">no live data</text>
+          <text x="90" y="76" text-anchor="middle" font-size="10" fill="#6B7280">no source</text>
+        </g>
+      </g>
+
+      <!-- Tool wrench (Stage 3) -->
+      <g id="toolNode" opacity="0" transform="translate(220,228)">
+        <circle r="36" fill="#ECFDF5" stroke="#10B981" stroke-width="2.5"/>
+        <g transform="translate(-14,-14)">
+          <path d="M22,2 a10,10 0 1 0 -8,18 l-8,8 a3,3 0 0 0 4,4 l8,-8 a10,10 0 0 0 18,-8 l-6,6 -6,-6 6,-6 a10,10 0 0 0 -8,-8 z"
+                fill="none" stroke="#10B981" stroke-width="2.5" stroke-linejoin="round"/>
+        </g>
+        <text y="56" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981">tool</text>
+      </g>
+
+      <!-- Verdict ribbon -->
+      <g id="verdict" opacity="0" transform="translate(40,388)">
+        <rect width="720" height="42" rx="10" fill="#1F2937"/>
+        <text id="verdictText" x="360" y="27" text-anchor="middle" font-size="14" font-weight="700" fill="#FFF7ED">give Claude a tool — or expect a confident guess.</text>
+      </g>
+
+    </svg>
+    <div class="caption" id="cap">Stage 1 — the user trusts the magic box.</div>
+  </div>
+</main>
+<button class="reset" id="reset" aria-label="Restart animation">Restart</button>
+
+<script>
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const $ = (id) => document.getElementById(id);
+  const userBubble = $('userBubble');
+  const thinking   = $('thinking');
+  const fakeAnswer = $('fakeAnswer');
+  const realAnswer = $('realAnswer');
+  const reality    = $('reality');
+  const toolNode   = $('toolNode');
+  const verdict    = $('verdict');
+  const stageText  = $('stageText');
+  const cap        = $('cap');
+  const realPrice  = $('realPrice');
+
+  const captions = [
+    'Stage 1 — the user trusts the magic box.',
+    'Stage 2 — Claude has no live data; the number is patterned from training.',
+    'Stage 3 — give Claude a tool. Real number. Fresh. Cited.'
+  ];
+  const stages = ['Stage 1 / 3', 'Stage 2 / 3', 'Stage 3 / 3'];
+
+  let timers = [];
+  function clearAll() { timers.forEach(clearTimeout); timers = []; }
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+  function setOpacity(el, v, ms) {
+    if (reduce) { el.style.transition = 'none'; el.style.opacity = v; return; }
+    el.style.transition = 'opacity ' + ms + 'ms cubic-bezier(0.22, 0.61, 0.36, 1)';
+    el.style.opacity = v;
+  }
+
+  function setStage(i) {
+    stageText.textContent = stages[i];
+    cap.textContent = captions[i];
+  }
+
+  function reset() {
+    clearAll();
+    [userBubble, thinking, fakeAnswer, realAnswer, reality, toolNode, verdict].forEach(el => {
+      el.style.transition = 'none';
+      el.style.opacity = 0;
+    });
+    setStage(0);
+  }
+
+  function play() {
+    reset();
+
+    // Stage 1: user asks
+    later(() => { setOpacity(userBubble, 1, 480); setStage(0); }, 200);
+    later(() => { setOpacity(thinking, 1, 320); }, 1100);
+
+    // Stage 2: confident wrong answer + reality
+    later(() => {
+      setStage(1);
+      setOpacity(thinking, 0, 240);
+      setOpacity(fakeAnswer, 1, 480);
+    }, 2800);
+    later(() => { setOpacity(reality, 1, 520); }, 3700);
+
+    // Pause to absorb
+    later(() => {
+      setStage(2);
+      setOpacity(fakeAnswer, 0, 320);
+      setOpacity(reality, 0, 320);
+    }, 6800);
+
+    // Stage 3: tool + real answer
+    later(() => { setOpacity(toolNode, 1, 420); }, 7200);
+    later(() => { setOpacity(thinking, 1, 240); }, 7600);
+    later(() => {
+      setOpacity(thinking, 0, 200);
+      setOpacity(realAnswer, 1, 520);
+    }, 8800);
+    later(() => { setOpacity(verdict, 1, 480); }, 9800);
+
+    // Loop
+    later(() => { play(); }, 13500);
+  }
+
+  $('reset').addEventListener('click', play);
+  if (reduce) {
+    setOpacity(userBubble, 1, 0);
+    setOpacity(realAnswer, 1, 0);
+    setOpacity(toolNode, 1, 0);
+    setOpacity(verdict, 1, 0);
+    setStage(2);
+  } else {
+    play();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Roadmaps, Quarterly Plans, and Saying No — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Roadmaps, Quarterly Plans, and Saying No</h1>
+  <p class="subtitle">A roadmap is a story you tell to align, not a contract you sign in blood</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most PMs build roadmaps the way they were taught — Gantt charts with feature names lined up against months, color-coded, beautiful, and almost entirely fictional by week six. The Gantt chart is not the problem; the *expectation* the Gantt chart sets is the problem.</p>
+  <div class="callout"><strong>Mental model: a roadmap is a story you tell to align, not a contract you sign</strong><br/>A roadmap has one job: get sales, engineering, design, customer success, and the board to all describe the next 90 days the same way. That's it. Same story, told confidently, in three different rooms.</div>
+  
+<h2>Move 1 — Now / Next / Later</h2>
+<ul>
+<li>The strongest roadmap format for most teams is **three columns: NOW, NEXT, LATER**. Replace your Gantt with this and watch your stakeholder conversations get 30 percent shorter.</li>
+<li>Step 1 — Force a quarterly outcome: Pick the one metric the team is moving this quarter. Activation? Retention? ARR? Without this, NOW becomes 'whatever feels urgent' and NEXT becomes a wishlist.</li>
+<li>Step 2 — Drop everything that doesn't map to the outcome: If a feature doesn't plausibly move the quarterly metric, it does not belong in NOW or NEXT. It can live in LATER as a direction signal, or in your private backlog.</li>
+<li>Step 3 — Cap NOW at 2-3 items: More than 3 in-flight items per pod and you lose focus. If everything is NOW, nothing is NOW. The cap forces you to sequence.</li>
+<li>Step 4 — Sequence NEXT in priority order, no dates: 5-6 items maximum. Numbered 1, 2, 3 in priority. Stakeholders can argue the order; they cannot extract a date.</li>
+<li>Step 5 — Make LATER a story, not a list: Group LATER items by theme: 'expand internationally', 'enterprise readiness', 'mobile experience'. Themes survive when individual features drop. Lists die feature by feature.</li>
+</ul>
+<h2>Move 2 — The polite no template</h2>
+<ul>
+<li>Sales will ask you to commit a feature to close a deal. A founder will ask you to add 'just one thing' to the sprint.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: turning your roadmap into a backlog: When stakeholders push, the path of least resistance is to add their ask to LATER and say 'it's on the roadmap'. Within three months your LATER column has 47 items, the roadmap looks impressive, and you've quietly committed to nothing.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">A roadmap is a story you tell to align, not a contract you sign. Commit to direction; don't commit to dates beyond the current quarter.</div>
+<div class="takeaway">Use NOW / NEXT / LATER columns: NOW is committed with ship dates, NEXT is scoped and prioritized without dates, LATER is themed direction.</div>
+<div class="takeaway">Cap NOW at 2-3 items per pod; cap LATER at 8-10 items grouped by 3-4 themes. Without a cap, the roadmap becomes a graveyard.</div>
+<div class="takeaway">The polite no template: 'Help me understand — deal size, timing, who else wants it? I'll come back tomorrow with yes, no, or swap.' Most asks die at step 1.</div>
+<div class="takeaway">The Yes-PM is popular for 90 days and useless by day 180. Saying no with reasons is not optional; it is the deliverable.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

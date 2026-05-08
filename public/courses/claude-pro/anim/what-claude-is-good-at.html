@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What Claude is good at</title>
+<style>
+  :root{--bg:#FFF7ED;--ink:#1F2937;--good:#10B981;--bad:#F43F5E;--accent:#F59E0B;--purple:#8B5CF6;--blue:#0EA5E9;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:760px}
+  svg{width:100%;height:auto;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+  #rb{position:absolute;bottom:-4px;right:8px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+  #rb:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  .tile{transform-box:fill-box;transform-origin:center;opacity:0}
+  .pop{animation:pop .55s cubic-bezier(.22,.61,.36,1) forwards;}
+  @keyframes pop{0%{opacity:0;transform:scale(.6) translateY(-10px)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg viewBox="0 0 760 480" aria-label="Capability map: tasks Claude is good at versus tasks Claude struggles with, sorted into top and bottom quadrants">
+      <rect width="760" height="480" fill="#FFF7ED"/>
+      <text x="380" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Where Claude shines — and where it slips.</text>
+
+      <!-- Top quadrant (good) -->
+      <rect x="40" y="56" width="680" height="170" rx="14" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+      <text x="60" y="82" font-size="13" font-weight="700" fill="#059669">GOOD AT</text>
+      <text x="60" y="98" font-size="11" fill="#065F46" font-style="italic">language transformations on text already in the prompt</text>
+
+      <!-- Bottom quadrant (bad) -->
+      <rect x="40" y="246" width="680" height="200" rx="14" fill="#FEF2F2" stroke="#F43F5E" stroke-width="2"/>
+      <text x="60" y="272" font-size="13" font-weight="700" fill="#BE123C">STRUGGLES WITH</text>
+      <text x="60" y="288" font-size="11" fill="#7F1D1D" font-style="italic">anything the model can’t see, can’t count, or has never read</text>
+
+      <!-- Conveyor / source -->
+      <g id="conveyor">
+        <rect x="280" y="448" width="200" height="22" rx="11" fill="#1F2937"/>
+        <text x="380" y="463" text-anchor="middle" font-size="10" fill="#FBBF24" font-family="ui-monospace,monospace">incoming tasks…</text>
+      </g>
+
+      <!-- Tiles top (good) — placed final positions -->
+      <g id="t1" class="tile">
+        <rect x="70"  y="118" width="148" height="92" rx="10" fill="#fff" stroke="#10B981" stroke-width="2"/>
+        <text x="144" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Summarize</text>
+        <text x="144" y="161" text-anchor="middle" font-size="10.5" fill="#374151">long doc → 5 bullets</text>
+        <text x="144" y="178" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">strong</text>
+        <circle cx="200" cy="132" r="8" fill="#10B981"/><path d="M196,132 l3,3 l6,-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g id="t2" class="tile">
+        <rect x="232" y="118" width="148" height="92" rx="10" fill="#fff" stroke="#10B981" stroke-width="2"/>
+        <text x="306" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Transform</text>
+        <text x="306" y="161" text-anchor="middle" font-size="10.5" fill="#374151">CSV → JSON, tone shifts</text>
+        <text x="306" y="178" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">strong</text>
+        <circle cx="362" cy="132" r="8" fill="#10B981"/><path d="M358,132 l3,3 l6,-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g id="t3" class="tile">
+        <rect x="394" y="118" width="148" height="92" rx="10" fill="#fff" stroke="#10B981" stroke-width="2"/>
+        <text x="468" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Classify</text>
+        <text x="468" y="161" text-anchor="middle" font-size="10.5" fill="#374151">label tickets, sort emails</text>
+        <text x="468" y="178" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">strong</text>
+        <circle cx="524" cy="132" r="8" fill="#10B981"/><path d="M520,132 l3,3 l6,-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g id="t4" class="tile">
+        <rect x="556" y="118" width="148" height="92" rx="10" fill="#fff" stroke="#10B981" stroke-width="2"/>
+        <text x="630" y="142" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Draft</text>
+        <text x="630" y="161" text-anchor="middle" font-size="10.5" fill="#374151">first pass copy / code</text>
+        <text x="630" y="178" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">strong</text>
+        <circle cx="686" cy="132" r="8" fill="#10B981"/><path d="M682,132 l3,3 l6,-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- Tiles bottom (bad) — 4 -->
+      <g id="t5" class="tile">
+        <rect x="70"  y="308" width="148" height="118" rx="10" fill="#fff" stroke="#F43F5E" stroke-width="2"/>
+        <text x="144" y="332" text-anchor="middle" font-size="13" font-weight="700" fill="#BE123C">Real-time data</text>
+        <text x="144" y="351" text-anchor="middle" font-size="10.5" fill="#374151">stock price, weather</text>
+        <text x="144" y="370" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">needs a tool</text>
+        <g transform="translate(200,322)"><circle r="8" fill="#F43F5E"/><line x1="-3" y1="-3" x2="3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="-3" x2="-3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+      </g>
+      <g id="t6" class="tile">
+        <rect x="232" y="308" width="148" height="118" rx="10" fill="#fff" stroke="#F43F5E" stroke-width="2"/>
+        <text x="306" y="332" text-anchor="middle" font-size="13" font-weight="700" fill="#BE123C">Exact math</text>
+        <text x="306" y="351" text-anchor="middle" font-size="10.5" fill="#374151">17-digit multiplication</text>
+        <text x="306" y="370" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">use a calculator</text>
+        <g transform="translate(362,322)"><circle r="8" fill="#F43F5E"/><line x1="-3" y1="-3" x2="3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="-3" x2="-3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+      </g>
+      <g id="t7" class="tile">
+        <rect x="394" y="308" width="148" height="118" rx="10" fill="#fff" stroke="#F43F5E" stroke-width="2"/>
+        <text x="468" y="332" text-anchor="middle" font-size="13" font-weight="700" fill="#BE123C">Post-cutoff</text>
+        <text x="468" y="351" text-anchor="middle" font-size="10.5" fill="#374151">last week's news</text>
+        <text x="468" y="370" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">no training data</text>
+        <g transform="translate(524,322)"><circle r="8" fill="#F43F5E"/><line x1="-3" y1="-3" x2="3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="-3" x2="-3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+      </g>
+      <g id="t8" class="tile">
+        <rect x="556" y="308" width="148" height="118" rx="10" fill="#fff" stroke="#F43F5E" stroke-width="2"/>
+        <text x="630" y="332" text-anchor="middle" font-size="13" font-weight="700" fill="#BE123C">Novel domains</text>
+        <text x="630" y="351" text-anchor="middle" font-size="10.5" fill="#374151">your private codebase</text>
+        <text x="630" y="370" text-anchor="middle" font-size="9" fill="#6B7280" font-style="italic">give examples first</text>
+        <g transform="translate(686,322)"><circle r="8" fill="#F43F5E"/><line x1="-3" y1="-3" x2="3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="-3" x2="-3" y2="3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g>
+      </g>
+
+      <!-- Sorting hand / arrow indicator -->
+      <g id="ptr" opacity="0">
+        <circle cx="380" cy="438" r="9" fill="#F59E0B"/>
+        <path d="M380,420 L380,400" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arr)"/>
+      </g>
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill="#F59E0B"/>
+        </marker>
+      </defs>
+
+      <!-- Footer caption inside SVG -->
+      <text x="380" y="468" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">Sort the task before you ask. The wrong quadrant is a wasted prompt.</text>
+    </svg>
+    <button id="rb">↺ reset</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const ids=['t1','t2','t3','t4','t5','t6','t7','t8'];
+  let timers=[];
+  function clearAll(){timers.forEach(clearTimeout);timers=[];}
+  function reset(){
+    clearAll();
+    ids.forEach(id=>{
+      const el=document.getElementById(id);
+      el.classList.remove('pop');
+      el.style.opacity='0';
+    });
+    document.getElementById('ptr').setAttribute('opacity','0');
+    run();
+  }
+  function pop(id,delay){
+    timers.push(setTimeout(()=>{
+      const el=document.getElementById(id);
+      // restart animation
+      void el.offsetWidth;
+      el.classList.add('pop');
+    },delay));
+  }
+  function flashPtr(delay){
+    timers.push(setTimeout(()=>{
+      const p=document.getElementById('ptr');
+      p.setAttribute('opacity','1');
+      timers.push(setTimeout(()=>p.setAttribute('opacity','0'),420));
+    },delay));
+  }
+  function run(){
+    // alternate top/bottom to feel like sorting
+    const order=[
+      ['t1',300],['t5',900],
+      ['t2',1500],['t6',2100],
+      ['t3',2700],['t7',3300],
+      ['t4',3900],['t8',4500],
+    ];
+    order.forEach(([id,d])=>{flashPtr(d-150);pop(id,d);});
+    timers.push(setTimeout(reset,11000));
+  }
+  document.getElementById('rb').addEventListener('click',reset);
+  // honor reduced motion
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    ids.forEach(id=>document.getElementById(id).style.opacity='1');
+  } else {
+    run();
+  }
+})();
+</script>
+</body>
+</html>

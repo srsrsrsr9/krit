@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: centralize too early, decentralize too late</title>
+<style>
+  :root {
+    --bg: #ECFDF5;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --accent: #10B981;
+    --bad: #F43F5E;
+    --warm: #F59E0B;
+    --ink-soft: #374151;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .frame-wrap { width:100%; max-width:780px; }
+  .frame { width:100%; aspect-ratio: 16/10; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; padding:0 12px; }
+  .num { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+  @media (prefers-reduced-motion: reduce) {
+    .anim, .anim * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame-wrap">
+    <svg class="frame anim" viewBox="0 0 780 488" aria-label="Animation: a small startup builds a Platform Team before any AI feature exists, and it gets cut. Then seven separate teams each ship their own RAG, leaving security with seven surfaces. The right time to centralize is between two and three real feature teams." role="img">
+      <!-- timeline -->
+      <line x1="60" y1="412" x2="720" y2="412" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+      <g font-size="10" fill="#6B7280" class="num">
+        <text x="60"  y="430">T0</text>
+        <text x="280" y="430">→ too early</text>
+        <text x="500" y="430">→ too late</text>
+        <text x="700" y="430" text-anchor="end">right time</text>
+      </g>
+      <!-- timeline pulses -->
+      <g>
+        <circle cx="60" cy="412" r="5" fill="#10B981"/>
+        <circle cx="280" cy="412" r="5" fill="#F43F5E"/>
+        <circle cx="500" cy="412" r="5" fill="#F43F5E"/>
+        <circle cx="700" cy="412" r="5" fill="#10B981"/>
+      </g>
+
+      <!-- ============ ACT 1: too early ============ -->
+      <g style="animation: act1 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+        <text x="40" y="42" font-size="13" font-weight="700" fill="#B91C1C" letter-spacing="1.5">ACT 1 — TOO EARLY</text>
+        <text x="40" y="60" font-size="12" fill="#6B7280" font-style="italic">small startup, no AI feature yet</text>
+
+        <!-- big platform team box -->
+        <rect x="120" y="100" width="280" height="240" rx="14" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
+        <text x="260" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#1F2937">"AI PLATFORM TEAM"</text>
+        <text x="260" y="142" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">building infra for hypothetical features</text>
+
+        <!-- people in the platform -->
+        <g>
+          <g transform="translate(160 180)"><circle r="14" fill="#A7F3D0"/><circle cy="-4" r="7" fill="#1F2937"/></g>
+          <g transform="translate(220 180)"><circle r="14" fill="#FDE68A"/><circle cy="-4" r="7" fill="#1F2937"/></g>
+          <g transform="translate(280 180)"><circle r="14" fill="#BFDBFE"/><circle cy="-4" r="7" fill="#1F2937"/></g>
+          <g transform="translate(340 180)"><circle r="14" fill="#FECACA"/><circle cy="-4" r="7" fill="#1F2937"/></g>
+        </g>
+        <!-- gears spinning, but nothing leaves -->
+        <g transform="translate(260 248)">
+          <g style="animation: spinSlow 6s linear infinite; transform-origin: center;">
+            <path d="M0,-22 L4,-22 L6,-12 L14,-10 L18,-18 L22,-14 L14,-6 L18,2 L26,0 L26,4 L18,4 L14,12 L22,16 L18,20 L14,12 L6,16 L4,22 L-4,22 L-6,12 L-14,16 L-18,20 L-22,16 L-14,8 L-18,0 L-26,4 L-26,0 L-18,-4 L-14,-10 L-22,-14 L-18,-18 L-14,-10 L-6,-12 L-4,-22 Z"
+                  fill="#94A3B8"/>
+            <circle r="6" fill="#ECFDF5"/>
+          </g>
+        </g>
+        <text x="260" y="298" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">ships nothing</text>
+
+        <!-- empty user side -->
+        <g transform="translate(540 230)">
+          <rect x="-60" y="-60" width="120" height="120" rx="12" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <text x="0" y="-12" text-anchor="middle" font-size="12" fill="#9CA3AF" font-weight="700">USERS</text>
+          <text x="0" y="6" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">getting nothing</text>
+          <!-- tumbleweed dot -->
+          <circle cx="0" cy="36" r="3" fill="#9CA3AF" opacity="0.6"/>
+        </g>
+
+        <!-- arrow into the void -->
+        <g>
+          <line x1="404" y1="240" x2="476" y2="240" stroke="#9CA3AF" stroke-width="2" stroke-dasharray="3 4"/>
+          <text x="440" y="232" text-anchor="middle" font-size="10" fill="#9CA3AF">?</text>
+        </g>
+
+        <!-- got cut stamp -->
+        <g style="animation: stamp1 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity: 0;">
+          <rect x="160" y="356" width="200" height="36" rx="8" fill="#FEE2E2" stroke="#FECACA" stroke-width="1.5"/>
+          <text x="260" y="378" text-anchor="middle" font-size="13" font-weight="700" fill="#B91C1C">team cut at next review</text>
+        </g>
+      </g>
+
+      <!-- ============ ACT 2: too late ============ -->
+      <g style="animation: act2 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+        <text x="40" y="42" font-size="13" font-weight="700" fill="#B91C1C" letter-spacing="1.5">ACT 2 — TOO LATE</text>
+        <text x="40" y="60" font-size="12" fill="#6B7280" font-style="italic">7 product teams, each rolling their own</text>
+
+        <!-- 7 small RAG boxes -->
+        <g>
+          <g transform="translate(110 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 1</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB A</text>
+          </g>
+          <g transform="translate(210 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 2</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB B</text>
+          </g>
+          <g transform="translate(310 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 3</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB C</text>
+          </g>
+          <g transform="translate(410 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 4</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB D</text>
+          </g>
+          <g transform="translate(510 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 5</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB E</text>
+          </g>
+          <g transform="translate(610 130)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 6</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB F</text>
+          </g>
+          <g transform="translate(360 210)">
+            <rect width="80" height="60" rx="8" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.5"/>
+            <text x="40" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">Team 7</text>
+            <text x="40" y="40" text-anchor="middle" font-size="9" fill="#6B7280">RAG v1</text>
+            <text x="40" y="52" text-anchor="middle" font-size="9" fill="#6B7280">vector DB G</text>
+          </g>
+        </g>
+
+        <!-- security person, head in hands -->
+        <g transform="translate(180 320)">
+          <circle r="22" fill="#FECACA"/>
+          <circle cy="-6" r="9" fill="#1F2937"/>
+          <text x="0" y="40" text-anchor="middle" font-size="11" font-weight="700" fill="#B91C1C">SECURITY</text>
+          <text x="0" y="54" text-anchor="middle" font-size="11" fill="#1F2937" class="num">7 audit surfaces</text>
+        </g>
+
+        <!-- spaghetti lines from teams to security -->
+        <g stroke="#F43F5E" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.85">
+          <path d="M150 196 C 150 240, 180 280, 180 312"/>
+          <path d="M250 196 C 250 240, 210 280, 192 312"/>
+          <path d="M350 196 C 350 250, 240 290, 200 314"/>
+          <path d="M450 196 C 440 250, 260 290, 208 314"/>
+          <path d="M550 196 C 540 260, 280 296, 212 314"/>
+          <path d="M650 196 C 640 260, 300 300, 216 314"/>
+          <path d="M400 276 C 360 296, 240 312, 210 320"/>
+        </g>
+
+        <g style="animation: stamp2 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <rect x="380" y="340" width="320" height="46" rx="10" fill="#FEE2E2" stroke="#FECACA" stroke-width="1.5"/>
+          <text x="540" y="362" text-anchor="middle" font-size="12" font-weight="700" fill="#B91C1C">7 inconsistent implementations</text>
+          <text x="540" y="378" text-anchor="middle" font-size="11" fill="#1F2937">cost, drift, and audit nightmare</text>
+        </g>
+      </g>
+
+      <!-- ============ ACT 3: right time ============ -->
+      <g style="animation: act3 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+        <text x="40" y="42" font-size="13" font-weight="700" fill="#065F46" letter-spacing="1.5">ACT 3 — THE RIGHT MOMENT</text>
+        <text x="40" y="60" font-size="12" fill="#6B7280" font-style="italic">centralize when 2-3 teams duplicate the same thing</text>
+
+        <!-- 3 product teams pulling from a small shared platform -->
+        <!-- shared platform -->
+        <g>
+          <rect x="300" y="240" width="180" height="80" rx="12" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+          <text x="390" y="266" text-anchor="middle" font-size="12" font-weight="700" fill="#065F46">SHARED RAG PLATFORM</text>
+          <text x="390" y="282" text-anchor="middle" font-size="10" fill="#065F46" font-style="italic">one eval, one auth, one log</text>
+          <!-- tiny gear inside -->
+          <g transform="translate(390 304)">
+            <circle r="8" fill="#FFFFFF"/>
+            <circle r="3" fill="#10B981"/>
+          </g>
+        </g>
+
+        <!-- 3 product team boxes with check marks -->
+        <g transform="translate(120 130)">
+          <rect width="120" height="70" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+          <text x="60" y="26" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937">Search</text>
+          <text x="60" y="44" text-anchor="middle" font-size="11" fill="#065F46" font-style="italic">live in prod</text>
+          <circle cx="100" cy="56" r="8" fill="#10B981"/>
+          <path d="M96,56 l3,3 l6,-6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(330 130)">
+          <rect width="120" height="70" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+          <text x="60" y="26" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937">Support</text>
+          <text x="60" y="44" text-anchor="middle" font-size="11" fill="#065F46" font-style="italic">live in prod</text>
+          <circle cx="100" cy="56" r="8" fill="#10B981"/>
+          <path d="M96,56 l3,3 l6,-6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <g transform="translate(540 130)">
+          <rect width="120" height="70" rx="10" fill="#FFFFFF" stroke="#10B981" stroke-width="1.5"/>
+          <text x="60" y="26" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937">Onboarding</text>
+          <text x="60" y="44" text-anchor="middle" font-size="11" fill="#065F46" font-style="italic">live in prod</text>
+          <circle cx="100" cy="56" r="8" fill="#10B981"/>
+          <path d="M96,56 l3,3 l6,-6" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+        </g>
+
+        <!-- clean lines down to platform -->
+        <g stroke="#10B981" stroke-width="2" fill="none" stroke-linecap="round">
+          <path d="M180 200 C 180 220, 340 230, 340 240"/>
+          <path d="M390 200 L 390 240"/>
+          <path d="M600 200 C 600 220, 440 230, 440 240"/>
+        </g>
+
+        <!-- happy security -->
+        <g transform="translate(680 280)">
+          <circle r="22" fill="#A7F3D0"/>
+          <circle cy="-6" r="9" fill="#1F2937"/>
+          <path d="M-7,5 Q0,11 7,5" stroke="#1F2937" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <text x="0" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#065F46">SECURITY</text>
+          <text x="0" y="58" text-anchor="middle" font-size="11" fill="#1F2937" class="num">1 surface</text>
+        </g>
+        <line x1="490" y1="280" x2="654" y2="280" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3 4"/>
+
+        <g style="animation: stamp3 12s cubic-bezier(0.22,0.61,0.36,1) infinite; opacity:0;">
+          <rect x="80" y="350" width="620" height="40" rx="10" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1.5"/>
+          <text x="390" y="375" text-anchor="middle" font-size="12" font-weight="700" fill="#065F46">centralize the second time someone re-invents the same wheel — not before, not later</text>
+        </g>
+      </g>
+
+      <style>
+        @keyframes act1 {
+          0%      { opacity: 0; }
+          3%,28%  { opacity: 1; }
+          33%,100%{ opacity: 0; }
+        }
+        @keyframes act2 {
+          0%,33%  { opacity: 0; }
+          37%,62% { opacity: 1; }
+          67%,100%{ opacity: 0; }
+        }
+        @keyframes act3 {
+          0%,67%  { opacity: 0; }
+          72%,97% { opacity: 1; }
+          100%    { opacity: 0; }
+        }
+        @keyframes stamp1 {
+          0%,18%  { opacity: 0; transform: translateY(6px); }
+          22%,28% { opacity: 1; transform: translateY(0); }
+          33%,100%{ opacity: 0; }
+        }
+        @keyframes stamp2 {
+          0%,52%  { opacity: 0; transform: translateY(6px); }
+          57%,62% { opacity: 1; transform: translateY(0); }
+          67%,100%{ opacity: 0; }
+        }
+        @keyframes stamp3 {
+          0%,82%  { opacity: 0; transform: translateY(6px); }
+          87%,97% { opacity: 1; transform: translateY(0); }
+          100%    { opacity: 0; }
+        }
+        @keyframes spinSlow {
+          to { transform: rotate(360deg); }
+        }
+      </style>
+    </svg>
+    <div class="caption">Centralize too early and the platform team ships nothing; too late and security audits seven copies of the same wheel.</div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Layout and Grids — The Invisible Skeleton — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Layout and Grids — The Invisible Skeleton</h1>
+  <p class="subtitle">A grid is a contract; spacing is the punctuation</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Some screens feel calm. Other screens feel itchy.</p>
+  <div class="callout"><strong>Mental model: the grid is a contract</strong><br/>A grid is not a visual aesthetic; it is **a contract you sign with your future self and your engineers**. It says: 'every spacing decision in this product comes from this list of numbers — 4, 8, 12, 16, 24, 32, 48, 64. No exceptions without a written reason.' The reason a system feels deliberate is that it has fewer choices, not more. The grid is what removes the choices.</div>
+  
+<h2>Move 1 — The 8-point spacing scale</h2>
+<ul>
+<li>Not because Apple did, not because Google did — because 8 has the cleanest factors of any small number that still gives you usable steps. Half of 8 is 4 (still on a pixel boundary).</li>
+<li>Step 1 — Audit current spacing: Grep your CSS for px values. You will find dozens of unique numbers between 1 and 64. Most of them are within 2px of an 8-point step.</li>
+<li>Step 2 — Define the scale as tokens: In Tailwind, this is mostly the default. Define spacing-1 through spacing-16 in your config, but keep the names usable: tight, snug, cozy, comfy, loose.</li>
+<li>Step 3 — Replace per-component overrides: Sweep one screen at a time. The first three are slow; the next ten go fast because the patterns repeat.</li>
+<li>Step 4 — Add a lint rule: Forbid arbitrary px values in className strings. The cost of slipping back is now visible in CI, not in code review.</li>
+<li>Step 5 — Document the exceptions: Some places need a 6px badge gap. Fine — write down which and why, so the next person knows it was a decision, not an accident.</li>
+</ul>
+<h2>Move 2 — The gutter that earns its keep</h2>
+<ul>
+<li>Once your spacing scale is locked, the next decision is the **gutter** — the gap between columns in a multi-column layout. The default gutter on a 12-column desktop grid is 24 or 32 pixels.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the 1px freelance: Every grid dies the same way. An engineer adds padding-15 because 'it looks slightly better than 16'. Three sprints later you have padding-13, padding-17, padding-22. None of them visibly wrong. Together: chaos. **The grid is a contract. The first off-scale value is the moment the contract dies.** Treat off-scale paddings the way you treat `console.log` in production: not catastrophic, but always a smell.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">A grid is a contract. The whole win is the constraint, not the aesthetic.</div>
+<div class="takeaway">Pick 8 as your base unit. The math is the reason: clean halves, quarters, and pixel-perfect rendering.</div>
+<div class="takeaway">Five to seven steps cover everything. Most days you live between 16 and 32.</div>
+<div class="takeaway">Gutters must exceed internal padding. Otherwise cards look glued together.</div>
+<div class="takeaway">The grid dies the moment someone ships padding-15 'because it looks better'. Defend the contract.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>

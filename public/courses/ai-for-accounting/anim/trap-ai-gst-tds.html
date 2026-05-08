@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: AI fakes section number</title>
+<style>
+:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(-2px,1px)}75%{transform:translate(2px,-1px)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.draft{animation:fade .4s ease .3s both}
+.send{animation:pop .4s ease 1.6s both}
+.reject{animation:pop .5s ease 3s both,shake .3s ease 3.5s 3 both}
+.fix{animation:fade .5s ease 6s both}
+.real{animation:pop .5s ease 7.5s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="An AI drafts a GST notice response citing a fake circular, the GST officer rejects it, then the fix uses RAG against the actual GST act for real citations">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+
+<!-- BAD: AI draft with fake citation -->
+<g class="draft" transform="translate(40 30)">
+<rect width="320" height="160" rx="8" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">AI draft (no RAG)</text>
+<line x1="14" y1="32" x2="306" y2="32" stroke="#7F1D1D"/>
+<text x="14" y="50" font-size="10" fill="#1F2937">Reply to GST notice GSTIN/2024/...</text>
+<text x="14" y="68" font-size="10" fill="#1F2937">"Per Circular 224/18/2024-GST,</text>
+<text x="14" y="84" font-size="10" fill="#7F1D1D" font-weight="bold">section 17(5)(g), ITC is restricted</text>
+<text x="14" y="100" font-size="10" fill="#1F2937">in cases where the supplier has..."</text>
+<text x="14" y="124" font-size="10" fill="#7F1D1D" font-style="italic">— circular doesn't exist</text>
+<text x="14" y="140" font-size="10" fill="#7F1D1D" font-style="italic">— section reference garbled</text>
+</g>
+
+<!-- SEND -->
+<g class="send" transform="translate(40 200)">
+<rect width="100" height="36" rx="6" fill="#1E40AF"/>
+<text x="50" y="22" text-anchor="middle" font-size="12" fill="#fff" font-weight="bold">Submit ↗</text>
+</g>
+<text class="send" x="160" y="222" font-size="10" fill="#1F2937">CA hits submit on the official portal</text>
+
+<!-- GST OFFICER REJECTS -->
+<g class="reject" transform="translate(40 248)">
+<rect width="320" height="100" rx="8" fill="#7F1D1D"/>
+<text x="160" y="24" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">GST Officer · 4 days later</text>
+<text x="160" y="46" text-anchor="middle" font-size="10" fill="#FCA5A5">"Cited circular 224/18/2024-GST does</text>
+<text x="160" y="60" text-anchor="middle" font-size="10" fill="#FCA5A5">not exist on cbic-gst.gov.in"</text>
+<text x="160" y="80" text-anchor="middle" font-size="10" fill="#FCA5A5" font-weight="bold">→ penalty notice issued · ₹47K</text>
+</g>
+
+<!-- FIX: RAG -->
+<g class="fix" transform="translate(380 30)">
+<rect width="300" height="160" rx="8" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">FIX · RAG against the actual GST act</text>
+<line x1="14" y1="32" x2="286" y2="32" stroke="#065F46"/>
+
+<g transform="translate(14 42)">
+<rect width="120" height="32" rx="4" fill="#FFFFFF" stroke="#065F46"/>
+<text x="60" y="20" text-anchor="middle" font-size="10" fill="#065F46" font-weight="bold">CGST Act 2017</text>
+</g>
+<g transform="translate(150 42)">
+<rect width="120" height="32" rx="4" fill="#FFFFFF" stroke="#065F46"/>
+<text x="60" y="20" text-anchor="middle" font-size="10" fill="#065F46" font-weight="bold">CBIC circulars</text>
+</g>
+<text x="150" y="92" text-anchor="middle" font-size="10" fill="#065F46">retrieve relevant pages → embed in prompt</text>
+<text x="150" y="108" text-anchor="middle" font-size="10" fill="#065F46">force AI to cite the chunk it used</text>
+<text x="150" y="124" text-anchor="middle" font-size="10" fill="#065F46">refuse if no chunk supports the claim</text>
+<text x="150" y="146" text-anchor="middle" font-size="10" fill="#065F46" font-style="italic">structural fix for hallucination</text>
+</g>
+
+<!-- REAL OUTPUT -->
+<g class="real" transform="translate(380 200)">
+<rect width="300" height="148" rx="8" fill="#6EE7B7" stroke="#065F46" stroke-width="2"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#fff" font-weight="bold">RAG output</text>
+<line x1="14" y1="32" x2="286" y2="32" stroke="#065F46"/>
+<text x="14" y="50" font-size="10" fill="#1F2937">"Per Section 16(2)(c) of CGST Act</text>
+<text x="14" y="66" font-size="10" fill="#1F2937">2017 [chunk_id: cgst_2017_p47],</text>
+<text x="14" y="82" font-size="10" fill="#065F46" font-weight="bold">ITC is conditional on supplier filing"</text>
+<text x="14" y="106" font-size="10" fill="#065F46">→ verifiable · officer accepts</text>
+<text x="14" y="124" font-size="10" fill="#065F46">→ no penalty</text>
+<text x="14" y="140" font-size="10" fill="#065F46" font-style="italic">audit-trail clean</text>
+</g>
+</svg>
+<div class="caption">In tax workflows, RAG with citations is the price of admission. Never optional.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

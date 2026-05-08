@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: Vibes-based spacing</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --line: #E5D9C7;
+    --amber: #F59E0B;
+    --green: #10B981;
+    --blue: #0EA5E9;
+    --violet: #8B5CF6;
+    --rose: #F43F5E;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 760px; }
+  .frame { width: 100%; aspect-ratio: 16/10; display: block; }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+  .num {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    fill: var(--rose);
+  }
+  .numGood { fill: var(--green); }
+  .label {
+    font-size: 12px;
+    fill: var(--muted);
+    font-family: ui-monospace, monospace;
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 700;
+    fill: var(--ink);
+  }
+  /* Bad card visible 0–45%, good 50–100% */
+  @keyframes badShow { 0%, 42% { opacity: 1; } 48%, 100% { opacity: 0; } }
+  @keyframes goodShow { 0%, 48% { opacity: 0; } 54%, 100% { opacity: 1; } }
+  /* measurement annotations pulse */
+  @keyframes pulseMeasure {
+    0%, 6% { opacity: 0; }
+    12% { opacity: 1; }
+    40% { opacity: 1; }
+    46%, 100% { opacity: 0; }
+  }
+  /* grid overlay slides in */
+  @keyframes gridIn {
+    0%, 48% { opacity: 0; }
+    54% { opacity: 0.5; }
+    72% { opacity: 0.5; }
+    80%, 100% { opacity: 0; }
+  }
+  /* good measurements */
+  @keyframes goodMeasure {
+    0%, 60% { opacity: 0; }
+    66% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  /* quality stamp (good) */
+  @keyframes stamp {
+    0%, 78% { opacity: 0; transform: scale(0.6) rotate(-12deg); }
+    84% { opacity: 1; transform: scale(1.1) rotate(-12deg); }
+    90% { opacity: 1; transform: scale(1) rotate(-12deg); }
+    100% { opacity: 1; transform: scale(1) rotate(-12deg); }
+  }
+  /* phase title swaps */
+  @keyframes titleBad { 0%, 42% { opacity: 1; } 48%, 100% { opacity: 0; } }
+  @keyframes titleGood { 0%, 48% { opacity: 0; } 54%, 100% { opacity: 1; } }
+  /* bad card jitter (subtle "off") */
+  @keyframes wobble {
+    0%, 30% { transform: translate(0,0); }
+    33% { transform: translate(0.6px,-0.4px); }
+    36% { transform: translate(-0.4px,0.5px); }
+    40% { transform: translate(0,0); }
+    100% { transform: translate(0,0); }
+  }
+  .DUR { animation-duration: 13s; animation-iteration-count: infinite; animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
+  .badLayer { animation-name: badShow; }
+  .goodLayer { animation-name: goodShow; opacity: 0; }
+  .badMeasure { animation-name: pulseMeasure; opacity: 0; }
+  .gridOverlay { animation-name: gridIn; opacity: 0; }
+  .goodMeasure { animation-name: goodMeasure; opacity: 0; }
+  .stamp { animation-name: stamp; transform-origin: center; transform-box: fill-box; opacity: 0; }
+  .tBad { animation-name: titleBad; }
+  .tGood { animation-name: titleGood; opacity: 0; }
+  .wobble { animation-name: wobble; transform-origin: center; transform-box: fill-box; }
+  @media (prefers-reduced-motion: reduce) {
+    .DUR { animation: none !important; }
+    .badLayer { opacity: 1; }
+    .goodLayer { opacity: 1; }
+    .badMeasure, .goodMeasure { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 760 475" aria-label="Trap: eyeballed paddings of 7, 13, 22, 9 px feel cheap. Fix: snap to 8-point grid, rhythm calms.">
+      <!-- background -->
+      <rect x="0" y="0" width="760" height="475" fill="#FFF7ED"/>
+
+      <!-- title bad -->
+      <text x="380" y="42" text-anchor="middle" class="title tBad DUR">Spacing by feel: 7 / 13 / 22 / 9</text>
+      <text x="380" y="42" text-anchor="middle" class="title tGood DUR">Snapped to 8-point grid: 16 / 16 / 24</text>
+
+      <!-- BAD CARD -->
+      <g class="badLayer DUR">
+        <g class="wobble DUR">
+          <!-- card outer with weird paddings -->
+          <rect x="200" y="100" width="360" height="240" rx="14" fill="#FFFFFF" stroke="#E5D9C7" stroke-width="2"/>
+          <!-- avatar -->
+          <circle cx="227" cy="127" r="14" fill="#FED7AA" stroke="#F59E0B" stroke-width="2"/>
+          <!-- name (offset by 13) -->
+          <rect x="248" y="118" width="120" height="10" rx="3" fill="#1F2937"/>
+          <rect x="248" y="134" width="80"  height="8"  rx="3" fill="#9CA3AF"/>
+          <!-- body block padded weirdly: 22 from name, 9 between -->
+          <rect x="207" y="180" width="346" height="10" rx="3" fill="#D6CCBA"/>
+          <rect x="207" y="199" width="320" height="10" rx="3" fill="#D6CCBA"/>
+          <rect x="207" y="218" width="280" height="10" rx="3" fill="#D6CCBA"/>
+          <!-- button (off-center, padded 9) -->
+          <rect x="207" y="246" width="98" height="34" rx="8" fill="#F59E0B"/>
+          <text x="256" y="268" text-anchor="middle" font-size="12" fill="#FFFFFF" font-weight="700">Action</text>
+          <!-- caption with wrong gap -->
+          <rect x="207" y="298" width="200" height="8" rx="3" fill="#E5D9C7"/>
+        </g>
+
+        <!-- bad measurements -->
+        <g class="badMeasure DUR">
+          <!-- top: 7px -->
+          <line x1="200" y1="113" x2="227" y2="113" stroke="#F43F5E" stroke-width="1.2" stroke-dasharray="3 2"/>
+          <text x="178" y="116" class="num">7</text>
+
+          <!-- left after avatar: 13px from avatar to name -->
+          <line x1="241" y1="123" x2="248" y2="123" stroke="#F43F5E" stroke-width="1.2"/>
+          <text x="232" y="138" class="num">13</text>
+
+          <!-- gap from header to body: 22 -->
+          <line x1="170" y1="158" x2="170" y2="180" stroke="#F43F5E" stroke-width="1.2" stroke-dasharray="3 2"/>
+          <text x="146" y="173" class="num">22</text>
+
+          <!-- between body lines: 9 -->
+          <line x1="565" y1="190" x2="565" y2="199" stroke="#F43F5E" stroke-width="1.2"/>
+          <text x="572" y="198" class="num">9</text>
+
+          <!-- button left padding 7 -->
+          <line x1="200" y1="263" x2="207" y2="263" stroke="#F43F5E" stroke-width="1.2"/>
+          <text x="184" y="267" class="num">7</text>
+
+          <!-- judgment -->
+          <g transform="translate(580 200)">
+            <rect x="0" y="0" width="140" height="36" rx="8" fill="#FEE2E2" stroke="#FCA5A5"/>
+            <text x="70" y="22" text-anchor="middle" font-size="12" fill="#9F1239" font-weight="700">subtly off</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- GOOD CARD -->
+      <g class="goodLayer DUR">
+        <!-- 8pt grid overlay (faint) -->
+        <g class="gridOverlay DUR">
+          <g stroke="#0EA5E9" stroke-width="0.5" opacity="0.4">
+            <line x1="208" y1="100" x2="208" y2="340"/>
+            <line x1="216" y1="100" x2="216" y2="340"/>
+            <line x1="224" y1="100" x2="224" y2="340"/>
+            <line x1="232" y1="100" x2="232" y2="340"/>
+            <line x1="240" y1="100" x2="240" y2="340"/>
+            <line x1="248" y1="100" x2="248" y2="340"/>
+            <line x1="256" y1="100" x2="256" y2="340"/>
+            <line x1="264" y1="100" x2="264" y2="340"/>
+            <line x1="272" y1="100" x2="272" y2="340"/>
+            <line x1="280" y1="100" x2="280" y2="340"/>
+            <line x1="200" y1="116" x2="560" y2="116"/>
+            <line x1="200" y1="132" x2="560" y2="132"/>
+            <line x1="200" y1="148" x2="560" y2="148"/>
+            <line x1="200" y1="164" x2="560" y2="164"/>
+            <line x1="200" y1="180" x2="560" y2="180"/>
+            <line x1="200" y1="196" x2="560" y2="196"/>
+            <line x1="200" y1="212" x2="560" y2="212"/>
+            <line x1="200" y1="228" x2="560" y2="228"/>
+            <line x1="200" y1="244" x2="560" y2="244"/>
+            <line x1="200" y1="260" x2="560" y2="260"/>
+            <line x1="200" y1="276" x2="560" y2="276"/>
+            <line x1="200" y1="292" x2="560" y2="292"/>
+            <line x1="200" y1="308" x2="560" y2="308"/>
+            <line x1="200" y1="324" x2="560" y2="324"/>
+          </g>
+        </g>
+
+        <!-- card -->
+        <rect x="200" y="100" width="360" height="240" rx="14" fill="#FFFFFF" stroke="#E5D9C7" stroke-width="2"/>
+
+        <!-- avatar 16px in, 16px down -->
+        <circle cx="232" cy="132" r="16" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+        <!-- name -->
+        <rect x="264" y="124" width="140" height="10" rx="3" fill="#1F2937"/>
+        <rect x="264" y="142" width="92"  height="8"  rx="3" fill="#9CA3AF"/>
+        <!-- 24px gap to body -->
+        <rect x="216" y="184" width="328" height="10" rx="3" fill="#CFE3D6"/>
+        <rect x="216" y="208" width="300" height="10" rx="3" fill="#CFE3D6"/>
+        <rect x="216" y="232" width="260" height="10" rx="3" fill="#CFE3D6"/>
+        <!-- 24px gap to button -->
+        <rect x="216" y="272" width="120" height="40" rx="10" fill="#10B981"/>
+        <text x="276" y="297" text-anchor="middle" font-size="13" fill="#FFFFFF" font-weight="700">Action</text>
+
+        <!-- good measurements -->
+        <g class="goodMeasure DUR">
+          <line x1="200" y1="116" x2="216" y2="116" stroke="#10B981" stroke-width="1.4"/>
+          <text x="186" y="120" class="num numGood">16</text>
+
+          <line x1="170" y1="160" x2="170" y2="184" stroke="#10B981" stroke-width="1.4"/>
+          <text x="146" y="175" class="num numGood">24</text>
+
+          <line x1="586" y1="194" x2="586" y2="208" stroke="#10B981" stroke-width="1.4"/>
+          <text x="594" y="206" class="num numGood">16</text>
+
+          <line x1="170" y1="252" x2="170" y2="272" stroke="#10B981" stroke-width="1.4"/>
+          <text x="146" y="266" class="num numGood">24</text>
+        </g>
+
+        <!-- stamp -->
+        <g class="stamp DUR" transform="translate(580 130)">
+          <rect x="0" y="0" width="140" height="44" rx="10" fill="#DCFCE7" stroke="#10B981" stroke-width="2"/>
+          <text x="70" y="20" text-anchor="middle" font-size="11" fill="#065F46" font-weight="700">8-pt rhythm</text>
+          <text x="70" y="36" text-anchor="middle" font-size="11" fill="#065F46">feels intentional</text>
+        </g>
+      </g>
+
+      <!-- footer -->
+      <line x1="60" y1="400" x2="700" y2="400" stroke="#E5D9C7" stroke-width="1.5"/>
+      <text x="60" y="426" class="label">card padding · vertical rhythm · 8-point baseline</text>
+    </svg>
+    <div class="caption">Eyeballed paddings whisper "cheap." A grid whispers "considered."</div>
+  </div>
+</main>
+</body>
+</html>

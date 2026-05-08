@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Where AI Meets the Ledger — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Where AI Meets the Ledger</h1>
+  <p class="subtitle">Patterns at scale meet patterns at scale; the math is finally on your side</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Two camps of CAs exist right now. Camp One thinks AI will replace them by 2027.</p>
+  <div class="callout"><strong>Mental model: a ledger is patterns at scale; AI is a machine for patterns at scale</strong><br/>Think of every accounting workflow as a pile of repeating patterns: the 12 invoices that look like the 12 from last month; the 47 vendor bills that all share a GSTIN format; the 4,200 bank lines that fall into 22 categories. **A ledger is patterns at scale. AI is a machine for patterns at scale.** The match is structural, not magical.</div>
+  
+<h2>Move 1 — Classify-then-verify</h2>
+<ul>
+<li>Here is the first named move you will use for the rest of your career. **Classify-then-verify.** AI does the first pass — categorising, extracting, matching, with a confidence score on each row.</li>
+<li>Step 1 — Standardise input: You get 4,200 invoices in 11 different formats. Five minutes of cleanup: one CSV with vendor name, GSTIN, item description, taxable value, GST amount. Don't skip this. Garbage in, confidently wrong out.</li>
+<li>Step 2 — AI proposes HSN with confidence: The model returns: HSN code, 4-digit and 8-digit, plus a confidence score 0 to 100. 3,840 score above 90; 320 between 70 and 90; 40 below 70. Total runtime: 14 seconds for ₹0.42 of API spend.</li>
+<li>Step 3 — CA samples the easy stuff: Pick 50 random rows from the 3,840 high-confidence pile. Verify by hand. If your sample error rate is under 1 percent, accept the pile. If it is higher, you have a systemic problem and you re-prompt.</li>
+<li>Step 4 — CA reviews the medium pile: All 320 medium-confidence rows get a human eye, two seconds each, ten minutes total. You override roughly 40, accept the rest.</li>
+<li>Step 5 — CA investigates the low pile: All 40 low-confidence rows get a real conversation with the file. These are typically genuine ambiguities — composite supplies, mixed packaging, exempt items mis-billed. This is exactly the work a CA is paid for.</li>
+<li>Step 6 — Eval log: Every prompt, every response, every override is logged with timestamps and reviewer name. If a notice arrives in 2028, you can reproduce the entire workflow.</li>
+</ul>
+<h2>Move 2 — The 80/20 split between AI and CA</h2>
+<ul>
+<li>Now the bigger picture. Across the full surface of accounting work, roughly 80 percent of the hours are pattern-matching work — extraction, classification, reconciliation, drafting, summarising.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the third-category fantasy: Every CA, on first contact with AI, tries to invent a third category — &quot;AI does it but a human spot-checks&quot; or &quot;AI signs and the CA reviews afterwards.&quot; There is no third category. **Either AI does it under your supervision, or you do it. The signature is yours either way.** Anything that blurs this line is how firms get into trouble.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">A ledger is patterns at scale; AI is a machine for patterns at scale; the match is structural, not magical.</div>
+<div class="takeaway">Classify-then-verify: AI does the wide first pass with confidence scores; the CA does the deep second pass on flagged rows and high-rupee entries.</div>
+<div class="takeaway">Roughly 80 percent of accounting hours are pattern-matching work AI eats; roughly 20 percent are judgment hours only a CA may sign.</div>
+<div class="takeaway">There is no third category. Either AI does it under your supervision, or you do it; the signature is yours either way.</div>
+<div class="takeaway">AI's biggest superpower is calibrated honesty — it tells you which rows it is unsure about. A junior never will.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

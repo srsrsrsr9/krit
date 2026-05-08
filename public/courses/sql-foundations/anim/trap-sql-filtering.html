@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WHERE-the-cat-sat-on — NULL silently drops</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:740px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 740 420" aria-label="Eight rows pass through WHERE city not equal Mumbai. Mumbai rows correctly drop. Pune rows correctly stay. NULL rows are silently and incorrectly dropped, illustrated as a cat sitting where the answer should be.">
+    <rect width="740" height="420" fill="#FFF7ED"/>
+
+    <!-- Title -->
+    <text x="370" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      <tspan font-family="ui-monospace,monospace" fill="#7C3AED">WHERE</tspan>
+      <tspan> city &lt;&gt; 'Mumbai'</tspan>
+    </text>
+    <text x="370" y="46" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      — and the cat that sat on the answer.
+    </text>
+
+    <!-- ===================== INPUT (left) ===================== -->
+    <g transform="translate(28,72)">
+      <rect x="0" y="0" width="220" height="304" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#1F2937">customers</text>
+
+      <g transform="translate(10,28)">
+        <rect x="0" y="0" width="200" height="22" rx="4" fill="#FED7AA"/>
+        <line x1="44" y1="0" x2="44" y2="22" stroke="#FBA74E" stroke-width="0.8"/>
+        <line x1="124" y1="0" x2="124" y2="22" stroke="#FBA74E" stroke-width="0.8"/>
+        <text x="22" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">id</text>
+        <text x="84" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">name</text>
+        <text x="162" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">city</text>
+      </g>
+      <g id="inputRows" transform="translate(10,52)" font-family="ui-monospace,monospace" font-size="10"></g>
+    </g>
+
+    <!-- ===================== FILTER (middle) — 3 lanes ===================== -->
+    <g transform="translate(268,72)">
+      <rect x="0" y="0" width="200" height="304" rx="14" fill="#FFFFFF" stroke="#8B5CF6" stroke-width="2"/>
+      <rect x="0" y="0" width="200" height="32" rx="14" fill="#8B5CF6"/>
+      <text x="100" y="21" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace">city &lt;&gt; 'Mumbai'</text>
+
+      <!-- Lane labels -->
+      <g transform="translate(0,272)" font-family="ui-monospace,monospace">
+        <text x="36"  y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#047857">TRUE</text>
+        <text x="100" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#9F1239">FALSE</text>
+        <text x="164" y="14" text-anchor="middle" font-size="9" font-weight="700" fill="#92400E">NULL</text>
+      </g>
+
+      <!-- Lane separators -->
+      <line x1="68"  y1="32" x2="68"  y2="270" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="132" y1="32" x2="132" y2="270" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="3,3"/>
+      <rect x="2"   y="32" width="64" height="238" fill="#ECFDF5" opacity="0.5"/>
+      <rect x="68"  y="32" width="64" height="238" fill="#FEF2F2" opacity="0.5"/>
+      <rect x="132" y="32" width="64" height="238" fill="#FFFBEB" opacity="0.5"/>
+
+      <!-- The cat (sleeping over the NULL lane) -->
+      <g id="cat" transform="translate(150,180)" opacity="0">
+        <!-- soft body -->
+        <ellipse cx="22" cy="28" rx="32" ry="14" fill="#FED7AA" stroke="#9A3412" stroke-width="1.5"/>
+        <!-- head -->
+        <circle cx="6" cy="22" r="11" fill="#FED7AA" stroke="#9A3412" stroke-width="1.5"/>
+        <!-- ears -->
+        <path d="M 0 14 L -2 8 L 4 12 Z" fill="#FED7AA" stroke="#9A3412" stroke-width="1.2"/>
+        <path d="M 10 14 L 14 8 L 12 14 Z" fill="#FED7AA" stroke="#9A3412" stroke-width="1.2"/>
+        <!-- eyes (closed - lines) -->
+        <path d="M 1 21 q 2 1.5 4 0" fill="none" stroke="#1F2937" stroke-width="1" stroke-linecap="round"/>
+        <path d="M 8 21 q 2 1.5 4 0" fill="none" stroke="#1F2937" stroke-width="1" stroke-linecap="round"/>
+        <!-- nose -->
+        <path d="M 5 25 L 7 25 L 6 26 Z" fill="#9F1239"/>
+        <!-- whiskers -->
+        <line x1="-3" y1="25" x2="2" y2="25" stroke="#1F2937" stroke-width="0.6"/>
+        <line x1="10" y1="25" x2="15" y2="25" stroke="#1F2937" stroke-width="0.6"/>
+        <!-- tail -->
+        <path d="M 50 28 q 12 -8 6 -22" fill="none" stroke="#9A3412" stroke-width="2" stroke-linecap="round"/>
+        <!-- "Z Z" -->
+        <text x="-4" y="6" font-size="10" font-style="italic" fill="#6B7280">z</text>
+        <text x="2"  y="0" font-size="8"  font-style="italic" fill="#6B7280">z</text>
+      </g>
+    </g>
+
+    <!-- Traveler -->
+    <g id="traveler" opacity="0">
+      <rect x="-58" y="-12" width="116" height="24" rx="6" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5"/>
+      <text id="travelerText" x="0" y="4" text-anchor="middle" font-size="10"
+            font-family="ui-monospace,monospace" fill="#1F2937">#1 Aanya  Pune</text>
+    </g>
+
+    <!-- ===================== OUTPUT BUCKETS (right) ===================== -->
+    <g transform="translate(488,72)">
+      <text x="110" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937">result set</text>
+
+      <g transform="translate(0,28)">
+        <rect x="0" y="0" width="220" height="100" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#047857" font-family="ui-monospace,monospace">KEPT — Pune (correct)</text>
+        <g id="bucketTrue" transform="translate(10,22)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+
+      <g transform="translate(0,138)">
+        <rect x="0" y="0" width="220" height="76" rx="8" fill="#FEF2F2" stroke="#F43F5E" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">DROPPED — Mumbai (correct)</text>
+        <g id="bucketFalse" transform="translate(10,22)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+
+      <g transform="translate(0,224)">
+        <rect x="0" y="0" width="220" height="80" rx="8" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">DROPPED — NULL (surprise!)</text>
+        <text x="10" y="32" font-size="9" fill="#92400E" font-style="italic">no error. just gone.</text>
+        <g id="bucketNull" transform="translate(10,40)" font-family="ui-monospace,monospace" font-size="9"></g>
+      </g>
+    </g>
+
+    <!-- Footer surprise hint -->
+    <g id="bugHint" opacity="0">
+      <rect x="120" y="392" width="500" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.2"/>
+      <text x="370" y="407" text-anchor="middle" font-size="10.5" font-weight="700" fill="#92400E">
+        NULL &lt;&gt; 'Mumbai' is UNKNOWN — and UNKNOWN is not TRUE. The cat won.
+      </text>
+    </g>
+  </svg>
+  <div class="caption">
+    Use <tspan font-family="ui-monospace,monospace">city IS NULL OR city &lt;&gt; 'Mumbai'</tspan> if you actually want them.
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 8 rows. Pune→TRUE (kept), Mumbai→FALSE (dropped correctly), NULL→UNKNOWN (silently dropped)
+  var rows=[
+    {id:1, name:'Aanya', city:'Pune',   verdict:'T'},
+    {id:2, name:'Ravi',  city:'Mumbai', verdict:'F'},
+    {id:3, name:'Mira',  city:null,     verdict:'U'},
+    {id:4, name:'Karan', city:'Pune',   verdict:'T'},
+    {id:5, name:'Diya',  city:'Mumbai', verdict:'F'},
+    {id:6, name:'Vihaan',city:null,     verdict:'U'},
+    {id:7, name:'Isha',  city:'Pune',   verdict:'T'},
+    {id:8, name:'Arjun', city:'Mumbai', verdict:'F'}
+  ];
+
+  var inputRows=document.getElementById('inputRows');
+  var bucketTrue=document.getElementById('bucketTrue');
+  var bucketFalse=document.getElementById('bucketFalse');
+  var bucketNull=document.getElementById('bucketNull');
+  var traveler=document.getElementById('traveler');
+  var travelerText=document.getElementById('travelerText');
+  var cat=document.getElementById('cat');
+  var bugHint=document.getElementById('bugHint');
+  var resetBtn=document.getElementById('reset');
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+  function cityStr(c){ return c===null ? 'NULL' : c; }
+
+  function renderInput(highlight){
+    clear(inputRows);
+    var H=22;
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i], y=i*H, hl=(i===highlight);
+      var bg=el('rect',{x:0,y:y,width:200,height:H-2,rx:3,
+        fill:hl?'#FEF3C7':((i%2===0)?'#FFFFFF':'#FFFBEB'),
+        stroke:hl?'#F59E0B':'none','stroke-width':hl?1.5:0});
+      inputRows.appendChild(bg);
+      [44,124].forEach(function(x){
+        var ln=el('line',{x1:x,y1:y+1,x2:x,y2:y+H-3,stroke:'#FED7AA','stroke-width':0.7});
+        inputRows.appendChild(ln);
+      });
+      var t1=el('text',{x:22,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t1.textContent='#'+r.id;
+      var t2=el('text',{x:84,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t2.textContent=r.name;
+      var t3=el('text',{x:162,y:y+13,'text-anchor':'middle','font-size':10,
+        fill:r.city===null?'#92400E':'#1F2937',
+        'font-style':r.city===null?'italic':'normal',
+        'font-weight':r.city===null?'700':'normal'});
+      t3.textContent=cityStr(r.city);
+      inputRows.appendChild(t1);inputRows.appendChild(t2);inputRows.appendChild(t3);
+    }
+  }
+
+  var counts={T:0,F:0,U:0};
+  function bucketTarget(v){
+    var x=488+110;
+    if(v==='T'){ var i=counts.T++; return {x:x,y:72+28+22+i*12}; }
+    if(v==='F'){ var j=counts.F++; return {x:x,y:72+138+22+j*12}; }
+    var k=counts.U++; return {x:x,y:72+224+40+k*12};
+  }
+
+  function placeInBucket(r){
+    var g = (r.verdict==='T')?bucketTrue:(r.verdict==='F')?bucketFalse:bucketNull;
+    var idx = counts[r.verdict] - 1;
+    var t=el('text',{x:4,y:12+idx*12,'font-size':9,'font-family':'ui-monospace,monospace'});
+    if(r.verdict==='T'){ t.setAttribute('fill','#065F46'); }
+    else if(r.verdict==='F'){ t.setAttribute('fill','#9F1239'); t.setAttribute('text-decoration','line-through'); t.setAttribute('opacity','0.7'); }
+    else { t.setAttribute('fill','#92400E'); t.setAttribute('font-style','italic'); t.setAttribute('opacity','0.6'); }
+    t.textContent='#'+r.id+' '+r.name+' '+cityStr(r.city);
+    g.appendChild(t);
+  }
+
+  function easeInOut(t){ return t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  function inputAnchor(i){ return {x: 28+220-10, y: 72+52+i*22+9}; }
+  var FILTER_CX=268+100, FILTER_CY=72+160;
+
+  function animateRow(i, done){
+    var r=rows[i];
+    renderInput(i);
+    travelerText.textContent='#'+r.id+' '+r.name+'  '+cityStr(r.city);
+    traveler.querySelector('rect').setAttribute('stroke','#1F2937');
+    traveler.querySelector('rect').setAttribute('fill','#FFFFFF');
+
+    var start=inputAnchor(i);
+    var laneX = (r.verdict==='T') ? FILTER_CX-64 : (r.verdict==='F') ? FILTER_CX : FILTER_CX+64;
+    var exitPt = {x: laneX, y: 72+270};
+    var end = bucketTarget(r.verdict);
+    var P1=550, P2=420, P3=420;
+    if(prefersReduce){ P1=P2=P3=0; }
+
+    traveler.setAttribute('opacity','1');
+    traveler.setAttribute('transform','translate('+start.x+','+start.y+')');
+    var s0=performance.now();
+    function p1(now){
+      var t=Math.min((now-s0)/P1,1), v=easeInOut(t);
+      var x=lerp(start.x, FILTER_CX, v);
+      var y=lerp(start.y, FILTER_CY-50, v);
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      if(t<1) requestAnimationFrame(p1);
+      else {
+        // recolor
+        var c = r.verdict==='T'?'#10B981':(r.verdict==='F'?'#F43F5E':'#F59E0B');
+        var bg = r.verdict==='T'?'#ECFDF5':(r.verdict==='F'?'#FEF2F2':'#FFFBEB');
+        traveler.querySelector('rect').setAttribute('stroke',c);
+        traveler.querySelector('rect').setAttribute('fill',bg);
+        s0b=performance.now(); requestAnimationFrame(p2);
+      }
+    }
+    var s0b;
+    function p2(now){
+      var t=Math.min((now-s0b)/P2,1), v=easeInOut(t);
+      var x=lerp(FILTER_CX, exitPt.x, v);
+      var y=lerp(FILTER_CY-50, exitPt.y, v);
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      if(t<1) requestAnimationFrame(p2);
+      else { s0c=performance.now(); requestAnimationFrame(p3); }
+    }
+    var s0c;
+    function p3(now){
+      var t=Math.min((now-s0c)/P3,1), v=easeInOut(t);
+      var x=lerp(exitPt.x, end.x+4, v);
+      var y=lerp(exitPt.y, end.y+6, v);
+      traveler.setAttribute('transform','translate('+x+','+y+')');
+      traveler.setAttribute('opacity', String(1-v));
+      if(t<1) requestAnimationFrame(p3);
+      else {
+        traveler.setAttribute('opacity','0');
+        placeInBucket(r);
+        // When the FIRST NULL row drops, fade the cat in
+        if(r.verdict==='U' && counts.U===1){
+          fadeIn(cat,500);
+        }
+        done();
+      }
+    }
+    if(prefersReduce){ placeInBucket(r); if(r.verdict==='U'&&counts.U===1)cat.setAttribute('opacity','1'); done(); }
+    else requestAnimationFrame(p1);
+  }
+
+  function fadeIn(node, dur){
+    if(prefersReduce){ node.setAttribute('opacity','1'); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/dur,1);
+      node.setAttribute('opacity', String(t));
+      if(t<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function play(){
+    counts={T:0,F:0,U:0};
+    clear(bucketTrue); clear(bucketFalse); clear(bucketNull);
+    bugHint.setAttribute('opacity','0');
+    cat.setAttribute('opacity','0');
+    traveler.setAttribute('opacity','0');
+    renderInput(-1);
+
+    if(prefersReduce){
+      for(var i=0;i<rows.length;i++) animateRow(i, function(){});
+      bugHint.setAttribute('opacity','1');
+      return;
+    }
+    var i=0;
+    function next(){
+      if(i>=rows.length){
+        setTimeout(function(){
+          fadeIn(bugHint, 500);
+          setTimeout(play, 3800);
+        }, 400);
+        return;
+      }
+      animateRow(i, function(){ i++; setTimeout(next, 140); });
+    }
+    next();
+  }
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

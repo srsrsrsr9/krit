@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Run a 14-Day Classroom Experiment — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Run a 14-Day Classroom Experiment</h1>
+  <p class="subtitle">A baseline, three numbers, and a kill criterion</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most of what passes for &quot;AI works in my classroom&quot; is vibes. A teacher tries a tool for two weeks, students seem more engaged, the teacher reports it as a win.</p>
+  <div class="callout"><strong>Mental model: a tracked intervention with three numbers</strong><br/>Think of the experiment as a small, tracked change. You change one thing — the AI tool — and you watch what happens to *three* numbers across two weeks.</div>
+  
+<h2>Move 1 — Design with three numbers</h2>
+<ul>
+<li>The design fits on one page. Three numbers, three captures, one decision rule.</li>
+<li>Day 0 — Capture baseline: Write down the three current values *before* starting. &quot;Last 4 weeks: quiz avg 68%, Sunday prep 4 hrs, last student survey: 3.8/5.&quot; Five minutes.</li>
+<li>Days 1-7 — Run intervention week 1: Use the AI tool consistently as designed. Don't change the design mid-week. Don't combine with other new things — that confounds the experiment.</li>
+<li>Day 7 — Mid-point gut check (no decisions): Quick note on a sticky: how does it *feel*? Worth re-reading on day 14 to see how the gut compared to the data.</li>
+<li>Days 8-14 — Run intervention week 2: Same tool, same design. Continue capturing the data points (weekly quiz, time logs, day-13 survey).</li>
+<li>Day 14 — Capture post values: Three numbers, written down. &quot;Quiz avg 71%, Sunday prep 2.5 hrs, survey 3.7/5.&quot; Don't editorialise — just the numbers.</li>
+<li>Day 14 — Make the decision: Apply your decision rule. Outcome up, cost down, relationship roughly flat → keep. Outcome flat, cost down, relationship dropped → keep but redirect saved time. Any number breached the kill criterion → stop. The rule is the whole point.</li>
+</ul>
+<h2>Move 2 — Decide on day 14</h2>
+<ul>
+<li>Day 14 is the only day that matters. Everything before it is data collection; everything after is execution of the decision.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: shipped without baseline: You started using the AI tool three weeks ago. Things 'feel better.' You're recommending it in the staff room.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">An experiment is a tracked intervention with three numbers — outcome, cost, relationship — captured on day 0 and day 14.</div>
+<div class="takeaway">No baseline, no experiment. The 5 minutes you spend writing baseline numbers on day 0 cannot be recovered later.</div>
+<div class="takeaway">Pre-write a kill criterion. Without one, you'll protect a tool you wanted to like even when the data says stop.</div>
+<div class="takeaway">The relationship signal beats outcome and cost. If 'my teacher knows me' dropped, you stop, regardless of how much time you saved.</div>
+<div class="takeaway">Saved time is not the win; the win is what you redirect the saved time toward. The boring 80% buys you the human 20%.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

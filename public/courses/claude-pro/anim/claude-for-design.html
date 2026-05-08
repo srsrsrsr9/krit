@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude for design — critique loop</title>
+<style>
+  :root{--bg:#ECFDF5;--ink:#1F2937;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:780px}
+  svg{width:100%;height:auto;display:block}
+  #rb{position:absolute;bottom:-4px;right:8px;background:#1F2937;color:#ECFDF5;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+  #rb:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  .stp{opacity:0}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg viewBox="0 0 780 500" aria-label="A design critique loop. Mockup version 1 is rough; Claude flags three specific points; the designer iterates; mockup version 2 is tighter; another loop produces version 3.">
+      <rect width="780" height="500" fill="#ECFDF5"/>
+      <text x="390" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Critique → iterate → critique. Each loop tightens it.</text>
+
+      <!-- Loop track -->
+      <path d="M120,260 C120,150 660,150 660,260" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="6 6" opacity="0.5"/>
+      <path d="M660,260 C660,370 120,370 120,260" fill="none" stroke="#10B981" stroke-width="2" stroke-dasharray="6 6" opacity="0.3"/>
+
+      <!-- Mockup v1 (rough) -->
+      <g id="v1" class="stp">
+        <rect x="50" y="74" width="180" height="160" rx="10" fill="#fff" stroke="#9CA3AF" stroke-width="2.4" stroke-dasharray="3 3"/>
+        <rect x="50" y="74" width="180" height="22" rx="10" fill="#9CA3AF"/>
+        <text x="60" y="89" font-size="10" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">v1 · rough</text>
+        <!-- chunky scribbly placeholder: misaligned hero + 3 buttons + walls of text -->
+        <rect x="62" y="108" width="156" height="34" rx="3" fill="#E5E7EB"/>
+        <rect x="62" y="148" width="80" height="14" rx="3" fill="#E5E7EB"/>
+        <rect x="148" y="148" width="60" height="14" rx="3" fill="#E5E7EB"/>
+        <rect x="62" y="170" width="156" height="6" rx="2" fill="#E5E7EB"/>
+        <rect x="62" y="182" width="156" height="6" rx="2" fill="#E5E7EB"/>
+        <rect x="62" y="194" width="120" height="6" rx="2" fill="#E5E7EB"/>
+        <rect x="62" y="208" width="40" height="18" rx="9" fill="#E5E7EB"/>
+        <rect x="108" y="208" width="40" height="18" rx="9" fill="#E5E7EB"/>
+        <rect x="154" y="208" width="40" height="18" rx="9" fill="#E5E7EB"/>
+      </g>
+      <text x="140" y="252" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">first pass</text>
+
+      <!-- Critique card 1 (Claude) -->
+      <g id="c1" class="stp">
+        <rect x="280" y="78" width="220" height="156" rx="10" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+        <rect x="280" y="78" width="220" height="22" rx="10" fill="#F59E0B"/>
+        <text x="290" y="93" font-size="10" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">claude · critique</text>
+        <!-- 3 specific points (not vague) -->
+        <circle cx="298" cy="118" r="7" fill="#F43F5E"/><text x="298" y="121" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">1</text>
+        <text x="312" y="116" font-size="10.5" fill="#1F2937" font-weight="600">Hero CTA is left of center —</text>
+        <text x="312" y="130" font-size="10.5" fill="#374151">align to 12-col grid (offset 32px).</text>
+        <circle cx="298" cy="148" r="7" fill="#F43F5E"/><text x="298" y="151" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">2</text>
+        <text x="312" y="146" font-size="10.5" fill="#1F2937" font-weight="600">Three CTAs compete —</text>
+        <text x="312" y="160" font-size="10.5" fill="#374151">demote two to text links.</text>
+        <circle cx="298" cy="178" r="7" fill="#F43F5E"/><text x="298" y="181" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">3</text>
+        <text x="312" y="176" font-size="10.5" fill="#1F2937" font-weight="600">Sub-copy is 3 lines —</text>
+        <text x="312" y="190" font-size="10.5" fill="#374151">cut to one. Trust the headline.</text>
+        <text x="390" y="218" text-anchor="middle" font-size="10" fill="#92400E" font-style="italic">specific. measurable. not "make it pop".</text>
+      </g>
+
+      <!-- Mockup v2 (tighter) -->
+      <g id="v2" class="stp">
+        <rect x="550" y="74" width="180" height="160" rx="10" fill="#fff" stroke="#10B981" stroke-width="2.4"/>
+        <rect x="550" y="74" width="180" height="22" rx="10" fill="#10B981"/>
+        <text x="560" y="89" font-size="10" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">v2 · iterated</text>
+        <!-- centered hero, 1 button + 1 link, less text -->
+        <rect x="600" y="108" width="80" height="20" rx="3" fill="#D1FAE5"/>
+        <rect x="600" y="134" width="80" height="6" rx="2" fill="#D1FAE5"/>
+        <rect x="610" y="146" width="60" height="6" rx="2" fill="#D1FAE5"/>
+        <rect x="610" y="170" width="60" height="22" rx="11" fill="#10B981"/>
+        <text x="640" y="186" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">Start free</text>
+        <rect x="610" y="200" width="60" height="6" rx="2" fill="#10B981" opacity="0.4"/>
+        <text x="640" y="220" text-anchor="middle" font-size="8.5" fill="#065F46">learn more →</text>
+      </g>
+      <text x="640" y="252" text-anchor="middle" font-size="11" fill="#10B981" font-style="italic">cycle 1 ✓</text>
+
+      <!-- Cycle 2 row -->
+      <!-- Critique card 2 -->
+      <g id="c2" class="stp">
+        <rect x="280" y="294" width="220" height="140" rx="10" fill="#FFF7ED" stroke="#F59E0B" stroke-width="2"/>
+        <rect x="280" y="294" width="220" height="22" rx="10" fill="#F59E0B"/>
+        <text x="290" y="309" font-size="10" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">claude · critique</text>
+        <circle cx="298" cy="334" r="7" fill="#F43F5E"/><text x="298" y="337" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">1</text>
+        <text x="312" y="332" font-size="10.5" fill="#1F2937" font-weight="600">Headline is 14px on mobile —</text>
+        <text x="312" y="346" font-size="10.5" fill="#374151">bump to 22 / 28 (clamp).</text>
+        <circle cx="298" cy="366" r="7" fill="#F43F5E"/><text x="298" y="369" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">2</text>
+        <text x="312" y="364" font-size="10.5" fill="#1F2937" font-weight="600">Trust mark missing —</text>
+        <text x="312" y="378" font-size="10.5" fill="#374151">add "no card needed" near CTA.</text>
+        <circle cx="298" cy="398" r="7" fill="#F43F5E"/><text x="298" y="401" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">3</text>
+        <text x="312" y="396" font-size="10.5" fill="#1F2937" font-weight="600">Link tone matches button —</text>
+        <text x="312" y="410" font-size="10.5" fill="#374151">drop link to gray, keep CTA loud.</text>
+      </g>
+
+      <!-- Mockup v3 (final) -->
+      <g id="v3" class="stp">
+        <rect x="550" y="290" width="180" height="160" rx="10" fill="#fff" stroke="#10B981" stroke-width="3"/>
+        <rect x="550" y="290" width="180" height="22" rx="10" fill="#10B981"/>
+        <text x="560" y="305" font-size="10" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">v3 · shipped</text>
+        <text x="640" y="338" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46">Ship faster.</text>
+        <text x="640" y="356" text-anchor="middle" font-size="9.5" fill="#374151">One workflow, no setup.</text>
+        <rect x="608" y="374" width="64" height="24" rx="12" fill="#10B981"/>
+        <text x="640" y="391" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">Start free</text>
+        <text x="640" y="412" text-anchor="middle" font-size="8" fill="#6B7280">no card needed</text>
+        <text x="640" y="432" text-anchor="middle" font-size="8.5" fill="#9CA3AF">learn more</text>
+        <!-- ship checkmark badge -->
+        <g transform="translate(720,300)">
+          <circle r="12" fill="#10B981"/>
+          <path d="M-5,0 l3,3 l7,-7" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </g>
+      <g id="v1FromV3" class="stp">
+        <text x="140" y="378" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">designer iterates</text>
+        <text x="140" y="394" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">cycle 2</text>
+      </g>
+
+      <!-- Arrows between cycles -->
+      <g id="ar1" class="stp"><path d="M232,154 L278,154" stroke="#1F2937" stroke-width="2" stroke-linecap="round" marker-end="url(#aI)"/></g>
+      <g id="ar2" class="stp"><path d="M504,154 L548,154" stroke="#1F2937" stroke-width="2" stroke-linecap="round" marker-end="url(#aI)"/></g>
+      <g id="ar3" class="stp"><path d="M640,238 C640,265 280,265 280,294" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 4" marker-end="url(#aG)" fill="none"/></g>
+      <g id="ar4" class="stp"><path d="M504,372 L548,372" stroke="#1F2937" stroke-width="2" stroke-linecap="round" marker-end="url(#aI)"/></g>
+
+      <text x="390" y="478" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">A good critique names the pixel, not the vibe.</text>
+
+      <defs>
+        <marker id="aI" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1F2937"/></marker>
+        <marker id="aG" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#10B981"/></marker>
+      </defs>
+    </svg>
+    <button id="rb">↺ reset</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seq=[
+    ['v1',300],['ar1',1200],['c1',1500],
+    ['ar2',3300],['v2',3600],
+    ['ar3',5200],['c2',5600],
+    ['ar4',7400],['v3',7700],['v1FromV3',7900],
+  ];
+  let timers=[];
+  function clearAll(){timers.forEach(clearTimeout);timers=[];}
+  function fade(id,dur,target){
+    const el=document.getElementById(id);if(!el)return;
+    const start=performance.now();const from=parseFloat(el.style.opacity||0);
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.style.opacity=String(from+(target-from)*e);
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function reset(){
+    clearAll();
+    seq.forEach(([id])=>document.getElementById(id).style.opacity='0');
+    if(reduced){seq.forEach(([id])=>document.getElementById(id).style.opacity='1');return;}
+    run();
+  }
+  function run(){
+    seq.forEach(([id,t])=>timers.push(setTimeout(()=>fade(id,500,1),t)));
+    timers.push(setTimeout(reset,12500));
+  }
+  document.getElementById('rb').addEventListener('click',reset);
+  reset();
+})();
+</script>
+</body>
+</html>

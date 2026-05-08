@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: AI cookie-cutter mockup</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}
+*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.bad-mock{animation:fade .5s ease .5s both}
+.bad-label{animation:fade .5s ease 2s both}
+.iter1{animation:pop .5s ease 4s both}
+.crit1{animation:fade .4s ease 5s both}
+.iter2{animation:pop .5s ease 6.5s both}
+.crit2{animation:fade .4s ease 7.5s both}
+.iter3{animation:pop .5s ease 9s both}
+.shipped{animation:pop .5s ease 10s both}
+</style></head>
+<body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="Asking Claude for a full mockup produces cookie-cutter output, vs the critique-mode loop that tightens iteratively">
+<rect width="720" height="405" rx="14" fill="#FAF5FF"/>
+
+<!-- BAD: full mockup -->
+<g transform="translate(40 30)">
+<rect width="320" height="170" rx="10" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">BEFORE · "design a login screen"</text>
+
+<g class="bad-mock" transform="translate(70 36)">
+<rect width="180" height="120" rx="8" fill="#FFFFFF" stroke="#7F1D1D"/>
+<text x="90" y="20" text-anchor="middle" font-size="9" fill="#1F2937" font-weight="bold">YourCompany</text>
+<rect x="20" y="32" width="140" height="14" rx="2" fill="#E5E7EB"/>
+<rect x="20" y="52" width="140" height="14" rx="2" fill="#E5E7EB"/>
+<rect x="20" y="74" width="140" height="20" rx="3" fill="#3B82F6"/>
+<text x="90" y="88" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">Sign in</text>
+<text x="90" y="108" text-anchor="middle" font-size="8" fill="#9CA3AF">Forgot password?</text>
+</g>
+
+<g class="bad-label" transform="translate(0 142)">
+<text x="160" y="14" text-anchor="middle" font-size="10" fill="#7F1D1D" font-style="italic">cookie-cutter · no brand · no opinion</text>
+</g>
+</g>
+
+<g class="bad-label" transform="translate(40 215)">
+<rect width="320" height="60" rx="10" fill="#7F1D1D"/>
+<text x="160" y="22" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">design lead: "this could be anything"</text>
+<text x="160" y="42" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">no point of view · zero usable</text>
+</g>
+
+<!-- FIX: critique loop -->
+<g transform="translate(380 30)">
+<text x="150" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">AFTER · critique-mode loop</text>
+
+<g class="iter1" transform="translate(0 30)">
+<rect width="300" height="60" rx="6" fill="#FED7AA" stroke="#9A3412"/>
+<text x="14" y="20" font-size="11" fill="#7C2D12" font-weight="bold">v1 (designer-drafted)</text>
+<text x="14" y="38" font-size="10" fill="#7C2D12">Claude: "primary CTA competes with</text>
+<text x="14" y="52" font-size="10" fill="#7C2D12">'forgot password' link · same weight"</text>
+</g>
+<g class="crit1" transform="translate(0 96)">
+<text x="150" y="14" text-anchor="middle" font-size="9" fill="#9A3412">↓ designer iterates</text>
+</g>
+
+<g class="iter2" transform="translate(0 110)">
+<rect width="300" height="60" rx="6" fill="#FCD34D" stroke="#92400E"/>
+<text x="14" y="20" font-size="11" fill="#7C2D12" font-weight="bold">v2 (CTA fixed)</text>
+<text x="14" y="38" font-size="10" fill="#7C2D12">Claude: "form validation copy is</text>
+<text x="14" y="52" font-size="10" fill="#7C2D12">accusatory · 'invalid' → soften"</text>
+</g>
+<g class="crit2" transform="translate(0 176)">
+<text x="150" y="14" text-anchor="middle" font-size="9" fill="#92400E">↓ designer iterates</text>
+</g>
+
+<g class="iter3" transform="translate(0 190)">
+<rect width="300" height="60" rx="6" fill="#A7F3D0" stroke="#065F46"/>
+<text x="14" y="20" font-size="11" fill="#065F46" font-weight="bold">v3 · ships</text>
+<text x="14" y="38" font-size="10" fill="#065F46">Claude: "this is consistent with</text>
+<text x="14" y="52" font-size="10" fill="#065F46">your design system. ship it."</text>
+</g>
+</g>
+
+<g class="shipped" transform="translate(380 280)">
+<rect width="300" height="50" rx="8" fill="#065F46"/>
+<text x="150" y="22" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">Quality scored: +37% vs v1</text>
+<text x="150" y="40" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">designer-led · AI as critic, not creator</text>
+</g>
+
+<g transform="translate(40 305)">
+<rect width="320" height="80" rx="10" fill="#1F2937"/>
+<text x="160" y="22" text-anchor="middle" font-size="11" fill="#FCD34D" font-weight="bold">Claude is a junior designer</text>
+<text x="160" y="40" text-anchor="middle" font-size="10" fill="#9CA3AF">it's read every book and designed nothing</text>
+<text x="160" y="58" text-anchor="middle" font-size="10" fill="#9CA3AF">good at critique · weak at first draft</text>
+<text x="160" y="74" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">use accordingly</text>
+</g>
+</svg>
+<div class="caption">"Generate a mockup" gets you generic. "Critique my mockup" gets you a teammate.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Design Feedback Loop — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>The Design Feedback Loop</h1>
+  <p class="subtitle">Critique is the second design step, not the last</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most teams treat design critique as the last gate before shipping. The designer pushes a Figma link to Slack, four people drop unstructured opinions in the thread, the loudest one wins, and the work goes back for a 'revision'.</p>
+  <div class="callout"><strong>Mental model: critique is the second design step, not the last</strong><br/>Treat critique as **step two of the design process, not step ten**. The job of the first sketch is to become wrong on purpose so a critique can pull it toward right. Designers who polish before critique waste polish; teams that critique only at the end produce design that is locally optimal and globally weird. **Make the cost of being wrong cheap by inviting critique while the work is still ugly.**</div>
+  
+<h2>Move 1 — The 3-question critique</h2>
+<ul>
+<li>Most critique fails because it has no structure. 'I don't like the colour' is not actionable; 'this could be cleaner' is not a critique, it's a vibe.</li>
+<li>Min 0-2 — Show the work cold: No designer commentary, no walkthrough. Reviewers see the screen the way a user would. Silence is fine.</li>
+<li>Min 2-5 — Question 1: primary action: Each reviewer points at what they think is the primary action. If you get more than one answer, you have a structural problem to fix before continuing.</li>
+<li>Min 5-9 — Question 2: cold context: Pretend the user landed here from a deep link with no onboarding. Walk through what is unclear, missing, or assumed.</li>
+<li>Min 9-13 — Question 3: anticipated pushback: Designer names the three most likely senior-design pushbacks. Reviewers add their own. Write them down.</li>
+<li>Min 13-15 — Decisions: Three buckets: fix now, fix in next iteration, document and ship. No 'discuss further' — that's procrastination dressed up as care.</li>
+</ul>
+<h2>Move 2 — The spec-first PR</h2>
+<ul>
+<li>When design moves to engineering, most teams lose half the work. The Figma file gets copy-pasted into components, the 'why' evaporates, and three sprints later nobody remembers why the modal was 480px wide instead of 520.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the polish-before-critique cycle: Designers want to show finished work; reviewers want to be invited to opinion. So designers polish for two days, then 'open up critique' on a thing that is too pretty to change. Reviewers feel rude pointing at structural problems and instead trade taste on colour and copy. **The polished design is the enemy of the good design.** Invite critique while the work is sketchy and the changes are cheap. The polish layer is the last 10%, not the first 90%.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Critique is the second design step, not the last. Invite it while changes are cheap.</div>
+<div class="takeaway">The 3-question critique: what's the primary action, what breaks with no context, what would a cold reviewer push back on. In that order, every time.</div>
+<div class="takeaway">If three reviewers give three different answers to 'what's the primary action', you have a hierarchy problem, not a critique problem.</div>
+<div class="takeaway">The spec-first PR: three paragraphs of intent (what changed, why, what we're not doing) above the diff. Free, high-leverage, ritual.</div>
+<div class="takeaway">End every critique with decisions in three buckets: fix now, fix later, document and ship. 'Discuss further' is procrastination.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

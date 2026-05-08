@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Interaction & microcopy</title>
+<style>
+:root{--bg:#EFF6FF;--ink:#1F2937;--mute:#6B7280;--accent:#0EA5E9;--good:#10B981;--bad:#F43F5E;--warm:#F59E0B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
+.wrap{width:100%;max-width:760px;position:relative}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:var(--mute);margin-top:10px}
+#rb{position:absolute;bottom:-6px;right:6px;background:var(--ink);color:#EFF6FF;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+ <div class="wrap">
+  <svg viewBox="0 0 760 470" aria-label="Two buttons side by side. The left button gives no feedback and spins for three seconds. The right button shows optimistic state, then a saved confirmation.">
+   <rect width="760" height="470" fill="#EFF6FF"/>
+   <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Three seconds is forever without feedback.</text>
+
+   <line x1="380" y1="60" x2="380" y2="450" stroke="#BFDBFE" stroke-width="1" stroke-dasharray="3 4"/>
+
+   <!-- LEFT: silent button -->
+   <g id="left">
+    <text x="180" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#F43F5E">SILENT · no feedback</text>
+
+    <!-- card -->
+    <rect x="50" y="86" width="260" height="280" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="74"  y="120" width="212" height="10" rx="3" fill="#1F2937" opacity=".55"/>
+    <rect x="74"  y="138" width="170" height="8"  rx="3" fill="#1F2937" opacity=".3"/>
+    <rect x="74"  y="172" width="212" height="60" rx="8" fill="#F3F4F6" stroke="#E5E7EB"/>
+
+    <!-- the button -->
+    <g id="btnL" transform="translate(74,260)">
+     <rect id="btnLR" width="212" height="44" rx="10" fill="#0EA5E9"/>
+     <text id="btnLT" x="106" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF">Save</text>
+     <!-- spinner (hidden initially) -->
+     <g id="spinL" opacity="0">
+      <circle cx="106" cy="22" r="9" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2.4"/>
+      <path id="spinLArc" d="M 106 13 A 9 9 0 0 1 115 22" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>
+     </g>
+    </g>
+
+    <!-- cursor -->
+    <g id="curL" opacity="0">
+     <path d="M 0 0 L 14 8 L 7 9 L 9 17 L 6 18 L 4 10 L -1 14 Z" fill="#1F2937"/>
+    </g>
+
+    <!-- timeline -->
+    <g id="tlL" opacity="0">
+     <text x="180" y="394" text-anchor="middle" font-size="11" fill="#6B7280" font-family="ui-monospace,monospace">elapsed</text>
+     <rect x="74" y="402" width="212" height="10" rx="5" fill="#FEE2E2"/>
+     <rect id="tlLBar" x="74" y="402" width="0" height="10" rx="5" fill="#F43F5E"/>
+     <text id="tlLT" x="180" y="430" text-anchor="middle" font-size="13" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">0.0 s</text>
+    </g>
+
+    <!-- user thought -->
+    <g id="thoughtL" opacity="0">
+     <rect x="74" y="438" width="212" height="22" rx="11" fill="#FEF2F2" stroke="#F43F5E"/>
+     <text x="180" y="453" text-anchor="middle" font-size="11" fill="#991B1B" font-style="italic">"Did it work? Click again?"</text>
+    </g>
+   </g>
+
+   <!-- RIGHT: optimistic button -->
+   <g id="right">
+    <text x="570" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#10B981">OPTIMISTIC · talks back</text>
+
+    <rect x="440" y="86" width="260" height="280" rx="14" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="464"  y="120" width="212" height="10" rx="3" fill="#1F2937" opacity=".55"/>
+    <rect x="464"  y="138" width="170" height="8"  rx="3" fill="#1F2937" opacity=".3"/>
+    <rect x="464"  y="172" width="212" height="60" rx="8" fill="#F3F4F6" stroke="#E5E7EB"/>
+
+    <g id="btnR" transform="translate(464,260)">
+     <rect id="btnRR" width="212" height="44" rx="10" fill="#10B981"/>
+     <text id="btnRT" x="106" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#FFFFFF">Save</text>
+     <g id="checkR" opacity="0">
+      <path d="M 92 22 L 102 32 L 122 12" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/>
+     </g>
+    </g>
+
+    <g id="curR" opacity="0">
+     <path d="M 0 0 L 14 8 L 7 9 L 9 17 L 6 18 L 4 10 L -1 14 Z" fill="#1F2937"/>
+    </g>
+
+    <g id="tlR" opacity="0">
+     <text x="570" y="394" text-anchor="middle" font-size="11" fill="#6B7280" font-family="ui-monospace,monospace">elapsed</text>
+     <rect x="464" y="402" width="212" height="10" rx="5" fill="#D1FAE5"/>
+     <rect id="tlRBar" x="464" y="402" width="0" height="10" rx="5" fill="#10B981"/>
+     <text id="tlRT" x="570" y="430" text-anchor="middle" font-size="13" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0.0 s</text>
+    </g>
+
+    <g id="thoughtR" opacity="0">
+     <rect x="464" y="438" width="212" height="22" rx="11" fill="#ECFDF5" stroke="#10B981"/>
+     <text x="570" y="453" text-anchor="middle" font-size="11" fill="#065F46" font-style="italic">"Cool. What's next?"</text>
+    </g>
+   </g>
+  </svg>
+  <div class="cap">Same backend latency. Different felt experience. Microcopy is engineering.</div>
+  <button id="rb">↺ replay</button>
+ </div>
+</main>
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+var EASE=function(t){return 1-Math.pow(1-t,3);};
+var rafs=[],tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',v);}
+function setT(id,x,y){$(id).setAttribute('transform','translate('+x+','+y+')');}
+function fade(id,a,b,dur,cb){
+ var e=$(id);if(!e)return;
+ var s=performance.now();
+ function tick(now){var t=Math.min((now-s)/dur,1);e.setAttribute('opacity',(a+(b-a)*EASE(t)).toFixed(3));if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();}
+ rafs.push(requestAnimationFrame(tick));
+}
+function moveT(id,fx,fy,tx,ty,dur,cb){
+ var s=performance.now();
+ function tick(now){var t=Math.min((now-s)/dur,1),e=EASE(t);
+  setT(id,fx+(tx-fx)*e,fy+(ty-fy)*e);
+  if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function pulseBtn(id){
+ var s=performance.now();
+ var rect=document.getElementById(id+'R');
+ if(!rect)return;
+ function tick(now){
+  var t=Math.min((now-s)/200,1);
+  var k=1-0.05*Math.sin(t*Math.PI);
+  rect.setAttribute('transform','translate('+(106*(1-k))+','+(22*(1-k))+') scale('+k+')');
+  if(t<1)rafs.push(requestAnimationFrame(tick));
+  else rect.removeAttribute('transform');
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function timer(barId,textId,dur,fromColor,toColor){
+ var s=performance.now();
+ function tick(now){
+  var t=Math.min((now-s)/dur,1),e=EASE(t);
+  $(barId).setAttribute('width',(212*e).toFixed(1));
+  var sec=(dur/1000)*e;
+  $(textId).textContent=sec.toFixed(1)+' s';
+  if(toColor && t>0.7){$(barId).setAttribute('fill',toColor);$(textId).setAttribute('fill',toColor);}
+  if(t<1)rafs.push(requestAnimationFrame(tick));
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function spinForever(){
+ // rotate spinL via attribute transform on path
+ var arc=$('spinLArc');
+ var s=performance.now();
+ function tick(now){
+  var deg=((now-s)/1000)*360;
+  arc.setAttribute('transform','rotate('+deg+' 106 22)');
+  rafs.push(requestAnimationFrame(tick));
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function checkAnim(){
+ var p=$('checkR').querySelector('path');
+ var s=performance.now();
+ function tick(now){
+  var t=Math.min((now-s)/450,1),e=EASE(t);
+  p.setAttribute('stroke-dashoffset',(40*(1-e)).toFixed(1));
+  if(t<1)rafs.push(requestAnimationFrame(tick));
+ }
+ rafs.push(requestAnimationFrame(tick));
+}
+
+function setBtnText(id,text,color,bgColor){
+ $(id+'T').textContent=text;
+ if(color)$(id+'T').setAttribute('fill',color);
+ if(bgColor)$(id+'R').setAttribute('fill',bgColor);
+}
+
+function run(){
+ clearAll();
+ ['curL','curR','spinL','tlL','tlR','thoughtL','thoughtR','checkR'].forEach(function(id){setOp(id,0);});
+ setBtnText('btnL','Save','#FFFFFF','#0EA5E9');
+ setBtnText('btnR','Save','#FFFFFF','#10B981');
+ $('tlLBar').setAttribute('width',0);$('tlRBar').setAttribute('width',0);
+ $('tlLT').textContent='0.0 s';$('tlRT').textContent='0.0 s';
+ $('tlLBar').setAttribute('fill','#F43F5E');$('tlLT').setAttribute('fill','#F43F5E');
+ $('tlRBar').setAttribute('fill','#10B981');$('tlRT').setAttribute('fill','#10B981');
+ $('checkR').querySelector('path').setAttribute('stroke-dashoffset','40');
+ setT('curL',60,180);setT('curR',460,180);
+
+ // cursors enter
+ after(400,function(){
+  fade('curL',0,1,300,null);fade('curR',0,1,300,null);
+  moveT('curL',60,180,158,270,800,null);
+  moveT('curR',460,180,548,270,800,null);
+ });
+
+ // both click at the same time
+ after(1300,function(){
+  pulseBtn('btnL');pulseBtn('btnR');
+  fade('tlL',0,1,300,null);fade('tlR',0,1,300,null);
+ });
+
+ // LEFT: spinner forever (button stays disabled looking)
+ after(1450,function(){
+  setBtnText('btnL','','#FFFFFF','#94A3B8');
+  fade('spinL',0,1,250,null);
+  spinForever();
+  timer('tlLBar','tlLT',5000,'#F43F5E','#F43F5E'); // count up to 5s
+ });
+
+ // LEFT: thought appears at 2.5s
+ after(2700,function(){fade('thoughtL',0,1,400,null);});
+
+ // RIGHT: optimistic — Saving... immediately
+ after(1450,function(){
+  setBtnText('btnR','Saving…','#FFFFFF','#0EA5E9');
+  timer('tlRBar','tlRT',900,'#0EA5E9','#10B981');
+ });
+ // RIGHT: success at ~900ms
+ after(2350,function(){
+  setBtnText('btnR','Saved','#FFFFFF','#10B981');
+  fade('checkR',0,1,200,null);
+  checkAnim();
+ });
+ after(3000,function(){fade('thoughtR',0,1,400,null);});
+
+ // fade thoughts/cursors before reset
+ after(8800,function(){
+  fade('thoughtL',1,0,500,null);fade('thoughtR',1,0,500,null);
+  fade('curL',1,0,500,null);fade('curR',1,0,500,null);
+  fade('spinL',1,0,500,null);
+  fade('tlL',1,0,500,null);fade('tlR',1,0,500,null);
+  fade('checkR',1,0,500,null);
+ });
+ after(10000,run);
+}
+$('rb').addEventListener('click',function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

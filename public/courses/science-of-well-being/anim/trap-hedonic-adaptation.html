@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Intensity Arms Race</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:12px}
+svg{width:100%;height:auto;display:block}
+#rb{position:absolute;bottom:18px;right:18px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.78}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" aria-label="The intensity arms race: doubling the cost of pleasure delivers diminishing happiness bumps.">
+  <rect width="760" height="470" fill="#FFF7ED"/>
+
+  <text x="380" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">The intensity arms race.</text>
+  <text x="380" y="54" text-anchor="middle" font-size="12" fill="#6B7280" font-style="italic">Cost doubles. The thrill barely budges.</text>
+
+  <!-- LEFT: Cost bars (vertical) growing -->
+  <g transform="translate(60,90)">
+    <text x="140" y="-10" text-anchor="middle" font-size="12" font-weight="600" fill="#6B7280">DINNER COST (₹)</text>
+    <!-- baseline -->
+    <line x1="0" y1="290" x2="280" y2="290" stroke="#1F2937" stroke-width="2"/>
+    <!-- 4 bars at x=10,80,150,220, width 60. Heights normalised so 4000 fits within 270px -->
+    <!-- scale: 4000 -> 260, so px = (val/4000)*260 -->
+    <g id="costBars">
+      <g id="bar0"><rect x="10"  y="290" width="60" height="0" fill="#F59E0B" rx="3"/></g>
+      <g id="bar1"><rect x="80"  y="290" width="60" height="0" fill="#F59E0B" rx="3"/></g>
+      <g id="bar2"><rect x="150" y="290" width="60" height="0" fill="#F59E0B" rx="3"/></g>
+      <g id="bar3"><rect x="220" y="290" width="60" height="0" fill="#F43F5E" rx="3"/></g>
+    </g>
+    <!-- labels under bars -->
+    <text x="40"  y="306" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 1</text>
+    <text x="110" y="306" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 2</text>
+    <text x="180" y="306" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 3</text>
+    <text x="250" y="306" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 4</text>
+    <!-- value labels above bars -->
+    <text id="lbl0" x="40"  y="290" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace" opacity="0">₹500</text>
+    <text id="lbl1" x="110" y="290" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace" opacity="0">₹1000</text>
+    <text id="lbl2" x="180" y="290" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2937" font-family="ui-monospace,monospace" opacity="0">₹2000</text>
+    <text id="lbl3" x="250" y="290" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace" opacity="0">₹4000</text>
+  </g>
+
+  <!-- RIGHT: Happiness bumps (decaying line + dots) -->
+  <g transform="translate(400,90)">
+    <text x="160" y="-10" text-anchor="middle" font-size="12" font-weight="600" fill="#6B7280">HAPPINESS BUMP</text>
+    <!-- frame -->
+    <rect x="0" y="0" width="320" height="290" rx="8" fill="#FFFFFF" stroke="#FED7AA" stroke-width="1.5"/>
+    <!-- baseline at y=240 -->
+    <line x1="0" y1="240" x2="320" y2="240" stroke="#9CA3AF" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+    <text x="324" y="244" font-size="10" fill="#9CA3AF">baseline</text>
+    <!-- vertical guides for each "night" at x=40,120,200,280 -->
+    <g stroke="#FFEDD5" stroke-width="1">
+      <line x1="40"  y1="20" x2="40"  y2="240"/>
+      <line x1="120" y1="20" x2="120" y2="240"/>
+      <line x1="200" y1="20" x2="200" y2="240"/>
+      <line x1="280" y1="20" x2="280" y2="240"/>
+    </g>
+    <!-- bump arcs and dots: drawn dynamically by JS -->
+    <path id="bumpLine" d="" fill="none" stroke="#0EA5E9" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <g id="bumpDots"></g>
+    <!-- delta labels -->
+    <text id="d0" x="40"  y="194" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace" opacity="0">+5.0</text>
+    <text id="d1" x="120" y="208" text-anchor="middle" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace" opacity="0">+3.0</text>
+    <text id="d2" x="200" y="220" text-anchor="middle" font-size="11" font-weight="700" fill="#F59E0B" font-family="ui-monospace,monospace" opacity="0">+1.5</text>
+    <text id="d3" x="280" y="230" text-anchor="middle" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace" opacity="0">+0.5</text>
+    <!-- night labels -->
+    <text x="40"  y="260" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 1</text>
+    <text x="120" y="260" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 2</text>
+    <text x="200" y="260" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 3</text>
+    <text x="280" y="260" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">night 4</text>
+  </g>
+
+  <!-- Caption -->
+  <rect id="capBg" x="40" y="406" width="680" height="28" rx="8" fill="#1F2937" opacity="0"/>
+  <text id="cap" x="380" y="424" text-anchor="middle" font-size="12" fill="white" opacity="0"></text>
+
+  <!-- End card -->
+  <g id="endCard" opacity="0">
+    <rect x="120" y="170" width="520" height="120" rx="14" fill="#1F2937"/>
+    <text x="380" y="212" text-anchor="middle" font-size="16" fill="white" font-weight="700">8x the cost. ⅒ the thrill.</text>
+    <text x="380" y="240" text-anchor="middle" font-size="13" fill="#FED7AA">Adaptation is the tax. Variety is the rebate.</text>
+    <text x="380" y="266" text-anchor="middle" font-size="11" fill="#9CA3AF" font-style="italic">— hedonic adaptation, decoded.</text>
+  </g>
+</svg>
+<button id="rb">↺ reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $id(id){return document.getElementById(id);}
+function setOp(id,v){const e=$id(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+
+let tms=[],rafs=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];rafs.forEach(cancelAnimationFrame);rafs=[];}
+
+function animOp(id,a,b,dur,cb){
+  const e=$id(id);if(!e)return;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(a,b,easeOut(t))));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Bar grow: rect height grows up. Bar group i: rect element child.
+// Original rect y=290, height=0; we adjust y and height.
+function growBar(i,toH,dur,cb){
+  const rect=document.querySelector(`#bar${i} rect`);
+  const lbl=$id('lbl'+i);
+  const baseY=290;
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    const h=toH*e;
+    rect.setAttribute('y',(baseY-h).toFixed(1));
+    rect.setAttribute('height',h.toFixed(1));
+    lbl.setAttribute('y',(baseY-h-6).toFixed(1));
+    lbl.setAttribute('opacity',String(e));
+    if(t<1)rafs.push(requestAnimationFrame(tick));else if(cb)cb();
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+// Bump arcs in right panel (relative to translate(400,90))
+// Bump i: x center at 40+i*80, baseline y=240. Peak y = 240 - peakH.
+// peaks: night1=170, night2=200, night3=220, night4=232
+const PEAKS=[170,200,220,232];
+const DELTAS=['+5.0','+3.0','+1.5','+0.5'];
+
+function drawBumpUpTo(i,phase){
+  // Build path going through bumps 0..i with phase (0..1) applied to the last
+  const baseY=240;
+  let d='M0,'+baseY;
+  for(let k=0;k<=i;k++){
+    const cx=40+k*80;
+    const peakY=PEAKS[k];
+    const localPhase=(k<i)?1:phase;
+    // Bump shape: from prev x (cx-40) at baseY, up to cx at peakY, back to (cx+40) at baseY
+    const startX=cx-40, endX=cx+40;
+    // ramp up
+    if(localPhase<=0){ d+=` L${startX},${baseY}`; continue; }
+    // at phase p: peak height h = (baseY-peakY)*p_curve; we sweep from startX to startX + 80*p
+    const sweepX = startX + 80*localPhase;
+    // draw quadratic up-down with control at (cx, peakY-(baseY-peakY)*0.6) but to keep simple use cubic
+    // Simpler: line from startX,baseY to current sweep along arc using sine
+    // Build small polyline:
+    const steps=14;
+    for(let j=1;j<=steps;j++){
+      const tt=(j/steps)*localPhase;
+      const x=startX+80*tt;
+      // sine arc from 0..1: sin(pi*tt)
+      const arc=Math.sin(Math.PI*tt);
+      const y=baseY-(baseY-peakY)*arc;
+      d+=` L${x.toFixed(1)},${y.toFixed(1)}`;
+    }
+  }
+  $id('bumpLine').setAttribute('d',d);
+}
+
+function animBump(i,dur,cb){
+  const s=performance.now();
+  function tick(now){
+    const t=Math.min((now-s)/dur,1),e=easeOut(t);
+    drawBumpUpTo(i,e);
+    if(t<1)rafs.push(requestAnimationFrame(tick));else{
+      // Add a dot at peak
+      const cx=40+i*80, peakY=PEAKS[i];
+      const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',peakY);
+      dot.setAttribute('r','5');dot.setAttribute('fill','#0EA5E9');
+      $id('bumpDots').appendChild(dot);
+      // show delta label
+      animOp('d'+i,0,1,400,null);
+      if(cb)cb();
+    }
+  }
+  rafs.push(requestAnimationFrame(tick));
+}
+
+function setCap(text){
+  $id('cap').textContent=text;
+  animOp('cap',0,1,350,null);
+  animOp('capBg',0,0.92,350,null);
+}
+function clearCap(cb){
+  animOp('cap',1,0,250,null);
+  animOp('capBg',0.92,0,250,cb);
+}
+
+// Bar heights (px). val/4000 * 260
+const BAR_H=[
+  Math.round(500/4000*260),   // 32.5
+  Math.round(1000/4000*260),  // 65
+  Math.round(2000/4000*260),  // 130
+  Math.round(4000/4000*260)   // 260
+];
+
+function run(){
+  clearAll();
+  // Reset bars
+  for(let i=0;i<4;i++){
+    const r=document.querySelector(`#bar${i} rect`);
+    r.setAttribute('y','290');r.setAttribute('height','0');
+    setOp('lbl'+i,0); setOp('d'+i,0);
+  }
+  // Reset bump path & dots
+  $id('bumpLine').setAttribute('d','');
+  $id('bumpDots').innerHTML='';
+  setOp('cap',0); setOp('capBg',0); setOp('endCard',0);
+
+  const captions=[
+    'Night 1 — ₹500 dinner. Magic. ✨',
+    'Night 2 — double up. Still nice.',
+    'Night 3 — double again. …meh.',
+    'Night 4 — ₹4000. Barely registers.'
+  ];
+  let t=600;
+  for(let i=0;i<4;i++){
+    after(t,()=>setCap(captions[i]));
+    after(t+200,()=>growBar(i,BAR_H[i],700,null));
+    after(t+500,()=>animBump(i,900,null));
+    after(t+1700,()=>clearCap(null));
+    t += 2200;
+  }
+
+  after(t,()=>setCap('More money. Same brain. Diminishing returns.'));
+  after(t+1700,()=>clearCap(null));
+  after(t+2100,()=>animOp('endCard',0,1,500,null));
+  after(t+5400,()=>animOp('endCard',1,0,500,()=>{ after(400,run); }));
+}
+
+$id('rb').addEventListener('click',()=>{clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

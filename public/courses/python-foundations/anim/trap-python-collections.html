@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unhashable type trap</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --bad: #F43F5E;
+    --good: #10B981;
+    --warn: #F59E0B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Inter", sans-serif;
+  }
+  .stage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+  }
+  .frame {
+    width: 100%;
+    max-width: 760px;
+    aspect-ratio: 16/10;
+    display: block;
+  }
+  .caption {
+    text-align: center;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 760px;
+  }
+  text { font-family: system-ui, -apple-system, sans-serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+  }
+  .shaking { animation: shake 320ms cubic-bezier(0.22, 0.61, 0.36, 1); transform-origin: center; transform-box: fill-box; }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spinner { animation: spin 1.6s linear infinite; transform-origin: center; transform-box: fill-box; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg class="frame" viewBox="0 0 760 475" aria-label="Animation showing a Python list being rejected by the dict hash machinery, raising a TypeError, then a tuple of the same values being accepted because tuples are immutable and therefore hashable.">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#1F2937"/>
+        </marker>
+        <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#F43F5E"/>
+        </marker>
+      </defs>
+
+      <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">
+        Lists can't be dict keys. Tuples can.
+      </text>
+      <text x="380" y="52" text-anchor="middle" font-size="13" fill="#6B7280">
+        A hashable object is an object whose identity won't change. Lists mutate; tuples don't.
+      </text>
+
+      <!-- TOP: list path -->
+      <g transform="translate(40,80)">
+        <text x="0" y="0" font-size="14" font-weight="700" fill="#9F1239" class="mono">d = {[1, 2]: 'a'}</text>
+
+        <!-- list object -->
+        <g transform="translate(0,20)" id="listObj">
+          <rect width="120" height="50" rx="8" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2"/>
+          <text x="60" y="22" text-anchor="middle" font-size="11" fill="#6B7280">list (mutable)</text>
+          <text x="60" y="40" text-anchor="middle" font-size="14" class="mono" fill="#1F2937">[1, 2]</text>
+          <!-- mutability badge -->
+          <g transform="translate(86,4)">
+            <rect width="32" height="16" rx="4" fill="#F43F5E"/>
+            <text x="16" y="12" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">MUT</text>
+          </g>
+        </g>
+
+        <!-- arrow into hash -->
+        <line x1="130" y1="45" x2="240" y2="45" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- hash machinery -->
+        <g transform="translate(250,20)">
+          <rect width="160" height="50" rx="8" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+          <text x="80" y="22" text-anchor="middle" font-size="11" fill="#6B7280">hash() machine</text>
+          <g id="gear" transform="translate(80,38)" class="spinner">
+            <circle r="9" fill="none" stroke="#1F2937" stroke-width="2"/>
+            <circle r="3" fill="#1F2937"/>
+            <line x1="0" y1="-13" x2="0" y2="-9" stroke="#1F2937" stroke-width="2"/>
+            <line x1="0" y1="13" x2="0" y2="9" stroke="#1F2937" stroke-width="2"/>
+            <line x1="-13" y1="0" x2="-9" y2="0" stroke="#1F2937" stroke-width="2"/>
+            <line x1="13" y1="0" x2="9" y2="0" stroke="#1F2937" stroke-width="2"/>
+          </g>
+        </g>
+
+        <!-- rejection -->
+        <line x1="420" y1="45" x2="510" y2="45" stroke="#F43F5E" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrowRed)" id="rejectArrow" opacity="0"/>
+
+        <!-- error -->
+        <g transform="translate(520,16)" id="listError" opacity="0">
+          <rect width="170" height="60" rx="8" fill="#FEE2E2" stroke="#F43F5E" stroke-width="2"/>
+          <text x="14" y="22" font-size="12" font-weight="700" class="mono" fill="#9F1239">TypeError</text>
+          <text x="14" y="40" font-size="11" class="mono" fill="#9F1239">unhashable type:</text>
+          <text x="14" y="54" font-size="11" class="mono" fill="#9F1239">'list'</text>
+        </g>
+      </g>
+
+      <!-- diff explanation -->
+      <g transform="translate(40,180)" id="diffGroup" opacity="0">
+        <rect width="680" height="80" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+        <text x="20" y="28" font-size="14" font-weight="700" fill="#92400E">Why?</text>
+        <text x="20" y="50" font-size="13" fill="#1F2937">
+          A dict stores keys at slots based on hash(key). If the key mutates,
+        </text>
+        <text x="20" y="68" font-size="13" fill="#1F2937">
+          its hash changes, and the dict can no longer find it. So Python forbids the storage in the first place.
+        </text>
+      </g>
+
+      <!-- BOTTOM: tuple path -->
+      <g transform="translate(40,280)" id="tupleGroup" opacity="0">
+        <text x="0" y="0" font-size="14" font-weight="700" fill="#065F46" class="mono">d = {(1, 2): 'a'}</text>
+
+        <!-- tuple object -->
+        <g transform="translate(0,20)">
+          <rect width="120" height="50" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+          <text x="60" y="22" text-anchor="middle" font-size="11" fill="#6B7280">tuple (immutable)</text>
+          <text x="60" y="40" text-anchor="middle" font-size="14" class="mono" fill="#1F2937">(1, 2)</text>
+          <g transform="translate(86,4)">
+            <rect width="32" height="16" rx="4" fill="#10B981"/>
+            <text x="16" y="12" text-anchor="middle" font-size="9" fill="#fff" font-weight="700">IMM</text>
+          </g>
+        </g>
+
+        <line x1="130" y1="45" x2="240" y2="45" stroke="#1F2937" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <g transform="translate(250,20)">
+          <rect width="160" height="50" rx="8" fill="#fff" stroke="#1F2937" stroke-width="2"/>
+          <text x="80" y="22" text-anchor="middle" font-size="11" fill="#6B7280">hash() machine</text>
+          <text x="80" y="42" text-anchor="middle" font-size="14" class="mono" fill="#10B981">3713081631934410656</text>
+        </g>
+
+        <line x1="420" y1="45" x2="510" y2="45" stroke="#10B981" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <g transform="translate(520,16)">
+          <rect width="170" height="60" rx="8" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+          <text x="14" y="22" font-size="12" font-weight="700" class="mono" fill="#065F46">success</text>
+          <text x="14" y="40" font-size="11" class="mono" fill="#065F46">key stored in slot</text>
+          <text x="14" y="54" font-size="11" class="mono" fill="#065F46">d[(1, 2)] = 'a'</text>
+        </g>
+      </g>
+
+      <!-- final summary -->
+      <g transform="translate(40,390)" id="summaryGroup" opacity="0">
+        <rect width="680" height="60" rx="10" fill="#fff" stroke="#E5E7EB" stroke-width="1.5"/>
+        <text x="20" y="28" font-size="13" fill="#1F2937">
+          <tspan font-weight="700">Hashable types:</tspan>
+          <tspan class="mono"> int, float, str, bool, tuple (of hashables), frozenset</tspan>
+        </text>
+        <text x="20" y="48" font-size="13" fill="#1F2937">
+          <tspan font-weight="700">Unhashable:</tspan>
+          <tspan class="mono"> list, dict, set, anything that can mutate in place</tspan>
+        </text>
+      </g>
+    </svg>
+    <div class="caption">Mutability is contagious: a tuple containing a list is itself unhashable. The rule applies recursively.</div>
+  </div>
+</main>
+<script>
+(function () {
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
+  var stages = [
+    { id: 'rejectArrow', delay: 1400 },
+    { id: 'listError', delay: 1700, shake: 'listObj' },
+    { id: 'diffGroup', delay: 3500 },
+    { id: 'tupleGroup', delay: 5500 },
+    { id: 'summaryGroup', delay: 7500 }
+  ];
+
+  function show(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.transition = 'opacity 500ms ' + EASE;
+    el.style.opacity = '1';
+  }
+
+  function shake(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('shaking');
+    setTimeout(function () { el.classList.remove('shaking'); }, 320);
+  }
+
+  function init() {
+    ['rejectArrow','listError','diffGroup','tupleGroup','summaryGroup'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transition = 'none';
+      }
+    });
+  }
+
+  function run() {
+    if (prefersReduced) {
+      ['rejectArrow','listError','diffGroup','tupleGroup','summaryGroup'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.opacity = '1';
+      });
+      return;
+    }
+    init();
+    stages.forEach(function (s) {
+      setTimeout(function () {
+        show(s.id);
+        if (s.shake) shake(s.shake);
+      }, s.delay);
+    });
+    setTimeout(run, 11000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
+</body>
+</html>

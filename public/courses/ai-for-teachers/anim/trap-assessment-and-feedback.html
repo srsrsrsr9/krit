@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: assessment and feedback</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --paper: #FFFFFF;
+    --line: #E5E7EB;
+    --amber: #F59E0B;
+    --rose: #F43F5E;
+    --emerald: #10B981;
+    --sky: #0EA5E9;
+    --violet: #8B5CF6;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family: system-ui,-apple-system,"Inter",sans-serif; }
+  .stage { width:100%; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .wrap { width:100%; max-width:780px; }
+  .frame { width:100%; aspect-ratio: 16/9; display:block; }
+  .caption { text-align:center; font-size:13px; font-style:italic; color:var(--muted); margin-top:10px; min-height:18px; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .cell { fill: #DBEAFE !important; }
+    .cell.bad { fill: #FECACA !important; stroke: #F43F5E !important; stroke-width: 2 !important; }
+    .cap.c1 { opacity: 1 !important; }
+    .cap.c2, .cap.c3, .cap.c4 { opacity: 0 !important; }
+    .fix-overlay { opacity: 1 !important; }
+    .scan-line, .magnifier { opacity: 0 !important; }
+    .email-toast { opacity: 1 !important; }
+    .trust-bar { width: 30% !important; }
+  }
+
+  /* 14s loop */
+  /* 0–3s: 32 cells fade in */
+  /* 3–6s: 3 cells flip red */
+  /* 6–8s: trust meter drops, parent email toast */
+  /* 8–11s: scan line / magnifier passes over cells, all become green */
+  /* 11–14s: hold + caption */
+
+  @keyframes cellIn {
+    0%, 5% { opacity: 0; transform: scale(0.6); }
+    14%, 100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes badPulse {
+    0%, 22% { opacity: 0; }
+    27% { opacity: 1; }
+    32% { opacity: 0.55; }
+    36% { opacity: 1; }
+    62% { opacity: 1; }
+    66%, 100% { opacity: 0; }
+  }
+  @keyframes emailIn {
+    0%, 38% { opacity: 0; transform: translateY(8px); }
+    44%, 64% { opacity: 1; transform: translateY(0); }
+    70%, 100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes trustDrop {
+    0%, 22% { width: 78%; }
+    32%, 50% { width: 32%; }
+    72%, 100% { width: 86%; }
+  }
+  @keyframes scanLine {
+    0%, 60% { opacity: 0; transform: translateX(0); }
+    62% { opacity: 1; }
+    78% { opacity: 1; transform: translateX(450px); }
+    82% { opacity: 0; transform: translateX(450px); }
+    100% { opacity: 0; transform: translateX(450px); }
+  }
+  @keyframes fixIn {
+    0%, 80% { opacity: 0; }
+    86%, 100% { opacity: 1; }
+  }
+  @keyframes goodIn {
+    0%, 70% { fill: #FECACA; stroke: #F43F5E; }
+    78%, 100% { fill: #A7F3D0; stroke: #10B981; }
+  }
+  @keyframes capSwap {
+    0%, 4% { opacity: 0; }
+    8%, 22% { opacity: 1; }
+    26%, 30% { opacity: 0; }
+    34%, 50% { opacity: 1; }
+    54%, 58% { opacity: 0; }
+    62%, 78% { opacity: 1; }
+    82%, 86% { opacity: 0; }
+    90%, 98% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .cap { animation: capSwap 14s var(--ease) infinite; }
+  .cap.c1 { animation-delay: 0s; }
+  .cap.c2 { animation-delay: -10.5s; }
+  .cap.c3 { animation-delay: -7s; }
+  .cap.c4 { animation-delay: -3.5s; }
+
+  .cell { animation: cellIn 14s var(--ease) infinite; transform-origin: center; transform-box: fill-box; }
+  .bad-overlay { animation: badPulse 14s var(--ease) infinite; }
+  .email-toast { animation: emailIn 14s var(--ease) infinite; }
+  .trust-bar { animation: trustDrop 14s var(--ease) infinite; }
+  .scan-line { animation: scanLine 14s var(--ease) infinite; }
+  .fix-overlay { animation: fixIn 14s var(--ease) infinite; }
+  .bad-cell { animation: goodIn 14s var(--ease) infinite; }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg class="frame" viewBox="0 0 780 439" aria-label="Thirty-two students open AI feedback. Three contradict themselves because the AI hallucinated. Trust drops; a parent emails. The fix is a thirty-second teacher review per essay.">
+      <!-- background -->
+      <rect x="0" y="0" width="780" height="439" fill="#FFF7ED"/>
+
+      <!-- Title -->
+      <text x="40" y="40" font-size="14" font-weight="700" fill="#1F2937" letter-spacing="0.5">32 ESSAYS · AI FEEDBACK · UNREVIEWED</text>
+      <line x1="40" y1="50" x2="240" y2="50" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Grid 8x4 of student feedback cards -->
+      <g transform="translate(40, 70)">
+        <!-- Generated grid: cell size 56 wide x 50 tall, gap 4 -->
+        <g id="grid">
+          <!-- Row 1 -->
+          <g class="cell" style="animation-delay: 0s">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S1</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <g class="cell" style="animation-delay: 0.04s" transform="translate(60, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S2</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <g class="cell" style="animation-delay: 0.08s" transform="translate(120, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S3</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <!-- Bad cell #1 (S4) -->
+          <g class="cell" style="animation-delay: 0.12s" transform="translate(180, 0)">
+            <rect class="bad-cell" x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#1F2937"/>
+            <text x="24" y="17" font-size="8" font-weight="700" fill="#1F2937">S4</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            <g class="bad-overlay">
+              <path d="M44 6 L52 14 M52 6 L44 14" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round"/>
+            </g>
+          </g>
+          <g class="cell" style="animation-delay: 0.16s" transform="translate(240, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S5</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <g class="cell" style="animation-delay: 0.20s" transform="translate(300, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S6</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <g class="cell" style="animation-delay: 0.24s" transform="translate(360, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S7</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+          <g class="cell" style="animation-delay: 0.28s" transform="translate(420, 0)">
+            <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+            <text x="24" y="17" font-size="8" fill="#1E3A8A">S8</text>
+            <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+            <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+          </g>
+
+          <!-- Row 2 -->
+          <g transform="translate(0, 54)">
+            <g class="cell" style="animation-delay: 0.32s">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="24" y="17" font-size="8" fill="#1E3A8A">S9</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.36s" transform="translate(60, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S10</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.40s" transform="translate(120, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S11</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.44s" transform="translate(180, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S12</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <!-- Bad cell #2 (S13) -->
+            <g class="cell" style="animation-delay: 0.48s" transform="translate(240, 0)">
+              <rect class="bad-cell" x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#1F2937"/>
+              <text x="22" y="17" font-size="8" font-weight="700" fill="#1F2937">S13</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+              <g class="bad-overlay">
+                <path d="M44 6 L52 14 M52 6 L44 14" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+            </g>
+            <g class="cell" style="animation-delay: 0.52s" transform="translate(300, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S14</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.56s" transform="translate(360, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S15</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.60s" transform="translate(420, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S16</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+          </g>
+
+          <!-- Row 3 -->
+          <g transform="translate(0, 108)">
+            <g class="cell" style="animation-delay: 0.64s">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S17</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.68s" transform="translate(60, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S18</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.72s" transform="translate(120, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S19</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.76s" transform="translate(180, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S20</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.80s" transform="translate(240, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S21</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 0.84s" transform="translate(300, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S22</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <!-- Bad cell #3 (S23) -->
+            <g class="cell" style="animation-delay: 0.88s" transform="translate(360, 0)">
+              <rect class="bad-cell" x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#1F2937"/>
+              <text x="22" y="17" font-size="8" font-weight="700" fill="#1F2937">S23</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+              <g class="bad-overlay">
+                <path d="M44 6 L52 14 M52 6 L44 14" stroke="#F43F5E" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+            </g>
+            <g class="cell" style="animation-delay: 0.92s" transform="translate(420, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S24</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+          </g>
+
+          <!-- Row 4 -->
+          <g transform="translate(0, 162)">
+            <g class="cell" style="animation-delay: 0.96s">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S25</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.00s" transform="translate(60, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S26</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.04s" transform="translate(120, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S27</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.08s" transform="translate(180, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S28</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.12s" transform="translate(240, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S29</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.16s" transform="translate(300, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S30</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.20s" transform="translate(360, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S31</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+            <g class="cell" style="animation-delay: 1.24s" transform="translate(420, 0)">
+              <rect x="0" y="0" width="56" height="50" rx="8" fill="#DBEAFE" stroke="#3B82F6" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="6" fill="#3B82F6"/>
+              <text x="22" y="17" font-size="8" fill="#1E3A8A">S32</text>
+              <line x1="6" y1="28" x2="50" y2="28" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="36" x2="46" y2="36" stroke="#93C5FD" stroke-width="1.5"/>
+              <line x1="6" y1="44" x2="42" y2="44" stroke="#93C5FD" stroke-width="1.5"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- Scan line for fix -->
+        <rect class="scan-line" x="-20" y="-6" width="20" height="220" fill="#10B981" opacity="0"/>
+      </g>
+
+      <!-- Right column: trust + email + fix -->
+      <g transform="translate(540, 70)">
+        <text x="0" y="14" font-size="11" font-weight="700" fill="#1F2937" letter-spacing="0.5">CLASS TRUST</text>
+        <rect x="0" y="22" width="200" height="14" rx="7" fill="#FEE2E2" stroke="#1F2937" stroke-width="1.5"/>
+        <rect class="trust-bar" x="0" y="22" width="78%" height="14" rx="7" fill="#10B981" style="max-width:200px;"/>
+        <text x="0" y="56" font-size="10" font-style="italic" fill="#6B7280">contradictory comments noticed</text>
+
+        <!-- Parent email toast -->
+        <g class="email-toast" transform="translate(0, 76)">
+          <rect x="0" y="0" width="200" height="78" rx="12" fill="#FFFFFF" stroke="#F43F5E" stroke-width="2.5"/>
+          <circle cx="22" cy="22" r="10" fill="#F43F5E"/>
+          <path d="M14 18 L22 24 L30 18" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="40" y="20" font-size="11" font-weight="700" fill="#1F2937">Parent · 7:42 AM</text>
+          <text x="40" y="36" font-size="10" fill="#1F2937">"Why does Aisha's report</text>
+          <text x="40" y="50" font-size="10" fill="#1F2937">say 'too short' AND</text>
+          <text x="40" y="64" font-size="10" fill="#1F2937">'overly verbose'?"</text>
+        </g>
+
+        <!-- Fix block -->
+        <g class="fix-overlay" transform="translate(0, 168)" opacity="0">
+          <rect x="0" y="0" width="200" height="142" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2.5"/>
+          <circle cx="22" cy="24" r="13" fill="#10B981"/>
+          <path d="M16 24 L21 29 L29 19" stroke="#FFFFFF" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="44" y="20" font-size="12" font-weight="700" fill="#065F46">The fix</text>
+          <text x="44" y="36" font-size="10" fill="#1F2937">30 sec / essay × 32</text>
+          <text x="6" y="60" font-size="11" fill="#1F2937">= 16 minutes total</text>
+          <text x="6" y="80" font-size="11" fill="#1F2937" font-weight="700">Caught all 3 contradictions.</text>
+          <line x1="6" y1="92" x2="194" y2="92" stroke="#A7F3D0" stroke-width="1.5"/>
+          <text x="6" y="110" font-size="10" font-style="italic" fill="#065F46">AI does the work.</text>
+          <text x="6" y="126" font-size="10" font-style="italic" fill="#065F46">You do the read-through.</text>
+        </g>
+      </g>
+    </svg>
+    <div class="caption">
+      <span class="cap c1">Stage 1 · Thirty-two students. Thirty-two AI feedback cards. Sent at 11pm. No teacher in the loop.</span>
+      <span class="cap c2">Stage 2 · Three of them contradict themselves. The model hallucinated mid-batch and you didn't see.</span>
+      <span class="cap c3">Stage 3 · Trust falls. One parent emails by 7:42 AM. The class noticed before you did.</span>
+      <span class="cap c4">Stage 4 · Sixteen minutes of skimming would have caught all three. AI drafts; you sign.</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

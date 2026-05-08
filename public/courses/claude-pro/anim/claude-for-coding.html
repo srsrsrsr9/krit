@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Claude for coding — kernel + subagents</title>
+<style>
+  :root{--bg:#EFF6FF;--ink:#1F2937;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+  .wrap{position:relative;width:100%;max-width:780px}
+  svg{width:100%;height:auto;display:block}
+  #rb{position:absolute;bottom:-4px;right:8px;background:#1F2937;color:#EFF6FF;border:none;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+  #rb:hover{opacity:1}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+  .stp{opacity:0}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+    <svg viewBox="0 0 780 500" aria-label="Claude Code workflow: load CLAUDE.md as the kernel, plan in a subagent, execute in the main thread, verify with a pr-reviewer subagent">
+      <rect width="780" height="500" fill="#EFF6FF"/>
+      <text x="390" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1F2937">Claude Code = kernel + planned, executed, verified.</text>
+
+      <!-- Kernel: CLAUDE.md being loaded -->
+      <g id="kernel" class="stp">
+        <rect x="40" y="62" width="200" height="76" rx="12" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+        <text x="58" y="86" font-size="11.5" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">CLAUDE.md</text>
+        <line x1="58" y1="98"  x2="222" y2="98" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="58" y1="110" x2="200" y2="110" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="58" y1="122" x2="180" y2="122" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+        <text x="140" y="156" text-anchor="middle" font-size="10.5" fill="#92400E" font-style="italic">kernel: rules, stack, taste</text>
+      </g>
+
+      <!-- Arrow from kernel to main thread -->
+      <g id="kArrow" class="stp">
+        <path d="M242,100 L300,100" stroke="#F59E0B" stroke-width="2.4" marker-end="url(#arrAm)" stroke-linecap="round"/>
+      </g>
+
+      <!-- Main thread (center spine) -->
+      <g id="main" class="stp">
+        <rect x="300" y="68" width="180" height="64" rx="12" fill="#1F2937"/>
+        <text x="390" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#FBBF24">main thread</text>
+        <text x="390" y="112" text-anchor="middle" font-size="10.5" fill="#D1D5DB" font-family="ui-monospace,monospace">claude — orchestrator</text>
+      </g>
+
+      <!-- Task chip dropping in -->
+      <g id="task" class="stp">
+        <rect x="510" y="74" width="220" height="52" rx="10" fill="#fff" stroke="#0EA5E9" stroke-width="2"/>
+        <text x="525" y="94" font-size="11" font-weight="700" fill="#0369A1">TASK</text>
+        <text x="525" y="112" font-size="10.5" fill="#1F2937" font-family="ui-monospace,monospace">add /reset to dashboard</text>
+      </g>
+
+      <!-- Step 1: Plan subagent (parallel branch) -->
+      <g id="planBox" class="stp">
+        <rect x="60" y="200" width="200" height="100" rx="12" fill="#FAF5FF" stroke="#8B5CF6" stroke-width="2"/>
+        <rect x="60" y="200" width="200" height="22" rx="12" fill="#8B5CF6"/>
+        <text x="160" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">subagent · plan</text>
+        <text x="160" y="244" text-anchor="middle" font-size="11" fill="#5B21B6">writes docs/PLAN.md</text>
+        <text x="160" y="262" text-anchor="middle" font-size="10" fill="#7C3AED" font-style="italic">scoped, read-only</text>
+        <text x="160" y="284" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">~ 90 s</text>
+      </g>
+
+      <!-- Step 2: Execute (main + Edit) -->
+      <g id="execBox" class="stp">
+        <rect x="290" y="200" width="200" height="100" rx="12" fill="#ECFDF5" stroke="#10B981" stroke-width="2"/>
+        <rect x="290" y="200" width="200" height="22" rx="12" fill="#10B981"/>
+        <text x="390" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">main · execute</text>
+        <text x="390" y="244" text-anchor="middle" font-size="11" fill="#065F46">Edit + Bash + Write</text>
+        <text x="390" y="262" text-anchor="middle" font-size="10" fill="#047857" font-style="italic">touches the codebase</text>
+        <text x="390" y="284" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">~ 4 min</text>
+      </g>
+
+      <!-- Step 3: Verify subagent (pr-reviewer) -->
+      <g id="reviewBox" class="stp">
+        <rect x="520" y="200" width="200" height="100" rx="12" fill="#FEF2F2" stroke="#F43F5E" stroke-width="2"/>
+        <rect x="520" y="200" width="200" height="22" rx="12" fill="#F43F5E"/>
+        <text x="620" y="216" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="ui-monospace,monospace">subagent · pr-reviewer</text>
+        <text x="620" y="244" text-anchor="middle" font-size="11" fill="#9F1239">audits the diff</text>
+        <text x="620" y="262" text-anchor="middle" font-size="10" fill="#BE123C" font-style="italic">fresh eyes, no memory</text>
+        <text x="620" y="284" text-anchor="middle" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">~ 60 s</text>
+      </g>
+
+      <!-- Connecting arrows -->
+      <g id="a1" class="stp"><path d="M340,135 Q220,170 160,200" fill="none" stroke="#8B5CF6" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrV)"/></g>
+      <g id="a2" class="stp"><path d="M260,250 L290,250" fill="none" stroke="#1F2937" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrI)"/></g>
+      <g id="a3" class="stp"><path d="M490,250 L520,250" fill="none" stroke="#1F2937" stroke-width="2.2" stroke-linecap="round" marker-end="url(#arrI)"/></g>
+      <g id="a4" class="stp"><path d="M620,300 Q620,350 460,360 L420,360" fill="none" stroke="#F43F5E" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 4" marker-end="url(#arrR)"/></g>
+
+      <!-- Result PR card -->
+      <g id="pr" class="stp">
+        <rect x="240" y="340" width="180" height="56" rx="10" fill="#fff" stroke="#10B981" stroke-width="2"/>
+        <circle cx="262" cy="368" r="9" fill="#10B981"/>
+        <path d="M257,368 l4,4 l8,-8" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="282" y="364" font-size="11.5" font-weight="700" fill="#065F46">PR #421 ready</text>
+        <text x="282" y="380" font-size="10" fill="#374151" font-family="ui-monospace,monospace">+147  −12  · 6 files</text>
+      </g>
+
+      <!-- Annotations -->
+      <text x="160" y="320" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">parallel · returns plan only</text>
+      <text x="390" y="320" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">serial · main thread does the work</text>
+      <text x="620" y="320" text-anchor="middle" font-size="10" fill="#6B7280" font-style="italic">parallel · returns review only</text>
+
+      <!-- Bottom spine label -->
+      <text x="390" y="436" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1F2937">plan → execute → verify</text>
+      <text x="390" y="454" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">subagents keep main-thread context clean</text>
+      <text x="390" y="476" text-anchor="middle" font-size="10" fill="#9CA3AF">(each subagent has its own context window — they hand back a summary, not a transcript)</text>
+
+      <defs>
+        <marker id="arrAm" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F59E0B"/></marker>
+        <marker id="arrV"  markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#8B5CF6"/></marker>
+        <marker id="arrI"  markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1F2937"/></marker>
+        <marker id="arrR"  markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#F43F5E"/></marker>
+      </defs>
+    </svg>
+    <button id="rb">↺ reset</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const seq=[
+    ['kernel',200],['kArrow',900],['main',1300],['task',1900],
+    ['a1',2700],['planBox',3000],
+    ['a2',4400],['execBox',4700],
+    ['a3',6500],['reviewBox',6800],
+    ['a4',8400],['pr',8800],
+  ];
+  let timers=[];
+  function clearAll(){timers.forEach(clearTimeout);timers=[];}
+  function fade(id,dur,target){
+    const el=document.getElementById(id);if(!el)return;
+    const start=performance.now();const from=parseFloat(el.style.opacity||el.getAttribute('opacity')||0);
+    function tick(now){
+      const t=Math.min((now-start)/dur,1);
+      const e=1-Math.pow(1-t,3);
+      el.style.opacity=String(from+(target-from)*e);
+      if(t<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function reset(){
+    clearAll();
+    seq.forEach(([id])=>document.getElementById(id).style.opacity='0');
+    if(reduced){seq.forEach(([id])=>document.getElementById(id).style.opacity='1');return;}
+    run();
+  }
+  function run(){
+    seq.forEach(([id,t])=>timers.push(setTimeout(()=>fade(id,500,1),t)));
+    timers.push(setTimeout(reset,12500));
+  }
+  document.getElementById('rb').addEventListener('click',reset);
+  if(reduced){seq.forEach(([id])=>document.getElementById(id).style.opacity='1');}else{run();}
+})();
+</script>
+</body>
+</html>

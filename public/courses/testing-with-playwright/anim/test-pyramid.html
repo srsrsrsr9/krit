@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The test pyramid</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+#rb{position:absolute;bottom:8px;right:16px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="The test pyramid: many fast unit tests at the base, fewer integration in the middle, very few end-to-end at the top, contrasted with the inverted ice-cream-cone anti-pattern">
+
+  <rect width="760" height="470" fill="#FFF7ED"/>
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">Same coverage. Wildly different bills.</text>
+
+  <!-- ─────────── LEFT: HEALTHY PYRAMID ─────────── -->
+  <g>
+    <text x="180" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#10B981">healthy pyramid</text>
+
+    <!-- Base = unit (wide) -->
+    <g id="p-unit" opacity="0">
+      <polygon points="50,330 310,330 280,260 80,260" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+      <text x="180" y="290" text-anchor="middle" font-size="12" font-weight="700" fill="#065F46">unit</text>
+      <text id="pu-num" x="180" y="312" text-anchor="middle" font-size="20" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Middle = integration -->
+    <g id="p-int" opacity="0">
+      <polygon points="80,260 280,260 250,196 110,196" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+      <text x="180" y="226" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E">integration</text>
+      <text id="pi-num" x="180" y="246" text-anchor="middle" font-size="16" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Top = e2e -->
+    <g id="p-e2e" opacity="0">
+      <polygon points="110,196 250,196 220,140 140,140" fill="#FECACA" stroke="#F43F5E" stroke-width="2"/>
+      <text x="180" y="166" text-anchor="middle" font-size="10" font-weight="700" fill="#9F1239">e2e</text>
+      <text id="pe-num" x="180" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Cost ledger -->
+    <g id="p-ledger" opacity="0">
+      <rect x="50" y="350" width="260" height="76" rx="9" fill="white" stroke="#10B981" stroke-width="1.5"/>
+      <text x="62" y="370" font-size="11" font-weight="700" fill="#065F46">CI run</text>
+      <text x="62" y="388" font-size="11" fill="#1F2937">duration</text>
+      <text x="298" y="388" text-anchor="end" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">3 m 40 s</text>
+      <text x="62" y="404" font-size="11" fill="#1F2937">flake rate</text>
+      <text x="298" y="404" text-anchor="end" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">0.4 %</text>
+      <text x="62" y="420" font-size="11" fill="#1F2937">cost / day</text>
+      <text x="298" y="420" text-anchor="end" font-size="11" font-weight="700" fill="#10B981" font-family="ui-monospace,monospace">$2</text>
+    </g>
+  </g>
+
+  <!-- Vertical divider -->
+  <line x1="380" y1="60" x2="380" y2="430" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ─────────── RIGHT: INVERTED CONE ─────────── -->
+  <g>
+    <text x="580" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#F43F5E">inverted ice-cream cone</text>
+
+    <!-- Top = e2e (wide) -->
+    <g id="i-e2e" opacity="0">
+      <polygon points="450,140 710,140 680,196 480,196" fill="#FECACA" stroke="#F43F5E" stroke-width="2"/>
+      <text x="580" y="170" text-anchor="middle" font-size="12" font-weight="700" fill="#9F1239">e2e</text>
+      <text id="ie-num" x="580" y="190" text-anchor="middle" font-size="20" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Middle = integration -->
+    <g id="i-int" opacity="0">
+      <polygon points="480,196 680,196 650,260 510,260" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+      <text x="580" y="226" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E">integration</text>
+      <text id="ii-num" x="580" y="246" text-anchor="middle" font-size="14" font-weight="700" fill="#92400E" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Bottom = unit (tiny) -->
+    <g id="i-unit" opacity="0">
+      <polygon points="510,260 650,260 620,330 540,330" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+      <text x="580" y="290" text-anchor="middle" font-size="10" font-weight="700" fill="#065F46">unit</text>
+      <text id="iu-num" x="580" y="306" text-anchor="middle" font-size="13" font-weight="700" fill="#065F46" font-family="ui-monospace,monospace">0</text>
+    </g>
+
+    <!-- Cost ledger -->
+    <g id="i-ledger" opacity="0">
+      <rect x="450" y="350" width="260" height="76" rx="9" fill="white" stroke="#F43F5E" stroke-width="1.5"/>
+      <text x="462" y="370" font-size="11" font-weight="700" fill="#9F1239">CI run</text>
+      <text x="462" y="388" font-size="11" fill="#1F2937">duration</text>
+      <text x="698" y="388" text-anchor="end" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">38 min</text>
+      <text x="462" y="404" font-size="11" fill="#1F2937">flake rate</text>
+      <text x="698" y="404" text-anchor="end" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">11 %</text>
+      <text x="462" y="420" font-size="11" fill="#1F2937">cost / day</text>
+      <text x="698" y="420" text-anchor="end" font-size="11" font-weight="700" fill="#F43F5E" font-family="ui-monospace,monospace">$84</text>
+    </g>
+  </g>
+
+</svg>
+<div class="cap">A handful of e2e tests can outweigh a thousand unit tests in cost — and still miss the bug.</div>
+<button id="rb">reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+var tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function fade(id,from,to,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+function num(id,from,to,dur){
+  var e=$(id);if(!e)return;
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.textContent=Math.round(lerp(from,to,easeOut(t))).toString();
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function run(){
+  clearAll();
+  ['p-unit','p-int','p-e2e','p-ledger','i-unit','i-int','i-e2e','i-ledger']
+    .forEach(function(id){setOp(id,0);});
+  $('pu-num').textContent='0';
+  $('pi-num').textContent='0';
+  $('pe-num').textContent='0';
+  $('iu-num').textContent='0';
+  $('ii-num').textContent='0';
+  $('ie-num').textContent='0';
+
+  // Healthy pyramid: build base up.
+  after(400,  function(){fade('p-unit',0,1,400); num('pu-num',0,1000,1000);});
+  after(1500, function(){fade('p-int',0,1,400);  num('pi-num',0,100,800);});
+  after(2400, function(){fade('p-e2e',0,1,400);  num('pe-num',0,20,600);});
+  after(3300, function(){fade('p-ledger',0,1,500);});
+
+  // Inverted cone — wide top first, narrow base last.
+  after(5000, function(){fade('i-e2e',0,1,400);  num('ie-num',0,50,800);});
+  after(6000, function(){fade('i-int',0,1,400);  num('ii-num',0,12,500);});
+  after(6900, function(){fade('i-unit',0,1,400); num('iu-num',0,3,400);});
+  after(7800, function(){fade('i-ledger',0,1,500);});
+
+  // Loop
+  after(13500, function(){
+    var ids=['p-unit','p-int','p-e2e','p-ledger','i-unit','i-int','i-e2e','i-ledger'];
+    ids.forEach(function(id){fade(id,1,0,500);});
+    after(700, run);
+  });
+}
+
+$('rb').addEventListener('click', function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

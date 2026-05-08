@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trap: L&D = compliance training</title>
+<style>:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}.frame{width:100%;max-width:720px}.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes draw{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}.bad{animation:fade .5s ease .3s both}.boxes-checked{animation:fade .25s ease both}.bad-line{stroke-dasharray:600;animation:draw 4s linear .5s forwards}.fix{animation:fade .5s ease 5s both}.fix-line{stroke-dasharray:600;animation:draw 4s linear 5.5s forwards}.sprint{animation:fade .25s ease both}</style>
+</head><body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="Annual 4-hour AI ethics training watched at 2x speed vs weekly 30-min learning sprints with public demos; capability climbs in the second">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+<g class="bad" transform="translate(40 30)"><text x="160" y="14" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">BEFORE · annual 4-hour compliance training</text>
+<rect width="320" height="120" rx="8" fill="#FECACA" stroke="#7F1D1D" stroke-width="2"/>
+<g transform="translate(20 30)" font-family="ui-monospace,monospace" font-size="9" fill="#7F1D1D">
+<g class="boxes-checked" style="animation-delay:.5s"><rect width="14" height="14" fill="#7F1D1D"/><text x="20" y="11" fill="#7F1D1D">module 1: ethics intro · 2× speed</text></g>
+<g class="boxes-checked" style="animation-delay:1s" transform="translate(0 22)"><rect width="14" height="14" fill="#7F1D1D"/><text x="20" y="11">module 2: bias awareness · 2× speed</text></g>
+<g class="boxes-checked" style="animation-delay:1.5s" transform="translate(0 44)"><rect width="14" height="14" fill="#7F1D1D"/><text x="20" y="11">module 3: data privacy · 2× speed</text></g>
+<g class="boxes-checked" style="animation-delay:2s" transform="translate(0 66)"><rect width="14" height="14" fill="#7F1D1D"/><text x="20" y="11">module 4: assessment · all "B" answers</text></g>
+<g class="boxes-checked" style="animation-delay:2.5s" transform="translate(0 88)"><text x="0" y="11" font-weight="bold" fill="#7F1D1D">→ certified · zero behavior change</text></g>
+</g>
+</g>
+<g class="bad" transform="translate(40 170)" style="animation-delay:3s"><rect width="320" height="60" rx="10" fill="#7F1D1D"/><text x="160" y="22" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">3 ethics incidents that year</text><text x="160" y="40" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">box checked; behavior unchanged</text></g>
+<g class="fix" transform="translate(380 30)"><text x="150" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">AFTER · weekly 30-min sprints</text>
+<rect width="300" height="120" rx="8" fill="#A7F3D0" stroke="#065F46" stroke-width="2"/>
+<g transform="translate(14 28)" font-family="ui-monospace,monospace" font-size="8" fill="#065F46">
+<g class="sprint" style="animation-delay:5.3s"><rect width="14" height="14" fill="#10B981"/><text x="20" y="11">W1: live AI demo + public mistake</text></g>
+<g class="sprint" style="animation-delay:5.6s" transform="translate(0 18)"><rect width="14" height="14" fill="#10B981"/><text x="20" y="11">W2: peer review of bad prompt</text></g>
+<g class="sprint" style="animation-delay:5.9s" transform="translate(0 36)"><rect width="14" height="14" fill="#10B981"/><text x="20" y="11">W3: tool-fit critique</text></g>
+<g class="sprint" style="animation-delay:6.2s" transform="translate(0 54)"><rect width="14" height="14" fill="#10B981"/><text x="20" y="11">W4: sharing weekly wins + losses</text></g>
+<g class="sprint" style="animation-delay:6.5s" transform="translate(0 72)"><text x="0" y="11" font-weight="bold">→ 14 sprints/quarter · capability compounds</text></g>
+</g>
+</g>
+<g class="fix" transform="translate(380 170)" style="animation-delay:7s"><rect width="300" height="60" rx="10" fill="#065F46"/><text x="150" y="22" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">0 incidents · widespread adoption</text><text x="150" y="40" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">behavior compounds; checkbox doesn't</text></g>
+<g transform="translate(40 245)" style="animation-delay:8s">
+<line x1="0" y1="100" x2="640" y2="100" stroke="#1F2937"/><text x="0" y="115" font-size="9" fill="#1F2937">W0</text><text x="640" y="115" font-size="9" fill="#1F2937" text-anchor="end">W52</text>
+<polyline class="bad-line" points="0,98 100,99 200,98 300,99 400,98 500,99 600,98 640,99" stroke="#F43F5E" stroke-width="3" fill="none"/>
+<text x="640" y="92" text-anchor="end" font-size="10" fill="#7F1D1D" font-weight="bold">→ flat (compliance)</text>
+<polyline class="fix-line" points="0,98 80,90 160,80 240,68 320,55 400,42 480,30 560,18 640,8" stroke="#10B981" stroke-width="3" fill="none"/>
+<text x="640" y="4" text-anchor="end" font-size="10" fill="#065F46" font-weight="bold">↗ rising (sprints)</text>
+<text x="320" y="135" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Capability over a year · two L&amp;D approaches</text>
+</g>
+</svg>
+<div class="caption">Annual ticked-box training is theatre. Weekly sprints with public demos are the system that actually compounds.</div>
+</div></main><button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A/B test: noise vs signal</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFDF8; --line:#1F2937;
+    --A:#0EA5E9; --B:#F59E0B;
+    --warn:#F43F5E; --ok:#10B981;
+    --ease:cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .frame{width:100%;max-width:840px;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;max-width:780px;line-height:1.5;}
+  .reset{position:fixed;bottom:14px;right:14px;background:#1F2937;color:#FFF7ED;border:none;border-radius:999px;
+    font:600 12px system-ui;padding:8px 14px;cursor:pointer;letter-spacing:.02em}
+  .reset:hover{background:#374151}
+  .num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+
+  .day-tab{transition: fill .35s var(--ease);}
+  .ci-band, .lift-pt, .verdict-card, .lift-num, .ci-num{
+    transition: transform .7s var(--ease), opacity .5s var(--ease), fill .5s var(--ease);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg id="root" class="frame" viewBox="0 0 840 500"
+      aria-label="An A/B test over 14 days. Day 1 shows a wide confidence interval. Day 7 still uncertain. Day 14 narrow and significant.">
+
+      <text x="420" y="32" text-anchor="middle" font-size="20" font-weight="700">When can you call it?</text>
+      <text x="420" y="54" text-anchor="middle" font-size="13" fill="#6B7280">Variant B vs A. The lift moves. The confidence interval is the truth-teller.</text>
+
+      <!-- Day tabs -->
+      <g transform="translate(60, 80)">
+        <rect class="day-tab" id="tab1" x="0"   y="0" width="120" height="32" rx="8" fill="#F3E8FF" stroke="#8B5CF6" stroke-width="1.6"/>
+        <text x="60"  y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#5B21B6">Day 1</text>
+        <rect class="day-tab" id="tab7" x="135" y="0" width="120" height="32" rx="8" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.4" opacity=".55"/>
+        <text x="195" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937" opacity=".7">Day 7</text>
+        <rect class="day-tab" id="tab14" x="270" y="0" width="120" height="32" rx="8" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.4" opacity=".55"/>
+        <text x="330" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#1F2937" opacity=".7">Day 14</text>
+
+        <!-- Manager balloon (Day 1 only) -->
+        <g id="mgr" transform="translate(440,16)">
+          <g transform="translate(0,-6)">
+            <circle cx="0" cy="-2" r="13" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.8"/>
+            <circle cx="-4" cy="-3" r="1.5" fill="#1F2937"/>
+            <circle cx="4" cy="-3" r="1.5" fill="#1F2937"/>
+            <path d="M-4 3 Q0 6 4 3" stroke="#1F2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(20,0)">
+            <path d="M0 0 L8 -8 L210 -8 Q220 -8 220 0 L220 28 Q220 36 210 36 L8 36 Q0 36 0 28 Z"
+              fill="#FFFDF8" stroke="#F43F5E" stroke-width="1.6"/>
+            <text x="14" y="14" font-size="11" font-weight="700" fill="#9F1239">"B is winning! ship it!"</text>
+            <text x="14" y="28" font-size="10" fill="#6B7280" font-style="italic">— a manager, day 1</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- ============= CHART ============= -->
+      <!-- chart frame: x = lift % from -15 to +40, y = 1 row -->
+      <g transform="translate(60,170)">
+        <!-- card -->
+        <rect x="0" y="-20" width="720" height="240" rx="14" fill="#FFFDF8" stroke="#1F2937" stroke-width="2"/>
+        <text x="20" y="0" font-size="12" font-weight="700">Variant B vs A — observed lift with 95% confidence interval</text>
+
+        <!-- x axis -->
+        <line x1="20" y1="170" x2="700" y2="170" stroke="#1F2937" stroke-width="1.5"/>
+        <!-- ticks: -15..40 maps to 20..700, that's 680px / 55 = 12.36 px per % -->
+        <!-- helper: x = 20 + (val+15)*12.36 -->
+        <g font-family="ui-monospace,monospace" font-size="10" fill="#6B7280">
+          <line x1="20"   y1="166" x2="20"   y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="20"  y="186" text-anchor="middle">-15%</text>
+          <line x1="143.4" y1="166" x2="143.4" y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="143.4" y="186" text-anchor="middle">-5%</text>
+          <!-- ZERO line -->
+          <line x1="205.4" y1="60" x2="205.4" y2="170" stroke="#1F2937" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text x="205.4" y="186" text-anchor="middle" font-weight="700" fill="#1F2937">0%</text>
+          <line x1="328.8" y1="166" x2="328.8" y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="328.8" y="186" text-anchor="middle">+10%</text>
+          <line x1="452.2" y1="166" x2="452.2" y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="452.2" y="186" text-anchor="middle">+20%</text>
+          <line x1="575.6" y1="166" x2="575.6" y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="575.6" y="186" text-anchor="middle">+30%</text>
+          <line x1="699"   y1="166" x2="699"   y2="174" stroke="#6B7280" stroke-width="1"/>
+          <text x="699"   y="186" text-anchor="middle">+40%</text>
+        </g>
+
+        <!-- "noise zone" shading (around 0) -->
+        <rect x="143.4" y="60" width="124" height="110" fill="#FEE2E2" opacity=".25"/>
+        <text x="205.4" y="55" text-anchor="middle" font-size="9.5" fill="#9F1239" font-style="italic">noise zone</text>
+
+        <!-- ============ DAY 1 ROW ============ -->
+        <g transform="translate(0,90)">
+          <!-- y label -->
+          <text x="-44" y="4" font-size="11" font-weight="700" fill="#5B21B6">Day 1</text>
+          <!-- CI band: -7% to +35% -->
+          <!-- x: -7 -> 20+(8)*12.36 = 118.88 ; +35 -> 20+(50)*12.36 = 638
+               width = 519.1; midpoint -> +14% -> 20+29*12.36 = 378.4 -->
+          <g class="ci-band" id="ci1">
+            <rect x="118.88" y="-12" width="519.1" height="24" rx="12"
+              fill="#FECDD3" stroke="#F43F5E" stroke-width="1.6"/>
+          </g>
+          <!-- Point estimate +14% -->
+          <g class="lift-pt">
+            <circle cx="378.4" cy="0" r="6.5" fill="#F59E0B" stroke="#1F2937" stroke-width="1.6"/>
+            <text x="378.4" y="-18" text-anchor="middle" font-size="11" font-weight="700" fill="#92400E" class="lift-num">+14%</text>
+          </g>
+          <!-- whiskers -->
+          <line x1="118.88" y1="-12" x2="118.88" y2="12" stroke="#9F1239" stroke-width="1.6"/>
+          <line x1="638" y1="-12" x2="638" y2="12" stroke="#9F1239" stroke-width="1.6"/>
+          <!-- CI text -->
+          <text x="652" y="3" font-size="10" fill="#9F1239" class="num ci-num">CI [-7%, +35%]</text>
+        </g>
+
+        <!-- Verdict card under chart -->
+        <g transform="translate(0,210)" class="verdict-card" id="verdict1">
+          <rect x="0" y="-12" width="720" height="34" rx="10" fill="#FECDD3" stroke="#F43F5E" stroke-width="1.6"/>
+          <text x="14" y="9" font-size="12" font-weight="700" fill="#9F1239">Day 1 was noise.</text>
+          <text x="120" y="9" font-size="11.5" fill="#9F1239">CI straddles zero — B might be losing by 7%, or winning by 35%. Calling now is a coin flip dressed up.</text>
+        </g>
+      </g>
+
+      <!-- bottom narration band -->
+      <g transform="translate(60, 442)">
+        <rect x="0" y="0" width="720" height="38" rx="10" fill="#FFFDF8" stroke="#1F2937" stroke-width="1.6"/>
+        <text x="14" y="16" font-size="11" font-weight="700" fill="#1F2937">The rule:</text>
+        <text x="68" y="16" font-size="11" fill="#1F2937">don't call a winner until the entire confidence interval sits above zero.</text>
+        <text x="14" y="30" font-size="10.5" fill="#6B7280" font-style="italic">More days &rarr; more samples &rarr; tighter CI &rarr; honest answer.</text>
+      </g>
+    </svg>
+    <div class="caption">Day 1 was noise. Day 14 is signal. Patience beats vibes.</div>
+  </div>
+</main>
+<button class="reset" id="reset" aria-label="Restart animation">Restart</button>
+
+<script>
+(function(){
+  const root = document.getElementById('root');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const ci = document.querySelector('#ci1 rect');
+  const pt = document.querySelector('.lift-pt circle');
+  const ptLabel = document.querySelector('.lift-num');
+  const ciLabel = document.querySelector('.ci-num');
+  const ciLabelEl = ciLabel;
+  const verdict = document.getElementById('verdict1');
+  const verdictRect = verdict.querySelector('rect');
+  const verdictTitle = verdict.querySelector('text:nth-of-type(1)');
+  const verdictBody = verdict.querySelector('text:nth-of-type(2)');
+  const tab1 = document.getElementById('tab1');
+  const tab7 = document.getElementById('tab7');
+  const tab14 = document.getElementById('tab14');
+  const mgr = document.getElementById('mgr');
+
+  // mapping helper: lift % -> x px
+  const X = v => 20 + (v + 15) * 12.36;
+
+  // states (corresponds to days)
+  const states = [
+    { // Day 1
+      lo: -7, hi: 35, mid: 14,
+      label: '+14%', ci: 'CI [-7%, +35%]',
+      band: '#FECDD3', stroke:'#F43F5E', dot:'#F59E0B',
+      activeTab:'tab1',
+      verdictBg:'#FECDD3', verdictStroke:'#F43F5E', titleColor:'#9F1239', bodyColor:'#9F1239',
+      title:'Day 1 was noise.',
+      body:'CI straddles zero — B might be losing by 7%, or winning by 35%. Calling now is a coin flip dressed up.',
+      mgrOn: true
+    },
+    { // Day 7
+      lo: -1, hi: 9, mid: 4,
+      label:'+4%', ci:'CI [-1%, +9%]',
+      band:'#FEF3C7', stroke:'#F59E0B', dot:'#F59E0B',
+      activeTab:'tab7',
+      verdictBg:'#FEF3C7', verdictStroke:'#F59E0B', titleColor:'#92400E', bodyColor:'#92400E',
+      title:'Day 7 — still uncertain.',
+      body:'CI narrowed but still touches zero. The lift might be real, or might be 1% in the other direction. Wait.',
+      mgrOn: false
+    },
+    { // Day 14
+      lo: 2, hi: 10, mid: 6,
+      label:'+6%', ci:'CI [+2%, +10%]',
+      band:'#D1FAE5', stroke:'#10B981', dot:'#10B981',
+      activeTab:'tab14',
+      verdictBg:'#D1FAE5', verdictStroke:'#10B981', titleColor:'#065F46', bodyColor:'#065F46',
+      title:'Day 14 — significant.',
+      body:'Whole CI above zero. B genuinely beats A by somewhere between 2% and 10%. Now you ship.',
+      mgrOn: false
+    }
+  ];
+
+  // get whisker lines (siblings of band)
+  const day1Group = document.querySelector('g[transform="translate(0,90)"]');
+  const whiskers = day1Group.querySelectorAll('line[stroke-width="1.6"]');
+  // dynamically create if not found correctly: but we know it has both whiskers already
+
+  function setState(s){
+    const lo = X(s.lo), hi = X(s.hi), mid = X(s.mid);
+    ci.setAttribute('x', lo);
+    ci.setAttribute('width', hi - lo);
+    ci.setAttribute('fill', s.band);
+    ci.setAttribute('stroke', s.stroke);
+    pt.setAttribute('cx', mid);
+    pt.setAttribute('fill', s.dot);
+    ptLabel.setAttribute('x', mid);
+    ptLabel.textContent = s.label;
+    ptLabel.setAttribute('fill', s.titleColor);
+
+    // whiskers
+    whiskers[0].setAttribute('x1', lo); whiskers[0].setAttribute('x2', lo);
+    whiskers[0].setAttribute('stroke', s.stroke);
+    whiskers[1].setAttribute('x1', hi); whiskers[1].setAttribute('x2', hi);
+    whiskers[1].setAttribute('stroke', s.stroke);
+
+    ciLabel.textContent = s.ci;
+    ciLabel.setAttribute('x', hi + 14);
+    ciLabel.setAttribute('fill', s.titleColor);
+
+    // tabs
+    [tab1, tab7, tab14].forEach(t => {
+      t.setAttribute('fill', '#FFFDF8');
+      t.setAttribute('opacity', '.55');
+    });
+    const active = document.getElementById(s.activeTab);
+    if (s.activeTab === 'tab1') active.setAttribute('fill', '#F3E8FF');
+    if (s.activeTab === 'tab7') active.setAttribute('fill', '#FEF3C7');
+    if (s.activeTab === 'tab14') active.setAttribute('fill', '#D1FAE5');
+    active.setAttribute('opacity', '1');
+
+    // verdict
+    verdictRect.setAttribute('fill', s.verdictBg);
+    verdictRect.setAttribute('stroke', s.verdictStroke);
+    verdictTitle.textContent = s.title;
+    verdictTitle.setAttribute('fill', s.titleColor);
+    verdictBody.textContent = s.body;
+    verdictBody.setAttribute('fill', s.bodyColor);
+    // shift the body text x dynamically based on title length-ish
+    verdictBody.setAttribute('x', s.title.length * 6 + 30);
+
+    mgr.style.opacity = s.mgrOn ? '1' : '0';
+    mgr.style.transition = 'opacity .5s var(--ease)';
+  }
+
+  let i = 0, t;
+  function step(){
+    setState(states[i]);
+    i = (i+1) % states.length;
+    const dwell = (i === 0) ? 4500 : (i === 1 ? 3000 : 3500);
+    t = setTimeout(step, dwell);
+  }
+  function start(){
+    if(reduced){ setState(states[2]); return; }
+    clearTimeout(t); i = 0; step();
+  }
+  document.getElementById('reset').addEventListener('click', start);
+  start();
+})();
+</script>
+</body>
+</html>

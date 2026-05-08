@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Shipping, Measuring, and What Comes After — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Shipping, Measuring, and What Comes After</h1>
+  <p class="subtitle">Ship-day is the start of the work, not the finish line</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Most teams treat the launch blog as the finish line. The team writes a Slack post, the founder tweets a thread, and everyone moves on.</p>
+  <div class="callout"><strong>Mental model: ship-day is day 0, not day 30</strong><br/>Reframe a launch as the **start** of the data-collection phase, not the end of the work phase. The build phase ends on ship-day; the learning phase begins.</div>
+  
+<h2>Move 1 — The pre-mortem</h2>
+<ul>
+<li>A **pre-mortem** is a 30-minute team exercise, run 1-2 weeks before launch, where you imagine the launch has failed catastrophically and you list every reason why. The frame is past-tense: *'It is now 30 days post-launch.</li>
+<li>Step 1 — Schedule the meeting 1-2 weeks pre-launch: Late enough that the feature is real, early enough that you can act on findings. 30 minutes, all 4-6 people involved (PM, eng, design, CS, QA, maybe sales).</li>
+<li>Step 2 — Set the past-tense frame: 'It is 30 days after launch. The feature has flopped. Tell me the story of why.' Insist on past-tense. People will slip; gently correct them.</li>
+<li>Step 3 — Brainstorm silently for 5 minutes: Silent first, talking second. Otherwise the loudest voice anchors the room. Each person writes their failure modes on stickies or in a doc, no discussion.</li>
+<li>Step 4 — Group, prioritize, classify: Group similar items. For each, the team votes: high / medium / low likelihood, and high / medium / low impact. Top quadrant (high likelihood, high impact) goes to 'mitigate now'. Most others go to 'accept + monitor'.</li>
+<li>Step 5 — Convert mitigations to owners and dates; convert monitors to dashboard items: Every 'mitigate' item gets a name and a date before the meeting ends. Every 'monitor' item gets a metric name and a target threshold for action. Walk out with a plan, not a list of fears.</li>
+</ul>
+<h2>Move 2 — The 7-day post-launch loop</h2>
+<ul>
+<li>After launch, run a tight loop for the first 7 days, then a slower loop through day 30. The 7-day window is where you catch fires; the 30-day window is where you decide whether to double down, fix, or kill.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: vanity metrics on launch day: On launch day, the easiest numbers to share are the largest ones. Page views on the launch blog. Tweet impressions. Total sign-ups in the launch window. PR mentions.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Ship-day is day 0, not day 30. The product question — did this work — opens at launch and stays open for at least 30 days.</div>
+<div class="takeaway">Run a pre-mortem 1-2 weeks before launch: past-tense framing ('imagine it has already failed') produces 3-4x more risks than future-tense brainstorming.</div>
+<div class="takeaway">Run the 7-day post-launch loop: day 0-1 fires, day 2-7 activation, day 7-14 retention delta, day 14-30 outcome verdict. Skip rows 3 and 4 and you're shipping coin flips.</div>
+<div class="takeaway">If users who tried the feature have lower retention than users who didn't, the feature is actively hurting; investigate before you spend on adoption.</div>
+<div class="takeaway">On day 30, write a 3-sentence verdict and share it. The PMs who do this consistently get promoted within 18 months; the PMs who don't keep shipping features into the void.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

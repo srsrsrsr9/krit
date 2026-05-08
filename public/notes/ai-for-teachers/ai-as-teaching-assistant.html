@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI as a Teaching Assistant, Not a Replacement — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>AI as a Teaching Assistant, Not a Replacement</h1>
+  <p class="subtitle">The boring 80%, the human 20%, and the line you have to draw</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Teaching is two jobs that share a body. The first job is the boring 80%: photocopying, drafting feedback stems, summarising chapters, formatting question papers, writing the same parent email for the fifteenth time.</p>
+  <div class="callout"><strong>Mental model: AI is a fluent intern who has never met your students</strong><br/>Picture a smart, fast, exhausting intern. Speaks in full paragraphs. Knows the textbook. Has never sat in your second-period Class 8 and watched Aarav fall asleep three times because his father lost his job last week.</div>
+  
+<h2>Move 1 — Scope the task</h2>
+<ul>
+<li>Before you open Claude or ChatGPT, ask one question: *which 80%?* Not &quot;how do I use AI for teaching&quot;. Not &quot;can AI plan my whole week&quot;.</li>
+<li>Step 1 — The Sunday thought: &quot;Ugh, I have to teach the Periodic Table on Tuesday.&quot; Not yet a prompt. It's a feeling.</li>
+<li>Step 2 — Identify the audience: Class 9 CBSE, mixed-ability section, 38 students. Last year's class found atomic mass confusing. That's audience-specific signal AI doesn't know.</li>
+<li>Step 3 — Identify the outcome: By the end of the period, students should be able to read a periodic-table cell and tell you the element's atomic number, mass, and group. That's three concrete verbs, not a vibe.</li>
+<li>Step 4 — Identify the time and constraint: 40-minute period, no lab access, board + chalk + textbook only. AI doesn't know the lab is locked on Tuesdays.</li>
+<li>Step 5 — Write the prompt: &quot;Draft a 40-minute lesson plan for Class 9 CBSE Science (mixed-ability, 38 students, no lab) so that by the end students can read a periodic-table cell and identify atomic number, atomic mass, and group. Open with a 3-minute hook. Include one quick check-for-understanding at minute 25.&quot;</li>
+<li>Step 6 — Read what came back: First draft is 70% useful. You'll cut the cheesy hook, replace the example, keep the structure. 12 minutes saved on a task that used to take 35.</li>
+</ul>
+<h2>Move 2 — AI grades the rough, you grade the meaning</h2>
+<ul>
+<li>There is one move that, if you only learn one move from this entire course, will keep you out of trouble: **AI grades the rough, you grade the meaning.** AI is good at structure. Is the paragraph well-formed?</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: letting AI grade essays unsupervised: It is so tempting. 30 essays, AI scores them all in 4 minutes, you post the marks. Don't.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Teaching is two jobs: the boring 80% (structure work AI does well) and the human 20% (judgment work AI does badly). Drawing the line is the whole skill.</div>
+<div class="takeaway">AI is a fluent intern who has never met your students. Trust it accordingly.</div>
+<div class="takeaway">Scope every task before opening the AI; the smaller the brief, the better the output.</div>
+<div class="takeaway">AI grades the rough, you grade the meaning. Never reverse the order on marks of record.</div>
+<div class="takeaway">Letting AI grade unread is the classic trap. Use it for reading order, not for the marks themselves.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

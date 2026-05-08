@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>What AI Does to Knowledge Work — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>What AI Does to Knowledge Work</h1>
+  <p class="subtitle">Tasks change fast, jobs change slow, and the gap is where leadership lives</p>
+  <p class="byline">notes by Aanya ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Most AI plans your CEO has read on the flight back from a conference are wrong in the same way. They treat AI as something that automates *jobs*.</p>
+  <div class="callout"><strong>Mental model: a job is a stack of tasks, not a monolith</strong><br/>Hold this picture. A *task* is a 30-minute, scoped unit of work with a defined output: write the status memo, scrape three competitors, summarise the call. A *job* is the stack of 80 to 200 such tasks plus the human who is accountable when the stack misbehaves.</div>
+  
+<h2>Move 1 — The 70-20-10 split</h2>
+<ul>
+<li>Look at any knowledge worker's week and the hours land in three buckets. About **70% is purely human work**: judgment, ambiguous calls, relationship maintenance, the cost of saying no, the politics of saying yes.</li>
+<li>Step 1 — List 20 tasks: Pick the team. List the 20 most-frequent tasks anyone on the team did last week. Concrete: 'write Monday status memo', 'review junior's deck', 'pull churn numbers'. Not 'do strategy'.</li>
+<li>Step 2 — Tag each task: Tag each as Human / With-AI / AI-only based on whether AI can do 80% of it well today. Be honest, not aspirational. 'Strategic thinking' is not a task. 'Summarise the strategy doc into 5 bullets' is.</li>
+<li>Step 3 — Pick the 20%: Look at the With-AI bucket. That is your redesign target. Not the 70%, not the 10%. The middle. Most leaders try to redesign the 10% (which is already automated) or the 70% (which is not movable yet).</li>
+<li>Step 4 — Choose ONE workflow: Of the With-AI tasks, pick the ONE that runs at least weekly and has a clear quality signal. That's your pilot. Not three workflows. One.</li>
+<li>Step 5 — Redesign the ritual: Don't add an 'AI step' to the existing ritual. Redesign the ritual: who produces the artifact, who reviews it, what the new failure mode is, how you'll catch it. The license was the easy part.</li>
+</ul>
+<h2>Move 2 — The 'what stays human' question</h2>
+<ul>
+<li>The 70-20-10 split tells you what shifts. The harder question is what *doesn't*.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: 'automate everything, replace people': Every quarter, some leader you respect will say a version of *&quot;AI does X, so we don't need people for X anymore.&quot;* Watch for the slip from task to job. AI does *the writing task*; it does not do *the writer's job*. AI handles *first-pass review*; it does not do *the engineer's job*.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Tasks change in months; jobs change in years; lead in the gap.</div>
+<div class="takeaway">About 47% of knowledge-work tasks are 80%+ automatable, but about 80% of jobs are 0% automatable; both numbers are simultaneously true.</div>
+<div class="takeaway">The 70-20-10 split: 70% human, 20% human-with-AI, 10% AI-only — redesign the 20%, not the 10%.</div>
+<div class="takeaway">Three things stay human: accountability, calibration to specific people, ambiguity arbitration; design every role around this 30%.</div>
+<div class="takeaway">'Automate everything, replace people' is the most expensive trap in 2026 — it eats the seed corn that grows your seniors.</div>
+  <div class="signoff">— Aanya, on the bus, again</div>
+</main>
+</body>
+</html>

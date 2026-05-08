@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Audit Trails: When AI Cannot Sign the Books — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Audit Trails: When AI Cannot Sign the Books</h1>
+  <p class="subtitle">AI assists, the CA signs</p>
+  <p class="byline">notes by Ishaan ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Three years from now, a notice will arrive at a firm that used AI for an engagement in 2026. The Assessing Officer or the ICAI inspector will ask: &quot;Show me how this position was reached.</p>
+  <div class="callout"><strong>Mental model: AI assists, the CA signs</strong><br/>There is exactly one role AI plays in a regulated accounting practice: **assistant**. The signature, the opinion, the responsibility, and the liability live with the CA. Always. Without exception.</div>
+  
+<h2>Move 1 — The eval log</h2>
+<ul>
+<li>First named move. The **eval log** is a structured, append-only record of every meaningful AI interaction in your firm.</li>
+<li>Step 1 — The notice arrives: October 2028: an Assessing Officer questions the ITC claim of ₹4.7 lakh on motor vehicles for sales staff in your client's FY 2025-26 GSTR-3B. The position was that the vehicles fell within the 'driver training' exception. Why?</li>
+<li>Step 2 — Pull the eval log entries: Search engagement_id ABC-26-Q4-GST for any entry tagged 'motor_vehicle_itc'. You find 4 entries, dating Oct 2026 to Mar 2027.</li>
+<li>Step 3 — Reconstruct the position: Each entry shows the prompt, retrieved passages (Sec 17(5)(a), Circular 156/12/2021, an ITAT Mumbai 2024 decision), the model's draft conclusion, the reviewer (Anand, 14-Oct-2026), changes made (2 substantive corrections), partner approval (Vidya, same day), and the final advisory note ID.</li>
+<li>Step 4 — Open the actual artefact: From the entry, retrieve the final advisory note. The note cites the same passages, applies them to the client's specific facts (vehicles used 70% for sales-staff transport, 30% for driver training), and concludes with the partial-claim position.</li>
+<li>Step 5 — Defend or concede: If the position is sound and the trail is clean, you have a defensible case file in the AO's hands within a week. If the position was weak, you concede early, pay, and learn — but you can defend the *process* even when conceding the substance.</li>
+<li>Step 6 — Without the eval log: No eval log: 'Honestly Sir, I think the senior CA at the time looked at the relevant section and decided. Do we have it in writing? Let me check.' That is how engagement letters become disciplinary complaints.</li>
+</ul>
+<h2>Move 2 — The four-eye review</h2>
+<ul>
+<li>Second named move. **Four-eye review** means every artefact that leaves the firm has been reviewed by at least two distinct chartered accountants — typically a senior who does substantive review and a partner who confirms the position and signs.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the lone-reviewer shortcut: Under deadline pressure, the four-eye review collapses into a one-eye review. The senior approves; the partner signs based on a verbal summary; the audit trail records two reviewers but only one actually looked.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">AI assists; the CA signs. There is no other arrangement that survives a notice or an inspection.</div>
+<div class="takeaway">The eval log is the precondition for using AI in regulated work — without it, you are defending yourself with anecdotes.</div>
+<div class="takeaway">Four-eye review is non-negotiable for any artefact that ships under the firm's name; the AI changes what the eyes look at, not whether two pairs are required.</div>
+<div class="takeaway">Substantive review produces changes; a reviewer who consistently makes zero changes is the statistical signature of rubber-stamping, and an inspector will catch the pattern.</div>
+<div class="takeaway">Disclosure to the client of AI assistance is not legal advice; it is professional practice in 2026, and it earns more trust than it loses.</div>
+  <div class="signoff">— Ishaan, on the bus, again</div>
+</main>
+</body>
+</html>

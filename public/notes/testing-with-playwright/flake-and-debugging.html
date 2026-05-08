@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Killing Flakiness — Debugging the Hardest Failures — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Killing Flakiness — Debugging the Hardest Failures</h1>
+  <p class="subtitle">Flake is information you haven't decoded yet</p>
+  <p class="byline">notes by Karthik ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>There's an on-call engineer at a Bengaluru fintech who got paged at 3am because a Playwright test `await page.waitForTimeout(3000)`'d on a flow that, on AWS that night, took 3,200 milliseconds. The test went red.</p>
+  <div class="callout"><strong>Mental model: flake is information you haven't decoded yet</strong><br/>Most teams treat a flaky test as a bug *in the test*. Sometimes it is. More often, it's a bug in your **timing assumptions**: you assumed a network call always takes &lt;500ms, the page always finishes hydrating in &lt;200ms, the spinner always appears before the real content. The test passes 95% of the time because those assumptions hold 95% of the time. The other 5% is reality.</div>
+  
+<h2>Move 1 — The trace viewer ritual</h2>
+<ul>
+<li>Playwright ships with a **trace viewer** — a step-by-step replay of every action, every locator query, every network request, every console message, with screenshots before and after each step. It's the single most valuable debugging tool in the ecosystem and most teams discover it three years too late.</li>
+<li>1. Test went red on PR #4421, retry #2: Locally it passes. Slack messages start: 'flaky test, can you re-run?'</li>
+<li>2. Open the artifact: Download `trace.zip` from the GitHub Actions artifact list.</li>
+<li>3. Find the failing step: Trace viewer shows: `await page.getByRole('button', { name: 'Place order' }).click()` waited 5 seconds, then timed out. Button never became enabled.</li>
+<li>4. Read the network panel: `POST /api/quote` returned 500 at 4.8s. The button is gated behind a successful quote.</li>
+<li>5. The actual bug: Quote API has a 1-in-200 race when the user changes shipping address mid-quote. *Not* a flaky test. A real production bug the test caught for you.</li>
+</ul>
+<h2>Move 2 — The deterministic-clock fix</h2>
+<ul>
+<li>A huge category of flake comes from **time**: tests that depend on `Date.now()`, animations that take a different number of milliseconds on different machines, debouncing that fires after exactly 300ms when CI is busy. The fix is not to add sleeps.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the retry crutch: Setting `retries: 3` in `playwright.config.ts` and calling it a fix is the developer equivalent of pressing snooze. Each retry hides a real signal: the test failed, you didn't read the trace, you re-ran until it passed, and you shipped.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Flake is information you haven't decoded yet. Treat it as a signal pointing at a non-determinism, not noise to suppress.</div>
+<div class="takeaway">The trace viewer ritual: when a test flakes, open the trace before doing anything else. Set `trace: 'on-first-retry'` in your config.</div>
+<div class="takeaway">The deterministic-clock fix: for tests that depend on time, install `page.clock` and advance virtual time. Real clocks make flaky tests.</div>
+<div class="takeaway">Mock the network with `page.route()` instead of relying on real third-party services for tests that don't need them.</div>
+<div class="takeaway">Retries are a temporary band-aid for genuine infra noise, not a substitute for fixing the actual cause.</div>
+  <div class="signoff">— Karthik, on the bus, again</div>
+</main>
+</body>
+</html>

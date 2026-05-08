@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trap: demo-to-rollback</title>
+<style>
+:root{--bg:#FAF5FF;--ink:#1F2937;--bad:#F43F5E;--good:#10B981;--warn:#F59E0B}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}
+.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.frame{width:100%;max-width:720px}
+.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes count{0%{stroke-dashoffset:200}100%{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none !important}}
+.t1{animation:fade .5s ease .2s both}
+.t2{animation:fade .5s ease 1.6s both}
+.t3{animation:fade .5s ease 3s both}
+.t4{animation:fade .5s ease 4.4s both}
+.t5{animation:pop .6s ease 5.8s both}
+.bottom{animation:fade .5s ease 7s both}
+</style>
+</head>
+<body>
+<main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A flashy AI feature demo at an all-hands followed by Twitter screenshots and a rollback eleven days later">
+<rect width="720" height="405" rx="14" fill="#FAF5FF"/>
+
+<!-- TIMELINE TRACK -->
+<line x1="60" y1="180" x2="660" y2="180" stroke="#5B21B6" stroke-width="3"/>
+
+<!-- DAY 0: ALL-HANDS DEMO -->
+<g class="t1">
+<circle cx="120" cy="180" r="14" fill="#FCD34D" stroke="#92400E" stroke-width="2"/>
+<text x="120" y="156" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 0</text>
+<text x="120" y="142" text-anchor="middle" font-size="10" fill="#7C2D12">all-hands demo</text>
+<g transform="translate(60 200)">
+<rect width="120" height="60" rx="8" fill="#FCD34D" stroke="#92400E" stroke-width="1.5"/>
+<text x="60" y="22" text-anchor="middle" font-size="11" fill="#7C2D12" font-weight="bold">"AI does X!"</text>
+<text x="60" y="40" text-anchor="middle" font-size="9" fill="#7C2D12">applause 👏</text>
+<text x="60" y="54" text-anchor="middle" font-size="9" fill="#7C2D12">CTO impressed</text>
+</g>
+</g>
+
+<!-- DAY 1: SHIPPED -->
+<g class="t2">
+<circle cx="240" cy="180" r="12" fill="#10B981" stroke="#065F46" stroke-width="2"/>
+<text x="240" y="156" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 1</text>
+<text x="240" y="142" text-anchor="middle" font-size="10" fill="#065F46">shipped to customers</text>
+</g>
+
+<!-- DAY 7: FIRST SCREENSHOT -->
+<g class="t3">
+<circle cx="380" cy="180" r="12" fill="#F59E0B" stroke="#92400E" stroke-width="2"/>
+<text x="380" y="156" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 7</text>
+<text x="380" y="142" text-anchor="middle" font-size="10" fill="#92400E">first hallucination</text>
+<g transform="translate(335 200)">
+<rect width="100" height="50" rx="6" fill="#FFFFFF" stroke="#92400E"/>
+<text x="50" y="18" text-anchor="middle" font-size="9" fill="#1F2937" font-weight="bold">@user1: 🤔</text>
+<text x="50" y="34" text-anchor="middle" font-size="8" fill="#1F2937" font-style="italic">"this answer is</text>
+<text x="50" y="44" text-anchor="middle" font-size="8" fill="#1F2937" font-style="italic">made up"</text>
+</g>
+</g>
+
+<!-- DAY 11: TWITTER STORM -->
+<g class="t4">
+<circle cx="520" cy="180" r="14" fill="#F43F5E" stroke="#7F1D1D" stroke-width="2"/>
+<text x="520" y="156" text-anchor="middle" font-size="11" fill="#1F2937" font-weight="bold">Day 11</text>
+<text x="520" y="142" text-anchor="middle" font-size="10" fill="#7F1D1D">3 screenshots viral</text>
+<g transform="translate(465 200)" font-size="8" fill="#7F1D1D">
+<rect width="110" height="60" rx="6" fill="#FECACA" stroke="#7F1D1D"/>
+<text x="55" y="14" text-anchor="middle" font-weight="bold">@user2: 😡</text>
+<text x="55" y="26" text-anchor="middle">@user3: ❌</text>
+<text x="55" y="38" text-anchor="middle">@user4: 🤡</text>
+<text x="55" y="50" text-anchor="middle" font-style="italic">retweets piling up</text>
+</g>
+</g>
+
+<!-- DAY 12: ROLLBACK -->
+<g class="t5">
+<circle cx="640" cy="180" r="20" fill="#7F1D1D" stroke="#000" stroke-width="2"/>
+<text x="640" y="186" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">⏎</text>
+<text x="640" y="156" text-anchor="middle" font-size="11" fill="#7F1D1D" font-weight="bold">Day 12</text>
+<text x="640" y="142" text-anchor="middle" font-size="10" fill="#7F1D1D">ROLLED BACK</text>
+</g>
+
+<!-- BOTTOM BANNER -->
+<g class="bottom" transform="translate(40 300)">
+<rect width="640" height="80" rx="10" fill="#1F2937"/>
+<text x="320" y="24" text-anchor="middle" font-size="12" fill="#FCD34D" font-weight="bold">Stakes high · verifiability low · the never-ship corner</text>
+<text x="320" y="46" text-anchor="middle" font-size="11" fill="#FCA5A5">Demo wow ≠ shipping fit. Both axes flunked the test before launch.</text>
+<text x="320" y="64" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">Most rolled-back AI features were rolled back because the cost of error was unbounded.</text>
+</g>
+</svg>
+<div class="caption">If verification is as expensive as the work itself, you don't have a tool fit. You have a refusal candidate.</div>
+</div></main>
+<button class="reset" onclick="location.reload()">↺ Replay</button>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SELECT * trap — the day they added a column</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --paper:#FFFFFF; --line:#E5E7EB;
+    --good:#10B981; --bad:#F43F5E; --amber:#F59E0B;
+    --blue:#0EA5E9; --purple:#8B5CF6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif;}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .wrap{position:relative;width:100%;max-width:760px;}
+  .frame{width:100%;height:auto;display:block;}
+  .caption{text-align:center;font-size:13px;font-style:italic;color:var(--muted);margin-top:10px;line-height:1.4;}
+  .reset{position:absolute;bottom:8px;right:8px;background:var(--ink);color:var(--bg);
+    border:none;border-radius:8px;padding:6px 12px;font:inherit;font-size:11px;cursor:pointer;opacity:.7;}
+  .reset:hover{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    .reset{display:none;}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="wrap">
+  <svg class="frame" viewBox="0 0 760 430" aria-label="A SELECT star query runs cleanly, then a new internal_notes PII column is added to the table, and the same query silently leaks the PII into a Slack notification">
+    <rect width="760" height="430" fill="#FFF7ED"/>
+
+    <!-- Title -->
+    <text x="380" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1F2937">
+      <tspan font-family="ui-monospace,monospace" fill="#7C3AED">SELECT *</tspan>
+      <tspan> — fine until it isn't.</tspan>
+    </text>
+    <text id="subtitle" x="380" y="46" text-anchor="middle" font-size="11" fill="#6B7280" font-style="italic">
+      Tuesday: clean. The query returns what you expect.
+    </text>
+
+    <!-- ===================== QUERY (top) ===================== -->
+    <g transform="translate(40,68)">
+      <rect x="0" y="0" width="380" height="58" rx="10" fill="#1F2937"/>
+      <text x="14" y="22" font-size="11" font-family="ui-monospace,monospace" fill="#9CA3AF">-- daily_orders.sql</text>
+      <text x="14" y="42" font-size="13" font-family="ui-monospace,monospace" fill="#FFFFFF">
+        <tspan fill="#A78BFA">SELECT</tspan>
+        <tspan fill="#FCD34D"> *</tspan>
+        <tspan fill="#A78BFA"> FROM</tspan>
+        <tspan fill="#FFFFFF"> customers</tspan>
+        <tspan fill="#A78BFA"> WHERE</tspan>
+        <tspan fill="#FFFFFF"> active</tspan>
+        <tspan fill="#A78BFA"> = </tspan>
+        <tspan fill="#FCD34D">true</tspan>
+        <tspan fill="#FFFFFF">;</tspan>
+      </text>
+    </g>
+
+    <!-- "ships to Slack" arrow -->
+    <g transform="translate(440,72)">
+      <text x="0" y="14" font-size="11" font-weight="700" fill="#1F2937">runs nightly →</text>
+      <text x="0" y="32" font-size="10" fill="#6B7280">posts results to</text>
+      <g transform="translate(0,42)">
+        <rect x="0" y="0" width="80" height="22" rx="11" fill="#FFFFFF" stroke="#0EA5E9" stroke-width="1.5"/>
+        <text x="40" y="15" text-anchor="middle" font-size="11" font-weight="700" fill="#0369A1" font-family="ui-monospace,monospace">#alerts</text>
+      </g>
+    </g>
+
+    <!-- ===================== TABLE (left) ===================== -->
+    <g transform="translate(40,148)">
+      <rect x="0" y="0" width="380" height="170" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <text x="14" y="20" font-size="12" font-weight="700" fill="#1F2937">customers</text>
+
+      <!-- Header (3 cols at first, then 4) -->
+      <g id="tableHead" transform="translate(10,28)">
+        <rect x="0" y="0" width="360" height="22" rx="4" fill="#FED7AA"/>
+        <text id="hCol1" x="44"  y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">id</text>
+        <text id="hCol2" x="160" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">name</text>
+        <text id="hCol3" x="280" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9A3412">active</text>
+        <!-- New column header (hidden initially) -->
+        <g id="hCol4group" opacity="0">
+          <rect x="240" y="0" width="120" height="22" rx="4" fill="#FECACA" stroke="#F43F5E" stroke-width="1.2"/>
+          <text x="300" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#9F1239" font-family="ui-monospace,monospace">internal_notes</text>
+        </g>
+      </g>
+
+      <!-- Rows -->
+      <g id="tableRows" transform="translate(10,52)" font-family="ui-monospace,monospace" font-size="10"></g>
+    </g>
+
+    <!-- The "schema change" banner (hidden then shown) -->
+    <g id="schemaBanner" opacity="0">
+      <rect x="40" y="328" width="380" height="32" rx="8" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="56" y="349" font-size="11.5" font-weight="700" fill="#92400E">
+        <tspan font-family="ui-monospace,monospace">ALTER TABLE</tspan>
+        <tspan> customers ADD COLUMN internal_notes text;</tspan>
+      </text>
+      <text x="58" y="372" font-size="10" font-style="italic" fill="#92400E">— Wednesday, 4:12pm. Someone wanted a place for "private" comments.</text>
+    </g>
+
+    <!-- ===================== OUTPUT (right) — Slack mock ===================== -->
+    <g transform="translate(440,148)">
+      <rect x="0" y="0" width="280" height="232" rx="10" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1.5"/>
+      <!-- Slack header bar -->
+      <rect x="0" y="0" width="280" height="26" rx="10" fill="#0EA5E9"/>
+      <rect x="0" y="14" width="280" height="12" fill="#0EA5E9"/>
+      <text x="14" y="18" font-size="11" font-weight="700" fill="#FFFFFF" font-family="ui-monospace,monospace"># alerts · daily-orders bot</text>
+
+      <!-- Message timestamp -->
+      <text id="slackStamp" x="14" y="46" font-size="10" fill="#6B7280" font-family="ui-monospace,monospace">Tue 09:00</text>
+      <text x="14" y="62" font-size="11" font-weight="700" fill="#1F2937">Active customers (3):</text>
+
+      <!-- Result lines -->
+      <g id="slackBody" transform="translate(14,74)" font-family="ui-monospace,monospace" font-size="10"></g>
+
+      <!-- Leak badge -->
+      <g id="leakBadge" opacity="0">
+        <rect x="14" y="194" width="252" height="28" rx="8" fill="#FEF2F2" stroke="#F43F5E" stroke-width="1.5"/>
+        <text x="140" y="212" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9F1239">
+          PII just shipped to a public channel.
+        </text>
+      </g>
+    </g>
+
+    <!-- Footer bug hint -->
+    <g id="bugHint" opacity="0">
+      <rect x="160" y="400" width="440" height="22" rx="11" fill="#FECACA" stroke="#F43F5E" stroke-width="1.2"/>
+      <text x="380" y="415" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9F1239">
+        the day they added a column. SELECT * grew with it.
+      </text>
+    </g>
+  </svg>
+  <div class="caption">
+    <tspan>SELECT * is a contract you don't control. Name your columns; the future will thank you.</tspan>
+  </div>
+  <button class="reset" id="reset" aria-label="Replay animation">replay</button>
+  </div>
+</main>
+<script>
+(function(){
+  'use strict';
+  var SVGNS='http://www.w3.org/2000/svg';
+  var prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var rows=[
+    {id:101, name:'Aanya R.',  active:'true',  notes:'card ending 4421; mom\'s acct'},
+    {id:102, name:'Ravi K.',   active:'true',  notes:'phone +91-98xxx; flagged'},
+    {id:103, name:'Mira S.',   active:'true',  notes:'home addr; payment dispute'}
+  ];
+
+  var tableRows=document.getElementById('tableRows');
+  var slackBody=document.getElementById('slackBody');
+  var hCol4=document.getElementById('hCol4group');
+  var schemaBanner=document.getElementById('schemaBanner');
+  var leakBadge=document.getElementById('leakBadge');
+  var bugHint=document.getElementById('bugHint');
+  var subtitle=document.getElementById('subtitle');
+  var slackStamp=document.getElementById('slackStamp');
+  var resetBtn=document.getElementById('reset');
+
+  function el(name, attrs){
+    var n=document.createElementNS(SVGNS,name);
+    if(attrs) for(var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function clear(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+
+  function renderTable(showNotes){
+    clear(tableRows);
+    var ROW_H=22;
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i];
+      var y=i*ROW_H;
+      var bg=el('rect',{x:0,y:y,width:360,height:ROW_H-2,rx:3,
+        fill:(i%2===0)?'#FFFFFF':'#FFFBEB'});
+      tableRows.appendChild(bg);
+
+      var t1=el('text',{x:44,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t1.textContent='#'+r.id;
+      var t2=el('text',{x:160,y:y+13,'text-anchor':'middle','font-size':10,fill:'#1F2937'});
+      t2.textContent=r.name;
+      var t3=el('text',{x:280,y:y+13,'text-anchor':'middle','font-size':10,fill:'#047857','font-weight':'700'});
+      t3.textContent=r.active;
+      tableRows.appendChild(t1); tableRows.appendChild(t2); tableRows.appendChild(t3);
+
+      if(showNotes){
+        // Hide t3 reposition; instead overlay 4-col layout
+        t3.setAttribute('x','230');
+        var t4=el('text',{x:300,y:y+13,'text-anchor':'middle','font-size':9,fill:'#9F1239','font-style':'italic'});
+        t4.textContent=r.notes;
+        tableRows.appendChild(t4);
+        // tinted cell to mark new column
+        var tint=el('rect',{x:240,y:y+1,width:120,height:ROW_H-3,fill:'#FEE2E2',opacity:'0.5'});
+        tableRows.insertBefore(tint, t1);
+      }
+    }
+  }
+
+  function renderSlack(showLeak, stamp){
+    clear(slackBody);
+    slackStamp.textContent = stamp;
+    for(var i=0;i<rows.length;i++){
+      var r=rows[i];
+      var y=i*16;
+      var t=el('text',{x:0,y:y,'font-size':10,fill:'#1F2937'});
+      var line = '#'+r.id+'  '+r.name+'  '+r.active;
+      if(showLeak) line += '  '+r.notes;
+      t.textContent = line;
+      if(showLeak){
+        // Highlight the leaked PII portion via tspan trick: split label
+        t.textContent = '#'+r.id+'  '+r.name+'  '+r.active+'  ';
+        var tspan=document.createElementNS(SVGNS,'tspan');
+        tspan.setAttribute('fill','#9F1239');
+        tspan.setAttribute('font-weight','700');
+        tspan.textContent = r.notes;
+        t.appendChild(tspan);
+      }
+      slackBody.appendChild(t);
+    }
+  }
+
+  function fadeIn(node, dur, cb){
+    if(prefersReduce){ node.setAttribute('opacity','1'); if(cb) cb(); return; }
+    var s=performance.now();
+    function step(now){
+      var t=Math.min((now-s)/dur,1);
+      node.setAttribute('opacity', String(t));
+      if(t<1) requestAnimationFrame(step); else if(cb) cb();
+    }
+    requestAnimationFrame(step);
+  }
+
+  function play(){
+    // Reset visibility
+    hCol4.setAttribute('opacity','0');
+    schemaBanner.setAttribute('opacity','0');
+    leakBadge.setAttribute('opacity','0');
+    bugHint.setAttribute('opacity','0');
+    subtitle.textContent = 'Tuesday: clean. The query returns what you expect.';
+
+    // Stage 1: clean run
+    renderTable(false);
+    renderSlack(false, 'Tue 09:00');
+
+    if(prefersReduce){
+      // Show entire Wednesday state
+      setTimeout(function(){
+        renderTable(true);
+        hCol4.setAttribute('opacity','1');
+        schemaBanner.setAttribute('opacity','1');
+        renderSlack(true,'Wed 09:00');
+        leakBadge.setAttribute('opacity','1');
+        bugHint.setAttribute('opacity','1');
+        subtitle.textContent='Wednesday: same query. New column. PII in Slack.';
+      },0);
+      return;
+    }
+
+    // Stage 2 (~3s): schema change
+    setTimeout(function(){
+      subtitle.textContent='Wednesday 4:12pm: ALTER TABLE… new column.';
+      fadeIn(schemaBanner, 500);
+      fadeIn(hCol4, 600, function(){
+        // Re-render table with notes column
+        renderTable(true);
+      });
+    }, 3000);
+
+    // Stage 3 (~6s): query reruns, leaks
+    setTimeout(function(){
+      subtitle.textContent='Wednesday 9:00am: same SELECT *. Same channel.';
+      renderSlack(true, 'Wed 09:00');
+      fadeIn(leakBadge, 500);
+    }, 6500);
+
+    // Stage 4 (~8.5s): bug hint
+    setTimeout(function(){
+      fadeIn(bugHint, 500);
+    }, 8500);
+
+    // Loop
+    setTimeout(play, 12500);
+  }
+
+  resetBtn.addEventListener('click', play);
+  play();
+})();
+</script>
+</body>
+</html>

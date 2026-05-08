@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From flaky to reliable</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFF7ED;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,-apple-system,"Inter",sans-serif;color:#1F2937}
+#w{position:relative;width:100%;max-width:760px;padding:16px}
+svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}
+#rb{position:absolute;bottom:8px;right:16px;background:#1F2937;color:#FFF7ED;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;opacity:.75}
+#rb:hover{opacity:1}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="w">
+<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg"
+     aria-label="A flaky test produces ten mixed results, the trace viewer reveals a race condition, and after replacing waitForTimeout with waitFor the test passes ten out of ten times">
+
+  <rect width="760" height="470" fill="#FFF7ED"/>
+  <text x="380" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1F2937">A flake, a trace, a fix.</text>
+
+  <!-- ─────── ROW 1: TEN RUNS ─────── -->
+  <text x="32" y="68" font-size="12" font-weight="700" fill="#6B7280">10 runs · before</text>
+  <g id="rowBefore">
+    <!-- 10 dots, x = 50 + i*68, y = 90 -->
+    <g id="b0"><circle cx="50"  cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b1"><circle cx="118" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b2"><circle cx="186" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b3"><circle cx="254" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b4"><circle cx="322" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b5"><circle cx="390" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b6"><circle cx="458" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b7"><circle cx="526" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b8"><circle cx="594" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+    <g id="b9"><circle cx="662" cy="90" r="14" fill="#E5E7EB" stroke="#9CA3AF" stroke-width="1.5"/></g>
+  </g>
+  <!-- Verdict chip -->
+  <g id="bverdict" opacity="0">
+    <rect x="595" y="116" width="130" height="24" rx="6" fill="#FEE2E2" stroke="#F43F5E" stroke-width="1.5"/>
+    <text x="660" y="133" text-anchor="middle" font-size="11" font-weight="700" fill="#9F1239">3 / 10 failed</text>
+  </g>
+
+  <!-- ─────── ROW 2: TRACE FLAG ─────── -->
+  <g id="trace" opacity="0">
+    <rect x="32" y="158" width="696" height="48" rx="9" fill="#1F2937"/>
+    <text x="48" y="180" font-size="11" fill="#9CA3AF" font-family="ui-monospace,monospace">$ npx playwright test</text>
+    <text x="223" y="180" font-size="11" fill="#FCD34D" font-family="ui-monospace,monospace">--trace=on-first-retry</text>
+    <text x="48" y="196" font-size="10" fill="#86EFAC" font-family="ui-monospace,monospace">→ trace.zip captured for the failing run</text>
+  </g>
+
+  <!-- ─────── ROW 3: TRACE VIEWER + DIFF ─────── -->
+  <g id="viewer" opacity="0">
+    <!-- Trace viewer panel -->
+    <rect x="32" y="222" width="320" height="178" rx="10" fill="white" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="32" y="222" width="320" height="22" rx="10" fill="#F3F4F6"/>
+    <text x="48" y="237" font-size="10" font-weight="700" fill="#6B7280">trace viewer</text>
+    <text x="342" y="237" text-anchor="end" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">3.4 s</text>
+
+    <!-- Action timeline -->
+    <text x="48" y="262" font-size="10" fill="#1F2937" font-family="ui-monospace,monospace">goto('/cart')</text>
+    <rect x="48" y="266" width="60" height="4" rx="2" fill="#10B981"/>
+
+    <text x="48" y="284" font-size="10" fill="#1F2937" font-family="ui-monospace,monospace">click('Add')</text>
+    <rect x="48" y="288" width="40" height="4" rx="2" fill="#10B981"/>
+
+    <text x="48" y="306" font-size="10" fill="#1F2937" font-family="ui-monospace,monospace">waitForTimeout(3000)</text>
+    <rect x="48" y="310" width="180" height="4" rx="2" fill="#F59E0B"/>
+
+    <text x="48" y="328" font-size="10" fill="#F43F5E" font-family="ui-monospace,monospace">expect('#cart-count').toHaveText('1')</text>
+    <rect x="48" y="332" width="14" height="4" rx="2" fill="#F43F5E"/>
+    <text x="68" y="338" font-size="9" fill="#F43F5E" font-family="ui-monospace,monospace">× cart still empty in DOM</text>
+
+    <!-- Race-condition annotation -->
+    <g>
+      <rect x="48" y="354" width="288" height="36" rx="7" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="60" y="370" font-size="10.5" font-weight="700" fill="#92400E">race condition</text>
+      <text x="60" y="384" font-size="9.5" fill="#92400E">network came back at 3041 ms — assertion fired at 3000.</text>
+    </g>
+
+    <!-- Diff panel -->
+    <rect x="372" y="222" width="356" height="178" rx="10" fill="#1F2937"/>
+    <text x="388" y="240" font-size="10" font-weight="700" fill="#9CA3AF">cart.spec.ts</text>
+
+    <!-- Before line -->
+    <rect x="378" y="252" width="346" height="20" rx="4" fill="#7F1D1D" opacity="0.6"/>
+    <text x="386" y="266" font-size="10" fill="#FECACA" font-family="ui-monospace,monospace">- await page.waitForTimeout(3000);</text>
+
+    <!-- After line -->
+    <rect x="378" y="276" width="346" height="20" rx="4" fill="#14532D" opacity="0.6"/>
+    <text x="386" y="290" font-size="10" fill="#A7F3D0" font-family="ui-monospace,monospace">+ await expect(count).toHaveText('1');</text>
+
+    <text x="388" y="318" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">// auto-retries until the assertion holds</text>
+    <text x="388" y="334" font-size="10" fill="#9CA3AF" font-family="ui-monospace,monospace">// or the test timeout fires.</text>
+
+    <text x="388" y="370" font-size="11" fill="white" font-weight="700">Replace fixed sleeps with web-first assertions.</text>
+    <text x="388" y="385" font-size="10" fill="#9CA3AF">The framework will wait for you.</text>
+  </g>
+
+  <!-- ─────── ROW 4: TEN RUNS AFTER ─────── -->
+  <g id="rowAfter" opacity="0">
+    <text x="32" y="426" font-size="12" font-weight="700" fill="#10B981">10 runs · after the fix</text>
+    <g id="a0"><circle cx="50"  cy="448" r="11" fill="#10B981"/></g>
+    <g id="a1"><circle cx="118" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a2"><circle cx="186" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a3"><circle cx="254" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a4"><circle cx="322" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a5"><circle cx="390" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a6"><circle cx="458" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a7"><circle cx="526" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a8"><circle cx="594" cy="448" r="11" fill="#10B981"/></g>
+    <g id="a9"><circle cx="662" cy="448" r="11" fill="#10B981"/></g>
+  </g>
+</svg>
+<div class="cap">A flake is a message: somewhere, a wait is racing the world. Trace it, then teach the test to wait for state, not seconds.</div>
+<button id="rb">reset</button>
+</div>
+
+<script>
+(function(){
+'use strict';
+function $(id){return document.getElementById(id);}
+function setOp(id,v){var e=$(id);if(e)e.setAttribute('opacity',String(v));}
+function setAttr(id,attr,v){var e=$(id);if(e)e.setAttribute(attr,String(v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function easeOut(t){return 1-Math.pow(1-t,3);}
+var tms=[];
+function after(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearAll(){tms.forEach(clearTimeout);tms=[];}
+function fade(id,from,to,dur,cb){
+  var e=$(id);if(!e){if(cb)cb();return;}
+  var s=performance.now();
+  function tick(now){
+    var t=Math.min((now-s)/dur,1);
+    e.setAttribute('opacity',String(lerp(from,to,easeOut(t))));
+    if(t<1)requestAnimationFrame(tick);else if(cb)cb();
+  }
+  requestAnimationFrame(tick);
+}
+
+// Outcome sequence: g r g g r g r r g g
+var outcomes = ['g','r','g','g','r','g','r','r','g','g'];
+
+function paintBefore(i){
+  var g = $('b'+i); if(!g) return;
+  var c = g.querySelector('circle');
+  if(outcomes[i]==='g'){
+    c.setAttribute('fill','#10B981');
+    c.setAttribute('stroke','#10B981');
+  } else {
+    c.setAttribute('fill','#F43F5E');
+    c.setAttribute('stroke','#F43F5E');
+  }
+}
+
+function resetBefore(){
+  for(var i=0;i<10;i++){
+    var g = $('b'+i); if(!g) continue;
+    var c = g.querySelector('circle');
+    c.setAttribute('fill','#E5E7EB');
+    c.setAttribute('stroke','#9CA3AF');
+  }
+}
+
+function run(){
+  clearAll();
+  resetBefore();
+  setOp('bverdict',0);
+  setOp('trace',0);
+  setOp('viewer',0);
+  setOp('rowAfter',0);
+
+  // Stage 1: paint 10 runs before, one every 220 ms.
+  for(var i=0;i<10;i++){
+    (function(idx){
+      after(400 + idx*220, function(){ paintBefore(idx); });
+    })(i);
+  }
+
+  after(2900, function(){ fade('bverdict',0,1,400); });
+
+  // Stage 2: trace flag appears.
+  after(3700, function(){ fade('trace',0,1,500); });
+
+  // Stage 3: trace viewer + diff.
+  after(4800, function(){ fade('viewer',0,1,600); });
+
+  // Stage 4: 10/10 green after fix.
+  after(8400, function(){ fade('rowAfter',0,1,500); });
+
+  // Loop
+  after(13500, function(){
+    fade('bverdict',1,0,400);
+    fade('trace',1,0,400);
+    fade('viewer',1,0,400);
+    fade('rowAfter',1,0,400);
+    after(700, run);
+  });
+}
+
+$('rb').addEventListener('click', function(){clearAll();run();});
+run();
+})();
+</script>
+</body>
+</html>

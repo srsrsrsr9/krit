@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Output worship</title>
+<style>
+  :root{
+    --bg:#FFF7ED; --ink:#1F2937; --muted:#6B7280;
+    --amber:#F59E0B; --good:#10B981; --bad:#F43F5E;
+    --sky:#0EA5E9; --violet:#8B5CF6; --paper:#FFFFFF;
+    --line:#E5E7EB;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,"Inter",sans-serif}
+  .stage{width:100%;min-height:100vh;display:flex;align-items:center;
+    justify-content:center;padding:16px}
+  .frame{width:100%;max-width:760px;aspect-ratio:16/9;display:block}
+  .caption{text-align:center;font-size:13px;font-style:italic;
+    color:var(--muted);margin-top:10px;max-width:760px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .reset{position:fixed;right:14px;bottom:14px;border:2px solid var(--ink);
+    background:var(--paper);color:var(--ink);border-radius:10px;
+    padding:6px 10px;font:600 12px system-ui;cursor:pointer}
+  .reset:hover{background:var(--ink);color:var(--paper)}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div>
+    <svg id="svg" class="frame" viewBox="0 0 760 428"
+         aria-label="A PM ships twelve features but the outcome graph stays flat. Caption: ships do not equal outcomes.">
+      <!-- background card -->
+      <rect x="0" y="0" width="760" height="428" fill="#FFF7ED"/>
+
+      <!-- Title -->
+      <text x="380" y="34" text-anchor="middle"
+            font-size="18" font-weight="700" fill="#1F2937">
+        The output-worship trap
+      </text>
+      <text x="380" y="54" text-anchor="middle"
+            font-size="12" font-style="italic" fill="#6B7280">
+        twelve ships, one quarter, almost no outcome
+      </text>
+
+      <!-- Left panel: ship grid -->
+      <g transform="translate(40,80)">
+        <rect x="0" y="0" width="320" height="300" rx="14"
+              fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="16" y="26" font-size="13" font-weight="700" fill="#1F2937">
+          Features shipped
+        </text>
+        <text x="16" y="44" font-size="11" font-style="italic" fill="#6B7280">
+          Q3 — confetti budget: unlimited
+        </text>
+
+        <!-- 12 feature tiles in 4x3 grid -->
+        <g id="tiles"></g>
+
+        <!-- counter -->
+        <g transform="translate(16,260)">
+          <text x="0" y="0" font-size="11" fill="#6B7280">shipped</text>
+          <text id="shipCount" x="0" y="22"
+                font-family="ui-monospace,monospace"
+                font-size="22" font-weight="700" fill="#F59E0B">0 / 12</text>
+        </g>
+
+        <!-- usage stamp (appears later) -->
+        <g id="usageStamp" opacity="0" transform="translate(180,250)">
+          <rect x="0" y="0" width="124" height="36" rx="8"
+                fill="#FFFFFF" stroke="#F43F5E" stroke-width="2"/>
+          <text x="62" y="16" text-anchor="middle"
+                font-size="10" font-weight="700" fill="#F43F5E">
+            ACTUAL USAGE
+          </text>
+          <text x="62" y="29" text-anchor="middle"
+                font-family="ui-monospace,monospace"
+                font-size="11" font-weight="700" fill="#1F2937">
+            11 of 12  &lt;2%
+          </text>
+        </g>
+      </g>
+
+      <!-- Right panel: outcome graph -->
+      <g transform="translate(400,80)">
+        <rect x="0" y="0" width="320" height="300" rx="14"
+              fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+        <text x="16" y="26" font-size="13" font-weight="700" fill="#1F2937">
+          Outcome (weekly active retention)
+        </text>
+        <text x="16" y="44" font-size="11" font-style="italic" fill="#6B7280">
+          target: +6 pts &nbsp;·&nbsp; actual: ?
+        </text>
+
+        <!-- axes -->
+        <g transform="translate(40,70)" stroke="#9CA3AF" stroke-width="1">
+          <line x1="0" y1="180" x2="260" y2="180"/>
+          <line x1="0" y1="0"   x2="0"   y2="180"/>
+        </g>
+        <!-- target line -->
+        <g transform="translate(40,70)">
+          <line x1="0" y1="40" x2="260" y2="40"
+                stroke="#10B981" stroke-width="2"
+                stroke-dasharray="4 4"/>
+          <text x="262" y="44" font-size="10" fill="#10B981">target</text>
+        </g>
+        <!-- baseline -->
+        <g transform="translate(40,70)">
+          <text x="-32" y="184" font-size="10" fill="#6B7280">0</text>
+          <text x="-32" y="44"  font-size="10" fill="#6B7280">+6</text>
+        </g>
+
+        <!-- the flat outcome line: animated draw -->
+        <g transform="translate(40,70)">
+          <path id="flatline"
+                d="M0 152 L260 152"
+                fill="none" stroke="#F43F5E" stroke-width="3"
+                stroke-linecap="round"
+                pathLength="1"
+                stroke-dasharray="1 1"
+                stroke-dashoffset="1"/>
+          <!-- micro-noise wobble (decorative) -->
+          <path id="noise"
+                d="M0 152 L20 150 L40 153 L60 151 L80 152 L100 150 L120 153 L140 152 L160 151 L180 152 L200 153 L220 152 L240 151 L260 152"
+                fill="none" stroke="#F43F5E" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round"
+                opacity="0"/>
+        </g>
+
+        <!-- annotation -->
+        <g id="anno" opacity="0" transform="translate(40,210)">
+          <rect x="0" y="0" width="240" height="56" rx="10"
+                fill="#FEF3C7" stroke="#F59E0B" stroke-width="2"/>
+          <text x="14" y="22" font-size="12" font-weight="700" fill="#1F2937">
+            ships ≠ outcomes
+          </text>
+          <text x="14" y="40" font-size="11" fill="#6B7280">
+            twelve confetti bursts, one flat line
+          </text>
+        </g>
+      </g>
+
+      <!-- confetti layer (in front) -->
+      <g id="confetti"></g>
+    </svg>
+    <div class="caption">
+      Twelve features land. The outcome graph never moves. The trap isn't shipping — it's mistaking shipping for progress.
+    </div>
+  </div>
+</main>
+<button class="reset" id="resetBtn" aria-label="Restart animation">restart</button>
+
+<script>
+(function(){
+  const ns = "http://www.w3.org/2000/svg";
+  const tilesG = document.getElementById("tiles");
+  const confettiG = document.getElementById("confetti");
+  const shipCount = document.getElementById("shipCount");
+  const flatline = document.getElementById("flatline");
+  const noise = document.getElementById("noise");
+  const anno = document.getElementById("anno");
+  const usageStamp = document.getElementById("usageStamp");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const COLORS = ["#F59E0B","#0EA5E9","#10B981","#8B5CF6","#F43F5E"];
+  const tilePositions = [];
+  const cols = 4, rows = 3;
+  const tileW = 64, tileH = 50, gx = 18, gy = 60, sx = 16, sy = 70;
+
+  // build empty tiles up front (so the grid skeleton reads)
+  for (let r=0; r<rows; r++){
+    for (let c=0; c<cols; c++){
+      const x = sx + c*(tileW+gx);
+      const y = sy + r*(tileH+gy/2.2);
+      tilePositions.push({x,y});
+    }
+  }
+
+  function clear(node){
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function el(tag, attrs){
+    const n = document.createElementNS(ns, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  function makeTile(i, pos){
+    const g = el("g", {transform:`translate(${pos.x},${pos.y})`,
+                       opacity:"0", id:"tile"+i});
+    const color = COLORS[i % COLORS.length];
+    const r = el("rect",{x:0,y:0,width:tileW,height:tileH,rx:10,
+      fill:"#FFFFFF",stroke:color,"stroke-width":2});
+    g.appendChild(r);
+    // tiny "feature" lines
+    const l1 = el("rect",{x:8,y:10,width:36,height:6,rx:3,fill:color,opacity:.85});
+    const l2 = el("rect",{x:8,y:22,width:24,height:5,rx:2.5,fill:"#E5E7EB"});
+    const l3 = el("rect",{x:8,y:32,width:30,height:5,rx:2.5,fill:"#E5E7EB"});
+    g.appendChild(l1); g.appendChild(l2); g.appendChild(l3);
+    // ship tag
+    const tag = el("rect",{x:tileW-22,y:tileH-14,width:18,height:10,rx:3,
+      fill:color});
+    const tagText = el("text",{x:tileW-13,y:tileH-6,"text-anchor":"middle",
+      "font-size":"7","font-weight":"700",fill:"#FFFFFF"});
+    tagText.textContent = "v"+(i+1);
+    g.appendChild(tag); g.appendChild(tagText);
+    return g;
+  }
+
+  function burstConfetti(cx, cy, color){
+    const pieces = 8;
+    for (let i=0;i<pieces;i++){
+      const a = (i/pieces)*Math.PI*2 + Math.random()*0.4;
+      const dist = 22 + Math.random()*18;
+      const dx = Math.cos(a)*dist, dy = Math.sin(a)*dist;
+      const c = COLORS[Math.floor(Math.random()*COLORS.length)];
+      const piece = el("rect",{
+        x:cx-2,y:cy-2,width:5,height:5,rx:1.2,
+        fill:c,opacity:0.95,
+        transform:`rotate(${Math.random()*60-30} ${cx} ${cy})`
+      });
+      confettiG.appendChild(piece);
+      const start = performance.now();
+      const dur = 700 + Math.random()*250;
+      function tick(now){
+        const t = Math.min(1,(now-start)/dur);
+        const e = 1 - Math.pow(1-t,3);
+        piece.setAttribute("transform",
+          `translate(${dx*e},${dy*e + 18*t*t}) rotate(${360*t} ${cx} ${cy})`);
+        piece.setAttribute("opacity", String(1-t));
+        if (t<1 && !reduce) requestAnimationFrame(tick);
+        else piece.remove();
+      }
+      if (reduce) piece.remove();
+      else requestAnimationFrame(tick);
+    }
+  }
+
+  let timeouts = [];
+  function later(fn, ms){
+    const id = setTimeout(fn, reduce ? 0 : ms);
+    timeouts.push(id);
+  }
+
+  function reset(){
+    timeouts.forEach(clearTimeout); timeouts = [];
+    clear(tilesG); clear(confettiG);
+    shipCount.textContent = "0 / 12";
+    shipCount.setAttribute("fill","#F59E0B");
+    flatline.setAttribute("stroke-dashoffset","1");
+    noise.setAttribute("opacity","0");
+    anno.setAttribute("opacity","0");
+    usageStamp.setAttribute("opacity","0");
+  }
+
+  function run(){
+    reset();
+
+    // ship 12 tiles, staggered
+    const stagger = 230;
+    for (let i=0;i<12;i++){
+      ((idx)=>{
+        later(()=>{
+          const pos = tilePositions[idx];
+          const tile = makeTile(idx, pos);
+          tilesG.appendChild(tile);
+          // fade + small rise
+          tile.setAttribute("opacity","0");
+          tile.setAttribute("transform",
+            `translate(${pos.x},${pos.y+8})`);
+          const start = performance.now();
+          function fade(now){
+            const t = Math.min(1,(now-start)/360);
+            const e = 1 - Math.pow(1-t,3);
+            tile.setAttribute("opacity", String(e));
+            tile.setAttribute("transform",
+              `translate(${pos.x},${pos.y + 8*(1-e)})`);
+            if (t<1 && !reduce) requestAnimationFrame(fade);
+          }
+          if (reduce){ tile.setAttribute("opacity","1");
+            tile.setAttribute("transform",`translate(${pos.x},${pos.y})`);
+          } else requestAnimationFrame(fade);
+          // confetti burst at tile center (panel coords -> svg coords)
+          const panelX = 40 + pos.x + tileW/2;
+          const panelY = 80 + pos.y + tileH/2;
+          burstConfetti(panelX, panelY);
+          shipCount.textContent = (idx+1)+" / 12";
+        }, 600 + idx*stagger);
+      })(i);
+    }
+
+    const shipDone = 600 + 12*stagger + 200;
+
+    // outcome line draws (flat, depressing)
+    later(()=>{
+      flatline.setAttribute("stroke-dasharray","260 260");
+      flatline.setAttribute("stroke-dashoffset","260");
+      const start = performance.now();
+      function draw(now){
+        const t = Math.min(1,(now-start)/1500);
+        const e = 1 - Math.pow(1-t,3);
+        flatline.setAttribute("stroke-dashoffset", String(260*(1-e)));
+        if (t<1 && !reduce) requestAnimationFrame(draw);
+      }
+      if (reduce) flatline.setAttribute("stroke-dashoffset","0");
+      else requestAnimationFrame(draw);
+    }, 800);
+
+    // noise overlay fade in (slight wobble on the flat line)
+    later(()=>{
+      noise.setAttribute("opacity","0.55");
+    }, 2400);
+
+    // usage stamp slams in
+    later(()=>{
+      usageStamp.setAttribute("opacity","0");
+      usageStamp.setAttribute("transform","translate(180,250) scale(1.15)");
+      const start = performance.now();
+      function bump(now){
+        const t = Math.min(1,(now-start)/350);
+        const e = 1 - Math.pow(1-t,3);
+        const s = 1.15 - 0.15*e;
+        usageStamp.setAttribute("opacity", String(e));
+        usageStamp.setAttribute("transform",
+          `translate(180,250) scale(${s})`);
+        if (t<1 && !reduce) requestAnimationFrame(bump);
+      }
+      if (reduce){
+        usageStamp.setAttribute("opacity","1");
+        usageStamp.setAttribute("transform","translate(180,250) scale(1)");
+      } else requestAnimationFrame(bump);
+      shipCount.setAttribute("fill","#F43F5E");
+    }, shipDone + 200);
+
+    // annotation: ships != outcomes
+    later(()=>{
+      anno.setAttribute("opacity","0");
+      anno.setAttribute("transform","translate(40,218)");
+      const start = performance.now();
+      function rise(now){
+        const t = Math.min(1,(now-start)/450);
+        const e = 1 - Math.pow(1-t,3);
+        anno.setAttribute("opacity", String(e));
+        anno.setAttribute("transform",
+          `translate(40,${218 - 8*e})`);
+        if (t<1 && !reduce) requestAnimationFrame(rise);
+      }
+      if (reduce){
+        anno.setAttribute("opacity","1");
+        anno.setAttribute("transform","translate(40,210)");
+      } else requestAnimationFrame(rise);
+    }, shipDone + 600);
+
+    // loop
+    later(run, shipDone + 4200);
+  }
+
+  document.getElementById("resetBtn").addEventListener("click", run);
+  run();
+})();
+</script>
+</body>
+</html>

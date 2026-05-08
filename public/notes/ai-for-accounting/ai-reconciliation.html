@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI in Reconciliation and Bank Statement Matching — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>AI in Reconciliation and Bank Statement Matching</h1>
+  <p class="subtitle">Reconciliation is fuzzy matching at scale; AI was built for fuzzy matching at scale</p>
+  <p class="byline">notes by Meera ✏️</p>
+  <span class="doodle">~ 14 min read ~</span>
+  <p>Bank reconciliation is the activity that articled assistants think defines accounting. A 14,000-line statement, a 14,000-line ledger, and the patient question: which line on each side corresponds to which line on the other?</p>
+  <div class="callout"><strong>Mental model: reconciliation is fuzzy matching at scale</strong><br/>Stop thinking of reconciliation as a sorting problem. Start thinking of it as a **fuzzy matching** problem.</div>
+  
+<h2>Move 1 — Confidence-scored matches</h2>
+<ul>
+<li>First named move. Stop producing binary match/no-match outputs.</li>
+<li>Step 1 — Load both sides into a common schema: Bank: date, amount, narration, channel. Ledger: date, amount, party, narration. One row per transaction; no merged cells, no totals rows.</li>
+<li>Step 2 — Score every plausible pair on amount + date + similarity: For each bank line, the matcher considers ledger lines within ±3 days and ±0 rupees, scores narration similarity, and returns top-3 candidate matches with scores.</li>
+<li>Step 3 — Pick the best match per row, score 0 to 100: Of the 14,000 bank lines: 12,400 score above 95, 1,200 score between 70 and 95, 320 score below 70, 80 have no candidate (unmatched on the bank side).</li>
+<li>Step 4 — Accept-zone sampling: Sample 100 random matches from the 12,400 high-confidence pile. Verify each by hand. Sample error rate: 0.3 percent. Acceptable; accept the pile.</li>
+<li>Step 5 — Review zone, row by row: All 1,200 medium-confidence matches reviewed at roughly 5 seconds each — 100 minutes. Override rate: about 8 percent. Pattern: most overrides are near-duplicate vendor names that need a manual disambiguation.</li>
+<li>Step 6 — Investigate zone: All 320 low-confidence and 80 unmatched lines get a real conversation with the file. About 60 percent are timing differences (cleared in next month), 30 percent are missing ledger entries (booking errors), 10 percent are genuine reconciling items requiring follow-up.</li>
+<li>Step 7 — Eval log + signoff: Full match table with scores, override log, and unresolved exceptions go into the working papers. Partner reviews exception list, signs off, files.</li>
+</ul>
+<h2>Move 2 — The human-in-the-loop tier</h2>
+<ul>
+<li>Second named move. The **human-in-the-loop tier** is where the CA actually adds value.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: collapsing the tiers: Under deadline pressure, every firm tries the same shortcut: &quot;let's just review everything with confidence below 90 and accept the rest.&quot; Two months later you realise you've been auto-accepting matches above 90 with no sampling at all, and the high-rupee mismatches above 90 have been silently flowing through for a quarter.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Reconciliation is fuzzy matching at scale; AI is a fuzzy matcher; the alignment is structural, not magical.</div>
+<div class="takeaway">Confidence-scored matches are the only output worth shipping — binary match/no-match throws away the most useful information AI produces.</div>
+<div class="takeaway">Three tiers: auto-accept with sampling, medium review row-by-row, low investigate fully. Plus a rupee-value override that promotes high-value matches regardless of confidence.</div>
+<div class="takeaway">The human-in-the-loop tier is not a fallback; it is where the CA's judgment is intentionally placed — small in volume, decisive in impact.</div>
+<div class="takeaway">Collapsing the tiers under deadline pressure is the failure mode every firm rediscovers; sampling and rupee thresholds are non-negotiable.</div>
+  <div class="signoff">— Meera, on the bus, again</div>
+</main>
+</body>
+</html>

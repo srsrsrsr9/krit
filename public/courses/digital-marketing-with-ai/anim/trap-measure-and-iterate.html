@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Trap: vanity dashboard</title>
+<style>:root{--bg:#FFF7ED;--ink:#1F2937;--bad:#F43F5E;--good:#10B981}*{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Inter",sans-serif}.stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}.frame{width:100%;max-width:720px}.caption{text-align:center;font-size:13px;font-style:italic;color:#6B7280;margin-top:8px}.reset{position:fixed;right:12px;bottom:12px;padding:6px 10px;font-size:11px;background:#fff;border:1px solid #d1d5db;border-radius:6px;cursor:pointer}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}.tile{animation:pop .15s ease both}.confused{animation:fade .5s ease 4s both}.fix-tile{animation:pop .5s ease both}.answer{animation:fade .5s ease 8s both}</style>
+</head><body><main class="stage"><div>
+<svg class="frame" viewBox="0 0 720 405" aria-label="A 47-tile vanity dashboard makes founder unable to answer 'are we growing?'; a 3-tile dashboard answers in 4 seconds">
+<rect width="720" height="405" rx="14" fill="#FFF7ED"/>
+<g transform="translate(40 30)"><text x="160" y="14" text-anchor="middle" font-size="12" fill="#7F1D1D" font-weight="bold">BEFORE · 47-tile dashboard</text>
+<rect width="320" height="180" rx="8" fill="#FFFFFF" stroke="#7F1D1D" stroke-width="2"/>
+<g font-family="ui-monospace,monospace" font-size="6" fill="#7F1D1D">
+<g class="tile" style="animation-delay:.05s"><rect x="6" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="26" y="36" text-anchor="middle">reach</text></g>
+<g class="tile" style="animation-delay:.1s"><rect x="50" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="70" y="36" text-anchor="middle">imp</text></g>
+<g class="tile" style="animation-delay:.15s"><rect x="94" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="114" y="36" text-anchor="middle">CTR</text></g>
+<g class="tile" style="animation-delay:.2s"><rect x="138" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="158" y="36" text-anchor="middle">CPC</text></g>
+<g class="tile" style="animation-delay:.25s"><rect x="182" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="202" y="36" text-anchor="middle">CPM</text></g>
+<g class="tile" style="animation-delay:.3s"><rect x="226" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="246" y="36" text-anchor="middle">CVR</text></g>
+<g class="tile" style="animation-delay:.35s"><rect x="270" y="22" width="40" height="22" fill="#FECACA" stroke="#7F1D1D"/><text x="290" y="36" text-anchor="middle">CAC</text></g>
+<g class="tile" style="animation-delay:.4s"><rect x="6" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="26" y="62" text-anchor="middle" fill="#9A3412">LTV</text></g>
+<g class="tile" style="animation-delay:.45s"><rect x="50" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="70" y="62" text-anchor="middle" fill="#9A3412">ROAS</text></g>
+<g class="tile" style="animation-delay:.5s"><rect x="94" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="114" y="62" text-anchor="middle" fill="#9A3412">D7 ret</text></g>
+<g class="tile" style="animation-delay:.55s"><rect x="138" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="158" y="62" text-anchor="middle" fill="#9A3412">D30</text></g>
+<g class="tile" style="animation-delay:.6s"><rect x="182" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="202" y="62" text-anchor="middle" fill="#9A3412">NPS</text></g>
+<g class="tile" style="animation-delay:.65s"><rect x="226" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="246" y="62" text-anchor="middle" fill="#9A3412">EngR3</text></g>
+<g class="tile" style="animation-delay:.7s"><rect x="270" y="48" width="40" height="22" fill="#FED7AA" stroke="#9A3412"/><text x="290" y="62" text-anchor="middle" fill="#9A3412">SOV</text></g>
+<g class="tile" style="animation-delay:.75s"><rect x="6" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="26" y="88" text-anchor="middle" fill="#92400E">BR</text></g>
+<g class="tile" style="animation-delay:.8s"><rect x="50" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="70" y="88" text-anchor="middle" fill="#92400E">PV</text></g>
+<g class="tile" style="animation-delay:.85s"><rect x="94" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="114" y="88" text-anchor="middle" fill="#92400E">SES</text></g>
+<g class="tile" style="animation-delay:.9s"><rect x="138" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="158" y="88" text-anchor="middle" fill="#92400E">AVG</text></g>
+<g class="tile" style="animation-delay:.95s"><rect x="182" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="202" y="88" text-anchor="middle" fill="#92400E">ARPU</text></g>
+<g class="tile" style="animation-delay:1s"><rect x="226" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="246" y="88" text-anchor="middle" fill="#92400E">DAU</text></g>
+<g class="tile" style="animation-delay:1.05s"><rect x="270" y="74" width="40" height="22" fill="#FEF3C7" stroke="#92400E"/><text x="290" y="88" text-anchor="middle" fill="#92400E">MAU</text></g>
+<g class="tile" style="animation-delay:1.1s"><rect x="6" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="26" y="114" text-anchor="middle" fill="#1E40AF">SQL</text></g>
+<g class="tile" style="animation-delay:1.15s"><rect x="50" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="70" y="114" text-anchor="middle" fill="#1E40AF">MQL</text></g>
+<g class="tile" style="animation-delay:1.2s"><rect x="94" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="114" y="114" text-anchor="middle" fill="#1E40AF">stage1</text></g>
+<g class="tile" style="animation-delay:1.25s"><rect x="138" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="158" y="114" text-anchor="middle" fill="#1E40AF">stage2</text></g>
+<g class="tile" style="animation-delay:1.3s"><rect x="182" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="202" y="114" text-anchor="middle" fill="#1E40AF">stage3</text></g>
+<g class="tile" style="animation-delay:1.35s"><rect x="226" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="246" y="114" text-anchor="middle" fill="#1E40AF">churn</text></g>
+<g class="tile" style="animation-delay:1.4s"><rect x="270" y="100" width="40" height="22" fill="#DBEAFE" stroke="#1E40AF"/><text x="290" y="114" text-anchor="middle" fill="#1E40AF">cohort</text></g>
+<text x="160" y="142" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#7F1D1D" font-style="italic">…and 19 more tiles</text>
+</g>
+</g>
+<g class="confused" transform="translate(40 230)"><rect width="320" height="60" rx="10" fill="#7F1D1D"/><text x="160" y="22" text-anchor="middle" font-size="12" fill="#FCA5A5" font-weight="bold">Founder: "are we growing?"</text><text x="160" y="42" text-anchor="middle" font-size="10" fill="#FCA5A5" font-style="italic">analyst points to 4 different tiles · couldn't say</text></g>
+<g transform="translate(380 30)"><text x="150" y="14" text-anchor="middle" font-size="12" fill="#065F46" font-weight="bold">AFTER · 3-tile dashboard</text>
+<rect width="300" height="180" rx="8" fill="#FFFFFF" stroke="#065F46" stroke-width="2"/>
+<g class="fix-tile" style="animation-delay:5s" transform="translate(20 30)"><rect width="260" height="40" rx="6" fill="#10B981"/><text x="130" y="18" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">★ NORTH STAR</text><text x="130" y="34" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">paid CAC: ₹847</text></g>
+<g class="fix-tile" style="animation-delay:5.4s" transform="translate(20 80)"><rect width="260" height="40" rx="6" fill="#34D399"/><text x="130" y="18" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">⚠ GATING</text><text x="130" y="34" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">D7 retention: 28%</text></g>
+<g class="fix-tile" style="animation-delay:5.8s" transform="translate(20 130)"><rect width="260" height="40" rx="6" fill="#065F46"/><text x="130" y="18" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">✗ KILL</text><text x="130" y="34" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">ROAS: 3.2× (vs 1.5× kill)</text></g>
+</g>
+<g class="answer" transform="translate(380 230)"><rect width="300" height="60" rx="10" fill="#065F46"/><text x="150" y="22" text-anchor="middle" font-size="12" fill="#A7F3D0" font-weight="bold">Founder: "are we growing?"</text><text x="150" y="40" text-anchor="middle" font-size="10" fill="#A7F3D0" font-style="italic">answer in 4 seconds · "yes — CAC down, ROAS up"</text></g>
+<g class="answer" style="animation-delay:9s" transform="translate(40 310)"><rect width="640" height="70" rx="10" fill="#1F2937"/><text x="320" y="24" text-anchor="middle" font-size="13" fill="#FCD34D" font-weight="bold">3 tiles for decisions; archive the other 47 for drill-downs</text><text x="320" y="46" text-anchor="middle" font-size="11" fill="#9CA3AF">North star (one number) · gating (one number) · kill criterion (one number)</text><text x="320" y="64" text-anchor="middle" font-size="10" fill="#9CA3AF" font-style="italic">Subtraction is what unblocks decisions; addition is theatre</text></g>
+</svg>
+<div class="caption">A 47-tile dashboard hides decisions. 3 tiles is the discipline that drives them.</div>
+</div></main><button class="reset" onclick="location.reload()">↺ Replay</button>
+</body></html>

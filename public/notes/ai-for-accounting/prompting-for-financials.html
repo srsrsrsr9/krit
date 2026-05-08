@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Prompting for Financials Without Hallucinating — Notes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+:root { --paper:#FFFEF7; --ink:#1F2937; --ink2:#374151; --rule:#BFDBFE; --margin:#FCA5A5; --accent:#9D174D; --hl:#FDE68A; }
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Architects+Daughter&display=swap");
+* { box-sizing: border-box; }
+html,body { margin:0; padding:0; background:#E5E7EB; font-family: "Patrick Hand","Caveat","Architects Daughter","Comic Sans MS",cursive; color: var(--ink); }
+.page { background: var(--paper); width: 800px; margin: 24px auto; padding: 56px 56px 56px 88px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); position: relative; min-height: 1100px; background-image: repeating-linear-gradient(transparent 0 32px, var(--rule) 32px 33px); border-left: 2px solid var(--margin); }
+.page::before { content:""; position:absolute; left: 64px; top:0; bottom:0; width:1px; background: var(--margin); opacity: 0.6; }
+h1 { font-family:"Caveat",cursive; font-size: 48px; margin: 0 0 4px 0; color: var(--ink); transform: rotate(-1.5deg); transform-origin: 0 0; }
+h2 { font-family:"Caveat",cursive; font-size: 30px; margin: 28px 0 8px 0; color: var(--accent); border-bottom: 2px dashed var(--accent); padding-bottom: 4px; transform: rotate(-0.7deg); transform-origin: 0 0; display: inline-block; }
+h3 { font-family:"Caveat",cursive; font-size: 22px; margin: 18px 0 4px 0; color: var(--ink); }
+.byline { font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(1deg); display: inline-block; }
+.subtitle { font-size: 16px; color: var(--ink2); margin: 0 0 20px 0; }
+ul { padding-left: 22px; margin: 6px 0 14px; }
+li { font-size: 17px; line-height: 28px; margin-bottom: 4px; }
+li::marker { color: var(--accent); }
+.callout { background: var(--hl); border-left: 5px solid #D97706; padding: 8px 14px; margin: 10px 0; transform: rotate(-0.3deg); display: inline-block; max-width: 100%; }
+.callout strong { color: var(--accent); }
+.scribble { display: block; font-style: italic; color: #6B7280; font-size: 15px; transform: rotate(-1deg); margin: 8px 0; }
+.takeaway { background: #FEF3C7; padding: 12px 16px; border: 2px dashed #92400E; border-radius: 8px; margin: 6px 0; font-size: 17px; line-height: 26px; transform: rotate(-0.2deg); }
+.takeaway::before { content: "★  "; color: #D97706; }
+.trap { background: #FEE2E2; border-left: 5px solid #B91C1C; padding: 8px 14px; margin: 8px 0; font-size: 16px; line-height: 24px; }
+.trap::before { content: "⚠  "; color: #B91C1C; font-weight: bold; }
+.doodle { font-family:"Caveat",cursive; color: #2563EB; font-size: 24px; transform: rotate(-3deg); display: inline-block; margin: 8px 4px; }
+.signoff { margin-top: 36px; text-align: right; font-family:"Caveat",cursive; font-size: 22px; color: var(--accent); transform: rotate(-1deg); display: inline-block; float: right; }
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; width: auto; min-height: auto; page-break-after: always; } }
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>Prompting for Financials Without Hallucinating</h1>
+  <p class="subtitle">Numbers are not text — verify every figure</p>
+  <p class="byline">notes by Vikrant ✏️</p>
+  <span class="doodle">~ 13 min read ~</span>
+  <p>Prompting for blog posts is forgiving. If a model writes &quot;the cat sat on the mat&quot; instead of &quot;the cat slept on the mat,&quot; the world keeps turning.</p>
+  <div class="callout"><strong>Mental model: numbers are not text — verify every figure</strong><br/>When a model produces text, errors are usually obvious or harmless — wrong tone, missed nuance, awkward phrasing. When a model produces numbers, errors are usually invisible and material. **A number that is wrong by one digit looks identical to a number that is right.**</div>
+  
+<h2>Move 1 — Structured-output prompts</h2>
+<ul>
+<li>First named move. Stop asking for paragraphs.</li>
+<li>Step 1 — Define the schema first: Before you write a single English word, write the JSON schema. Field names, types, required vs optional, format constraints (GSTIN is exactly 15 chars, dates are YYYY-MM-DD).</li>
+<li>Step 2 — Wrap with a system prompt that demands strict adherence: 'You return JSON only. No prose, no markdown fences, no explanation. If a field cannot be extracted, return null. If the document is not a tax invoice, return {&quot;error&quot;: &quot;not_invoice&quot;}.'</li>
+<li>Step 3 — Add a citation field: Include a 'source_lines' array — the line numbers in the source document where each value came from. This is the audit trail at the row level.</li>
+<li>Step 4 — Include 1 or 2 examples: Few-shot examples beat instructions. Show the model one good input/output pair. Watch the consistency improve immediately.</li>
+<li>Step 5 — Validate on parse: Your code attempts to parse the JSON. If it fails — missing field, wrong type, GSTIN of wrong length — re-prompt or flag. Never silently accept malformed output.</li>
+<li>Step 6 — Reconcile totals before trusting: Sum extracted taxable + IGST + CGST + SGST and compare with the model's 'total' field and the source-document total. If they don't match within ₹1, the row is flagged.</li>
+</ul>
+<h2>Move 2 — The 'show your sources' demand</h2>
+<ul>
+<li>Second named move. For every figure the model produces, demand a citation back to the source.</li>
+</ul>
+  <h3>Traps to flag for the exam</h3><div class="trap">The classic trap: the well-formatted hallucination: The most dangerous output is one that *looks* right. Clean tables, neat columns, GSTINs that pass format validation — and one number that is silently wrong by ₹54,000.</div>
+  <h3>Takeaways (memorize these)</h3><div class="takeaway">Numbers are not text. A wrong number looks identical to a right one; verification is non-negotiable.</div>
+<div class="takeaway">Structured-output prompts make the schema a contract: malformed responses fail at parse time instead of in production.</div>
+<div class="takeaway">The 'show your sources' demand turns invisible errors into visible ones; demand page/line/cell for every figure.</div>
+<div class="takeaway">Format quality and number quality are uncorrelated; neat output can still be wrong by ₹54,000.</div>
+<div class="takeaway">Always reconcile extracted totals against the source-document total before trusting any row.</div>
+  <div class="signoff">— Vikrant, on the bus, again</div>
+</main>
+</body>
+</html>
