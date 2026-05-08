@@ -182,6 +182,7 @@ export const EmbedAnimationBlock = z.object({
   height: z.number().int().min(120).max(1200).default(420),
   caption: z.string().optional(),
   fallbackImage: z.string().optional(),
+  audioSrc: z.string().optional(),
 });
 
 /**

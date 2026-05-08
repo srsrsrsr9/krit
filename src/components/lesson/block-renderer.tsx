@@ -127,7 +127,7 @@ function BlockOne({
     case "culturalAside":
       return <CulturalAsideBlock defaultLocale={block.defaultLocale} variants={block.variants} />;
     case "embedAnimation":
-      return <EmbedAnimationBlock src={block.src} height={block.height} caption={block.caption} fallbackImage={block.fallbackImage} />;
+      return <EmbedAnimationBlock src={block.src} height={block.height} caption={block.caption} fallbackImage={block.fallbackImage} audioSrc={block.audioSrc} />;
     case "chatScenario":
       return <ChatScenarioBlock coach={block.coach} intro={block.intro} buckets={block.buckets} scenarios={block.scenarios} />;
     case "lessonMeta":
