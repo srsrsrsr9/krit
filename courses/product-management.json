@@ -132,7 +132,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/product-management/anim/pm-mental-model-translator.html",
+          "src": "/courses/product-management/anim/pm-mental-model.html",
           "height": 420,
           "caption": "Watch one user complaint turn into an engineering ticket, a sales talking point, and a no-thank-you to a different stakeholder — all in the same week.",
           "fallbackImage": "/courses/product-management/anim/pm-mental-model-translator-poster.png"
@@ -623,7 +623,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/product-management/anim/talking-to-users-channels.html",
+          "src": "/courses/product-management/anim/talking-to-users.html",
           "height": 420,
           "caption": "Watch a single interview play twice — once with future-tense questions (loud lies), once with past-tense questions (quiet truth).",
           "fallbackImage": "/courses/product-management/anim/talking-to-users-channels-poster.png"
@@ -1148,7 +1148,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/product-management/anim/prd-contract-with-future-you.html",
+          "src": "/courses/product-management/anim/prd-and-prioritization.html",
           "height": 420,
           "caption": "Watch a one-page PRD survive three weeks of scope-creep attempts that would have flattened a JIRA ticket.",
           "fallbackImage": "/courses/product-management/anim/prd-contract-with-future-you-poster.png"
@@ -1633,7 +1633,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/product-management/anim/roadmap-now-next-later.html",
+          "src": "/courses/product-management/anim/roadmaps-and-tradeoffs.html",
           "height": 420,
           "caption": "Watch a 6-month Gantt drift into chaos, while a now/next/later board absorbs the same shocks and stays useful.",
           "fallbackImage": "/courses/product-management/anim/roadmap-now-next-later-poster.png"
@@ -2158,7 +2158,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/product-management/anim/shipping-post-launch-loop.html",
+          "src": "/courses/product-management/anim/shipping-and-followup.html",
           "height": 420,
           "caption": "Watch a feature ship on day 0, hit a soft activation curve by day 7, and produce the kill signal at day 21 — a story most teams never see because they stopped looking.",
           "fallbackImage": "/courses/product-management/anim/shipping-post-launch-loop-poster.png"

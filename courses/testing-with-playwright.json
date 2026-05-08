@@ -131,7 +131,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/testing-with-playwright/anim/why-tests-survive-bridge.html",
+          "src": "/courses/testing-with-playwright/anim/why-tests-survive.html",
           "height": 420,
           "caption": "Watch a feature decay across 6 months, with and without a test suite holding it up.",
           "fallbackImage": "/courses/testing-with-playwright/anim/why-tests-survive-bridge.png"
@@ -654,7 +654,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/testing-with-playwright/anim/test-pyramid-altitudes.html",
+          "src": "/courses/testing-with-playwright/anim/test-pyramid.html",
           "height": 420,
           "caption": "Watch a feature get tested at each altitude — same logic, very different cost.",
           "fallbackImage": "/courses/testing-with-playwright/anim/test-pyramid-altitudes.png"
@@ -1142,7 +1142,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/testing-with-playwright/anim/playwright-fundamentals-autowait.html",
+          "src": "/courses/testing-with-playwright/anim/playwright-fundamentals.html",
           "height": 420,
           "caption": "Watch a Playwright `click` walk through the actionability checks: attached → visible → stable → enabled → on top → fire.",
           "fallbackImage": "/courses/testing-with-playwright/anim/playwright-fundamentals-autowait.png"
@@ -1664,7 +1664,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/testing-with-playwright/anim/flake-and-debugging-trace.html",
+          "src": "/courses/testing-with-playwright/anim/flake-and-debugging.html",
           "height": 420,
           "caption": "Walk through a Playwright trace of a flaky checkout test: the timeline reveals the race condition the eye missed.",
           "fallbackImage": "/courses/testing-with-playwright/anim/flake-and-debugging-trace.png"
@@ -2158,7 +2158,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/testing-with-playwright/anim/ci-and-coverage-shards.html",
+          "src": "/courses/testing-with-playwright/anim/ci-and-coverage.html",
           "height": 420,
           "caption": "Watch a single 28-minute serial run get sharded across 4 parallel workers — same coverage, 7 minutes total.",
           "fallbackImage": "/courses/testing-with-playwright/anim/ci-and-coverage-shards.png"

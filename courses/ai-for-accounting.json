@@ -132,7 +132,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-accounting/anim/ai-meets-ledger-pattern-engine.html",
+          "src": "/courses/ai-for-accounting/anim/ai-meets-ledger.html",
           "height": 420,
           "caption": "Watch 4,200 invoice lines flow through the pattern engine; the model groups, scores, flags. The 4,000 it nails fly by; the 200 it isn't sure about glow yellow and queue up for you.",
           "fallbackImage": "/courses/ai-for-accounting/anim/ai-meets-ledger-pattern-engine-poster.png"
@@ -659,7 +659,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-accounting/anim/prompting-financials-totals-check.html",
+          "src": "/courses/ai-for-accounting/anim/prompting-for-financials.html",
           "height": 420,
           "caption": "Watch a 47-line invoice extract: AI returns the table, then the totals from the source and the totals from the AI output line up side by side. The 14-rupee mismatch glows red instantly.",
           "fallbackImage": "/courses/ai-for-accounting/anim/prompting-financials-totals-check-poster.png"
@@ -1186,7 +1186,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-accounting/anim/ai-reconciliation-confidence-flow.html",
+          "src": "/courses/ai-for-accounting/anim/ai-reconciliation.html",
           "height": 420,
           "caption": "A 14,000-line bank statement and a 14,000-line ledger flow into the matcher. Watch the confidence-scored output emerge in three colour-coded streams: high, medium, low. The low stream queues up for human review.",
           "fallbackImage": "/courses/ai-for-accounting/anim/ai-reconciliation-confidence-flow-poster.png"
@@ -1722,7 +1722,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-accounting/anim/ai-gst-tds-rag-pipeline.html",
+          "src": "/courses/ai-for-accounting/anim/ai-gst-tds.html",
           "height": 420,
           "caption": "A query about ITC eligibility on motor vehicles. Watch the system retrieve Section 17(5)(a), surface the verbatim text, and the model produce an answer that cites the section in its response.",
           "fallbackImage": "/courses/ai-for-accounting/anim/ai-gst-tds-rag-pipeline-poster.png"
@@ -2254,7 +2254,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-accounting/anim/ai-audit-trail-replay.html",
+          "src": "/courses/ai-for-accounting/anim/ai-audit-trail.html",
           "height": 420,
           "caption": "Replay of an audit-trail entry from 18 months ago. Watch the original prompt, retrieved passages, model response, reviewer notes, and final filed version reconstruct themselves on screen.",
           "fallbackImage": "/courses/ai-for-accounting/anim/ai-audit-trail-replay-poster.png"

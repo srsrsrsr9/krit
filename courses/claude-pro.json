@@ -131,7 +131,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/claude-pro/anim/what-claude-is-good-at-capability-map.html",
+          "src": "/courses/claude-pro/anim/what-claude-is-good-at.html",
           "height": 420,
           "caption": "Capability map of Claude.ai, Claude Code, and the API. Hover any cell to see fit."
         },
@@ -651,7 +651,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/claude-pro/anim/claude-for-coding-plan-then-do.html",
+          "src": "/courses/claude-pro/anim/claude-for-coding.html",
           "height": 420,
           "caption": "Animated walkthrough of a /plan run feeding into a /implement run with subagent fan-out."
         },
@@ -1180,7 +1180,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/claude-pro/anim/claude-for-cowork-draft-loop.html",
+          "src": "/courses/claude-pro/anim/claude-for-cowork.html",
           "height": 420,
           "caption": "Visual: the bullet to draft to send loop, with the review gate that catches the AI-isms."
         },
@@ -1709,7 +1709,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/claude-pro/anim/claude-for-design-tightening-loop.html",
+          "src": "/courses/claude-pro/anim/claude-for-design.html",
           "height": 420,
           "caption": "Animated: a mockup goes through three rounds of Claude critique, each round tightening one constraint."
         },
@@ -2238,7 +2238,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/claude-pro/anim/claude-as-teammate-fanout.html",
+          "src": "/courses/claude-pro/anim/claude-as-teammate.html",
           "height": 420,
           "caption": "Animated: 4 parallel subagents investigate 4 codebase areas, each writes a 5-bullet artifact, the orchestrator merges."
         },

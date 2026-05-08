@@ -132,7 +132,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-leaders/anim/ai-strategy-mental-model-curves.html",
+          "src": "/courses/ai-for-leaders/anim/ai-strategy-mental-model.html",
           "height": 420,
           "caption": "Watch the cost curve fall and the capability curve rise. Notice which problems pass through the intersection in 2024, in 2025, in 2026."
         },
@@ -663,7 +663,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-leaders/anim/portfolio-and-bets-allocation.html",
+          "src": "/courses/ai-for-leaders/anim/portfolio-and-bets.html",
           "height": 420,
           "caption": "A budget circle filling and refilling as bets pass and fail their 90-day gates."
         },
@@ -1138,7 +1138,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-leaders/anim/team-and-org-design-cell-to-factory.html",
+          "src": "/courses/ai-for-leaders/anim/team-and-org-design.html",
           "height": 420,
           "caption": "Watch a cell become two cells become a factory as concurrent demand crosses the threshold."
         },
@@ -1616,7 +1616,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-leaders/anim/risk-and-governance-eval-gate.html",
+          "src": "/courses/ai-for-leaders/anim/risk-and-governance.html",
           "height": 420,
           "caption": "An eval gate in motion. Watch a release attempt fail at the 1.5% threshold, three times, before the team finds the bug."
         },

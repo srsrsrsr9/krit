@@ -89,7 +89,12 @@ export function TutorSidebar({
   }, []);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Scroll the chat-list container only — never the page. scrollIntoView
+    // bubbles up into the document scroller when this sidebar is sticky,
+    // which made the lesson page auto-scroll on every render.
+    const el = bottomRef.current?.parentElement;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
   }, [messages, streaming]);
 
   async function send(text: string) {

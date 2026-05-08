@@ -128,7 +128,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-teachers/anim/ai-as-teaching-assistant-the-line.html",
+          "src": "/courses/ai-for-teachers/anim/ai-as-teaching-assistant.html",
           "height": 420,
           "caption": "Drag tasks across the line. Watch the AI intern handle the left side and freeze on the right.",
           "fallbackImage": "/courses/ai-for-teachers/anim/ai-as-teaching-assistant-the-line-poster.png"
@@ -656,7 +656,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-teachers/anim/lesson-prep-with-ai-the-brief.html",
+          "src": "/courses/ai-for-teachers/anim/lesson-prep-with-ai.html",
           "height": 420,
           "caption": "Build the brief one line at a time and watch the lesson plan output sharpen.",
           "fallbackImage": "/courses/ai-for-teachers/anim/lesson-prep-with-ai-the-brief-poster.png"
@@ -1184,7 +1184,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-teachers/anim/assessment-and-feedback-rubric-pass.html",
+          "src": "/courses/ai-for-teachers/anim/assessment-and-feedback.html",
           "height": 420,
           "caption": "Watch a single essay flow through a rubric pass — green for structural ticks, red for the meaning checks AI cannot make.",
           "fallbackImage": "/courses/ai-for-teachers/anim/assessment-and-feedback-rubric-pass-poster.png"
@@ -1663,7 +1663,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-teachers/anim/ai-detection-and-honesty-process-anchor.html",
+          "src": "/courses/ai-for-teachers/anim/ai-detection-and-honesty.html",
           "height": 420,
           "caption": "An assignment redesigned: the final-document version vs the process-anchored version, side by side.",
           "fallbackImage": "/courses/ai-for-teachers/anim/ai-detection-and-honesty-process-anchor-poster.png"
@@ -2149,7 +2149,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/ai-for-teachers/anim/ai-classroom-experiments-three-numbers.html",
+          "src": "/courses/ai-for-teachers/anim/ai-classroom-experiments.html",
           "height": 420,
           "caption": "Watch a 14-day experiment unfold across three lines: outcome, cost, relationship. Drag day-14 to see the decision logic.",
           "fallbackImage": "/courses/ai-for-teachers/anim/ai-classroom-experiments-three-numbers-poster.png"

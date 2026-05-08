@@ -132,7 +132,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/digital-marketing-with-ai/anim/digital-marketing-mental-model-cac-ltv.html",
+          "src": "/courses/digital-marketing-with-ai/anim/digital-marketing-mental-model.html",
           "height": 420,
           "caption": "Watch a campaign with healthy LTV/CAC compound, and one with broken math drown — both in the same dashboard."
         },
@@ -605,7 +605,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/digital-marketing-with-ai/anim/content-pipeline-flow.html",
+          "src": "/courses/digital-marketing-with-ai/anim/content-pipeline.html",
           "height": 420,
           "caption": "Watch a brief move through the pipeline — and watch what happens when each stage is skipped."
         },
@@ -1081,7 +1081,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/digital-marketing-with-ai/anim/ads-and-experiments-confidence-intervals.html",
+          "src": "/courses/digital-marketing-with-ai/anim/ads-and-experiments.html",
           "height": 420,
           "caption": "Watch a confidence interval shrink in real time as sample size grows. Day 2 is theatre; day 7 starts to talk."
         },
@@ -1552,7 +1552,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/digital-marketing-with-ai/anim/personalization-segments-vs-individuals.html",
+          "src": "/courses/digital-marketing-with-ai/anim/personalization-and-crm.html",
           "height": 420,
           "caption": "Watch the same email engine run as segments and as individuals — see the cost, conversion, and unsubscribe rate diverge."
         },
@@ -2028,7 +2028,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/digital-marketing-with-ai/anim/measure-and-iterate-northstar-loop.html",
+          "src": "/courses/digital-marketing-with-ai/anim/measure-and-iterate.html",
           "height": 420,
           "caption": "Watch a 14-day loop play out — north-star rising, vanity metrics oscillating, kill criterion deciding the fate."
         },

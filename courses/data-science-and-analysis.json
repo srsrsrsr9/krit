@@ -132,7 +132,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/data-science-and-analysis/anim/data-mental-model-translation.html",
+          "src": "/courses/data-science-and-analysis/anim/data-mental-model.html",
           "height": 420,
           "caption": "The translation moment in motion. Watch a one-line stakeholder ask convert into three candidate hypotheses, and only one survives the data check."
         },
@@ -630,7 +630,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/data-science-and-analysis/anim/cleaning-and-shaping-schema.html",
+          "src": "/courses/data-science-and-analysis/anim/cleaning-and-shaping.html",
           "height": 420,
           "caption": "Watch a messy events table reshape towards a target schema, with row-count and key-uniqueness assertions firing at each step."
         },
@@ -1086,7 +1086,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/data-science-and-analysis/anim/statistical-thinking-ci.html",
+          "src": "/courses/data-science-and-analysis/anim/statistical-thinking.html",
           "height": 420,
           "caption": "Watch confidence intervals shrink as sample size grows from n=47 to n=4,700. The point estimate barely moves; the CI tells the story."
         },
@@ -1583,7 +1583,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/data-science-and-analysis/anim/modeling-fundamentals-staircase.html",
+          "src": "/courses/data-science-and-analysis/anim/modeling-fundamentals.html",
           "height": 420,
           "caption": "Walk up the modeling staircase from baseline to deep model on a real Bengaluru SaaS churn dataset. Notice when accuracy stops moving."
         },
@@ -2043,7 +2043,7 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/data-science-and-analysis/anim/communicating-results-bluf.html",
+          "src": "/courses/data-science-and-analysis/anim/communicating-results.html",
           "height": 420,
           "caption": "Watch a 28-slide deck collapse into a one-page BLUF memo. Notice what gets kept, what becomes appendix, what disappears entirely."
         },
