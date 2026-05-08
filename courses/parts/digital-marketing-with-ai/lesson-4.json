@@ -1,0 +1,223 @@
+{
+  "slug": "personalization-and-crm",
+  "title": "Personalization Without Creepiness",
+  "subtitle": "Segments, not individuals — and the would-you-tell-them test",
+  "estimatedMinutes": 13,
+  "skills": ["marketing-personalization"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/digital-marketing-with-ai/personalization-and-crm.mp3",
+      "audioDurationSec": 695,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — when 1:1 becomes creepy" },
+        { "startSec": 80, "label": "Mental model: segments not individuals" },
+        { "startSec": 220, "label": "Move 1 — The consent ladder" },
+        { "startSec": 410, "label": "Move 2 — The would-you-tell-them test" },
+        { "startSec": 560, "label": "Trap, try-it, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/digital-marketing-with-ai/personalization-and-crm.html",
+      "notesByline": "Notes by Sneha, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "There are two stories about personalization. The vendor story: 'AI lets you treat every customer like a unique individual.' The reality: when you actually try, the cost goes up, the conversion ticks down, and a tenth of your audience unsubscribes the day they realise you saw them browse a sensitive product category at 11pm last Tuesday.\n\nThe lesson is not that personalization is bad. It's that the *unit* most marketing teams pick — the individual — is wrong. The unit that actually pays back is the **segment**: a few hundred to a few thousand customers who share a behavioural pattern. Segments scale; individuals don't. And segments don't trip the creepy-meter."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two columns: left, '1:1 personalization' shows 100 individual customer cards each with a unique AI-generated email, with a creepy-meter at 9/10 and a high cost. Right, 'Segment-level' shows 5 segment buckets each containing many customer dots, with creepy-meter at 2/10 and lower cost.",
+      "caption": "Same data, two unit choices. Segments are cheaper, less creepy, and more durable.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FCE7F3'/><g transform='translate(40 40)'><rect width='240' height='200' rx='10' fill='#FFFFFF' stroke='#9D174D' stroke-width='2'/><text x='120' y='24' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9D174D'>1:1 — individual</text><g transform='translate(20 40)'><circle cx='15' cy='15' r='8' fill='#F472B6'/><circle cx='45' cy='15' r='8' fill='#F472B6'/><circle cx='75' cy='15' r='8' fill='#F472B6'/><circle cx='105' cy='15' r='8' fill='#F472B6'/><circle cx='135' cy='15' r='8' fill='#F472B6'/><circle cx='165' cy='15' r='8' fill='#F472B6'/><circle cx='195' cy='15' r='8' fill='#F472B6'/><circle cx='15' cy='45' r='8' fill='#F472B6'/><circle cx='45' cy='45' r='8' fill='#F472B6'/><circle cx='75' cy='45' r='8' fill='#F472B6'/><circle cx='105' cy='45' r='8' fill='#F472B6'/><circle cx='135' cy='45' r='8' fill='#F472B6'/><circle cx='165' cy='45' r='8' fill='#F472B6'/><circle cx='195' cy='45' r='8' fill='#F472B6'/><circle cx='15' cy='75' r='8' fill='#F472B6'/><circle cx='45' cy='75' r='8' fill='#F472B6'/><circle cx='75' cy='75' r='8' fill='#F472B6'/></g><text x='20' y='160' fill='#9D174D' font-family='sans-serif' font-size='11'>Cost / message: ₹14</text><text x='20' y='180' fill='#9D174D' font-family='sans-serif' font-size='11'>Creepy meter: 9/10</text></g><g transform='translate(320 40)'><rect width='240' height='200' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='2'/><text x='120' y='24' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Segment-level (5 buckets)</text><g transform='translate(20 40)'><rect x='0' y='0' width='100' height='40' rx='6' fill='#A7F3D0' stroke='#065F46'/><text x='50' y='25' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>festive shoppers</text><rect x='110' y='0' width='90' height='40' rx='6' fill='#86EFAC' stroke='#065F46'/><text x='155' y='25' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>cart abandon</text><rect x='0' y='50' width='90' height='40' rx='6' fill='#6EE7B7' stroke='#065F46'/><text x='45' y='75' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>repeat 3+ buy</text><rect x='100' y='50' width='100' height='40' rx='6' fill='#34D399' stroke='#065F46'/><text x='150' y='75' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>tier-2 newcomer</text></g><text x='20' y='160' fill='#065F46' font-family='sans-serif' font-size='11'>Cost / message: ₹0.40</text><text x='20' y='180' fill='#065F46' font-family='sans-serif' font-size='11'>Creepy meter: 2/10</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: segments not individuals",
+      "md": "True 1:1 personalization is a story marketing tools sell. In practice you almost never see it; what you see is **segment personalization disguised as individual personalization** — and when it actually drifts toward individual, customers notice and recoil.\n\nThe model: pick 4-8 behavioural segments, each big enough to be statistically meaningful (n > 200), and craft 4-8 distinct experiences. AI helps you ship them efficiently. But the unit is the segment, not the human.\n\nWhy: segments respect signal you have honestly earned (browsed kurtas, viewed checkout, tier-2 newcomer). Individuals tempt you to cross into signal you scraped. Segments scale; individuals creep."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/digital-marketing-with-ai/anim/personalization-segments-vs-individuals.html",
+      "height": 420,
+      "caption": "Watch the same email engine run as segments and as individuals — see the cost, conversion, and unsubscribe rate diverge."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Nykaa Q3 push — when personalization becomes creepy",
+          "md": "Imagine kar. Tu Nykaa pe kuch sensitive products dekha — anti-fungal cream, koi acne thing. Logout. Doosre din WhatsApp marketing message: \"Hi Sneha, hope your skin journey is going well! Special discount on the items you were viewing yesterday.\"\n\nBhai. Yeh creepy hai. Item ka *naam* nahi liya, lekin pata chal gaya. Aur tu ne kabhi consent nahi diya WhatsApp pe yeh message paane ka.\n\nResult: brand ke liye unsubscribe spike, social media pe screenshot, brand-trust permanent damage. Founder ne agency ko gaali di. Agency ne tool ko gaali di. Tool ne data-broker ko gaali di. Customer ne brand ko forever delete kar diya."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "When personalization announces itself",
+          "md": "A user browses a sensitive product category, logs out, and gets a WhatsApp message the next day mentioning the items they 'were viewing'. Even without naming the items, the moment of recognition — *they're watching me* — is what damages the brand. The customer didn't consent to that channel knowing that information."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The consent ladder"
+    },
+    {
+      "type": "markdown",
+      "md": "Not all signals are equal. The **consent ladder** ranks the data you might use, from highest trust to lowest. The rule: only use a signal if the user climbed *to* that rung; don't infer downward.\n\n1. **Declared (top rung).** The user explicitly told you. 'I shop for festive wear.' 'I'm allergic to sulfates.' 'Send me Diwali offers.' Highest trust; near-zero creepy.\n2. **Behavioural on your own surface.** They browsed kurtas twice last week, on your site, while logged in. Earned, declared by action.\n3. **Aggregate cohort.** They share a pattern with 800 other customers — high cart-abandon rate after viewing accessories. Anonymised; safe.\n4. **Inferred from third-party.** A data broker says they're in 'household income tier 3'. *Below* the consent floor; don't use.\n5. **Cross-device fingerprinting / non-consented enrichment.** Same answer. Don't.\n\nThe ladder doesn't say AI is bad at personalization. It says: AI *should only operate on signals that climbed the ladder honestly*. Most personalization disasters happen because someone fed AI signals from rungs 4 or 5 and called it 'smart'."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A vertical ladder. Top rung 'Declared' (green, highest trust). Then 'Behavioural on-site'. Then 'Aggregate cohort'. Below a red dotted line, 'Inferred from broker' (red, off-ladder), and 'Device fingerprint' (red, off-ladder).",
+      "caption": "The consent ladder. Above the line = honest signal AI can use. Below the line = signals that turn personalization into surveillance.",
+      "maxWidth": 480,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 360' role='img'><rect width='480' height='360' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' font-size='12'><g transform='translate(60 30)'><rect width='360' height='40' rx='8' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='15' y='25' fill='#FFFFFF' font-weight='bold'>1. Declared</text><text x='200' y='25' fill='#FFFFFF'>'I shop for festive wear' — they told you</text></g><g transform='translate(60 80)'><rect width='360' height='40' rx='8' fill='#34D399' stroke='#065F46' stroke-width='2'/><text x='15' y='25' fill='#065F46' font-weight='bold'>2. Behavioural on-site</text><text x='200' y='25' fill='#065F46'>browsed kurtas twice (logged in)</text></g><g transform='translate(60 130)'><rect width='360' height='40' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='15' y='25' fill='#065F46' font-weight='bold'>3. Aggregate cohort</text><text x='200' y='25' fill='#065F46'>matches 800-customer pattern</text></g><line x1='30' y1='200' x2='450' y2='200' stroke='#7F1D1D' stroke-width='2' stroke-dasharray='6 4'/><text x='240' y='195' text-anchor='middle' fill='#7F1D1D' font-style='italic' font-size='11' font-weight='bold'>consent floor</text><g transform='translate(60 220)'><rect width='360' height='40' rx='8' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='15' y='25' fill='#7F1D1D' font-weight='bold'>4. Inferred (broker)</text><text x='200' y='25' fill='#7F1D1D'>third-party 'household income' enrichment</text></g><g transform='translate(60 270)'><rect width='360' height='40' rx='8' fill='#EF4444' stroke='#7F1D1D' stroke-width='2'/><text x='15' y='25' fill='#FFFFFF' font-weight='bold'>5. Fingerprinting</text><text x='200' y='25' fill='#FFFFFF'>cross-device tracking without consent</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: 'Personalize the email' → an honest segment + signal plan",
+      "steps": [
+        { "label": "Step 1 — List the signals you have", "body": "Inventory: declared preferences, on-site behaviour, purchase history, channel engagement. Don't reach for inferred or third-party signals yet." },
+        { "label": "Step 2 — Filter by ladder rung", "body": "Drop everything below rung 3 (cohort). What remains is your honest signal pool." },
+        { "label": "Step 3 — Group into 4-8 segments", "body": "Each segment: n > 200 customers, behaviourally distinct, paired with a clear hypothesis ('cart abandoners after accessories view → respond to social proof')." },
+        { "label": "Step 4 — Craft segment-level content", "body": "AI drafts 4-8 versions, one per segment. Voice anchor applied. 3-pass review." },
+        { "label": "Step 5 — Set a creepy-meter check", "body": "Final pass: 'If we showed this email to the customer with the line attached: \"we sent this because you did X\", would they nod or recoil?' If recoil, scale back the signal." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your team has access to: declared preferences (rung 1), on-site browsing (rung 2), purchase history (rung 1-2), and a third-party data enrichment service (rung 4). Which combination should AI personalization actually use?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Declared preferences + on-site browsing + purchase history. Skip the third-party enrichment.", "correct": true, "explain": "Right. Stay above the consent floor. The first three are signals the customer earned for you; the third-party data is signals you bought without their consent." },
+        { "id": "b", "label": "All four — more signal is more accuracy.", "correct": false, "explain": "More signal isn't more accuracy when the extra signal is non-consented. It's more risk." },
+        { "id": "c", "label": "Just declared preferences; everything else is inference.", "correct": false, "explain": "Too restrictive. On-site behaviour is a signal the customer gave you on your surface; using it is fair." },
+        { "id": "d", "label": "Just the third-party enrichment; it's the most powerful predictor.", "correct": false, "explain": "Powerful and creepy aren't the same as good. The third-party data fails the consent ladder." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Mehmaan ka rule",
+          "md": "Mehmaan tere ghar aata hai. Tu unka pasandida chai banata hai *kyunki unhone bola tha pehle*. Achha. Warm.\n\nLekin agar tu unke fridge mein peep maar ke pata laga le ki unhe oat milk pasand hai, aur uska use kare — woh creepy hai. Even though information same hai.\n\nDeclared signal vs inferred signal ka pura difference yeh hai. Mehmaan ne kya bola, vs tu ne kya jasoosi ki."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The guest rule",
+          "md": "When a guest tells you their tea preference, using it is hospitality. When you peek in their fridge to find out, using it is creepy. The information is the same; the consent path is different. Personalization works the same way. Use what they told you. Don't use what you snooped."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The would-you-tell-them test"
+    },
+    {
+      "type": "markdown",
+      "md": "The simplest creepy-meter check is also the most honest one: **for every personalised piece, write the line you'd say if the customer asked 'how did you know?' If you can say it without flinching, you're fine. If you'd want to dodge, you're over the line.**\n\nThree examples:\n\n- 'You favourited this kurta last week, so we wanted to let you know it's back in stock.' — *would say.* The customer earned that signal by clicking favourite.\n- 'You browsed accessories twice in the last 14 days, so here's a 10% discount.' — *would say, with light squirm.* The signal is on-site, behaviour-based, and the discount is a fair offer. Acceptable.\n- 'Your household income tier suggests you'd like our premium range.' — *would not say.* No customer ever consented to be classified that way. The discomfort of saying it is the test failing.\n\nMost teams skip the test because it adds friction. The friction is the feature. It's the thing that stops you from shipping the email that gets you on the front page of a privacy story."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A speech bubble from a customer asking 'how did you know?' with three response options: 'You told us' (green), 'You did this on our site' (yellow), 'We bought your data' (red, with a face-palm emoji).",
+      "caption": "The would-you-tell-them test. Three responses; one of them ends the relationship.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(40 50)'><circle cx='40' cy='40' r='30' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='30' cy='35' r='3' fill='#1F2937'/><circle cx='50' cy='35' r='3' fill='#1F2937'/><path d='M28 50 Q40 56 52 50' stroke='#1F2937' stroke-width='2' fill='none'/><path d='M80 30 L120 30 L120 60 L80 60 L60 75 L70 60 L80 60 Z' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='100' y='48' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>How did you know?</text></g><g transform='translate(220 30)'><rect width='280' height='40' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='15' y='25' fill='#065F46' font-weight='bold' font-family='sans-serif' font-size='12'>'You told us when you signed up.'</text><text x='250' y='25' text-anchor='end' fill='#065F46' font-size='14'>safe</text></g><g transform='translate(220 90)'><rect width='280' height='40' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='15' y='25' fill='#92400E' font-weight='bold' font-family='sans-serif' font-size='12'>'You favourited it on our site.'</text><text x='250' y='25' text-anchor='end' fill='#92400E' font-size='14'>fine</text></g><g transform='translate(220 150)'><rect width='280' height='40' rx='8' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='15' y='25' fill='#7F1D1D' font-weight='bold' font-family='sans-serif' font-size='11'>'We bought your data from a broker.'</text><text x='250' y='25' text-anchor='end' fill='#7F1D1D' font-size='14'>over the line</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Growth-Lead Gauri",
+        "role": "D2C veteran, has personally killed 7 'smart' personalization campaigns before launch"
+      },
+      "intro": [
+        "Privacy round. Five real personalization plays — you tell me: **safe**, **borderline**, or **don't ship**.",
+        "Use the would-you-tell-them test. If you'd flinch saying the line, that's the line.",
+        "Reminder: the cost of saying 'don't ship' is one campaign. The cost of shipping the wrong one is sometimes the brand."
+      ],
+      "buckets": [
+        { "id": "safe", "label": "Safe", "tone": "safe" },
+        { "id": "borderline", "label": "Borderline", "tone": "neutral" },
+        { "id": "dont", "label": "Don't ship", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "User favourited a kurta. Two weeks later: 'Hi! That kurta is back in stock; here's a 5% loyalty offer.'", "correctBucketId": "safe", "explain": "Declared action (favourite). Honest signal. Mild offer. The line 'you favourited it' lands fine." },
+        { "id": "s2", "situation": "User browsed 6 product pages over 3 sessions, didn't buy. Email: 'Looks like you've been comparing options — here are 3 user reviews of the most-viewed item.'", "correctBucketId": "borderline", "explain": "Behavioural signal on your site is fair, but 'comparing options' announces surveillance more than the signal warrants. Soften the line, ship." },
+        { "id": "s3", "situation": "Customer's WhatsApp number wasn't given for marketing. Marketing tool sends them a Diwali offer 'because they're in your database'.", "correctBucketId": "dont", "explain": "WhatsApp without explicit channel consent is the regulated landmine. India's DPDPA enforces this; not a brand judgement call, a legal one." },
+        { "id": "s4", "situation": "Email: 'Based on your previous purchases (last 12 months: kids' clothing 4x), here's our new kids' collection.'", "correctBucketId": "safe", "explain": "Purchase history is a rung-1/2 signal, transparently named. The line 'you've bought from this category' is comfortable to say out loud." },
+        { "id": "s5", "situation": "Push notification 'You spent ₹2,400 on us last quarter — top 5% customer! Special offer'", "correctBucketId": "borderline", "explain": "Purchase history is fine. Tier-ranking ('top 5%') is starting to creep — implies a behind-the-scenes scoring the customer didn't agree to. Reframe ('thank you for being a regular customer'), ship." },
+        { "id": "s6", "situation": "Email: 'We noticed you visited from Pune; here's a Tier-2 starter kit.' (User is a logged-in customer who never declared their city.)", "correctBucketId": "dont", "explain": "Geolocation from IP without declared address is over the consent line. Even if technically possible, the line 'we tracked your IP' fails the test." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: creepy 1:1 personalization that backfires",
+      "md": "The trap is seductive because vendors sell it as the dream: 'AI lets you treat every customer like an individual.' What this becomes in practice is an email pipeline trained on every signal you can scrape, regulated and unregulated, until one of them shows up in a customer's inbox in a way they didn't expect.\n\nThe failure is non-linear. 95% of customers don't notice. 4% notice and unsubscribe quietly. 1% notice, screenshot, and post. That 1% is enough. India's DPDPA in 2026 has teeth; the social cost is bigger than the legal one.\n\nThe defence is upstream: don't operate below the consent floor in the first place. Segment-level personalization on declared and on-site signals doesn't trip the wire."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Drag these into the right order — designing a segment-level personalization campaign without crossing the creepy line.",
+      "items": [
+        { "id": "1", "label": "Inventory available signals and rank by consent ladder", "detail": "Drop anything below rung 3 before designing." },
+        { "id": "2", "label": "Define 4-8 segments, each n > 200, with a behavioural hypothesis", "detail": "Each segment must be answerable: why this group, what do we predict about them." },
+        { "id": "3", "label": "Draft segment-level content with brand voice anchor", "detail": "AI drafts 4-8 versions; not 4,000." },
+        { "id": "4", "label": "Apply 3-pass content review", "detail": "Voice, fact, slop. From lesson 2." },
+        { "id": "5", "label": "Run the would-you-tell-them test", "detail": "Write the 'we sent this because…' line for each segment. If you flinch, redesign." },
+        { "id": "6", "label": "Pre-register the kill criterion (unsub spike, complaint rate)", "detail": "If unsub rate > X% within 48h, pause and review." },
+        { "id": "7", "label": "Ship to one segment, monitor, then expand", "detail": "Don't blast all 8 segments at once; one bad signal source surfaces fastest in a small launch." }
+      ],
+      "hint": "Inventory → segment → draft → review → tell-test → kill criterion → staged ship."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You're designing a Diwali campaign for a Pune D2C brand expanding into Tier-2 cities. Available signals: declared festive preferences (rung 1), on-site browsing of festive collection (rung 2), 12-month purchase history (rung 1-2), pin code from delivery address (rung 1, declared at checkout), inferred lifestyle persona from a third-party data partner (rung 4).\n\nDesign 4 segments. For each, write:\n- The signal(s) you'd use (and why you skipped any)\n- The 'we sent this because…' line\n- Whether it passes the would-you-tell-them test",
+      "expected": "Skipped: third-party lifestyle persona (rung 4). Below the consent floor.\n\nSegment 1 — Festive shoppers, declared\n- Signals: declared festive preference + on-site browse this season.\n- Line: 'We sent this because you told us festive collections matter to you, and you've been browsing this season's drop.'\n- Passes the test cleanly.\n\nSegment 2 — Tier-2 newcomers (first-time, this quarter, pin code outside top 8 cities)\n- Signals: pin code (declared at checkout) + first-purchase status.\n- Line: 'Thank you for being one of our newer customers; here's a Tier-2 starter kit with regional shipping.'\n- Passes — pin code was declared, framing is welcoming.\n\nSegment 3 — Repeat 3+ purchasers in the last year\n- Signals: purchase history.\n- Line: 'You've shopped with us multiple times this year; here's a thank-you offer on your usual category.'\n- Passes — purchase history is the cleanest signal.\n\nSegment 4 — Cart-abandoners after viewing festive collection\n- Signals: on-site cart and view behaviour.\n- Line: 'You added this kurta to your cart but didn't check out — Diwali stock is moving fast; here's free shipping.'\n- Borderline-passes; would soften 'we noticed you didn't check out' into 'in case you're still deciding'."
+    },
+    {
+      "type": "quiz",
+      "prompt": "An AI-personalization vendor offers to enrich your customer base with 'lifestyle-based household income tiers' for ₹3 per record. Your customer base is 200,000. Which of these are honest reasons to refuse? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "The signal lives below the consent floor; using it fails the would-you-tell-them test.", "correct": true, "explain": "Right. The customer never consented to be income-classified by a third party for marketing." },
+        { "id": "b", "label": "Under DPDPA-style regulations, third-party enrichment without explicit consent is a regulated and increasingly enforced risk.", "correct": true, "explain": "Right. By 2026 the legal teeth are real; the optionality has shrunk." },
+        { "id": "c", "label": "₹6 lakh is too expensive for what it would deliver.", "correct": false, "explain": "Cost objection is weak; it sidesteps the substantive issue. Even at ₹0 it would be wrong to use." },
+        { "id": "d", "label": "AI personalization doesn't work.", "correct": false, "explain": "Sweeping and false. The objection is to *this signal*, not all personalization." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Naani aur shaadi-fixing aunty",
+          "md": "Naani biodata padhke shaadi fix karti thi — explicit information. Caste, salary, height, family. Sab declared. Awkward, but consensual.\n\nShaadi-fixing aunty thi jo padosi se 'pucha-pacha' ke information jutati thi. \"Suni hai unka beta US mein kaam karta hai...\" Yeh inferred. Yeh creepy. Yeh aaj DPDPA violation banti.\n\nMarketing personalization ka choice waisa hi hai. Tu Naani-mode mein chal sakta hai. Tu aunty-mode mein chal sakta hai. Aunty-mode mein customer ek baar pakad le toh forever damage."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The biodata vs the aunty network",
+          "md": "Two ways the previous generation gathered information for arranged marriages: declared biodata or the gossip-aunty network. The first was awkward but consensual; the second was inferred from sources nobody had agreed to. Marketing personalization has the same choice. Pick biodata-mode."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Personalize at the segment level, not the individual level — segments scale, individuals creep.",
+        "The consent ladder ranks signals by trust earned; never operate below the consent floor (third-party enrichment, fingerprinting).",
+        "The would-you-tell-them test is the cheapest creepy-meter you have: if you'd flinch saying the 'we sent this because…' line, redesign.",
+        "Most personalization disasters come from feeding AI signals it shouldn't have access to, not from AI itself.",
+        "By 2026, India's DPDPA is teeth-bearing; brand cost of a privacy story is bigger than the legal cost, and both are real."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Take the last personalised email your team shipped. Write the literal sentence: 'We sent this because…' Would you say it to the customer's face? If not, what specifically would you redesign?"
+    }
+  ]
+}

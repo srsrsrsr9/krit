@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 47 Tests, One Headline, Zero Replication",
+    "source": "Anonymous senior analyst at Paisa Vault, a Pune-based consumer-fintech startup",
+    "date": "March 2025",
+    "story": "On March 11, 2025, the growth-analytics team at Paisa Vault published a celebrated internal note titled *\"Why Tier-2 Cities Convert 1.8x Better Than Tier-1.\"* It went up on the company wiki, got pinned in #all-hands, and was quoted by the CEO in the next investor update. The methodology section, in tiny font on page 4, read: *\"Logistic regression with city-tier as predictor; p = 0.043.\"*\n\nWhat the note did not mention: the same analyst had run **47 hypothesis tests** that week against the same Q4 dataset. Tier, age bucket, gender, device type, referral source, time-of-day, day-of-week, NPS bucket, lifetime-value decile, and 38 others. **One** of them, by sheer luck of the multiple-comparisons fairy, came in at p < 0.05. That one became *\"the finding.\"* The other 46 went into the recycle bin.\n\nIn April, the product team rolled out a Tier-2 acquisition push based on the note. Six weeks of paid marketing, ₹38 lakh of spend. **Conversion lift: -0.4 percent.** Replication on Q1 data: p = 0.71. The growth lead, in the post-mortem on May 2, said the line that everyone now quotes back: *\"We didn't have a finding. We had a coincidence with a confidence interval.\"*\n\nThe analyst still works there. The note is still on the wiki, with a banner now: *\"RETRACTED — see post-mortem.\"*",
+    "takeaway": "If you torture a dataset long enough, it will confess to anything. State your hypothesis before you touch the data, or don't dignify what comes out as a finding."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Is Churn Really Up?",
+    "setup": "It's **Day 4** of Aditi's first week at Vyapaar Money, a Mumbai consumer-credit fintech. She has a fresh laptop, a still-sticky onboarding mug, and Slack DM from her boss at 9:47am: *\"Quick one. The leadership offsite is Friday. Is churn really up this quarter? Need a one-liner I can put on a slide. Thanks!\"*\n\nAditi opens the data warehouse. She has access to 14 tables, three years of history, and exactly **48 hours**. She pings you, her unofficial mentor.",
+    "coach": { "name": "Staff-DS Sandeep", "role": "Staff data scientist, six startups in, allergic to dashboards without denominators" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aditi types: *\"I'll just pull churn rate by month for Q3 and Q2, eyeball it, send the number.\"* What do you tell her **first**?",
+        "options": [
+          { "id": "a", "label": "\"Sounds good, ship it. Sandeep is busy.\"", "correct": false, "explain": "Sandeep watches Aditi's slide land in Friday's deck with the words *churn is up 14 percent.* Three weeks later the cohort team finds it was a denominator change — the product redefined 'active user' in August. Aditi's slide is now in a board memo. Sandeep emails her, gently.", "points": 0 },
+          { "id": "b", "label": "\"Before you query: write down what 'churn is up' would actually have to look like in the data to be true. Then go look.\"", "correct": true, "explain": "**Yes.** Hypothesis first, data second. Aditi writes: *churn is up = the cohort-adjusted 90-day retention curve in Q3 sits below the same curve in Q2 by more than the noise of the last 6 quarters.* Now she knows what query to write and what answer would actually settle it.", "points": 3 },
+          { "id": "c", "label": "\"Run 20 cuts of the data — by city, age, plan, device — and find the most dramatic chart.\"", "correct": false, "explain": "This is the Paisa Vault playbook from the field notes. Run enough cuts and one will look dramatic by chance alone. Aditi will ship a coincidence and call it a finding. Hard pass.", "points": 0 },
+          { "id": "d", "label": "\"Just ask the boss what answer he wants and back into it.\"", "correct": false, "explain": "Sandeep would like a word. This is how analysts become rubber stamps and then get blamed in retros for findings that weren't theirs to begin with.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aditi writes the hypothesis. She pulls Q2 and Q3 churn. Q2: 4.1 percent. Q3: 4.6 percent. She's about to Slack: *\"churn up 12 percent QoQ.\"* What do you say?",
+        "options": [
+          { "id": "a", "label": "\"Looks decisive. Send it.\"", "correct": false, "explain": "12 percent relative jump on a base of 4 percent is well inside the noise band of a quarterly metric on a fintech with seasonality. She's about to call a wave a tide.", "points": 0 },
+          { "id": "b", "label": "\"What's the quarter-on-quarter noise floor for the last 8 quarters? If Q1 to Q2 also moved 12 percent in random directions, this isn't a signal.\"", "correct": true, "explain": "**Exactly.** Aditi pulls the historical series and finds Q-on-Q swings of -9, +14, -6, +11, -3, +8, -7 percent over the last two years. Q3's +12 is unremarkable. The 'finding' dissolves on contact with context.", "points": 3 },
+          { "id": "c", "label": "\"Run a t-test on daily churn rates across the two quarters, report the p-value.\"", "correct": false, "explain": "A t-test on daily churn rates with n in the thousands will return p < 0.001 on tiny effect sizes that don't matter. She'll get statistical significance and zero practical significance. Wrong tool for the question.", "points": 1 },
+          { "id": "d", "label": "\"Segment by acquisition cohort first — a mix shift in new users can fake a churn spike.\"", "correct": true, "explain": "**Smart.** If Vyapaar acquired a flood of low-quality referral users in late Q2, Q3 churn looks worse without the underlying retention curve changing at all. Cohort-adjust before you call it a trend.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aditi cohort-adjusts. The Q3 curve is 0.3 points below Q2 — well inside historical noise. Boss wants a one-liner. **What does she write?**",
+        "options": [
+          { "id": "a", "label": "\"Churn is up 12 percent QoQ.\" (one number, no caveats)", "correct": false, "explain": "Confidently wrong. The number is real but the framing is misleading. Cohort-adjusted, there's no signal. This sentence will outlive the truth in every deck for the next six quarters.", "points": 0 },
+          { "id": "b", "label": "\"Headline churn ticked up from 4.1 to 4.6 percent QoQ, but cohort-adjusted retention is flat — within historical noise. No real change yet.\"", "correct": true, "explain": "**Ship this.** Specific numbers, the apparent move, the corrected interpretation, and a calibrated conclusion. Boss can put this on a slide and defend it from any VP who pulls on the thread.", "points": 3 },
+          { "id": "c", "label": "\"Churn analysis is complicated. Need more time.\"", "correct": false, "explain": "The work is done. This is a confidence problem masquerading as a thoroughness problem. Boss reads this as 'Aditi can't summarize.'", "points": 1 },
+          { "id": "d", "label": "\"Cohort-adjusted retention is flat. The 12 percent headline move is a mix-shift artifact from the June referral campaign.\"", "correct": true, "explain": "**Even better — names the cause.** If Aditi can point to the mechanism (June referral cohort dragging down headline numbers without affecting underlying retention), the boss now has a *story*, not just a number. That's a senior-analyst move.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You walked Aditi from 'pull a number' to 'state a hypothesis, check the noise floor, cohort-adjust, write a defensible one-liner' in under two days. Sandeep buys you a vada pav. This is what a data mental model looks like in practice.",
+      "good": "Decent instincts on most of it. The hypothesis-first reflex is the muscle worth building — re-read the lesson on framing before the next ad-hoc request, because the next one is already in your DMs.",
+      "learn": "Aditi shipped a slide that didn't survive contact with a curious VP. Re-read the lesson — especially the section on **stating the hypothesis before querying** and **noise floors before headlines**. The Paisa Vault retraction is a preview, not a punchline."
+    }
+  }
+}

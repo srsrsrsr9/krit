@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ₹2.4 Crore Line Item That Did Not Exist",
+    "source": "Engagement partner at Mehta Iyer & Co., a Hyderabad CA firm with a strong manufacturing client base",
+    "date": "October 2025",
+    "story": "On 11 October 2025, a first-year articleship — bright, eager, six weeks in — was asked to produce a one-page board summary of the September P&L for a client with **₹91 crore turnover** in industrial coatings. The client's CFO wanted it by 6 PM the same day for a 9 AM Sunday board call.\n\nThe junior pasted the raw trial balance into a chat interface and typed a single line: *'Summarise this P&L for a board pack. One page.'*\n\nThe AI obliged. The output read beautifully. Crisp narrative, clean variance commentary, three-bullet executive summary. Tucked into the cost-of-goods-sold breakdown, between 'raw materials' and 'consumables', sat a line: **'Forex hedging losses — ₹2,41,38,000'**.\n\nThe client did not run a forex hedging programme. The line item did not exist anywhere in the trial balance. The model had constructed a plausible-looking fabrication because the surrounding context (an exporter, a quarter of dollar weakness, a P&L in rupees) made forex hedging losses statistically reasonable. **It was a hallucinated line item with a hallucinated rupee figure.**\n\nThe junior did not catch it. The senior reviewer, time-pressed, did not catch it. The engagement partner caught it at 5:47 PM during her 13-minute final read, only because she happened to remember the client did not hedge. **₹13 minutes between fabrication and the boardroom.**\n\nThe firm now mandates structured-output prompts (JSON schema, fixed keys) and source-citation lines (every figure must point back to a trial balance row) for all AI-assisted client deliverables. The junior, to her credit, helped write the new policy.",
+    "takeaway": "Free-form prose hides hallucinations. JSON schemas expose them. If the model has to fill a fixed key, it cannot smuggle in a fictional one."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Write the P&L Summary Prompt — Without the Hallucinations",
+    "setup": "It is **Tuesday, 17 March 2026, 4:15 PM**. **Anand** is back at his desk. The 90-day rollout is in week 5; the pilot cohort is humming. Now **Senior-CA Sundari** — a 9-years-post-qual senior who runs the bookkeeping practice for the pilot clients — has dropped a problem on his desk.\n\n*'Anand. We are doing monthly P&L summaries for 8 pilot clients. The current prompt is one line: \"Summarise the September P&L\". Last month the AI invented a deferred-revenue figure for a client that runs cash-only retail. CFO almost asked us about it on a call. I want you to design a structured-output prompt by EOD. I want JSON, I want citations, I want it to fail loudly when the data is missing — not quietly invent.'*\n\nShe puts a coffee on his desk. *'Walk me through it stage by stage. I want to learn this with you.'*",
+    "coach": { "name": "Senior-CA Sundari", "role": "Senior CA, 9 years post-qualification, runs bookkeeping for the AI pilot cohort" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "**Stage 1.** Sundari asks: *'Why is \"summarise this P&L\" a bad prompt? Be specific.'*",
+        "options": [
+          { "id": "a", "label": "It is too short. Just make it longer.", "correct": false, "explain": "Length is not the issue. A 50-word prompt that says 'summarise this P&L in detail' is just as broken. The problem is structural, not verbose-vs-terse.", "points": 0 },
+          { "id": "b", "label": "It does not specify the output shape, the required fields, or the source of truth. The model is free to interpret, free to invent line items, and free to hide the inventions inside fluent prose.", "correct": true, "explain": "**Exactly.** A free-form prompt invites a free-form output. The model has no contractual obligation to stick to the trial balance, so it doesn't. Sundari nods — this is the diagnosis you wanted to lead with.", "points": 3 },
+          { "id": "c", "label": "It does not say 'do not hallucinate'.", "correct": false, "explain": "Telling a model 'do not hallucinate' is like telling a child 'do not be tired'. It is a behavioural plea, not a structural fix. The model will hallucinate anyway; it just won't know it has.", "points": 1 },
+          { "id": "d", "label": "It uses the word 'summarise'. We should say 'analyse'.", "correct": false, "explain": "Vocabulary swap does not solve the problem. 'Analyse this P&L' has the same failure mode as 'summarise this P&L' — both leave the output shape and source-of-truth unspecified.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "**Stage 2.** Sundari nods. *'Now design the output schema. What does the JSON look like?'* Pick the best version.",
+        "options": [
+          { "id": "a", "label": "`{ \"summary\": \"...\", \"highlights\": [\"...\"] }` — flexible, lets the model decide what to surface.", "correct": false, "explain": "Two free-form string fields. You have changed the wrapper but not the contract. The model will write a paragraph in 'summary' and a list of paragraphs in 'highlights', and the hallucinations come right back. Schema by name only.", "points": 0 },
+          { "id": "b", "label": "Fixed keys for every line of the standard P&L: `revenue`, `cogs`, `gross_profit`, `opex_breakdown` (with named sub-keys: `salaries`, `rent`, `utilities`, `professional_fees`, `other`), `ebitda`, `depreciation`, `interest`, `tax`, `pat`. Every value is a number in rupees plus a `source_row_id` pointing back to the trial balance row.", "correct": true, "explain": "**This is the move.** Every key is named. Every value has a source pointer. If the model wants to invent 'forex hedging losses' it has nowhere to put it — the schema does not have that key, and even if you added an `other` key, that key requires a `source_row_id`. Sundari smiles.", "points": 3 },
+          { "id": "c", "label": "One key: `narrative` (string, max 500 words).", "correct": false, "explain": "You have just put a word limit on the hallucination. The fabrication still happens; it is now 500 words instead of 800. The structural problem is unsolved.", "points": 0 },
+          { "id": "d", "label": "Fixed keys but no source pointers — pointers slow the model down and cost extra tokens.", "correct": false, "explain": "Tokens cost paise. A wrong board pack costs the engagement. The source pointer is the verifiability layer; it is the difference between a draft you can audit and a draft you have to take on faith. Skip it and you have skipped the only thing that catches fabrication.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "**Stage 3.** *'Now the failure modes. What does the prompt say when the data is missing or ambiguous?'* What instruction goes in?",
+        "options": [
+          { "id": "a", "label": "*'If a value is missing, estimate it based on prior periods.'*", "correct": false, "explain": "You have just instructed the model to fabricate, in writing. This is the prompt-engineering equivalent of telling a junior 'if you can't find the receipt, just guess'. Catastrophic.", "points": 0 },
+          { "id": "b", "label": "*'If a value cannot be derived from the supplied trial balance with a clear source row, return null for the field and add the field name to a top-level `missing_fields` array. Do not estimate, do not interpolate, do not infer from other periods.'*", "correct": true, "explain": "**Yes.** Failure has to be loud, structured, and localised. A null field plus a `missing_fields` array means the reviewer sees, at a glance, what the model could not source. No silent invention. Sundari is taking notes.", "points": 3 },
+          { "id": "c", "label": "*'Do your best.'*", "correct": false, "explain": "'Do your best' is permission to invent. Sundari sighs.", "points": 0 },
+          { "id": "d", "label": "*'Flag low-confidence values with a 🤔 emoji.'*", "correct": false, "explain": "Cute. Not parseable. The CA reviewer's eye will skim past an emoji; a structured `missing_fields` array forces a programmatic check before the file is opened. Use mechanism, not vibes.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "**Stage 4.** *'Last piece. The prompt is built. The output JSON arrives. What is the one human verification step you will not skip?'*",
+        "options": [
+          { "id": "a", "label": "Spot-check 3 random source-row pointers against the actual trial balance row. If any pointer is wrong or fabricated, reject the entire output and re-run.", "correct": true, "explain": "**Correct.** The pointer is the contract. If even one pointer is wrong, you have evidence the model is willing to fabricate the citation layer too — at which point every other figure is suspect. Three checks take 90 seconds and cost almost nothing.", "points": 3 },
+          { "id": "b", "label": "Read the narrative summary at the bottom and check it 'sounds right'.", "correct": false, "explain": "'Sounds right' is exactly how the ₹2.41 crore phantom forex line in Mehta Iyer's case slipped through. Plausibility is not verification. The narrative will always sound right; the model is good at narratives.", "points": 0 },
+          { "id": "c", "label": "Run the output through a second AI for a 'consistency check'.", "correct": false, "explain": "Two models that share training data will share blind spots. You have not added independence; you have added another opaque layer. Use a human and a deterministic rule (does row_id_X exist in the trial balance, yes/no), not another model.", "points": 1 },
+          { "id": "d", "label": "Check that the totals tie: revenue minus cogs equals gross profit, gross profit minus opex equals ebitda, and so on down the P&L.", "correct": true, "explain": "**Also correct, also non-negotiable.** Arithmetic ties are the cheapest deterministic check available. They catch a whole class of failures — copy-paste errors, double-counted rows, dropped sub-totals — that pointer checks miss. Half-credit for one, full-credit for both.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Sundari leans back. *'Anand, write this up. We are using your prompt across the pilot starting Monday.'* You diagnosed the free-form-prompt failure mode, designed a fixed-key schema with source pointers, made failure loud and structured, and named the two non-negotiable verification steps. This is what 'AI as a tool' actually looks like in a CA practice — not a chatbot, a contract.",
+      "good": "Sundari is happy with most of it but pulls you up on one or two answers. You have the structural intuition; re-read the lesson on the show-your-sources demand and the difference between estimating and sourcing. Bring v2 of the prompt by Thursday.",
+      "learn": "Sundari is firm. *'Anand, the difference between a useful AI prompt and a dangerous one is whether it can fabricate without you noticing. Re-read the lesson — the structured-output move and the show-your-sources demand. We will rewrite this together tomorrow.'* The Mehta Iyer story is in the textbook for a reason; do not be the next case study."
+    }
+  }
+}

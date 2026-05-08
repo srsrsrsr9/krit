@@ -1,0 +1,264 @@
+{
+  "slug": "ai-audit-trail",
+  "title": "Audit Trails: When AI Cannot Sign the Books",
+  "subtitle": "AI assists, the CA signs",
+  "estimatedMinutes": 14,
+  "skills": ["accounting-ai-audit-discipline"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-accounting/ai-audit-trail.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the line at the signature" },
+        { "startSec": 80, "label": "Mental model: AI assists, CA signs" },
+        { "startSec": 220, "label": "Move 1 — The eval log" },
+        { "startSec": 410, "label": "Move 2 — The four-eye review" },
+        { "startSec": 560, "label": "Trap, takeaways, capstone setup" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-accounting/ai-audit-trail.html",
+      "notesByline": "Notes by Anand, articleship batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Three years from now, a notice will arrive at a firm that used AI for an engagement in 2026. The Assessing Officer or the ICAI inspector will ask: \"Show me how this position was reached. Who reviewed what. What did the model produce. What did the human change. What model was used. When.\"\n\nIf the firm can answer those questions in fifteen minutes from a structured log, the engagement is defensible. If it cannot, it doesn't matter how good the original work was; the firm is defending itself with a story instead of a record.\n\nThis lesson is about building that record. It is the least exciting topic in the entire course and quite possibly the most important."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A workflow diagram. AI box on the left, with arrows showing prompt/response pairs flowing into a central log box. Two CAs reviewing on the right, each with a stamp marked 'reviewer 1' and 'reviewer 2'. A signature seal at the far right.",
+      "caption": "Every input, every output, every reviewer, every change — captured at the moment it happens. The signature seals the trail.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(20 70)'><rect width='110' height='130' rx='10' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='55' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#1E3A8A' font-weight='bold'>AI</text><g font-family='monospace' font-size='9' fill='#1E3A8A'><text x='10' y='56'>prompt</text><text x='10' y='72'>response</text><text x='10' y='88'>model ver</text><text x='10' y='104'>timestamp</text><text x='10' y='120'>context docs</text></g></g><path d='M130 135 L185 135' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(190 50)'><rect width='180' height='180' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#92400E' font-weight='bold'>EVAL LOG</text><g font-family='monospace' font-size='8' fill='#1F2937'><text x='10' y='52'>2026-04-14 09:14:22</text><text x='10' y='66'>engagement_id: ABC-26</text><text x='10' y='80'>model: claude-opus-4-7</text><text x='10' y='94'>prompt_hash: 3f9a...</text><text x='10' y='108'>retrieved: [doc_3, doc_7]</text><text x='10' y='122'>response_hash: 7c1b...</text><text x='10' y='136'>reviewer_1: anand@firm</text><text x='10' y='150'>changes: 3</text><text x='10' y='164'>reviewer_2: vidya@firm</text></g></g><path d='M370 135 L425 135' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(430 70)'><rect width='150' height='130' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='75' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#065F46' font-weight='bold'>2 reviewers</text><g transform='translate(15 50)'><circle cx='15' cy='15' r='12' fill='#FFF' stroke='#065F46' stroke-width='1.5'/><text x='15' y='19' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>1</text></g><g transform='translate(80 50)'><circle cx='15' cy='15' r='12' fill='#FFF' stroke='#065F46' stroke-width='1.5'/><text x='15' y='19' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>2</text></g><g transform='translate(50 95)'><polygon points='15,0 18,8 28,8 20,14 23,22 15,17 7,22 10,14 2,8 12,8' fill='#F59E0B' stroke='#92400E'/></g><text x='75' y='124' text-anchor='middle' font-family='monospace' font-size='9' fill='#065F46'>signed by partner</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: AI assists, the CA signs",
+      "md": "There is exactly one role AI plays in a regulated accounting practice: **assistant**. The signature, the opinion, the responsibility, and the liability live with the CA. Always. Without exception.\n\nThe audit trail is the evidence of this division of labour. It captures, for every AI-assisted output, what the model produced, what the human changed, who approved the change, and when. If a regulator, a partner, or a future court wants to know how a number was reached, the audit trail is the answer.\n\n**No audit trail, no defensible engagement.** It really is that binary."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-accounting/anim/ai-audit-trail-replay.html",
+      "height": 420,
+      "caption": "Replay of an audit-trail entry from 18 months ago. Watch the original prompt, retrieved passages, model response, reviewer notes, and final filed version reconstruct themselves on screen.",
+      "fallbackImage": "/courses/ai-for-accounting/anim/ai-audit-trail-replay-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Working papers, naye zamaane mein",
+          "md": "Pehle working papers physical file mein hote the. Tick marks, pencil notes, partner ka initial. Bhaag-bhaag ke retrieval karte the audit ke time.\n\nAaj — eval log JSON mein hai. Searchable, timestamped, hash-verified. Audit ke time 15 minute mein nikaal sakte ho. Kaam wahi hai — paper kam hai, discipline same hai. Jisko discipline lagta hai useless overhead, woh first notice mein samjhega working papers ka asli matlab kya hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Working papers, new format",
+          "md": "Old working papers were tick marks and partner initials in a manila file. New working papers are timestamped JSON in an eval log. The format is digital; the discipline is identical."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 1 — The eval log" },
+    {
+      "type": "markdown",
+      "md": "First named move. The **eval log** is a structured, append-only record of every meaningful AI interaction in your firm.\n\nFor each entry: the engagement ID, the date and timestamp, the model and version, the exact prompt sent (or its hash if the prompt is templated), the documents retrieved into context, the response received, who reviewed it, what they changed, and the final artefact ID it contributed to.\n\nThis is not a feature to be added later. It is the precondition for using AI in regulated work at all. A firm that uses AI without an eval log is a firm that has decided, possibly without realising it, to defend itself with anecdotes.\n\nThe practical setup is unglamorous: a database table, a few middleware lines that log every API call, and a retention policy that matches your audit retention (typically 7 years in India for tax records, 8 for company records under the Companies Act)."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A schematic of an eval log entry as a JSON-like document, with fields: timestamp, engagement_id, model, prompt_hash, retrieved_docs, response_hash, reviewer_1, changes, reviewer_2, final_artefact.",
+      "caption": "A single eval log entry. Append-only, hash-verified, queryable. This is what 'audit trail' means in 2026.",
+      "maxWidth": 540,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 360' role='img'><rect width='540' height='360' rx='14' fill='#ECFDF5'/><g transform='translate(60 30)'><rect width='420' height='300' rx='12' fill='#FFF' stroke='#065F46' stroke-width='2'/><text x='210' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>EVAL LOG ENTRY</text><line x1='20' y1='44' x2='400' y2='44' stroke='#065F46' stroke-width='1'/><g font-family='monospace' font-size='10' fill='#1F2937'><text x='20' y='66'>id:               42189</text><text x='20' y='84'>engagement_id:    ABC-26-Q4-GST</text><text x='20' y='102'>timestamp:        2026-04-14T09:14:22+05:30</text><text x='20' y='120'>model:            claude-opus-4-7</text><text x='20' y='138'>model_version:    2026-03-15</text><text x='20' y='156'>prompt_hash:      3f9a8b7c4e2d1f...</text><text x='20' y='174'>prompt_template:  gst_itc_query_v3</text><text x='20' y='192'>retrieved_docs:   [doc_3, doc_7, doc_22]</text><text x='20' y='210'>response_hash:    7c1bd4a2f9e8c3...</text><text x='20' y='228'>reviewer_1:       anand@firm.in</text><text x='20' y='246'>review_at:        2026-04-14T10:02:11+05:30</text><text x='20' y='264'>changes_made:     3 (see diff)</text><text x='20' y='282'>reviewer_2:       vidya@firm.in (partner)</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "What it looks like to defend an AI-assisted position from 2026 in 2028",
+      "steps": [
+        {
+          "label": "Step 1 — The notice arrives",
+          "body": "October 2028: an Assessing Officer questions the ITC claim of ₹4.7 lakh on motor vehicles for sales staff in your client's FY 2025-26 GSTR-3B. The position was that the vehicles fell within the 'driver training' exception. Why?"
+        },
+        {
+          "label": "Step 2 — Pull the eval log entries",
+          "body": "Search engagement_id ABC-26-Q4-GST for any entry tagged 'motor_vehicle_itc'. You find 4 entries, dating Oct 2026 to Mar 2027."
+        },
+        {
+          "label": "Step 3 — Reconstruct the position",
+          "body": "Each entry shows the prompt, retrieved passages (Sec 17(5)(a), Circular 156/12/2021, an ITAT Mumbai 2024 decision), the model's draft conclusion, the reviewer (Anand, 14-Oct-2026), changes made (2 substantive corrections), partner approval (Vidya, same day), and the final advisory note ID."
+        },
+        {
+          "label": "Step 4 — Open the actual artefact",
+          "body": "From the entry, retrieve the final advisory note. The note cites the same passages, applies them to the client's specific facts (vehicles used 70% for sales-staff transport, 30% for driver training), and concludes with the partial-claim position."
+        },
+        {
+          "label": "Step 5 — Defend or concede",
+          "body": "If the position is sound and the trail is clean, you have a defensible case file in the AO's hands within a week. If the position was weak, you concede early, pay, and learn — but you can defend the *process* even when conceding the substance."
+        },
+        {
+          "label": "Step 6 — Without the eval log",
+          "body": "No eval log: 'Honestly Sir, I think the senior CA at the time looked at the relevant section and decided. Do we have it in writing? Let me check.' That is how engagement letters become disciplinary complaints."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these belong in an eval log entry? (Select all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "The exact prompt or a hash plus the prompt template version", "correct": true, "explain": "Right. Without the prompt, you cannot reproduce the response or argue what was asked." },
+        { "id": "b", "label": "The model name and version used", "correct": true, "explain": "Right. Different model versions produce different outputs; defending an answer requires knowing which model produced it." },
+        { "id": "c", "label": "The reviewer's identity and timestamp", "correct": true, "explain": "Right. The audit trail must trace human responsibility." },
+        { "id": "d", "label": "Marketing copy describing how impressive the AI workflow is", "correct": false, "explain": "Brochure material has no place in working papers." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Eval log = chai-break ka bhanda phod prevent karta hai",
+          "md": "Tea break pe partner pucheega — \"abhi jo Q3 wala ITC position liya tha, kis basis pe?\"\n\nBina eval log: \"sir, articled assistant ne batayi thi, AI ne bhi same kaha tha, mereko sahi laga.\"  \nWith eval log: laptop khol, search 'ITC motor vehicle Q3', 14 second mein full trail dikha do.\n\nDono mein difference partner ki nazar mein partner ke level ka hi banta hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The chai-break test",
+          "md": "If a partner can ask 'show me how we got to that position' and you can produce a full trail in 30 seconds, you have a real audit trail. If you have to start a sentence with 'I think,' you don't."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 2 — The four-eye review" },
+    {
+      "type": "markdown",
+      "md": "Second named move. **Four-eye review** means every artefact that leaves the firm has been reviewed by at least two distinct chartered accountants — typically a senior who does substantive review and a partner who confirms the position and signs.\n\nFour-eye review predates AI by decades. What changes with AI is the *target* of the review: the reviewer is not just checking the junior's work; they are checking the AI's draft *and* the junior's modifications *and* the underlying basis. Three things to verify, not one.\n\nIn practice, the review is a structured walk-through: open the eval log entry, read the prompt and retrieved passages, read the model's draft, read the changes the first reviewer made and why, then form an independent judgment on the final position. If the senior CA agrees, they sign. If not, they push back, the cycle repeats.\n\nFour-eye review is non-negotiable for any artefact that goes out under the firm's name on a tax-relevant or audit-relevant matter."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram with an AI draft on the left, a junior reviewer in the middle (pair of eyes), and a senior reviewer on the right (another pair of eyes). Both reviewers' approval is required before the artefact can ship.",
+      "caption": "Four eyes, two distinct CAs, one shipped artefact. The discipline isn't new; what's new is what the eyes are looking at.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(20 80)'><rect width='110' height='80' rx='10' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='55' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#1E3A8A' font-weight='bold'>AI draft</text><text x='55' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>+ retrieved</text><text x='55' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>passages</text></g><path d='M130 120 L160 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(160 70)'><rect width='130' height='100' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='28' text-anchor='middle' font-family='monospace' font-size='11' fill='#92400E' font-weight='bold'>Reviewer 1</text><g transform='translate(40 40)'><ellipse cx='10' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='10' cy='10' r='3' fill='#1F2937'/><ellipse cx='30' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='30' cy='10' r='3' fill='#1F2937'/></g><text x='65' y='80' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>senior CA</text></g><path d='M290 120 L320 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(320 70)'><rect width='130' height='100' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='28' text-anchor='middle' font-family='monospace' font-size='11' fill='#92400E' font-weight='bold'>Reviewer 2</text><g transform='translate(40 40)'><ellipse cx='10' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='10' cy='10' r='3' fill='#1F2937'/><ellipse cx='30' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='30' cy='10' r='3' fill='#1F2937'/></g><text x='65' y='80' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>partner</text></g><path d='M450 120 L480 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(480 80)'><rect width='100' height='80' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='50' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#065F46' font-weight='bold'>shipped</text><text x='50' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>signed +</text><text x='50' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>logged</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "CA-Veteran Vidya",
+        "role": "Partner, mid-tier Pune firm, 22 years in practice"
+      },
+      "intro": [
+        "Final scenarios. These are the ones I see partners get wrong most often, and the ones the ICAI inspector will care about most.",
+        "For each, decide whether the audit-trail discipline holds or fails."
+      ],
+      "buckets": [
+        { "id": "hold", "label": "Discipline holds", "tone": "safe" },
+        { "id": "fail", "label": "Discipline fails", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "a1",
+          "situation": "Every AI prompt and response is logged with timestamp, model version, and reviewer identity. Two CAs review every advisory before it ships.",
+          "correctBucketId": "hold",
+          "explain": "Holds. Eval log + four-eye review = textbook discipline."
+        },
+        {
+          "id": "a2",
+          "situation": "Prompts are logged but only the senior CA reviews. The partner signs based on the senior's verbal summary.",
+          "correctBucketId": "fail",
+          "explain": "Fails. Partner signature without independent review collapses the four-eye discipline. The signature is on a document the partner did not actually examine."
+        },
+        {
+          "id": "a3",
+          "situation": "AI is used heavily but no logs are kept; the firm relies on the partner's memory and the staff's working notes.",
+          "correctBucketId": "fail",
+          "explain": "Fails badly. Memory and working notes are not an audit trail. First notice exposes the gap."
+        },
+        {
+          "id": "a4",
+          "situation": "Logs are kept but stored in an individual staff member's personal laptop with no backup or retention policy.",
+          "correctBucketId": "fail",
+          "explain": "Fails. Logs that cannot be retrieved 7 years later are no logs at all. Centralised storage with retention policy is required."
+        },
+        {
+          "id": "a5",
+          "situation": "Eval log captures everything but reviewers regularly approve drafts in under 60 seconds with zero changes recorded across 47 consecutive engagements.",
+          "correctBucketId": "fail",
+          "explain": "Fails. Statistical signature of rubber-stamping. A reviewer who never finds anything wrong is not reviewing. The pattern itself is a finding."
+        },
+        {
+          "id": "a6",
+          "situation": "Every advisory note carries a footer: 'Drafted with AI assistance under [model and version]; reviewed by [name 1] on [date]; signed by [name 2, partner].' Filed alongside the eval log entry.",
+          "correctBucketId": "hold",
+          "explain": "Holds. Disclosure to the client is good practice; the footer is the public-facing equivalent of the eval log entry."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the lone-reviewer shortcut",
+      "md": "Under deadline pressure, the four-eye review collapses into a one-eye review. The senior approves; the partner signs based on a verbal summary; the audit trail records two reviewers but only one actually looked.\n\n**The discipline must survive March 31st.** A discipline that holds in October and breaks in March is not a discipline; it is a preference. Build the workflow so that the partner physically cannot sign without opening the artefact, and the eval log captures the time spent on review, not just the timestamp of the click."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these activities for setting up audit-trail discipline at a firm starting an AI-assisted practice for the first time.",
+      "items": [
+        { "id": "policy", "label": "Write the firm's AI-use policy: what AI may do, what it may not, who reviews what", "detail": "Document referenced in every engagement letter." },
+        { "id": "log", "label": "Set up the eval-log infrastructure (database, middleware, retention policy)", "detail": "Centralised, append-only, hash-verified, 8-year retention minimum." },
+        { "id": "templates", "label": "Standardise prompt templates with version numbers", "detail": "So every entry can be tied back to a known prompt design." },
+        { "id": "review", "label": "Define four-eye review process for each artefact type (advisory, return, audit)", "detail": "Who is reviewer 1, who is reviewer 2, what each is looking for." },
+        { "id": "train", "label": "Train all CA staff on the workflow, the policy, and the eval log", "detail": "Including: how rubber-stamping shows up in the data and how it will be caught." },
+        { "id": "audit", "label": "Run a quarterly internal audit of the eval logs for rubber-stamp patterns", "detail": "Self-policing is cheaper than the inspector finding it." }
+      ],
+      "hint": "Policy and infrastructure come before the first prompt. Train before you ship."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Draft the four-line disclosure footer that should appear on every AI-assisted advisory note your firm issues. The footer must communicate enough for a client (or an inspector) to understand what AI did and what the CA did.",
+      "lang": "markdown",
+      "starter": "## AI-assist disclosure footer\n\n",
+      "expected": "## AI-assist disclosure footer\n\n*This advisory note was prepared with the assistance of an AI language model (claude-opus-4-7, version dated 2026-03-15). Source materials retrieved into the model's context for this opinion comprised: the CGST Act 2017, CGST Rules 2017, CBIC Notifications and Circulars current as of 2026-04-30, and the relevant ITAT decisions cited herein. The draft was reviewed and modified by [Senior CA name, ICAI Membership No. XXXXXX] on [date], and reviewed and signed by [Partner name, ICAI Membership No. XXXXXX] on [date]. Full prompt and review trail are preserved in the engagement file under reference [eval log ID].*\n\n*This advice reflects the firm's professional opinion as of the date of issue and is subject to the assumptions stated above. The signing partner accepts full professional responsibility for the position taken.*"
+    },
+    {
+      "type": "quiz",
+      "prompt": "What is the strongest sign that a firm's audit-trail discipline is real and not theatrical?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "The eval log shows substantive changes by reviewers across most engagements, not 100% approve-as-is rubber-stamping", "correct": true, "explain": "Right. A discipline that catches things is a discipline; a discipline that approves everything is theatre." },
+        { "id": "b", "label": "The eval log is colour-coded and visually impressive in client meetings", "correct": false, "explain": "Aesthetics are irrelevant. Substance is the test." },
+        { "id": "c", "label": "The firm has the most expensive AI subscription on the market", "correct": false, "explain": "Cost of tools is not discipline." },
+        { "id": "d", "label": "The partner has a quote on LinkedIn about AI transformation", "correct": false, "explain": "Marketing != audit trail." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Capstone ke liye preparation",
+          "md": "Ab tu ready hai. Capstone mein 47 SME clients ke liye AI-assisted GST reconciliation engagement scope karna hai. Sab kuch is course mein cover ho gaya — 80/20 split, classify-then-verify, structured-output prompts, confidence-scored matches, RAG, never-ship rule, eval log, four-eye review.\n\nEk hi cheez yaad rakhna: jo engagement letter mein nahi likha, woh aspect partner ki memory mein bhi nahi rahega. Specificity = defence. Vagueness = exposure."
+        },
+        "en": {
+          "tone": "info",
+          "title": "On to the capstone",
+          "md": "You now have every move you need for the capstone — the 80/20 split, classify-then-verify, structured prompts, confidence scoring, RAG, the never-ship rule, the eval log, and the four-eye review. The capstone tests whether you can put them in writing for a real client without softening the discipline."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "AI assists; the CA signs. There is no other arrangement that survives a notice or an inspection.",
+        "The eval log is the precondition for using AI in regulated work — without it, you are defending yourself with anecdotes.",
+        "Four-eye review is non-negotiable for any artefact that ships under the firm's name; the AI changes what the eyes look at, not whether two pairs are required.",
+        "Substantive review produces changes; a reviewer who consistently makes zero changes is the statistical signature of rubber-stamping, and an inspector will catch the pattern.",
+        "Disclosure to the client of AI assistance is not legal advice; it is professional practice in 2026, and it earns more trust than it loses."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Sketch the eval log schema your firm would adopt next quarter. What fields do you absolutely need, what would be nice to have, and what is the policy for retention, access, and tamper-evidence? Imagine you are explaining the design to your senior partner, who is sceptical about adding 'more software' to the firm."
+    }
+  ]
+}

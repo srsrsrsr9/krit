@@ -1,0 +1,316 @@
+{
+  "path": {
+    "slug": "testing-with-playwright",
+    "title": "Testing with Playwright",
+    "subtitle": "Tests that survive your next refactor",
+    "summary": "Most engineering teams treat tests like a cricket umpire's signal: noisy, late, and ignored. This path teaches you the mental models behind why tests are worth the slowdown, where they belong on the pyramid, and how to write Playwright suites that catch real bugs without crying wolf at 3am. By the end you can triage a flaky e2e suite, rewrite the worst offenders, and ship a CI pipeline your on-call doesn't curse.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "testing-mental-model",
+      "name": "Testing Mental Model",
+      "category": "tech",
+      "description": "Reason about why tests exist, what they protect, and when their cost is worth paying",
+      "decayDays": null
+    },
+    {
+      "slug": "testing-pyramid",
+      "name": "Test Pyramid Judgment",
+      "category": "tech",
+      "description": "Decide which tests to write at which altitude, and which to delete",
+      "decayDays": null
+    },
+    {
+      "slug": "playwright-selectors",
+      "name": "Playwright Selectors and Waits",
+      "category": "tech",
+      "description": "Write resilient locators and web-first assertions in TypeScript Playwright",
+      "decayDays": null
+    },
+    {
+      "slug": "playwright-debugging",
+      "name": "Playwright Flake Debugging",
+      "category": "tech",
+      "description": "Decode flaky failures using traces, the UI runner, and deterministic clocks",
+      "decayDays": null
+    },
+    {
+      "slug": "testing-ci-discipline",
+      "name": "CI and Test Maintenance Discipline",
+      "category": "tech",
+      "description": "Run Playwright in CI with sharding, retries, and a failure budget that keeps suites alive",
+      "decayDays": null
+    },
+    {
+      "slug": "testing-judgment",
+      "name": "Testing Judgment Under Pressure",
+      "category": "tech",
+      "description": "Make trade-offs between coverage, speed, and cost when the suite is on fire",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "testing-pyramid", "requires": "testing-mental-model" },
+    { "skill": "playwright-selectors", "requires": "testing-pyramid" },
+    { "skill": "playwright-debugging", "requires": "playwright-selectors" },
+    { "skill": "testing-ci-discipline", "requires": "playwright-debugging" },
+    { "skill": "testing-judgment", "requires": "testing-ci-discipline" }
+  ],
+  "assessment": {
+    "title": "Testing with Playwright Assessment",
+    "description": "Tests your judgment across the test pyramid, Playwright selectors and waits, flake debugging, and CI discipline. Most questions have an 'almost right' option that mirrors the most common mistake; pick the one that survives a real codebase.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["testing-judgment"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You're triaging a bug in production. Which is the *first* thing you write?",
+        "points": 1,
+        "skillSlug": "testing-mental-model",
+        "choices": [
+          { "id": "a", "label": "The fix, then a test once verified", "correct": false, "explanation": "Skips the proof you understood the bug. Half the time the fix solves a different problem and the original recurs." },
+          { "id": "b", "label": "A failing test that reproduces the bug, then the fix", "correct": true, "explanation": "The failing test is your evidence. The fix is then mechanical and the regression is locked out forever." },
+          { "id": "c", "label": "A retry with `--retries=3` to confirm it's reproducible", "correct": false, "explanation": "Retries hide bugs; they don't fix them." },
+          { "id": "d", "label": "A Slack post asking who owns the code", "correct": false, "explanation": "Sometimes useful, but not the first engineering action. Reproduce first." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A function calculates GST for a cart with 14 conditional branches across currency, payment method, and tax rules. What kind of test fits best?",
+        "points": 1,
+        "skillSlug": "testing-pyramid",
+        "choices": [
+          { "id": "a", "label": "An e2e test that fills a real form and clicks Pay", "correct": false, "explanation": "Wildly slow for what's essentially pure logic. The e2e proves wiring, not the 14 branches." },
+          { "id": "b", "label": "A unit test with representative inputs for each branch", "correct": true, "explanation": "Pure function, deterministic. Unit test runs in <5ms and covers the branching directly." },
+          { "id": "c", "label": "An integration test against a real database", "correct": false, "explanation": "GST calculation doesn't need DB. Integration adds cost without adding signal here." },
+          { "id": "d", "label": "A snapshot test of the cart total UI", "correct": false, "explanation": "Snapshot proves what the UI rendered, not whether the math is correct. Wrong altitude entirely." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Which Playwright locator is the right *first* choice for a 'Submit order' button?",
+        "points": 1,
+        "skillSlug": "playwright-selectors",
+        "choices": [
+          { "id": "a", "label": "page.locator('.btn.btn-primary.submit-order-v2')", "correct": false, "explanation": "Coupled to CSS classes; one design refactor and it dies." },
+          { "id": "b", "label": "page.getByRole('button', { name: 'Submit order' })", "correct": true, "explanation": "Role-based, name-based, framework-agnostic. The default." },
+          { "id": "c", "label": "page.getByTestId('submit-order-btn')", "correct": false, "explanation": "Test IDs are an escape hatch; reaching for them first skips the more semantic option." },
+          { "id": "d", "label": "page.locator('xpath=//button[text()=\"Submit order\"]')", "correct": false, "explanation": "XPath in 2026 is a code smell. Almost always a better Playwright API exists." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A teammate pushes this code: `const t = await page.locator('h1').textContent(); expect(t).toBe('Welcome');`. What's wrong?",
+        "points": 1,
+        "skillSlug": "playwright-selectors",
+        "choices": [
+          { "id": "a", "label": "Nothing — this is the standard pattern", "correct": false, "explanation": "Not even close. The await breaks the auto-retry, making the assertion one-shot." },
+          { "id": "b", "label": "The assertion no longer auto-retries; if the H1 renders 50ms later, the test fails", "correct": true, "explanation": "Right. Use `await expect(page.getByRole('heading')).toHaveText('Welcome')` instead." },
+          { "id": "c", "label": "The H1 selector should be `page.locator('h1.title')` for specificity", "correct": false, "explanation": "Adding more CSS coupling makes it worse, not better." },
+          { "id": "d", "label": "The string 'Welcome' should be a regex", "correct": false, "explanation": "Strings are fine. The retry break is the actual problem." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A test fails 3% of the time in CI. What's your first move?",
+        "points": 1,
+        "skillSlug": "playwright-debugging",
+        "choices": [
+          { "id": "a", "label": "Add `await page.waitForTimeout(2000)` before the failing assertion", "correct": false, "explanation": "Buries the signal under sleep. Next time the issue takes 2.1 seconds, you're flaky again." },
+          { "id": "b", "label": "Open the trace viewer for the failing run and read the timeline + network panel", "correct": true, "explanation": "The trace tells you in 60 seconds whether it's the test, the app, or your timing assumption." },
+          { "id": "c", "label": "Bump `--retries` from 2 to 5 and ship", "correct": false, "explanation": "Retries hide flake; they don't fix it. Slows CI for failing tests by 2.5x." },
+          { "id": "d", "label": "Mark it `test.skip()` with a TODO comment", "correct": false, "explanation": "The test had information for you. Now it's gagged." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which signs suggest your suite is shaped like an ice-cream cone, not a pyramid? (Pick all that apply.)",
+        "points": 2,
+        "skillSlug": "testing-pyramid",
+        "choices": [
+          { "id": "a", "label": "CI takes 28 minutes and most of it is a single e2e shard", "correct": true, "explanation": "Top-heavy suite. Classic cone." },
+          { "id": "b", "label": "You have more snapshot tests than logic tests for a pure data library", "correct": true, "explanation": "Different bait, same culture: shape over substance." },
+          { "id": "c", "label": "Devs run unit tests locally and let CI run e2e", "correct": false, "explanation": "That's healthy. Fast tests local, slow tests in CI." },
+          { "id": "d", "label": "Unit test failures cascade because of tight coupling between modules", "correct": false, "explanation": "That's a coupling problem, not a pyramid problem." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You want to test a debounced search that fires after 300ms of inactivity. What's the right approach?",
+        "points": 1,
+        "skillSlug": "playwright-debugging",
+        "choices": [
+          { "id": "a", "label": "`await page.waitForTimeout(500)` to be safely past 300ms", "correct": false, "explanation": "Real time on CI varies by 200ms+. This is how 4% flake rates start." },
+          { "id": "b", "label": "Install `page.clock` and advance virtual time with `clock.runFor(310)`", "correct": true, "explanation": "Deterministic, fast, no CI jitter. The clock is yours." },
+          { "id": "c", "label": "Bump `--retries` so the test eventually passes", "correct": false, "explanation": "Retries paper over the timing race. They don't fix it." },
+          { "id": "d", "label": "Use `expect(...).toBeVisible({ timeout: 30000 })` to give it lots of slack", "correct": false, "explanation": "Slows the test, doesn't make it deterministic. The race condition is still there." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which are *legitimate* reasons to use `--retries` in CI? (Pick all that apply.)",
+        "points": 2,
+        "skillSlug": "testing-ci-discipline",
+        "choices": [
+          { "id": "a", "label": "Smoothing over a known-flaky CI runner so dashboards aren't all red while you fix it", "correct": true, "explanation": "Acceptable as a temporary measure with a tracked deadline." },
+          { "id": "b", "label": "As a final guard against transient blips with a third-party service you can't mock", "correct": true, "explanation": "Acceptable when the third party is genuinely flaky and outside your control." },
+          { "id": "c", "label": "To hide a debounce race so you can ship a PR before a demo", "correct": false, "explanation": "Exactly the trap. Use `page.clock` and ship a real fix." },
+          { "id": "d", "label": "Because the team agreed flakes are 'normal' and 3 retries usually works", "correct": false, "explanation": "Cultural version of the trap. The day a real bug starts flaking 51% of the time, you ship it." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your `playwright.config.ts` has `retries: 3` and `workers: 1` with 312 tests. CI takes 28 minutes. What's the highest-leverage single change?",
+        "points": 1,
+        "skillSlug": "testing-ci-discipline",
+        "choices": [
+          { "id": "a", "label": "Drop retries to 0 to surface flake immediately", "correct": false, "explanation": "Surfaces flake but turns CI red while you fix everything. Dev revolt within a week." },
+          { "id": "b", "label": "Shard the suite across 4 workers/jobs in CI", "correct": true, "explanation": "Sharding is the highest-leverage change: ~4x parallelism, no test changes, no surprises. Pair it with a failure budget." },
+          { "id": "c", "label": "Delete the slowest 50 tests", "correct": false, "explanation": "Loses real coverage. Demote them down the pyramid instead." },
+          { "id": "d", "label": "Run only changed tests on each PR", "correct": false, "explanation": "Brittle and incomplete; misses regressions in untouched code paths. Possible later, not first." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What does it mean to set a 'failure budget' for your test suite?",
+        "points": 1,
+        "skillSlug": "testing-ci-discipline",
+        "choices": [
+          { "id": "a", "label": "A maximum number of tests allowed to fail in CI before the whole pipeline blocks", "correct": false, "explanation": "Confuses budgets with thresholds. A budget governs *flake*, not pass/fail per run." },
+          { "id": "b", "label": "An agreed maximum *flake rate* (e.g. 1%) above which the team stops feature work to fix tests", "correct": true, "explanation": "Right. Budgets create a forcing function: when crossed, maintenance becomes priority over features." },
+          { "id": "c", "label": "The maximum runtime the suite is allowed before being deleted", "correct": false, "explanation": "Suites should be optimised, not deleted. Runtime budgets exist but aren't called 'failure budgets'." },
+          { "id": "d", "label": "A monthly cost limit on CI minutes", "correct": false, "explanation": "Useful but unrelated to test failure rates." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "When should you reach for `page.route()` to mock a network request?",
+        "points": 1,
+        "skillSlug": "playwright-debugging",
+        "choices": [
+          { "id": "a", "label": "Always — never hit real backends from Playwright", "correct": false, "explanation": "Too absolute. E2E tests for the critical path *should* hit the real backend at least once." },
+          { "id": "b", "label": "When the test depends on a third party that's slow, flaky, or charges per call", "correct": true, "explanation": "Right: control the boundary, isolate the test, save the dollars." },
+          { "id": "c", "label": "Only when the backend doesn't exist yet", "correct": false, "explanation": "Too narrow. Mocks are valuable even when the backend exists." },
+          { "id": "d", "label": "Never — mocks make tests lie about what the system does", "correct": false, "explanation": "Real concern, wrong conclusion. Mock at the right altitude; keep one e2e for full integration." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are characteristics of well-written Playwright tests? (Pick all that apply.)",
+        "points": 2,
+        "skillSlug": "playwright-selectors",
+        "choices": [
+          { "id": "a", "label": "Locators read like the user journey: 'click Pay, fill email, ...'", "correct": true, "explanation": "Semantic locators describe behaviour, survive refactors." },
+          { "id": "b", "label": "Most assertions are `await expect(locator).to...()` with no intermediate value extraction", "correct": true, "explanation": "Web-first assertions retry; extracting first defeats the retry." },
+          { "id": "c", "label": "Strategic `waitForTimeout` calls after each navigation 'just to be safe'", "correct": false, "explanation": "Flake bombs. Auto-wait already handles navigation." },
+          { "id": "d", "label": "All CSS selectors centralised in a `selectors.ts` file with comments", "correct": false, "explanation": "Centralising bad selectors doesn't make them good." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Anita asks: 'we have 3 e2e tests for the same checkout flow with different inputs. Should I delete two of them?' What's the best answer?",
+        "points": 1,
+        "skillSlug": "testing-judgment",
+        "choices": [
+          { "id": "a", "label": "Yes, delete the redundant two", "correct": false, "explanation": "Premature; you don't know yet which inputs catch real bugs vs which are duplicate." },
+          { "id": "b", "label": "Demote the redundant inputs to a parametrised unit/integration test, keep ONE e2e for the critical path", "correct": true, "explanation": "Right: same coverage at a lower altitude. Faster CI, less flake, no signal lost." },
+          { "id": "c", "label": "Keep all three; e2e tests are precious", "correct": false, "explanation": "All three at e2e altitude is exactly the cone-shaped suite problem." },
+          { "id": "d", "label": "Add a fourth to cover edge cases", "correct": false, "explanation": "Compounds the problem. More e2e is more flake surface." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A test passes alone but fails when run in parallel. The trace shows `getByRole('button', { name: 'Save' })` matched 3 buttons. What's the root cause?",
+        "points": 1,
+        "skillSlug": "playwright-debugging",
+        "choices": [
+          { "id": "a", "label": "Parallel runs aren't supported for this test", "correct": false, "explanation": "Playwright supports parallel by default. The test isn't parallelism-incompatible; the locator is too broad." },
+          { "id": "b", "label": "The locator is too broad; multiple dialogs each have a 'Save' button. Scope it to the relevant dialog.", "correct": true, "explanation": "Right: `page.getByRole('dialog', { name: 'Edit profile' }).getByRole('button', { name: 'Save' })`." },
+          { "id": "c", "label": "Add `await page.waitForTimeout(1000)` so other tests finish first", "correct": false, "explanation": "Anti-pattern: would make tests serial-by-sleep. Fix the locator scope." },
+          { "id": "d", "label": "Mark it `test.serial` so it runs alone", "correct": false, "explanation": "Hides the locator bug and slows CI by removing parallelism for no good reason." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "You inherit a Playwright suite where coverage is 91% but a critical bug shipped to prod last week. Which of these are likely culprits? (Pick all that apply.)",
+        "points": 2,
+        "skillSlug": "testing-mental-model",
+        "choices": [
+          { "id": "a", "label": "Most assertions use `toBeDefined()` or `toBeTruthy()` rather than specific behaviours", "correct": true, "explanation": "These pass for almost any return value. Padding, not proof." },
+          { "id": "b", "label": "The team chases a coverage number rather than asking what bug each test catches", "correct": true, "explanation": "Goodhart: when the metric becomes the goal, you've lost the plot." },
+          { "id": "c", "label": "The team uses Playwright instead of Cypress", "correct": false, "explanation": "Tooling has nothing to do with this failure mode." },
+          { "id": "d", "label": "There aren't enough e2e tests in the suite", "correct": false, "explanation": "More e2e wouldn't have caught it; more *thoughtful* tests would have. Quality over altitude." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CTO asks: 'why does the suite take 28 minutes? Just delete the slow ones.' What's the best response?",
+        "points": 1,
+        "skillSlug": "testing-judgment",
+        "choices": [
+          { "id": "a", "label": "Yes, deleting the slowest 50 will get us under 15 minutes", "correct": false, "explanation": "Loses real coverage. The slow tests usually exist for a reason; the fix is to demote, not delete." },
+          { "id": "b", "label": "Sharding across 4 workers cuts wall time ~4x with zero coverage loss; deletion comes after triage, not before", "correct": true, "explanation": "Right answer: parallelise first (free win), then triage what to demote down the pyramid." },
+          { "id": "c", "label": "Tests don't matter; let's focus on shipping features", "correct": false, "explanation": "Absolutely not. The CTO will quote that to the press during the next outage." },
+          { "id": "d", "label": "Add `--retries=10` so we're more confident in the slow ones", "correct": false, "explanation": "Compounds the slowness and the flake-hiding problem." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "When refactoring an e2e test that uses `.locator('.btn-primary')`, what's the best replacement?",
+        "points": 1,
+        "skillSlug": "playwright-selectors",
+        "choices": [
+          { "id": "a", "label": "`page.locator('button.btn-primary')` for more specificity", "correct": false, "explanation": "Still coupled to CSS class; one rename and it dies." },
+          { "id": "b", "label": "`page.getByRole('button', { name: <visible label> })`", "correct": true, "explanation": "Role + accessible name. Survives style refactors." },
+          { "id": "c", "label": "`page.getByTestId('btn-primary')`", "correct": false, "explanation": "Test ID is the escape hatch; reach for role first." },
+          { "id": "d", "label": "Wrap it in a helper function and call the helper everywhere", "correct": false, "explanation": "Centralising bad selectors doesn't make them good." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "playwright-flake-rescue",
+    "title": "Capstone: Rescue a 14% Flake Rate Suite in Two Sprints",
+    "prompt": "## The ask\n\nYou just joined a Pune-based B2B SaaS (let's call them **LedgerKite**, ~80 engineers, customers across Tier-2 India). The QA lead, Anita, drops a Slack on your second day:\n\n> \"Bhai, the e2e suite is on fire. **14% flake rate** over the last 30 days, **28-minute CI run** on every PR, devs are skipping it locally and force-merging on green retries. Two sprints. Fix it. The CTO is watching.\"\n\nThat's the entire brief. No code, no list of failing tests, no dashboard link. Anita is at a customer site for the next 48 hours.\n\n## What you have\n\n- 312 Playwright tests in TypeScript (mix of e2e, integration, and a few unit-shaped ones that snuck in)\n- A `playwright.config.ts` with `retries: 3` and no sharding\n- GitHub Actions running the full suite on every PR, 1 worker\n- A `flaky-tests.csv` Anita exported: 41 tests with flake rates >5%\n- The team has never used the trace viewer\n\n## Deliverables (Markdown, ~800-1200 words total)\n\n1. **Triage plan** — How do you classify the 41 flaky tests in week 1? What questions do you ask Anita when she's back? What do you measure before touching anything?\n2. **The first 5 tests to rewrite** — Pick 5 representative failure modes (you can invent the test names; describe each in 2-3 sentences). For each, write the *fix pattern* in TypeScript Playwright (real APIs: `getByRole`, `waitForResponse`, `page.clock`, `expect(locator).toBeVisible()` etc.).\n3. **The eval** — How will you know in 2 weeks whether you've actually improved things? Define 3 metrics with target numbers. Be honest about which one matters most.\n4. **The rollback plan** — If your changes make things *worse* (slower, more flaky, devs revolt), what's the kill switch? When do you pull it?\n\n## Constraints\n\n- You cannot rewrite the whole suite. Pick your battles.\n- You cannot add headcount. Anita and 2 SDETs are it.\n- You cannot disable CI on `main`.\n- Skipping a test counts as making the metric worse, not better.\n\nThe CTO will read this. Anita will defend it. Write like both are in the room.",
+    "rubric": [
+      {
+        "criterion": "Correctness",
+        "levels": [
+          { "label": "Triage logic is sound, fix patterns use real Playwright APIs correctly, metrics are measurable and tied to the actual problem", "points": 4 },
+          { "label": "Mostly right but one fix pattern misuses an API or one metric isn't actually measurable", "points": 3 },
+          { "label": "General shape is right but APIs are vague or metrics are vibes ('feels less flaky')", "points": 2 },
+          { "label": "Recommends sleep statements, retries-as-fix, or 'just delete the flaky tests'", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Craft",
+        "levels": [
+          { "label": "Reads like a senior SDET wrote it; named patterns, specific selectors, clear before/after, the rollback plan has a real trigger condition", "points": 4 },
+          { "label": "Clear and structured but the rollback is hand-wavy or the fix patterns lack a named move", "points": 3 },
+          { "label": "Functional but generic; could be about any tool, not specifically Playwright", "points": 1 },
+          { "label": "Slack-message quality; bullet points without examples", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Edge handling",
+        "levels": [
+          { "label": "Asks the right clarifying questions of Anita, accounts for the dev-revolt risk, names the failure mode where the fix itself becomes flaky", "points": 4 },
+          { "label": "Handles 2 of 3 edge cases (missed clarifying questions OR no plan for dev pushback OR no second-order risk)", "points": 2 },
+          { "label": "Treats the brief as fully specified; no clarifying questions, no rollback nuance", "points": 1 },
+          { "label": "Ignores constraints (suggests adding headcount, skipping tests, or disabling CI)", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "testing-with-playwright",
+    "title": "Testing with Playwright",
+    "description": "Proves the holder can write Playwright suites in TypeScript, debug flake using traces and deterministic clocks, and run a maintainable CI pipeline that survives real product velocity.",
+    "issuerName": "Krit Academy"
+  }
+}

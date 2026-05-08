@@ -1,0 +1,223 @@
+{
+  "slug": "ai-strategy-mental-model",
+  "title": "What AI Actually Does for a Business",
+  "subtitle": "Two curves shifted; everything else is just shopping",
+  "estimatedMinutes": 14,
+  "skills": ["leader-ai-strategy"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-leaders/ai-strategy-mental-model.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the 'AI-first' slogan trap" },
+        { "startSec": 80, "label": "Mental model: two curves, not one wave" },
+        { "startSec": 220, "label": "Move 1 — the 80/20 capability lens" },
+        { "startSec": 410, "label": "Move 2 — the 'what's now feasible' question" },
+        { "startSec": 560, "label": "Trap, takeaways, reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-leaders/ai-strategy-mental-model.html",
+      "notesByline": "Notes by Vikrant, MBA-2024 batch"
+    },
+    {
+      "type": "markdown",
+      "md": "Your CEO said the company is 'AI-first now.' The all-hands clapped. Engineering went back to their laptops. By Tuesday, three product managers had drafted three different AI roadmaps; by Friday, two of them had quietly hired vendors.\n\nThis is what a strategy without a model looks like. The slogan is doing all the work. By the end of this lesson you will have a model with two axes that turns every AI conversation in your company into a structured one. You will also know which 80% of AI features at your company are theatre, and which 20% might be real."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two curves on a chart: a downward-sloping cost curve (cost per task) and an upward-sloping capability curve (max difficulty solvable). They cross at a region labelled 'now feasible.'",
+      "caption": "Two curves moved. Cost per AI-completed task fell. Maximum task difficulty AI can handle rose. The intersection is your strategy surface; nothing outside it is your job.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='12' fill='#1F2937'><line x1='60' y1='40' x2='60' y2='270' stroke='#1F2937' stroke-width='2'/><line x1='60' y1='270' x2='540' y2='270' stroke='#1F2937' stroke-width='2'/><text x='30' y='160' transform='rotate(-90 30 160)' text-anchor='middle' fill='#6B7280'>cost / capability</text><text x='300' y='295' text-anchor='middle' fill='#6B7280'>time</text><path d='M70 70 Q200 80 320 130 T540 250' stroke='#F43F5E' stroke-width='3' fill='none'/><text x='80' y='62' fill='#9F1239' font-weight='bold'>cost per task</text><text x='480' y='240' fill='#9F1239'>↓ falling</text><path d='M70 250 Q200 240 320 180 T540 80' stroke='#10B981' stroke-width='3' fill='none'/><text x='80' y='265' fill='#065F46' font-weight='bold'>max task difficulty</text><text x='450' y='95' fill='#065F46'>↑ rising</text><circle cx='320' cy='155' r='52' fill='#FCD34D' opacity='0.4' stroke='#92400E' stroke-width='2' stroke-dasharray='5 3'/><text x='320' y='150' text-anchor='middle' font-weight='bold' fill='#92400E'>NOW</text><text x='320' y='168' text-anchor='middle' fill='#92400E' font-size='11'>feasible</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: AI shifted two curves, not one wave",
+      "md": "Forget 'AI is a wave.' Waves do not give you decision rules.\n\n**AI is two curves moving against each other.** Curve one is the *cost* of completing a unit of cognitive task — it has fallen roughly 90% in 24 months on most language tasks. Curve two is the *capability frontier* — the maximum task difficulty an off-the-shelf model can attempt with non-laughable accuracy. It has risen.\n\nThe area where these two curves intersect is the only strategically interesting region in your business. Outside that region, AI is irrelevant or unaffordable. Your job as a leader is not to chase the wave; it is to identify which of your problems just walked into the intersection."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-leaders/anim/ai-strategy-mental-model-curves.html",
+      "height": 420,
+      "caption": "Watch the cost curve fall and the capability curve rise. Notice which problems pass through the intersection in 2024, in 2025, in 2026."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Founder ne deck mein ChatGPT screenshots daal diye",
+          "md": "Bhai, scene yeh hai. VC ne pucha — \"AI strategy?\" Founder ne deck mein **slide 7 pe ChatGPT ke screenshots** daal diye. Caption — \"AI-powered customer success.\"\n\nVC ne sirf ek question pucha — \"kaunsi cost curve shift hui jo aapne notice kiya?\" Slide 8 nahi tha. Founder ne kaha — \"voh next milestone hai.\" Round closed. **Cheque nahi cuta.**\n\nMoral: screenshot ke neeche curve nahi ho toh slide nahi, ad hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The deck without the curve",
+          "md": "Founder pitches an 'AI-powered' product. The deck has GPT screenshots. The VC asks one question: which curve shifted that made this possible now? There is no slide 8. The cheque does not clear. The lesson generalises beyond fundraising."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The 80/20 capability lens"
+    },
+    {
+      "type": "markdown",
+      "md": "Most of your team's AI ideas are not bad; they are *misallocated*. Eighty percent of them are about tasks where AI is technically possible but commercially uninteresting; the other twenty percent are about tasks where AI just became commercially possible for the first time.\n\nThe 80/20 capability lens is one question, asked twice, in this order:\n\n1. **What is now feasible that was not feasible 18 months ago?** (Capability curve.)\n2. **At what cost?** (Cost curve.)\n\nIf you cannot answer question 1 in a sentence, the idea is theatre. If question 1 has an answer but question 2 does not, the idea is a research project, not a product. Both go to the bottom of the stack.\n\nA crisp number for the lens: at a Bengaluru SaaS series-B I worked with in 2026, this single question killed 19 of 23 proposed AI features in a 90-minute review and saved roughly ₹1.7 crore in build cost."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A funnel labelled '23 AI ideas in.' Three filters: 'capability shift named?', 'cost makes sense?', 'user problem real?'. Out the bottom: 4 surviving ideas.",
+      "caption": "The 80/20 capability funnel. Most ideas die at the first filter; the survivors are the ones worth resourcing.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><polygon points='40,40 540,40 470,90 110,90' fill='#EDE9FE' stroke='#5B21B6' stroke-width='2'/><text x='290' y='65' text-anchor='middle' font-weight='bold' fill='#4C1D95'>23 AI ideas in</text><text x='290' y='82' text-anchor='middle' font-size='11' fill='#5B21B6'>(every product manager has three)</text><polygon points='110,100 470,100 410,150 170,150' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='290' y='125' text-anchor='middle' font-weight='bold' fill='#9D174D'>Filter 1: which curve shifted?</text><text x='290' y='142' text-anchor='middle' font-size='11' fill='#9D174D'>Cuts ~14 ideas</text><polygon points='170,160 410,160 360,210 220,210' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='290' y='185' text-anchor='middle' font-weight='bold' fill='#92400E'>Filter 2: cost makes sense?</text><text x='290' y='202' text-anchor='middle' font-size='11' fill='#92400E'>Cuts ~5 more</text><polygon points='220,220 360,220 320,260 260,260' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='290' y='245' text-anchor='middle' font-weight='bold' fill='#065F46'>4 survive</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation moment — 'we should use AI for support' becomes a strategy bullet",
+      "steps": [
+        { "label": "Step 1 — The English question", "body": "Director of CX says: 'We should use AI for customer support.' Sounds reasonable. Means almost nothing." },
+        { "label": "Step 2 — Curve check (capability)", "body": "Ask: what is now feasible? 'Drafting responses to ambiguous tickets in passable English' became feasible in 2024. 'Resolving complex billing disputes end-to-end' did not." },
+        { "label": "Step 3 — Curve check (cost)", "body": "Ask: at what cost? Drafting at ~₹0.40 per ticket vs an agent at ₹38. Ratio is 95:1, well past the 'commercially interesting' threshold." },
+        { "label": "Step 4 — Scope the surface", "body": "Restate as: 'Draft first-response for tier-1 tickets in English-only categories. Agent edits before send. Tier-2 unchanged.' This is now a feature spec, not a slogan." },
+        { "label": "Step 5 — Tag the assumption", "body": "Write down: 'We assume our tier-1 ticket mix is >60% English-only and that draft acceptance is >55%. We will know by day 45.' This goes into the assumption ledger you will build in lesson 5." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your CTO suggests building 'an AI tutor that answers any student question in any language with full personalisation.' What is the leadership-grade response?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Ask which capability shift made this feasible in the last 18 months — and which sub-task is now under cost, separately.", "correct": true, "explain": "Correct. You have just split a slogan into a capability question and a cost question. If the CTO can answer both, you have a feature; if not, you have a research project." },
+        { "id": "b", "label": "Approve the spec; AI tutoring is the future of edtech.", "correct": false, "explain": "Slogan-driven approval. 'Future of edtech' is true and useless; it does not tell you which sub-task to fund." },
+        { "id": "c", "label": "Reject the idea; AI tutors hallucinate.", "correct": false, "explain": "Reasonable concern, wrong altitude. Hallucination is a property of the implementation; a scoped sub-task with eval gates can keep it bounded. Premature rejection costs you the 20%." },
+        { "id": "d", "label": "Hire a Chief AI Officer to evaluate.", "correct": false, "explain": "Org-chart deflection. You can apply the 80/20 lens in the same meeting; outsourcing it adds three months and no information." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "All-hands ke baad ka real scene",
+          "md": "CEO ne all-hands mein bola — \"hum AI-first hain.\" Engineering ne lunch ke time pe pucha — \"mtlb kya?\" CTO bola — \"matlab API access.\" Engineering ne dekha — **12 ghante ka rate-limit hai, sirf 4 prompts per minute, aur token budget mein lunch nahi aata.**\n\nSlogan upar, capacity neeche. Curve shift hua tha, lekin company ke andar tak nahi pahuncha tha. Bhai, AI-first banne ka cost API quota hai, slide nahi."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Slogan up top, capacity at the bottom",
+          "md": "The CEO declared 'AI-first.' Engineering discovered that 'AI-first' meant a 4-prompts-per-minute rate limit and a token budget that didn't cover lunch. The capability curve had moved outside the company; it had not moved inside the company. Slogans cannot create capacity."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 'what's now feasible that wasn't' question"
+    },
+    {
+      "type": "markdown",
+      "md": "Move 2 is a habit, not a framework. Every time someone in your company proposes an AI feature, you ask one question, in exactly these words:\n\n> *\"What is now feasible that was not feasible 18 months ago — and how do we know?\"*\n\nThe phrasing matters. Not 'is AI useful here?' (yes, always, vacuously). Not 'should we use AI?' (slogan). Not 'what is your roadmap?' (premature). The question forces the proposer to name a *delta in capability* and *cite evidence*. If they cannot, the conversation ends.\n\nIn six months of using this question at a Pune fintech, the leadership team killed roughly 60% of incoming AI proposals at the first meeting; the survivors had a notably higher production-deployment rate, around 73% versus 18% before."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A two-by-two matrix. X-axis: 'capability shifted' yes/no. Y-axis: 'cost in the right zone' yes/no. The four cells: 'fund', 'wait', 'research', 'theatre'.",
+      "caption": "The leader's 2x2 for any AI proposal. Most of what crosses your desk lives in the bottom-right.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 360' role='img'><rect width='560' height='360' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#1F2937'><text x='280' y='30' text-anchor='middle' font-weight='bold' font-size='14' fill='#065F46'>The leader's 2x2 for AI proposals</text><line x1='280' y1='60' x2='280' y2='320' stroke='#374151' stroke-width='2'/><line x1='80' y1='190' x2='480' y2='190' stroke='#374151' stroke-width='2'/><text x='180' y='55' text-anchor='middle' font-size='11' fill='#374151'>Capability shifted? NO</text><text x='380' y='55' text-anchor='middle' font-size='11' fill='#374151'>Capability shifted? YES</text><text x='40' y='130' text-anchor='middle' font-size='11' fill='#374151' transform='rotate(-90 40 130)'>Cost OK? YES</text><text x='40' y='265' text-anchor='middle' font-size='11' fill='#374151' transform='rotate(-90 40 265)'>Cost OK? NO</text><rect x='90' y='70' width='180' height='110' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='180' y='115' text-anchor='middle' font-weight='bold' fill='#92400E'>WAIT</text><text x='180' y='135' text-anchor='middle' font-size='10' fill='#92400E'>same as last year;</text><text x='180' y='148' text-anchor='middle' font-size='10' fill='#92400E'>no new bet justified</text><rect x='290' y='70' width='180' height='110' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='380' y='115' text-anchor='middle' font-weight='bold' fill='#065F46'>FUND</text><text x='380' y='135' text-anchor='middle' font-size='10' fill='#065F46'>this is the 20%;</text><text x='380' y='148' text-anchor='middle' font-size='10' fill='#065F46'>cohort + kill criterion + ship</text><rect x='90' y='200' width='180' height='110' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='180' y='245' text-anchor='middle' font-weight='bold' fill='#9D174D'>THEATRE</text><text x='180' y='265' text-anchor='middle' font-size='10' fill='#9D174D'>shiny demo, no math;</text><text x='180' y='278' text-anchor='middle' font-size='10' fill='#9D174D'>kill at the first meeting</text><rect x='290' y='200' width='180' height='110' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='380' y='245' text-anchor='middle' font-weight='bold' fill='#1E40AF'>RESEARCH</text><text x='380' y='265' text-anchor='middle' font-size='10' fill='#1E40AF'>real shift, wrong cost;</text><text x='380' y='278' text-anchor='middle' font-size='10' fill='#1E40AF'>revisit in 6 months</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Board-Member Bharat",
+        "role": "Independent director, ex-CFO of a listed mid-cap, has watched four CEOs say 'AI-first' in the last 36 months"
+      },
+      "intro": [
+        "Aap aaye. Baith jaaiye.",
+        "Main aapko paanch AI proposals dikhata hoon — woh proposals jo aapke peers ne board ke saamne rakhe. Aap classify kijiye: **fund**, **wait**, **theatre**, ya **research**.",
+        "Spoiler — main inn proposals ko already dekh chuka hoon. Mera passing percentage 22% hai. Aap se umeed kam hai, but try toh kijiye."
+      ],
+      "buckets": [
+        { "id": "fund", "label": "Fund", "tone": "safe" },
+        { "id": "wait", "label": "Wait", "tone": "neutral" },
+        { "id": "research", "label": "Research", "tone": "neutral" },
+        { "id": "theatre", "label": "Theatre", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "D2C founder pitches: 'AI-powered personalised email recommendations for our 4 lakh subscribers. We will use GPT.' No baseline, no cohort, no curve cited.", "correctBucketId": "theatre", "explain": "Theatre. Personalised email recs have been industry-standard since 2014; no curve shifted. Adding 'GPT' is rebranding, not strategy. Kill at the first meeting." },
+        { "id": "s2", "situation": "Insurance company head of claims pitches: 'Use a multimodal model to read damage photos and pre-fill the claim form. Pilot on motor claims under ₹50,000. Eval set of 2,000 historical claims attached. Cost ~₹4 per claim vs ₹180 for the manual coder.'", "correctBucketId": "fund", "explain": "Fund. Multimodal capability genuinely shifted in 2024; cost ratio 45:1; cohort is scoped; eval set exists. This is the 20%. Ship the pilot, attach a kill criterion." },
+        { "id": "s3", "situation": "EdTech head pitches: 'Build a fully personalised AI tutor that adapts to each child's learning pace across all 11 subjects in 7 languages.' No sub-task scoping; no eval; cited 'OpenAI is doing it'.", "correctBucketId": "theatre", "explain": "Theatre. Slogan-shaped scope, no curve evidence, no cohort. The 'OpenAI is doing it' is the giveaway: that is comparison-driven, not problem-driven. Kill it. (Note: a *scoped* version of this — 'hint generation for class-7 algebra word problems' — could have been fund-able. The pitch did not do the scoping work.)" },
+        { "id": "s4", "situation": "CFO pitches: 'Use AI to fully automate our financial close. Replace 40% of the finance team in 9 months.' Cost-per-token math attached, but the eval set has 12 examples and the 'agent' has no fallback path.", "correctBucketId": "research", "explain": "Research. The capability is genuinely interesting; the cost math is plausible; but a 12-example eval set on a function with audit liability is reckless. Don't fund yet; revisit when there is a 500+ example eval set and a fallback path." },
+        { "id": "s5", "situation": "Head of Sales pitches: 'AI to score inbound leads and route them automatically.' Lead-scoring has worked at the company since 2017; the proposal cites no new capability shift.", "correctBucketId": "wait", "explain": "Wait. Lead-scoring is the textbook 'no curve shifted' case. The existing model is fine; an LLM rewrite is mostly a project to keep someone employed. Revisit in 12 months when the cost falls another order of magnitude." },
+        { "id": "s6", "situation": "Hospital CTO pitches: 'AI to draft discharge summaries from doctor notes. Pilot on 1 ward, 3-month duration, eval against gold-standard human-written summaries on 800 cases. Disclaimer: the model is wrong on roughly 11% of summaries today.'", "correctBucketId": "research", "explain": "Research. The capability shifted, the cohort is right, the eval is real. But 11% wrong on a discharge summary is unsafe to ship as-is. Fund the next eval cycle, not the rollout. The honest disclosure of the failure rate is a good sign." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: shiny demo, no measurable outcome",
+      "md": "The single most common failure pattern in 2024-26 leader AI programs: a team builds a demo, shows it at all-hands, gets applause, ships nothing.\n\nThe fix is not 'demand more demos.' The fix is **never let a demo end without a measurable outcome attached, in writing, before anyone leaves the room.** A demo without a cohort-scoped metric is a screensaver.\n\nA crisp number from a 2026 Bengaluru SaaS post-mortem: 87% of internal AI demos that received standing applause never reached 1,000 users. The 13% that did had one thing in common — a cohort and a metric written on a slide *during* the demo, not after."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're handed an AI feature proposal. Order the questions you ask, from first to last.",
+      "items": [
+        { "id": "1", "label": "Which capability shifted in the last 18 months that makes this feasible now?", "detail": "If they cannot answer, the rest does not matter. Stop here." },
+        { "id": "2", "label": "What is the cost per task, and what is the manual baseline?", "detail": "If the ratio is < 5:1, the bet rarely survives 12 months." },
+        { "id": "3", "label": "Which user cohort do we test on, and how is it scoped?", "detail": "'All users' is not a cohort. 'English-only tier-1 tickets in the first 30 days' is." },
+        { "id": "4", "label": "What's the 90-day kill criterion?", "detail": "Threshold + cohort + action. 'We'll revisit' does not count." },
+        { "id": "5", "label": "Who owns it, and where does the 'why' live?", "detail": "If only the AI team can articulate the user problem, the program is rudderless." },
+        { "id": "6", "label": "What goes into the assumption ledger?", "detail": "Five to seven dated assumptions; the bet is the conjunction of these holding." }
+      ],
+      "hint": "The earliest filters are cheapest. Curve check first; budget and ledger last."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Pick one AI idea floating around your company right now (your own, or someone else's). Apply the 'what's now feasible that wasn't' question. Write a 2-3 sentence answer naming (a) the specific capability shift, (b) the cost ratio against the manual baseline, and (c) the user cohort you would scope for the first 90 days. If you cannot answer (a), say so explicitly — that itself is useful information.",
+      "expected": "Strong answer (paraphrased example):\n\n'(a) In late-2024, multimodal models reliably read low-resolution screenshots of receipts in mixed Hindi-English. (b) Our manual data-entry cost is ~₹22 per receipt; LLM cost is ~₹0.80, ratio ~27:1. (c) First 90 days: only motor-insurance claims under ₹25,000 from our top-3 distributor cities, with a hard fallback to manual entry on any low-confidence read.'\n\nWeak answer pattern: 'AI is getting really good and we should use it for our forms.' (No capability shift named. No cost. No cohort. This is the 80%.)"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of the following are signs an AI proposal lives in the 'theatre' quadrant? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "The proposal cites 'AI-first' or 'cutting-edge AI' but does not name which capability shifted.", "correct": true, "explain": "Yes. Sloganeering without a named curve shift is the canonical theatre signature." },
+        { "id": "b", "label": "The pilot is scoped to a specific user cohort with a 90-day metric.", "correct": false, "explain": "Opposite. Cohort scoping with a metric is the signature of the *fund* quadrant, not theatre." },
+        { "id": "c", "label": "The cost-per-task math is missing or hand-waved ('we'll figure it out').", "correct": true, "explain": "Yes. Missing cost math means either no one did the work, or the work was done and the answer was bad. Either way, theatre." },
+        { "id": "d", "label": "The eval set has 800+ representative examples and a known failure rate.", "correct": false, "explain": "Strong signal of *research* or *fund*, not theatre. A real eval set is one of the most expensive artefacts to fake." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Mummy-aunty test for AI strategy",
+          "md": "Apni mummy ko 30 second mein samjhao — \"company AI mein kya kar rahi hai.\" Agar tu bola — \"hum AI-first hain, transformation chal raha hai\" — mummy bolegi — \"matlab kuch nahi.\"\n\nAgar tu bola — \"hum customer support ke top-1 tickets ke draft AI se likhwa rahe hain, isse roz 4 ghante bachte hain, agent edit karke send karta hai\" — mummy bolegi — \"theek hai, paisa bach raha hai toh accha hai.\"\n\nMummy nahi convince hui toh board nahi convince hoga. Mummy-aunty test pass kar."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The mummy-aunty test, generalised",
+          "md": "Explain your AI strategy to a non-technical relative in 30 seconds. If you find yourself reaching for 'transformation' or 'AI-first', you have not finished thinking. Boards have a higher bar than your aunty, but the failure mode is identical."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "AI is two curves moving against each other — cost falling, capability rising. Strategy lives where they cross.",
+        "Most AI ideas at your company are theatre; the 80/20 lens kills them in one meeting.",
+        "Ask one question — 'what is now feasible that was not feasible 18 months ago, and how do we know?' — and ask it every time.",
+        "A demo without a cohort-scoped metric is a screensaver; never let a demo close without one.",
+        "If your strategy fails the mummy-aunty test, your board will not save you."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick the next AI proposal sitting in your inbox or your team's roadmap. Plot it on the 2x2 (capability shifted? cost OK?) and write one sentence on which quadrant it lives in. If it lands in 'fund', ask yourself why it is not already funded. If it lands in 'theatre', ask yourself why it is still on the roadmap."
+    }
+  ]
+}

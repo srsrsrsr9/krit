@@ -1,0 +1,270 @@
+{
+  "slug": "talking-to-users",
+  "title": "Talking to Users Without Getting Lied To",
+  "subtitle": "They tell you what they want; your job is to hear what they need",
+  "estimatedMinutes": 13,
+  "skills": ["pm-user-research"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/product-management/talking-to-users.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the polite-Indian problem" },
+        { "startSec": 80, "label": "Mental model: stated want vs revealed need" },
+        { "startSec": 220, "label": "Move 1 — Tell me about the last time" },
+        { "startSec": 410, "label": "Move 2 — The silence move" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/product-management/talking-to-users.html",
+      "notesByline": "Notes by Aryan, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Users will lie to you. Not maliciously — politely, helpfully, with smiles. They will say they love your product, want your dark mode, would absolutely pay for the new tier. None of it predicts what they will do.\n\nThis is a special problem in India, where saying no to a stranger is mildly impolite and saying no to a stranger who is *clearly trying their best* is socially expensive. Your interview transcripts are a museum of well-meaning lies.\n\nThe fix is not to call users liars. The fix is to **stop asking the questions that produce lies**. By the end of this lesson you will know two moves that pull real signal out of a user without making either of you uncomfortable."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two speech bubbles. Bubble 1 from a user: 'I would absolutely use a dark mode!' Bubble 2 from the same user, smaller: 'I have not opened the app in 3 weeks.' Below, an arrow labelled 'PM listens to bubble 1, ignores bubble 2'.",
+      "caption": "What they say versus what their behavior says. Most PMs tune in to the louder, wronger signal.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FEF3C7'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(40 40)'><path d='M0 30 Q0 0 30 0 L290 0 Q320 0 320 30 L320 70 Q320 100 290 100 L60 100 L40 130 L40 100 L30 100 Q0 100 0 70 Z' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='160' y='45' text-anchor='middle' font-size='14' font-weight='bold' fill='white'>I would absolutely use a dark mode!</text><text x='160' y='68' text-anchor='middle' font-size='11' fill='#D1FAE5' font-style='italic'>(stated want — feels real, isn't)</text></g><g transform='translate(170 175)'><path d='M0 20 Q0 0 20 0 L260 0 Q280 0 280 20 L280 50 Q280 70 260 70 L40 70 L20 90 L20 70 Q0 70 0 50 Z' fill='#9CA3AF' stroke='#374151' stroke-width='1.5' opacity='0.85'/><text x='140' y='30' text-anchor='middle' font-size='11' fill='white'>I haven't opened the app in 3 weeks</text><text x='140' y='50' text-anchor='middle' font-size='10' fill='#E5E7EB' font-style='italic'>(revealed behavior — quiet, true)</text></g><text x='280' y='265' text-anchor='middle' font-size='11' fill='#7C2D12' font-style='italic'>most PMs hear the loud one and miss the quiet one</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: users tell you what they want, not what they need",
+      "md": "Treat every user statement as having two channels:\n\n- **Channel A** — what they say. Loud, polite, optimistic, designed to make you feel good.\n- **Channel B** — what they actually do, did, or are doing right now. Quiet, often invisible, always more accurate.\n\nGood interviews tune the volume on Channel B. Bad interviews crank Channel A and call it research.\n\nThe failure mode for a junior PM is not asking the wrong questions — it's asking *future-tense* questions ('would you use…', 'would you pay for…') and treating the answers as data. They aren't. They're aspirations."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/product-management/anim/talking-to-users-channels.html",
+      "height": 420,
+      "caption": "Watch a single interview play twice — once with future-tense questions (loud lies), once with past-tense questions (quiet truth).",
+      "fallbackImage": "/courses/product-management/anim/talking-to-users-channels-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Aunty test ka satya",
+          "md": "Bhai, scene yeh hai. PM gaya aunty ke ghar product dikhane. Aunty ne chai pilayi, biscuit khilaye, app dekha. PM ne poocha — *'Aunty, kaisa laga? Use karoge?'*\n\nAunty: *'Beta, bahut acchha hai. Zaroor karungi. Mera number bhi de do, app daal ke batati hoon.'*\n\nApp install nahi hua. PM se contact bhi nahi kiya. Lekin uss 30 minute mein PM ko laga product is *fire*. **Aunty ne lie nahi kiya — Aunty ne tameez kiya.** Yeh tameez aapka roadmap fa-fa kar deti hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The polite no, in three acts",
+          "md": "You demo your product to a friend's parent. They serve you tea, listen patiently, smile, say 'this is wonderful, I'll definitely use it, send me the link.' They never install it. They never reply.\n\nThey didn't lie. They were polite. Politeness is the loudest noise in your research data, and you have to learn to filter it without becoming rude in the process."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — 'Tell me about the last time…'"
+    },
+    {
+      "type": "markdown",
+      "md": "The single most useful sentence in user research is **'Tell me about the last time you…'** It does three things at once.\n\nFirst, it forces past-tense. The user can't aspire; they have to remember. Memory is messy, but messy memory is closer to truth than confident future-tense.\n\nSecond, it forces specifics. 'Tell me about the last time you exported data' produces a story with a date, a tool, a workaround, a frustration. 'Would you use an export feature' produces a polite yes.\n\nThird, it surfaces the absence. If they cannot recall a single instance — 'umm, I don't think I have' — that is the most valuable answer in the interview. Stated demand without a single recent instance of the underlying behavior is theoretical demand. Theoretical demand does not pay for engineers.\n\nA Mumbai fintech I consulted with was about to build a complex bill-splitter for 6 months of work. Their pre-research interview asked 'would you use a bill-splitter?' — 78 percent said yes. Their re-do, asking 'tell me about the last time you split a bill,' found that 70 percent of their target users hadn't split one in the last 90 days. Project killed. Six months saved. ₹2.4 crore not lit on fire."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two interview transcripts side by side. Left, in red, future-tense: 'Would you use X? — Yes, definitely!' Right, in green, past-tense: 'Tell me about the last time — Hmm, I don't think I have.' Arrow from right transcript to a small box that says 'project saved'.",
+      "caption": "Same user, two question framings. One produces a feature; the other produces a decision not to build it.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><rect width='240' height='220' rx='10' fill='#FEE2E2' stroke='#991B1B' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-size='13' font-weight='bold' fill='#7F1D1D'>FUTURE-TENSE (lies)</text><text x='14' y='62' font-size='11' fill='#7F1D1D'>PM: 'Would you use a bill</text><text x='14' y='78' font-size='11' fill='#7F1D1D'>splitter feature?'</text><text x='14' y='108' font-size='11' fill='#7F1D1D' font-weight='bold'>User: 'Oh, definitely yes!'</text><text x='14' y='138' font-size='11' fill='#7F1D1D'>PM: 'How often would you</text><text x='14' y='154' font-size='11' fill='#7F1D1D'>use it?'</text><text x='14' y='184' font-size='11' fill='#7F1D1D' font-weight='bold'>User: 'Maybe weekly!'</text><text x='120' y='210' text-anchor='middle' font-size='10' font-style='italic' fill='#9D174D'>78% said yes. Project greenlit.</text></g><g transform='translate(310 30)'><rect width='240' height='220' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-size='13' font-weight='bold' fill='#064E3B'>PAST-TENSE (truth)</text><text x='14' y='62' font-size='11' fill='#064E3B'>PM: 'Tell me about the last</text><text x='14' y='78' font-size='11' fill='#064E3B'>time you split a bill.'</text><text x='14' y='108' font-size='11' fill='#064E3B' font-weight='bold'>User: 'Hmm, I don't think</text><text x='14' y='124' font-size='11' fill='#064E3B' font-weight='bold'>I have, recently.'</text><text x='14' y='154' font-size='11' fill='#064E3B'>PM: 'How long ago?'</text><text x='14' y='184' font-size='11' fill='#064E3B' font-weight='bold'>User: 'Maybe 4 months?'</text><text x='120' y='210' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>70% had no recent instance. Killed.</text></g><text x='290' y='270' text-anchor='middle' font-size='11' fill='#7C2D12' font-style='italic'>Same product. Same users. ₹2.4 crore difference.</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translating a vague 'users want X' into evidence — the 5-step interview",
+      "steps": [
+        {
+          "label": "Step 1 — Stop asking 'would you'",
+          "body": "Strike every future-tense question from your interview script. If you have 'would you use', 'would you pay', 'how often would you', delete them. They don't survive contact with reality."
+        },
+        {
+          "label": "Step 2 — Replace with 'tell me about the last time'",
+          "body": "Convert every aspiration into a memory probe. 'Would you use an export feature?' becomes 'Tell me about the last time you needed to get data out of the dashboard.'"
+        },
+        {
+          "label": "Step 3 — Follow the workaround",
+          "body": "When they describe what they did, ask what tool they used, what was annoying, how long it took. Workarounds are revealed need with a price tag attached."
+        },
+        {
+          "label": "Step 4 — Probe for absence",
+          "body": "If they cannot recall a single instance in the last 30-90 days, that is data, not failure. Note it. Ask 'when do you think the last time was?' and let them sit with it."
+        },
+        {
+          "label": "Step 5 — Count the workarounds, not the wishes",
+          "body": "When you tally interviews, count specific past-tense instances of the underlying behavior. If 8 out of 10 users had a workaround in the last 30 days, you have a feature. If 8 out of 10 said 'I would use it,' you have nothing."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "A user says 'I would absolutely use a Hindi UI if you built one.' What is the highest-signal next question?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Great, what shade of saffron should the buttons be?", "correct": false, "explain": "Designs the feature before validating the problem. Premature." },
+        { "id": "b", "label": "Tell me about the last time the English UI actually slowed you or your team down.", "correct": true, "explain": "Past-tense, specific, surfaces real pain or its absence." },
+        { "id": "c", "label": "On a scale of 1 to 10, how important is Hindi UI to you?", "correct": false, "explain": "Stated importance is the most consistently wrong signal in product research." },
+        { "id": "d", "label": "Would your team also use it?", "correct": false, "explain": "Future-tense, second-hand. Worse than the first answer, somehow." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Mummy se feedback lena",
+          "md": "PM ne mummy ko app dikhaya. Mummy: *'Beta, bahut sundar hai. Acchha rang hai. Tu khud bana?'* — Yeh feedback nahi hai. Yeh **gaurav** hai.\n\nReal test: *'Mummy, Whatsapp pe pichhle hafte aapne kis aunty ko sabse zyada message kiya?'* Yeh question past-tense hai. Iska jawab actual usage data hai. Beta ka product nahi, behavior ka data."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Asking your mum is not user research",
+          "md": "Your mum looking at your app and saying 'beta, this is so beautiful' is not feedback. It is parental love wearing a feedback costume.\n\nReal feedback from anyone, including your mum, comes from past-tense questions about what they actually did last week. Pride doesn't show you a churn risk; behavior does."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The silence move"
+    },
+    {
+      "type": "markdown",
+      "md": "After a user finishes their first answer, **wait three to five seconds before saying anything**. Do not nod, do not 'mm-hmm', do not move on. Just wait.\n\nThe first answer is the social-acceptable one — the one they think you want, or the one that takes the least effort to construct. The silence makes them uncomfortable enough to fill it. The second answer is closer to truth. Often it starts with 'actually…' or 'well, also…' — those are the words you came for.\n\nThis works because polite people in most cultures, and especially in India, treat silence as a conversational vacuum that has to be filled. Use it. The PMs who run the best interviews are not the ones with the cleverest questions; they are the ones who are the most comfortable with awkward pauses.\n\nHard mode: count to five in your head before you speak. The first time you do this, it will feel like cruelty. By the third interview, you will hear the second answer be three times more useful than the first, every time."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A timeline of a single interview question. T+0 question asked, T+8s first answer ends, T+8 to T+13 silence (highlighted), T+13 second answer begins, labelled 'the answer you came for'.",
+      "caption": "The five seconds you don't speak are the most productive five seconds of the interview.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200' role='img'><rect width='600' height='200' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><line x1='40' y1='100' x2='560' y2='100' stroke='#6B7280' stroke-width='2'/><g transform='translate(60 100)'><circle r='8' fill='#3B82F6'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#1E3A8A'>T+0</text><text x='0' y='40' text-anchor='middle' font-size='11' font-weight='bold' fill='#1E3A8A'>Q asked</text></g><g transform='translate(190 100)'><circle r='8' fill='#10B981'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#065F46'>T+8s</text><text x='0' y='40' text-anchor='middle' font-size='11' fill='#065F46'>1st answer ends</text><text x='0' y='56' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>('it's mostly fine')</text></g><rect x='200' y='75' width='180' height='50' rx='8' fill='#FCD34D' stroke='#92400E' stroke-width='2' opacity='0.7'/><text x='290' y='98' text-anchor='middle' font-size='12' font-weight='bold' fill='#7C2D12'>SILENCE — 5 seconds</text><text x='290' y='115' text-anchor='middle' font-size='10' fill='#92400E'>do not speak, do not nod</text><g transform='translate(390 100)'><circle r='8' fill='#F43F5E'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#9D174D'>T+13s</text><text x='0' y='40' text-anchor='middle' font-size='11' font-weight='bold' fill='#9D174D'>2nd answer begins</text><text x='0' y='56' text-anchor='middle' font-size='10' font-style='italic' fill='#9D174D'>('actually, last week...')</text></g><g transform='translate(540 100)'><circle r='8' fill='#8B5CF6'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#5B21B6'>T+45s</text><text x='0' y='40' text-anchor='middle' font-size='11' fill='#5B21B6'>real signal</text></g><text x='300' y='180' text-anchor='middle' font-size='11' font-style='italic' fill='#5B21B6'>The 2nd answer is on average 3x more useful than the 1st.</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "VP-Product Vivek",
+        "role": "Your hands-on VP, ex-Flipkart, allergic to roadmap theatre",
+        "avatarSrc": "/avatars/vivek.svg"
+      },
+      "intro": [
+        "Okay, you've done a few interviews. Let me read you snippets and you tell me — is this **gold** (real signal), **noise** (polite nothing), or **trap** (looks like signal, isn't)?",
+        "The question is not what they said. The question is what their answer is evidence of.",
+        "If you can't tell, default to noise. Better to lose one good signal than build a feature on a misread."
+      ],
+      "buckets": [
+        { "id": "gold", "label": "Gold (real signal)", "tone": "safe" },
+        { "id": "noise", "label": "Noise (polite nothing)", "tone": "neutral" },
+        { "id": "trap", "label": "Trap (false signal)", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "User: 'Last Tuesday I needed to send the inventory report to my boss. I exported as CSV, opened in Excel, deleted three columns, and screen-shotted it because the Excel had auto-formatted my SKU codes as dates.'",
+          "correctBucketId": "gold",
+          "explain": "Specific date, specific workaround, specific frustration. This is exactly the past-tense, behavior-revealed signal you want."
+        },
+        {
+          "id": "s2",
+          "situation": "User: 'I love your product. It's so well designed. Whoever built it really gets it.'",
+          "correctBucketId": "noise",
+          "explain": "Compliments are not data. Note it for morale, ignore it for product decisions."
+        },
+        {
+          "id": "s3",
+          "situation": "User: 'I would absolutely pay 50 percent more for an enterprise tier with SSO, audit logs, and SLA guarantees.'",
+          "correctBucketId": "trap",
+          "explain": "Future-tense pricing answer. The 'absolutely' is doing all the lying. At launch, conversion will be a third of what they implied."
+        },
+        {
+          "id": "s4",
+          "situation": "User pauses for 6 seconds, then: 'Actually... I should mention my team has been using a Google Sheet on the side because the in-app reports don't have the columns we want.'",
+          "correctBucketId": "gold",
+          "explain": "The pause-then-actually is the silence move paying off. A side-Google-Sheet is the highest-signal artifact in B2B research."
+        },
+        {
+          "id": "s5",
+          "situation": "User: 'It would be really cool if you had AI in there. Everyone's doing AI right? You should think about it.'",
+          "correctBucketId": "noise",
+          "explain": "Trend-following without specifics. No 'last time' attached. They are repeating a headline back at you, not describing pain."
+        },
+        {
+          "id": "s6",
+          "situation": "User: 'I rate it 9 out of 10. I'd recommend it to anyone in my industry.'",
+          "correctBucketId": "trap",
+          "explain": "Stated NPS in a research call is unreliable; the user is rating the conversation, not the product. The score will tank in an actual NPS survey."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: leading questions disguised as innocent ones",
+      "md": "Watch for sentences that start with **'Don't you think…?'** or **'Wouldn't it be nice if…?'** These are not questions. They are statements with a question mark stapled on. The user almost always agrees, because disagreeing is rude.\n\nRule of thumb: if your question implies the answer you hope for, the answer is worthless. Rewrite until the question would feel just as natural with the opposite answer.\n\n**'Don't you find the current export confusing?'** is leading. **'Tell me about the last time you used the export'** is not. Same topic, different worlds."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're prepping a 30-min user interview for tomorrow. Order your prep moves from first to last.",
+      "items": [
+        { "id": "p1", "label": "Write down the one decision this interview should help you make", "detail": "If you can't, you're collecting feelings, not running research." },
+        { "id": "p2", "label": "Draft 5-7 past-tense questions, no future-tense, no 'would you'", "detail": "Each one starts with 'tell me about the last time' or 'walk me through how you...'" },
+        { "id": "p3", "label": "Write a 1-line opener that does NOT pitch the product", "detail": "If you pitch first, every answer becomes a polite reaction to your pitch." },
+        { "id": "p4", "label": "Decide what 'gold signal' would look like for the decision", "detail": "Pre-commit to what evidence would change your mind. Otherwise you'll see only what confirms your plan." },
+        { "id": "p5", "label": "Pick a notetaker (or set up a recording with consent)", "detail": "If you take notes alone, you'll miss 40 percent of the signal. Get a second pair of ears." }
+      ],
+      "hint": "The first move is not 'write the questions'. It's 'know what decision this informs'."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You are about to interview an admin user of a Pune-based HR SaaS. The team has been told to validate whether to build an attendance-export feature. Write the first 4 interview questions you would ask, none of them future-tense.",
+      "lang": "markdown",
+      "starter": "1. Walk me through how you handled attendance reporting last month — start to finish.\n2. \n3. \n4. ",
+      "expected": "1. Walk me through how you handled attendance reporting last month — start to finish.\n2. Tell me about the last time you needed attendance data outside the dashboard. What did you do?\n3. When you exported, what tool did you open it in next, and what did you have to clean up?\n4. Was there a moment in the last 30 days where you had attendance data and couldn't get it where it needed to go? Tell me about it."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these signals are reliable evidence of real demand? Select all that apply.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "A user describes a specific workaround they built last week to solve the problem", "correct": true, "explain": "Workarounds are demand with a cost already paid. Highest-signal evidence." },
+        { "id": "b", "label": "A user says 'I would definitely use this if you built it'", "correct": false, "explain": "Future-tense aspiration. Mostly noise." },
+        { "id": "c", "label": "Three different users mention the same Google Sheet they all built independently", "correct": true, "explain": "Convergent past-tense behavior across users is rare and high-signal." },
+        { "id": "d", "label": "A user gives the product an unprompted 9 out of 10", "correct": false, "explain": "NPS in a research call is reading politeness, not product." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Demo-day dhokha",
+          "md": "Founder ne demo-day organize kiya. 12 prospects aaye. Sabne *'wow'* bola. Sabne business card diya. Founder ne 14 din baad email kiya. **2 reply aaye.** Reply mein bhi *'currently we're not prioritizing this, but bahut accha tha.'*\n\nBhai, demo-day ki *'wow'* aur usage ki *'wow'* — dono alag languages hain. Demo-day mein log free chai aur networking ke liye bhi *'wow'* bolte hain."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Why demo-day enthusiasm is a poor leading indicator",
+          "md": "Twelve prospects at your demo day. All said 'wow.' All gave you a card. You email them two weeks later. Two reply. Both polite passes.\n\nDemo-day 'wow' is a social signal — they're enjoying the food and your enthusiasm. Usage 'wow' is when someone unprompted sends you a screenshot of how they used the thing. Don't confuse the two."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Users tell you what they want; their behavior tells you what they need. Tune for behavior, discount aspiration.",
+        "Replace every future-tense question with 'tell me about the last time…' — past tense produces stories, future tense produces fiction.",
+        "After the user's first answer, count to five before speaking. The second answer is the one you came for.",
+        "Workarounds are demand with a price tag attached; a side-built Google Sheet is the highest-signal artifact in B2B research.",
+        "If your question implies the answer you hope for, the answer is worthless. Test by flipping it — would the question feel just as natural with the opposite answer?"
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Recall the last user feedback you acted on (at work, in a side project, on a pitch). Was the evidence past-tense behavior or future-tense aspiration? If it was aspiration, what did the user actually do after launch — and how does that change your read on the original signal?"
+    }
+  ]
+}

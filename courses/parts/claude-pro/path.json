@@ -1,0 +1,313 @@
+{
+  "path": {
+    "slug": "claude-pro",
+    "title": "Claude Pro: Cowork, Code, Design",
+    "subtitle": "Use Claude as a teammate, not a search engine",
+    "summary": "You already pay for Claude. You already paste things into the chat. This path makes you the person on the team who actually gets ten times the value out of the same subscription. By the end you can split work between Claude.ai, Claude Code and the API, run subagent fan-outs without supervising every token, and roll the whole thing out across a team without anyone signing off on hallucinations.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "claude-mental-model",
+      "name": "Claude Mental Model",
+      "category": "tech",
+      "description": "Pick which Claude surface fits a task and predict where it will fail",
+      "decayDays": null
+    },
+    {
+      "slug": "claude-coding-workflow",
+      "name": "Claude Coding Workflow",
+      "category": "tech",
+      "description": "Drive Claude Code with a CLAUDE.md kernel, plans, subagents and hooks instead of vibes",
+      "decayDays": null
+    },
+    {
+      "slug": "claude-cowork-discipline",
+      "name": "Claude Cowork Discipline",
+      "category": "tech",
+      "description": "Use Claude for Slack, email and meetings without sending unread output",
+      "decayDays": null
+    },
+    {
+      "slug": "claude-design-collaboration",
+      "name": "Claude Design Collaboration",
+      "category": "tech",
+      "description": "Co-design with Claude as a junior critic and tightening loop, not a generator",
+      "decayDays": null
+    },
+    {
+      "slug": "claude-orchestration",
+      "name": "Claude Orchestration",
+      "category": "tech",
+      "description": "Run long, parallel and background Claude workflows with subagents and artifact handoffs",
+      "decayDays": null
+    },
+    {
+      "slug": "claude-judgment",
+      "name": "Claude Judgment",
+      "category": "tech",
+      "description": "Decide when not to use Claude, when to escalate, and how to roll it out across a team",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "claude-coding-workflow", "requires": "claude-mental-model" },
+    { "skill": "claude-cowork-discipline", "requires": "claude-coding-workflow" },
+    { "skill": "claude-design-collaboration", "requires": "claude-cowork-discipline" },
+    { "skill": "claude-orchestration", "requires": "claude-design-collaboration" },
+    { "skill": "claude-judgment", "requires": "claude-orchestration" }
+  ],
+  "assessment": {
+    "title": "Claude Pro Assessment",
+    "description": "Tests whether you can pick the right Claude surface for a task, predict failure modes, and roll Claude out across a team without it generating expensive nonsense.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["claude-judgment"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your PM asks Claude.ai for the latest RBI guidelines on co-branded credit cards. Claude confidently cites three circulars. What is the single biggest risk?",
+        "points": 1,
+        "skillSlug": "claude-mental-model",
+        "choices": [
+          { "id": "a", "label": "Without web search turned on, Claude will confidently produce circular numbers that look real but were never issued", "correct": true, "explanation": "This is the classic recency-and-citation hallucination. Without a tool that actually fetches the RBI website, Claude pattern-matches to plausible circular numbers. Always turn on web search for regulatory work." },
+          { "id": "b", "label": "Claude.ai has a 200K token limit and the circulars do not fit", "correct": false, "explanation": "Opus 4.7 has a 1M context window in 2026. Context size is not the failure mode here." },
+          { "id": "c", "label": "The PM should have used Claude Haiku 4.5 because it is faster", "correct": false, "explanation": "Speed is irrelevant; correctness and citation are the problem. Switching to Haiku makes hallucinations cheaper, not rarer." },
+          { "id": "d", "label": "Claude refuses to discuss banking regulation", "correct": false, "explanation": "It does not refuse. The problem is that it answers too willingly without grounding." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the two scenarios where Claude Code clearly beats Claude.ai pasted-in code.",
+        "points": 2,
+        "skillSlug": "claude-coding-workflow",
+        "choices": [
+          { "id": "a", "label": "Refactoring 14 files that all import the same util", "correct": true, "explanation": "Multi-file edits with grep, read and apply-patch tools are exactly Claude Code's strength. Claude.ai cannot touch your filesystem." },
+          { "id": "b", "label": "Asking what a regex does", "correct": false, "explanation": "A one-shot question with no file access is faster on Claude.ai." },
+          { "id": "c", "label": "Running a migration script and verifying the output across three environments", "correct": true, "explanation": "Background tasks plus shell access plus a CLAUDE.md kernel make Claude Code the right tool. You want it to actually run things and check, not describe what it would run." },
+          { "id": "d", "label": "Drafting a one-paragraph PR description", "correct": false, "explanation": "That is a single text task. Claude.ai or even Haiku will do it cheaper." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A junior PM at your Bengaluru fintech sends a Slack message to the CEO that begins 'As an AI language model, I would like to thank you for the opportunity'. What broke?",
+        "points": 1,
+        "skillSlug": "claude-cowork-discipline",
+        "choices": [
+          { "id": "a", "label": "The no-send-without-review rule was skipped — the draft was copied verbatim", "correct": true, "explanation": "Claude is a draft engine, not the sender. Every output goes through a human read before it leaves your name." },
+          { "id": "b", "label": "Claude Sonnet 4.6 has a known bug with Slack formatting", "correct": false, "explanation": "It does not. The bug is the workflow." },
+          { "id": "c", "label": "The PM should have used Opus instead of Sonnet", "correct": false, "explanation": "Bigger model would still produce the same opener if asked badly. The model is not the issue; the review gate is." },
+          { "id": "d", "label": "Slack stripped the formatting and revealed the AI prefix", "correct": false, "explanation": "Slack does not add AI disclaimers. The text was already there." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is the best opening move when using Claude for design critique on a new dashboard mockup?",
+        "points": 1,
+        "skillSlug": "claude-design-collaboration",
+        "choices": [
+          { "id": "a", "label": "Upload the mockup, name the user, name the goal, and ask Claude to find the three weakest decisions before suggesting fixes", "correct": true, "explanation": "Critique-not-generate. You constrain Claude to find weaknesses with a named user and goal so it cannot drift into generic advice." },
+          { "id": "b", "label": "Ask Claude to redesign the dashboard from scratch", "correct": false, "explanation": "This loses everything you know. Claude will produce a generic SaaS template and erase the constraints you have already considered." },
+          { "id": "c", "label": "Ask Claude what colour to use for the primary CTA", "correct": false, "explanation": "Too narrow. You will get a confident answer with no understanding of contrast, brand, or context." },
+          { "id": "d", "label": "Paste the Figma file into Claude.ai", "correct": false, "explanation": "Figma URLs do not render. The mockup needs to be an image or a structured description." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which two are real built-in Claude Code subagents you would invoke with the Task tool?",
+        "points": 2,
+        "skillSlug": "claude-coding-workflow",
+        "choices": [
+          { "id": "a", "label": "Plan", "correct": true, "explanation": "Plan is a built-in subagent that does read-only investigation and writes a plan to docs/PLAN.md." },
+          { "id": "b", "label": "general-purpose", "correct": true, "explanation": "general-purpose is the catch-all subagent for multi-step search and research with its own context window." },
+          { "id": "c", "label": "auto-deploy", "correct": false, "explanation": "There is no built-in deploy subagent. Deployment is intentionally human-driven." },
+          { "id": "d", "label": "money-mover", "correct": false, "explanation": "Made up. No financial subagent exists." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You are running Claude Code on a 200-file refactor. After 40 minutes it has touched 60 files and is still going. What is the right move?",
+        "points": 1,
+        "skillSlug": "claude-orchestration",
+        "choices": [
+          { "id": "a", "label": "Stop, ask it to write a plan, split the work into parallel subagents with bounded scope, and resume", "correct": true, "explanation": "Long unsupervised loops are where Claude drifts. Bound the scope, fan out, and recheck artifacts at the boundaries." },
+          { "id": "b", "label": "Let it keep going — it has momentum", "correct": false, "explanation": "Momentum is the warning sign. The longer it runs unchecked, the more likely the last 30 files were applied to a wrong assumption." },
+          { "id": "c", "label": "Switch to Opus mid-run for higher quality", "correct": false, "explanation": "Switching models mid-run loses cache and does not fix the lack of plan." },
+          { "id": "d", "label": "Cancel everything and do it manually", "correct": false, "explanation": "Premature surrender. Bound and resume; do not throw away the first 60 files of work." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A CA firm in Pune wants Claude to read 800 ITRs and flag anomalies. Which surface and pattern fits best?",
+        "points": 1,
+        "skillSlug": "claude-mental-model",
+        "choices": [
+          { "id": "a", "label": "Anthropic API with batch processing on Haiku 4.5, structured JSON output, with a 2 percent human sample review", "correct": true, "explanation": "High-volume, structured, repetitive work belongs on the API with the cheapest model that holds quality. Always sample. Never assume 100 percent correctness." },
+          { "id": "b", "label": "Paste each ITR into Claude.ai one by one with Opus", "correct": false, "explanation": "800 manual paste cycles costs partner-level hours. Wrong tool." },
+          { "id": "c", "label": "Drop the PDFs into a Claude Project and ask one big question", "correct": false, "explanation": "Projects help with shared context, not 800 individual document analyses with structured output." },
+          { "id": "d", "label": "Use Claude Code to write a Python script that calls Sonnet 4.6 sequentially", "correct": false, "explanation": "Closer, but sequential calls on Sonnet are 10x more expensive and slower than batched Haiku, with no quality gain on a structured-extraction task." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which two belong in a CLAUDE.md kernel file?",
+        "points": 2,
+        "skillSlug": "claude-coding-workflow",
+        "choices": [
+          { "id": "a", "label": "Hard rules with MUST / SHOULD / MAY priority", "correct": true, "explanation": "Hard rules at the top means Claude reads them every session. This is the whole point of a kernel file." },
+          { "id": "b", "label": "Slash commands and when to use each", "correct": true, "explanation": "Slash commands collapse repeated protocols ('plan', 'bugfix', 'ship') into one token instead of pasted prose." },
+          { "id": "c", "label": "Production database credentials", "correct": false, "explanation": "Never. Secrets in CLAUDE.md is a security failure waiting to happen and most editors auto-include it." },
+          { "id": "d", "label": "A daily TODO list", "correct": false, "explanation": "The kernel is durable rules. TODOs go in PLAN.md or your tracker, not in a file every session reads." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You ask Claude to draft a client proposal. It returns 1,800 polished words. What is the right next step?",
+        "points": 1,
+        "skillSlug": "claude-cowork-discipline",
+        "choices": [
+          { "id": "a", "label": "Read every paragraph, cut at least 30 percent, and replace at least three sentences in your own voice", "correct": true, "explanation": "Length is the lazy signal of effort. Cut, sharpen, claim it. Otherwise it reads as Claude and the client smells it." },
+          { "id": "b", "label": "Send it as is — it is well written", "correct": false, "explanation": "This is the no-send-without-review failure. Polish does not equal voice or accuracy." },
+          { "id": "c", "label": "Ask Claude to make it longer", "correct": false, "explanation": "More length, more drift, more chance of fabrication. Wrong direction." },
+          { "id": "d", "label": "Run it through Claude again to detect AI", "correct": false, "explanation": "AI detectors on AI output are theatre. The fix is your editing pass, not another model call." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A team uses Claude Code with run_in_background for a 3-hour data backfill. What artifact should the background job write?",
+        "points": 1,
+        "skillSlug": "claude-orchestration",
+        "choices": [
+          { "id": "a", "label": "A timestamped log file plus a structured summary so the foreground agent can pick up without rereading 50K lines", "correct": true, "explanation": "Artifact handoff: long jobs leave a small structured artifact for the next agent to consume. This is the only way fan-out scales." },
+          { "id": "b", "label": "Nothing — the foreground agent will read the full stdout", "correct": false, "explanation": "50K lines of stdout will exhaust context and bury the signal. Always summarise to an artifact." },
+          { "id": "c", "label": "An email to the team", "correct": false, "explanation": "Email is not an agent-readable artifact. The next Claude run cannot use it." },
+          { "id": "d", "label": "A push notification", "correct": false, "explanation": "Notifications are for humans, not for agent handoff." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your designer wants Claude to generate 12 hero-image options for a landing page. What is the best framing?",
+        "points": 1,
+        "skillSlug": "claude-design-collaboration",
+        "choices": [
+          { "id": "a", "label": "Skip image generation in Claude — describe 12 directions, then commission three from a real image tool", "correct": true, "explanation": "Claude does not generate images. The right Claude move is to brainstorm directions and constrain the prompt for an image model." },
+          { "id": "b", "label": "Ask Claude to render 12 hero images directly", "correct": false, "explanation": "Claude does not produce images. Asking will return 12 text descriptions or apologies." },
+          { "id": "c", "label": "Ask Claude for 12 colour palettes", "correct": false, "explanation": "Different question. Palettes do not solve the hero-image need." },
+          { "id": "d", "label": "Ask Claude to copy 12 competitor heroes", "correct": false, "explanation": "Imitation is not the brief and Claude cannot pull live competitor pages without web search." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick two real failure modes of long-running Claude workflows.",
+        "points": 2,
+        "skillSlug": "claude-judgment",
+        "choices": [
+          { "id": "a", "label": "Drift — by step 20, Claude is solving a slightly different problem than step 1", "correct": true, "explanation": "Drift is the headline failure mode of unsupervised loops. Restate the goal at every checkpoint." },
+          { "id": "b", "label": "Cascade — one wrong assumption gets reused in 14 downstream files", "correct": true, "explanation": "Cascade is why bounded scope and artifact handoff matter. One bad assumption multiplies." },
+          { "id": "c", "label": "Claude refusing to run for more than 5 minutes", "correct": false, "explanation": "There is no such ceiling. Run length is a budget choice, not a hard limit." },
+          { "id": "d", "label": "Claude logging out of itself", "correct": false, "explanation": "Made up. Sessions persist." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Claude Sonnet 4.6 in 2026 costs roughly $3 per million input tokens. You run a workflow at 400K tokens of input per task and run it 200 times a week. Roughly what is your weekly bill?",
+        "points": 1,
+        "skillSlug": "claude-judgment",
+        "choices": [
+          { "id": "a", "label": "About $240 a week", "correct": true, "explanation": "400K x 200 = 80M input tokens. 80 x $3 = $240. Output tokens add more, but the input dominates here." },
+          { "id": "b", "label": "About $24 a week", "correct": false, "explanation": "Off by a factor of 10. Easy to make on the back of a napkin. Recompute the input volume." },
+          { "id": "c", "label": "About $2,400 a week", "correct": false, "explanation": "Off by a factor of 10 the other way. Probably you confused tokens with characters." },
+          { "id": "d", "label": "Free if you have a Pro plan", "correct": false, "explanation": "Pro plan is the chat product, not the API. API usage is metered separately." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You are rolling Claude out across a 200-person company. Where should you start?",
+        "points": 1,
+        "skillSlug": "claude-judgment",
+        "choices": [
+          { "id": "a", "label": "Pick one team with a measurable, low-risk workflow, run a 30-day pilot with eval and review gates, then expand", "correct": true, "explanation": "Pilots prove value and surface failure modes before they hit 200 people. Eval and review gates are non-negotiable for any roll-out." },
+          { "id": "b", "label": "Buy seats for everyone and announce it on Slack", "correct": false, "explanation": "Mass roll-out without a pilot is how you end up in newspapers about an AI mistake." },
+          { "id": "c", "label": "Mandate Claude for every Slack message", "correct": false, "explanation": "Forcing the tool over-rotates and creates worse output where humans were already fine." },
+          { "id": "d", "label": "Wait until someone proves ROI", "correct": false, "explanation": "Nobody will, because nobody has a budget. You design the pilot." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Claude.ai Projects let you attach a knowledge base for repeated reuse. What is the right material to put in?",
+        "points": 1,
+        "skillSlug": "claude-mental-model",
+        "choices": [
+          { "id": "a", "label": "Your style guide, last 6 months of polished examples, and your refusal list", "correct": true, "explanation": "Projects shine when the same context is reused. Style + examples + 'never say this' is the trio." },
+          { "id": "b", "label": "Every PDF on the company drive", "correct": false, "explanation": "Volume kills relevance. Curate." },
+          { "id": "c", "label": "Customer credit card numbers", "correct": false, "explanation": "Never. PII in a Project is a leakage waiting to happen." },
+          { "id": "d", "label": "Just one file with today's date", "correct": false, "explanation": "Then a Project is wasted; a normal chat would do." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick two cases where you should NOT use Claude.",
+        "points": 2,
+        "skillSlug": "claude-judgment",
+        "choices": [
+          { "id": "a", "label": "Real-time stock prices for a trading decision", "correct": true, "explanation": "Even with web search, latency and reliability are wrong for trading. Use a market data API directly." },
+          { "id": "b", "label": "Drafting a Slack standup", "correct": false, "explanation": "This is a perfect Claude task — short, low risk, one human review." },
+          { "id": "c", "label": "Diagnosing a specific patient's medication interaction without doctor review", "correct": true, "explanation": "Health decisions at the individual level need licensed review. Claude is a research aide, not a clinician." },
+          { "id": "d", "label": "Summarising a 60-page RFP", "correct": false, "explanation": "Long-document summarisation is a core Claude strength." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "MCP (Model Context Protocol) connects Claude to external tools. Which is the safest thing to expose first?",
+        "points": 1,
+        "skillSlug": "claude-orchestration",
+        "choices": [
+          { "id": "a", "label": "Read-only access to your wiki and design system", "correct": true, "explanation": "Read-only first lets Claude be more useful with zero blast radius. Add write access only after you trust the loop." },
+          { "id": "b", "label": "Write access to production database", "correct": false, "explanation": "Catastrophic first move. A confident wrong query drops a table." },
+          { "id": "c", "label": "Email send permissions", "correct": false, "explanation": "An autonomous loop sending emails on your behalf is the no-send-without-review rule violated at scale." },
+          { "id": "d", "label": "Stripe charge endpoint", "correct": false, "explanation": "Charging cards is exactly the kind of action you do not want a model to do unsupervised." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "claude-pro-rollout",
+    "title": "Capstone: Roll Out Claude Across a 200-Person Company in 30 Days",
+    "prompt": "Your CEO has read a McKinsey report on the flight back from Davos and now wants Claude rolled out across the entire 200-person company by end of next month. Budget is approved. She wants you to scope the 30-day pilot.\n\nYou have four candidate verticals: **cowork** (Slack, email, meetings), **code** (engineering team of 40), **design** (product design team of 8), and **orchestration** (long-running workflows in ops, finance, support).\n\nPick **three** of the four to include in the pilot. Skip one. Defend the choice.\n\nFor each of the three you pick, deliver:\n\n1. **Specific workflow** — name one concrete task that Claude will replace or augment. Not 'help with email'; say 'draft first-pass replies to support tickets in Zendesk for the L1 team to review and send'.\n2. **Surface and model** — Claude.ai Project, Claude Code, or API. Which model and why. Approximate weekly cost in dollars.\n3. **Eval** — how you will measure whether it worked. One leading metric, one lagging metric, one failure metric.\n4. **Failure mode** — the most likely way this goes wrong, and what you will see when it does.\n5. **Human review gate** — what cannot ship without a human. Be specific.\n\nFor the vertical you skipped, write 80-120 words explaining why it is wrong **for this company at this stage**. Generic answers ('it's risky') do not score.\n\nAt the bottom, give the CEO a one-paragraph executive summary she can forward to the board. Then add a single bullet titled **'What I would do differently if budget was half'** — because budgets always get cut.",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Each pick is justified with a workflow, surface, model and weekly cost; the skipped vertical has a company-specific reason; eval has leading + lagging + failure metric", "points": 4 },
+          { "label": "Picks are justified but missing one of: cost, eval failure metric, or the skip rationale is generic", "points": 2 },
+          { "label": "Picks are vibes-based or two of the above are missing", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity to context",
+        "levels": [
+          { "label": "Recommendations clearly account for the 200-person size, the four verticals' different risk profiles, and Indian tech context (compliance, data residency, cost in INR)", "points": 4 },
+          { "label": "Acknowledges company size and risk but ignores India-specific or compliance-specific constraints", "points": 2 },
+          { "label": "Same generic answer would apply to any company, any country, any size", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "Executive summary is one paragraph, board-ready; rubric items are short and skimmable; the budget-cut bullet shows real prioritisation", "points": 4 },
+          { "label": "Mostly clear but executive summary buries the lead, or budget-cut bullet just removes the cheapest item", "points": 2 },
+          { "label": "Wall of text, no executive summary, or budget-cut bullet is missing", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "claude-pro",
+    "title": "Claude Pro: Cowork, Code, Design",
+    "description": "Holder can pick the right Claude surface for a task, drive Claude Code with a CLAUDE.md kernel and subagents, and roll Claude out across a team with eval and human-review gates.",
+    "issuerName": "Krit Academy"
+  }
+}

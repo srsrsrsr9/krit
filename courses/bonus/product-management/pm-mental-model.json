@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Velocity Trap",
+    "source": "Anonymous APM at Skytrip, a Bengaluru-based travel SaaS (Series A, ~120 staff)",
+    "date": "March 2025",
+    "story": "On March 4, 2025, Skytrip's engineering lead pinged the new APM, Aditya, on Slack: *\"We can ship a redesigned booking-confirmation page in one sprint — three engineers are unblocked. Want it?\"*\n\nAditya, eight days into the job and desperate to look decisive, said yes. He wrote a half-page brief on Tuesday, design landed Wednesday, code merged Friday. The team shipped a beautiful new confirmation page on **March 21**. It had a nicer hero image, a clearer trip summary, and a 'share with co-traveller' button engineering had been wanting to build for months.\n\nThree weeks of analytics later: **0.4%** of confirmed bookings used the share button. The 'nicer' confirmation page had no measurable lift on repeat-booking rate. The actual top-3 customer complaints — slow refunds, confusing baggage rules, no IRCTC fallback when flights got cancelled — were untouched.\n\nIn the post-mortem, the engineering lead said the quiet part out loud: *\"We had bandwidth and a feature we wanted to build. You said go.\"* Aditya had optimised for **shipping** when his job was to optimise for **users not getting screwed on refunds**. The roadmap lost a sprint. The customers lost six more weeks.",
+    "takeaway": "An engineering team with bandwidth is not a customer with a problem. The PM's job is to know the difference — and say no when it isn't."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rhea's First Monday",
+    "setup": "It's **Monday, week 1** at Tarakash, a 200-person Bengaluru B2B SaaS. **Rhea** has been an APM for exactly 4 working days. At 9:47am, the CEO forwards her an email with a one-line note: *\"Pls handle. Need response by EOD.\"*\n\nThe email is from **Mehta & Co.**, Tarakash's third-largest customer (₹38L ARR, renewal in 11 weeks). Their ops head writes: *\"Your team takes 3 days to respond to support tickets. Our compliance officer needs SLA dashboards visible in the product. Please add this. Otherwise we may not renew.\"*\n\nRhea's Slack lights up. The engineering lead, Shankar, has already replied to a separate thread saying: *\"We can spin up a basic SLA dashboard in 2 sprints if we cut the search-relevance work.\"* Rhea has 7 hours and one shot to respond.",
+    "coach": { "name": "Director-PM Devika", "role": "Director of Product, Tarakash · 11 years in product, allergic to feature requests dressed as ultimatums" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Devika DMs Rhea: *\"Before you reply to anyone — what's the actual problem here?\"* What do you have Rhea say back?",
+        "options": [
+          { "id": "a", "label": "\"The problem is Mehta wants an SLA dashboard. I'll scope it with Shankar.\"", "correct": false, "explain": "You restated the **output** as the problem. Devika sighs. The customer asked for a dashboard, but the underlying complaint is *3-day support response times*. A dashboard makes slow support **visible**, not faster. You're about to spend two sprints decorating a wound.", "points": 0 },
+          { "id": "b", "label": "\"The problem is our support is slow. The dashboard is their proposed fix. I want to verify the response-time number before agreeing to anything.\"", "correct": true, "explain": "**Yes.** Outcome (fast support) vs output (dashboard) cleanly separated, and you're going to check the data before you commit eng time. Devika sends back a thumbs-up and the world's smallest filter coffee emoji.", "points": 3 },
+          { "id": "c", "label": "\"The problem is Mehta is threatening to churn. We need to keep them happy, so let's ship the dashboard.\"", "correct": false, "explain": "Churn risk is real, but \"keep customer happy\" is a feeling, not a problem statement. You're about to pull two engineers off search-relevance to build a dashboard that may not move the renewal needle one millimetre. Re-read the lesson on **outcome vs output**.", "points": 0 },
+          { "id": "d", "label": "\"The problem is the CEO forwarded this to me, so I need to deliver something visible by EOD.\"", "correct": false, "explain": "Honest but wrong. If the only signal you optimise for is *\"the CEO is watching me\"*, you'll ship CEO-pleasing features for the rest of your career. Devika has seen this movie. It does not end well.", "points": 1 }
+          ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Rhea pulls the support data. Median first-response time across all customers: **9 hours**. For Mehta specifically: **2.6 days** — because three of their tickets last month were tagged as 'feature request' and routed to the product backlog where they sat. What's Rhea's next move?",
+        "options": [
+          { "id": "a", "label": "Reply to Mehta: \"You're right, support is slow. We're shipping an SLA dashboard in 2 sprints.\"", "correct": false, "explain": "You confirmed the wrong cause. The median is fine — Mehta's specific tickets got mis-routed. A dashboard won't fix routing. You're treating an org problem with a UI bandage and burning engineers in the process.", "points": 0 },
+          { "id": "b", "label": "Reply to Mehta: \"The 3-day delay was a routing bug specific to your account — we're fixing the routing this week. We'll also share weekly SLA numbers in your QBR. Holding off on a dashboard until we know it's the bottleneck.\"", "correct": true, "explain": "**This is the move.** Acknowledge the pain, name the actual cause, ship the cheap fix now, and **resist the expensive fix until proven necessary**. You also bought time to validate whether a dashboard is the right answer. Devika literally claps once.", "points": 3 },
+          { "id": "c", "label": "Loop in Shankar and start scoping the dashboard while also fixing the routing bug. Cover both bases.", "correct": false, "explain": "\"Both bases\" sounds responsible and is actually how PMs ship 40% more work for 5% more outcome. You haven't validated that the dashboard is needed at all. Half-credit for fixing the routing.", "points": 1 },
+          { "id": "d", "label": "Forward the data to the CEO and ask what to do.", "correct": false, "explain": "You escalated a decision that's literally your job. The CEO forwarded this to you because they wanted **a PM to decide**. Devika notes: \"If you bounce every hard call back up, you're a forwarding service, not a PM.\"", "points": 0 }
+          ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Mehta replies, mollified but still cranky: *\"Fine. But we want SLA visibility within 90 days, dashboard or otherwise.\"* It's now 4:30pm. How does Rhea close the loop with the CEO?",
+        "options": [
+          { "id": "a", "label": "\"Handled. Mehta's happy. Routing fix shipping this week.\"", "correct": false, "explain": "Too thin. The CEO doesn't know what changed, why, or what trade-off you protected. In two weeks when this comes up in a board call, the CEO has nothing to say. Half a job.", "points": 1 },
+          { "id": "b", "label": "Three lines: (1) Root cause was a ticket-routing bug, not a dashboard gap. (2) Routing fix this week, weekly SLA numbers in their QBR. (3) Did NOT pull eng off search-relevance — happy to revisit in 30 days if the metric doesn't move.", "correct": true, "explain": "**Beautiful.** Diagnosis, action, trade-off you protected, and a built-in review date. The CEO now trusts you with the next escalation instead of micro-managing it. Devika forwards your message to the rest of the PM team as 'how to write up an escalation.'", "points": 3 },
+          { "id": "c", "label": "A 600-word document with a Gantt chart, three risk scenarios, and a stakeholder map.", "correct": false, "explain": "The CEO will not read 600 words. You optimised for looking thorough rather than being clear. The signal-to-noise ratio of a good PM update is high. Yours is currently low.", "points": 0 },
+          { "id": "d", "label": "\"Resolved for now. I'll keep an eye on it.\"", "correct": false, "explain": "Vague. \"Keep an eye on it\" is the PM equivalent of *\"we'll circle back.\"* The CEO has no idea whether you fixed something, dodged something, or merely promised something. Trust isn't built on vibes.", "points": 0 }
+          ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "First Monday and you didn't ship a vanity feature, didn't pull engineers off real work, and wrote an escalation summary your CEO will quote. Devika quietly bumps you up the trust ladder. **Welcome to the job, Rhea.**",
+      "good": "You avoided the worst trap (shipping the dashboard reflexively) but stumbled on either the diagnosis or the wrap-up. Re-read the **outcome vs output** section before week 2 — the next escalation is already in someone's drafts folder.",
+      "learn": "You optimised for looking responsive instead of being effective. Re-read the lesson on **what a PM is actually for** — especially the bit on customer requests being hypotheses, not specs. Good news: you have 89 more days in your first 90."
+    }
+  }
+}

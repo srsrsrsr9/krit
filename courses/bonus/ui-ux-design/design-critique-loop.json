@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Designer Who Skipped Critique",
+    "source": "Anonymous design manager at PadhAI Tutor, a Gurugram-based AI-tutoring app for K-12",
+    "date": "October 2024",
+    "story": "PadhAI's Series-B launch event was scheduled for **October 8, 2024**. The lead designer on the new parent dashboard — call him R, three years out of NID, very confident — refused two scheduled critique sessions in the last sprint. *\"Calls slow me down, the team will nitpick fonts, I've got it.\"* His manager, conflict-averse and slammed with hiring, let it slide both times.\n\nLaunch shipped on schedule. Within **72 hours**, three problems surfaced that any 30-minute critique would have caught: the *Add Child* CTA was below the fold on the most common Android screen size; the parent's weekly progress report used a colour scale where *red* meant *good* (mapped backward from a heatmap library); and the PIN-setup flow asked for the PIN *before* explaining what the PIN was for, leading to a **47% drop-off** at that screen.\n\nThe team shipped **three emergency redesigns over the next eleven days**. The first two were patches; the third was a full rebuild of the PIN flow. R was not fired but was moved off the dashboard team. His manager wrote a one-paragraph addendum to the team's working agreement: *\"Critique is not feedback you opt into. It is the cheapest insurance you can buy on a deadline.\"*\n\nThe interesting part: R came back in February having internalised the lesson. By Q2 2025 he was running the team's critique sessions himself — including a rule that *every* design lead must present at least one half-finished file per sprint, *especially* when they think it doesn't need it. The team's launch-incident rate dropped to roughly one per quarter from one per launch.",
+    "takeaway": "Critique is not a tax on confident designers. It is the only thing that turns a confident designer into a senior one."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Two Weeks to Launch",
+    "setup": "Twelve weeks into the **Saral Pay** engagement. The launch is in **two weeks**. Vikram pings you Monday morning: *\"I know we planned a critique session this week but honestly we should just ship. Three new screens, all 90% there, can we just push?\"*\n\nYou know what *just ship* means. Your job is to apply the **3-question critique** — *what is this trying to do? what is in the way? what is the smallest change that helps?* — to the three screens, and decide what gets cut so launch happens on time *and* doesn't blow up.",
+    "coach": {
+      "name": "Design-Director Diya",
+      "role": "Has personally been the *just ship* person. Has the scars."
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision: **how do you respond to Vikram's *\"just ship\"* message?**",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Two weeks is *more* reason to critique, not less. 90 minutes Wednesday — we walk through the three screens with the 3-question loop, decide what ships and what cuts. Faster than the redesign you'll need post-launch.\"",
+            "correct": true,
+            "explain": "**Right framing.** You re-anchored the cost: critique is cheaper than rework. You also gave a specific time-bounded ask (90 minutes Wednesday). Vikram says yes because the alternative he just proposed sounds vague.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"Sure, let's just ship. We'll iterate post-launch.\"",
+            "correct": false,
+            "explain": "Post-launch *iteration* is the polite name for *emergency hotfix at 11pm on launch day*. PadhAI did three of these in eleven days. You signed up to be on-call for whatever breaks.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"You're the founder, your call.\"",
+            "correct": false,
+            "explain": "You abdicated. The exact moment Vikram needed a contrary expert opinion, you became a yes-machine. Why is he paying you?",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Send me the Figma, I'll review async tonight and send notes.\"",
+            "correct": true,
+            "explain": "**Acceptable second-best.** Async critique loses the back-and-forth but preserves the actual review. Pair with one short call to discuss the highest-impact items. Half-credit because it works only if you actually send the notes by morning.",
+            "points": 2
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Wednesday's call. **Screen 1**: a *Refer a Friend* feature with three reward tiers, illustrated badges, and a leaderboard. Vikram is excited about it. Apply question 1: ***\"What is this trying to do?\"***",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ask Vikram to state, in one sentence, what behaviour this screen is supposed to drive — and within how many days. If he can't, the screen is solving a vibe, not a problem.",
+            "correct": true,
+            "explain": "**The first question of any critique.** If the goal isn't crisp, no amount of design fixes the screen. Vikram pauses for a long moment and says: *\"...we want users to invite people.\"* That's not a goal; that's the feature description.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Suggest moving the leaderboard above the badges for better visual hierarchy.",
+            "correct": false,
+            "explain": "You jumped to *what is in the way* before establishing *what it's trying to do*. You're polishing a screen that may not need to exist for launch.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Praise the illustrations — they're really nice.",
+            "correct": false,
+            "explain": "Critique is not a feedback sandwich. Compliments at the start of a critique are cortisol-suppressors that delay the substance. Diya's eye is twitching.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Ask if there's user research validating that referrals matter for Saral Pay's growth model right now.",
+            "correct": true,
+            "explain": "**Sharp.** This is the *what is this trying to do* question at the strategic layer. If referrals aren't a top-3 acquisition lever in month 1, the entire screen is a candidate for the cut list — illustrations and all.",
+            "points": 3
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Vikram concedes Refer-a-Friend can wait. **Screen 2**: the *Onboarding KYC* flow, which works but has 7 steps. Apply question 2: ***\"What is in the way?\"*** What do you look for?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Drop-off cliffs between steps; fields the user can't answer without leaving the app; copy that sounds like compliance not a person; any step that re-asks something already given.",
+            "correct": true,
+            "explain": "**Lands it.** *In the way* is concrete: friction the user can name. Naming four candidates lets you and Vikram walk the screens looking for them. You find that step 4 asks for PAN *and* DOB on separate screens (re-ask), and step 6 asks for *occupation* with 47 dropdown options.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Suggest making the form fields a different colour so they stand out more.",
+            "correct": false,
+            "explain": "Cosmetic. *In the way* is about user-friction, not visual polish. The 7-step flow has structural problems your colour change doesn't touch.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Recommend collapsing 7 steps to 1 long-scroll page.",
+            "correct": false,
+            "explain": "You replaced one bad pattern with another. Long-scroll KYC forms intimidate; 7 small steps with progress feel achievable. The right move is to remove *unnecessary* steps, not to mash them all together.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "Look at the analytics from the staging cohort — where are users actually dropping off?",
+            "correct": true,
+            "explain": "**Brilliant if data exists.** Real drop-off > opinion drop-off. Vikram pulls the staging numbers; step 6 (the 47-option dropdown) loses 31% of users. Now you have your single biggest target with zero debate.",
+            "points": 3
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "**Screen 3**: a beautifully animated transaction-history page Vikram has spent two weekends on. It's polished. It's also the last screen in your critique. Apply question 3: ***\"What is the smallest change that helps?\"*** With launch in 13 days, what do you decide?",
+        "options": [
+          {
+            "id": "a",
+            "label": "Ship it as-is. It's polished, it works, and the smallest helpful change before launch is *no change* — protect the launch window for the KYC fixes that actually matter.",
+            "correct": true,
+            "explain": "**This is the senior move.** Critique is not an excuse to redesign everything you see. You correctly identified that the transaction history is *already in the launch-acceptable zone*, and protected scarce engineering hours for the KYC step-6 fix that will actually move retention. Vikram exhales for the first time today.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Suggest five small polish items — different easing curve, different empty state, different timestamp format.",
+            "correct": false,
+            "explain": "You added 3 days of work to a 13-day runway, on a screen that wasn't broken. The KYC fix won't ship in time because you spent the budget here. You optimised the wrong screen.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Recommend a full rebuild — the animation library is heavy and slows the app.",
+            "correct": false,
+            "explain": "Two weeks before launch is *not* the time to rebuild. If the perf issue is real, log it post-launch with a measurement. Pre-launch critique should bias toward *smallest helpful change*, not *most thorough one*.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Cut the transaction-history animation entirely — too risky on low-end Android devices.",
+            "correct": false,
+            "explain": "Possibly true but you have no data to back it. *Cutting* the polish work without measurement is the inverse of the over-polish trap; you traded one untested decision for another. Test on a low-end device first; cut only if measured.",
+            "points": 1
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Wednesday's 90-minute critique cut the Refer-a-Friend screen, fixed the KYC step-6 dropdown (3 to 12 grouped options), and protected the transaction-history animation. Saral Pay launches on time. Step-6 retention goes from 69% to 91% in week one. Vikram texts you three weeks later: *\"That call saved the launch.\"* **Diya forwards your message to her own clients as a teaching example.**",
+      "good": "You ran the critique loop but spent budget on the wrong screen, or didn't push back hard enough on a feature that should have been cut. Launch goes okay but with one redesign in the first month. Re-read the lesson on **the smallest change that helps** as the actual hardest of the three questions.",
+      "learn": "You either let *just ship* win, or you ran the critique and turned it into a redesign. Re-read the lesson — especially the section on **critique as triage, not perfection**, and the part about **how protecting the launch is itself a design decision**."
+    }
+  }
+}

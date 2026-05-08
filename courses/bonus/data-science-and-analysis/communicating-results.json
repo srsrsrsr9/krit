@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 14-Page PDF Nobody Read",
+    "source": "Anonymous principal data scientist at Vahan Insure, a Hyderabad-based motor-insurance startup",
+    "date": "April 2024",
+    "story": "On April 3, 2024, the data-science team at Vahan Insure delivered what they considered their magnum opus: a **14-page PDF** titled *\"Q1 Claims Risk Model: Methodology, Performance, and Recommendations.\"* It contained 22 figures, 6 tables, 4 SHAP plots, a section on hyperparameter sensitivity, and — buried on page 11, paragraph 3 — the actual recommendation: *raise the premium for self-driven two-wheelers in three specific districts by 8 to 12 percent.*\n\nThe PDF went to the CFO, the Chief Underwriter, the COO, and the founder. The team scheduled a 60-minute readout. The founder cancelled. The COO skimmed page one, asked for 'the headline,' got pointed to page 11, and gave up at the SHAP waterfall on page 8. The Chief Underwriter, who actually had the authority to act on the recommendation, read the executive summary, found it was eight bullets long with no clear ask, and forwarded it to her team with the note *\"thoughts?\"*\n\nThree weeks went by. The recommendation was never actioned. On April 24, the project was quietly killed in the next quarterly planning meeting — not because the model was wrong, but because no decision-maker could find the answer inside the artefact. The principal DS later said, in a beer-fuelled offsite confession in May: *\"We spent four weeks on the model and 90 minutes on the memo. We had it backwards.\"*\n\nThe model was technically excellent. The communication was a 14-page coffin.",
+    "takeaway": "An unread analysis is indistinguishable from an analysis that was never done. The memo is the deliverable; the model is the input."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The CFO's Memo",
+    "setup": "It's **Week 18**. Aditi's churn investigation from Week 1 has snowballed. She's done the cohort analysis, the proper hypothesis tests, the modelling, the segmentation. She has 38 charts, 4 SQL queries that would make a senior engineer weep with joy, and a clear story.\n\nThe CFO emails at **6:14pm Thursday**: *\"Board call is Tuesday at 9am. Need a memo from you on Q3 churn — what's happening, why, what we should do. Two pages max. I'll read it Monday morning.\"*\n\nAditi opens a blank Google Doc. Her cursor blinks. She has 90 hours, the work of three months, and two pages. She pings you.",
+    "coach": { "name": "Head-of-Data Hema", "role": "Head of Data, has watched too many brilliant analyses die in 14-page PDFs" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aditi types the first heading: *\"1. Methodology.\"* She's about to walk through her cohort approach. **Stop her.** What goes first in a board memo?",
+        "options": [
+          { "id": "a", "label": "\"Methodology first — they need to trust the process before they trust the number.\"", "correct": false, "explain": "This is the Vahan Insure tombstone from the field notes. Page 11 of 14. The CFO will not read past 'methodology' on a Monday morning. Methodology is an appendix, not a lede.", "points": 0 },
+          { "id": "b", "label": "\"BLUF — Bottom Line Up Front. The first sentence answers the CFO's question. The next sentence says what to do about it.\"", "correct": true, "explain": "**Yes.** Aditi rewrites: *\"Q3 churn rose from 4.1 to 4.6 percent, driven entirely by the June referral cohort. Cohort-adjusted retention is flat. Recommendation: tighten referral-source filters; do not change retention strategy.\"* Two sentences. CFO knows the answer before paragraph two.", "points": 3 },
+          { "id": "c", "label": "\"Start with a chart that shows the trend.\"", "correct": false, "explain": "Charts are evidence, not headlines. A board reader looking at a trend chart still has to do the interpretation work. Tell them the answer; let the chart confirm it.", "points": 1 },
+          { "id": "d", "label": "\"Start with what changed since the last board memo on this topic.\"", "correct": true, "explain": "**Smart for a recurring memo.** Board members read in series; they want the delta from last quarter, not the full re-establishment of context. Pair this with a BLUF and you have an executive-grade opening.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "After the BLUF, Aditi has roughly 1.5 pages left. **What are the three sections that earn their space?**",
+        "options": [
+          { "id": "a", "label": "(1) Methodology in detail, (2) all 38 charts, (3) appendix with SQL queries.", "correct": false, "explain": "This is exactly the 14-page PDF that didn't get read. Detail belongs in the appendix link. The memo is for decisions, not for showing your work.", "points": 0 },
+          { "id": "b", "label": "(1) The evidence (one or two charts max), (2) the assumptions and what would change the conclusion, (3) the recommendation with a clear next step and owner.", "correct": true, "explain": "**Memo gold.** Evidence proves the BLUF. Assumptions show your honesty (and pre-empt the CFO's pushback). The recommendation makes the memo *actionable*. A board member can read this in 90 seconds and walk into Tuesday's meeting prepared.", "points": 3 },
+          { "id": "c", "label": "(1) Cohort breakdown, (2) statistical significance, (3) modelling approach.", "correct": false, "explain": "This reads like a thesis abstract. The CFO doesn't care about your modelling approach in the body; she cares whether to act and on what. Move it to the appendix.", "points": 1 },
+          { "id": "d", "label": "(1) Evidence, (2) what we'd need to be wrong, (3) recommendation, (4) what we'll know by next quarter.", "correct": true, "explain": "**Even better.** Adding 'what would change my mind' (assumptions/falsifiers) and 'what we'll know by next quarter' (a follow-up commitment) signals senior-analyst maturity. The board now trusts you to update them on your own claims.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Aditi has the structure. She's writing the recommendation. She drafts: *\"We should consider possibly tightening referral filters, subject to further analysis.\"* **Edit it.**",
+        "options": [
+          { "id": "a", "label": "Leave it. Hedging is professional.", "correct": false, "explain": "Hedging like that gets read as 'the analyst doesn't know.' The CFO has read 200 of these. She wants you to take a position, with the assumptions called out. 'Subject to further analysis' is the death-rattle of any recommendation.", "points": 0 },
+          { "id": "b", "label": "\"Tighten referral filters to exclude the three highest-CAC partner sources by June 1. Owner: Growth team. We expect a 0.5 to 1.0 point reduction in headline churn within two cycles. If churn does not move, escalate for a deeper segmentation review.\"", "correct": true, "explain": "**A real recommendation.** Specific action, owner, deadline, expected effect, falsifier (what would prove you wrong). The board can either approve, push back on a specific element, or hand it to Growth on Tuesday afternoon. That is what a memo is for.", "points": 3 },
+          { "id": "c", "label": "\"Recommend further investigation into referral cohort dynamics over Q4.\"", "correct": false, "explain": "This means 'I want more time.' If you needed more time, the memo should say so explicitly with a date. Otherwise it sounds like the analysis didn't reach a conclusion — even though it did.", "points": 1 },
+          { "id": "d", "label": "\"Tighten referral filters by June 1. Caveat: assumes June referral cohort is the dominant driver, which holds in this analysis but should be re-verified after the August cohort lands.\"", "correct": true, "explain": "**Honest and decisive.** Takes a clear action, names the load-bearing assumption, schedules its own re-check. The CFO can sign off without doing the analyst's worrying for her.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You took Aditi's three months of work and helped her translate it into the two pages that decide whether it ships. BLUF, evidence, assumptions, decision-grade recommendation. Tuesday's board call: the CFO opens with Aditi's recommendation verbatim. The action ships by June 1. Hema framed an internal screenshot of the memo as the team standard. Aditi's first 90 days have a closing chapter.",
+      "good": "Most of the structure is right. Drill the **recommendation specificity** — generic recommendations are how brilliant analyses become quarterly archive material. Re-read the section on owner / deadline / falsifier as the unit of an actionable ask.",
+      "learn": "Aditi sent a methodology-first memo with a buried recommendation. The CFO skimmed page one, asked for the headline, gave up, and the project quietly died in next quarter's planning. Re-read the lesson — especially the sections on **BLUF**, **assumptions over precision**, and **recommendations that ship**. The Vahan Insure 14-page PDF is not a cautionary tale. It is a forecast."
+    }
+  }
+}

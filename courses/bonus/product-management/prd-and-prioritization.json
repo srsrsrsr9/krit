@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The PRD That Didn't Define Done",
+    "source": "Engineering manager at Vahaan Logistics, a Pune-based fleet-management SaaS (Series A, ~80 staff)",
+    "date": "June 2024",
+    "story": "On **June 3, 2024**, a PM at Vahaan named Karan handed engineering a PRD titled *'Driver attendance — phase 1.'* It was 2 pages. It described the problem (fleet owners couldn't tell which drivers showed up), listed user stories ('as a fleet owner, I want to see daily attendance'), and ended with: *\"Acceptance criteria: TBD with eng during sprint planning.\"*\n\nNobody filled in the TBD. Sprint planning happened on **June 7**. Engineering interpreted *'see daily attendance'* as a daily-summary table — driver name, punch-in time, status. Karan, in his head, had imagined a real-time dashboard with geo-fenced punch-in via the driver app, plus an automatic SMS to the fleet owner if more than 10% of drivers were absent.\n\nNeither person asked. Engineering shipped the table on **June 28**. It worked beautifully.\n\nKaran demoed it to the design partner — **Patel Transports, ₹22L ARR** — on **July 2**. The CEO of Patel looked at the table and said: *\"This is just a list. Where's the SMS? Where's the map?\"* Karan turned the colour of curd.\n\nThe rebuild took **2 weeks** and **3 engineers**, plus a credibility hit with Patel that took two more months to repair. The rebuilt PRD had a 'Definition of Done' section with 7 bullets, signed off by eng, design, and the design partner. It was 1 page longer than the original. It would have saved 14 days.",
+    "takeaway": "If the PRD doesn't define 'done', engineering will define it for you — and they'll define it as 'whatever was easiest to build from your description.'"
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rhea's First Quarter Plan",
+    "setup": "**Week 5, Tarakash.** Rhea has earned the right to own a piece of the Q3 plan. Devika hands her the quarter brief: **2 engineers, 12 weeks, one objective — *lift trial-to-paid conversion from 11% back to 18%.*** \n\nRhea has a backlog of **8 candidate features**, gathered from her interviews and the broader team:\n\n1. **Tally integration template** (3 wks) — fixes the bottleneck she found in lesson 2.\n2. **Guided onboarding tour** (2 wks) — the CEO's favourite pet idea.\n3. **API docs upgrade** (5 wks) — engineering wants this badly.\n4. **In-product chat support** (4 wks) — sales asked for it.\n5. **Pricing page A/B test** (1 wk) — growth team's ask.\n6. **SSO/Google login** (2 wks) — 4 users asked in interviews.\n7. **Admin audit log** (3 wks) — Mehta from week 1 asked for this in their renewal call.\n8. **Slack notification integration** (4 wks) — competitor has it.\n\nShe has roughly **24 engineer-weeks** of capacity. She has to cut to 3 features and write a defensible PRD for the lead one. Devika's calendar slot is in 90 minutes.",
+    "coach": { "name": "Director-PM Devika", "role": "Director of Product, Tarakash · believes a roadmap with 8 things is a wishlist with delusions" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Devika asks: *\"What's your filter? You can't pick 3 without knowing why you're picking 3.\"* What does Rhea say?",
+        "options": [
+          { "id": "a", "label": "\"I'll pick the 3 most-requested features so we cover the most stakeholders.\"", "correct": false, "explain": "Stakeholder happiness is not the objective. The objective is **trial-to-paid 11% → 18%**. Three features that please everyone but don't move that number is how PMs ship 'busy' instead of 'effective.'", "points": 0 },
+          { "id": "b", "label": "\"My filter is: does this feature plausibly move trial-to-paid conversion in 12 weeks? Anything that doesn't, gets cut or deferred — even if a stakeholder asked for it.\"", "correct": true, "explain": "**Yes.** You named the objective and made it the cut-line. Now Slack notifications, audit log, and SSO are obviously off the list — they're retention/expansion features, not conversion features. Devika nods.", "points": 3 },
+          { "id": "c", "label": "\"I'll pick the 3 cheapest features so we can ship the most.\"", "correct": false, "explain": "Cheap features that don't move the metric are still a wasted quarter. The pricing A/B test is cheap; an audit log is cheap-ish. Neither is the bottleneck. Cost is a tiebreaker, not the criterion.", "points": 1 },
+          { "id": "d", "label": "\"I'll let the team vote.\"", "correct": false, "explain": "PM democracy is how you end up with the engineering team's pet feature, sales' pet feature, and the CEO's pet feature. None of which were chosen because they move the metric. Devika is now googling 'how to fire an APM.'", "points": 0 }
+          ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Applying the conversion-lift filter, which **3 features** does Rhea pick?",
+        "options": [
+          { "id": "a", "label": "Tally template (3w) + Guided tour (2w) + API docs (5w) = 10w. Save the rest as buffer.", "correct": false, "explain": "Tally and guided tour are good picks. API docs is a 5-week investment that helps **integration partners**, not trial users hitting the conversion wall. Devika points out: \"Eng wants this. Eng wanting something is not the same as it moving the metric.\"", "points": 1 },
+          { "id": "b", "label": "Tally template (3w) + Guided tour (2w) + Pricing A/B test (1w) = 6w. Pull in audit log (3w) since it helped retain Mehta.", "correct": false, "explain": "You started strong then added the audit log because it felt politically smart. Mehta is **renewal**, not **trial-to-paid**. You drifted off the objective in the second sentence.", "points": 1 },
+          { "id": "c", "label": "Tally template (3w) + Guided tour (2w) + Pricing A/B test (1w) = 6w. Hold the remaining 18w of capacity in reserve for the 2 inevitable scope expansions and one bug-bash sprint.", "correct": true, "explain": "**This is mature planning.** All three picks plausibly hit conversion. You explicitly held buffer for scope creep and on-call work. Devika says: \"I've been a PM for 11 years. I have never once finished a quarter at the originally-scoped capacity.\"", "points": 3 },
+          { "id": "d", "label": "Pick all 8 — *\"we'll figure out as we go.\"*", "correct": false, "explain": "24 engineer-weeks of capacity, 24 engineer-weeks of features, zero buffer, zero scope discipline. This is the *now/now/now* roadmap from lesson 4, except it's currently lesson 3 and you're already failing the next one.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Rhea picks the 3. Now she has to write the PRD for the **Tally integration template**. Which version does she ship?",
+        "options": [
+          { "id": "a", "label": "A 1-pager: Problem (CFOs can't push invoices to Tally), User story (\"as a CFO, I want to push invoices to Tally\"), Acceptance criteria: TBD with eng.", "correct": false, "explain": "You re-created Karan's PRD from the field notes. Engineering will interpret 'push invoices to Tally' as 'a button that exports a CSV.' Two weeks in, you'll discover they didn't build the webhook. Re-read the field notes, then re-read them.", "points": 0 },
+          { "id": "b", "label": "A 2-pager: Problem, target metric (% of trial users who complete a Tally integration in <10 mins), in-scope (one-click template, sample webhook payload, error states for top-3 failure modes), explicitly out-of-scope (Zoho, Quickbooks, custom mappings), Definition of Done (5 bullets, eng-signed).", "correct": true, "explain": "**Beautiful.** Problem, target metric, in-scope, **out-of-scope** (this is the bit most PMs miss), and a Definition of Done that engineering signed. You can now cut a sprint review with confidence. Devika prints this and pins it to the wall.", "points": 3 },
+          { "id": "c", "label": "A 14-page document with personas, customer journey maps, competitor analysis, 4 mockups, a risk register, and an OKR alignment matrix.", "correct": false, "explain": "Nobody will read this. Nobody. The CEO will skim the first page, engineering will read the 'in-scope' section if you're lucky, and you'll have spent 3 days writing instead of building. PRD bloat is itself a form of avoiding the hard thinking.", "points": 0 },
+          { "id": "d", "label": "A Slack thread with 4 bullet points and a Loom video.", "correct": false, "explain": "Will work for a 3-person startup. Will not survive contact with a 200-person org where engineering, design, support, and sales all need to find this in 6 weeks. PRDs are durable; Slack threads are not.", "points": 1 }
+          ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You filtered ruthlessly, scoped honestly, and wrote a PRD engineering can actually build from. **Devika tells the head of eng you're 'unusually clear-eyed for someone 5 weeks in.'** You're ahead of where most APMs are at month 6.",
+      "good": "You got the filter right but stumbled on either the picks or the PRD craft. Re-read the section on **Definition of Done** and **explicit out-of-scope** — both are where rebuilds get prevented.",
+      "learn": "You optimised for breadth (lots of features, vague PRD) instead of depth (3 features, sharp PRD). Re-read the lesson, especially the parts on **the cut-line filter** and **why 'TBD with eng' is the most expensive 4 letters in product management**."
+    }
+  }
+}

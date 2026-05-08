@@ -1,0 +1,264 @@
+{
+  "slug": "prd-and-prioritization",
+  "title": "PRDs, Specs, and the Art of Prioritization",
+  "subtitle": "A PRD is a contract with future-you, not a novel for the engineers",
+  "estimatedMinutes": 14,
+  "skills": ["pm-prd-and-priority"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/product-management/prd-and-prioritization.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the 14-page PRD nobody read" },
+        { "startSec": 80, "label": "Mental model: PRD as contract with future-you" },
+        { "startSec": 220, "label": "Move 1 — RICE and value-vs-effort" },
+        { "startSec": 410, "label": "Move 2 — Cut, don't compromise" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/product-management/prd-and-prioritization.html",
+      "notesByline": "Notes by Devanshi, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most PRDs fail in one of two directions. Either they are 14 pages of background, user personas, motivational quotes, and pixel mockups — and nobody reads past page 3. Or they are a one-line JIRA ticket with the word 'TBD' in 4 places, and the engineer ships exactly the wrong thing.\n\nNeither extreme works. The fix is to think about what a PRD is *for*. Not who reads it; what it does. A PRD is the document that makes 'done' unambiguous before any code is written. If, after reading it, you and the engineer disagree on whether something is in scope, the PRD has failed regardless of how pretty it was.\n\nThis lesson teaches you to write a one-page PRD that survives, and to prioritize between PRDs without lighting your political capital on fire."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two PRDs side by side. Left, labelled 'Novel': a long page of dense text. Right, labelled 'Contract': a short structured doc with sections — Outcome, Out of scope, Done means, Risks, Open questions. Below, a smiling engineer reading the right one and a confused engineer reading the left one.",
+      "caption": "Same feature, two documents. One is admired. The other is shipped.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><rect width='220' height='220' rx='10' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='2'/><text x='110' y='25' text-anchor='middle' font-weight='bold' fill='#7F1D1D'>The Novel (14 pages)</text><line x1='15' y1='40' x2='205' y2='40' stroke='#9D174D'/><line x1='15' y1='52' x2='205' y2='52' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='64' x2='195' y2='64' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='76' x2='205' y2='76' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='88' x2='180' y2='88' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='100' x2='205' y2='100' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='112' x2='200' y2='112' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='124' x2='205' y2='124' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='136' x2='190' y2='136' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='148' x2='205' y2='148' stroke='#9D174D' stroke-dasharray='2 2'/><line x1='15' y1='160' x2='195' y2='160' stroke='#9D174D' stroke-dasharray='2 2'/><text x='110' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#7F1D1D'>read by: PM (twice)</text><text x='110' y='210' text-anchor='middle' font-size='10' font-style='italic' fill='#7F1D1D'>nobody else</text></g><g transform='translate(330 30)'><rect width='220' height='220' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='110' y='25' text-anchor='middle' font-weight='bold' fill='#065F46'>The Contract (1 page)</text><rect x='15' y='40' width='190' height='28' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='22' y='58' font-size='11' font-weight='bold' fill='#064E3B'>Outcome (with metric)</text><rect x='15' y='74' width='190' height='28' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='22' y='92' font-size='11' font-weight='bold' fill='#064E3B'>Out of scope (3 bullets)</text><rect x='15' y='108' width='190' height='28' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='22' y='126' font-size='11' font-weight='bold' fill='#064E3B'>Done means (criteria)</text><rect x='15' y='142' width='190' height='28' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='22' y='160' font-size='11' font-weight='bold' fill='#064E3B'>Risks + open Qs</text><text x='110' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>read by: PM, eng, design,</text><text x='110' y='210' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>sales, future-you</text></g></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: a PRD is a contract with future-you",
+      "md": "When you write a PRD, the most important reader is not the engineer, the designer, or the CEO. It is **future-you**, three weeks from now, when someone asks 'wait, was this in scope?' and you have to answer without re-litigating the whole thing.\n\nIf the doc resolves the disagreement on its own, the PRD worked. If you have to rebuild the context from memory and Slack threads, the PRD failed.\n\nThis reframe changes what you write. You stop writing for an imagined audience and start writing for your own future amnesia. **Outcome, out-of-scope, done-means, risks** — those four sections protect future-you. Everything else is optional."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/product-management/anim/prd-contract-with-future-you.html",
+      "height": 420,
+      "caption": "Watch a one-page PRD survive three weeks of scope-creep attempts that would have flattened a JIRA ticket.",
+      "fallbackImage": "/courses/product-management/anim/prd-contract-with-future-you-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "TBD ka tehzeeb",
+          "md": "PM ne PRD likha. 4 jagah likha *'TBD — to be discussed in standup.'* Standup mein discussion nahi hua. Engineer ne sprint shuru kar diya. Designer ne mock bana liya. Friday ko launch ki demo. Founder ne dekha — *'Yeh tho ekdum ulta ho gaya, scope to mera dimaag mein kuch aur tha.'*\n\nLesson: **TBD likhna safe nahi hai, tehzeeb hai.** Tehzeeb ka cost 4 din ka rework hai. Decide karo, ya likho 'open question, blocking — owner: PM, by Wednesday'. Lekin TBD ko PRD mein mat chhodo."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "TBD is not a placeholder, it is a deferred bug",
+          "md": "Every 'TBD' in a PRD is a decision you've delegated to whoever notices it last. That person is usually an engineer at 4 PM on Thursday, and their interpretation will not be the one you would have chosen.\n\nReplace TBD with one of two things: an actual decision, or 'open question, blocking, owner: PM, by Wednesday'. Both are fine. TBD is not."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — RICE and value-vs-effort"
+    },
+    {
+      "type": "markdown",
+      "md": "You will have more PRDs than engineers, always. Prioritization is not a skill — it is the *job*. Two frameworks earn their keep, not because they're cleverer than your gut, but because they make your gut auditable.\n\n**RICE** = Reach × Impact × Confidence ÷ Effort. You score each on a small scale (impact 1-5, confidence 0.5-1, reach in users-per-quarter, effort in person-weeks). The number you get is meaningless on its own; the number is meaningful when you compare it to other RICE scores. RICE works for triage of medium-sized features (a sprint to a quarter of work).\n\n**Value vs effort 2x2** is the cheaper, faster cousin. Plot every feature on a value-axis and an effort-axis. Top-left (high value, low effort) is the obvious yes. Bottom-right (low value, high effort) is the obvious no. The interesting quadrants are top-right (high value, high effort — 'big bets', need careful timing) and bottom-left (low value, low effort — 'snacks', do them between bigger work or skip if no slack).\n\nNeither framework decides for you. Both make your reasoning visible. The point is auditability — six months later, when the feature flopped, you can re-read your inputs and learn which one your gut was wrong about. Confidence, usually."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A 2x2 grid. X-axis labelled Effort (low to high). Y-axis labelled Value (low to high). Top-left quadrant 'YES — do now' filled green. Top-right 'BIG BETS — schedule carefully' yellow. Bottom-left 'SNACKS — between work' blue. Bottom-right 'NO — never' grey. Five sample features plotted as dots.",
+      "caption": "The 2x2 every PM eventually draws. The trick is being honest about which dot lives where.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' fill='#1F2937'><rect x='80' y='40' width='200' height='110' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><rect x='280' y='40' width='200' height='110' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><rect x='80' y='150' width='200' height='110' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><rect x='280' y='150' width='200' height='110' fill='#E5E7EB' stroke='#374151' stroke-width='2'/><text x='180' y='65' text-anchor='middle' font-weight='bold' fill='#064E3B'>YES — do now</text><text x='380' y='65' text-anchor='middle' font-weight='bold' fill='#7C2D12'>BIG BETS</text><text x='380' y='82' text-anchor='middle' font-size='10' fill='#7C2D12'>schedule with care</text><text x='180' y='175' text-anchor='middle' font-weight='bold' fill='#1E3A8A'>SNACKS</text><text x='180' y='192' text-anchor='middle' font-size='10' fill='#1E3A8A'>between bigger work</text><text x='380' y='175' text-anchor='middle' font-weight='bold' fill='#374151'>NO — say no</text><text x='180' y='280' text-anchor='middle' font-size='11' font-weight='bold' fill='#1F2937'>EFFORT (low to high)</text><text x='25' y='150' text-anchor='middle' font-size='11' font-weight='bold' fill='#1F2937' transform='rotate(-90 25 150)'>VALUE (low to high)</text><circle cx='130' cy='90' r='8' fill='#10B981'/><text x='130' y='113' text-anchor='middle' font-size='9' fill='#065F46'>SSO toggle</text><circle cx='420' cy='100' r='10' fill='#F59E0B'/><text x='420' y='123' text-anchor='middle' font-size='9' fill='#7C2D12'>Hindi UI</text><circle cx='160' cy='200' r='6' fill='#3B82F6'/><text x='160' y='220' text-anchor='middle' font-size='9' fill='#1E3A8A'>tooltip fix</text><circle cx='420' cy='220' r='6' fill='#6B7280'/><text x='420' y='240' text-anchor='middle' font-size='9' fill='#374151'>2nd theme</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translating a backlog of 12 asks into a sprint plan — RICE in 5 steps",
+      "steps": [
+        {
+          "label": "Step 1 — Score Reach honestly",
+          "body": "Reach is users affected per quarter, not 'every user could theoretically use this.' If only 8 percent of admins ever open the export menu, your reach for an export feature is at most 8 percent."
+        },
+        {
+          "label": "Step 2 — Score Impact on a small scale",
+          "body": "Use 0.25 / 0.5 / 1 / 2 / 3. Not 1-10. The narrower scale prevents 'everything is a 7' inflation. Impact 3 is reserved for things that materially shift retention or revenue."
+        },
+        {
+          "label": "Step 3 — Score Confidence brutally",
+          "body": "100 percent only if you have direct user evidence (interviews, instrumented behavior). 80 percent if you have indirect (sales reports, support tickets). 50 percent or lower for 'the CEO has a feeling'. Most early-stage features are 50-70 percent."
+        },
+        {
+          "label": "Step 4 — Estimate Effort with engineering",
+          "body": "Person-weeks. Take the engineer's number and multiply by 1.5 for review, QA, and the one mid-project surprise. The 1.5x is empirical, not pessimism."
+        },
+        {
+          "label": "Step 5 — Sort by score, then sanity-check",
+          "body": "Look at the top 5. Does the order match what your judgment says? If not, your inputs are off — usually confidence. Do not tweak the inputs to match your gut; either trust the gut and override (and write down why), or trust the inputs and override the gut. Be explicit about which you did."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Two features score within 12 percent of each other on RICE. The CEO has a strong preference for the lower-scored one. What does the framework actually tell you to do?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Build the higher-RICE feature; data wins.", "correct": false, "explain": "A 12 percent gap is within the noise of your own confidence numbers. RICE is signaling 'these are equivalent'." },
+        { "id": "b", "label": "Build the CEO's choice; their gut is the tiebreaker.", "correct": false, "explain": "Defaulting to HiPPO skips the actual question — what does the CEO know that your inputs missed?" },
+        { "id": "c", "label": "Treat the scores as equivalent and decide on a non-RICE factor: strategic fit, dependency unlock, or learning value.", "correct": true, "explain": "When scores are within 15 percent, the model is signaling 'use judgment'. That's the point." },
+        { "id": "d", "label": "Re-run RICE with stricter inputs until one wins.", "correct": false, "explain": "Tweaking inputs to get the answer you want is how RICE becomes theatre." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Roadmap mein 'P0' ka inflation",
+          "md": "Bhai, scene yeh hai. PRD review meeting. Founder bola — *'yeh P0.'* VP-Sales bola — *'mera bhi P0.'* Customer success ne likha — *'humare 3 customers ke liye P0.'* Engineering manager ne calmly bola — *'Sir, agar 9 cheezein P0 hain, toh kuch bhi P0 nahi hai.'*\n\nP0 inflation real hai. RICE ka kaam yeh nahi ki sab ko convince kare — kaam yeh hai ki dikhaye ki **9 P0 mein se 7 actually P2 hain**, with reasons."
+        },
+        "en": {
+          "tone": "info",
+          "title": "P0 inflation in three meetings",
+          "md": "Roadmap meeting. The founder calls one feature P0. Sales calls another P0. Customer success calls a third P0. By Friday, nine things are P0 and the engineering manager has stopped attending.\n\nThe job of a prioritization framework is not to win the meeting. It's to make the inflation visible. RICE doesn't need to convince anyone; it just has to show that 7 of the 9 P0s are actually P2, with the reasons spelled out."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Cut, don't compromise"
+    },
+    {
+      "type": "markdown",
+      "md": "Halfway through every project, you will be asked to fit more into less. Less time, less engineers, fewer designers — same scope. The default response is to compromise — half-build feature A, half-build feature B, ship a fuzzy version of both. **This is the worst possible move.**\n\nThe rule is **cut, don't compromise**. When scope must shrink, drop entire features rather than building diluted versions of every feature.\n\nWhy: a half-built feature has all the QA cost, all the documentation cost, all the support-ticket cost, and a fraction of the user value. Three features built well beat six features built halfway, every single time. Half-features become technical debt and customer complaints; cut features become future roadmap items.\n\nThe move in practice: when the engineer says 'we cannot fit all five things by Friday,' your response is 'which two of the five are we cutting completely?' — not 'which corners can we shave on each.' This will feel cruel the first time. Do it anyway."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two scope diagrams. Left, labelled 'Compromise', shows 5 features each at 60 percent done, all coloured half-yellow. Right, labelled 'Cut', shows 3 features at 100 percent done in green and 2 features greyed out and labelled 'next quarter'.",
+      "caption": "Compromise spreads pain across every feature. Cutting concentrates pain on the features that can wait.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><text x='130' y='20' text-anchor='middle' font-weight='bold' fill='#7F1D1D'>COMPROMISE (the trap)</text><g transform='translate(0 35)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F1: 60%</text></g><g transform='translate(0 62)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F2: 60%</text></g><g transform='translate(0 89)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F3: 60%</text></g><g transform='translate(0 116)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F4: 60%</text></g><g transform='translate(0 143)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F5: 60%</text></g><text x='130' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#7F1D1D'>5 unfinished things, 5x support cost</text></g><g transform='translate(310 30)'><text x='130' y='20' text-anchor='middle' font-weight='bold' fill='#065F46'>CUT (the right move)</text><g transform='translate(0 35)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F1: shipped well (100%)</text></g><g transform='translate(0 62)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F2: shipped well (100%)</text></g><g transform='translate(0 89)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F3: shipped well (100%)</text></g><g transform='translate(0 116)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#E5E7EB' stroke='#9CA3AF' stroke-dasharray='3 2'/><text x='10' y='16' font-size='10' fill='#6B7280'>F4: cut, on next quarter</text></g><g transform='translate(0 143)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#E5E7EB' stroke='#9CA3AF' stroke-dasharray='3 2'/><text x='10' y='16' font-size='10' fill='#6B7280'>F5: cut, may not return</text></g><text x='130' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>3 great things, 0 support debt</text></g></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "VP-Product Vivek",
+        "role": "Your hands-on VP, ex-Flipkart, allergic to roadmap theatre",
+        "avatarSrc": "/avatars/vivek.svg"
+      },
+      "intro": [
+        "Cut-or-compromise time. I'll give you a mid-sprint scenario, you tell me — **cut entire feature**, **trim scope of one feature**, or **add resources / extend deadline**.",
+        "There's no universal right answer; there's a defensible answer given the situation. I'll explain the cleanest move for each.",
+        "Junior PMs default to compromise on everything. That's not a strategy, that's an avoidance pattern."
+      ],
+      "buckets": [
+        { "id": "cut", "label": "Cut a feature entirely", "tone": "safe" },
+        { "id": "trim", "label": "Trim scope of one", "tone": "neutral" },
+        { "id": "extend", "label": "Add resource / extend", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "Sprint has 5 features. Engineer says 4 days behind. 1 feature (F4) is dependent on a 3rd-party API still being unstable. The other 4 are independent and on track.",
+          "correctBucketId": "cut",
+          "explain": "Cut F4 — its dependency means it'll keep slipping anyway. Better to fully ship 4 than wobble on 5."
+        },
+        {
+          "id": "s2",
+          "situation": "1 feature (the dashboard) has 6 sub-tasks. 4 are core, 2 are 'nice to have' filters. Engineer says all 6 won't fit; 4 will.",
+          "correctBucketId": "trim",
+          "explain": "Trim within one feature when sub-tasks are clearly tiered. Ship the 4 core, defer the 2 filters. The feature still ships intact."
+        },
+        {
+          "id": "s3",
+          "situation": "Quarter has 8 features. Mid-quarter, sales close a $400K deal contingent on 1 specific feature shipping in 6 weeks instead of 12. Engineering says it's possible only if you drop 2 other features or add a contractor.",
+          "correctBucketId": "cut",
+          "explain": "Cut 2 features. Adding a contractor mid-sprint usually slows the team in the first 3 weeks (onboarding cost). Cutting features is decisive and reversible — those features can ship next quarter."
+        },
+        {
+          "id": "s4",
+          "situation": "1 feature is 90 percent done. Last 10 percent is polish — animations, edge-case error states, accessibility audit. Engineer says 1 more week.",
+          "correctBucketId": "extend",
+          "explain": "The last 10 percent is what the user actually feels. Extending by a week is far cheaper than the support load of an unpolished launch."
+        },
+        {
+          "id": "s5",
+          "situation": "5 features all roughly equivalent in importance. All halfway done. Engineer says only 3 will be ready Friday at full quality.",
+          "correctBucketId": "cut",
+          "explain": "Pick 2 to cut now, ship 3 well. Compromising on all 5 means 5 half-features and 5x the support burden."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: 'just one more thing' scope creep",
+      "md": "Mid-project, someone (often the founder, occasionally sales, sometimes you) realises the feature would be 'just so much better with X.' X is small. X seems harmless. X is how 4-week features become 9-week features.\n\nThe trap has a name: **the just-one-more-thing trap**. The escape: every scope addition mid-project must displace something already in scope. Not 'add to the end' — *displace*. If nothing can be displaced, the addition does not enter the sprint.\n\nWrite this in your PRD: 'Mid-sprint additions require a 1:1 displacement.' Engineers will love you. Future-you will love you more."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're prioritizing 6 features for next quarter using value-vs-effort. Order your moves from first to last.",
+      "items": [
+        { "id": "p1", "label": "Define the team's quarterly outcome metric", "detail": "Without a target metric, 'value' is a vibe. Pick one number you're trying to move." },
+        { "id": "p2", "label": "Score each feature for value (impact on the target metric, not impact in general)", "detail": "Tie value to the quarterly metric, not to a general sense of importance." },
+        { "id": "p3", "label": "Get effort estimates from engineering, not from your gut", "detail": "Your effort estimate is wrong by 50 percent. Engineering's is wrong by 30 percent. Use theirs." },
+        { "id": "p4", "label": "Plot all 6 on the 2x2 and identify the obvious quadrants", "detail": "Top-left does. Bottom-right doesn't. Top-right and bottom-left are the conversation." },
+        { "id": "p5", "label": "Discuss the 'big bets' (top-right) explicitly with leadership before committing", "detail": "Big bets need timing and political cover. Don't slip them in; surface them for a yes or no." }
+      ],
+      "hint": "Step 1 is not 'score the features'. It's 'define what value means for this quarter'."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write the 'Done means' section of a one-page PRD for an admin CSV export feature. Aim for 3-5 bullet points. Each bullet should be testable; an engineer should be able to point at the running feature and check yes or no.",
+      "lang": "markdown",
+      "starter": "## Done means\n\n- Admin can click 'Export' on the inventory dashboard and download a .csv within 10 seconds for up to 50,000 rows.\n- ",
+      "expected": "## Done means\n\n- Admin can click 'Export' on the inventory dashboard and download a .csv within 10 seconds for up to 50,000 rows.\n- The CSV preserves SKU codes as text (no auto-conversion to dates by Excel) and includes the columns currently visible in the dashboard view.\n- An audit log entry is created on each export, capturing user, timestamp, and row count, visible in the existing audit-log view.\n- Errors over 50,000 rows return a clear message: 'Use the scheduled-export feature for larger datasets.' (no silent timeouts).\n- Documentation page in the help center is updated with a 3-line how-to before launch."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are valid reasons to cut an entire feature mid-sprint? Select all that apply.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "A blocking dependency on a 3rd-party API has become unstable", "correct": true, "explain": "External instability means the feature will keep slipping; cleanest cut." },
+        { "id": "b", "label": "The engineer estimating it is on holiday for 2 days", "correct": false, "explain": "A 2-day absence is not a feature-level decision; that's a sprint-management adjustment." },
+        { "id": "c", "label": "User research conducted mid-sprint shows the underlying problem is not real", "correct": true, "explain": "If the problem isn't real, finishing the feature is a sunk-cost mistake. Cut and redeploy." },
+        { "id": "d", "label": "The CEO mentioned a different priority in passing on Slack", "correct": false, "explain": "Casual comments are not decisions. Confirm intent before cutting committed work." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "EMI logic in product",
+          "md": "Compromise ka problem yeh hai ki short-term mein chhota lagta hai, long-term mein interest pile hota hai. Bilkul EMI ki tarah.\n\nHar half-shipped feature ka monthly EMI hai — support tickets, bug reports, documentation gaps, designer ka *'iska v2 kab aayega?'* ka question. Tu yeh EMI 18 mahine bharta hai, yaa ek baar feature **cut** karke headline pain leta hai. Smart PMs cut karte hain, EMI nahi bharte."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Half-features come with EMI",
+          "md": "Cutting a feature is a single up-front cost — one awkward conversation. Compromising on a feature is an EMI: support tickets every week, bug reports every month, designer asking 'when's v2?' every quarter, for 18 months.\n\nThe smart PMs take the up-front cost. The exhausted ones pay EMI for years."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "A PRD is a contract with future-you about what 'done' means. Outcome, out-of-scope, done-means, risks — those four sections, on one page.",
+        "TBD is not a placeholder; it is a deferred bug. Replace with a decision or a tracked open question with an owner and a date.",
+        "RICE and value-vs-effort don't decide for you; they make your reasoning auditable. When scores are within 15 percent, use judgment, not a tiebreaker.",
+        "When scope must shrink, cut entire features rather than compromising on every feature. Three things shipped well beat six things shipped halfway.",
+        "Mid-sprint additions require 1:1 displacement; if nothing can be displaced, the addition does not enter the sprint."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Look at the most recent PRD or feature spec you have written or read. Which sections protected future-you, and which were padding? If you had to rewrite it as a one-page contract — outcome, out-of-scope, done-means, risks — what would you keep, and what would you cut?"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 47% lift at day 2, -3% at day 14",
+    "source": "Anonymous performance marketer at a Bangalore D2C apparel brand",
+    "date": "November 2025",
+    "story": "Variant B was crushing it. Day 2: lift +47% over control. n=200 per arm. Manager said 'declare winner, scale to 100% traffic.' I caved.\n\nDay 14 (post-rollout): aggregated lift over 30,000 users was -3%. We had taken 2 days of noise and called it signal. Worse: variant B was creative-fatigue-prone; lift decayed faster than control. **₹14 lakh of paid spend at -3% efficiency before we caught it.**\n\nThe minimum sample size for our ROAS variance was n≈4,700 per arm. Day 2 with n=200 had confidence interval of [-7%, +35%] — the +47% point estimate was within noise. I now run a power calculation BEFORE every test, write the minimum n on the test plan, and refuse to call winners before we hit it.",
+    "takeaway": "Day-2 lift is almost always noise; minimum-sample-size discipline before declaring winners is non-negotiable."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: declare winner today?",
+    "setup": "Sneha's running a creative A/B test on Meta. Day 2: variant B leading by 38% lift. Manager wants to scale to 100% traffic for Q2 push. Sneha has 30 minutes to decide.",
+    "coach": { "name": "Founder-turned-mentor Manish", "role": "Built and sold 2 D2C brands; runs ad spend > ₹40cr/yr" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Manager pings: 'B is winning huge. Scale now?' Sneha's first move?",
+        "options": [
+          { "id": "a", "label": "Calculate the minimum sample size for the variance she's seeing. Probably much larger than current n.", "correct": true, "explain": "Right. Day-2 'huge lift' usually has a CI wide enough to include zero. Power calc first, decision second.", "points": 3 },
+          { "id": "b", "label": "Yes — scale immediately to capture the lift.", "correct": false, "explain": "Same Bangalore D2C story. ₹14 lakh of regret incoming.", "points": 0 },
+          { "id": "c", "label": "Reject the test entirely.", "correct": false, "explain": "Overcorrection. The test is fine; the rush is the problem.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Power calc says minimum n = 4700/arm. Currently at n = 200/arm. What's Sneha's call?",
+        "options": [
+          { "id": "a", "label": "Continue test until n hits 4700/arm. Set a calendar reminder for the date that lands.", "correct": true, "explain": "Right discipline. Pre-committed ending; no decision until then.", "points": 3 },
+          { "id": "b", "label": "Compromise: scale variant B to 50% traffic now.", "correct": false, "explain": "Half-measure that still leaks ROAS if B isn't actually winning. Wait for the data.", "points": 0 },
+          { "id": "c", "label": "Kill the test; pick by gut.", "correct": false, "explain": "Wastes the data already collected. Run it out.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 14: n hit. Lift is +6%, CI [+2%, +10%]. Manager wants 'a bigger win'.",
+        "options": [
+          { "id": "a", "label": "Ship variant B. +6% with tight CI is a real, sizable win at scale.", "correct": true, "explain": "Right. 6% lift on every ad spend dollar across the year is enormous; manager just expected larger headline.", "points": 3 },
+          { "id": "b", "label": "Run another 14 days hoping for bigger lift.", "correct": false, "explain": "Diminishing returns; 6% is already a confirmed win. Ship.", "points": 0 },
+          { "id": "c", "label": "Skip B; design a third variant.", "correct": false, "explain": "Loss aversion. B is the win; keep iterating but ship the win first.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Sneha ships +6% with confidence and CI documented. Manager learns the discipline. ₹14L not lost on day-2 noise.",
+      "good": "Solid run. Discipline holds; +6% shipped. Worth re-running with a creative variant 3 next quarter.",
+      "learn": "Re-read the power-calc section. Day-2 'lift' is usually noise; the math is what tells you."
+    }
+  }
+}

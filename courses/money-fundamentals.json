@@ -316,6 +316,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/money-fundamentals/anim/trap-lifestyle-inflation.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: lifestyle inflation accidentally",
@@ -762,6 +768,12 @@
               "explain": "Over-buffering is also a bug. Move ₹6L to equity (broad-market index), keep ₹4L (~6-7 months) liquid. Money sitting in a liquid fund earning 7% when equity gives 12% over decades is opportunity cost compounded."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/money-fundamentals/anim/trap-emergency-fund.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1252,6 +1264,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/money-fundamentals/anim/trap-compounding-cascade.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: 'just 1% more, sounds small'",
@@ -1645,6 +1663,12 @@
           "caption": "The decision tree fits on a postcard. Most Indian retail confusion comes from products that don't appear here.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FEFCE8'/><g transform='translate(180 30)'><rect width='200' height='40' rx='10' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='100' y='25' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#7C2D12' font-weight='bold'>What's this product for?</text></g><g font-family='sans-serif' font-size='10' fill='#FFFFFF' font-weight='bold' text-anchor='middle'><g transform='translate(20 130)'><rect width='110' height='32' rx='6' fill='#10B981'/><text x='55' y='14'>Protection</text><text x='55' y='27' font-size='9'>→ Term ins.</text></g><g transform='translate(140 130)'><rect width='110' height='32' rx='6' fill='#10B981'/><text x='55' y='14'>Growth</text><text x='55' y='27' font-size='9'>→ Index fund</text></g><g transform='translate(260 130)'><rect width='110' height='32' rx='6' fill='#10B981'/><text x='55' y='14'>Buffer</text><text x='55' y='27' font-size='9'>→ Liquid fund</text></g><g transform='translate(380 130)'><rect width='110' height='32' rx='6' fill='#10B981'/><text x='55' y='14'>Tax 80C/CCD</text><text x='55' y='27' font-size='9'>→ PPF / NPS</text></g></g><g transform='translate(180 200)'><rect width='200' height='40' rx='10' fill='#EF4444' stroke='#7F1D1D' stroke-width='2'/><text x='100' y='18' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#FFFFFF' font-weight='bold'>Bundled (ins. + invest.)</text><text x='100' y='32' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#FFFFFF'>→ AVOID; unbundle</text></g><g><line x1='280' y1='70' x2='75' y2='130' stroke='#92400E' stroke-width='1.5' marker-end='url(#mt)'/><line x1='280' y1='70' x2='195' y2='130' stroke='#92400E' stroke-width='1.5' marker-end='url(#mt)'/><line x1='280' y1='70' x2='315' y2='130' stroke='#92400E' stroke-width='1.5' marker-end='url(#mt)'/><line x1='280' y1='70' x2='435' y2='130' stroke='#92400E' stroke-width='1.5' marker-end='url(#mt)'/><line x1='280' y1='70' x2='280' y2='200' stroke='#7F1D1D' stroke-width='1.5' stroke-dasharray='3 2' marker-end='url(#mtr)'/></g><defs><marker id='mt' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#92400E'/></marker><marker id='mtr' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#7F1D1D'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/money-fundamentals/anim/trap-investing-basics-india.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -2111,6 +2135,12 @@
               "explain": "Worked in numbers, failed in sustainability. The note matters as much as the data. Modify: relax the budget to ₹18K/week, find the level you can hold without burning out."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/money-fundamentals/anim/trap-money-audit.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",

@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Photosynthesis A-Grade",
+    "source": "Anonymous senior English teacher at a CBSE-affiliated school in Bandra, Mumbai",
+    "date": "October 2024",
+    "story": "On October 7, 2024, a Grade 12 English teacher in Mumbai uploaded **63 board-prep essays** to an AI grading tool over a weekend. She had a JEE-prep daughter, a sick mother-in-law, and a Diwali break starting Tuesday. The tool returned grades and feedback in 41 minutes. She copy-pasted the marks into the school portal without reading a single rubric.\n\nOne essay, by a quiet Marathi-medium student named Rohan, scored a glowing **A (92/100)**. The essay was on \"The Role of Sunlight in Modern Civilization\" and contained the sentence: *\"Photosynthesis primarily occurs in the mitochondria of plant cells, releasing oxygen as a byproduct.\"* The AI praised it for \"strong scientific grounding.\"\n\nRohan's father, a retired botanist, read the graded essay over Diwali sweets. He was, charitably, unimpressed. The complaint reached the principal on October 14. By October 22, the school auditor had pulled all **47 essays** the teacher had graded that weekend; **9 contained factual errors the AI had rewarded**. Every grade was reissued. Two parents threatened to escalate to the CBSE board. The teacher kept her job but lost her Class 12 section for the following year.\n\nShe later told the auditor: *\"I trusted it because the marks looked reasonable. I forgot a reasonable-looking mark and a correct mark are not the same thing.\"*",
+    "takeaway": "AI grades fluently, not accurately. Fluency without a teacher's eye is just confident wrong-ness, served fast."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Sunday 11pm, 38 Essays, One Cup of Chai",
+    "setup": "It's **Sunday, 11:14pm**. You're **Ms. Anjali**, government school teacher in Pune, 15 years in the trade, **Day 6** of your principal-approved \"AI in my classroom\" 90-day pilot. Tomorrow at 9am, **38 Class 10 history essays** on the Quit India Movement are due back to students. You've graded six. Your back hurts.\n\nThe AI tool — paid for from a ₹47,000 annual school budget you fought hard for — can grade the rest in twelve minutes. The dashboard is open. The \"Grade All\" button is glowing. Your daughter has a Marathi unit test tomorrow and you promised to revise with her.\n\nYour mentor pings you on WhatsApp: *\"Anjali, before you click anything, talk to me.\"*",
+    "coach": { "name": "Mentor-Master Mukherjee", "role": "Retired DIET faculty, 32 years training teachers, your AI-pilot guide" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Mukherjee asks: *\"What's the actual job AI is doing here, in one sentence?\"* What do you tell yourself before you click anything?",
+        "options": [
+          { "id": "a", "label": "\"AI is grading my essays so I don't have to.\"", "correct": false, "explain": "This is the framing that produced the Bandra photosynthesis incident. If AI is *replacing* your judgment, you've outsourced the one thing parents and the board are paying you to do. Mukherjee groans audibly over the phone.", "points": 0 },
+          { "id": "b", "label": "\"AI is doing a first-pass scoring; I'm doing the final grade.\"", "correct": true, "explain": "**Yes.** This is the assistant frame, not the replacement frame. AI handles volume; you handle judgment. The pilot is meant to save you 60% of the time, not 100% of the responsibility.", "points": 3 },
+          { "id": "c", "label": "\"AI is faster than me, so its grade is probably more consistent.\"", "correct": false, "explain": "Consistency is not accuracy. An AI can be perfectly consistent at being subtly wrong about the Quit India Movement (it once told a Delhi teacher Gandhi led the 1857 revolt). Mukherjee asks you to put the chai down and read the rubric.", "points": 0 },
+          { "id": "d", "label": "\"AI is a draft I review; the grade in the portal is mine, with my name on it.\"", "correct": true, "explain": "**The strongest framing.** Your name goes in the school register, not the AI's. If a parent escalates on Tuesday, \"the AI graded it\" is not a defence the principal will accept. Own the output, use the assist.", "points": 3 }
+         ]
+      },
+      {
+        "id": "s2",
+        "prompt": "OK. You'll AI-grade, then review. **How do you set up the pass to make review actually possible** at 11:30pm on a Sunday?",
+        "options": [
+          { "id": "a", "label": "Click \"Grade All,\" wait 12 minutes, copy-paste 38 grades into the portal, sleep.", "correct": false, "explain": "This is the Bandra Sunday on rerun. \"Review\" that happens after grades are in the portal isn't review; it's archaeology. By the time you spot an error, the student has already seen the grade.", "points": 0 },
+          { "id": "b", "label": "AI-grade all 38, then spot-check **6 random essays** before publishing any grade.", "correct": true, "explain": "**Practical.** A 6-essay spot-check (16% sample) catches systematic errors — if the AI is misreading the Quit India dates in two of six, you know to slow down on all 38. Random beats top-3, top-3 introduces bias.", "points": 3 },
+          { "id": "c", "label": "AI-grade, then read **only the A-grade and F-grade essays**; trust the middle.", "correct": false, "explain": "Half-credit. The extremes are where parents complain, so you're not crazy. But Rohan's photosynthesis A would have been caught by this method only because his father is a botanist. The middle is where systematic errors hide; you can't trust the middle without sampling it.", "points": 1 },
+          { "id": "d", "label": "AI-grade tonight, but **publish nothing until Monday morning** after a 30-minute fresh-eye review.", "correct": true, "explain": "**Strongest move.** Sunday 11pm fatigue + AI fluency = the photosynthesis trap. Sleep, drink coffee, do the spot-check at 7am with a clear head. Mukherjee approves; he says he wishes more teachers separated *generation* from *publication*.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "AI returns the grades. Spot-check time. **Essay #14** scored 88/100 — high A. The AI feedback says: *\"Strong grasp of historical context, especially the role of Subhash Chandra Bose in launching the Quit India Movement in 1942.\"* What do you do?",
+        "options": [
+          { "id": "a", "label": "Looks reasonable. Move on. Bose was important in that era.", "correct": false, "explain": "**This is the moment Rohan's father caught.** Subhash Chandra Bose did not launch the Quit India Movement — Gandhi did, with the August 8, 1942 Bombay session of the AICC. Bose was already abroad founding the INA. The AI is fluently, confidently wrong, and you just rewarded the student for it.", "points": 0 },
+          { "id": "b", "label": "Open the essay. Read it. Cross-check the AI's claim against the rubric.", "correct": true, "explain": "**Yes.** You read the essay; the student didn't actually write that Bose launched Quit India — the AI hallucinated the praise. The student's actual work is solid. You revise the feedback, keep the grade close, and flag the AI's confabulation in your pilot log.", "points": 3 },
+          { "id": "c", "label": "Lower the grade by 10 points to be safe — \"if I'm not sure, the student loses.\"", "correct": false, "explain": "You're now punishing the student for the AI's error. That's worse than trusting the AI; it's compounding the AI's mistake with your fear. Mukherjee says \"chhi chhi\" loud enough that you hear it through the phone.", "points": 0 },
+          { "id": "d", "label": "Flag this essay for tomorrow morning's full re-grade by hand, ungraded for now.", "correct": true, "explain": "**Solid.** When the AI's feedback contains a verifiable factual claim that you can't immediately confirm, the right move is to defer, not to publish. One ungraded essay returned Tuesday is much cheaper than 47 reissued grades like Bandra.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Last call. You finish the spot-check at 12:08am. **2 of 6 essays had AI feedback errors** (33% error rate in the sample). What do you do with the remaining 32 essays?",
+        "options": [
+          { "id": "a", "label": "Publish all 38. The errors I found were minor.", "correct": false, "explain": "33% sample error rate projects to roughly 10-12 wrong essays in the full set. Publishing now is the Bandra script with different names. Mukherjee texts: *\"If you publish, I won't be your mentor anymore. Half-joking.\"*", "points": 0 },
+          { "id": "b", "label": "Publish the 4 clean ones from the sample. Hand-grade the other 34 myself this week.", "correct": true, "explain": "**Honest move.** You salvage what's verified, you do the work for the rest, and you tell the class on Monday: *\"Some grades are out today, the rest by Friday — I'm checking each one carefully.\"* Students respect transparency; principals reward it.", "points": 3 },
+          { "id": "c", "label": "Re-run the AI with a stricter prompt and hope for fewer errors.", "correct": false, "explain": "You don't know whether the prompt was the problem or the model is just confidently wrong about Indian history. Re-running without diagnosing is gambling, and you have a 90-day pilot to defend.", "points": 0 },
+          { "id": "d", "label": "Pause publication, log the 33% error rate in your pilot notebook, escalate to Mukherjee Monday.", "correct": true, "explain": "**Pilot-grade thinking.** A 33% AI-feedback error rate in Week 1 is the most important data you'll collect this quarter. Document it; it's the difference between a pilot that gets renewed and one that gets quietly killed.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Day 6 of the pilot and you've already learned the lesson Bandra learned in October. You used AI as an assistant, not a replacement; you separated generation from publication; you caught a confabulated Bose claim that would have ended up in 38 student notebooks. **Mukherjee sends you a single emoji: a folded-hands namaste.** Sleep well.",
+      "good": "You avoided the headline disaster, mostly. Re-read the lesson on the **assistant frame** — the difference between \"AI graded it\" and \"AI helped me grade it\" is the difference between a 90-day pilot that succeeds and one that becomes a cautionary slide in next year's CBSE conference.",
+      "learn": "You let fluency stand in for accuracy, which is exactly what the Bandra teacher did. Re-read this lesson, especially the section on **why AI feedback can be confidently wrong about Indian history** and the **3-step assistant protocol**. Mukherjee will be available again on Wednesday; bring your pilot notebook."
+    }
+  }
+}

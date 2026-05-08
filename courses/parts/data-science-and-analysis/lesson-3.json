@@ -1,0 +1,226 @@
+{
+  "lesson": {
+    "slug": "statistical-thinking",
+    "title": "Statistical Thinking Without the Stats Major",
+    "subtitle": "Confidence intervals over point estimates; effect size over p-value",
+    "estimatedMinutes": 14,
+    "skills": ["data-statistical-thinking"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/data-science-and-analysis/statistical-thinking.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why p-values are misused" },
+          { "startSec": 80, "label": "Mental model: CIs over point estimates" },
+          { "startSec": 220, "label": "Move 1: the t-test that actually matters" },
+          { "startSec": 410, "label": "Move 2: sample-size math" },
+          { "startSec": 560, "label": "The trap: p < 0.05 ergo true" }
+        ],
+        "notesPdfUrl": "/notes/data-science-and-analysis/statistical-thinking.html",
+        "notesByline": "Notes by Aditi, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Most of working analytics gets by on three concepts: a **confidence interval**, a **t-test**, and the back-of-envelope for **how many rows you need**. You do not need a statistics major. You do need to stop reporting p-values as if they were decisions.\n\nThe lesson starts with a heresy: 'p < 0.05' is a t-shirt slogan, not a decision rule. The number tells you *evidence under a null*, not whether the effect is real-world meaningful, not whether your sample is big enough to even ask the question, not whether the difference matters for the business. We will replace the p-value habit with a small kit of three tools you can defend in any standup."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two charts side by side. Left: a single point on a number line labelled '4.8% vs 5.1%, p = 0.04'. Right: two confidence-interval bars with overlapping ranges, labelled 'real difference: somewhere between -0.6pp and +1.2pp'",
+        "caption": "Same data, two stories. The point estimate hides the uncertainty; the CI shows it.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#ECFDF5'/><g transform='translate(30 40)'><rect width='240' height='160' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>Point estimate (lazy)</text><line x1='30' y1='90' x2='210' y2='90' stroke='#1F2937' stroke-width='2'/><circle cx='80' cy='90' r='6' fill='#1F2937'/><text x='80' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>4.8%</text><circle cx='160' cy='90' r='6' fill='#F43F5E'/><text x='160' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9D174D'>5.1%</text><text x='120' y='140' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E' font-style='italic'>'p = 0.04, ship it'</text></g><g transform='translate(310 40)'><rect width='240' height='160' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#1E40AF'>Confidence interval (honest)</text><line x1='30' y1='80' x2='210' y2='80' stroke='#1F2937' stroke-width='2'/><line x1='40' y1='75' x2='40' y2='85' stroke='#1F2937' stroke-width='2'/><line x1='200' y1='75' x2='200' y2='85' stroke='#1F2937' stroke-width='2'/><rect x='40' y='73' width='160' height='14' fill='#93C5FD' opacity='0.6'/><text x='40' y='105' text-anchor='start' font-family='sans-serif' font-size='10' fill='#1E40AF'>−0.6pp</text><text x='200' y='105' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1E40AF'>+1.2pp</text><text x='120' y='130' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>true effect lives in here</text><text x='120' y='148' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1E40AF' font-style='italic'>'real but small, maybe zero'</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: confidence intervals over point estimates",
+        "md": "Hold this picture. Every number you produce from data is a *guess at a range*, not a single true value. The point estimate is the centre of that range. The confidence interval is the range itself. The CI tells you what you actually know.\n\nA point estimate of '5.1% conversion' tells the reader nothing about precision. A CI of '5.1% (95% CI: 3.5% to 6.7%)' tells them the truth: with this sample size, the real number could be anywhere in a 3.2pp band. If you change the headline based on a 0.3pp difference and your CI is 3.2pp wide, you are reading noise.\n\n**Always report the CI. Always.** If you only have room for one number, report the CI; the point estimate without the CI is a lie of omission."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/data-science-and-analysis/anim/statistical-thinking-ci.html",
+        "height": 420,
+        "caption": "Watch confidence intervals shrink as sample size grows from n=47 to n=4,700. The point estimate barely moves; the CI tells the story."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "tip",
+            "title": "Cricket commentator wala scene",
+            "md": "Bhai, T20 mein commentator boltaa hai *\"Virat ka strike rate is innings 142 hai, career mein 138 hai, **clearly** Virat is in form\"*. Phir 8 balls ka sample size pe 138 vs 142 ka comparison kar raha hai. CI to itna wide hai ki Virat ka strike rate is innings actually 95 bhi ho sakta hai aur 175 bhi.\n\n8 ball pe nikala statistic, 5-saal career se compare kar diya. **Yeh hi p < 0.05 trap hai.** Sample chhota, narrative zoom-in, conclusion bahut zoor se. Asli analyst CI dekh ke bolega *\"is innings ka strike rate is 142, but with so few balls, anywhere between 95 and 175 is consistent with this sample.\"* Boring? Haan. Sahi? Bhi haan."
+          },
+          "en": {
+            "tone": "tip",
+            "title": "The cricket commentator problem",
+            "md": "T20 commentator says 'Virat's strike rate this innings is 142, his career is 138, clearly he's in form'. They are comparing an 8-ball sample to a 5-year career. The CI on 8 balls is wide enough to fit a strike rate of 95 or 175. The narrative is loud; the math is small. This is exactly the p-value trap in cricket commentary form."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The t-test that actually matters"
+      },
+      {
+        "type": "markdown",
+        "md": "You will run two tests in your career more than every other test combined: the **two-sample t-test** (comparing means of two groups) and the **two-proportion z-test** (comparing rates of two groups). Master these and 80% of business analytics is solved.\n\nThe pattern is always the same:\n\n1. Compute the difference in means or rates between the two groups.\n2. Compute the standard error of that difference.\n3. Report the difference, the 95% CI (≈ ±2 standard errors), and only then the p-value.\n4. Compare the CI to the **business threshold**: the smallest effect that would change a decision. If the entire CI is below threshold, the answer is 'no, even at the upper bound this is too small to matter'. If the CI straddles threshold, the answer is 'we cannot tell yet'. If the entire CI is above threshold, you have a real effect worth shipping.\n\nThis sequence — difference, CI, business threshold — is the move. The p-value is a sanity check, not the headline."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A horizontal bar chart with three confidence intervals: top one fully above a vertical line labelled 'business threshold', middle one straddling the line, bottom one entirely below the line",
+        "caption": "Three real-world readings of an A/B test. Only the top one is a 'ship it'. The bottom one is a 'kill it'. The middle one is 'we cannot tell yet, run more'.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#FAF5FF'/><line x1='280' y1='30' x2='280' y2='230' stroke='#5B21B6' stroke-width='2' stroke-dasharray='5 4'/><text x='280' y='25' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>business threshold</text><g transform='translate(0 60)'><line x1='320' y1='10' x2='480' y2='10' stroke='#065F46' stroke-width='3'/><line x1='320' y1='5' x2='320' y2='15' stroke='#065F46' stroke-width='3'/><line x1='480' y1='5' x2='480' y2='15' stroke='#065F46' stroke-width='3'/><circle cx='400' cy='10' r='5' fill='#065F46'/><text x='495' y='14' font-family='sans-serif' font-size='11' fill='#065F46'>SHIP IT</text><text x='30' y='14' font-family='sans-serif' font-size='10' fill='#1F2937'>entirely above threshold</text></g><g transform='translate(0 130)'><line x1='220' y1='10' x2='360' y2='10' stroke='#92400E' stroke-width='3'/><line x1='220' y1='5' x2='220' y2='15' stroke='#92400E' stroke-width='3'/><line x1='360' y1='5' x2='360' y2='15' stroke='#92400E' stroke-width='3'/><circle cx='290' cy='10' r='5' fill='#92400E'/><text x='370' y='14' font-family='sans-serif' font-size='11' fill='#92400E'>RUN MORE</text><text x='30' y='14' font-family='sans-serif' font-size='10' fill='#1F2937'>straddles threshold</text></g><g transform='translate(0 200)'><line x1='100' y1='10' x2='240' y2='10' stroke='#9D174D' stroke-width='3'/><line x1='100' y1='5' x2='100' y2='15' stroke='#9D174D' stroke-width='3'/><line x1='240' y1='5' x2='240' y2='15' stroke='#9D174D' stroke-width='3'/><circle cx='170' cy='10' r='5' fill='#9D174D'/><text x='250' y='14' font-family='sans-serif' font-size='11' fill='#9D174D'>KILL IT</text><text x='30' y='14' font-family='sans-serif' font-size='10' fill='#1F2937'>entirely below threshold</text></g></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "The translation: 'did the new pricing work?' becomes a defensible answer in 6 steps",
+        "steps": [
+          { "label": "Step 1 — Get the business threshold first", "body": "Ask: 'What's the smallest lift that would change your decision?' If the PM says '+0.5pp conversion', that is your threshold. Without it, no test result is interpretable." },
+          { "label": "Step 2 — Choose the right test", "body": "Conversion rate (binary outcome): two-proportion z-test. Time-on-page or revenue per user (continuous): two-sample t-test. Pick once, before you run." },
+          { "label": "Step 3 — Compute the difference and the standard error", "body": "Difference of rates is straightforward; SE depends on both sample sizes and both rates. Most analytics platforms expose this; if not, scipy.stats.ttest_ind or proportions_ztest in statsmodels." },
+          { "label": "Step 4 — Build the 95% CI", "body": "CI ≈ difference ± 1.96 × SE. Report this in the headline. The width tells you what you can claim; the centre tells you the direction." },
+          { "label": "Step 5 — Compare CI to threshold", "body": "Three possible reads: entirely above (ship), entirely below (kill), or straddles (run more or accept inconclusive)." },
+          { "label": "Step 6 — Report all three numbers, p-value last", "body": "Headline: 'Variant B converts at 5.1% vs control 4.8%; 95% CI on the difference is +0.1pp to +0.5pp; threshold was +0.5pp; recommend running for 2 more weeks.' p = 0.04 is a footnote." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Your A/B test on a Bengaluru SaaS shows variant B converts at 5.1% vs control 4.8%, with n = 47 per arm. What do you tell the PM?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Inconclusive — at n=47 per arm the 95% CI on a conversion rate is roughly ±2pp wide; the 0.3pp gap is well inside the noise band", "correct": true, "explain": "Correct. Power, not p-value. With this sample size you cannot distinguish a 0.3pp effect from zero. The honest answer is 'I cannot tell yet'." },
+          { "id": "b", "label": "Variant B wins, ship it", "correct": false, "explain": "Classic n=47 trap. Confidence interval is wider than the effect; you are reading noise wrapped in a uniform." },
+          { "id": "c", "label": "Run the test 5 more times and pool the results", "correct": false, "explain": "Variant of p-hacking. Pooling re-tests inflates the false positive rate. Run one test for the right duration." },
+          { "id": "d", "label": "Variant A wins because the CI overlaps", "correct": false, "explain": "Overlap means inconclusive, not 'A wins'. Defaulting to control is still a decision dressed up as analysis." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "warn",
+            "title": "47 vs 4700 ka difference",
+            "md": "Bhai, sample size ka game samjhle. Mumbai fintech mein A/B test chala — n=47 per arm. PM bola 'p = 0.04 hai sir, ship it'. Tu CFO ko convince karne gaya. CFO bola *\"47 logon pe basis kar ke ₹2 crore ka pricing change?\"*\n\nUsi pricing change pe n=4700 per arm wala test chalo. Result? Effect was actually **−0.2pp**, statistically significant in opposite direction. Pehle wala test pure noise tha jo p < 0.05 bana ke gir gaya.\n\n**n = 47 mein 'significant' ka matlab 'lottery jeet gaye'. n = 4700 mein 'significant' ka matlab 'sach mein effect hai'.** Sample size ke bina p-value ek number hai, nothing more."
+          },
+          "en": {
+            "tone": "warn",
+            "title": "n=47 vs n=4,700",
+            "md": "A Mumbai fintech ran a pricing A/B with n=47 per arm and shipped on p=0.04. They re-ran at n=4,700 and the effect was actually -0.2pp, also 'significant', in the opposite direction. The first test was a coin-flip wrapped in a p-value. Sample size is the difference between 'we know' and 'we got lucky'."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — Sample-size math (the back-of-envelope)"
+      },
+      {
+        "type": "markdown",
+        "md": "How many rows do I need? You have two answers: 'depends' (true) and a one-line approximation (useful). The one-liner for proportions tests:\n\n> n per arm ≈ **16 × p × (1 − p) / Δ²**\n\nwhere `p` is the baseline rate and `Δ` is the smallest effect you care about (in absolute percentage points, e.g. 0.005 for 0.5pp).\n\nWorked example: baseline conversion 5%, smallest meaningful lift 0.5pp.\n\n> n ≈ 16 × 0.05 × 0.95 / (0.005)² = 16 × 0.0475 / 0.000025 = **30,400 per arm**\n\nThirty thousand per arm. If your test is averaging 3,000 conversions a week, you need a 10-week test or a bigger effect to detect. If the PM gives you 2 weeks and a 0.5pp threshold, the test is mathematically impossible before you start. Run that math at the *start* of the experiment, not at the end. It saves arguments."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A bar chart showing required sample size growing as the minimum detectable effect shrinks: 0.5pp needs 30,400 per arm; 1.0pp needs 7,600; 2.0pp needs 1,900; 5.0pp needs 304",
+        "caption": "Sample size and effect size are inversely squared. Halve the detectable effect, quadruple the rows.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#FFF7ED'/><g><line x1='80' y1='220' x2='540' y2='220' stroke='#1F2937' stroke-width='1.5'/><line x1='80' y1='40' x2='80' y2='220' stroke='#1F2937' stroke-width='1.5'/></g><g><rect x='110' y='50' width='80' height='170' fill='#F43F5E' opacity='0.85' stroke='#9F1239' stroke-width='2'/><text x='150' y='40' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#9F1239' font-weight='bold'>30,400</text><text x='150' y='235' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>0.5pp</text><rect x='220' y='160' width='80' height='60' fill='#F59E0B' opacity='0.85' stroke='#92400E' stroke-width='2'/><text x='260' y='150' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E' font-weight='bold'>7,600</text><text x='260' y='235' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>1.0pp</text><rect x='330' y='205' width='80' height='15' fill='#10B981' opacity='0.85' stroke='#065F46' stroke-width='2'/><text x='370' y='195' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-weight='bold'>1,900</text><text x='370' y='235' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>2.0pp</text><rect x='440' y='217' width='80' height='3' fill='#0EA5E9' opacity='0.85' stroke='#0369A1' stroke-width='2'/><text x='480' y='212' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#0369A1' font-weight='bold'>304</text><text x='480' y='235' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>5.0pp</text></g><text x='310' y='258' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>baseline 5%, n per arm needed</text></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Senior-DS Saanya",
+          "role": "Tech lead at a Bengaluru SaaS, 9 years of cleaning other people's data"
+        },
+        "intro": [
+          "Welcome to the stats clinic. 🩺",
+          "Six real-shaped questions from your PM. Tell me each one is **answerable as-asked** (run the test), **needs effect threshold** (ask the PM the smallest effect they care about first), or **mathematically impossible** (the test cannot detect what they want with the data they have)."
+        ],
+        "buckets": [
+          { "id": "answerable", "label": "Answerable", "tone": "safe" },
+          { "id": "threshold", "label": "Needs threshold first", "tone": "neutral" },
+          { "id": "impossible", "label": "Impossible", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "PM: 'Did the new onboarding flow lift week-1 retention?' Baseline retention = 30%. They want results in 2 weeks. Daily new-signups: 200. Threshold: 'any improvement counts'.", "correctBucketId": "threshold", "explain": "'Any improvement' is not a threshold; it means 'I'll find a way to call any positive number a win'. Force the PM to commit: smallest lift that justifies shipping the new flow." },
+          { "id": "s2", "situation": "PM: 'Did the new onboarding flow lift week-1 retention by ≥3pp from baseline 30%?' Daily signups: 200. Test ran 4 weeks (n ≈ 5,600 per arm).", "correctBucketId": "answerable", "explain": "Threshold stated, sample size adequate (n ≈ 16 × 0.3 × 0.7 / 0.03² ≈ 1,250 per arm needed; we have 4× that). Run the comparison." },
+          { "id": "s3", "situation": "PM: 'Did the new pricing tier lift ARPU by ≥₹50?' Baseline ARPU mean ₹1,200, SD ₹400. n = 80 per arm.", "correctBucketId": "impossible", "explain": "For continuous outcomes, n per arm ≈ 16 × SD² / Δ² = 16 × 160,000 / 2,500 ≈ 1,024. n=80 cannot detect ₹50 effect. Test will be inconclusive by construction." },
+          { "id": "s4", "situation": "PM: 'I want to know if our new ML ranking model is better.' No threshold, no metric, no sample size discussion.", "correctBucketId": "threshold", "explain": "Three things missing: better at what (CTR, conversion, revenue?), by how much, and on what sample. Force these definitions before any test." },
+          { "id": "s5", "situation": "PM: 'Did the email campaign lift opens by ≥0.5pp from baseline 15%?' n = 220,000 per arm.", "correctBucketId": "answerable", "explain": "n ≈ 16 × 0.15 × 0.85 / 0.005² ≈ 8,160 per arm needed; we have 27× that. Run the proportions z-test." },
+          { "id": "s6", "situation": "PM: 'Is variant B's median revenue per user higher than variant A's?' Distribution heavily right-skewed (a few whales). n = 1,200 per arm.", "correctBucketId": "answerable", "explain": "Skewed distribution and 'median' is the right call (not mean). Use Mann-Whitney U or bootstrap CI on the difference of medians; n=1,200 per arm is plenty for non-parametric tests at typical effect sizes." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: p < 0.05 ergo true",
+        "md": "Three things 'p < 0.05' does NOT tell you:\n\n1. **Whether the effect is large enough to matter.** A statistically significant 0.2% revenue lift on a B2B SaaS is not commercially significant.\n2. **Whether the result will replicate.** Most p ≈ 0.04 results from small samples do not survive a re-run. The replication crisis is real, even in business analytics.\n3. **Whether you are testing the right hypothesis.** A confident p-value on a wrongly-defined metric is high-quality evidence for a wrong claim.\n\nThe slogan is 'p < 0.05 ergo true'. The slogan is wrong. Replace it with: **report the effect size, the CI, and the comparison to a pre-stated business threshold.** The p-value is a sanity check on whether you have evidence; it is not the evidence itself."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the steps of an honest A/B test analysis, from first to last.",
+        "items": [
+          { "id": "th", "label": "Get the smallest meaningful effect (business threshold) from the asker", "detail": "Before any test runs." },
+          { "id": "ss", "label": "Compute required sample size for that threshold", "detail": "Back-of-envelope: 16 × p × (1−p) / Δ²." },
+          { "id": "te", "label": "Pick the right test (z-test for proportions, t-test for means, non-parametric for skewed)", "detail": "One choice, before data." },
+          { "id": "ru", "label": "Run the test on a clean, sample-size-adequate dataset", "detail": "Stop at the planned n; do not peek." },
+          { "id": "ci", "label": "Build the 95% CI on the effect, not just a p-value", "detail": "CI ≈ difference ± 1.96 × SE." },
+          { "id": "co", "label": "Compare CI to the pre-stated threshold and recommend ship / kill / run more", "detail": "Three possible reads, one recommendation." }
+        ],
+        "hint": "The frequent mistake: skip the threshold step (#1) and discover at step 6 you have no way to interpret the CI."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "A PM at a Hyderabad SMB SaaS asks: 'baseline conversion is 8%; we'd ship anything above +1pp; we have 1,500 daily signups; how long does the A/B test need to run?'",
+        "lang": "markdown",
+        "starter": "Threshold (Δ): \nBaseline (p): \nRequired n per arm (formula): \nDays to run (assuming 50/50 split): \nRecommendation: ",
+        "expected": "Threshold (Δ): 0.01 (1pp absolute)\nBaseline (p): 0.08\nRequired n per arm (formula): 16 × 0.08 × 0.92 / (0.01)² = 16 × 0.0736 / 0.0001 = 11,776 per arm\nDays to run (assuming 50/50 split): 1,500/day total → 750/arm/day → 11,776 / 750 ≈ 16 days, round up to ~3 weeks for safety\nRecommendation: Run for 21 days (3 full weeks to also even out day-of-week effects); halt if traffic drops or a weekend skew becomes obvious."
+      },
+      {
+        "type": "quiz",
+        "prompt": "You run a t-test comparing churn rate between two cohorts (n=2,400 each). p = 0.003 and the difference is 0.4pp. What do you tell the business?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Statistically significant but commercially marginal — the 0.4pp difference is real, but probably below the threshold that would justify shipping a change", "correct": true, "explain": "Correct. With n=2,400 you can detect tiny effects; that does not make them business-meaningful. State both in the same sentence." },
+          { "id": "b", "label": "Significant, ship the change", "correct": false, "explain": "Confuses statistical with practical significance. The whole lesson." },
+          { "id": "c", "label": "Not significant, kill it", "correct": false, "explain": "p = 0.003 is significant by any conventional threshold. The issue is the magnitude, not the significance." },
+          { "id": "d", "label": "Use a Bayesian framework", "correct": false, "explain": "Different framework, same answer. The honest read is 'real but small'." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "info",
+            "title": "Manager ne dashboard banane chala diya",
+            "md": "Scene: Manager ne pucha *\"is this significant?\"*. Tu ne *\"p = 0.04\"* bola. Manager ne dashboard banane bhej diya. Tu ek week baad presentation mein ja raha hai, slide pe likha hai *\"+0.3pp conversion lift, p = 0.04, statistically significant.\"* Director pucha: *\"effect kitna bada hai?\"* Tu ne ruk ke calculate kiya: ₹4 lakh/month. Engineering cost: ₹18 lakh. \n\nDirector chai pe gaya. Tu wapas kursi pe baith ke socha: **bus stated CI dikha deta to yeh meeting 4 minute mein khatam hoti.** P-value pe 4 hafte gaye, threshold ne 4 minute mein decide kar diya."
+          },
+          "en": {
+            "tone": "info",
+            "title": "The dashboard that wasted four weeks",
+            "md": "Manager asks 'is this significant?'. You say p = 0.04. Manager sends you to build a dashboard. Four weeks later, the director asks 'how big is the effect?' and the answer is ₹4 lakh/month against an ₹18 lakh engineering cost. Four weeks of dashboard for a four-minute decision. The threshold question would have killed it on day one."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "'p < 0.05' is a t-shirt slogan, not a decision rule; report effect size and confidence interval first, p-value last.",
+          "Every number is a guess at a range; the confidence interval is the honest version of the point estimate.",
+          "Two tests cover 80% of business analytics: the two-proportion z-test (rates) and the two-sample t-test (means); pick the right one before running.",
+          "Compute required sample size at the start of the experiment using n ≈ 16 × p(1−p) / Δ²; if the math says impossible, do not run.",
+          "Compare your CI to a pre-stated business threshold; three reads only — ship it, kill it, or run more — and the threshold is what prevents post-hoc storytelling."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick the last A/B test or comparison you reported on. Did you state the business threshold before running it? If not, what was the smallest effect you would have called a win, and how do you know you are not just remembering a number that justifies the result you got?"
+      }
+    ]
+  }
+}

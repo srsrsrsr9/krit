@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Series-B That Demo'd 'AI Everywhere'",
+    "source": "Anonymous Chief of Staff at a Series-B Bengaluru SaaS, ARR ~$22M",
+    "date": "March 2025",
+    "story": "On March 6, 2025, the CEO of a Bengaluru-based vertical SaaS company stood in front of his board and said the words every founder thinks will save them: *'AI everywhere.'* The deck had 41 slides. Eleven of them said the word 'agentic'. Three said 'transformational'. None of them had a number on them.\n\nThe board, charmed, approved a ₹9 crore AI line item for the year. The CEO went back and asked his VP of Engineering to 'figure out the roadmap'. The VP, who had never shipped an LLM feature, hired two ML engineers in Hyderabad at ₹65L each, bought enterprise OpenAI credits, and let every team add 'AI' to a Q2 OKR.\n\nEighteen months later, in October 2026, the audit came in. The company had shipped: an AI-powered email summarizer (turned off after 3 weeks because users complained), a 'Smart Search' that was just BM25 with a re-ranker, and a chatbot on the marketing site that the SDR team disabled because it was answering pricing questions wrong. Net new revenue attributable to AI: zero. Net new churn prevented: zero. Spend: ₹11.4 crore (140% of budget).\n\nThe board replaced the CEO in November. The new CEO's first slide at her first board meeting had three rows: *Bet 1, Bet 2, Bet 3*. Each had a number. Two of them were small.",
+    "takeaway": "'AI everywhere' is the strategic equivalent of 'we'll figure it out'. Boards don't fund vibes for 18 months in a row."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Vikrant's Four Weeks to Scope",
+    "setup": "It's January 2026. **Vikrant**, VP of Product at a 300-person Bengaluru SaaS, has just been handed a board mandate: *'Build us an AI strategy. Q1.'* The CFO, who has seen this movie before, sends him a single Slack message: *'Vikrant — I will fund this. But I need ROI projections, not a deck. You have 4 weeks.'*\n\nVikrant has one analyst, a half-finished Notion page titled 'AI ideas (40+)', and a CFO who counts in basis points. His first instinct is to make a slide called 'AI Transformation Roadmap'. **Stop him.**",
+    "coach": { "name": "CFO-Veteran Vinita", "role": "Ex-CFO at two Indian unicorns, now operating advisor. Counts in cash, not capabilities." },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Vikrant opens his laptop on day 1 and asks: *'Where do I start?'* What do you tell him?",
+        "options": [
+          { "id": "a", "label": "Start with a vision deck. 'AI-First [Company Name]' — get the board excited, then back-fill the substance.", "correct": false, "explain": "This is exactly the trap the Series-B above fell into. Vinita: *'Vikrant, the board doesn't need to be excited. They need to be reassured. Vision decks without numbers are just expensive screensavers.'*", "points": 0 },
+          { "id": "b", "label": "Pick the 3-5 highest-leverage workflows in the company today, and ask: where would AI move a metric that already shows up on the P&L?", "correct": true, "explain": "**Yes.** Strategy starts from existing P&L lines. CAC, gross margin, sales cycle, support cost per ticket. If AI can move one of those by 15%+, you have a bet. If it can't, you don't.", "points": 3 },
+          { "id": "c", "label": "Hire a McKinsey AI strategy engagement. They've done this for 200 companies.", "correct": false, "explain": "₹3 crore for a deck you could write in 4 weeks if you talked to your own customers. Vinita: *'You're outsourcing the one thing the board hired YOU to do.'*", "points": 0 },
+          { "id": "d", "label": "Survey all 300 employees: 'Where would AI help your job?'", "correct": false, "explain": "You'll get 300 answers, all valid, none prioritized. Internal demand surveys produce wishlists, not strategies. Save this for week 3 once you have a frame.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Day 9. Vikrant has narrowed to 12 candidate use cases. The CFO is asking how he'll **rank** them. What's the frame?",
+        "options": [
+          { "id": "a", "label": "Score each on (1) impact on a P&L line, (2) feasibility with current LLM tech in 2026, (3) data readiness. Three columns, one number each, sum.", "correct": true, "explain": "**Clean.** Three axes the CFO can audit. Impact = rupees. Feasibility = does this exist or are we inventing? Data readiness = do we have the inputs without a 6-month pipeline build? Boring scoring beats elegant theorizing.", "points": 3 },
+          { "id": "b", "label": "Rank by 'strategic differentiation' — pick the bets that competitors can't easily copy.", "correct": false, "explain": "Differentiation matters in year 3. In year 1, you need bets that *work*. A defensible bet that doesn't ship is just a thesis. Ship first, defend second.", "points": 1 },
+          { "id": "c", "label": "Rank by which features are most fun to demo. Demos drive sales.", "correct": false, "explain": "This is how you get the email summarizer that gets turned off in 3 weeks. Demos are not metrics.", "points": 0 },
+          { "id": "d", "label": "Combine impact-on-P&L with a hard 'data readiness' filter — kill anything that needs a new data pipeline before it can ship.", "correct": true, "explain": "**Sharper.** Data readiness is the silent killer of AI roadmaps. Vinita: *'I've watched ₹4 crore of AI budget get spent building data pipelines for a feature that never shipped. Filter early.'*", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 21. Vikrant has 3 finalists. The CFO wants ROI projections. He's tempted to write *'$2M ARR uplift in year 1'* because it sounds bold. What do you tell him?",
+        "options": [
+          { "id": "a", "label": "Write three numbers per bet: optimistic, base, pessimistic. Show the assumptions. Let the CFO pick which one she believes.", "correct": true, "explain": "**This is the move.** A range with assumptions is auditable. A point estimate is a hostage situation. Vinita will respect the range; she'll cross-examine the point estimate.", "points": 3 },
+          { "id": "b", "label": "$2M ARR uplift, confidently. Boards reward boldness.", "correct": false, "explain": "Boards reward boldness *that ships*. You're 6 months from being the CEO who promised 40% CAC reduction and delivered 4%. Don't be that CEO. (See lesson 5.)", "points": 0 },
+          { "id": "c", "label": "Refuse to project. Say 'AI is too uncertain to forecast.'", "correct": false, "explain": "The CFO will fund someone who *will* forecast. Refusing the question doesn't make it go away; it just makes you look unprepared.", "points": 0 },
+          { "id": "d", "label": "Project the *cost* precisely (you control it) and the *uplift* as a range tied to a leading indicator you'll measure in 90 days.", "correct": true, "explain": "**Even better.** Tying uplift to a 90-day leading indicator (e.g., 'time-to-first-resolution drops by X') gives the CFO a checkpoint. If the indicator doesn't move, you kill the bet at month 4, not month 12.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Day 27. Vikrant's draft strategy has 3 bets, ROI ranges, and 90-day leading indicators. He's about to present. What's the **one slide** the CFO needs to see first?",
+        "options": [
+          { "id": "a", "label": "A diagram of the AI tech stack — vector DB, model layer, orchestration, eval framework.", "correct": false, "explain": "The CFO does not care about your tech stack on slide one. She cares whether this returns capital. Tech stack is slide 14.", "points": 0 },
+          { "id": "b", "label": "A 3-row table: Bet | Investment | 90-day signal | Year-1 expected return (range). Then everything else.", "correct": true, "explain": "**Perfect.** Three rows, four columns, no jargon. Vinita: *'If I can read your strategy in 30 seconds, I'll fund it. If I need 30 minutes, I'll ask you to come back next quarter.'*", "points": 3 },
+          { "id": "c", "label": "A market map of every AI competitor in your category.", "correct": false, "explain": "Useful context. Wrong slide one. The board hired you to make decisions, not to summarize the market.", "points": 1 },
+          { "id": "d", "label": "A bold headline: 'How AI Will 10x [Company Name]' with a hero image.", "correct": false, "explain": "You just became the Series-B CEO from the field notes. The board has seen this slide before. They didn't fund it then either.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Vinita pours you a coffee. Vikrant walks into the boardroom on day 28 with three bets, three numbers, and three checkpoints. The CFO funds all three. The board lets him keep his job. **You just turned a vision deck into a strategy.**",
+      "good": "Solid frame, mostly. Re-read the section on 90-day leading indicators — that's the difference between 'we have a strategy' and 'we have a strategy that survives quarter 2'.",
+      "learn": "You drifted toward vibes. The Series-B in the field notes did the same thing and lost a CEO over it. Re-read the lesson, especially the **three-axis scoring** and the **range-not-a-point-estimate** sections. Try again."
+    }
+  }
+}

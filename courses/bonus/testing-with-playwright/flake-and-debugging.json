@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 14 Days of Flake, One Race Condition, Forty-Seven Engineering Hours",
+    "source": "Platform engineer at Anant Labs, a Gurugram-based data-platform startup (Series B, ~110 engineers)",
+    "date": "April 2025",
+    "story": "Anant's onboarding suite started flaking on April 2, 2025. By April 16 — fourteen calendar days later — the team had logged **47 engineering hours** across six engineers triaging the same handful of specs. Every theory died:\n\n- 'It's the CI runner's CPU.' Not it — flaked on dedicated machines too.\n- 'It's network calls.' Not it — fully mocked.\n- 'It's a Playwright bug.' Not it — pinned to v1.42 throughout.\n- 'Just add retries.' Made it worse — masked the signal.\n\nThe breakthrough came from one trace file. An SDET opened the trace viewer (`npx playwright show-trace trace.zip`), scrubbed to the failing assertion, and saw it: the spec called `await page.click('Save')` immediately after a state update, and the save button's `onClick` handler was racing with React's re-render. The previous click handler was still attached when Playwright clicked, so the click was registered against the *old* component, which silently no-op'd.\n\nThe original 'fix' someone had added was `await page.waitForTimeout(2000)` — which masked the race ~92% of the time. That's why the flake rate looked like 8%, not 80%.\n\nThe real fix was three lines: replace the timeout with `await expect(page.getByRole('button', { name: 'Save' })).toBeEnabled();` so Playwright waits for the button to actually be ready. Flake rate dropped from **8% to 0.4%** overnight. The trace viewer found in 20 minutes what 47 hours of guessing couldn't.",
+    "takeaway": "Flake is never random — it's a race condition you haven't read carefully enough. Open the trace before you open Stack Overflow."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Three Flaky Tests, Three Trace Files",
+    "setup": "Week 4. Sneha has dropped Tarakash's overall flake rate from 14% to 4.1% by deleting the worst-offending specs. She's now down to **three persistent flakes** that resist every easy fix. CI has a 22% chance of going red on any given PR, and the dev team is starting to ignore failures again.\n\nFor each flaky spec, Sneha has a Playwright trace file from the most recent failure. She has 90 minutes before the engineering all-hands where she has to report progress. **Three diagnoses, three fixes, no guessing.**",
+    "coach": { "name": "QA-Director Kavya", "role": "Believes the trace viewer is the single most under-used tool in software engineering" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "**Flaky test #1: `dashboard-greeting.spec.ts`** — fails ~6% of the time on `expect(page.getByText('Good morning')).toBeVisible()`. The trace shows the assertion failed at 11:59:58.421 IST. What does Sneha conclude?",
+        "options": [
+          { "id": "a", "label": "It's a time-of-day bug — the test asserts 'Good morning' but ran at 11:59pm. Fix: mock the system clock with `await page.clock.install({ time: new Date('2026-01-15T09:00:00') });`", "correct": true, "explain": "**Lethal diagnosis.** The trace timestamp is the smoking gun — at 11:59pm IST the dashboard rightfully showed 'Good evening' or 'Good night.' Playwright's clock fixture (added in v1.45) lets you freeze time per-test. No more time-of-day flake.", "points": 3 },
+          { "id": "b", "label": "Add a retry: `test.describe.configure({ retries: 3 });` so the test passes on the second attempt.", "correct": false, "explain": "Kavya groans. The test would still fail at 11:59pm — it would just fail three times in a row. Retries are for genuinely transient failures (network blips), not for design defects you haven't bothered to find.", "points": 0 },
+          { "id": "c", "label": "Loosen the assertion to `expect(page.getByText(/Good (morning|afternoon|evening|night)/)).toBeVisible();`", "correct": false, "explain": "You made the test never fail, which is not the same as making the test correct. Now if the greeting component breaks entirely and shows nothing, your test still passes. Looser assertions = lower signal.", "points": 0 },
+          { "id": "d", "label": "Skip the test in CI between 11pm and 6am IST.", "correct": false, "explain": "Adding time-of-day skip logic is a complexity tax that someone else will trip over. Mocking the clock is one line; conditional skipping is a maintenance burden forever.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "**Flaky test #2: `expense-list.spec.ts`** — fails ~4% of the time on `await expect(rows).toHaveCount(20)`. Trace shows the page loaded with 19 rows visible, then the assertion failed, then a 20th row appeared 600ms later. Diagnosis?",
+        "options": [
+          { "id": "a", "label": "It's an infinite-scroll / lazy-load race. The list paginates as you scroll; the test asserted before the last row had been requested. Fix: scroll to the bottom and wait for the loading spinner to disappear before asserting.", "correct": true, "explain": "**Correct read of the trace.** The 600ms gap and the appearing row are the tell. The fix: `await page.getByRole('main').evaluate(el => el.scrollTo(0, el.scrollHeight)); await expect(page.getByRole('progressbar')).toBeHidden(); await expect(rows).toHaveCount(20);`", "points": 3 },
+          { "id": "b", "label": "It's a backend pagination bug. Open a ticket for the platform team.", "correct": false, "explain": "The trace clearly shows the row *did* appear, just late. The product is working as designed (lazy loading). The test is wrong, not the backend. You'd burn a week of platform team time finding nothing.", "points": 0 },
+          { "id": "c", "label": "Add `await page.waitForTimeout(1000);` before the assertion.", "correct": false, "explain": "If your test sleeps, your test is wrong. The 1000ms might cover the 600ms today, but the day a slow CI runner makes it 1100ms, you're back to flake.", "points": 0 },
+          { "id": "d", "label": "Change the assertion to `await expect(rows).toHaveCount(20, { timeout: 5000 });` — let Playwright retry.", "correct": true, "explain": "**Acceptable.** `toHaveCount` already retries by default, but extending the timeout is a valid stopgap. Better than `waitForTimeout` because it still fails fast on a real bug. Pair with the scroll fix for a robust solution.", "points": 2 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "**Flaky test #3: `approve-expense.spec.ts`** — fails ~3% of the time, only on Mondays. Trace shows the test logged in as a manager, navigated to the approval queue, but the page rendered an empty state. The previous Friday's data should be there. Diagnosis?",
+        "options": [
+          { "id": "a", "label": "It's test-data pollution between runs. The Friday seed run gets cleared by a Monday morning data-reset job. Fix: each test should create its own data via API and clean up after itself, never rely on shared seeds.", "correct": true, "explain": "**This is the right shape of fix.** Tests that depend on cross-run state are guaranteed to flake the moment something touches the shared state. Use Playwright's `test.beforeEach` with API setup so each test owns its data lifecycle.", "points": 3 },
+          { "id": "b", "label": "Run the seed script before every test run as a CI pre-step.", "correct": true, "explain": "**Acceptable, weaker.** Re-seeding fixes the symptom but keeps the architectural smell (shared state across tests). Adds 30-60s to every CI run. Use only as a stopgap until you can refactor to per-test data.", "points": 2 },
+          { "id": "c", "label": "Skip the test on Mondays.", "correct": false, "explain": "You discovered a real bug — the data-reset job is destroying state someone depends on. Skipping the test hides it. Tomorrow it'll be a customer who notices.", "points": 0 },
+          { "id": "d", "label": "Disable the data-reset job.", "correct": false, "explain": "The job exists for a reason (probably compliance or storage cost). Disabling it 'because tests' is exactly how production systems get tangled. Fix the test, not the production housekeeping.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "All three flakes diagnosed correctly from trace files alone. Combined fix dropped CI red rate from 22% per PR to under 1.5%. Kavya posts in #engineering: *'Three flakes, three fixes, zero retries. This is the standard.'*",
+      "good": "You correctly diagnosed two of the three but reached for retries or sleeps once. Re-read the section on **trace-driven debugging** — the trace tells you the answer if you read it, every time.",
+      "learn": "You added retries or sleeps to mask the problem. The flake will return — usually right before a release. Re-read the lesson — especially **why retries are debt** and **how to read a Playwright trace step-by-step**."
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 200-File PR No One Could Review",
+    "source": "Staff engineer at Vyapar Forge, a Hyderabad-based series-C developer-tooling company",
+    "date": "April 2026",
+    "story": "On a Friday in late March 2026, a Vyapar engineer kicked off an autonomous Claude Code run with a single prompt: *\"Migrate our monolith from REST to gRPC. Take your time.\"* He gave it Opus 4.7 with the 1M-context window, MCP access to the repo, and went home for the weekend. He returned Monday to a **6-hour, 2.4M-token session** that had produced exactly what he asked for: a single PR, **207 files changed, +18,400 / -14,200 lines.**\n\nIt compiled. Most of the tests passed. It was, by any reasonable definition, the migration. It was also **completely unreviewable**. The senior engineer assigned the review opened the PR, scrolled for 90 seconds, closed the tab, and posted in #engineering: *\"I cannot in good conscience approve this. Splitting it would take a week. Reviewing it line-by-line would take a month.\"*\n\nThe PR sat for 11 days. Eventually the team **closed it without merging** and rebuilt the migration from scratch using **bounded subagent tasks**: one service per subagent, ~15-30 file PRs, sequential merges, each reviewable in 30 minutes. Total elapsed time: 4 weeks. **Total reviewable PRs: 23.** Total merged: 23. Total trust intact.\n\nThe 6-hour autonomous run is now an in-house cautionary tale. Every Vyapar engineer who joins gets shown the screenshot of the closed PR.",
+    "takeaway": "Long autonomous runs produce work, not reviewable work. Bounded subagents with tight artifacts are how you actually ship at scale — the constraint is *human review capacity*, not *model capacity*."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Week 14 — The TypeScript 6.0 Migration Fanout",
+    "setup": "**Week 14 of Q2 2026.** The Claude rollout is mostly stuck across Velora — coding, cowork, design. Last big task before quarter-end review: **migrate 14 microservices from TypeScript 5.4 to TypeScript 6.0.** Each service is 5k-40k lines, owned by 2-3 engineers, with non-trivial typing changes (the new `satisfies` semantics, narrowed `unknown`, stricter generic inference).\n\nYou — Karthik — have **two weeks**, **a budget of ~5M Claude tokens**, and a CTO who will personally read whatever ships. Get the design wrong and you produce a Vyapar-style 200-file disaster in 14 services at once.",
+    "coach": { "name": "Anthropic-Veteran Anuj", "role": "Has orchestrated three production migrations using subagent fanouts, two of which actually worked" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Anuj draws a whiteboard. *\"First decision. **One big run, or many small ones?**\"*",
+        "options": [
+          { "id": "a", "label": "One big Opus 4.7 run, 1M-context, all 14 services in one session — the model can hold it all.", "correct": false, "explain": "This is exactly the Vyapar mistake at 14x scale. Even if the model can hold it, *humans cannot review it*. You'd produce one unreviewable PR per service, simultaneously. Disaster.", "points": 0 },
+          { "id": "b", "label": "**14 parallel subagent tasks**, one per service, each with its own bounded `CLAUDE.md` and a 30-min-reviewable PR target.", "correct": true, "explain": "**Right architecture.** Subagents map cleanly to services. Reviewable-PR-as-constraint is the load-bearing rule. Anuj draws a green tick.", "points": 3 },
+          { "id": "c", "label": "Sequential one-at-a-time runs across 14 services — safest, slowest.", "correct": false, "explain": "Sequential is *safer per task* but burns the entire two-week budget on serial latency. You have parallelism available; use it for the 11 services that don't share dependencies.", "points": 1 },
+          { "id": "d", "label": "Parallel for the 11 independent services, **sequential for the 3 that share the auth library** (which itself needs migrating first).", "correct": true, "explain": "**Top-tier.** You correctly identified the dependency graph. Auth library migrates first (sequential), then 11 leaf services in parallel, then the 3 dependent services. This is the actual production-shaped plan.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "**Subagent design.** Each fanned-out task gets a prompt + context. **What goes in?**",
+        "options": [
+          { "id": "a", "label": "*\"Migrate this service to TypeScript 6.0.\"* + the repo path. That's it.", "correct": false, "explain": "No scope, no PR-size cap, no review hooks. The subagent will produce the Vyapar-shaped output: technically correct, operationally unmergeable.", "points": 0 },
+          { "id": "b", "label": "Migration brief + service `CLAUDE.md` + an explicit **PR-size budget** ('split into PRs of ≤25 files; each must pass typecheck independently') + a **handoff artifact** (migration log written to `docs/MIGRATIONS/`).", "correct": true, "explain": "**This is the recipe.** PR-size budget enforces reviewability. Independent typecheck enforces incremental safety. The handoff artifact lets the next subagent (or human) pick up the thread without rerunning context.", "points": 3 },
+          { "id": "c", "label": "Migration brief + a stern warning: 'Do not over-refactor.'", "correct": false, "explain": "Stern warnings without structural enforcement are decorative. The subagent needs *constraints*, not *requests*. PR-size budget is a constraint; 'don't over-refactor' is a hope.", "points": 1 },
+          { "id": "d", "label": "Migration brief + service `CLAUDE.md` + PR-size budget + handoff artifact + **a checkpoint at each PR**: the subagent stops and waits for human approval before continuing.", "correct": true, "explain": "**Top-tier paranoia, correctly applied.** Checkpoints turn a 6-hour autonomous run into a 6-hour *supervised* run. You catch wrong-turn behavior at PR 1, not at PR 23.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "**Model picks.** You have Opus 4.7, Sonnet 4.6, and Haiku 4.5 in the menu. **Which goes where?**",
+        "options": [
+          { "id": "a", "label": "Opus 4.7 for everything — best model wins.", "correct": false, "explain": "You'd burn the 5M-token budget in 4 services and run dry. Opus is the right tool for *hard reasoning*, not for *applying a known migration to leaf code*.", "points": 0 },
+          { "id": "b", "label": "**Opus 4.7** for the auth-library migration (hard, dependency-heavy, sets pattern). **Sonnet 4.6** for the 11 leaf services (apply known pattern). **Haiku 4.5** for repetitive cleanup (lint fixes, import reordering).", "correct": true, "explain": "**Exactly the cost-shape that works.** Reserve the most capable model for the load-bearing decision; let the cheaper models do the high-volume known work. This is how you stay inside 5M tokens.", "points": 3 },
+          { "id": "c", "label": "Haiku 4.5 for everything — cheapest, fastest.", "correct": false, "explain": "Haiku will produce confidently-wrong type narrowing on the new `satisfies` semantics in three services. Cost-optimization without capability-matching is false economy.", "points": 0 },
+          { "id": "d", "label": "Opus 4.7 for auth + the 3 dependent services. Sonnet 4.6 for the 11 leaves. **Skip Haiku** — too risky on type-system work.", "correct": true, "explain": "**Defensible.** TypeScript 6.0 type changes are subtle enough that you may not want Haiku in the loop at all. Higher per-token cost, but lower review burden. Anuj approves either of the two splits depending on team comfort.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "**Handoff design.** When a subagent finishes its service, what does it produce so the *next step* (human review, dependent-service subagent) can pick up cleanly?",
+        "options": [
+          { "id": "a", "label": "Just the PR — the diff is the artifact.", "correct": false, "explain": "Diff-only handoffs lose the *reasoning*: why this approach over the alternative, what edge cases it punted on, what tests don't yet cover. Reviewers re-derive context that the subagent already had.", "points": 0 },
+          { "id": "b", "label": "A `docs/MIGRATIONS/<service>.md` written by the subagent: scope, approach taken, decisions deferred, tests added, **known gaps**, suggested follow-up. Plus the PR.", "correct": true, "explain": "**The full handoff.** Reviewer reads the migration doc in 4 minutes, then reviews the PR in 25, total 30. Future engineer hitting an edge case 6 months later finds the 'known gaps' section. This is the artifact that makes the rollout *cumulative*.", "points": 3 },
+          { "id": "c", "label": "PR + a Slack message in #engineering summarizing what the subagent did.", "correct": false, "explain": "Slack messages are ephemeral. In 6 weeks the channel will have scrolled past, and the migration context will live nowhere durable. Use docs, not chat.", "points": 1 },
+          { "id": "d", "label": "Handoff doc + PR + **automated checkpoint**: the next dependent-service subagent reads the upstream service's migration doc as part of its context window.", "correct": true, "explain": "**Top-tier.** This is the orchestration pattern that compounds: each subagent builds on the last one's *learnings*, not just its *output*. By service 14, you've encoded 13 services' worth of edge cases.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You designed a real production fanout: dependency-aware ordering, model-tier matching, PR-size budgets, handoff artifacts, and checkpoints. **23 reviewable PRs land in two weeks**, the CTO reads three of them and stops there because they're boring in the best way. Velora's Q2 review goes well. **Anuj quietly forwards your design doc to the Anthropic team as a customer reference.**",
+      "good": "You got the architecture mostly right but cut a corner on either model selection or handoff design. Re-read the lesson on **bounded subagents** — the difference between 23 reviewable PRs and 1 Vyapar PR is in the artifacts, not the model.",
+      "learn": "You either built one giant unreviewable run, or you parallelized without thinking through dependencies and produced 14 conflicting PRs. Re-read the lesson — especially the sections on **PR-size budgets**, **dependency-aware fanout**, and **handoff artifacts**. The constraint is human review capacity, always."
+    }
+  }
+}

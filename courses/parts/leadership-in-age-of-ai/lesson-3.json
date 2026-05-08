@@ -1,0 +1,255 @@
+{
+  "lesson": {
+    "slug": "talent-and-hiring",
+    "title": "Hiring for the AI Era",
+    "subtitle": "Execution went to zero; judgment is the only thing left to filter on",
+    "estimatedMinutes": 13,
+    "skills": ["leadership-talent"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/leadership-in-age-of-ai/talent-and-hiring.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why your old interview loop is broken" },
+          { "startSec": 80, "label": "Mental model: judgment over execution" },
+          { "startSec": 220, "label": "Move 1: the new T-shape" },
+          { "startSec": 410, "label": "Move 2: behavioral interview design" },
+          { "startSec": 560, "label": "The classic trap and a try-it" }
+        ],
+        "notesPdfUrl": "/notes/leadership-in-age-of-ai/talent-and-hiring.html",
+        "notesByline": "Notes by Rajiv, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Your hiring loop was designed for an era where execution was the moat. *Can you write the SQL?* *Can you draft the brief?* *Can you build the model?* The candidate who could execute fastest, cleanest, with the most polish, was the candidate to hire. That world ended quietly some time in 2024, and most companies are still running interviews from it.\n\nIn 2026 the moat is not 'can you do it', because Claude can do it. The moat is *can you tell when the AI is about to do something stupid, and stop it*. That's a different filter, and it requires a different interview. By the end of this lesson you'll know how to redesign your loop for judgment, and the specific behavioral questions that separate the people who use AI from the people who supervise it."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two candidate profiles. Left: 'Old T' shape with broad shallow top labelled 'general skills' and a deep narrow bottom labelled 'execution depth'. Right: 'New T' with the same broad top, a narrower 'AI-orchestration' middle band, and the bottom now labelled 'judgment in one domain'.",
+        "caption": "Old T: depth in execution. New T: depth in judgment, with AI-orchestration as a connecting band.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g><text x='130' y='40' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='#5B21B6'>Old T-shape (pre-2024)</text><rect x='40' y='60' width='180' height='40' fill='#C4B5FD' stroke='#5B21B6' stroke-width='2'/><text x='130' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#5B21B6'>broad: general skills</text><rect x='100' y='100' width='60' height='150' fill='#8B5CF6' stroke='#5B21B6' stroke-width='2'/><text x='130' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>execution</text><text x='130' y='200' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>depth</text></g><g><text x='460' y='40' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='#065F46'>New T-shape (2026)</text><rect x='370' y='60' width='180' height='40' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='460' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>broad: general skills</text><rect x='400' y='100' width='120' height='30' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='460' y='120' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-weight='700'>AI orchestration</text><rect x='430' y='130' width='60' height='120' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='460' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>judgment</text><text x='460' y='200' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>in domain</text><text x='460' y='220' text-anchor='middle' font-family='sans-serif' font-size='9' fill='white' font-style='italic'>knows when</text><text x='460' y='234' text-anchor='middle' font-family='sans-serif' font-size='9' fill='white' font-style='italic'>AI is wrong</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: hire for judgment, because execution went to zero",
+        "md": "Hold this picture every time you walk into an interview. Execution skill — the ability to do the well-defined thing well — is now a commodity AI provides. Judgment — the ability to tell when a plausible answer is the wrong answer, when to push back, when to escalate, when to refuse — is the only thing left for a human to be senior at.\n\nThe old hiring filter ran on **can you do it?** The new filter runs on **can you tell when it's wrong?** Most candidates can do it, because Claude can do it. Far fewer can spot the error in a 1,800-word draft that reads beautifully. That's the bar. Build the loop around that bar."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/leadership-in-age-of-ai/anim/talent-and-hiring-judgment-vs-execution.html",
+        "height": 420,
+        "caption": "Two candidates, same task. One executes faster. The other catches the model's hallucinated citation. Watch which one ships."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "IIT topper vs the senior who reads line 47",
+            "tone": "info",
+            "md": "Bhai, ek interview real story. IIT-Delhi 2025 batch, 9.4 CGPA, ChatGPT pe sab kuch *one-shot* solve karta hai. Same panel mein, NIT-Trichy 2017 batch, 8 saal ka veteran. AI ka draft dekhta hai aur 11th line pe ruk gaya — *\"This number doesn't match the source. Where did this come from?\"*\n\nFresher confidence se bola — *\"Isn't important sir, AI gave it.\"* Veteran chuppchap source check kara, number galat tha. Kis ko hire kara? Veteran ko. Kyun? Execution AI deta hai. Line 47 read karna seekhna 8 saal lagte hain."
+          },
+          "en": {
+            "title": "Same role, two candidates",
+            "tone": "info",
+            "md": "Real story. The fresh IIT graduate with the 9.4 CGPA can one-shot every coding task with Claude. The senior with eight years of experience pauses at line 11 of the AI's draft and asks, *'where did this number come from?'* The number turned out to be hallucinated. Both could execute; one of them could supervise. Hire the supervisor. Execution is what AI gives you for free. Reading line 47 takes years."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The new T-shape"
+      },
+      {
+        "type": "markdown",
+        "md": "The classical T-shape was a hiring metaphor invented at IDEO and spread across every tech company in the 2010s: broad surface knowledge across many areas, with deep expertise in one. It's still useful — but the *what* of the depth has changed. In 2026 the depth bar is **judgment in one specific domain**, supported by a thin connecting band of **AI-orchestration skill** that bridges the broad top and the deep bottom.\n\nThree numbers worth carrying. Roughly **40% of mid-level execution work is now done by AI** in companies that have actually redesigned (most haven't). About **15% of senior judgment work** has moved to AI assistance, but the responsibility remains human. Less than **3% of strategic ambiguity arbitration** is AI-touched at all. The implication for hiring: the squeeze is in the middle. Mid-level roles defined purely by execution are evaporating; senior roles defined by judgment are *more* valuable than they were three years ago, because there are fewer people who can supervise the new junior — Claude.\n\nThe leadership move is to rewrite your job descriptions around judgment in a specific domain, with AI-orchestration as a stated competency rather than a buzzword. *'5 years of experience'* is a lazy proxy. *'Has caught at least three plausible-but-wrong AI outputs in production work, and can describe the failure mode'* is a real filter."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A pyramid showing three layers. Bottom: 40% execution work, mostly AI-touched (in violet). Middle: 35% mid-level work, partly AI-touched (in amber). Top: 25% senior judgment work, mostly human (in green). To the right, a narrow column showing where the hiring squeeze sits — the middle layer.",
+        "caption": "The squeeze is in the middle. Hire fewer mid-level executors, more juniors-with-judgment-potential, more seniors-with-judgment-record.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#EFF6FF'/><g><polygon points='200,40 360,40 380,100 180,100' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='280' y='75' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>25% senior judgment</text><polygon points='180,100 380,100 400,180 160,180' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='280' y='145' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#92400E' font-weight='700'>35% mid-level (squeeze)</text><polygon points='160,180 400,180 420,250 140,250' fill='#C4B5FD' stroke='#5B21B6' stroke-width='2'/><text x='280' y='220' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#5B21B6' font-weight='700'>40% execution (AI-touched)</text></g><g transform='translate(450 100)'><rect x='0' y='0' width='100' height='80' rx='6' fill='#FECACA' stroke='#DC2626' stroke-width='2'/><text x='50' y='30' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='700'>HIRING</text><text x='50' y='48' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='700'>SQUEEZE</text><text x='50' y='66' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D'>fewer mid roles</text><line x1='-50' y1='40' x2='0' y2='40' stroke='#DC2626' stroke-width='2' marker-end='url(#a3)'/></g><defs><marker id='a3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#DC2626'/></marker></defs></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'we need a senior PM' to a hiring rubric that filters for judgment",
+        "steps": [
+          { "label": "Step 1 — Name the judgment moments", "body": "List 5 decisions a senior PM on this team made last quarter that an AI would not have made well. Be specific: 'said no to the founder's pet feature', 'caught the wrong dashboard metric before launch', 'pulled a deadline because engineering was hiding burnout'." },
+          { "label": "Step 2 — Convert each into a behavioral question", "body": "Each judgment moment becomes a 'tell me about a time' question. Avoid hypotheticals — those reward articulate liars. Past behavior is the only signal that ports." },
+          { "label": "Step 3 — Define the AI-supervisor probe", "body": "One question: 'Tell me about a time AI gave you a confident answer that turned out to be wrong. How did you catch it?' If they cannot answer, they have not actually used AI as a senior; they've used it as a junior." },
+          { "label": "Step 4 — Define the restraint probe", "body": "One question: 'Walk me through a decision where you chose not to use AI even though you could have.' The strongest seniors say no to AI sometimes. Those who never have, haven't been supervising it." },
+          { "label": "Step 5 — Set the rubric, calibrate the panel", "body": "Three levels per question: clear example with the failure mode named (4 points); plausible example without specifics (2 points); vague or absent (0 points). Calibrate the panel against three real candidates from the past quarter so the bar isn't drifting." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "You're hiring a Senior Data Analyst. Which of these is the strongest single filter for the AI-era role?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Can describe a real instance where they caught an AI hallucinated number before it shipped, and the failure mode it represented", "correct": true, "explain": "Correct. This proves they read line 47, they understand failure modes, and they have actually supervised AI output in real work. The other filters are weaker proxies." },
+          { "id": "b", "label": "Lists 14 AI tools on their resume", "correct": false, "explain": "Tool fluency is a vanity metric. The AI-fluent label tells you nothing about whether they can spot a wrong answer." },
+          { "id": "c", "label": "Has the highest SQL-test score from the take-home", "correct": false, "explain": "SQL execution is exactly the skill AI commoditised. High score on a take-home in 2026 mostly tells you they used Claude well." },
+          { "id": "d", "label": "Comes from a brand-name company", "correct": false, "explain": "Brand correlates with confidence, not with judgment about AI failure modes. Many big-co analysts have never been forced to supervise AI in production." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Resume mein '14 AI tools' likhne wala candidate",
+            "tone": "warn",
+            "md": "Bhai, candidate aaya — *\"AI-fluent\"*, resume pe Copilot, Cursor, Claude, Gemini, Midjourney, ChatGPT, Replit, Lovable, Bolt, v0, Perplexity, Pi, Glean, Notion AI. *14 tools*.\n\nInterview mein pucha — *\"Konse kaam pe AI ne tujhe galat answer diya, aur tune kaise pakda?\"* Frozen. Bola — *\"Hmm, mujhe dhyaan nahi.\"* 14 tools, 0 catches. Yeh tool literacy hai, judgment nahi. Filter karne ki cheez yahi hai — tools list nahi, catches list."
+          },
+          "en": {
+            "title": "Tool fluency is not judgment",
+            "tone": "warn",
+            "md": "A candidate's resume lists 14 AI tools as proof of being 'AI-fluent'. In the interview you ask, *'tell me about a time AI gave you a confident wrong answer and how you caught it.'* They freeze. Fourteen tools, zero catches. The list signals literacy, not judgment. The filter you actually want is the catches list, and most candidates don't have one because they have not yet been forced to supervise rather than to use."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — Behavioral interview design"
+      },
+      {
+        "type": "markdown",
+        "md": "Behavioral interviews work because past specific behavior predicts future behavior much better than hypothetical questions. *'Tell me about a time'* > *'what would you do if'*. The 'if' question rewards articulate fluency, which AI also gives candidates for free during prep. The 'time' question requires a real episode that the candidate has to remember, recount, and defend.\n\nFour questions, used together, cover most of what you need for an AI-era senior role:\n\n1. **The catch**: *Tell me about a time an AI tool gave you a confident answer that turned out to be wrong. How did you notice and what did you change?*\n2. **The restraint**: *Walk me through a decision where you chose not to use AI even though you could have. Why?*\n3. **The hand-off**: *Describe a workflow you redesigned to use AI. Who owns the artifact, who reviews, what's the failure mode?*\n4. **The disagreement**: *Tell me about a time your team wanted to ship something AI produced and you said no. What was the cost and what would you do differently?*\n\nNotice what's missing: questions about model preferences, prompt-engineering tricks, or vendor brand allegiances. Those are the soundbites; the four above are the substance. A candidate who has not been forced to supervise will not have specific stories. They'll generalise. Generalisation is the tell."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A 2x2 matrix. X-axis: 'Specificity of story'. Y-axis: 'Names a failure mode'. The four quadrants are labelled: top-right 'STRONG hire — specific story + named failure', top-left 'plausible — name failure but no story', bottom-right 'tooling user — story but no failure analysis', bottom-left 'weak — generalises everything'. The strong quadrant is highlighted in green.",
+        "caption": "The interview-signal matrix. You're hiring from the top-right quadrant only. Most candidates land in the bottom-left.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FFF7ED'/><g><line x1='100' y1='40' x2='100' y2='240' stroke='#1F2937' stroke-width='2'/><line x1='100' y1='240' x2='540' y2='240' stroke='#1F2937' stroke-width='2'/><text x='80' y='40' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>names</text><text x='80' y='52' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>failure</text><text x='80' y='240' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>vague</text><text x='100' y='258' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>generic</text><text x='540' y='258' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>specific</text><rect x='320' y='60' width='220' height='80' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='430' y='90' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#065F46'>STRONG HIRE</text><text x='430' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>specific story +</text><text x='430' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>named failure mode</text><rect x='100' y='60' width='220' height='80' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='210' y='90' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#92400E'>maybe</text><text x='210' y='108' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>names failure modes</text><text x='210' y='122' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>but no real story</text><rect x='320' y='160' width='220' height='80' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='430' y='190' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#92400E'>tool user</text><text x='430' y='208' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>specific story</text><text x='430' y='222' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>no failure analysis</text><rect x='100' y='160' width='220' height='80' fill='#FECACA' stroke='#DC2626' stroke-width='2'/><text x='210' y='190' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#7F1D1D'>weak hire</text><text x='210' y='208' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>generalises</text><text x='210' y='222' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>everything</text></g></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "VP-People Vidya",
+          "role": "Same Vidya from lesson 1 — now grading interview answers"
+        },
+        "intro": [
+          "Same Vidya. We're now in interview-signal territory.",
+          "I'll give you 6 candidate answers to AI-era behavioral questions. Tell me — is this a **strong signal** (specific + failure mode named), **weak signal** (generic or self-promoting), or a **red flag** (suggests they don't actually supervise AI)?",
+          "Some of these are real answers from interviews I sat on. Others I made up. You won't be able to tell which is which, and that's the point."
+        ],
+        "buckets": [
+          { "id": "strong", "label": "Strong signal", "tone": "safe" },
+          { "id": "weak", "label": "Weak signal", "tone": "neutral" },
+          { "id": "red", "label": "Red flag", "tone": "danger" }
+        ],
+        "scenarios": [
+          {
+            "id": "s1",
+            "situation": "Q: 'Tell me about a time AI gave you a confident wrong answer.' A: 'Last March I asked Claude to summarise a 14-page MSA for our biggest client. It confidently said the renewal cap was 7%. The actual clause was 12%. I caught it because I always cross-check renewal numbers against the PDF. Cost would have been ~₹40 lakh on a 4-year contract if I'd taken it at face value.'",
+            "correctBucketId": "strong",
+            "explain": "Specific date, specific document, exact failure mode (number hallucination on a contract term), specific cost. This is the textbook strong signal."
+          },
+          {
+            "id": "s2",
+            "situation": "Q: 'Tell me about a time AI gave you a confident wrong answer.' A: 'Oh, AI gets things wrong all the time. You always have to verify. I'm very careful about that.'",
+            "correctBucketId": "weak",
+            "explain": "Pure generality. No date, no domain, no specific failure mode. They've heard the right answer; they haven't lived it."
+          },
+          {
+            "id": "s3",
+            "situation": "Q: 'Walk me through a decision where you chose NOT to use AI.' A: 'When I'm firing someone, I write the message myself. AI sounds plausible but it can't carry the relationship history with this specific person, and the words have to be mine when they ask why later.'",
+            "correctBucketId": "strong",
+            "explain": "Names the calibration issue (relationship history), names the accountability issue (the words have to be mine). This is the restraint signal you want."
+          },
+          {
+            "id": "s4",
+            "situation": "Q: 'Walk me through a decision where you chose NOT to use AI.' A: 'I always use AI. Why would you not? It's faster.'",
+            "correctBucketId": "red",
+            "explain": "Red flag. Either they have not been forced to supervise AI in a high-stakes setting, or they have and they didn't notice. Either way they will not be a senior who catches your team's mistakes."
+          },
+          {
+            "id": "s5",
+            "situation": "Q: 'Describe a workflow you redesigned to use AI.' A: 'I rolled out ChatGPT to my team last year. They love it. Productivity is way up.'",
+            "correctBucketId": "weak",
+            "explain": "No artifact owner, no failure mode, no calibration loop, no specific workflow. They rolled out a tool, not a workflow. Probe further before deciding, but the default reading is weak."
+          },
+          {
+            "id": "s6",
+            "situation": "Q: 'Tell me about a time your team wanted to ship something AI produced and you said no.' A: 'Two months ago, my analyst sent me an AI-generated competitor analysis with a confident claim that Razorpay had 38% market share. The number was a hallucination. I held the deck, made him source every claim, and we found three more. Took an extra day; saved a meeting with the CEO that would have torched our credibility.'",
+            "correctBucketId": "strong",
+            "explain": "Recent date, specific number, named the failure mode (number hallucination), named the cost of not catching it (CEO meeting credibility). Promote this person if they're internal; hire fast if they're not."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: hire for AI fluency, not for the actual job",
+        "md": "The most common 2026 hiring mistake: a candidate's resume looks like an AI tool buffet, the recruiter is impressed, and the interview drifts into 'how do you use Cursor/Claude/Copilot' territory. Two rounds later, you've hired someone who can talk about AI but cannot actually do product strategy, financial analysis, or whatever the role is supposed to do.\n\nAI fluency is necessary but not sufficient. The role is *senior product manager* or *senior data analyst* or *senior content lead*. Filter on the job's actual outcomes first; treat AI as a means, not the end. If you can't tell a candidate's AI fluency story apart from someone who watched 4 YouTube videos, that's the problem to solve. The four behavioral questions above are the cheapest fix."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the 5 steps of redesigning your interview loop for the AI era",
+        "items": [
+          { "id": "audit", "label": "Audit your last 5 hires for the role", "detail": "Which were strong? Which weren't? What signal would have predicted? Without this, you'll redesign in the dark." },
+          { "id": "judgment", "label": "List the 5 judgment moments senior people in the role made last quarter", "detail": "Specific decisions where supervisor judgment mattered. These become your behavioral questions." },
+          { "id": "questions", "label": "Convert each judgment moment to a 'tell me about a time' question", "detail": "Past episodes only. Hypotheticals reward articulate fluency, which AI gives every candidate." },
+          { "id": "rubric", "label": "Define the 3-level rubric per question and calibrate the panel", "detail": "Strong / weak / red flag. Calibrate against 3 known past candidates so the bar doesn't drift." },
+          { "id": "kill", "label": "Kill the questions that AI made meaningless", "detail": "Whiteboard SQL, generic case prompts, 'how would you' framings — these now reward who-prepped-with-Claude. Cut them." }
+        ],
+        "hint": "Audit, then list moments, then write questions, then rubric, then kill the obsolete ones."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Pick a senior role you'll hire for in the next 90 days. Write 4 behavioral questions calibrated for AI-era judgment. For each, write a one-line description of what a 'strong signal' answer would contain.",
+        "lang": "markdown",
+        "starter": "Role: <title>\n\nQ1 (the catch): <question>\nStrong signal looks like: <one-line description>\n\nQ2 (the restraint): <question>\nStrong signal: <description>\n\nQ3 (the hand-off): <question>\nStrong signal: <description>\n\nQ4 (the disagreement): <question>\nStrong signal: <description>",
+        "expected": "Role: Senior Marketing Manager (B2B SaaS, India)\n\nQ1 (the catch): 'Tell me about a time an AI tool produced a piece of marketing content with a confident claim that turned out to be wrong. How did you catch it and what did you change about your process afterwards?'\nStrong signal looks like: A specific piece of content, a specific factual error (number, citation, competitor reference), and a named workflow change (added a fact-check step, hired a junior to spotcheck, etc.).\n\nQ2 (the restraint): 'Walk me through a piece of customer-facing content where you chose to write it yourself without AI assistance. Why?'\nStrong signal: Names the kind of content where AI output is risky — apologies, sensitive announcements, anything that depends on relationship history with the customer.\n\nQ3 (the hand-off): 'Describe a content workflow on your team where AI now contributes a draft. Who signs the published artifact, what's the review checklist, what's the failure mode you watch for?'\nStrong signal: Names a single signer (not a rotation), a checklist under 90 seconds, and a specific failure mode like 'praises competitor by accident' or 'cites a regulation that doesn't exist'.\n\nQ4 (the disagreement): 'Tell me about a time a junior on your team wanted to ship AI-generated content and you said no. What was the cost of saying no, and what would you do differently?'\nStrong signal: Acknowledges that saying no had a real cost (junior frustrated, deadline missed, etc.) and reflects on the tradeoff rather than self-congratulating."
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO interview practices most worth retaining in the AI era:",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "Behavioral 'tell me about a time' questions about specific past episodes", "correct": true, "explain": "Correct. Past specific behavior is the most ports-to-future-behavior signal you have, and it's the hardest to fake with AI prep." },
+          { "id": "b", "label": "Calibrating panels against known past candidates", "correct": true, "explain": "Correct. Without calibration the bar drifts, especially as AI helps every candidate sound more polished. Calibration is the only way the rubric stays meaningful." },
+          { "id": "c", "label": "Whiteboard SQL or coding tasks the candidate solves alone", "correct": false, "explain": "Now mostly tests prompt skill. Either let them use AI explicitly, or replace with a judgment task." },
+          { "id": "d", "label": "Long take-home assignments with no time bound", "correct": false, "explain": "Take-homes were always biased toward those with free time; in 2026 they mostly test how well someone uses Claude." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Mummy ka interview test — story bina toh sab vibe hai",
+            "tone": "tip",
+            "md": "Mummy se kabhi pucha — *\"Kya aapne kabhi mistake ki?\"* Mummy turant specific batayegi — *\"1998 mein, navratri ke time, aalu wala sabzi mein bahut zyada haldi daal di thi, papa ne hass-hass ke kha li\"*. Date, dish, person, outcome.\n\nSenior candidates ko same test do. Specific story, specific failure mode, specific cost. Agar sirf — *\"Yes I learn from mistakes\"* type answer aaye, woh corporate vibe hai. Mummy se zyada accountability test pass karna hai."
+          },
+          "en": {
+            "title": "The mum-test for behavioral answers",
+            "tone": "tip",
+            "md": "Ask your mum about a mistake she made and you'll get a date, a dish, a person, and an outcome inside fifteen seconds. Apply the same standard to senior candidates. If their answer to *'tell me about a time'* is closer to 'I always learn from mistakes' than to 'last March, the MSA, the 7% renewal cap', it's corporate vibe, not real episode. Mum-grade specificity is the bar."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Execution skill went to zero in 2024; judgment is the only thing left for a senior to be filtered on.",
+          "The new T-shape is broad-top, AI-orchestration band, deep-judgment-in-one-domain bottom.",
+          "The hiring squeeze is in the middle layer; mid-level pure-execution roles evaporate while senior judgment roles get more valuable.",
+          "Four behavioral questions cover most of what you need: the catch, the restraint, the hand-off, the disagreement.",
+          "'Hire for AI fluency, not the actual job' is the trap that fills your team with people who can talk about AI but cannot do the work."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Look at the last senior candidate you rejected. Could you, today, name in one sentence the specific judgment failure mode they couldn't demonstrate? If yes, your loop is working. If no, what's the question you should have asked?"
+      }
+    ]
+  }
+}

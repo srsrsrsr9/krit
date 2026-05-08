@@ -1,0 +1,221 @@
+{
+  "slug": "digital-marketing-mental-model",
+  "title": "Marketing Math, Then Marketing AI",
+  "subtitle": "Your CAC is not a creative problem",
+  "estimatedMinutes": 13,
+  "skills": ["marketing-ai-mental-model"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/digital-marketing-with-ai/digital-marketing-mental-model.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — AI is a tool, not a strategy" },
+        { "startSec": 80, "label": "Mental model: CAC and LTV first" },
+        { "startSec": 220, "label": "Move 1 — The funnel-stage lens" },
+        { "startSec": 410, "label": "Move 2 — Which stage gets AI?" },
+        { "startSec": 560, "label": "Trap, try-it, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/digital-marketing-with-ai/digital-marketing-mental-model.html",
+      "notesByline": "Notes by Sneha, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "There are two tribes of marketers in 2026. Tribe A refuses to touch AI; their writers ship four blogs a week, their CAC is ₹847, and they're losing share to Tribe B. Tribe B has wired AI into every workflow; they ship 40 blogs a week, their CAC is ₹1,260, their organic traffic is down 22%, and they're convinced the next prompt will fix it.\n\nBoth are wrong, in mirror-image ways. This lesson is about the third path: knowing what your CAC and LTV say *before* you reach for any tool, and only then deciding what AI does and what you do."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A balance scale: on one side a stack of coins labelled 'CAC ₹847', on the other a wider stack labelled 'LTV ₹4,200'. The needle tilts toward LTV. A label below reads 'ratio: 4.96 — engine'.",
+      "caption": "Marketing math first. AI second. The ratio is the engine, not the tool stack.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><line x1='280' y1='40' x2='280' y2='180' stroke='#92400E' stroke-width='4'/><line x1='100' y1='110' x2='460' y2='90' stroke='#92400E' stroke-width='4'/><circle cx='280' cy='40' r='8' fill='#92400E'/><g transform='translate(60 110)'><rect width='80' height='14' rx='3' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><rect y='-16' width='80' height='14' rx='3' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><rect y='-32' width='80' height='14' rx='3' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='40' y='40' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>CAC</text><text x='40' y='58' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#92400E'>₹847</text></g><g transform='translate(380 90)'><rect width='110' height='14' rx='3' fill='#10B981' stroke='#065F46' stroke-width='2'/><rect y='-16' width='110' height='14' rx='3' fill='#10B981' stroke='#065F46' stroke-width='2'/><rect y='-32' width='110' height='14' rx='3' fill='#10B981' stroke='#065F46' stroke-width='2'/><rect y='-48' width='110' height='14' rx='3' fill='#10B981' stroke='#065F46' stroke-width='2'/><rect y='-64' width='110' height='14' rx='3' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='55' y='40' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>LTV</text><text x='55' y='58' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46'>₹4,200</text></g><rect x='160' y='220' width='240' height='40' rx='10' fill='#FED7AA' stroke='#92400E' stroke-width='2'/><text x='280' y='246' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#92400E' font-weight='bold'>LTV/CAC = 4.96 — this is an engine</text></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: CAC/LTV first, AI second",
+      "md": "Before any tool, any agency, any prompt: know two numbers.\n\n- **CAC** — what it costs you to acquire one paying customer, *fully loaded* (ad spend + tool costs + your time amortised).\n- **LTV** — gross profit you make off that customer over a defined window (12 months for D2C is standard).\n\nIf **LTV/CAC < 3**, you don't have a marketing engine. You have a fundraising plan. AI cannot fix that math; it can only run the wrong play faster. Fix the unit economics first; *then* let AI do the volume."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/digital-marketing-with-ai/anim/digital-marketing-mental-model-cac-ltv.html",
+      "height": 420,
+      "caption": "Watch a campaign with healthy LTV/CAC compound, and one with broken math drown — both in the same dashboard."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Founder ne bola 'AI ad copy lao'",
+          "md": "Scene yeh hai. Founder Monday morning meeting mein bola, \"yaar, AI use karo, ad copy banao, CAC kam karo.\" Tu khush. Tuesday tak ChatGPT ne 30 ad copies likh diye. \"Buy Now! Limited Time! Don't Miss Out!\" Wednesday se launch.\n\nDay 14 — CAC ₹847 se ₹1,640 ho gaya. Founder: \"AI kaam nahi kar raha.\"\n\nBhai, AI bilkul kaam kar raha hai. AI ne wahi likha jo tu maanga — ad copy. Tu ne yeh nahi maanga ki *positioning* fix karo, *audience* fix karo, *math* check karo. AI ne tujhe wahi diya jo tu ne demand kiya. Aur tu ne demand galat kiya."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Founder asks AI to lower CAC",
+          "md": "The founder asks for AI ad copy to lower CAC. By Tuesday you have 30 variants. By day 14, CAC has *risen* from ₹847 to ₹1,640. The founder concludes AI doesn't work.\n\nAI worked exactly as asked. You asked for ad copy. You did not ask whether the positioning, audience, or unit economics were the actual blocker. The AI gave you what you specified. The specification was the problem."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The funnel-stage lens"
+    },
+    {
+      "type": "markdown",
+      "md": "Pick any marketing activity. Ask one question: *which stage of the funnel does this serve?* You will discover that 'we should use AI' is not a strategy — it's a tool reaching for an unspecified problem.\n\nThree stages, in plain English:\n\n- **Top of funnel (TOFU)** — strangers becoming aware. SEO blogs, organic social, podcast ads. High volume, low per-piece consequence. CTR matters more than CAC.\n- **Middle of funnel (MOFU)** — interested visitors becoming considerers. Webinars, comparison pages, retargeting ads. Mid volume, mid consequence. CTA quality starts to matter.\n- **Bottom of funnel (BOFU)** — considerers becoming buyers. Cart-recovery emails, sales calls, checkout pages. Low volume, high per-piece consequence. One bad line costs a sale.\n\nDifferent stages have different tolerances for variance. AI's variance is fine at TOFU. It is *expensive* at BOFU."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "An inverted funnel split into three layers — TOFU at the top in light blue (high volume, low stakes), MOFU in middle in amber (medium), BOFU at the bottom in red (low volume, high stakes). On the right of each band, an icon: TOFU has 'AI 80%', MOFU has '50/50', BOFU has 'Human 80%'.",
+      "caption": "The funnel-stage lens. As stakes per piece rise, the human-to-AI ratio inverts.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#EFF6FF'/><polygon points='80,40 480,40 420,140 140,140' fill='#BFDBFE' stroke='#1E40AF' stroke-width='2'/><polygon points='140,140 420,140 360,220 200,220' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><polygon points='200,220 360,220 320,290 240,290' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='280' y='90' text-anchor='middle' font-family='sans-serif' font-size='15' font-weight='bold' fill='#1E3A8A'>TOFU</text><text x='280' y='110' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1E3A8A'>high volume, low stakes</text><text x='280' y='180' text-anchor='middle' font-family='sans-serif' font-size='15' font-weight='bold' fill='#92400E'>MOFU</text><text x='280' y='198' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E'>mid volume, mid stakes</text><text x='280' y='258' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#7F1D1D'>BOFU</text><text x='280' y='275' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>low volume, high stakes</text><g transform='translate(486 80)'><rect width='66' height='28' rx='6' fill='#1E3A8A'/><text x='33' y='18' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#FFFFFF'>AI 80%</text></g><g transform='translate(486 175)'><rect width='66' height='28' rx='6' fill='#92400E'/><text x='33' y='18' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#FFFFFF'>50 / 50</text></g><g transform='translate(486 250)'><rect width='66' height='28' rx='6' fill='#7F1D1D'/><text x='33' y='18' text-anchor='middle' font-family='sans-serif' font-size='10' font-weight='bold' fill='#FFFFFF'>Human 80%</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: 'We should use AI for marketing' → an actually answerable plan",
+      "steps": [
+        { "label": "Step 1 — Refuse the abstract", "body": "'Use AI for marketing' is unanswerable. Say back: 'Which funnel stage are we trying to move, and which metric will we know it by?' Don't move until you have an answer." },
+        { "label": "Step 2 — Pick the stage", "body": "Founder says: 'Lower CAC.' That's BOFU territory (or a positioning fix; see Step 4). Now we know what we're optimising." },
+        { "label": "Step 3 — Pick the metric", "body": "CAC has many cousins: blended CAC, paid CAC, CAC by channel, CAC by cohort. Pick one and write it down: 'Paid CAC for new D2C buyers acquired this month.'" },
+        { "label": "Step 4 — Diagnose before tooling", "body": "Is the math broken (LTV/CAC < 3)? AI won't fix that. Is the creative tired? AI can help. Is the audience wrong? AI can help find a better one. Different diagnosis, different tool." },
+        { "label": "Step 5 — Pick the AI ratio", "body": "TOFU drafts at 80% AI, voice review human. BOFU emails 50/50, cart-recovery copy human-led. Crisis PR — human only. The ratio comes from the diagnosis, not the tool catalogue." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your founder says, 'we should use AI to lower CAC by 30% this quarter.' What is the *first* thing you ask before reaching for a tool?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "What's our current LTV, and what's our LTV/CAC ratio?", "correct": true, "explain": "Right. If LTV/CAC < 3, lowering CAC alone is rearranging deck chairs. Diagnose the math first." },
+        { "id": "b", "label": "Which AI tool should we buy?", "correct": false, "explain": "Tools-first is the named trap. The diagnosis tells you what tool you need; not the other way around." },
+        { "id": "c", "label": "How many blog posts can we ship?", "correct": false, "explain": "Volume question. Doesn't tell you whether more volume helps." },
+        { "id": "d", "label": "Should we hire an agency?", "correct": false, "explain": "Org question. Comes after diagnosis, not before." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Meesho catalog wala lesson",
+          "md": "Meesho ke catalog mein ek pattern hai: top-of-funnel mein 5,000 product photos, sab AI-generated background, sab fine. Lekin checkout page ka copy? Bhai, woh 100% human-written hai. \"COD available, 7-day return, free shipping over ₹499\" — ek bhi AI-tweak nahi.\n\nKyun? Kyunki 5,000 catalog photos mein se 1 dud chalega. Checkout copy mein ek bhi galti — order drop ho gaya. Stakes ka ratio yahaan dikhta hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Meesho's quiet AI/human split",
+          "md": "Meesho runs thousands of AI-generated product photos at the top of the funnel and barely-touched human-written copy at checkout. The reasoning is the same: variance at TOFU is absorbed by volume; variance at BOFU is paid for in lost orders."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Which stage gets AI?"
+    },
+    {
+      "type": "markdown",
+      "md": "Once you can name the stage, the AI question becomes specific instead of philosophical. Here is the rule of thumb that holds across D2C, SaaS, and edtech: **as the stakes per piece rise, the human ratio rises with them.**\n\nA crisp number from a Pune D2C wellness brand scaling to Tier-2 cities last March: when they shifted ad-creative drafting from 100% human to 80% AI / 20% human review, output went 4x and CAC moved from ₹920 to ₹910 (within noise). When they tried the same shift on cart-abandonment emails, CAC moved from ₹920 to ₹1,140 — the AI emails sounded plausible but failed the brand-voice anchor at the moment users were closest to deciding. They reverted BOFU to human-led within two weeks.\n\nThe lesson is not that AI is bad at writing. The lesson is that *where you put it in the funnel* changes whether it pays you back."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A two-column comparison. Left column 'TOFU — AI heavy' shows fast output, low cost, ROAS 3.4x stable. Right column 'BOFU — Human heavy' shows slower output, higher cost, ROAS 4.1x and rising.",
+      "caption": "TOFU AI: cheap and stable. BOFU human: expensive and compounding. Both win, in different places.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(40 40)'><rect width='220' height='160' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#1E3A8A'>TOFU — AI heavy</text><text x='20' y='60' font-family='sans-serif' font-size='12' fill='#1E3A8A'>Output: 4x</text><text x='20' y='82' font-family='sans-serif' font-size='12' fill='#1E3A8A'>Cost / piece: ₹40</text><text x='20' y='104' font-family='sans-serif' font-size='12' fill='#1E3A8A'>ROAS: 3.4x (stable)</text><text x='20' y='130' font-family='sans-serif' font-size='11' fill='#3730A3' font-style='italic'>variance absorbed by volume</text></g><g transform='translate(300 40)'><rect width='220' height='160' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#9D174D'>BOFU — Human heavy</text><text x='20' y='60' font-family='sans-serif' font-size='12' fill='#9D174D'>Output: 1x</text><text x='20' y='82' font-family='sans-serif' font-size='12' fill='#9D174D'>Cost / piece: ₹600</text><text x='20' y='104' font-family='sans-serif' font-size='12' fill='#9D174D'>ROAS: 4.1x (rising)</text><text x='20' y='130' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-style='italic'>each piece pays back hard</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Growth-Lead Gauri",
+        "role": "D2C veteran, 11 years across Mumbai and Bengaluru, has fired three agencies and one founder"
+      },
+      "intro": [
+        "Hi. Gauri here. We have ten minutes; let's not waste them.",
+        "I'm going to throw five real-world asks at you. You tell me — is this a job for **AI 80%**, **Human 80%**, or **diagnose first** (we don't have enough info)?",
+        "There's no shame in 'diagnose first'. That's usually the right answer. People skip it because it feels lazy. It's actually the move."
+      ],
+      "buckets": [
+        { "id": "ai-heavy", "label": "AI 80%", "tone": "safe" },
+        { "id": "human-heavy", "label": "Human 80%", "tone": "danger" },
+        { "id": "diagnose", "label": "Diagnose first", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "Founder: 'Generate 200 SEO meta descriptions for our product catalogue this week.'", "correctBucketId": "ai-heavy", "explain": "Pure TOFU, high volume, low per-piece stakes. Classic AI 80%. A human voice-checks a sample and ships." },
+        { "id": "s2", "situation": "Performance marketer: 'Rewrite our cart-abandonment email; CAC is up 18% this month.'", "correctBucketId": "diagnose", "explain": "Don't reach for AI yet. Why is CAC up? New audience? Stockouts? Pricing change? The email may be fine; the upstream may not be. Diagnose, then act." },
+        { "id": "s3", "situation": "PR head: 'We just had a product recall; help me write the public statement by 8pm.'", "correctBucketId": "human-heavy", "explain": "Crisis PR is the brand 20%. AI default-frames toward generic empathy that reads hollow. Human writes; AI may copy-edit." },
+        { "id": "s4", "situation": "Junior: 'Should I use AI to translate our Hindi blog to Marathi for the Pune launch?'", "correctBucketId": "diagnose", "explain": "Maybe. Marathi has tonal nuances that LLMs handle inconsistently in 2026; output needs a Marathi-speaking review pass. So: AI draft + human review = a 50/50, not a clean AI 80%. Worth diagnosing." },
+        { "id": "s5", "situation": "Founder: 'Use AI to write 1,000 personalised birthday emails to our top customers.'", "correctBucketId": "ai-heavy", "explain": "Mid volume, low per-piece stakes (a missed birthday email is a non-event), heavy templating. AI 80% with a brand-voice template lock." },
+        { "id": "s6", "situation": "CMO: 'Refresh the homepage hero copy for the Q3 launch.'", "correctBucketId": "human-heavy", "explain": "One asset, top of every visit, sets brand tone. The 20% that's worth a human's full attention." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: AI tactics without metrics",
+      "md": "The single most common failure mode in 2026: someone writes 'AI ad copy' on a Q-plan, ships 200 variants, and reports 'we shipped 200 variants' as if shipping were the goal.\n\n**Shipping is not a metric.** CAC, ROAS, payback period, retention — those are metrics. If your AI plan does not say 'we expect CAC to move from X to Y by date Z, and if it doesn't, we will do A', you have an *activity plan* dressed as a strategy. The tell: the plan is full of tool names and short on numbers."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Drag these into the right order — the diagnostic sequence before any AI marketing decision.",
+      "items": [
+        { "id": "1", "label": "Compute LTV/CAC for the relevant cohort", "detail": "Numbers first; without them, every later choice is unanchored." },
+        { "id": "2", "label": "Identify which funnel stage the metric lives at", "detail": "Top, middle, or bottom changes everything that follows." },
+        { "id": "3", "label": "Decide whether the issue is math, audience, creative, or product", "detail": "Each diagnosis points to a different tool." },
+        { "id": "4", "label": "Pick the AI ratio for that stage and that diagnosis", "detail": "TOFU + creative-tired = AI heavy. BOFU + audience-wrong = human-led with AI assists." },
+        { "id": "5", "label": "Set a kill criterion before launch", "detail": "If you can't say 'we'd kill this at X', you can't honestly run it." }
+      ],
+      "hint": "Math, then stage, then diagnosis, then ratio, then criterion. Resist the urge to pick the tool first."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Take this real founder ask and rewrite it as an answerable diagnostic question.\n\n**Founder ask:** \"Use AI to grow our marketing 5x this quarter.\"\n\nWrite three numbered diagnostic questions you'd ask before saying anything else. Then write the one-sentence reply you'd send back to the founder by end of day.",
+      "expected": "Diagnostic questions:\n1. What's our current LTV/CAC ratio, and which channel is currently weakest on payback?\n2. Of our current marketing spend, what fraction goes to top-of-funnel, mid, and bottom — and which stage are we trying to grow 5x?\n3. Is '5x' on output (volume), on revenue, or on a specific metric like new-customer acquisitions?\n\nReply to founder:\n'Happy to scope this. Quick check first — is the 5x on revenue, on output, or on a stage-specific metric like new acquisitions? The answer changes the AI ratio I'd recommend by a lot. I'll have a numbered plan in your inbox by Friday once we align on that one number.'"
+    },
+    {
+      "type": "quiz",
+      "prompt": "A SaaS founder shows you these numbers: CAC ₹4,200, 12-month LTV ₹6,100, AI tools budget approved. What is the *most defensible* opening recommendation?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Don't scale paid acquisition; LTV/CAC is 1.45 — fix LTV (retention, expansion, pricing) before adding AI volume.", "correct": true, "explain": "Right. Adding AI to a broken-math channel just buys revenue at near-cost faster. Fix LTV first." },
+        { "id": "b", "label": "Use AI to lower CAC by 30%; that fixes the ratio.", "correct": false, "explain": "Tempting, but a 30% CAC drop on its own only moves the ratio to 2.06 — still under the 3x line. AI is buying you a smaller hole, not a profitable one." },
+        { "id": "c", "label": "Generate 50 AI-written blogs for SEO this month.", "correct": false, "explain": "Volume play with no link to the diagnosis. Will likely worsen the math by adding tooling spend without retention impact." },
+        { "id": "d", "label": "Hire two more performance marketers.", "correct": false, "explain": "Adds CAC inputs (overhead) to a CAC problem. Wrong direction." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Mummy-aunty test for marketing math",
+          "md": "Mummy ke saath baith ke samjha. \"Ek customer banane mein ₹847 lagta hai. Ek customer humein ₹4,200 deta hai over a year.\"\n\nMummy: \"Toh achha business hai.\"\n\nDoosra scenario. \"Ek customer ₹4,200 mein banata hu. Mujhe ₹6,100 milta hai.\"\n\nMummy: \"Beta, itna mehnat karke itna kam? Aur isme tax bhi hoga. Yeh business kya kar raha hai?\"\n\nMummy-aunty test paas. LTV/CAC < 3 means even your mom thinks something's off."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The mom test for unit economics",
+          "md": "Explain your CAC and LTV to someone with no marketing vocabulary. If they say 'that doesn't sound like a business', you don't have a marketing problem; you have a fundamentals problem. AI cannot rescue fundamentals."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "If LTV/CAC is under 3, you don't have a marketing engine — you have a fundraising plan, and AI cannot rescue the math.",
+        "'Use AI for marketing' is not a strategy; it's a tool reaching for an unspecified problem.",
+        "The funnel-stage lens decides everything: TOFU absorbs AI variance, BOFU pays for it in lost sales.",
+        "Diagnose before tooling: math, audience, creative, or product — each points to a different AI ratio.",
+        "If your AI plan has no 'we will move metric X to Y by date Z, or do A', you have an activity plan, not a strategy."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one current marketing initiative on your team. Write down its CAC, LTV, funnel stage, and current AI ratio. Then write the one diagnostic question you should have asked but didn't."
+    }
+  ]
+}

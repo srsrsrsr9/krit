@@ -1,0 +1,313 @@
+{
+  "path": {
+    "slug": "ai-for-leaders",
+    "title": "AI for Leaders",
+    "subtitle": "Build a defensible AI bet portfolio without selling out the team",
+    "summary": "Most leaders treat AI like a vibe; they pick a flagship feature, hand it to one team, and discover 11 months later that 87% of MVP 'AI features' never reach 1,000 users. This course teaches you to think about AI the way you think about a budget: as a portfolio of bets with explicit kill criteria, real eval gates, and a story your board will believe. By the end you can scope a 12-month AI bet portfolio, defend it line by line, and not flinch when the SVP asks 'what happens if it doesn't work?'.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "leader-ai-strategy",
+      "name": "AI Strategy Framing",
+      "category": "management",
+      "description": "Translate AI capability shifts into business outcomes leaders and boards can defend",
+      "decayDays": null
+    },
+    {
+      "slug": "leader-ai-portfolio",
+      "name": "AI Bet Portfolio Design",
+      "category": "management",
+      "description": "Pick, size, and pre-commit kill criteria for a 3-bet AI portfolio that survives reality",
+      "decayDays": null
+    },
+    {
+      "slug": "leader-ai-org",
+      "name": "AI Team Topology",
+      "category": "management",
+      "description": "Choose between AI cell and AI factory structures and place the 'why' where it sticks",
+      "decayDays": null
+    },
+    {
+      "slug": "leader-ai-governance",
+      "name": "AI Governance Without Theatre",
+      "category": "management",
+      "description": "Replace policy-doc theatre with real eval gates, kill switches, and a paper trail that holds in court",
+      "decayDays": null
+    },
+    {
+      "slug": "leader-ai-comms",
+      "name": "AI Communication to Boards",
+      "category": "management",
+      "description": "Frame an AI program for a board with cost-benefit math, a rollback narrative, and a date-stamped assumption ledger",
+      "decayDays": null
+    },
+    {
+      "slug": "leader-ai-judgment",
+      "name": "AI Leader Judgment",
+      "category": "management",
+      "description": "Read an AI proposal, pricing deck, or vendor pitch and tell signal from theatre in under 20 minutes",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "leader-ai-portfolio", "requires": "leader-ai-strategy" },
+    { "skill": "leader-ai-org", "requires": "leader-ai-portfolio" },
+    { "skill": "leader-ai-governance", "requires": "leader-ai-org" },
+    { "skill": "leader-ai-comms", "requires": "leader-ai-governance" },
+    { "skill": "leader-ai-judgment", "requires": "leader-ai-strategy" }
+  ],
+  "assessment": {
+    "title": "AI for Leaders Assessment",
+    "description": "Tests judgment under realistic leadership conditions: vendor pitches, team-design tradeoffs, governance gaps, and board questions you cannot dodge.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["leader-ai-judgment", "leader-ai-strategy", "leader-ai-portfolio", "leader-ai-org", "leader-ai-governance", "leader-ai-comms"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "An AI vendor demos a tool that 'reduces customer support handle time by 40%.' Which question best separates signal from theatre?",
+        "points": 1,
+        "skillSlug": "leader-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "Which model do you use?", "correct": false, "explanation": "Wrong abstraction. The model is rarely the bottleneck; integration, eval, and operator workflow are. Asking the model name signals you have not done your homework." },
+          { "id": "b", "label": "Show me the eval set, the customer cohort, and the baseline you measured against.", "correct": true, "explanation": "Correct. A vendor with a real number can produce all three. A vendor with a vibe will pivot to 'every customer is different.'" },
+          { "id": "c", "label": "What's the ROI in year one?", "correct": false, "explanation": "Tempting and very common, but ROI without the cohort and baseline is unverifiable. Vendors quote ROI from their best customer; you are not their best customer." },
+          { "id": "d", "label": "Is it GenAI or traditional ML?", "correct": false, "explanation": "Vanity question. The architecture matters less than whether the eval was run on data shaped like yours." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CEO says: 'we are AI-first now.' What does this concretely commit the company to?",
+        "points": 1,
+        "skillSlug": "leader-ai-strategy",
+        "choices": [
+          { "id": "a", "label": "Nothing. It's a slogan until cost-curve and capability-curve shifts are named per function.", "correct": true, "explanation": "Correct. 'AI-first' without a per-function statement of which cost-curve or capability-curve is shifting is a marketing line. Make it concrete or kill it." },
+          { "id": "b", "label": "Every team must use AI in at least one workflow this quarter.", "correct": false, "explanation": "This is what 'AI-first' usually decays into. It produces 14 vanity pilots and zero production wins. Activity is not strategy." },
+          { "id": "c", "label": "Hire a Chief AI Officer.", "correct": false, "explanation": "Org-chart theatre. The role can help, but only if there is a budget, a portfolio, and kill criteria attached. Without those, the CAIO becomes a slide-deck factory." },
+          { "id": "d", "label": "Replace 30% of headcount with AI within 18 months.", "correct": false, "explanation": "Specific but reckless. Headcount targets without capability evidence get reversed in month 9, and the trust is gone for two years." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which two of the following are reasonable kill criteria for an AI bet at the 90-day mark?",
+        "points": 2,
+        "skillSlug": "leader-ai-portfolio",
+        "choices": [
+          { "id": "a", "label": "User-facing metric (e.g. resolved tickets per agent) has not moved 5% on the treated cohort.", "correct": true, "explanation": "Correct. A specific, cohort-scoped, pre-committed delta is the cleanest kill criterion you can write. If it has not moved 5%, it likely will not move 25% later." },
+          { "id": "b", "label": "Internal NPS of the feature is below 7.", "correct": false, "explanation": "Internal NPS at 90 days is mostly a measure of who shouted last in a meeting. Not a real kill criterion." },
+          { "id": "c", "label": "The team has not reduced eval failure rate on the agreed test set below 8%.", "correct": true, "explanation": "Correct. Eval is the closest proxy to 'does this thing actually work,' and an 8% failure rate is roughly the support-ticket cost ceiling for most B2B SaaS." },
+          { "id": "d", "label": "Engineering velocity dropped by 10%.", "correct": false, "explanation": "Velocity is a process metric, not an outcome metric. AI bets often pull velocity down before they pay it back. Killing on velocity throws out winners." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You have ₹2.4 crore of AI budget for the year. A direct report wants to spend all of it on a single 'flagship' co-pilot for the sales team. Best move?",
+        "points": 1,
+        "skillSlug": "leader-ai-portfolio",
+        "choices": [
+          { "id": "a", "label": "Approve. Concentration beats diversification when you have conviction.", "correct": false, "explanation": "Wrong analogy. Concentration in equities works because outcomes are continuous; AI bets are binary at 90 days. One bet means one shot at learning." },
+          { "id": "b", "label": "Split into 3 bets of unequal size with pre-committed kill criteria; reserve ~15% for the bet you cannot yet name.", "correct": true, "explanation": "Correct. The 3-bet portfolio with one slot reserved for the unknown is the canonical structure. It buys you a second cycle even if bet 1 fails." },
+          { "id": "c", "label": "Split equally into 4 bets to maximise diversification.", "correct": false, "explanation": "Too dispersed. Four equal bets at this scale produce four under-resourced pilots. Diversification without conviction is just thrift dressed up." },
+          { "id": "d", "label": "Defer the budget to next year while you gather data.", "correct": false, "explanation": "Costliest option. Capability curves shift fast; a year of waiting often means competing on a problem already solved by a vendor." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your AI feature wraps a third-party LLM. Production has a 4% hallucination rate on financial answers. The PM proposes: 'add a disclaimer.' What is the leadership-grade response?",
+        "points": 1,
+        "skillSlug": "leader-ai-governance",
+        "choices": [
+          { "id": "a", "label": "Approve the disclaimer; users have been warned.", "correct": false, "explanation": "Disclaimer is policy-doc theatre. Indian regulators and Indian customers ignore it. So do internal incident reports six months later." },
+          { "id": "b", "label": "Block the launch until eval failure on financial answers is below 0.5% or the feature is gated to non-financial categories.", "correct": true, "explanation": "Correct. Eval gates are real governance; disclaimers are not. You either fix the rate or scope the surface; both are defensible to a board." },
+          { "id": "c", "label": "Ship to 5% of users with the disclaimer and monitor.", "correct": false, "explanation": "The 5% bucket gets a 4% bad-answer rate too. You will have 200 angry tickets and a regulator letter before you have learned anything new." },
+          { "id": "d", "label": "Ask Legal to redraft the disclaimer to be stronger.", "correct": false, "explanation": "Same theatre, more billable hours. Legal cannot change the failure rate; only engineering and eval can." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which two of the following are signs your AI program has 'centralised too early'?",
+        "points": 2,
+        "skillSlug": "leader-ai-org",
+        "choices": [
+          { "id": "a", "label": "Every product team has to file a request to the central AI team to ship anything with an LLM.", "correct": true, "explanation": "Correct. Centralised gating becomes a queue, the queue becomes a bottleneck, and product teams stop bringing AI ideas. The signal dies before the system can act on it." },
+          { "id": "b", "label": "There is one shared LLM gateway with rate-limits and logging.", "correct": false, "explanation": "This is platform, not centralisation. A gateway is healthy; a gating committee is not." },
+          { "id": "c", "label": "The central AI team has a 4-month backlog and three product teams have given up.", "correct": true, "explanation": "Correct. Backlog plus team withdrawal is the canonical 'too central, too soon' signature. The AI cell pattern was supposed to fix this." },
+          { "id": "d", "label": "The central AI team runs the eval harness and shared red-team prompts.", "correct": false, "explanation": "This is the part you should centralise. Evals and adversarial test sets are too expensive for each team to build alone." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You inherit an AI team that built impressive demos but no production traffic in 11 months. The first diagnostic question is:",
+        "points": 1,
+        "skillSlug": "leader-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "Where does the 'why' live? Who in the company can articulate the user problem this team is solving, in one sentence, without me prompting?", "correct": true, "explanation": "Correct. Demo teams die because the 'why' lives only in a slide. If you cannot find a sentence-long 'why' from someone outside the AI team, the program is rudderless." },
+          { "id": "b", "label": "What is the team's GPU budget?", "correct": false, "explanation": "Common but wrong-altitude. Budget rarely explains demo-only outcomes; misalignment with a user problem does." },
+          { "id": "c", "label": "Who is the team's manager?", "correct": false, "explanation": "Org-chart anxiety. Replacing the manager without finding the missing 'why' just produces a different demo team." },
+          { "id": "d", "label": "What model are they using?", "correct": false, "explanation": "Architecture-tourism. Model choice was almost never the bottleneck for the bottleneck pattern described." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "The board asks: 'What happens if your AI bet does not work?' The strongest response is:",
+        "points": 1,
+        "skillSlug": "leader-ai-comms",
+        "choices": [
+          { "id": "a", "label": "We have backed three independent bets; the largest is sized so we can absorb failure inside Q3 OPEX, and we will know by 14 September whether to continue, narrow, or sunset.", "correct": true, "explanation": "Correct. Names the portfolio, names the size, names the date, names the action. This is the rollback narrative boards want to hear." },
+          { "id": "b", "label": "AI is the future; the cost of not betting is higher than the cost of failing.", "correct": false, "explanation": "Hand-wave. Boards have heard this from the last two CIOs; they have stopped accepting it as an answer." },
+          { "id": "c", "label": "We will pivot.", "correct": false, "explanation": "Empty. 'Pivot' is the answer that means you have not thought about failure, dressed up as if you have." },
+          { "id": "d", "label": "The team is excellent; they will figure it out.", "correct": false, "explanation": "Faith-based budgeting. Faith is not a control." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your engineering manager wants to add 'AI features' to the next product release. What is the first artefact you ask for, before approving any spec?",
+        "points": 1,
+        "skillSlug": "leader-ai-strategy",
+        "choices": [
+          { "id": "a", "label": "A list of user problems where the cost-curve or capability-curve has shifted in the last 18 months — and the one we will pick.", "correct": true, "explanation": "Correct. The 80/20 lens. AI is not a feature; it is a way to attack problems whose cost or capability has just shifted. If your manager cannot name which curve shifted, the spec is premature." },
+          { "id": "b", "label": "A draft spec.", "correct": false, "explanation": "Drafting before the 'why' is selected just locks the team into the first feature someone thought of." },
+          { "id": "c", "label": "A budget estimate.", "correct": false, "explanation": "Budget without a problem statement is theatre." },
+          { "id": "d", "label": "A vendor comparison.", "correct": false, "explanation": "Vendor before problem is the most expensive shopping you can do." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Which of these is a real eval gate, not policy-doc theatre?",
+        "points": 1,
+        "skillSlug": "leader-ai-governance",
+        "choices": [
+          { "id": "a", "label": "All AI features must be reviewed by the AI Council before release.", "correct": false, "explanation": "Council gating without a specified test is theatre. The council ends up rubber-stamping anything with confident slides." },
+          { "id": "b", "label": "Failure rate on the 1,200-prompt internal eval set must be below 1.5%, with an attached red-team report from an external party, before any user is exposed.", "correct": true, "explanation": "Correct. Specific test set, specific threshold, specific attestation. This is what an actual gate looks like." },
+          { "id": "c", "label": "Engineering must follow our AI ethics principles.", "correct": false, "explanation": "Pure values-statement theatre. Principles do not pass or fail; tests do." },
+          { "id": "d", "label": "The CTO must sign off.", "correct": false, "explanation": "Personal-approval gating produces inconsistency and bottlenecks. It also gives the CTO no defensible audit trail." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You committed to a 90-day kill criterion. At day 78, the bet has not hit it but the team is showing real momentum. What do you do?",
+        "points": 1,
+        "skillSlug": "leader-ai-portfolio",
+        "choices": [
+          { "id": "a", "label": "Hold the line. The whole point of the pre-commit was that day-78 you would want to extend.", "correct": true, "explanation": "Correct. The kill criterion exists precisely to protect you from the optimistic version of yourself. Make the call at day 90 with the metric in front of you, not the vibe." },
+          { "id": "b", "label": "Extend by one quarter; momentum matters.", "correct": false, "explanation": "Tempting and seductively reasonable. The commitment was made by a less-attached version of you with better data; trust them." },
+          { "id": "c", "label": "Cut now; if it has not hit by day 78, day 90 is wishful.", "correct": false, "explanation": "Symmetric error. Cutting early throws out a real signal you might have at day 90." },
+          { "id": "d", "label": "Add a fourth bet to hedge.", "correct": false, "explanation": "Process injection. New bets take three months to spin up; the answer to 'this bet might fail' is not a fourth bet, it is the existing fourth bet you reserved." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the two items that belong on a board-grade 'assumption ledger' for an AI program.",
+        "points": 2,
+        "skillSlug": "leader-ai-comms",
+        "choices": [
+          { "id": "a", "label": "We assume LLM cost-per-token will fall 40% by Q4 2026; bet 2's unit economics depend on this.", "correct": true, "explanation": "Correct. Named, dated, dependency-tagged. This is exactly the form an assumption ledger takes." },
+          { "id": "b", "label": "AI will transform the business.", "correct": false, "explanation": "Slogan, not assumption. An assumption can be falsified; a slogan cannot." },
+          { "id": "c", "label": "We assume the SEBI consultation on automated investment-advice does not classify our advisor flow as RIA-licensed; we have a 30-day pivot if it does.", "correct": true, "explanation": "Correct. Specific regulatory dependency with a contingency. The kind of line that wins board trust because it shows you have thought about the downside." },
+          { "id": "d", "label": "Our team is the best in the country.", "correct": false, "explanation": "Marketing copy. Has no place in a ledger meant to survive scrutiny." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "AI cell vs AI factory. Which scenario is best served by an AI cell?",
+        "points": 1,
+        "skillSlug": "leader-ai-org",
+        "choices": [
+          { "id": "a", "label": "200-engineer SaaS, 6 product lines, AI is one of three competing strategic priorities, you are still figuring out which problems matter.", "correct": true, "explanation": "Correct. Cell is the right pattern when you do not yet know which problems will be load-bearing. Factory is for after you know." },
+          { "id": "b", "label": "8,000-engineer enterprise, AI is core to 4 of 5 product lines, regulatory load is heavy.", "correct": false, "explanation": "That is factory territory. Cell scales into chaos at this size." },
+          { "id": "c", "label": "12-person startup with one product.", "correct": false, "explanation": "Neither cell nor factory; just a team that uses AI tools. Imposing 'cell' here is over-engineering for the size." },
+          { "id": "d", "label": "1,200-engineer fintech with stable AI roadmap and known eval needs.", "correct": false, "explanation": "Mid-stage; this is where the cell-to-factory transition usually happens, but the question asked which scenario is *best* served by a cell, and stable-roadmap is past that point." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is the most reliable single sentence to put in front of a board audience that does not know the AI vocabulary?",
+        "points": 1,
+        "skillSlug": "leader-ai-comms",
+        "choices": [
+          { "id": "a", "label": "We will know by date Y whether assumption X holds; if it does, we deepen, if not, we sunset.", "correct": true, "explanation": "Correct. The 'we'll-know-X-by-Y' formulation gives the board a calendar event to anchor on, and pre-commits to a binary action. It survives translation across audiences." },
+          { "id": "b", "label": "AI is the most important shift since the cloud.", "correct": false, "explanation": "True or false, this is a slogan. Boards want to know how *you* will act, not what the trend says." },
+          { "id": "c", "label": "We will lead in AI.", "correct": false, "explanation": "Empty. 'Lead in AI' has no falsifiable form." },
+          { "id": "d", "label": "Trust us, we have the team.", "correct": false, "explanation": "Faith-based ask. Boards do not invest on faith; they invest on instrumented bets." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "An external consultant pitches a ₹6.4 crore 'AI transformation programme' across all 9 functions, payable over 18 months. The most useful question to puncture the pitch is:",
+        "points": 1,
+        "skillSlug": "leader-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "Which one function will move first, by what cohort-scoped metric, by what date — and what happens at that date if it has not moved?", "correct": true, "explanation": "Correct. Forces the consultant to surface a kill criterion they did not put in the deck. If they cannot, the programme is theatre." },
+          { "id": "b", "label": "What is your team size?", "correct": false, "explanation": "Vanity question. They will name a number; you will be no closer to a defensible decision." },
+          { "id": "c", "label": "What other clients have you worked with?", "correct": false, "explanation": "Reference theatre. Their best client outcome is not your expected outcome." },
+          { "id": "d", "label": "Can you do it in 12 months instead?", "correct": false, "explanation": "Negotiating the wrong axis. The problem is not duration; it is the absence of cohort-scoped metrics." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the two items that should always be written down for any AI feature that touches customer money, identity, or health.",
+        "points": 2,
+        "skillSlug": "leader-ai-governance",
+        "choices": [
+          { "id": "a", "label": "The eval set version, threshold, and date of last red-team test.", "correct": true, "explanation": "Correct. This is the engineering paper trail that holds up under audit and inside an incident postmortem." },
+          { "id": "b", "label": "A list of approved adjectives we can use in marketing.", "correct": false, "explanation": "Marketing hygiene, not governance. Belongs in a different document." },
+          { "id": "c", "label": "The kill switch — who can disable the feature, in how many minutes, with what alternative path for the user.", "correct": true, "explanation": "Correct. A kill switch with named owners and a maximum time-to-disable is one of the cheapest, highest-leverage governance artefacts you can write." },
+          { "id": "d", "label": "The CEO's quote about AI.", "correct": false, "explanation": "Slide-deck filler. Has no operational value." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Which is the cleanest leading indicator that an AI program is healthy at month 4?",
+        "points": 1,
+        "skillSlug": "leader-ai-strategy",
+        "choices": [
+          { "id": "a", "label": "Eval failure rate on the agreed test set has dropped 30%, and the treated cohort metric has moved more than the control by ≥ 3%.", "correct": true, "explanation": "Correct. Engineering quality is improving and a real-world cohort effect is visible. Both signals together predict month-9 outcomes far better than either alone." },
+          { "id": "b", "label": "The team has shipped 14 features.", "correct": false, "explanation": "Activity, not outcome. Fourteen unused features is a worse position than two used ones." },
+          { "id": "c", "label": "The company has been quoted in three press articles about AI.", "correct": false, "explanation": "Vanity metric. The public narrative around AI programs collapses on first incident." },
+          { "id": "d", "label": "Engineering velocity is up 20%.", "correct": false, "explanation": "Often a side-effect of AI tooling but not evidence the AI *bet* is working. Confuses developer-productivity gains with strategic outcomes." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "ai-for-leaders-capstone",
+    "title": "Capstone: Scope a 12-month AI bet portfolio for your CEO",
+    "prompt": "Your CEO walks into your 1:1 and says: \"Board meeting on the 14th. They want to hear our AI plan. I told them you would present a 12-month portfolio. Make it real.\"\n\nThat is the entire brief. They have not told you the budget envelope, the risk appetite, the regulatory surface, or whether 'AI' to them means GenAI co-pilots, traditional ML, or vendor tools. Part of the work is figuring out what to ask back, and what to assume on paper when you cannot ask.\n\nProduce a single document, no longer than 6 pages, that contains:\n\n1. **The portfolio.** Three named bets, with: the user problem each one attacks, the cost-curve or capability-curve shift that makes it possible *now*, the size in INR (or % of OPEX), and the named owner. Plus a fourth slot left explicitly empty, sized at ~15%, with a one-line note on what would have to be true for you to fill it.\n2. **The kill criteria.** For each bet, a 90-day metric — cohort-scoped, with a threshold, and the action you will take if it is not met. No 'we will revisit'; either *narrow*, *sunset*, or *deepen*.\n3. **The assumption ledger.** Five to seven named assumptions, each dated, with a dependency tag (which bet it underwrites) and a falsification path. Include at least one assumption about regulation, one about cost, and one about people / team capacity.\n4. **The org plan.** One paragraph: AI cell or AI factory? Where does the 'why' live? Which roles are net-new and which are reassigned? What is the governance gate, in one sentence, that you will commit to in writing?\n5. **The board narrative.** Three slides, written as bullet points: the framing slide (what we are doing and why), the rollback slide (what happens at day 90, day 180, day 365 if assumption X fails), and the ask slide (what you need from the board, in concrete terms — budget, hiring delegation, a regulatory cover, etc.).\n\nThe document should be defensible against a board member who has read three AI books and one McKinsey report and now thinks they understand the field. They will ask: \"What if it doesn't work?\" Your document should answer them before they ask.\n\nBe specific. Use real numbers, even if they are your best estimate flagged as such. \"Roughly ₹2.4 cr, of which ~38% goes to bet 1\" beats \"a meaningful investment.\" If you write 'meaningful', you have not finished.",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Every bet, gate, and number is explicitly tied to a named user problem and a falsifiable assumption. A skeptic could attack any single line and you would have a one-sentence response.", "points": 4 },
+          { "label": "Most bets are tied to user problems and have plausible kill criteria; one or two thresholds are vague or aspirational.", "points": 2 },
+          { "label": "Bets are activity-shaped ('build a co-pilot') without user problems or kill criteria; the document reads as a slide deck rather than a commitment.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity to assumptions",
+        "levels": [
+          { "label": "Assumption ledger is dated, dependency-tagged, and contains at least one regulatory and one cost assumption with a named falsification path. The rollback narrative names what changes if each assumption fails.", "points": 4 },
+          { "label": "Assumptions are listed but not dated or dependency-tagged; the rollback is generic ('we will pivot').", "points": 2 },
+          { "label": "No explicit assumption ledger, or assumptions are slogans ('AI is the future'). The portfolio cannot be stress-tested.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "Board narrative passes the 'we will know X by date Y' test on every bet. Numbers are concrete; jargon is translated; the rollback slide is more credible than the framing slide. A non-technical board member could repeat the plan back in their own words.", "points": 4 },
+          { "label": "Some sections are sharp and some lapse into AI-vendor copy. Numbers are concrete in places, vague in others. A board member would understand the 'what' but might miss the 'why now'.", "points": 2 },
+          { "label": "Reads like a vendor pitch — adjectives without numbers, vision without dates, no rollback narrative. Will not survive a real board Q&A.", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "ai-for-leaders",
+    "title": "AI for Leaders",
+    "description": "Holder can scope a defensible 12-month AI bet portfolio with pre-committed kill criteria, name a credible org structure, and present it to a board with a rollback narrative that survives Q&A.",
+    "issuerName": "Krit Academy"
+  }
+}

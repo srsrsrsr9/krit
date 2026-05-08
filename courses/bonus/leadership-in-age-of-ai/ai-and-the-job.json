@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 40% That Wasn't",
+    "source": "Internal review at a 400-person consulting firm, Gurgaon (anonymised at the partner's request)",
+    "date": "November 2025",
+    "story": "On April 14, 2025, the CEO of a 400-person Gurgaon consulting firm sent an all-hands email titled *\"Our AI-First Future.\"* Paragraph three contained the line that leaked to LinkedIn within forty minutes: *\"AI will replace approximately 40% of analyst work over the next 18 months.\"* No task analysis preceded the number. The 40% came from a McKinsey deck the COO had read on a flight to Mumbai.\n\nSix months later, the internal review told a different story. **40% of analyst tasks** had indeed been automated, mostly research synthesis and first-draft slide writing. Workload on the *remaining* analysts, however, was up **30%** — because senior partners, freed from waiting on first drafts, now demanded three drafts where they used to demand one. Quality review, client-context wrangling, and the unglamorous email-the-client-for-the-third-time work had not been touched by AI. Someone still had to do it.\n\nBetween August and October, **seven senior associates resigned** — five citing burnout, two citing \"strategic disagreement.\" Two went to direct competitors. One started a boutique. By November the CEO walked the email back at a town hall: *\"We were early in our framing.\"* The 40% number was never mentioned again.",
+    "takeaway": "AI replaces tasks, not jobs. If you announce headcount before doing task analysis, you will lose the people who knew which tasks actually mattered."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The 30% Cut",
+    "setup": "It is **Week 2** of your six-month mandate. You are **Rajiv**, newly-appointed Director of AI Transformation at a 200-person Indian consulting firm. Twenty minutes ago the CEO finished a board call and walked into your office without knocking.\n\n*\"Rajiv. The board wants a 30% headcount cut by Q4. AI should make this easy. I need a one-pager by Friday.\"*\n\nIt is Tuesday. The 30% number has not been justified, scoped, or stress-tested. The CEO has already mentioned it to two partners over coffee. You have a Friday deadline and a coach on Zoom.",
+    "coach": { "name": "Chief-People-Officer Charumati", "role": "CPO, 22 years across Infosys, Flipkart, and one company that no longer exists" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Charumati pours her chai. *\"Before you write the one-pager, what's the first move?\"* What do you tell her?",
+        "options": [
+          { "id": "a", "label": "Build the headcount-cut model fast — 30% across all functions, weighted by AI-replaceability score from the McKinsey report.", "correct": false, "explain": "You just imported someone else's task analysis as your strategy. The McKinsey numbers are population averages. Your firm has 200 people doing specific work for specific clients. Charumati: *\"Beta, you're solving the CEO's anxiety, not the firm's problem.\"*", "points": 0 },
+          { "id": "b", "label": "Run a two-week task-level audit — what each role actually does, hour-by-hour, before any headcount conversation.", "correct": true, "explain": "**Correct.** AI replaces tasks, not roles. Until you know which tasks each role spends time on, the 30% number is a guess wearing a suit. Charumati: *\"Now you're a director. Tell the CEO Friday is too soon and ask for three weeks.\"*", "points": 3 },
+          { "id": "c", "label": "Send the CEO a politely-worded email explaining that headcount cuts are an HR decision and you'd prefer to focus on tooling.", "correct": false, "explain": "You ducked. The CEO will find someone who *will* draft the one-pager, and that someone will not have done task analysis either. You preserved your hands and lost the room.", "points": 1 },
+          { "id": "d", "label": "Counter-propose a 15% cut — split the difference, look reasonable, get the CEO off your back.", "correct": false, "explain": "15% of nothing is still nothing. You have no task data and you just negotiated against yourself. The CEO will round it up to 20% in the board deck and your name will be on it.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "The CEO grudgingly gives you three weeks. The audit comes back: **38% of analyst tasks** are AI-automatable, but **only 8% of senior-associate work** is, and the partners' time is mostly client-relationship and judgement calls. What do you recommend?",
+        "options": [
+          { "id": "a", "label": "Cut 38% of analyst headcount. Keep seniors and partners. Math is math.", "correct": false, "explain": "You confused task automation with role elimination. If 38% of analyst *tasks* automate, the remaining 62% still needs humans, and senior associates will get crushed doing first-pass review. The Gurgaon firm in your field notes did exactly this. Seven seniors quit.", "points": 0 },
+          { "id": "b", "label": "Reduce *new analyst hiring* for two quarters; redeploy current analysts onto judgement-heavy work; track senior-associate workload weekly.", "correct": true, "explain": "**This is the move.** You absorb the productivity gain through attrition and redeployment instead of layoffs. You also instrument senior workload, which is the canary that died at the Gurgaon firm. Charumati nods. *\"This is what the CEO asked for, just not in the words he used.\"*", "points": 3 },
+          { "id": "c", "label": "Cut 30% across the board so every function feels equal pain.", "correct": false, "explain": "Equal pain isn't fair, it's lazy. You'd lose 30% of the partners — the people whose work AI cannot touch — to make a flat number look defensible in a deck.", "points": 0 },
+          { "id": "d", "label": "Recommend zero cuts. AI just makes everyone more productive — revenue per head goes up, problem solved.", "correct": false, "explain": "Charumati: *\"And what do you tell the board on Friday?\"* The CEO needs *something* that ladders to the cost target. \"Zero\" is a research finding, not a strategy.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Friday morning. Your one-pager is ready. The CEO opens it. He says: *\"I can't walk into the board with 'no layoffs.' I need a number.\"* Last call.",
+        "options": [
+          { "id": "a", "label": "*\"Give me a number that's a six-month freeze on backfills plus a 5% performance-managed exit. That's a real, defensible 8-10% reduction by Q4 without a layoff headline.\"*", "correct": true, "explain": "**Yes.** You gave him a number, a mechanism, and a story he can tell the board. No layoff press release, no LinkedIn leak, no seven-senior-resignation cascade. Charumati raises her chai. *\"Now you're useful.\"*", "points": 3 },
+          { "id": "b", "label": "*\"30% it is. I'll start with the analysts.\"*", "correct": false, "explain": "You folded. The CEO got the number that made him comfortable and the firm got the outcome from the Gurgaon field note. Six months from now your name is on the email that leaks to LinkedIn.", "points": 0 },
+          { "id": "c", "label": "*\"Let me run another two-week deep-dive — I want to be sure before recommending any number.\"*", "correct": false, "explain": "The CEO has a board meeting Friday. \"Let me study more\" is what people say when they want to avoid the decision. Two weeks from now you'll have the same problem with two fewer weeks of runway.", "points": 1 },
+          { "id": "d", "label": "*\"15%. Aggressive but doable. I'll own the comms plan.\"*", "correct": false, "explain": "You doubled what the data justifies because the CEO looked sad. \"Owning comms\" on a layoff you don't believe in is a great way to be the first one out the door yourself.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You held the line on task analysis, redeployed instead of cut, and gave the CEO a number he could defend. **Charumati orders you a second filter coffee.** Now go survive Week 3.",
+      "good": "You avoided the catastrophic call but flinched on at least one decision. Re-read the lesson on **tasks vs. roles** before the next CEO ambush, because there will be one.",
+      "learn": "You imported someone else's headcount math as strategy. Re-read the lesson — the Gurgaon firm in the field notes did exactly this and it cost them seven seniors. The good news: this was a drill."
+    }
+  }
+}

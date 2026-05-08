@@ -1,0 +1,50 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 'we noticed you spent 47 minutes on the kurta page'",
+    "source": "Anonymous CMO at a Mumbai apparel D2C, 4-year-old brand",
+    "date": "September 2025",
+    "story": "Our personalization vendor pitched us '1:1 personalization at scale.' We piloted on 47,000 high-LTV customers. The hero email said: *'Hi Priya, we noticed you spent 47 minutes on the kurta-with-dupatta page on Tuesday at 9 PM...'*\n\nResponse: 23% spam-flag rate (industry avg: 0.3%). 14 customers contacted support saying they 'felt watched.' Twitter picked it up. **Brand-trust score dropped 18 points.** Took 2 quarters to recover.\n\nWe shifted to segment-based: 'hi from your favorite kurta brand — based on your recent visits, here are 3 you might like.' Same intent, no creep. Click-through went UP from baseline. Spam-flag back to 0.3%.\n\nThe lesson wasn't 'personalization is bad.' It was 'showing the user that you watched them is bad'. Segments hide that the watching is happening; 1:1 advertises it.",
+    "takeaway": "Segments are personalization that doesn't advertise the surveillance. 1:1 specifics in customer-facing copy are a trust trap."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: personalization without creepiness",
+    "setup": "Sneha's CRM tool offers 1:1 personalization (browse history, time-on-page, exact item viewed). Vendor demo is impressive. Founder is excited. Sneha has to decide for the Q2 retention campaign.",
+    "coach": { "name": "Founder-turned-mentor Manish", "role": "Built and sold 2 D2C brands; runs ad spend > ₹40cr/yr" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Vendor pitches '1:1 personalization based on full browse history.' What's Sneha's lens?",
+        "options": [
+          { "id": "a", "label": "Apply the 'would you tell the user we know this?' test. If saying it aloud is creepy, sending it via email is creepy.", "correct": true, "explain": "Right test. The browse-time, exact-page, exact-time references fail this test loudly.", "points": 3 },
+          { "id": "b", "label": "Yes — 1:1 is the future, brands that won't will fall behind.", "correct": false, "explain": "Same Mumbai apparel story. 23% spam-flag is the future they're warning you about.", "points": 0 },
+          { "id": "c", "label": "Reject all personalization.", "correct": false, "explain": "Overcorrection. Segments-based is fine and effective.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Sneha picks segments-based. The vendor says 'less effective.' Does she budge?",
+        "options": [
+          { "id": "a", "label": "No — get a 14-day pilot with both. Measure click-through AND spam-flag rate. Decide on data.", "correct": true, "explain": "Right. Don't assume vendor's claim. Test both with both metrics.", "points": 3 },
+          { "id": "b", "label": "Yes — vendor knows their tool best.", "correct": false, "explain": "Vendor is selling. Always test before scaling.", "points": 0 },
+          { "id": "c", "label": "Skip the pilot; just go segments only.", "correct": false, "explain": "Reasonable but loses the comparative data. Pilot both for 14 days.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 14 results. 1:1 click-through: 14%. Segments click-through: 11%. 1:1 spam-flag rate: 18%. Segments spam-flag: 0.4%. Decision?",
+        "options": [
+          { "id": "a", "label": "Ship segments. The 3-point click-through gap is dwarfed by the 17.6-point spam-flag spread; the trust hit isn't worth it.", "correct": true, "explain": "Right. Spam-flag is a leading indicator of brand-trust collapse. Click-through doesn't compensate.", "points": 3 },
+          { "id": "b", "label": "Ship 1:1 — 27% relative lift on click-through.", "correct": false, "explain": "Repeats the Mumbai story. 18% spam-flag rate destroys deliverability across all sends, not just this one.", "points": 0 },
+          { "id": "c", "label": "Run another 14 days.", "correct": false, "explain": "Data is clear; another 14 days of brand-trust risk is unnecessary.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Sneha ships segments at +11% click-through, deliverability protected. CMO uses the spam-flag-vs-click-through math in next budget review. Founder updated.",
+      "good": "Solid pilot; segments shipped. Spam-flag risk avoided. Worth refining segments definition next quarter.",
+      "learn": "Re-read the 'would you tell the user' test. 1:1 specifics in customer-facing copy fail it almost always."
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 'feels better' isn't a result",
+    "source": "Anonymous Class 8 science teacher at a Chennai CBSE school",
+    "date": "October 2025",
+    "story": "I introduced AI-drafted exit tickets in October. By December, principal asked: 'did it work?'\n\nI said *\"feels like yes.\"* She asked: *\"compared to what?\"*\n\nI hadn't taken a baseline. I hadn't tracked test scores by chapter, prep time, or class engagement. I had a gut feeling and 14 weeks of zero data. **Principal pulled the ₹47,000 budget for next term's tools.**\n\nThat experience taught me what 14 days of baseline data would have unlocked. I now run all classroom experiments with three numbers: average chapter test score (before/after), my own prep time per week, and a 1-5 engagement rating I write down on Friday. I've kept this for 8 months. The two interventions that 'felt great' actually showed nothing measurable. The one I almost killed showed +14% on test scores.",
+    "takeaway": "'Feels better' isn't a result — three numbers tracked over 14 days is the cheapest insurance against losing your classroom-AI budget."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: did the experiment work?",
+    "setup": "Ms. Anjali ran an AI experiment in her Class 9 history classroom for 14 days: AI-generated practice questions sent home as nightly review. Now her principal asks the question: *did it work?* Anjali has no baseline data. She has a feeling.",
+    "coach": { "name": "Mentor-Master Mukherjee", "role": "Retired English HOD, 38 years in Pune schools" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First instinct: tell the principal *\"feels like the kids are more engaged.\"* What's the issue?",
+        "options": [
+          { "id": "a", "label": "Nothing — engagement is hard to measure anyway.", "correct": false, "explain": "This is exactly the response that gets the AI tooling budget killed. The principal needs governance evidence, not feelings.", "points": 0 },
+          { "id": "b", "label": "'Feels like' is unverifiable; the principal can't justify the budget on a feeling.", "correct": true, "explain": "Right. 'Feels like' is the trap. From now on, design experiments with a baseline before they start.", "points": 3 },
+          { "id": "c", "label": "Feeling counts more than data when teachers are the ones running the experiment.", "correct": false, "explain": "Teacher intuition matters, but it cannot SUBSTITUTE for measurement when budget is on the line.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Anjali wants to design the next experiment properly. Which 3 numbers should she track?",
+        "options": [
+          { "id": "a", "label": "Average chapter test score · weekly prep time · weekly engagement rating (1-5)", "correct": true, "explain": "Three numbers, two minutes a week, captures outcome (test) + cost (prep) + texture (engagement). The right minimum.", "points": 3 },
+          { "id": "b", "label": "Just test scores; that's the only objective metric.", "correct": false, "explain": "Misses the cost side. If test scores rise but prep time triples, the intervention isn't viable at scale.", "points": 1 },
+          { "id": "c", "label": "Track 14 different metrics across spreadsheet tabs.", "correct": false, "explain": "Dashboard delusion. Too many metrics = updated twice = abandoned. Three is the cap.", "points": 0 },
+          { "id": "d", "label": "Just engagement; tests are stress.", "correct": false, "explain": "Engagement alone is fakeable; principals will (correctly) ignore it without an outcome metric.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 14 of the next experiment. Test scores +12%, prep time -8%, engagement 4.2/5 (was 3.6). What's the right read?",
+        "options": [
+          { "id": "a", "label": "Modify with caution; one chapter's worth of data, but signal is encouraging — run another 14 days.", "correct": true, "explain": "Right. 14 days is enough to keep going; not enough to declare victory. A second 14-day run validates.", "points": 3 },
+          { "id": "b", "label": "Massive success — apply to all classes immediately.", "correct": false, "explain": "Single 14-day result on one chapter; could be the chapter, not the intervention. Run another cycle before scaling.", "points": 1 },
+          { "id": "c", "label": "Kill it; numbers can't be trusted on n=1 chapter.", "correct": false, "explain": "Overcorrection. Numbers are encouraging; another cycle is the right next move, not abandonment.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Anjali walks out of the principal's office with the AI budget renewed AND a 14-day experiment template that she'll reuse every term. Three numbers, two minutes a week, irrefutable signal.",
+      "good": "Solid. The principal sees discipline; budget held. Worth a second 14-day cycle to validate.",
+      "learn": "Re-read the baseline section. 'Feels like' is the most expensive sentence in classroom AI."
+    }
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "path": {
+    "slug": "digital-marketing-with-ai",
+    "title": "Digital Marketing Powered by AI",
+    "subtitle": "Use AI for the boring 80%; protect the brand 20%",
+    "summary": "Most marketers in 2026 are doing one of two stupid things: ignoring AI entirely and getting outshipped, or shoving AI into every workflow and getting outranked by their own slop. This path teaches the third path. By the end you can run a campaign portfolio with AI doing the heavy lifting, while you keep the brand voice, the math, and the kill criterion in human hands.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "marketing-ai-mental-model",
+      "name": "Marketing-AI Mental Model",
+      "category": "commerce",
+      "description": "Diagnose CAC/LTV before reaching for AI tools, and pick the right tool for each funnel stage",
+      "decayDays": null
+    },
+    {
+      "slug": "marketing-content",
+      "name": "AI-Powered Content Pipeline",
+      "category": "commerce",
+      "description": "Run a brief-to-ship content workflow that uses AI for drafts but protects the brand voice",
+      "decayDays": null
+    },
+    {
+      "slug": "marketing-ads",
+      "name": "Ads and Statistical Honesty",
+      "category": "commerce",
+      "description": "Set up ad experiments with real sample sizes and refuse to declare winners on noise",
+      "decayDays": null
+    },
+    {
+      "slug": "marketing-personalization",
+      "name": "Personalization Without Creepiness",
+      "category": "commerce",
+      "description": "Design segment-level personalization with consent and the would-you-tell-them test",
+      "decayDays": null
+    },
+    {
+      "slug": "marketing-measurement",
+      "name": "Marketing Measurement",
+      "category": "commerce",
+      "description": "Pick a north-star metric, run 14-day campaign loops, and apply a kill criterion",
+      "decayDays": null
+    },
+    {
+      "slug": "marketing-judgment",
+      "name": "Marketing Judgment",
+      "category": "commerce",
+      "description": "Decide what to automate, what to outsource to AI, and what to keep in human hands",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "marketing-content", "requires": "marketing-ai-mental-model" },
+    { "skill": "marketing-ads", "requires": "marketing-content" },
+    { "skill": "marketing-personalization", "requires": "marketing-ads" },
+    { "skill": "marketing-measurement", "requires": "marketing-personalization" },
+    { "skill": "marketing-judgment", "requires": "marketing-ai-mental-model" }
+  ],
+  "assessment": {
+    "title": "Digital Marketing Powered by AI Assessment",
+    "description": "Tests whether you can diagnose marketing math, ship AI-assisted content without slop, run ad experiments with statistical honesty, design segment-level personalization, and apply a kill criterion to a 14-day loop. Half the questions are judgment calls where every option is defensible; the point is to know why each is wrong.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": [
+      "marketing-ai-mental-model",
+      "marketing-content",
+      "marketing-ads",
+      "marketing-personalization",
+      "marketing-measurement",
+      "marketing-judgment"
+    ],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CAC is ₹847 and your 12-month LTV is ₹1,420. Your founder asks why you should not 3x the ad spend this quarter. The cleanest one-line answer is:",
+        "points": 1,
+        "skillSlug": "marketing-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "LTV-to-CAC is 1.7; we are buying revenue at near-cost and 3x will compound the problem.", "correct": true, "explanation": "Right. A LTV/CAC ratio under 3 means you don't yet have a marketing engine; you have a fundraising plan." },
+          { "id": "b", "label": "We need a fresh creative brief first.", "correct": false, "explanation": "True at some level, but it dodges the math. The unit economics are upstream of any creative." },
+          { "id": "c", "label": "We should switch to AI-generated ads to lower CAC.", "correct": false, "explanation": "AI tactics without metrics is the named trap. CAC of ₹847 isn't a creative problem; it's a positioning or LTV problem." },
+          { "id": "d", "label": "Q2 is a bad time for paid ads.", "correct": false, "explanation": "Calendar isn't the issue. The math is the issue." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are valid reasons to use AI at the *top* of the funnel rather than at the bottom? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "Top-of-funnel content is high-volume, low-stakes-per-piece — exactly the 80% AI is good at.", "correct": true, "explanation": "Yes. Volume + low per-unit consequence is the sweet spot for AI assistance." },
+          { "id": "b", "label": "Bottom-of-funnel copy goes to high-intent users where one weak line costs a sale.", "correct": true, "explanation": "Yes. The closer to checkout, the more a human should be holding the pen." },
+          { "id": "c", "label": "AI is more accurate at predicting purchase intent than at writing.", "correct": false, "explanation": "Backwards. Generative AI is much stronger at drafting than at probabilistic intent prediction." },
+          { "id": "d", "label": "Top-of-funnel doesn't matter for revenue.", "correct": false, "explanation": "It matters; it just absorbs more variance, which is why AI's variance is tolerable up there." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your AI tool generates 40 SEO articles in a week. Three months later, organic traffic is down 22% and Google has flagged the domain. The most likely cause is:",
+        "points": 1,
+        "skillSlug": "marketing-content",
+        "choices": [
+          { "id": "a", "label": "AI-generated SEO slop triggered the helpful-content signal; the site looks low-effort because it is.", "correct": true, "explanation": "Correct. The slop trap. Volume without editorial judgment looks exactly like what it is." },
+          { "id": "b", "label": "Three months is too short to see SEO impact.", "correct": false, "explanation": "Three months is plenty for a site-wide quality signal; this isn't a measurement problem." },
+          { "id": "c", "label": "Backlinks decayed.", "correct": false, "explanation": "Possible but rare to lose 22% in 3 months from backlink decay alone; the volume of new content is the smoking gun." },
+          { "id": "d", "label": "The articles need to be longer.", "correct": false, "explanation": "Longer slop is still slop. Length is the wrong axis." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which steps belong in the 3-pass review for AI-drafted marketing content? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-content",
+        "choices": [
+          { "id": "a", "label": "Voice pass — does this sound like the brand or like generic ChatGPT?", "correct": true, "explanation": "Yes. Without this pass, your blog reads like every other tool's output." },
+          { "id": "b", "label": "Fact pass — are the claims, numbers, and product details accurate?", "correct": true, "explanation": "Yes. AI confidently invents stats; the fact pass catches them before they ship." },
+          { "id": "c", "label": "Word-count pass — pad to 2000 words for SEO.", "correct": false, "explanation": "This is the slop pattern. Length without substance is the problem, not the solution." },
+          { "id": "d", "label": "Trend-keyword pass — stuff in five trending phrases.", "correct": false, "explanation": "Keyword stuffing in 2026 is a downgrade signal, not an upgrade." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Day 2 of an A/B test. Variant B is showing a 14% lift in CTR over A across 1,200 impressions. Your boss wants to declare a winner and roll out B. The right answer is:",
+        "points": 1,
+        "skillSlug": "marketing-ads",
+        "choices": [
+          { "id": "a", "label": "No conclusion yet — sample is too small to distinguish lift from noise.", "correct": true, "explanation": "Right. At 1,200 impressions, a 14% delta has wide confidence intervals; the no-conclusion-yet rule applies." },
+          { "id": "b", "label": "Roll out B; 14% is huge.", "correct": false, "explanation": "Classic trap: declared winner at day 2, still noise. The lift will likely shrink to 2-4% (or vanish) by sample size 4,700+." },
+          { "id": "c", "label": "Kill A immediately to save spend.", "correct": false, "explanation": "Same mistake in disguise. Killing a variant on noise is just choosing the wrong direction faster." },
+          { "id": "d", "label": "Run for 7 days regardless of sample size.", "correct": false, "explanation": "Time is the wrong unit. Sample size is the unit that determines statistical reach." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You compute that to detect a 5% lift on a baseline 4% CTR with 80% power, you need ~4,700 impressions per variant. Your campaign delivers 800 impressions per variant per day. Honest minimum experiment length is:",
+        "points": 1,
+        "skillSlug": "marketing-ads",
+        "choices": [
+          { "id": "a", "label": "About 6 days per variant.", "correct": true, "explanation": "Right. 4,700 / 800 ≈ 5.9 days. Calling a winner before then is theatre." },
+          { "id": "b", "label": "2 days; CTR signals stabilize fast.", "correct": false, "explanation": "They look stable, but on day 2 your interval is huge. Looks ≠ is." },
+          { "id": "c", "label": "14 days regardless.", "correct": false, "explanation": "More days than needed isn't wrong, but it isn't the *minimum*; the question is about the minimum." },
+          { "id": "d", "label": "Until B beats A by 20%.", "correct": false, "explanation": "Stopping rules driven by the result you want produce p-hacking by another name." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are core moves for the lift-vs-noise discipline? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-ads",
+        "choices": [
+          { "id": "a", "label": "Pre-register a minimum sample size before the campaign starts.", "correct": true, "explanation": "Yes. Pre-registration is what stops you from goal-seeking the result." },
+          { "id": "b", "label": "Apply the no-conclusion-yet rule until the floor is hit.", "correct": true, "explanation": "Yes. This is the discipline that protects you from the day-2 trap." },
+          { "id": "c", "label": "Use AI to generate confidence narratives for the daily standup.", "correct": false, "explanation": "AI-generated narrative confidence is not the same as statistical confidence." },
+          { "id": "d", "label": "Always pick the variant with the higher click-through.", "correct": false, "explanation": "Higher CTR ≠ higher CAC payback. Funnel-stage outcomes matter more than top-of-funnel signals." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A user is browsing your site logged out. Your AI personalization stack quietly enriches them via a third-party data broker and addresses the next email by their first name. The most precise objection is:",
+        "points": 1,
+        "skillSlug": "marketing-personalization",
+        "choices": [
+          { "id": "a", "label": "It fails the would-you-tell-the-user-we-know-this test.", "correct": true, "explanation": "Right. If the personalization breaks down the moment you describe how you got it, it's creepy. That is the test." },
+          { "id": "b", "label": "First names lower open rates.", "correct": false, "explanation": "Empirically the opposite, but the issue isn't open rate; it's consent." },
+          { "id": "c", "label": "Email tools cost too much.", "correct": false, "explanation": "Cost isn't the objection. The privacy stance is." },
+          { "id": "d", "label": "Personalization always backfires.", "correct": false, "explanation": "It doesn't always backfire; the un-consented kind does." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are rungs on the consent ladder, in increasing order of trust earned from the user? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-personalization",
+        "choices": [
+          { "id": "a", "label": "Anonymous behavioral cohort (e.g. 'browsed kurtas twice this week').", "correct": true, "explanation": "Yes. Cohort-level inference from declared behavior on your own site is the safe rung." },
+          { "id": "b", "label": "Explicit preference (e.g. user picks 'I shop for festive wear').", "correct": true, "explanation": "Yes. The user told you. Highest-trust rung." },
+          { "id": "c", "label": "Inferred income tier from device fingerprint.", "correct": false, "explanation": "This is below the consent floor, not a rung on the ladder." },
+          { "id": "d", "label": "Third-party broker data merged into the email greeting.", "correct": false, "explanation": "Same problem. Not on the ladder; under it." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your founder loves the marketing dashboard: 47 widgets, 9 filters, 3 sparkline rails. You suspect it's a vanity dashboard. The clearest test is:",
+        "points": 1,
+        "skillSlug": "marketing-measurement",
+        "choices": [
+          { "id": "a", "label": "Ask: which one number on this dashboard would you kill the campaign for if it dropped 25%?", "correct": true, "explanation": "Right. If no number passes the kill-criterion test, the dashboard is decoration, not decision support." },
+          { "id": "b", "label": "Count the widgets; over 30 is too many.", "correct": false, "explanation": "Widget count is correlated but not causal. The test is whether *any* number drives action." },
+          { "id": "c", "label": "Ask whether the dashboard is mobile-friendly.", "correct": false, "explanation": "Format question, not a substance question." },
+          { "id": "d", "label": "Replace it with a Notion doc.", "correct": false, "explanation": "Tool-swap doesn't fix vanity. The metric structure does." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You commit to a 14-day campaign loop with a kill criterion of 'CAC > ₹1,200 by day 10'. On day 10, CAC is ₹1,340. The right move is:",
+        "points": 1,
+        "skillSlug": "marketing-measurement",
+        "choices": [
+          { "id": "a", "label": "Kill the campaign as written; the criterion existed precisely for this moment.", "correct": true, "explanation": "Right. If you can't honor the criterion when you don't like the answer, you don't have a criterion; you have a wish." },
+          { "id": "b", "label": "Extend to day 14; maybe it recovers.", "correct": false, "explanation": "This is how kill criteria die. Extension on hope is the failure mode the rule was designed to prevent." },
+          { "id": "c", "label": "Increase budget to lower CAC.", "correct": false, "explanation": "CAC rising under spend is exactly the signal you should *reduce* spend on, not chase." },
+          { "id": "d", "label": "Switch attribution windows until CAC looks fine.", "correct": false, "explanation": "Attribution-window p-hacking is the most expensive way to lie to yourself." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which qualify as a real north-star metric for an Indian D2C brand? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-measurement",
+        "choices": [
+          { "id": "a", "label": "Repeat purchase rate within 90 days.", "correct": true, "explanation": "Yes. Captures product-market fit and retention in one number." },
+          { "id": "b", "label": "Contribution margin per acquired customer at 6 months.", "correct": true, "explanation": "Yes. Money you actually keep after CAC, refunds, and COGS." },
+          { "id": "c", "label": "Total Instagram reach.", "correct": false, "explanation": "Vanity. No payback model attached." },
+          { "id": "d", "label": "Number of campaigns shipped this quarter.", "correct": false, "explanation": "Activity metric, not outcome metric." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your team wants to use AI to draft a sensitive crisis-PR statement after a product recall. The cleanest call is:",
+        "points": 1,
+        "skillSlug": "marketing-judgment",
+        "choices": [
+          { "id": "a", "label": "Human writes; AI may copy-edit. The stakes are too high for the 80% rule.", "correct": true, "explanation": "Right. Crisis PR is the 20% you protect, not the 80% you automate." },
+          { "id": "b", "label": "AI drafts five versions; team picks the best.", "correct": false, "explanation": "Tempting, but in a crisis the *frame* is the message. AI default-frames toward generic empathy that reads as hollow." },
+          { "id": "c", "label": "AI handles it end-to-end with a 'human review' checkbox.", "correct": false, "explanation": "Review-as-rubber-stamp is the failure mode. Crisis PR is the wrong place for it." },
+          { "id": "d", "label": "Skip the statement; the issue will pass.", "correct": false, "explanation": "Different bug. The question is who writes it, not whether to write it." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "An agency pitches you on '100 SEO articles per week, fully AI, ranking guaranteed in 90 days'. The most honest red-flag is:",
+        "points": 1,
+        "skillSlug": "marketing-judgment",
+        "choices": [
+          { "id": "a", "label": "Volume + speed + ranking guarantee triangulates to slop with kicked-back risk on you.", "correct": true, "explanation": "Right. The pitch optimizes the metrics that don't survive the next algorithm update." },
+          { "id": "b", "label": "₹/article is too high.", "correct": false, "explanation": "Cost is downstream. The model is the problem." },
+          { "id": "c", "label": "AI articles can't rank.", "correct": false, "explanation": "They can, when paired with editorial judgment. The pitch lacks that pairing." },
+          { "id": "d", "label": "90 days is too long.", "correct": false, "explanation": "If anything, it's too short for honest SEO. The timeline is the least of the problems." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which decisions clearly belong in the *brand 20%* (human hands), not the AI 80%? (pick two)",
+        "points": 2,
+        "skillSlug": "marketing-judgment",
+        "choices": [
+          { "id": "a", "label": "Brand voice guidelines themselves.", "correct": true, "explanation": "Yes. AI can apply a voice; it should not invent yours." },
+          { "id": "b", "label": "Pricing position in the market.", "correct": true, "explanation": "Yes. Strategic position is judgment-heavy and irreversible at the brand level." },
+          { "id": "c", "label": "First draft of a Diwali email.", "correct": false, "explanation": "Classic 80% — drafts, lots of them, cheap. Voice review stays human." },
+          { "id": "d", "label": "Segmenting cart abandoners by browsed-category.", "correct": false, "explanation": "Mechanical segmentation is exactly what AI is good at. Doesn't need human hands." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "On a 14-day loop, your AI-generated landing page has +18% conversion vs the human-written one (n=6,200 per variant, p=0.04). Your CMO says 'fire the writers'. The judgment-trained answer is:",
+        "points": 1,
+        "skillSlug": "marketing-judgment",
+        "choices": [
+          { "id": "a", "label": "Adopt the AI page for *this* funnel; keep humans on brand work where the metric is harder to define.", "correct": true, "explanation": "Right. The result is real for *this* job; it does not generalize to all writing." },
+          { "id": "b", "label": "Fire the writers; data spoke.", "correct": false, "explanation": "Data spoke about one page. Generalising one experiment to a headcount decision is the over-fit move." },
+          { "id": "c", "label": "Reject the result; AI can't really write.", "correct": false, "explanation": "Ideology overriding evidence. The result is statistically significant on this funnel." },
+          { "id": "d", "label": "Run another A/B test forever before deciding.", "correct": false, "explanation": "Indecision dressed as rigor." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your founder hands you ₹40 lakh for Q2 and asks for 'AI doing the work of 5 people'. The first move that earns trust without overpromising is:",
+        "points": 1,
+        "skillSlug": "marketing-judgment",
+        "choices": [
+          { "id": "a", "label": "Map current spend by funnel stage and identify the 80% AI can plausibly handle, with a 14-day kill criterion attached to each.", "correct": true, "explanation": "Right. Plan, criterion, kill rule — the trinity." },
+          { "id": "b", "label": "Spend 50% on AI ad-copy generators in week one.", "correct": false, "explanation": "Tools-first, strategy-later is the failure mode you are paid to prevent." },
+          { "id": "c", "label": "Promise 5x output in 30 days and figure it out.", "correct": false, "explanation": "Overpromising in week one is how marketers get fired in month three." },
+          { "id": "d", "label": "Hire three more contractors to manage the AI tools.", "correct": false, "explanation": "Adds headcount to a budget that asked for less of it." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "digital-marketing-with-ai-capstone",
+    "title": "Capstone: ₹40L Q2 Budget, AI Doing the Work of Five People",
+    "prompt": "Your founder walks into your weekly 1:1 holding a coffee and a number. \"I'm giving you ₹40 lakh for Q2,\" she says. \"I want AI to do the work of five people. Show me the plan by Friday.\"\n\nIt's Monday. The brief is one sentence; the rest is your problem.\n\nYou run marketing for a Pune-based D2C wellness brand scaling into Tier-2 cities (think: Indore, Coimbatore, Bhubaneswar). Current state: CAC ₹847, 12-month LTV ₹4,200, ROAS 3.2x, monthly revenue ₹1.1 crore, repeat purchase rate 28% within 90 days. Three-person team: you, one performance marketer, one writer. Tools budget exists but no AI stack yet.\n\n## Deliverable\n\nWrite a 2-3 page brief covering:\n\n**1. Campaign portfolio (40% of grade)**\nAllocate the ₹40L across 4-6 campaigns. Each campaign needs:\n- Funnel stage (top / mid / bottom)\n- Whether AI is doing the heavy lifting, the human is, or it's a hybrid\n- Expected CAC, LTV impact, and ROAS\n- Why *this* campaign at *this* stage with *this* tool ratio\n\nBe specific: not 'run Meta ads', but 'run a Meta CAC-capped campaign for cart-abandoners in Tier-2 with AI-generated dynamic creative at ₹X budget'.\n\n**2. Evaluation framework (30% of grade)**\nDefine the *one north-star metric* for the quarter and the 3-5 supporting metrics. For each campaign, define:\n- The specific number you'd hit at day 10 to keep going\n- The kill criterion (the number where you stop)\n- The sample size you need to make a real call (not a noise call)\n\n**3. The 14-day kill criterion in writing (30% of grade)**\nPick one campaign. Write the kill criterion as a single paragraph that your most stubborn co-founder would honor at 11pm on day 10 when the number is just barely below the line. Anticipate the three excuses (\"give it more time\", \"the creative just needs a tweak\", \"the comparison window is wrong\") and disarm each.\n\n## What we're really testing\n\nCan you (a) defend the math, (b) survive a sensitivity check on your assumptions, and (c) communicate the plan in a way a non-marketing founder will actually approve?\n\nThe AI 80% / brand 20% split should be visible in your portfolio. So should the funnel-stage logic. So should the kill criterion's spine.",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Every campaign has a stage, a CAC target, an LTV link, and a no-conclusion-yet rule. Numbers are specific and survive a 'why this number?' interrogation.", "points": 4 },
+          { "label": "Most campaigns have stages and targets; one or two rest on round numbers without justification.", "points": 2 },
+          { "label": "Plan reads as a vibe-and-vendor list; AI is mentioned, math is not.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity to assumptions",
+        "levels": [
+          { "label": "Plan is robust to a 25% CAC increase or a 20% LTV decrease; failure modes for each campaign are named, with a kill criterion that survives 11pm-day-10 pressure.", "points": 4 },
+          { "label": "One sensitivity test is documented; others implied.", "points": 2 },
+          { "label": "Single point estimate; no tests; kill criterion is 'we will reassess'.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "A non-marketing founder reads the brief once and could defend it to a board. Numbers are clean, AI 80% / brand 20% is visible, kill criterion fits in three sentences.", "points": 4 },
+          { "label": "Reads well to marketers; needs a translation layer for the founder.", "points": 2 },
+          { "label": "Jargon-heavy, founder would ask three more questions before deciding.", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "digital-marketing-with-ai",
+    "title": "Digital Marketing Powered by AI",
+    "description": "Earned by demonstrating you can run AI-augmented marketing without losing the math, the brand voice, or the kill criterion.",
+    "issuerName": "Krit Academy"
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "slug": "pm-mental-model",
+  "title": "What a PM Actually Does",
+  "subtitle": "You're not the boss of engineering; you're the translator between rooms",
+  "estimatedMinutes": 14,
+  "skills": ["pm-mental-model"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/product-management/pm-mental-model.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the JIRA-monkey trap" },
+        { "startSec": 80, "label": "Mental model: PM as translator and sequencer" },
+        { "startSec": 220, "label": "Move 1 — Outcome over output" },
+        { "startSec": 410, "label": "Move 2 — The 3-question scope test" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/product-management/pm-mental-model.html",
+      "notesByline": "Notes by Rhea, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "On day one, every new PM thinks the job is to write JIRA tickets, run standups, and chase engineers. By month six, the good ones realise the job is something else entirely.\n\nThe job is **translation** — converting a vague founder ask into a thing engineers can build, a thing users will adopt, and a thing sales can sell. And **sequencing** — deciding what gets built first, second, and never. Tickets and standups are the byproduct, not the work.\n\nIf you remember nothing else from this course, remember this: a PM with a great roadmap and no translation skill ships features nobody uses. A PM with translation skill and no roadmap ships nothing — but at least nobody is angry."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Diagram: three rooms labelled Users, Engineers, Sales/CEO. A small figure labelled PM stands at the intersection, holding two arrows pointing in opposite directions, with a clipboard that says 'translate + sequence'.",
+      "caption": "The PM is not above the three rooms. The PM is the door between them.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='13' fill='#1F2937'><g transform='translate(30 60)'><rect width='130' height='160' rx='12' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold' fill='#1E3A8A'>Users</text><text x='65' y='60' text-anchor='middle' font-size='11'>say what they</text><text x='65' y='76' text-anchor='middle' font-size='11'>want, mean</text><text x='65' y='92' text-anchor='middle' font-size='11'>something else</text><circle cx='40' cy='130' r='10' fill='#3B82F6'/><circle cx='65' cy='130' r='10' fill='#3B82F6'/><circle cx='90' cy='130' r='10' fill='#3B82F6'/></g><g transform='translate(225 60)'><rect width='130' height='160' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold' fill='#065F46'>Engineers</text><text x='65' y='60' text-anchor='middle' font-size='11'>need specifics,</text><text x='65' y='76' text-anchor='middle' font-size='11'>edge cases,</text><text x='65' y='92' text-anchor='middle' font-size='11'>and the why</text><rect x='35' y='115' width='60' height='30' rx='3' fill='#10B981'/><text x='65' y='134' text-anchor='middle' font-size='10' fill='white' font-family='monospace'>{ }</text></g><g transform='translate(420 60)'><rect width='130' height='160' rx='12' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold' fill='#92400E'>Sales / CEO</text><text x='65' y='60' text-anchor='middle' font-size='11'>need a story</text><text x='65' y='76' text-anchor='middle' font-size='11'>and a date,</text><text x='65' y='92' text-anchor='middle' font-size='11'>this quarter</text><text x='65' y='135' text-anchor='middle' font-size='22'>₹</text></g><g transform='translate(180 145)'><circle r='22' fill='#F59E0B' stroke='#92400E' stroke-width='2'/><text y='5' text-anchor='middle' font-weight='bold' fill='white' font-size='12'>PM</text></g><g transform='translate(375 145)'><circle r='22' fill='#F59E0B' stroke='#92400E' stroke-width='2'/><text y='5' text-anchor='middle' font-weight='bold' fill='white' font-size='12'>PM</text></g><path d='M165 140 L205 140' stroke='#9D174D' stroke-width='2' marker-end='url(#mma)'/><path d='M205 155 L165 155' stroke='#9D174D' stroke-width='2' marker-end='url(#mma)'/><path d='M360 140 L400 140' stroke='#9D174D' stroke-width='2' marker-end='url(#mma)'/><path d='M400 155 L360 155' stroke='#9D174D' stroke-width='2' marker-end='url(#mma)'/><text x='290' y='250' text-anchor='middle' font-size='12' font-style='italic' fill='#7C2D12'>translate both ways, sequence the asks</text></g><defs><marker id='mma' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#9D174D'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: PM is a translator plus a sequencer",
+      "md": "Picture three rooms — **Users**, **Engineers**, **Sales/CEO**. Each room speaks a different language and has different incentives. The PM is the door between them; the PM's value is whatever loss in translation they prevent.\n\nThen, on top of that, the PM is the **sequencer**. Given finite engineers and infinite asks, the PM decides which ask gets built this sprint, which gets built next quarter, and which gets a polite no. Translation makes the asks legible. Sequencing makes them shippable."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/product-management/anim/pm-mental-model-translator.html",
+      "height": 420,
+      "caption": "Watch one user complaint turn into an engineering ticket, a sales talking point, and a no-thank-you to a different stakeholder — all in the same week.",
+      "fallbackImage": "/courses/product-management/anim/pm-mental-model-translator-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Priority ka asli scene",
+          "md": "Bhai, scene yeh hai. CEO ne bola **'Priority 1'**. PM ne meeting mein likha **'Priority 1.5, but really P1'**. Engineer ne JIRA mein likha **'P3, looks like a nice-to-have'**. Designer ne bola **'Yeh next quarter ka hai na?'**\n\nSab same ticket pe baat kar rahe hain. Aur ticket pe likha hai *'TBD'*. Yahi hai PM ka dard — 4 logon ki same ticket pe 4 alag understanding."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Priority drift, in one act",
+          "md": "The CEO calls it P1. The PM writes 'P1.5, but really P1' in the doc. The engineer files it as P3. The designer asks if it's next quarter's work. All four are looking at the same ticket. The ticket says 'TBD'.\n\nThis is the PM's daily problem in one sentence: same words, four meanings, zero alignment."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Outcome over output"
+    },
+    {
+      "type": "markdown",
+      "md": "**Output** is what you ship. **Outcome** is what changes for the user. Most PMs measure themselves on output because output is countable: features shipped, tickets closed, sprints completed. But shipping a feature nobody uses is not progress. It's debt.\n\nA Bengaluru SaaS I worked with shipped 47 features in one year. Their DAU/MAU was 0.14. The CEO was proud of the velocity. The CEO was wrong. They had built a museum of features, not a product.\n\nThe move is to **state every initiative as an outcome before you state it as an output**. Not 'ship the new invoicing module' — that's an output. Try 'reduce time-to-first-invoice from 4 days to under 1 day for new SMB customers'. Now you can tell, three months later, whether it worked. The module is one possible answer; the outcome is the actual question."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two columns. Left, labelled OUTPUT, lists 'shipped invoicing module / 47 features in 2025 / 12 sprints completed'. Right, labelled OUTCOME, lists 'time-to-first-invoice 4d to 0.8d / weekly active admins 38% to 55% / churn down 2pp'. An arrow runs from output to outcome with the word 'reframe' on it.",
+      "caption": "Same work, two ways to describe it. Only one tells you whether it worked.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' font-size='12' fill='#1F2937'><g transform='translate(30 30)'><rect width='220' height='180' rx='12' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-weight='bold' fill='#831843'>OUTPUT</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#9D174D' font-style='italic'>countable, but not informative</text><text x='20' y='80'>Shipped invoicing module</text><text x='20' y='105'>47 features in 2025</text><text x='20' y='130'>12 sprints completed</text><text x='20' y='155'>3 design rounds done</text><text x='110' y='172' text-anchor='middle' font-size='10' fill='#9D174D'>tells you nothing about value</text></g><g transform='translate(330 30)'><rect width='220' height='180' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-weight='bold' fill='#064E3B'>OUTCOME</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#065F46' font-style='italic'>what changed for the user</text><text x='20' y='80'>Time-to-first-invoice: 4d to 0.8d</text><text x='20' y='105'>Weekly active admins: 38% to 55%</text><text x='20' y='130'>Churn down 2 percentage pts</text><text x='20' y='155'>Support tickets down 28%</text><text x='110' y='172' text-anchor='middle' font-size='10' fill='#065F46'>tells you whether to ship more or stop</text></g><path d='M255 110 Q290 90 320 110' stroke='#7C2D12' stroke-width='2' fill='none' marker-end='url(#oa)'/><text x='290' y='80' text-anchor='middle' font-size='11' font-style='italic' fill='#7C2D12'>reframe</text></g><defs><marker id='oa' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#7C2D12'/></marker></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translating an output into an outcome — a worked example",
+      "steps": [
+        {
+          "label": "Step 1 — The original ask",
+          "body": "CEO Slack: 'We need to build a referral program.' This is an output disguised as a strategy. Six engineers could spend two months on it and you would still not know if it worked."
+        },
+        {
+          "label": "Step 2 — Find the implied user behavior",
+          "body": "Ask: what behavior change would make the CEO happy? Probably 'more new signups from existing customers without us paying Google.' Now you have a direction."
+        },
+        {
+          "label": "Step 3 — Pick a measurable target",
+          "body": "Frame it: 'Increase organic signups attributed to existing-customer referral from 4 percent to 12 percent of monthly new signups, by end of Q2.' Specific. Measurable. Time-boxed."
+        },
+        {
+          "label": "Step 4 — Then, and only then, brainstorm outputs",
+          "body": "Now you can compare options: a referral code, a friend-invite flow, a public testimonials page, a customer-advocacy program. Each is a hypothesis about how to move the outcome. The cheapest one to test wins."
+        },
+        {
+          "label": "Step 5 — Ship the cheapest test, measure, decide",
+          "body": "Ship a copy-link referral in 1 sprint. Measure for 4 weeks. If the metric moves, double down. If not, kill it before you build the loyalty programme that the CEO actually pictured."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of the following is an outcome (not an output)?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Ship a new dashboard by end of Q2", "correct": false, "explain": "Output — tells you what got built, not what changed." },
+        { "id": "b", "label": "Reduce time-to-first-invoice from 4 days to under 1 day for SMB customers", "correct": true, "explain": "Measurable behavior change with a target. Outcome." },
+        { "id": "c", "label": "Run 12 sprints in 2026", "correct": false, "explain": "Counts the work, not the value. Output." },
+        { "id": "d", "label": "Hire 3 more engineers", "correct": false, "explain": "An input, even further from outcome than output." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Standup ka satya",
+          "md": "Standup mein PM bola: *'Aaj kya kar rahe ho?'* — Engineer 1: *'API integrate.'* Engineer 2: *'Bug fix.'* Engineer 3: *'Refactor.'* Designer: *'Mock review.'*\n\nPM ne sab ko sun ke status doc mein likha **'On track.'** Founder ne 2 hafte baad poocha — *'feature kab launch hoga?'* — silence. Yaar, *kaam* count karna alag hai, *outcome* track karna alag."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The standup illusion",
+          "md": "Daily standup: API integration, bug fix, refactor, mock review. PM writes 'on track' in the status doc. Two weeks later, the founder asks when the feature ships. Silence.\n\nCounting work is not the same as tracking outcome. A standup full of activity can sit perfectly on top of zero progress."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 3-question scope test"
+    },
+    {
+      "type": "markdown",
+      "md": "Vague asks are the PM's daily reality. The CEO forwards an email at 11 PM: 'simple feature, just let admins export to Excel.' Sales asks for 'a Hindi version, our Tier-2 customers want it.' Support escalates 'better notifications, users keep complaining.'\n\nNone of these are scoped. All of them feel scoped. The 3-question scope test is the move that separates the PMs who get respect from the ones who get steamrolled.\n\nFor any incoming ask, you ask three questions, in order, before you write a single ticket:\n\n1. **Who?** — which user, in which role, on which screen?\n2. **What changes in their day?** — what is different, in measurable terms, after this ships?\n3. **What if we do nothing?** — does the customer churn, complain, or just sigh?\n\nIf you cannot answer all three in two sentences each, you do not have a feature; you have a feeling. Send it back."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Three concentric rings labelled Q1 Who, Q2 What changes, Q3 What if nothing. Inside the smallest ring is a small green box that says 'now you have a feature'.",
+      "caption": "Three filters, one feature. If a request can't pass all three, it goes back, not into the backlog.",
+      "maxWidth": 520,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 280' role='img'><rect width='520' height='280' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#1F2937'><circle cx='260' cy='140' r='130' fill='none' stroke='#0EA5E9' stroke-width='4'/><circle cx='260' cy='140' r='95' fill='none' stroke='#10B981' stroke-width='4'/><circle cx='260' cy='140' r='60' fill='none' stroke='#F59E0B' stroke-width='4'/><text x='260' y='25' text-anchor='middle' font-size='12' font-weight='bold' fill='#0369A1'>Q1: Who? (user, role, screen)</text><text x='260' y='55' text-anchor='middle' font-size='12' font-weight='bold' fill='#047857'>Q2: What changes in their day?</text><text x='260' y='90' text-anchor='middle' font-size='12' font-weight='bold' fill='#92400E'>Q3: What if we do nothing?</text><rect x='200' y='130' width='120' height='30' rx='6' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='260' y='150' text-anchor='middle' fill='white' font-size='12' font-weight='bold'>= a feature</text><text x='260' y='200' text-anchor='middle' font-size='11' font-style='italic' fill='#065F46'>Can't answer all 3 in 2 sentences each?</text><text x='260' y='220' text-anchor='middle' font-size='11' font-style='italic' fill='#065F46'>Send it back. You don't have a feature, you have a feeling.</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "VP-Product Vivek",
+        "role": "Your hands-on VP, ex-Flipkart, allergic to roadmap theatre",
+        "avatarSrc": "/avatars/vivek.svg"
+      },
+      "intro": [
+        "Arre, welcome to your first week. I'm going to throw stakeholder asks at you and you tell me what kind of move it is.",
+        "Three buckets: **Translate** (it's vague but real, your job to scope it), **Sequence** (it's already scoped, decide if and when), **Push back** (it's not a product question, send it back).",
+        "Don't overthink. The wrong answer is to do all three on every ask — that's how you burn out by month four."
+      ],
+      "buckets": [
+        { "id": "translate", "label": "Translate (scope it)", "tone": "neutral" },
+        { "id": "sequence", "label": "Sequence (when?)", "tone": "safe" },
+        { "id": "pushback", "label": "Push back (not a PM call)", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "CEO forwards: 'Acme Corp wants a dark mode. Can we ship it next sprint? Their CTO loves it.'",
+          "correctBucketId": "translate",
+          "explain": "Vague ask, real customer. Run the 3-question scope test. Maybe they want dark mode; maybe they want their warehouse staff to read screens at night under bad lighting. Different feature."
+        },
+        {
+          "id": "s2",
+          "situation": "Engineering lead asks: 'Should we upgrade Postgres from 14 to 16 this quarter? It needs 2 weeks.'",
+          "correctBucketId": "sequence",
+          "explain": "Already scoped, technical decision with a clear cost. Your job is to weigh it against feature work and decide when, not what."
+        },
+        {
+          "id": "s3",
+          "situation": "Sales says: 'Can you tell engineering to stop refactoring and ship the SSO feature faster?'",
+          "correctBucketId": "pushback",
+          "explain": "You don't tell engineering how to engineer. Translate the urgency (a deal? a deadline?) but the implementation call is theirs."
+        },
+        {
+          "id": "s4",
+          "situation": "Customer success lead: 'Three customers in two weeks asked for bulk-edit on the inventory list. Should it be on the roadmap?'",
+          "correctBucketId": "sequence",
+          "explain": "Three concrete data points, identifiable feature. Your call is when, not whether to scope. The scope is already obvious."
+        },
+        {
+          "id": "s5",
+          "situation": "Founder Slack at 11 PM: 'AI is the future. We need an AI strategy. Can you put together a deck for the board on Friday?'",
+          "correctBucketId": "translate",
+          "explain": "Maximum vague. Apply the scope test before you build anything. Ask: AI for what user, doing what differently, that we can't do today? If you build the deck without scoping, you'll commit the company to a thing nobody wanted."
+        },
+        {
+          "id": "s6",
+          "situation": "Designer asks: 'Do you want the modal to use rounded or square corners?'",
+          "correctBucketId": "pushback",
+          "explain": "Design's craft, not yours. Have an opinion if asked twice, but don't make it a PM decision. You're not paid to pick corner radii."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: confusing 'I am busy' with 'I am useful'",
+      "md": "First-time PMs default to motion. They write tickets, run meetings, send updates, edit Confluence pages. The output looks productive. The team's actual velocity, measured by outcome, is often unchanged or worse.\n\nThe trap has a name: **the JIRA-monkey trap**. You become a high-throughput typist for everyone else's asks. You feel valuable because you're tired. You're not — you're a router, and routers do not get promoted.\n\nThe escape: every Friday, write down the **one decision** you made this week that nobody else could have made. If you can't name one, you spent the week being a router."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "An engineer slacks you: 'Sales just promised the Lucknow team a Hindi UI by end of month. Is this real?' Order your moves from first to last.",
+      "items": [
+        { "id": "s1", "label": "Do not commit to anything in the Slack reply", "detail": "Your first move is silence. A 'sounds good!' here becomes a verbal contract by lunch." },
+        { "id": "s2", "label": "Apply the 3-question scope test on the ask", "detail": "Who needs Hindi, on which screens, by when, and what happens if not?" },
+        { "id": "s3", "label": "Talk to the sales lead — separately, not on the engineering Slack channel", "detail": "Find out the actual customer commitment. Was it 'we'll look into it' or 'shipping in 30 days'?" },
+        { "id": "s4", "label": "Write a 1-paragraph proposal: scope, owner, date, what we drop to make room", "detail": "Now you have a position, not a panic." },
+        { "id": "s5", "label": "Reply on the engineering Slack with the proposal and explicit tradeoffs", "detail": "Engineering finds out what's real and what's negotiable, in the same message." }
+      ],
+      "hint": "First instinct in Slack is to react. The right first instinct is to not react until you've scoped."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You receive this Slack from the CEO at 9 AM Monday: 'Hey, can we add notifications? Users keep complaining.' Write the 3-question scope test you would reply with. Aim for 3-5 sentences total.",
+      "lang": "markdown",
+      "starter": "Hey, before I scope this — three quick questions:\n\n1. Which users? (admins, end-users, or the ones in the warehouse view?)\n2. \n3. ",
+      "expected": "Hey, before I scope this — three quick questions:\n\n1. Which users? (admins, end-users, or the ones on the warehouse-staff view?)\n2. What's the moment in their day where lack of a notification is hurting them right now? (e.g. missed an order, found out late, had to ping support)\n3. If we don't ship anything, do they churn, complain, or just keep grumbling? Want to scope before we burn an engineer-week on the wrong notification."
+    },
+    {
+      "type": "quiz",
+      "prompt": "An ask passes Q1 (you can name the user) and Q2 (you can describe what changes), but you cannot answer Q3 (what happens if we do nothing). What does that mean?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Ship it — two out of three is good enough.", "correct": false, "explain": "Q3 is the cost-of-inaction question. Without it, you cannot prioritize against anything else." },
+        { "id": "b", "label": "It's a real feature but probably not urgent — park it in 'next', not 'now'.", "correct": true, "explain": "If nothing breaks when you skip it, it's a real ask but a low-priority one. Sequence it accordingly." },
+        { "id": "c", "label": "Reject it as out of scope.", "correct": false, "explain": "Two-out-of-three asks are common and often valid; they just don't deserve a sprint slot today." },
+        { "id": "d", "label": "Ask the engineer to estimate it first.", "correct": false, "explain": "Estimating before you've prioritized is how you burn engineering hours on questions that won't get built." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Founder ne bola 'just ship it' — 14th time",
+          "md": "Founder Friday evening: *'Yaar, just ship it. Stop overthinking.'* PM ne ship kiya. Monday subah customers ka WhatsApp group fata. Founder bola: *'Yaar, kya scope kiya tha tumne? Itna basic miss kaise ho gaya?'*\n\nLesson: 'Just ship it' founder ka job hai bolna. *'Wait, scope karte hain'* PM ka job hai bolna. Dono hi job zaruri hai. Lekin agar tu sirf founder ko echo karega, tujhe rakhne ki zarurat kya hai?"
+        },
+        "en": {
+          "tone": "warn",
+          "title": "When the founder says 'just ship it' for the 14th time",
+          "md": "Founder, Friday 6 PM: 'Just ship it, stop overthinking.' You ship. Monday 9 AM, the customer Slack is on fire. Founder, Monday 9:15: 'How did you not catch this in scoping?'\n\nThe founder's job is to push for speed. The PM's job is to push back when speed will cost more than it saves. If you only ever echo the founder, the company has no PM, just a more expensive Slack bot."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "The PM is a translator between users, engineers, and sales/CEO — and a sequencer of finite engineering against infinite asks.",
+        "Output is what you ship; outcome is what changes for the user. Frame every initiative as an outcome before deciding the output.",
+        "The 3-question scope test (Who? What changes in their day? What if we do nothing?) separates real features from feelings.",
+        "The JIRA-monkey trap: high motion, low decisions. Every Friday, name the one decision only you could have made this week.",
+        "If you only ever echo the founder, you are not adding value — you are adding latency. Push back is part of the job description."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Think back to the last feature you saw shipped at your company (or anywhere you worked). Was it framed as an output or an outcome? If you had to retroactively write the outcome statement for it, what behavior change was supposed to happen — and did it?"
+    }
+  ]
+}

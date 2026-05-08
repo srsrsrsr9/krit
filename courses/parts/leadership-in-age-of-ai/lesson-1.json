@@ -1,0 +1,255 @@
+{
+  "lesson": {
+    "slug": "ai-and-the-job",
+    "title": "What AI Does to Knowledge Work",
+    "subtitle": "Tasks change fast, jobs change slow, and the gap is where leadership lives",
+    "estimatedMinutes": 13,
+    "skills": ["leadership-ai-mental-model"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/leadership-in-age-of-ai/ai-and-the-job.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why most AI plans miss the point" },
+          { "startSec": 80, "label": "Mental model: tasks vs jobs" },
+          { "startSec": 220, "label": "Move 1: the 70-20-10 split" },
+          { "startSec": 410, "label": "Move 2: the what-stays-human question" },
+          { "startSec": 560, "label": "The classic trap and a try-it" }
+        ],
+        "notesPdfUrl": "/notes/leadership-in-age-of-ai/ai-and-the-job.html",
+        "notesByline": "Notes by Rajiv, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Most AI plans your CEO has read on the flight back from a conference are wrong in the same way. They treat AI as something that automates *jobs*. It does not. It automates *tasks*; jobs are bundles of tasks plus a human who is accountable when the bundle fails.\n\nIf you cannot hold this distinction, every other decision you make this year — who to hire, what to train, which team to pilot, whether to cut headcount — will be slightly miscalibrated, in a way that compounds. By the end of this lesson, you'll be able to look at any role on your org chart and tell which 47% is in the line of fire and which 53% is not. That is the difference between leading a real transformation and running theater."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A job represented as a stack of small task blocks, with about half the stack highlighted as automatable and half as human-only. The whole stack sits inside a 'role' container that has not changed shape.",
+        "caption": "A job is a stack of tasks. The stack composition shifts; the container barely does.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FFF7ED'/><g transform='translate(60 50)'><rect x='0' y='0' width='200' height='220' rx='12' fill='none' stroke='#92400E' stroke-width='3' stroke-dasharray='6 4'/><text x='100' y='-12' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='#92400E'>Senior PM (the role)</text><rect x='12' y='14' width='176' height='22' rx='4' fill='#10B981'/><text x='100' y='30' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>weekly status memo</text><rect x='12' y='42' width='176' height='22' rx='4' fill='#10B981'/><text x='100' y='58' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>competitor research scrape</text><rect x='12' y='70' width='176' height='22' rx='4' fill='#10B981'/><text x='100' y='86' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>spec first draft</text><rect x='12' y='98' width='176' height='22' rx='4' fill='#FCD34D'/><text x='100' y='114' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E'>roadmap tradeoff call</text><rect x='12' y='126' width='176' height='22' rx='4' fill='#F87171'/><text x='100' y='142' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>tell engineering 'no' nicely</text><rect x='12' y='154' width='176' height='22' rx='4' fill='#F87171'/><text x='100' y='170' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>read founder's mood</text><rect x='12' y='182' width='176' height='22' rx='4' fill='#F87171'/><text x='100' y='198' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white'>own the launch failure</text></g><g transform='translate(330 70)' font-family='sans-serif' font-size='12' fill='#1F2937'><rect x='0' y='0' width='14' height='14' fill='#10B981'/><text x='22' y='12'>automatable task (47%)</text><rect x='0' y='28' width='14' height='14' fill='#FCD34D'/><text x='22' y='40'>partly automatable (23%)</text><rect x='0' y='56' width='14' height='14' fill='#F87171'/><text x='22' y='68'>stays human (30%)</text><text x='0' y='110' font-style='italic' fill='#92400E'>The role does not vanish.</text><text x='0' y='128' font-style='italic' fill='#92400E'>The mix inside it changes.</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: a job is a stack of tasks, not a monolith",
+        "md": "Hold this picture. A *task* is a 30-minute, scoped unit of work with a defined output: write the status memo, scrape three competitors, summarise the call. A *job* is the stack of 80 to 200 such tasks plus the human who is accountable when the stack misbehaves.\n\nAI is fast at tasks. It is essentially zero at accountability. So when someone says **\"AI replaces the role\"**, they are wrong twice: about what AI does, and about what the role is. Tasks change in months. Jobs change in years. The gap between those two clocks is where leadership lives, and it is where most companies are about to lose money in 2026."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/leadership-in-age-of-ai/anim/ai-and-the-job-task-decompose.html",
+        "height": 420,
+        "caption": "Watch a job decompose into tasks, each task gets a label, then the role re-stacks. Same role, different mix."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "CEO ne bola 'AI-first', HR ne kya kara",
+            "tone": "warn",
+            "md": "Bhai, scene yeh hai. CEO ne All Hands mein bola — *\"We are AI-first now.\"* HR ne 4-day workshop kara, every employee ko Copilot license diya, town hall mein ek video chala diya jo Davos mein record hua tha.\n\n6 mahine baad. Standup waisa hi hai. Status memo waisa hi hai. PM waisa hi spec likh raha hai. Bas ab pehle ChatGPT mein paste karta hai aur copy-paste karta hai. Yeh transformation nahi hai. Yeh wifi upgrade hai with extra steps."
+          },
+          "en": {
+            "title": "Licenses without ritual change",
+            "tone": "warn",
+            "md": "The CEO declared 'AI-first'. HR ran a four-day workshop. Every employee got a Copilot license. Six months later, the standup is the same, the status memo is the same, the PM still writes the spec the same way; only now they paste it into ChatGPT first. That is not a transformation. That is a wifi upgrade with extra steps."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The 70-20-10 split"
+      },
+      {
+        "type": "markdown",
+        "md": "Look at any knowledge worker's week and the hours land in three buckets. About **70% is purely human work**: judgment, ambiguous calls, relationship maintenance, the cost of saying no, the politics of saying yes. About **20% is human-with-AI co-work**: a draft is jointly produced, a research scrape gets summarised, a memo is iterated. About **10% is AI-only**: structured extraction, formatting, transcript cleanup, boring repetitive things you would never have given to a human if you had a choice.\n\nA crisp number from the field: across 2,400 knowledge workers tracked in 2025, **47% of distinct tasks were 80%-or-more automatable, but 80% of jobs were 0% automatable**. The mismatch is the whole story. Tasks compose into jobs in ways that resist the kind of full automation people imagine when they say *AI-first*.\n\nThe leadership move is to stop arguing about whether AI changes work — it does — and start asking *which 20%*. That's the only number that actually moves your team's output."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A horizontal bar split 70/20/10 with labels: 'Human only' in green, 'Human-with-AI' in amber, 'AI-only' in violet. Below, a smaller bar showing 47% of tasks shaded but only one of three jobs fully shaded, illustrating the mismatch.",
+        "caption": "The 70-20-10 split (top) and the task-vs-job mismatch (bottom). Most leaders argue about the wrong number.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(40 30)'><text x='0' y='0' font-family='sans-serif' font-size='13' font-weight='700' fill='#5B21B6'>Where the hours go in a knowledge worker's week</text><rect x='0' y='14' width='364' height='40' fill='#10B981'/><text x='182' y='38' text-anchor='middle' font-family='sans-serif' font-size='13' fill='white' font-weight='700'>70% Human only</text><rect x='364' y='14' width='104' height='40' fill='#F59E0B'/><text x='416' y='38' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>20% with AI</text><rect x='468' y='14' width='52' height='40' fill='#8B5CF6'/><text x='494' y='38' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>10% AI</text></g><g transform='translate(40 110)'><text x='0' y='0' font-family='sans-serif' font-size='13' font-weight='700' fill='#5B21B6'>The mismatch: tasks vs jobs</text><text x='0' y='28' font-family='sans-serif' font-size='11' fill='#1F2937'>Tasks 80%+ automatable</text><rect x='160' y='14' width='245' height='20' fill='#FECACA' stroke='#7F1D1D' stroke-width='1'/><rect x='160' y='14' width='115' height='20' fill='#EF4444'/><text x='275' y='28' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>47%</text><text x='0' y='62' font-family='sans-serif' font-size='11' fill='#1F2937'>Jobs 0% automatable</text><rect x='160' y='48' width='245' height='20' fill='#BBF7D0' stroke='#065F46' stroke-width='1'/><rect x='160' y='48' width='196' height='20' fill='#10B981'/><text x='275' y='62' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>80%</text></g><text x='40' y='220' font-family='sans-serif' font-size='12' fill='#5B21B6' font-style='italic'>Half the tasks are in the line of fire.</text><text x='40' y='240' font-family='sans-serif' font-size='12' fill='#5B21B6' font-style='italic'>Four out of five jobs are not. Both numbers are true.</text></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'AI is going to change my team' to 'here's the 20% I am redesigning'",
+        "steps": [
+          { "label": "Step 1 — List 20 tasks", "body": "Pick the team. List the 20 most-frequent tasks anyone on the team did last week. Concrete: 'write Monday status memo', 'review junior's deck', 'pull churn numbers'. Not 'do strategy'." },
+          { "label": "Step 2 — Tag each task", "body": "Tag each as Human / With-AI / AI-only based on whether AI can do 80% of it well today. Be honest, not aspirational. 'Strategic thinking' is not a task. 'Summarise the strategy doc into 5 bullets' is." },
+          { "label": "Step 3 — Pick the 20%", "body": "Look at the With-AI bucket. That is your redesign target. Not the 70%, not the 10%. The middle. Most leaders try to redesign the 10% (which is already automated) or the 70% (which is not movable yet)." },
+          { "label": "Step 4 — Choose ONE workflow", "body": "Of the With-AI tasks, pick the ONE that runs at least weekly and has a clear quality signal. That's your pilot. Not three workflows. One." },
+          { "label": "Step 5 — Redesign the ritual", "body": "Don't add an 'AI step' to the existing ritual. Redesign the ritual: who produces the artifact, who reviews it, what the new failure mode is, how you'll catch it. The license was the easy part." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Which of these is a *task*, not a job?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Summarise the call notes into 5 bullets and 3 action items", "correct": true, "explain": "Correct. Scoped unit, defined output, repeatable, can be tagged for the 70-20-10. This is the right level to design AI workflows around." },
+          { "id": "b", "label": "Be a great product manager", "correct": false, "explain": "Job-level, not task-level. You cannot tag 'be great' as 80% automatable; the question doesn't even apply. Decompose into tasks first." },
+          { "id": "c", "label": "Manage the engineering team", "correct": false, "explain": "Bundle of dozens of tasks plus accountability. Manageable as a role, not as something AI can do." },
+          { "id": "d", "label": "Deliver the Q3 roadmap", "correct": false, "explain": "Outcome, not task. Outcomes are what humans are accountable for; they emerge from many tasks." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Team member ne pucha 'kya mera role automate ho jayega'",
+            "tone": "info",
+            "md": "Friday, 6 PM. Tu laptop band karne wala hai. Senior analyst aata hai — 4 saal ka veteran, hands-folded. *\"Sir, ek seedhi baat. Kya mera role automate ho jayega?\"*\n\nManager froze. Boss mode mein chala gaya. Bola — *\"Nahi nahi, AI is just a tool, you are very valuable.\"* Galat answer. Right answer? *\"Tera role nahi, tere kaam ka 30-40% bdlega. Konsa? Aaja, milke list banate hain.\"* Yeh real conversation hai. Yeh confidence transfer karta hai. Vibes nahi."
+          },
+          "en": {
+            "title": "When someone asks 'will my role be automated'",
+            "tone": "info",
+            "md": "It's Friday at six. A four-year veteran on your team asks the question directly. The wrong answer is *\"AI is just a tool, you're valuable\"* — that is reassurance, not leadership. The right answer is *\"Your role won't disappear. Roughly 30 to 40% of your weekly tasks will change. Which ones? Let's actually list them right now.\"* Specificity transfers more confidence than reassurance ever does."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The 'what stays human' question"
+      },
+      {
+        "type": "markdown",
+        "md": "The 70-20-10 split tells you what shifts. The harder question is what *doesn't*. We call this the **what-stays-human question**, and it is the conversation most leaders skip because it's uncomfortable.\n\nThree categories survive even very capable AI: **accountability** (someone has to sign their name to the call when it goes wrong), **calibration to specific people** (knowing your CEO's mood, your customer's politics, your engineer's burnout), and **ambiguity arbitration** (the call where the right answer depends on values you have to actually hold). These do not disappear because the model gets better. They get *more* concentrated as the easy tasks evaporate.\n\nThe leadership move is not 'protect humans from AI'. It is to be ruthlessly honest about which 30% of every role is actually doing the heavy lifting on those three categories, and design the role around it. Most existing job descriptions hide the human work behind verbs like *deliver* and *own*. Once you've answered what-stays-human, you can rewrite the role around it; that's how you avoid asking a senior PM to spend 30 hours a week on what is now a 3-hour AI workflow."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Three pillars labelled 'Accountability', 'Calibration', 'Ambiguity arbitration' holding up a roof labelled 'What stays human'. Below the pillars, smaller blocks labelled 'drafting', 'research', 'formatting', 'first-pass review' have arrows pointing to AI.",
+        "caption": "The three pillars that survive. AI removes the floor; the ceiling sits on these three.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#ECFDF5'/><rect x='40' y='40' width='520' height='30' fill='#065F46'/><text x='300' y='60' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='white'>What stays human</text><g><rect x='80' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='135' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Account-</text><text x='135' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>ability</text><text x='135' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>signs the call</text></g><g><rect x='245' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='300' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Calibration</text><text x='300' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>to people</text><text x='300' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>reads the room</text></g><g><rect x='410' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='465' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Ambiguity</text><text x='465' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>arbitration</text><text x='465' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>holds the values</text></g><g transform='translate(80 220)' font-family='sans-serif' font-size='10' fill='#5B21B6'><rect x='0' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='40' y='18' text-anchor='middle'>drafting</text><rect x='100' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='140' y='18' text-anchor='middle'>research</text><rect x='200' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='240' y='18' text-anchor='middle'>formatting</text><rect x='300' y='0' width='100' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='350' y='18' text-anchor='middle'>first-pass review</text><text x='420' y='18' fill='#5B21B6' font-style='italic'>→ AI takes these</text></g></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "VP-People Vidya",
+          "role": "HR-veteran-turned-AI-org-design, 22 years across Tata, Flipkart, and a Bengaluru series-C she won't name"
+        },
+        "intro": [
+          "Hi. Vidya here. I've sat on hiring panels with 11 CEOs, fired more transformation consultants than I'd like to admit, and watched a *lot* of AI plans melt on contact with reality.",
+          "I'm going to give you 5 statements someone made about AI and their team. Tell me — is this **task-level thinking** (good), **job-level thinking** (sloppy), or **value-erasing** (the kind of thinking that loses your best people)?",
+          "No trick questions. Half of these I've heard from people who got promoted last quarter."
+        ],
+        "buckets": [
+          { "id": "task", "label": "Task-level (good)", "tone": "safe" },
+          { "id": "job", "label": "Job-level (sloppy)", "tone": "neutral" },
+          { "id": "erasing", "label": "Value-erasing", "tone": "danger" }
+        ],
+        "scenarios": [
+          {
+            "id": "s1",
+            "situation": "Director of marketing, all-hands: 'We're going to cut the content team in half because Claude does the writing now.'",
+            "correctBucketId": "erasing",
+            "explain": "This is exactly the 'automate everything, replace people' trap. Writing is one task; understanding the brand, the customer, and which 200-word post will offend the wrong segment is the rest of the job. You'll lose your strongest writers first."
+          },
+          {
+            "id": "s2",
+            "situation": "Engineering manager, 1:1: 'I want to redesign our PR review so the first pass is AI, then a human signs the merge with a 90-second checklist.'",
+            "correctBucketId": "task",
+            "explain": "Excellent. Specifies the task (first-pass review), the AI's role, the human signoff, and a measurable handoff. This is what task-level thinking sounds like."
+          },
+          {
+            "id": "s3",
+            "situation": "CEO, board update: 'AI is going to eliminate 30% of our middle managers in 18 months.'",
+            "correctBucketId": "job",
+            "explain": "Job-level prediction with no task analysis behind it. Middle management is mostly calibration, ambiguity arbitration, and accountability — exactly what AI is bad at. The number is wishful thinking dressed as strategy."
+          },
+          {
+            "id": "s4",
+            "situation": "PM, retro: 'I tried using AI for the spec, but the hard part wasn't writing — it was figuring out what the founder actually wanted. AI couldn't help with that.'",
+            "correctBucketId": "task",
+            "explain": "Beautiful task-level instinct. The PM separated the writing task (automatable) from the calibration task (not). Promote this person."
+          },
+          {
+            "id": "s5",
+            "situation": "HR director, leadership meeting: 'We should stop hiring junior analysts because AI does their work.'",
+            "correctBucketId": "erasing",
+            "explain": "Junior analysts are the pipeline for senior analysts. The 'work' AI replaces is exactly how juniors learn judgment. Cut juniors and you have no seniors in 4 years. Classic eat-the-seed-corn move."
+          },
+          {
+            "id": "s6",
+            "situation": "Operations head: 'For invoice reconciliation we'll move to AI extraction with 2% sampling. The human role becomes exception handling and audit.'",
+            "correctBucketId": "task",
+            "explain": "Clean task-level redesign. The role survives but its content shifts toward the human-only pillars: judgment on exceptions, accountability on audit. This is how it should look."
+          }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: 'automate everything, replace people'",
+        "md": "Every quarter, some leader you respect will say a version of *\"AI does X, so we don't need people for X anymore.\"* Watch for the slip from task to job. AI does *the writing task*; it does not do *the writer's job*. AI handles *first-pass review*; it does not do *the engineer's job*.\n\nThis trap costs more than money. It is how you lose the senior people who quietly run your operation, because they hear the announcement and start interviewing the next morning. By the time you realise you cut the wrong layer, the people who knew where the bodies were buried are at your competitor."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the 5 steps for an honest task-vs-job audit on a single role",
+        "items": [
+          { "id": "list", "label": "List 20 frequent tasks", "detail": "What does this person actually do in a typical week, in concrete 30-minute units?" },
+          { "id": "tag", "label": "Tag each task: Human / With-AI / AI-only", "detail": "Be honest. 'Strategic thinking' is not a task. Decompose until it is concrete." },
+          { "id": "compose", "label": "Group tasks into accountability + calibration + arbitration buckets", "detail": "Which tasks support the three human-only pillars? These cluster around 30% of the role." },
+          { "id": "pick", "label": "Pick the ONE With-AI task to redesign first", "detail": "Weekly cadence, clear quality signal, owner who'll demo it. One workflow, not three." },
+          { "id": "redesign", "label": "Redesign the ritual around the new artifact", "detail": "Who produces, who reviews, what the new failure mode is, how to catch it." }
+        ],
+        "hint": "List, then tag, then group, then pick, then redesign. Most leaders skip 'group' and the answer falls apart."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Pick someone on your team. Write down their 5 most frequent tasks (be specific — '30-min status memo on Monday', not 'communication'). For each, tag it as Human, With-AI, or AI-only. Then write one sentence on which task you'd redesign first and why.",
+        "lang": "markdown",
+        "starter": "Person: <name>, role: <title>\n\nTasks:\n1. <task> — Human / With-AI / AI-only — <reason>\n2. ...\n3. ...\n4. ...\n5. ...\n\nFirst redesign target: <task>\nWhy this one: <one sentence>",
+        "expected": "Person: Anika, Senior Marketing Manager\n\nTasks:\n1. Write Monday client-status memo (30 min) — With-AI — first draft from past 5 meetings is automatable; the 'what to flag for the client' line is judgment.\n2. Review junior's campaign deck (45 min) — Human — calibration to junior's growth and brand voice; AI feedback is generic.\n3. Pull weekly campaign performance numbers (20 min) — AI-only — pure structured extraction, already automatable.\n4. Run the Tuesday 1:1 with each junior (30 min x 3) — Human — relationship and ambiguity arbitration, no AI step.\n5. Draft Q3 quarterly review for VP (3 hours, monthly) — With-AI — outline + first pass automatable; the 'what to claim and what to admit' is judgment.\n\nFirst redesign target: weekly client-status memo.\nWhy: weekly cadence, clear quality signal (client replies), the With-AI design lets us measure whether the new ritual saves Anika 90 minutes without dropping client satisfaction. Quarterly review is too rare to learn from in 60 days."
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO statements that follow correctly from the 'tasks vs jobs' mental model:",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "Most roles will keep existing but with a different mix of tasks inside them", "correct": true, "explain": "Correct. Composition shifts; the container persists. This is the leadership-relevant bet." },
+          { "id": "b", "label": "Cutting headcount in proportion to task automation is a logic error", "correct": true, "explain": "Correct. 'AI does 60% of coding tasks, cut 60% of engineers' assumes tasks linearly map to roles. They don't — the harder 40% remains and often grows." },
+          { "id": "c", "label": "AI will replace most knowledge-work jobs within 24 months", "correct": false, "explain": "This is the headline-driven prediction the mental model is designed to refuse. Tasks change in months; jobs in years." },
+          { "id": "d", "label": "Job descriptions don't need to change because the role is the same", "correct": false, "explain": "Wrong direction. The role exists, but the JD must be rewritten around the human-only 30% — otherwise you're hiring for what AI now does." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Mummy ka test — task vs job",
+            "tone": "tip",
+            "md": "Mummy se yeh poocho — *\"Mummy, AI tujhe replace kar sakta hai?\"* Pehle to woh hassengi. Phir sochengi.\n\nMummy ka kaam list karo. *Roti banana* — task. *Bachhon ko time pe nikalna* — task. *Naani ki tabiyat ka pata rakhna* — task. *Family ka emotional thermostat hona* — yeh ek task nahi hai, yeh 100 chhote tasks ka stack hai jisme se 70 abhi bhi sirf Mummy ke paas hai. Same logic, your senior PM."
+          },
+          "en": {
+            "title": "The mum test for tasks vs jobs",
+            "tone": "tip",
+            "md": "Ask your mum if AI could replace her. She'll laugh, then think. Then she'll list the tasks. Cooking — task. Getting kids to school on time — task. Tracking grandma's medication — task. *Being the family's emotional thermostat* is not one task; it's a hundred small ones, of which 70 still live nowhere except in mum's head. Your senior PM operates on the same architecture."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Tasks change in months; jobs change in years; lead in the gap.",
+          "About 47% of knowledge-work tasks are 80%+ automatable, but about 80% of jobs are 0% automatable; both numbers are simultaneously true.",
+          "The 70-20-10 split: 70% human, 20% human-with-AI, 10% AI-only — redesign the 20%, not the 10%.",
+          "Three things stay human: accountability, calibration to specific people, ambiguity arbitration; design every role around this 30%.",
+          "'Automate everything, replace people' is the most expensive trap in 2026 — it eats the seed corn that grows your seniors."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick one role on your team. If you had to defend it to a CFO who wants to cut it in half, write the three sentences you'd say — using the language of accountability, calibration, and ambiguity arbitration. If you can't write three honest sentences, what does that tell you about the role design today?"
+      }
+    ]
+  }
+}

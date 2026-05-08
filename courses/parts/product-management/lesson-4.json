@@ -1,0 +1,270 @@
+{
+  "slug": "roadmaps-and-tradeoffs",
+  "title": "Roadmaps, Quarterly Plans, and Saying No",
+  "subtitle": "A roadmap is a story you tell to align, not a contract you sign in blood",
+  "estimatedMinutes": 14,
+  "skills": ["pm-roadmapping"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/product-management/roadmaps-and-tradeoffs.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the gantt-chart fantasy" },
+        { "startSec": 80, "label": "Mental model: roadmap as story, not contract" },
+        { "startSec": 220, "label": "Move 1 — Now / Next / Later" },
+        { "startSec": 410, "label": "Move 2 — The polite no template" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/product-management/roadmaps-and-tradeoffs.html",
+      "notesByline": "Notes by Kabir, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most PMs build roadmaps the way they were taught — Gantt charts with feature names lined up against months, color-coded, beautiful, and almost entirely fictional by week six. The Gantt chart is not the problem; the *expectation* the Gantt chart sets is the problem.\n\n**A roadmap that's longer than a quarter is fiction.** Not because PMs are bad, but because the inputs change faster than the planning cycle: customers behave differently, competitors move, engineering finds the schema is wrong, the founder reads a tweet. By month four, half the roadmap is irrelevant. The team learns to treat roadmaps as a thing you nod at and ignore.\n\nThis lesson teaches you to build a roadmap that tells a coherent story without overpromising, and to say no to off-roadmap asks without losing the deal or the relationship."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two roadmaps side by side. Left, a Gantt chart with rectangular bars across 6 months in different colors, with a 'reality' line cutting through after 6 weeks. Right, three columns labelled NOW (in progress), NEXT (this quarter), LATER (after that), with bullet items in each.",
+      "caption": "The Gantt promises specifics it cannot keep. Now-Next-Later promises a direction it can.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FEF3C7'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><text x='130' y='18' text-anchor='middle' font-weight='bold' fill='#7F1D1D'>GANTT (fiction by week 6)</text><line x1='10' y1='40' x2='250' y2='40' stroke='#6B7280'/><text x='10' y='35' font-size='8' fill='#6B7280'>M1</text><text x='50' y='35' font-size='8' fill='#6B7280'>M2</text><text x='90' y='35' font-size='8' fill='#6B7280'>M3</text><text x='130' y='35' font-size='8' fill='#6B7280'>M4</text><text x='170' y='35' font-size='8' fill='#6B7280'>M5</text><text x='210' y='35' font-size='8' fill='#6B7280'>M6</text><rect x='10' y='50' width='80' height='14' rx='2' fill='#3B82F6'/><text x='12' y='61' font-size='9' fill='white'>F1: Export</text><rect x='50' y='70' width='100' height='14' rx='2' fill='#10B981'/><text x='52' y='81' font-size='9' fill='white'>F2: SSO</text><rect x='90' y='90' width='80' height='14' rx='2' fill='#F59E0B'/><text x='92' y='101' font-size='9' fill='white'>F3: Hindi</text><rect x='130' y='110' width='90' height='14' rx='2' fill='#8B5CF6'/><text x='132' y='121' font-size='9' fill='white'>F4: Reports</text><rect x='170' y='130' width='80' height='14' rx='2' fill='#EF4444'/><text x='172' y='141' font-size='9' fill='white'>F5: AI</text><line x1='65' y1='44' x2='65' y2='150' stroke='#9D174D' stroke-width='2' stroke-dasharray='4 3'/><text x='75' y='160' font-size='10' fill='#9D174D' font-style='italic'>reality line</text></g><g transform='translate(310 30)'><text x='130' y='18' text-anchor='middle' font-weight='bold' fill='#065F46'>NOW / NEXT / LATER</text><rect x='0' y='30' width='75' height='110' rx='6' fill='#DCFCE7' stroke='#065F46'/><text x='37' y='48' text-anchor='middle' font-weight='bold' font-size='10' fill='#064E3B'>NOW</text><text x='5' y='68' font-size='9' fill='#065F46'>F1: Export</text><text x='5' y='84' font-size='9' fill='#065F46'>F2: SSO</text><text x='5' y='100' font-size='9' fill='#065F46'>(in flight)</text><rect x='85' y='30' width='75' height='110' rx='6' fill='#FEF3C7' stroke='#92400E'/><text x='122' y='48' text-anchor='middle' font-weight='bold' font-size='10' fill='#7C2D12'>NEXT</text><text x='90' y='68' font-size='9' fill='#7C2D12'>F3: Hindi</text><text x='90' y='84' font-size='9' fill='#7C2D12'>F4: Reports</text><text x='90' y='100' font-size='9' fill='#7C2D12'>(scoped)</text><rect x='170' y='30' width='75' height='110' rx='6' fill='#DBEAFE' stroke='#1E40AF'/><text x='208' y='48' text-anchor='middle' font-weight='bold' font-size='10' fill='#1E3A8A'>LATER</text><text x='175' y='68' font-size='9' fill='#1E3A8A'>F5: AI</text><text x='175' y='84' font-size='9' fill='#1E3A8A'>F6: Mobile</text><text x='175' y='100' font-size='9' fill='#1E3A8A'>(direction)</text><text x='122' y='160' text-anchor='middle' font-size='10' fill='#065F46' font-style='italic'>commits to direction, not dates</text></g></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: a roadmap is a story you tell to align, not a contract you sign",
+      "md": "A roadmap has one job: get sales, engineering, design, customer success, and the board to all describe the next 90 days the same way. That's it. Same story, told confidently, in three different rooms.\n\nIt is **not** a contract. The customer who waves your roadmap at you in renewal asking 'where is feature X you promised in October?' has misunderstood what they were given. Your job is to set the expectation, in the doc itself, that direction is firm and dates are not.\n\nIf you remember nothing else from this lesson, remember: **commit to direction, not to dates beyond the current quarter**. Direction is auditable in 6 months ('did you build broadly the things you said you would?'). Dates are not survivable past 90 days."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/product-management/anim/roadmap-now-next-later.html",
+      "height": 420,
+      "caption": "Watch a 6-month Gantt drift into chaos, while a now/next/later board absorbs the same shocks and stays useful.",
+      "fallbackImage": "/courses/product-management/anim/roadmap-now-next-later-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Roadmap aur shaadi-card",
+          "md": "Bhai, scene yeh hai. Roadmap aur shaadi-card mein bahut similarity hai. Dono pe specific date likhi hai. Dono ko log frame karke rakhte hain. Aur dono mein **schedule reality se 70 percent match karta hai, baaki 30 percent improvise** hai.\n\nLekin shaadi-card pe likha tha *'7 PM sharp'*. 7 PM mein dulha bhi nahi tha, dulhan bhi nahi thi, photographer bhi nahi tha. Sab 9 baje pohche. Shaadi 11 baje shuru hui. **Card galat nahi tha, expectation galat tha.**\n\nRoadmap ka bhi yahi haal hai. Date mat dekho — direction dekho."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Why the wedding card is a useful metaphor for roadmaps",
+          "md": "An Indian wedding card says 'ceremony at 7 PM sharp.' The ceremony starts at 11. Nobody is angry; everyone understood the card was an aspiration, not a contract. The card was never wrong; the expectation it set, by being specific, was wrong.\n\nA roadmap with calendar dates beyond the current quarter is a wedding card. The doc is fine; the expectation it sets is the problem. State, on the doc, what is firm (direction) and what is aspirational (dates)."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Now / Next / Later"
+    },
+    {
+      "type": "markdown",
+      "md": "The strongest roadmap format for most teams is **three columns: NOW, NEXT, LATER**. Replace your Gantt with this and watch your stakeholder conversations get 30 percent shorter.\n\n**NOW** is what's in flight this sprint or this 4-6 week chunk. Everything in NOW has a PRD, an engineering owner, and an estimated ship window. NOW is the most committed column; if something is here, you have a contract with the team to ship it.\n\n**NEXT** is what's queued for this quarter, scoped enough that you could start within 2 weeks if NOW finishes early. NEXT items have a one-page PRD and a rough effort estimate, but no calendar date. NEXT is firm in priority order, soft in timing.\n\n**LATER** is everything else worth talking about — direction-setting, big bets, the things you want stakeholders to know are in your peripheral vision. LATER items might never ship; that's fine. The promise is 'these are the directions we're tracking,' not 'these will be built.' Be explicit about that in the doc.\n\nA Bengaluru SaaS at 50 employees switched from quarterly Gantt to now/next/later in early 2026. Roadmap-related Slack noise dropped by 60 percent. Sales stopped pre-selling unbuilt features. Engineering stopped seeing the roadmap as a threat. Same set of features, same team, just a different framing."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Three vertical columns. NOW column (green) has 2 items each with a PRD link icon and ship window. NEXT column (yellow) has 3 items with priority numbers. LATER column (blue) has 4 items as direction bullets without dates.",
+      "caption": "Same backlog, three commitment levels. Stakeholders learn which column to argue with you about.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><rect width='160' height='260' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-weight='bold' fill='#064E3B'>NOW (in flight)</text><text x='80' y='44' text-anchor='middle' font-size='9' font-style='italic' fill='#065F46'>committed; ship date set</text><rect x='10' y='60' width='140' height='40' rx='6' fill='white' stroke='#10B981'/><text x='15' y='76' font-size='10' font-weight='bold' fill='#064E3B'>F1: CSV Export</text><text x='15' y='90' font-size='9' fill='#065F46'>by 18 May, owner: Maya</text><rect x='10' y='110' width='140' height='40' rx='6' fill='white' stroke='#10B981'/><text x='15' y='126' font-size='10' font-weight='bold' fill='#064E3B'>F2: SSO</text><text x='15' y='140' font-size='9' fill='#065F46'>by 25 May, owner: Aryan</text><text x='80' y='240' text-anchor='middle' font-size='9' fill='#065F46' font-style='italic'>argue scope, not whether</text></g><g transform='translate(210 30)'><rect width='160' height='260' rx='12' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-weight='bold' fill='#7C2D12'>NEXT (this Q)</text><text x='80' y='44' text-anchor='middle' font-size='9' font-style='italic' fill='#92400E'>scoped, no date</text><rect x='10' y='60' width='140' height='32' rx='6' fill='white' stroke='#F59E0B'/><text x='15' y='80' font-size='10' fill='#7C2D12'>1. Hindi UI (W'house)</text><rect x='10' y='100' width='140' height='32' rx='6' fill='white' stroke='#F59E0B'/><text x='15' y='120' font-size='10' fill='#7C2D12'>2. Audit log v2</text><rect x='10' y='140' width='140' height='32' rx='6' fill='white' stroke='#F59E0B'/><text x='15' y='160' font-size='10' fill='#7C2D12'>3. Bulk-edit</text><text x='80' y='240' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>argue priority order</text></g><g transform='translate(390 30)'><rect width='160' height='260' rx='12' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-weight='bold' fill='#1E3A8A'>LATER (direction)</text><text x='80' y='44' text-anchor='middle' font-size='9' font-style='italic' fill='#1E3A8A'>may not ship; track only</text><text x='15' y='75' font-size='10' fill='#1E3A8A'>* Mobile app (Q3)</text><text x='15' y='100' font-size='10' fill='#1E3A8A'>* AI inventory hints</text><text x='15' y='125' font-size='10' fill='#1E3A8A'>* Multi-warehouse</text><text x='15' y='150' font-size='10' fill='#1E3A8A'>* Public API v2</text><text x='80' y='240' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>argue direction, not order</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translating a 22-item backlog into a now/next/later roadmap — 5 steps",
+      "steps": [
+        {
+          "label": "Step 1 — Force a quarterly outcome",
+          "body": "Pick the one metric the team is moving this quarter. Activation? Retention? ARR? Without this, NOW becomes 'whatever feels urgent' and NEXT becomes a wishlist."
+        },
+        {
+          "label": "Step 2 — Drop everything that doesn't map to the outcome",
+          "body": "If a feature doesn't plausibly move the quarterly metric, it does not belong in NOW or NEXT. It can live in LATER as a direction signal, or in your private backlog."
+        },
+        {
+          "label": "Step 3 — Cap NOW at 2-3 items",
+          "body": "More than 3 in-flight items per pod and you lose focus. If everything is NOW, nothing is NOW. The cap forces you to sequence."
+        },
+        {
+          "label": "Step 4 — Sequence NEXT in priority order, no dates",
+          "body": "5-6 items maximum. Numbered 1, 2, 3 in priority. Stakeholders can argue the order; they cannot extract a date."
+        },
+        {
+          "label": "Step 5 — Make LATER a story, not a list",
+          "body": "Group LATER items by theme: 'expand internationally', 'enterprise readiness', 'mobile experience'. Themes survive when individual features drop. Lists die feature by feature."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Why does a now/next/later roadmap reduce stakeholder noise compared to a Gantt chart?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "It hides information from stakeholders", "correct": false, "explain": "It hides nothing — it just labels the commitment level of each item." },
+        { "id": "b", "label": "It explicitly labels which items are committed and which are directional, so arguments happen at the right level of certainty", "correct": true, "explain": "Stakeholders argue NOW scope, NEXT order, LATER themes — three different conversations, none of them about extracting a calendar date." },
+        { "id": "c", "label": "It's shorter, so people read less", "correct": false, "explain": "Shorter helps but isn't the structural reason." },
+        { "id": "d", "label": "It removes engineering's input", "correct": false, "explain": "Engineering's input is more visible, not less, in this format." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Investor update mein roadmap dikhana",
+          "md": "Bhai, scene yeh hai. Founder ne investor update mein 8-feature ka colorful roadmap chipka diya. Investor ne 90 din baad poocha — *'feature 6 kab aa raha hai? October mein dikhaya tha.'*\n\nFounder ne PM ko Slack kiya 11 PM ko: *'why is feature 6 not done? You committed in the deck.'* PM ne reply kiya: *'Sir, woh deck mein **direction** thi, **commitment** nahi.'*\n\nLesson: investor decks mein bhi **commit nahi karte 90 din se aage**. Direction dikhao, dates mat. Investor smart hain — roadmap fiction unhone bhi padha hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Investor decks are a roadmap trap",
+          "md": "Founders love putting an 8-feature, color-coded roadmap into the investor deck. Investors then quote it back to you, 90 days later, asking where feature 6 is.\n\nThe fix: in any external doc, label what is committed (this quarter, with effort estimates) and what is directional (themes you're tracking). Investors with operating experience will respect the distinction. The ones who insist on dates have probably never built a product."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The polite no template"
+    },
+    {
+      "type": "markdown",
+      "md": "Sales will ask you to commit a feature to close a deal. A founder will ask you to add 'just one thing' to the sprint. A customer success lead will ask you to fix a bug for a specific account by Tuesday. You cannot say yes to all of them; you also cannot say no like a wall.\n\nThe **polite no template** is the move that lets you turn down off-roadmap asks without burning the relationship:\n\n> *'Help me understand: what's the deal size, what's the timing, and which 5 other customers want this? I'll come back tomorrow with a yes, a no, or a swap.'*\n\nThree things this does. First, it does not refuse — it asks for information. Asking is not refusing; nobody can be angry at being asked. Second, it surfaces evidence — sales will either bring real numbers (in which case you'll often say yes) or fold (in which case you've protected the roadmap without saying no). Third, it offers a swap — you're not adding work, you're trading. Engineering capacity is conserved.\n\nMost asks die at step 1. Sales doesn't have the data. Customer success doesn't have 5 other accounts. The founder's 'just one thing' is actually a hunch from a podcast. Your work is done; the asker walks away with their dignity intact and a clear next step. You walk away with your sprint."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A flowchart. Box 1: Off-roadmap ask arrives. Arrow to box 2: 'Ask the 3 questions: deal size? timing? who else wants it?'. Two arrows out. Down to box 3a: 'Asker has no data → ask dies, no offence given'. Right to box 3b: 'Asker has data → return tomorrow with yes/no/swap'.",
+      "caption": "The polite no is mostly a polite ask. Most asks don't survive the questions.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(40 30)'><rect width='160' height='50' rx='8' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#831843'>Off-roadmap ask</text><text x='80' y='40' text-anchor='middle' font-size='10' fill='#9D174D'>(sales / founder / CS)</text></g><path d='M120 80 L120 110' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><g transform='translate(40 110)'><rect width='160' height='80' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#7C2D12'>The 3 questions:</text><text x='80' y='40' text-anchor='middle' font-size='10' fill='#7C2D12'>1. deal size?</text><text x='80' y='55' text-anchor='middle' font-size='10' fill='#7C2D12'>2. timing?</text><text x='80' y='70' text-anchor='middle' font-size='10' fill='#7C2D12'>3. who else wants it?</text></g><path d='M200 150 L300 95' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><path d='M200 150 L300 215' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><g transform='translate(300 50)'><rect width='220' height='90' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='110' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#064E3B'>Path A: no data</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#065F46'>Asker can't answer 1 of 3 Qs</text><text x='110' y='60' text-anchor='middle' font-size='10' fill='#065F46'>Ask quietly dies</text><text x='110' y='76' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>~70% of asks end here</text></g><g transform='translate(300 175)'><rect width='220' height='90' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='110' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#1E3A8A'>Path B: real data</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#1E3A8A'>Return next day with</text><text x='110' y='60' text-anchor='middle' font-size='10' fill='#1E3A8A'>yes / no / swap proposal</text><text x='110' y='76' text-anchor='middle' font-size='10' font-style='italic' fill='#1E3A8A'>often the right call is yes</text></g></g><defs><marker id='pna' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "VP-Product Vivek",
+        "role": "Your hands-on VP, ex-Flipkart, allergic to roadmap theatre",
+        "avatarSrc": "/avatars/vivek.svg"
+      },
+      "intro": [
+        "Off-roadmap asks. I'll throw scenarios; you tell me — **yes (real swap)**, **polite no via 3 questions**, or **escalate (above your pay grade)**.",
+        "There is no universal yes-no rule. There is only 'do you have the data and authority to decide here, or not.'",
+        "If you escalate everything, you're a router. If you say no to everything, you're a wall. Both lose you the team."
+      ],
+      "buckets": [
+        { "id": "yes", "label": "Yes (with a swap)", "tone": "safe" },
+        { "id": "politeno", "label": "Polite no via 3 Qs", "tone": "neutral" },
+        { "id": "escalate", "label": "Escalate", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "Sales lead: 'Acme Corp wants SSO by next month or they walk. ₹38L renewal. Renewal in 6 weeks.'",
+          "correctBucketId": "yes",
+          "explain": "Concrete data, big deal, fits the team's enterprise theme. Yes, with a swap — propose what gets pushed from NEXT to make room."
+        },
+        {
+          "id": "s2",
+          "situation": "Sales lead: 'I have a feeling our prospects would close faster if we had a public roadmap page.'",
+          "correctBucketId": "politeno",
+          "explain": "Run the 3 questions. 'How many deals stalled because of no public roadmap? Which prospects asked? What did they say?' If they have answers, reconsider; usually they don't."
+        },
+        {
+          "id": "s3",
+          "situation": "Founder DMs: 'Saw a YouTube video about AI agents. We need an AI strategy by Friday for the board.'",
+          "correctBucketId": "escalate",
+          "explain": "Strategic scope question above sprint-level. Don't say no to a founder strategy ask alone; escalate via your manager so the answer is co-owned."
+        },
+        {
+          "id": "s4",
+          "situation": "Customer success: '3 enterprise customers in 2 weeks asked about audit logs for compliance. Renewals stacked over the next quarter.'",
+          "correctBucketId": "yes",
+          "explain": "Convergent signal across multiple accounts, clear theme (enterprise readiness), measurable cost-of-inaction. Yes, surface it as a NEXT candidate."
+        },
+        {
+          "id": "s5",
+          "situation": "Founder: 'Our competitor just launched a Slack integration. Can we ship one by end of month?'",
+          "correctBucketId": "politeno",
+          "explain": "Reactive ask without user evidence. Run the 3 Qs: how many of OUR customers asked, what would they actually do with it, what does it displace? Often the competitor's launch is a vanity move that won't move metrics."
+        },
+        {
+          "id": "s6",
+          "situation": "Sales: 'Can we offer a custom integration to Brand X for ₹4L one-time? They want it in 2 weeks.'",
+          "correctBucketId": "escalate",
+          "explain": "Custom one-off integrations are a strategic pricing/architecture decision (services revenue vs product roadmap). Escalate; this isn't a sprint-level call."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: turning your roadmap into a backlog",
+      "md": "When stakeholders push, the path of least resistance is to add their ask to LATER and say 'it's on the roadmap'. Within three months your LATER column has 47 items, the roadmap looks impressive, and you've quietly committed to nothing.\n\nThe trap has a name: **the roadmap-as-graveyard trap**. Items go in, they don't come out. Stakeholders eventually realise the roadmap is theatre.\n\nThe escape: cap LATER at 8-10 items, organised by 3-4 themes. Anything that doesn't fit a theme either becomes one (with reasoning) or is declined. 'On the roadmap' should mean something. Otherwise it means nothing."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Your sales lead just emailed: a prospect (₹60L ARR potential) wants a workflow-builder feature. Order your moves from first to last.",
+      "items": [
+        { "id": "p1", "label": "Reply within 2 hours: 'Got it — sending 3 quick questions before tomorrow morning'", "detail": "Fast acknowledge prevents the prospect from feeling ignored. But don't commit." },
+        { "id": "p2", "label": "Send the 3 questions: deal size confirmed, timing, which other customers want it, what they would use it for", "detail": "The data either exists or it doesn't. Both outcomes are useful." },
+        { "id": "p3", "label": "Spend 30 min checking: have other customers asked? CS data? Support tickets?", "detail": "Triangulate. Sales lead's anecdote may not be the full picture." },
+        { "id": "p4", "label": "Draft the response: yes (with what gets swapped), no (with a reason), or swap (a smaller alternative)", "detail": "Three concrete options. Not a vague 'we'll consider it'." },
+        { "id": "p5", "label": "Send response by tomorrow morning, copy engineering lead and VP", "detail": "Visibility prevents the prospect from re-asking in a different channel." }
+      ],
+      "hint": "The first step is not 'figure out the answer'. It's 'buy time without burning trust'."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Sales lead emails: 'Mumbai fintech prospect (₹25L ARR) wants UPI auto-reconciliation by August. Decision-maker likes us but says it's a must-have. Can we?' Write the polite no email you would send back, applying the 3-question template.",
+      "lang": "markdown",
+      "starter": "Hi [Sales lead],\n\nGot it — before I take this to engineering, three quick questions so I can come back tomorrow with a real answer:\n\n1. Deal size and renewal: confirming ₹25L ARR, single year, no add-ons?\n2. \n3. \n\nIf the data points to a yes, I'll propose what we'd swap from the current NEXT list. If not, I'll come back with a clear no and the reasoning so you can position it. Either way, you'll have something to send the prospect by Wednesday.\n\nThanks,\n[You]",
+      "expected": "Hi [Sales lead],\n\nGot it — before I take this to engineering, three quick questions so I can come back tomorrow with a real answer:\n\n1. Deal size and renewal: confirming ₹25L ARR, single year, no add-ons?\n2. Timing: when does the prospect actually need it live? Is August a contract date, an internal milestone for them, or a soft preference?\n3. Demand: outside this prospect, which other customers (named) have asked for UPI auto-reconciliation in the last 90 days, and what's the real revenue at stake?\n\nIf the data points to a yes, I'll propose what we'd swap from the current NEXT list. If not, I'll come back with a clear no and the reasoning so you can position it. Either way, you'll have something to send the prospect by Wednesday.\n\nThanks,\n[You]"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are valid uses of a roadmap? Select all that apply.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Telling sales, engineering, and the board the same coherent story for the next 90 days", "correct": true, "explain": "Alignment is the primary job. One story, three audiences." },
+        { "id": "b", "label": "Committing to a customer that feature X will ship by month Y", "correct": false, "explain": "That's a contract, not a roadmap. Roadmaps don't bind to specific dates beyond the current quarter." },
+        { "id": "c", "label": "Making the *why* behind sequencing visible — not just the *what*", "correct": true, "explain": "If a roadmap is just a list of features, you've built a backlog. Roadmaps explain the order." },
+        { "id": "d", "label": "Listing every JIRA ticket for the next 12 months", "correct": false, "explain": "Backlog dump. Nobody reads past row 7." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Yes-bhai PM ka anjaam",
+          "md": "Bhai, scene yeh hai. Ek PM tha — sabko *'haan, kar dete hain'* bolta tha. Sales ko haan, founder ko haan, customer success ko haan. Sab khush.\n\n3 mahine baad: 47 items NEXT mein, 19 items 'this quarter' mein, 8 features mid-build, kuch bhi shipped nahi. Founder ne 1:1 mein bola: *'yaar tumhe hum saying yes ke liye hire nahi kiya. Tumhe **decide** karne ke liye hire kiya.'*\n\nYes-bhai PMs first 3 mahine mein team ke favorite hote hain. 6 mahine mein sab ka bharosa kho dete hain."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The Yes-PM career arc",
+          "md": "Yes-PMs are popular for the first 90 days. Sales loves them, the founder loves them, customer success thinks they finally found a partner.\n\nBy day 180, the team realises nothing has shipped, the roadmap is a wishlist, and the Yes-PM has been promising the same three quarters' worth of work to four different stakeholders. The trust they built saying yes is destroyed in one missed quarter.\n\nThe job is to decide, not to please. Saying no is not optional; it is the deliverable."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "A roadmap is a story you tell to align, not a contract you sign. Commit to direction; don't commit to dates beyond the current quarter.",
+        "Use NOW / NEXT / LATER columns: NOW is committed with ship dates, NEXT is scoped and prioritized without dates, LATER is themed direction.",
+        "Cap NOW at 2-3 items per pod; cap LATER at 8-10 items grouped by 3-4 themes. Without a cap, the roadmap becomes a graveyard.",
+        "The polite no template: 'Help me understand — deal size, timing, who else wants it? I'll come back tomorrow with yes, no, or swap.' Most asks die at step 1.",
+        "The Yes-PM is popular for 90 days and useless by day 180. Saying no with reasons is not optional; it is the deliverable."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick the last off-roadmap ask you said yes to (at work or in any project). Apply the 3 questions retroactively — deal size, timing, who else wants it. With the data you actually had, would you have said yes again? If not, what changes about how you'll respond next time?"
+    }
+  ]
+}

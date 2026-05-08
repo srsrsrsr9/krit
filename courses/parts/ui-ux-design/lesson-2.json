@@ -1,0 +1,220 @@
+{
+  "slug": "layout-and-grid",
+  "title": "Layout and Grids — The Invisible Skeleton",
+  "subtitle": "A grid is a contract; spacing is the punctuation",
+  "estimatedMinutes": 13,
+  "skills": ["ui-layout-systems"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ui-ux-design/layout-and-grid.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — why screens feel off" },
+        { "startSec": 80, "label": "Mental model: the grid is a contract" },
+        { "startSec": 220, "label": "Move 1 — The 8-point spacing scale" },
+        { "startSec": 410, "label": "Move 2 — Gutters that earn their keep" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ui-ux-design/layout-and-grid.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Some screens feel calm. Other screens feel itchy. The itchy ones almost always have one thing in common: the spacing is wrong. Not the colours, not the type, not the copy. The padding around the buttons is 11px, then 14px, then 9px, depending on which engineer ate lunch first.\n\nLayout is the discipline that makes a screen feel deliberate. The skill is not making things look pretty; it is committing to a small set of numbers and refusing to break them. By the end of this lesson you will have a spacing scale you can defend in a code review, and a grid that does the rest of the heavy lifting for you."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing two cards side by side. The left card has random padding (11, 14, 9, 23 pixels marked), the right card has consistent 16/24 padding on a clean grid. The right card visibly looks calmer.",
+      "caption": "Left: spacing decided field by field. Right: spacing decided once, applied everywhere. The visual difference is the whole game.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#FFF7ED'/><g transform='translate(30 30)'><rect x='0' y='0' width='240' height='200' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='11' y='14' width='80' height='20' rx='3' fill='#FED7AA'/><rect x='11' y='48' width='218' height='28' rx='3' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='11' y='85' width='195' height='20' rx='3' fill='#FED7AA'/><rect x='11' y='114' width='218' height='28' rx='3' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='23' y='160' width='150' height='28' rx='4' fill='#1F2937'/><text x='98' y='179' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#FFFFFF'>Save</text><text x='-25' y='28' font-family='monospace' font-size='9' fill='#9CA3AF'>14</text><text x='-25' y='102' font-family='monospace' font-size='9' fill='#9CA3AF'>9</text><text x='-25' y='178' font-family='monospace' font-size='9' fill='#9CA3AF'>23</text><text x='120' y='225' text-anchor='middle' font-family='monospace' font-size='10' fill='#9CA3AF'>random padding</text></g><g transform='translate(290 30)'><rect x='0' y='0' width='240' height='200' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='16' y='16' width='80' height='20' rx='3' fill='#A7F3D0'/><rect x='16' y='48' width='208' height='28' rx='3' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='16' y='96' width='195' height='20' rx='3' fill='#A7F3D0'/><rect x='16' y='128' width='208' height='28' rx='3' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='16' y='176' width='208' height='10' rx='2' fill='#FFFFFF'/><rect x='16' y='160' width='208' height='32' rx='6' fill='#10B981'/><text x='120' y='181' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#FFFFFF'>Save</text><text x='245' y='28' font-family='monospace' font-size='9' fill='#10B981'>16</text><text x='245' y='110' font-family='monospace' font-size='9' fill='#10B981'>16</text><text x='245' y='176' font-family='monospace' font-size='9' fill='#10B981'>24</text><text x='120' y='225' text-anchor='middle' font-family='monospace' font-size='10' fill='#10B981'>8-point scale</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: the grid is a contract",
+      "md": "A grid is not a visual aesthetic; it is **a contract you sign with your future self and your engineers**. It says: 'every spacing decision in this product comes from this list of numbers — 4, 8, 12, 16, 24, 32, 48, 64. No exceptions without a written reason.' The reason a system feels deliberate is that it has fewer choices, not more. The grid is what removes the choices."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ui-ux-design/anim/layout-and-grid.html",
+      "height": 420,
+      "caption": "Toggle the 8-point grid overlay on a real screen and see which elements respect the contract and which freelance.",
+      "fallbackImage": "/courses/ui-ux-design/anim/layout-and-grid-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Mistry-bhai ka analogy",
+          "md": "Ghar banwa rahe ho. Mistry-bhai aaya, bola — 'sab dewar 9 inch ki, sab darwaza 7 feet ka, sab tile 2x2.' Tum ne pucha — 'aise kyun?' Bola — 'kyunki agar har dewar alag ho, electrician pagal ho jayega aur tum bhi.'\n\nUI mein bhi same hai. 8-point grid yahi mistry-bhai wala discipline hai. Bina iske, har screen new construction project hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no construction",
+          "md": "Imagine building a house where every wall is a slightly different thickness, every door a slightly different height. The plumber would lose his mind. Your engineers feel the same way when every screen has its own padding. The grid is the standard wall thickness."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The 8-point spacing scale"
+    },
+    {
+      "type": "markdown",
+      "md": "Pick 8. Not because Apple did, not because Google did — because 8 has the cleanest factors of any small number that still gives you usable steps. Half of 8 is 4 (still on a pixel boundary). Quarter of 8 is 2 (still rendering crisply). And 8 multiplied gives you 16, 24, 32, 48, 64 — the entire spacing ladder you will ever need.\n\nA defensible scale for a SaaS product:\n\n- **4px** — the only sub-8 step. Use sparingly: tight icon-text pairs.\n- **8px** — minimum gap inside a grouped element.\n- **12px** — sub-step for tighter dense screens; use sparingly.\n- **16px** — default padding inside cards and buttons.\n- **24px** — gap between related groups.\n- **32px** — gap between unrelated sections.\n- **48px** — gap before a major page region.\n- **64px** — page-level breathing room.\n\nNotice what is missing: 11, 13, 18, 22, 30. They feel right by 1px to whoever drew them, and they are wrong by 1px to everyone else."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A vertical ladder showing the 8-point scale: 4, 8, 16, 24, 32, 48, 64 marked clearly with a hand pointing to '24' as the most-used step.",
+      "caption": "The 8-point ladder. Most of your daily decisions live between 16 and 32; the rest are edge cases.",
+      "maxWidth": 480,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320' role='img'><rect width='480' height='320' rx='14' fill='#EFF6FF'/><g transform='translate(40 30)'><line x1='0' y1='0' x2='0' y2='270' stroke='#1E40AF' stroke-width='2'/><g font-family='monospace' font-size='13' fill='#1E40AF'><line x1='-6' y1='10' x2='6' y2='10' stroke='#1E40AF' stroke-width='2'/><text x='15' y='14'>4</text><line x1='-6' y1='30' x2='6' y2='30' stroke='#1E40AF' stroke-width='2'/><text x='15' y='34'>8</text><line x1='-6' y1='62' x2='6' y2='62' stroke='#1E40AF' stroke-width='2'/><text x='15' y='66'>16</text><line x1='-6' y1='110' x2='6' y2='110' stroke='#1E40AF' stroke-width='2'/><text x='15' y='114' font-weight='bold' fill='#0EA5E9'>24  ← most-used</text><line x1='-6' y1='170' x2='6' y2='170' stroke='#1E40AF' stroke-width='2'/><text x='15' y='174'>32</text><line x1='-6' y1='220' x2='6' y2='220' stroke='#1E40AF' stroke-width='2'/><text x='15' y='224'>48</text><line x1='-6' y1='260' x2='6' y2='260' stroke='#1E40AF' stroke-width='2'/><text x='15' y='264'>64</text></g></g><g transform='translate(280 30)'><rect x='0' y='0' width='160' height='270' rx='8' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><text x='80' y='25' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#1F2937' font-weight='bold'>Card example</text><line x1='15' y1='40' x2='145' y2='40' stroke='#E5E7EB' stroke-width='1'/><rect x='15' y='52' width='130' height='14' rx='2' fill='#DBEAFE'/><rect x='15' y='74' width='130' height='10' rx='2' fill='#F3F4F6'/><rect x='15' y='100' width='130' height='14' rx='2' fill='#DBEAFE'/><rect x='15' y='122' width='130' height='10' rx='2' fill='#F3F4F6'/><rect x='15' y='154' width='130' height='32' rx='6' fill='#0EA5E9'/><text x='80' y='175' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#FFFFFF' font-weight='bold'>Save</text><text x='80' y='220' text-anchor='middle' font-family='monospace' font-size='9' fill='#9CA3AF'>16 inside  •  24 between</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Adopting an 8-point grid in an existing codebase",
+      "steps": [
+        { "label": "Step 1 — Audit current spacing", "body": "Grep your CSS for px values. You will find dozens of unique numbers between 1 and 64. Most of them are within 2px of an 8-point step." },
+        { "label": "Step 2 — Define the scale as tokens", "body": "In Tailwind, this is mostly the default. Define spacing-1 through spacing-16 in your config, but keep the names usable: tight, snug, cozy, comfy, loose." },
+        { "label": "Step 3 — Replace per-component overrides", "body": "Sweep one screen at a time. The first three are slow; the next ten go fast because the patterns repeat." },
+        { "label": "Step 4 — Add a lint rule", "body": "Forbid arbitrary px values in className strings. The cost of slipping back is now visible in CI, not in code review." },
+        { "label": "Step 5 — Document the exceptions", "body": "Some places need a 6px badge gap. Fine — write down which and why, so the next person knows it was a decision, not an accident." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Why is 8 a better base unit than 10?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Because 8 has clean half-steps (4) and quarter-steps (2) that stay on pixel boundaries", "correct": true, "explain": "The divisibility is the whole reason. 10 gives you 5 and 2.5 — and 2.5px gets rounded inconsistently across browsers and density modes." },
+        { "id": "b", "label": "Because designers prefer it aesthetically", "correct": false, "explain": "It's not aesthetic; it's mathematical. Aesthetic preferences shift; the divisibility argument doesn't." },
+        { "id": "c", "label": "Because 10 is too round and feels boring", "correct": false, "explain": "Roundness has nothing to do with it. The argument is about sub-steps and pixel rendering." },
+        { "id": "d", "label": "Because Tailwind uses 8 by default", "correct": false, "explain": "Tailwind uses 4 as a base unit that composes into 8. Even Tailwind's reason is divisibility." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Bengaluru ka 200-person SaaS",
+          "md": "Bengaluru ke ek 200-person SaaS mein design lead ne ek Friday afternoon team ko bola — 'kal se sirf 8-point spacing.' Engineer bola — 'sir, abhi to bahut places hai jaha 11px, 13px, 22px hai.' Lead bola — 'haan, lekin ab tum agla 11px likhoge to PR mein roak laga doonga.'\n\nDo months mein screen calmer ho gaye. Dev velocity bhi badhi — kyunki ab koi 'kitna padding' decide nahi kar raha, sab pre-decided hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Same point, no Friday standup",
+          "md": "A 200-person SaaS in Bengaluru moved to an 8-point grid in a single sprint. The screens calmed down inside two months. Engineering velocity also went up — because nobody was negotiating the right padding any more, the answer was already in the config."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The gutter that earns its keep"
+    },
+    {
+      "type": "markdown",
+      "md": "Once your spacing scale is locked, the next decision is the **gutter** — the gap between columns in a multi-column layout. The default gutter on a 12-column desktop grid is 24 or 32 pixels. The default for a single-column mobile layout is 16.\n\nThe useful version of this rule: **the gutter should always exceed the padding inside the columns**, otherwise your two cards look like one continuous strip with a vertical scratch through the middle. If your card has 16px internal padding, your gutter should be at least 24. If your card has 24px padding, your gutter should be at least 32.\n\nA gutter that is too tight is a layout that feels glued. A gutter that is too wide is a layout that feels broken into islands. The Goldilocks zone for desktop SaaS is 24 to 32 pixels; for marketing pages where each section is a story, push it to 48 or 64. For mobile, you almost never go above 16."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two grids side by side. Left: cards with 12px gutter and 24px internal padding — they look glued together. Right: same cards with 32px gutter — they breathe.",
+      "caption": "Left: the gutter-eaten layout. Right: gutters wider than internal padding, so each card reads as its own island.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 220' role='img'><rect width='560' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(20 30)'><rect x='0' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='12' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='12' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='118' width='56' height='20' rx='4' fill='#92400E'/><rect x='92' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='104' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='104' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='118' width='56' height='20' rx='4' fill='#92400E'/><rect x='184' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='196' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='196' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='118' width='56' height='20' rx='4' fill='#92400E'/><text x='130' y='175' text-anchor='middle' font-family='monospace' font-size='10' fill='#92400E'>gutter 12px (too tight)</text></g><g transform='translate(300 30)'><rect x='0' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='10' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='10' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='10' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='10' y='118' width='42' height='20' rx='4' fill='#065F46'/><rect x='94' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='104' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='104' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='118' width='42' height='20' rx='4' fill='#065F46'/><rect x='188' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='198' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='198' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='198' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='198' y='118' width='42' height='20' rx='4' fill='#065F46'/><text x='125' y='175' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>gutter 32px (breathing)</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Studio-Lead Saanvi", "role": "design lead, 9 years across India and Singapore" },
+      "intro": [
+        "Back to me. Today: spacing decisions, with no right answer in two of the six. Welcome to design.",
+        "Tell me whether each layout choice is sound, suspect, or actively wrong."
+      ],
+      "buckets": [
+        { "id": "sound", "label": "Sound", "tone": "safe" },
+        { "id": "suspect", "label": "Suspect — defend it or fix it", "tone": "neutral" },
+        { "id": "wrong", "label": "Actively wrong", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "Engineer adds padding-15 because the card 'looks better at 15px than at 16'.", "correctBucketId": "wrong", "explain": "Once anyone freelances by 1px, the contract is dead. The whole win of the grid is the discipline of the constraint." },
+        { "id": "s2", "situation": "Designer uses 12px padding inside dense data table cells.", "correctBucketId": "sound", "explain": "12 is on the scale (it's 8 + 4) and dense data-tables are the canonical use case for the sub-step. Defensible." },
+        { "id": "s3", "situation": "PM asks for a 'tight 6px gap' between two related metrics on a dashboard tile.", "correctBucketId": "suspect", "explain": "6 is off-scale; you'd want either 4 or 8. Push back, suggest the nearest scale value, or write down 6 as a documented exception." },
+        { "id": "s4", "situation": "On mobile, you switch from a 24px gutter to a 16px gutter.", "correctBucketId": "sound", "explain": "Standard responsive behaviour. Mobile screens are narrower so gutters proportionally shrink." },
+        { "id": "s5", "situation": "Card padding 24px, gutter between cards 16px.", "correctBucketId": "wrong", "explain": "Gutter narrower than padding makes cards feel glued. The gutter should always exceed the internal padding." },
+        { "id": "s6", "situation": "Marketing page uses 80px between major sections.", "correctBucketId": "sound", "explain": "Off the standard scale (80 is 64 + 16) but defensible for marketing pages where each section is its own story; document it as an exception." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the 1px freelance",
+      "md": "Every grid dies the same way. An engineer adds padding-15 because 'it looks slightly better than 16'. Three sprints later you have padding-13, padding-17, padding-22. None of them visibly wrong. Together: chaos. **The grid is a contract. The first off-scale value is the moment the contract dies.** Treat off-scale paddings the way you treat `console.log` in production: not catastrophic, but always a smell."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order the steps for setting up a grid + spacing system on a new product.",
+      "items": [
+        { "id": "s1", "label": "Pick the base unit", "detail": "8 unless you have a specific reason." },
+        { "id": "s2", "label": "Define the spacing scale as named tokens", "detail": "spacing-1 (4) through spacing-16 (64) in your tailwind.config or CSS variables." },
+        { "id": "s3", "label": "Pick a column count and gutter for each breakpoint", "detail": "12-column with 24px gutter on desktop, 4-column with 16px gutter on mobile is a defensible default." },
+        { "id": "s4", "label": "Apply to one screen end-to-end", "detail": "Pick the most-used screen; convert it fully before going wider." },
+        { "id": "s5", "label": "Add a lint or design-token rule that forbids arbitrary values", "detail": "Make the next freelance painful. Tailwind's safelist or a custom ESLint rule both work." }
+      ],
+      "hint": "Start with the unit; everything else is derived from it."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You inherit a settings screen with this CSS: every input has padding 11px, every section has margin-bottom 17px, the page has padding 23px on the sides. Write a brief migration plan in 3-4 sentences: which scale you'd pick, which values you'd map the old ones to, and how you'd avoid silent regressions during the rollout.",
+      "lang": "markdown",
+      "starter": "I'd adopt an 8-point scale...",
+      "expected": "I'd adopt an 8-point scale and map the existing values upward to the nearest scale step: 11 becomes 12, 17 becomes 16, 23 becomes 24. I'd convert the spacing into named tokens (spacing-1 through spacing-16) in the design-token config so changes are global, not per-component. To avoid silent regressions, I'd ship the migration screen-by-screen with a visual diff in PR review, and add a lint rule that forbids arbitrary px values in className strings going forward. The first three screens will feel slow; after that the patterns repeat and the sweep accelerates."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which two are signs your grid is being respected? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Designers and engineers can name the spacing scale from memory", "correct": true, "explain": "Memorability is the test of whether the system has gone from policy to muscle memory." },
+        { "id": "b", "label": "Most paddings in the codebase use named tokens, not raw px", "correct": true, "explain": "Tokens decouple the value from the use, which lets you change the spacing scale without rewriting components." },
+        { "id": "c", "label": "Every screen looks identical", "correct": false, "explain": "The grid does not enforce uniformity of layout; it enforces uniformity of spacing values. Variety lives at the composition level." },
+        { "id": "d", "label": "Engineers stop asking design about padding", "correct": false, "explain": "If they stop asking it might mean the system works — or it might mean they're freelancing. The right test is whether the values they ship are on-scale." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Tata Sky ke remote ka design",
+          "md": "Tata Sky ka remote yaad hai? Buttons ka spacing perfect hota tha — chote chote thumb se bhi galat button nahi dabta tha. Wahin pe ek local cable wala remote dekho — buttons random spacing pe hai, kabhi 2 mil milimeter dur, kabhi sticking together. Aap mute karne ja rahe ho, channel change ho jaata hai.\n\nGrid yeh hi cheez hai — physical product mein bhi, screen pe bhi. Spacing ka discipline hi accidents kam karta hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no remote",
+          "md": "A premium TV remote has buttons spaced on a deliberate grid. A cheap remote has buttons that drift. Press 'mute' on the cheap one and you'll often hit 'channel up' instead. The grid isn't decoration; it's accident-prevention. Same on a screen."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "A grid is a contract. The whole win is the constraint, not the aesthetic.",
+        "Pick 8 as your base unit. The math is the reason: clean halves, quarters, and pixel-perfect rendering.",
+        "Five to seven steps cover everything. Most days you live between 16 and 32.",
+        "Gutters must exceed internal padding. Otherwise cards look glued together.",
+        "The grid dies the moment someone ships padding-15 'because it looks better'. Defend the contract."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Open a screen in a product you ship. Inspect it in DevTools and write down every unique padding and margin value. How many are there? How many fall on an 8-point scale? Pick the worst offender and write a one-line explanation of how it got there."
+    }
+  ]
+}

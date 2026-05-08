@@ -338,6 +338,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/python-foundations/anim/trap-python-types-stickers.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: mutable defaults",
@@ -991,6 +997,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/python-foundations/anim/trap-python-control-flow.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Iterate over items, not indices — `for x in items`, not `for i in range(len(items))`",
@@ -1164,6 +1176,12 @@
               "explain": "A pass-through with no signature is a black box. The caller has no idea what to pass; the type checker can't help; the IDE can't autocomplete. *args/**kwargs is a tool, not a default — use only when you genuinely need variadic forwarding."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/python-foundations/anim/trap-python-functions.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1610,6 +1628,12 @@
           "caption": "The hashability test is mechanical. If the type is immutable, it can be a dict key. If not, it can't.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#EFF6FF'/><g transform='translate(180 30)'><rect width='200' height='40' rx='10' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='100' y='25' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#7C2D12' font-weight='bold'>Is the key immutable?</text></g><g transform='translate(60 130)'><rect width='180' height='40' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='90' y='20' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#064E3B' font-weight='bold'>YES — str, int, tuple,</text><text x='90' y='34' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#064E3B' font-weight='bold'>frozenset</text><text x='90' y='65' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-style='italic'>→ hashable, OK as key</text></g><g transform='translate(320 130)'><rect width='180' height='40' rx='8' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><text x='90' y='20' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='bold'>NO — list, dict, set</text><text x='90' y='34' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='bold'>(any mutable)</text><text x='90' y='65' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-style='italic'>→ TypeError: unhashable</text></g><line x1='240' y1='75' x2='160' y2='125' stroke='#065F46' stroke-width='2' marker-end='url(#fy)'/><line x1='320' y1='75' x2='400' y2='125' stroke='#7F1D1D' stroke-width='2' marker-end='url(#fn)'/><defs><marker id='fy' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker><marker id='fn' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#7F1D1D'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/python-foundations/anim/trap-python-collections.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -2093,6 +2117,12 @@
               "explain": "Boundary bug. The file is not UTF-8 (probably latin-1 or windows-1252 from an Indian-accountant Excel export). Fix: detect with `chardet` or specify the right encoding explicitly. Don't 'errors=ignore' it; you'll silently lose the ₹ sign."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/python-foundations/anim/trap-python-mini-project.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",

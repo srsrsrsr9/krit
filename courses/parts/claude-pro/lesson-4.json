@@ -1,0 +1,224 @@
+{
+  "lesson": {
+    "slug": "claude-for-design",
+    "title": "Claude Design: Mockups, Copy, Critique",
+    "subtitle": "A junior designer who has read every book and shipped nothing",
+    "estimatedMinutes": 13,
+    "skills": ["claude-design-collaboration"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/claude-pro/claude-for-design.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why design with Claude is tricky" },
+          { "startSec": 80, "label": "Mental model: well-read junior" },
+          { "startSec": 220, "label": "Move 1: critique-not-generate" },
+          { "startSec": 410, "label": "Move 2: iterative-tightening loop" },
+          { "startSec": 560, "label": "Where Claude can't go" }
+        ],
+        "notesPdfUrl": "/notes/claude-pro/claude-for-design.html",
+        "notesByline": "Notes by Karthik, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Designers come to Claude with two opposite expectations and both are wrong. The first expectation: *Claude will generate beautiful mockups for me*. It will not — Claude does not produce images, it produces text descriptions of images, and even those are generic unless aggressively constrained. The second expectation: *Claude knows nothing about design, so why bother*. Also wrong — Claude has read every design book, every Nielsen Norman article, every IDEO case study. It is the most well-read junior designer you could hire. The right framing sits in between: Claude is a junior designer who has read everything and designed nothing. You bring the taste; Claude brings the vocabulary, the critique, and the grunt work."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'><rect width='640' height='280' fill='#FAF5FF'/><circle cx='150' cy='140' r='65' fill='#8B5CF6' opacity='0.85'/><text x='150' y='130' text-anchor='middle' font-family='sans-serif' font-size='14' fill='white' font-weight='700'>Claude</text><text x='150' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>read everything</text><text x='150' y='165' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>shipped nothing</text><circle cx='490' cy='140' r='65' fill='#F59E0B' opacity='0.85'/><text x='490' y='130' text-anchor='middle' font-family='sans-serif' font-size='14' fill='white' font-weight='700'>You</text><text x='490' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>have taste</text><text x='490' y='165' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>have shipped</text><line x1='220' y1='130' x2='420' y2='130' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><defs><marker id='a' markerWidth='10' markerHeight='10' refX='9' refY='3' orient='auto'><polygon points='0 0, 10 3, 0 6' fill='#1F2937'/></marker></defs><text x='320' y='120' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1F2937'>vocabulary + critique</text><line x1='420' y1='160' x2='220' y2='160' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><text x='320' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1F2937'>taste + constraints</text></svg>",
+        "alt": "Claude on left with 'read everything', You on right with 'have taste'",
+        "caption": "Both directions matter. Claude alone produces generic; you alone shipped slowly."
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: junior designer with the entire library memorised",
+        "md": "Picture the most well-read junior designer in the country. They can quote Krug on usability, Wroblewski on forms, Norman on signifiers, Saffer on micro-interactions. They have never run a real user test. They have never argued with engineering about feasibility. They have never watched a real user fumble through their flow. So they are useful for vocabulary, principles, and critique against named criteria. They are useless when the question is *'what would actually work for our users in this specific context'*. That is your job, always."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/claude-pro/anim/claude-for-design-tightening-loop.html",
+        "height": 420,
+        "caption": "Animated: a mockup goes through three rounds of Claude critique, each round tightening one constraint."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Designer ne Claude se logo banwaya",
+            "tone": "warn",
+            "md": "Bhai, scene yeh hai: Mumbai ki ek D2C founder ne designer ko bola *'Claude se 5 logo options nikalwao'*. Designer ne 8 prompts try kiye, har baar Claude ne *'I cannot generate images, but here's a description of what your logo could look like'* bola. Founder ne sochi designer slacking kar rahi hai. Asli scene? **Claude images banata hi nahi hai**. Image ke liye Midjourney, DALL-E, ya Adobe Firefly. Claude ka role tha brief sharpen karna, na ki render karna. Tool fit galat tha; designer ki galti nahi thi."
+          },
+          "en": {
+            "title": "Asking Claude for a logo",
+            "tone": "warn",
+            "md": "A D2C founder asked their designer for 5 logo options 'from Claude'. Eight prompts in, Claude was politely declining each time because Claude does not generate images. The right framing was for Claude to sharpen the brief and constrain the prompt, then commission images from a real image model. Tool fit, not tool use, was the problem."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1: Critique, Don't Generate"
+      },
+      {
+        "type": "markdown",
+        "md": "The single highest-leverage Claude design move is this: **show your mockup to Claude with a named user, a named goal, and a named primary action; ask Claude to identify the three weakest decisions before suggesting fixes**. Notice everything that constrains the answer. The user is named (*'a 38-year-old shop-owner in Surat ordering wholesale supplies on her phone, one-handed, in a noisy market'*). The goal is named (*'place a repeat order in under 90 seconds'*). The primary action is named (*'tap reorder, confirm address, pay'*). Now Claude cannot drift into generic SaaS advice; it has to evaluate the screen against a real scenario.\n\nThe opposite move — *'design me a checkout screen for a B2B marketplace'* — is what every founder tries first. Claude returns a generic best-practice template that ignores everything you already considered. You spend more time explaining why the suggestion does not fit than you would have spent designing from scratch. Critique-not-generate flips the cost: instead of you reviewing 800 words of Claude proposal, Claude reviews your 1 mockup against your 3 constraints. That is a 10x easier loop."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'><rect width='640' height='280' fill='#ECFDF5'/><rect x='40' y='40' width='270' height='200' rx='8' fill='white' stroke='#F43F5E' stroke-width='3'/><text x='175' y='75' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='#9F1239'>GENERATE</text><text x='175' y='105' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#9F1239'>'design me a checkout'</text><text x='175' y='135' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239'>Claude returns generic</text><text x='175' y='155' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239'>SaaS template</text><text x='175' y='185' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239'>You write 800 words</text><text x='175' y='205' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239'>explaining why no</text><rect x='340' y='40' width='270' height='200' rx='8' fill='white' stroke='#10B981' stroke-width='3'/><text x='475' y='75' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='#065F46'>CRITIQUE</text><text x='475' y='105' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>'find 3 weakest decisions'</text><text x='475' y='125' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>+ named user + goal</text><text x='475' y='155' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>Claude reviews YOUR</text><text x='475' y='175' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>mockup against YOUR</text><text x='475' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>constraints</text></svg>",
+        "alt": "GENERATE in red on left vs CRITIQUE in green on right",
+        "caption": "Critique with named constraints. Generate with no constraints. Pick the right side."
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'review my mockup' to a real critique prompt",
+        "steps": [
+          { "label": "Name the user", "body": "Specific: '38-year-old wholesaler in Surat, on a 6-inch Android, one-handed, noisy market'." },
+          { "label": "Name the goal", "body": "Specific: 'place a repeat order in under 90 seconds with no surprises at the price line'." },
+          { "label": "Name the primary action", "body": "Specific: 'tap reorder card, confirm shipping address, pay via UPI'." },
+          { "label": "Attach the mockup", "body": "Image upload to Claude.ai, with a one-line caption of what each region of the screen is." },
+          { "label": "Ask the critique", "body": "'Find the three weakest decisions in this screen given the user, goal and primary action. Then propose a fix for each. Do not redesign.'" },
+          { "label": "Triage the response", "body": "Accept what fits, reject what doesn't. Note the rejections — they reveal where Claude lacks context. Iterate." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Which is the strongest critique prompt?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "'What do you think of this design?'", "correct": false, "explain": "Unbounded. Claude returns vague best practices that ignore your constraints." },
+          { "id": "b", "label": "'Find the 3 weakest decisions in this screen for a 38-year-old wholesaler placing a 90-second repeat order on a 6-inch phone'", "correct": true, "explain": "Named user, named goal, bounded count. Claude has to evaluate against real constraints." },
+          { "id": "c", "label": "'Redesign this screen'", "correct": false, "explain": "Generate, not critique. You lose all the constraints you already considered." },
+          { "id": "d", "label": "'Make it look more modern'", "correct": false, "explain": "'Modern' is meaningless. The trend that wins this year breaks something else next year." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Aunty test",
+            "tone": "info",
+            "md": "Bhai, design ka pehla test toh hamesha *'aunty test'*. Tumhari mummy aur unki teen friends. Bina explanation ke screenshot dikhao. Agar woh primary action 4 second mein point kar sakti hain, design clean hai. Claude woh test simulate kar sakta hai — *'pretend you're a 55-year-old Aunty, never used this app, what do you tap first'*. Sometimes Claude bolega *'I'd tap the giant blue button'* — galat answer, kyunki actual aunty would tap the photo first because pattern recognition. Use Claude as a baseline; Aunty as the truth."
+          },
+          "en": {
+            "title": "The aunty test",
+            "tone": "info",
+            "md": "First test of any design is the aunty test: a 55-year-old who has never seen the app, looking at a screenshot. Can she point to the primary action in 4 seconds? Claude can simulate that test (it has read the research) but Claude is a model of an aunty, not the actual one. Use Claude as a fast baseline. Use a real aunty as the truth."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2: The Iterative-Tightening Loop"
+      },
+      {
+        "type": "markdown",
+        "md": "Designs do not get good in one round. They get good in **3-5 rounds where each round tightens one specific constraint**. Round one is critique against the user goal. Round two is copy: every word on the screen, in your voice, under a length cap. Round three is edge cases: empty state, error state, slow network. Round four is accessibility: contrast, tap targets, keyboard nav. Round five is the trade-off summary: what you intentionally sacrificed and why.\n\nClaude is the perfect partner for this loop because each round is small, bounded, and reviewable in five minutes. The temptation is to ask Claude for *'all of this in one round'*. Don't. The output is mush, the review is exhausting, and you cannot tell which round of critique you accepted vs rejected. **One constraint per round** keeps the loop crisp.\n\nFor copy specifically, the iterative-tightening loop has its own rhythm. Paste the screen text. Ask Claude to *'cut by 30 percent without losing meaning'*. Then *'rewrite for the user voice — they're a busy shop owner, not a SaaS user'*. Then *'find any word that sounds American where it should sound Indian'*. Three small asks beat one big ask, every time."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 240'><rect width='640' height='240' fill='#FEF3C7'/><circle cx='80' cy='120' r='30' fill='#F59E0B'/><text x='80' y='124' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>R1</text><text x='80' y='170' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>critique</text><text x='80' y='183' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>vs goal</text><line x1='115' y1='120' x2='155' y2='120' stroke='#92400E' stroke-width='2'/><circle cx='190' cy='120' r='30' fill='#F59E0B'/><text x='190' y='124' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>R2</text><text x='190' y='170' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>copy</text><text x='190' y='183' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>tighten</text><line x1='225' y1='120' x2='265' y2='120' stroke='#92400E' stroke-width='2'/><circle cx='300' cy='120' r='30' fill='#F59E0B'/><text x='300' y='124' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>R3</text><text x='300' y='170' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>edge</text><text x='300' y='183' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>cases</text><line x1='335' y1='120' x2='375' y2='120' stroke='#92400E' stroke-width='2'/><circle cx='410' cy='120' r='30' fill='#F59E0B'/><text x='410' y='124' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>R4</text><text x='410' y='170' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>a11y</text><text x='410' y='183' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>+ contrast</text><line x1='445' y1='120' x2='485' y2='120' stroke='#92400E' stroke-width='2'/><circle cx='520' cy='120' r='30' fill='#10B981'/><text x='520' y='124' text-anchor='middle' font-family='sans-serif' font-size='11' fill='white' font-weight='700'>R5</text><text x='520' y='170' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>trade-off</text><text x='520' y='183' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>summary</text></svg>",
+        "alt": "Five circles labelled R1 through R5 with one constraint each",
+        "caption": "Five small rounds, each tightening one thing. Beats one giant round, every time."
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "AI-Tutor Anjali",
+          "role": "Ex-Goldman ops, runs Claude across her cousin's family business",
+          "avatarSrc": "/coaches/ai-tutor-anjali.png"
+        },
+        "intro": [
+          "You are designing the order-tracking screen for a Mumbai delivery startup. Each scenario is a Claude interaction.",
+          "Sort by whether you should run it, fix the prompt first, or skip it entirely."
+        ],
+        "buckets": [
+          { "id": "run", "label": "RUN — good critique prompt", "tone": "safe" },
+          { "id": "fix", "label": "FIX — needs constraints first", "tone": "neutral" },
+          { "id": "skip", "label": "SKIP — wrong tool / wrong move", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "'Find 3 weak decisions on this screen for a 28-year-old delivery rider, peeking at the screen between drops, wants to see the next pickup address fast.'", "correctBucketId": "run", "explain": "Named user, named context, bounded count. Textbook critique." },
+          { "id": "s2", "situation": "'Design the perfect order tracking screen.'", "correctBucketId": "fix", "explain": "Generate-not-critique, no user, no constraints. Add the user, the goal, the primary action; then run." },
+          { "id": "s3", "situation": "'Generate 12 hero illustrations of a delivery rider for the empty state.'", "correctBucketId": "skip", "explain": "Claude does not generate images. Use Midjourney or commission an illustrator." },
+          { "id": "s4", "situation": "'Cut the copy on this screen by 30% without losing meaning, keeping a casual Hinglish tone.'", "correctBucketId": "run", "explain": "Bounded copy round in the iterative-tightening loop. Strong constraint, easy review." },
+          { "id": "s5", "situation": "'Tell me what color the primary CTA should be.'", "correctBucketId": "fix", "explain": "Too narrow without context (brand, contrast, screen position). Add: 'given a saffron brand, against a #FAF5FF bg, what hex meets WCAG AA on a 56dp button'." },
+          { "id": "s6", "situation": "'Run a usability test on this screen with 50 simulated users.'", "correctBucketId": "skip", "explain": "Simulated users are not users. Run with real ones; use Claude only to design the test script." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: confusing well-read with experienced",
+        "md": "Claude can quote Norman, Krug, Wroblewski. Claude cannot tell you whether the *Add to Cart* button on your screen is in the right place for your users. Reading a thousand books on swimming does not teach you to swim. The trap is treating Claude's authoritative tone as authority. The defense: every Claude design suggestion gets matched against either real user data or your own shipped experience. If neither exists, the suggestion is a hypothesis, not an answer."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order an iterative-tightening loop on a new screen",
+        "items": [
+          { "id": "context", "label": "Establish the context: user, goal, primary action", "detail": "Without these, every round drifts." },
+          { "id": "critique", "label": "Round 1 — critique vs goal (find 3 weakest decisions)", "detail": "Critique-not-generate." },
+          { "id": "copy", "label": "Round 2 — tighten copy by 30 percent in user voice", "detail": "Words first, layout second." },
+          { "id": "edge", "label": "Round 3 — edge cases (empty, error, slow network)", "detail": "The 80/20 of post-launch bugs." },
+          { "id": "a11y", "label": "Round 4 — accessibility (contrast, tap targets, keyboard)", "detail": "Hard rule, not optional." },
+          { "id": "tradeoffs", "label": "Round 5 — trade-off summary (what was sacrificed and why)", "detail": "The artifact that survives the design review." }
+        ],
+        "hint": "Context, then critique, then copy, then edges, then access, then summary."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Pick a real screen you have shipped or are about to ship. Write the critique prompt: name user, goal, primary action, and ask for 3 weakest decisions. No generation; only critique.",
+        "lang": "markdown",
+        "starter": "SCREEN: \n\nUSER: \n\nGOAL: \n\nPRIMARY ACTION: \n\nPROMPT TO CLAUDE:\n",
+        "expected": "SCREEN: Order tracking screen, post-checkout, before delivery\n\nUSER: A 35-year-old parent in Pune, expecting a kids' birthday gift, anxious about the 6 PM delivery window\n\nGOAL: See where the package is and when it will arrive, in under 5 seconds, on a 6-inch phone with one hand\n\nPRIMARY ACTION: Glance at status; tap to call rider only if delivery is delayed\n\nPROMPT TO CLAUDE: Given the screen attached and the user/goal/action above, find the three weakest decisions. For each, name the decision, why it weakens the goal, and one specific fix that respects the constraints. Do not redesign the screen."
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the two ways Claude clearly adds value in a design loop.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "Critiquing copy against a length cap and a named voice", "correct": true, "explain": "Bounded, reviewable, and Claude is genuinely strong here." },
+          { "id": "b", "label": "Producing 6 image variations of a hero", "correct": false, "explain": "Claude does not generate images. Wrong tool." },
+          { "id": "c", "label": "Listing the 5 most likely edge cases for a screen given a user scenario", "correct": true, "explain": "Claude has read every postmortem. Edge case enumeration is fast and reliable." },
+          { "id": "d", "label": "Replacing your real user research", "correct": false, "explain": "It cannot. Simulated users are not users; Claude is a baseline, not the truth." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Hinglish copy ka problem",
+            "tone": "info",
+            "md": "Bhai, Claude se *'casual Hinglish copy'* maango toh sometimes woh likhega *'Hey bhai, your order is on the way, super excited na?'*. Wahi *'super excited na?'* — yeh actual Hinglish nahi hai, yeh ad-agency Hinglish hai. Real shop-owner aunty aisa nahi bolti. Fix? Apne 3-4 real customer messages paste karo as the voice reference. Claude tab actual register pakad leta hai, na ki Bandra-bro register."
+          },
+          "en": {
+            "title": "Translated voice doesn't sound translated",
+            "tone": "info",
+            "md": "Ask Claude for 'casual Hinglish copy' and you get ad-agency Hinglish: 'super excited na?'. Real users don't talk like that. Fix: paste 3-4 real customer messages as voice reference. Claude calibrates fast when given real samples; without them, it defaults to the cliche."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Claude is a junior designer who has read every book and shipped nothing — bring the taste, take the vocabulary.",
+          "Critique-not-generate: name the user, name the goal, name the primary action, ask for the 3 weakest decisions.",
+          "Iterative-tightening: 5 rounds with one constraint each beats 1 round with everything mashed together.",
+          "Claude does not generate images; use it to sharpen the brief and constrain a real image model's prompt.",
+          "Authoritative tone is not authority; every design suggestion is a hypothesis until matched against real user data."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Open your most recent design file. Could you write the user, goal, and primary action for the screen you're working on right now in 60 seconds? If not, that's the thing to fix before you ask Claude anything."
+      }
+    ]
+  }
+}

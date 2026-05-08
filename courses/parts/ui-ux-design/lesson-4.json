@@ -1,0 +1,220 @@
+{
+  "slug": "interaction-and-microcopy",
+  "title": "Interaction Design and Microcopy",
+  "subtitle": "Every click is a question; every state change is the answer",
+  "estimatedMinutes": 13,
+  "skills": ["ui-interaction-design"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ui-ux-design/interaction-and-microcopy.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the silent button" },
+        { "startSec": 80, "label": "Mental model: clicks are questions" },
+        { "startSec": 220, "label": "Move 1 — State changes that confirm" },
+        { "startSec": 410, "label": "Move 2 — Microcopy that defuses" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ui-ux-design/interaction-and-microcopy.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most interfaces are silent. You click, and you wait, and you wonder: did it hear you? Is something happening? Did I press the right thing? Should I press it again?\n\nThe shipping bug is rarely the slow API; it's that the UI gives no signal during the slow API. The fix is not engineering; it's interaction design — a 30-line state machine and a few lines of microcopy that turn a silent button into a conversation. By the end of this lesson you'll know how to design state transitions that confirm, and microcopy that defuses the user's anxiety in real time."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing a user clicking a 'Pay ₹2,400' button on the left, then a thought bubble: 'Did it hear me? Should I click again?' On the right, the same button now in a 'Processing... ₹2,400' state with a spinner, and a calm thought bubble: 'OK, it's working.'",
+      "caption": "Same backend latency, two different UX. Left: user uncertainty leads to double-clicks and refunds. Right: the button answered the user's question.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FEF3C7'/><g transform='translate(30 50)'><rect x='0' y='0' width='220' height='180' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='40' y='60' width='140' height='40' rx='8' fill='#1F2937'/><text x='110' y='85' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#FFFFFF'>Pay  Rs.2,400</text><g transform='translate(30 130)'><ellipse cx='80' cy='25' rx='80' ry='22' fill='#FFFFFF' stroke='#1F2937' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>did it hear me?</text><text x='80' y='34' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>click again?</text></g></g><g transform='translate(290 50)'><rect x='0' y='0' width='220' height='180' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='40' y='60' width='140' height='40' rx='8' fill='#10B981' opacity='0.7'/><circle cx='65' cy='80' r='6' fill='none' stroke='#FFFFFF' stroke-width='2.5' stroke-dasharray='6 4'><animateTransform attributeName='transform' type='rotate' from='0 65 80' to='360 65 80' dur='1.2s' repeatCount='indefinite'/></circle><text x='130' y='85' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#FFFFFF'>Processing...</text><g transform='translate(30 130)'><ellipse cx='80' cy='25' rx='80' ry='22' fill='#FFFFFF' stroke='#10B981' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>OK, it&apos;s working</text><text x='80' y='34' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>I&apos;ll wait</text></g></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: every click is a question",
+      "md": "When the user clicks, they are asking the interface a question: 'did this work?' The interface owes them an answer **inside 100 milliseconds**. Anything slower than that feels broken even if it isn't. The answer doesn't have to be the result; it just has to be acknowledgement that the question was heard. **A spinner inside 100ms is not a delay; it is a reply.**"
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ui-ux-design/anim/interaction-and-microcopy.html",
+      "height": 420,
+      "caption": "Watch a button transition through idle → hover → pressed → loading → success — five states, each with a job.",
+      "fallbackImage": "/courses/ui-ux-design/anim/interaction-and-microcopy-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Auto-rickshaw meter wala lesson",
+          "md": "Bhai, Mumbai ki auto le. Driver ne meter daala — TRRR — sound aaya, screen blink hua. Ab tum chill ho. Kyunki tumhe pata hai meter chal raha hai. Ab dusri auto ke liye driver bola 'meter daal diya hai bhai' lekin koi sound nahi, koi blink nahi. Tumhe pure ride trust nahi hota.\n\nUI mein same. State change is the meter sound. Bina iske, every interaction feels like a 'trust me bro' from the driver."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no auto",
+          "md": "When the rickshaw meter clicks and beeps, you trust it. When the driver just says 'meter is on', you don't. State change is the audible-meter version of UI. Without it, every click is a 'trust me bro'."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — State changes that confirm"
+    },
+    {
+      "type": "markdown",
+      "md": "Every interactive element should have **at least five states**, each visually distinct:\n\n1. **Idle** — the rest state.\n2. **Hover** — slight elevation or colour shift; signals 'this is interactive'.\n3. **Pressed** — depressed or darker; signals 'I heard you'.\n4. **Loading** — spinner, shimmer, or skeleton; signals 'I'm working'.\n5. **Success or Error** — explicit confirmation; signals 'here is what happened'.\n\nMost junior designers ship two: idle and hover. Some skip hover entirely. The user is then forced to guess at every interaction whether the system is alive.\n\nThe useful version of this rule: **anything that takes more than 200 milliseconds to respond needs a loading state, and anything that takes more than 2 seconds needs progress indication, not just a spinner.** A spinner that runs forever is more anxiety-inducing than no spinner at all. If you can show a percentage, a step counter, or a 'this usually takes 5 seconds' message, do it.\n\nFor the result state: a quiet inline confirmation beats a modal toast for routine actions; a celebration beats a quiet confirmation for a milestone (first invoice sent, first user invited). Match the volume of the feedback to the importance of the action."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A horizontal row of five button states: Idle (filled blue), Hover (slightly elevated, lighter shade), Pressed (depressed, darker shade), Loading (with spinner and dimmed), Success (green check).",
+      "caption": "Five states, each with a job. Most products ship two of these and call it done.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 200' role='img'><rect width='560' height='200' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(20 60)'><rect width='90' height='36' rx='6' fill='#0EA5E9'/><text x='45' y='22' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Save</text><text x='45' y='60' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E3A8A'>1. Idle</text></g><g transform='translate(125 56)'><rect width='90' height='40' rx='6' fill='#0284C7' filter='url(#sh1)'/><text x='45' y='25' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Save</text><text x='45' y='64' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E3A8A'>2. Hover</text></g><g transform='translate(230 64)'><rect width='90' height='32' rx='6' fill='#0369A1'/><text x='45' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Save</text><text x='45' y='56' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E3A8A'>3. Pressed</text></g><g transform='translate(335 60)'><rect width='90' height='36' rx='6' fill='#0EA5E9' opacity='0.6'/><circle cx='30' cy='18' r='6' fill='none' stroke='#FFFFFF' stroke-width='2' stroke-dasharray='6 4'/><text x='55' y='22' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>Saving...</text><text x='45' y='60' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E3A8A'>4. Loading</text></g><g transform='translate(440 60)'><rect width='100' height='36' rx='6' fill='#10B981'/><text x='28' y='22' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='14'>OK</text><text x='62' y='22' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>Saved</text><text x='50' y='60' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>5. Success</text></g></g><defs><filter id='sh1' x='-20%' y='-20%' width='140%' height='140%'><feDropShadow dx='0' dy='2' stdDeviation='2' flood-color='#1E3A8A' flood-opacity='0.3'/></filter></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Designing the lifecycle of a single button click",
+      "steps": [
+        { "label": "T+0ms — Click registered", "body": "Button enters pressed state immediately. Visual shift: slightly darker fill, slight depression. Cost: 10 lines of CSS." },
+        { "label": "T+50ms — Optimistic state", "body": "If the action is safe to assume success (a like, a star, a non-destructive toggle), update the UI immediately. Roll back on error." },
+        { "label": "T+200ms — Loading kicks in", "body": "If the request hasn't returned yet, swap label to 'Saving…' and add a spinner. Disable the button to prevent double-click." },
+        { "label": "T+2000ms — Progress indication", "body": "If still pending after 2s, change copy to 'Still working… this usually takes a few seconds.' Anxiety drops; abandonment drops." },
+        { "label": "T+resolved — Result state", "body": "Inline 'Saved' for routine; toast for cross-page actions; modal celebration only for genuine milestones. Match volume to importance." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your 'Send invoice' button has a 1.4 second backend roundtrip. Users are double-clicking and getting duplicate invoices. The fix is:",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Add an immediate pressed-state, swap to 'Sending...' inside 200ms, and disable the button until the request resolves", "correct": true, "explain": "The pressed-state answers 'did you hear me?' inside 100ms; the loading state owns the next 1.4 seconds; disable kills the double-click. Three lines of UI logic, one solved problem." },
+        { "id": "b", "label": "Speed up the backend to under 200ms", "correct": false, "explain": "Worth doing eventually, but the perceived-responsiveness fix is in the UI. Backend optimisation takes a sprint; the UI fix takes ten minutes." },
+        { "id": "c", "label": "Add a confirmation modal before sending", "correct": false, "explain": "Adds a click. Solves intent confirmation, not the unresponsive feeling. The double-clicks would still happen if the modal is also slow." },
+        { "id": "d", "label": "Show a toast 'Invoice sent' when the request resolves", "correct": false, "explain": "Useful for the success state, but the silent 1.4 seconds is the actual bug. The toast is what comes after the loading state, not instead of it." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Paytm ka tring sound",
+          "md": "Paytm ne ek genius move kiya tha — successful payment ke baad 'tring' sound aur green tick. Shopkeeper ko phone dekhne ki bhi zaroorat nahi, kaan se sun lo. Yeh state change ka peak design hai — auditory + visual + emotional confirmation, sab ek time pe.\n\nAaj UPI apps mein yeh sound hai matlab interaction is solved. Bina iski har payment 'gaya kya?' wala question reh jaata."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Same point, no Paytm",
+          "md": "Paytm's success-tring sound is a perfect interaction-design move: auditory plus visual plus emotional confirmation, all delivered inside 200ms. The shopkeeper doesn't even have to look at the phone. State change at its loudest is sometimes the right call."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Microcopy that defuses"
+    },
+    {
+      "type": "markdown",
+      "md": "Microcopy is every word in your interface that isn't the brand name or the body content. Buttons, labels, error messages, empty states, tooltips, placeholders, modal titles, system notifications. They are the single largest unowned design surface in most products.\n\nThree principles, in order of impact:\n\n1. **Name the verb.** Buttons should say what the user is doing. 'Save invoice' beats 'Save'. 'Send password reset link' beats 'Submit'. The user is performing an action; the button is the noun-verb.\n\n2. **Errors should name the cause.** 'Something went wrong' is the apology of a system that doesn't know what happened. 'We couldn't save your invoice — your card was declined; try a different card or contact your bank' is twelve more words and infinitely more useful. The user can act on cause; they cannot act on apology.\n\n3. **Empty states are onboarding.** A blank screen with 'No invoices yet' is a wasted moment. The same screen with 'No invoices yet — your invoices will appear here as you create them. Click below to make your first one.' converts new users at 3-4x the rate. The empty state is the most persuasive surface in your product because the user has nothing else to look at.\n\nA crisp test: read every piece of microcopy in your product out loud. If it sounds like a 1990s government form, rewrite it."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two error toasts. Left: red toast, generic 'Something went wrong.' Right: amber toast 'We couldn't save your invoice — your card was declined. Try a different card or contact your bank.' with a 'Try again' button.",
+      "caption": "Same error, two messages. The right one names the cause and the next step; the left one names the problem of the system.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 220' role='img'><rect width='560' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(30 50)'><rect x='0' y='0' width='220' height='120' rx='10' fill='#FECACA' stroke='#B91C1C' stroke-width='2'/><circle cx='25' cy='30' r='12' fill='#B91C1C'/><text x='25' y='35' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#FFFFFF'>!</text><text x='45' y='35' font-family='sans-serif' font-size='13' font-weight='bold' fill='#7F1D1D'>Error</text><text x='15' y='65' font-family='sans-serif' font-size='12' fill='#1F2937'>Something went wrong.</text><text x='15' y='90' font-family='monospace' font-size='10' fill='#9CA3AF'>(useless apology)</text></g><g transform='translate(290 50)'><rect x='0' y='0' width='240' height='120' rx='10' fill='#FED7AA' stroke='#92400E' stroke-width='2'/><circle cx='25' cy='30' r='12' fill='#92400E'/><text x='25' y='35' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#FFFFFF'>!</text><text x='45' y='35' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>Card declined</text><text x='15' y='55' font-family='sans-serif' font-size='11' fill='#1F2937'>We couldn&apos;t save your invoice.</text><text x='15' y='70' font-family='sans-serif' font-size='11' fill='#1F2937'>Your card was declined; try a</text><text x='15' y='85' font-family='sans-serif' font-size='11' fill='#1F2937'>different card or contact your bank.</text><rect x='15' y='95' width='90' height='20' rx='4' fill='#92400E'/><text x='60' y='109' text-anchor='middle' font-family='sans-serif' font-size='10' font-weight='bold' fill='#FFFFFF'>Try again</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Studio-Lead Saanvi", "role": "design lead, 9 years across India and Singapore" },
+      "intro": [
+        "Microcopy and interaction today. I'll show you six bits of copy or interaction patterns from real-ish apps.",
+        "Tell me whether each one helps the user, hurts them, or is technically fine but missing a chance."
+      ],
+      "buckets": [
+        { "id": "helps", "label": "Helps", "tone": "safe" },
+        { "id": "hurts", "label": "Hurts the user", "tone": "danger" },
+        { "id": "missed", "label": "Missed opportunity", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "An empty inbox screen showing only a sad cloud illustration and the text 'No emails.'", "correctBucketId": "missed", "explain": "Empty states are the best onboarding moment in your app. Use them to show what would appear and how to get there." },
+        { "id": "s2", "situation": "A 'Submit' button on a contact form.", "correctBucketId": "missed", "explain": "Submit is institutional. 'Send message' is the verb the user is doing." },
+        { "id": "s3", "situation": "An error toast: 'Network error. Code: ECONNREFUSED 127.0.0.1:5432.'", "correctBucketId": "hurts", "explain": "Exposing a stack trace to the user is hostile. Translate technical errors into plain English with a useful next step." },
+        { "id": "s4", "situation": "A primary CTA that says 'Pay Rs.2,400 now'.", "correctBucketId": "helps", "explain": "Names the verb (pay), the amount (Rs.2,400), and the urgency (now). The user knows exactly what will happen on click." },
+        { "id": "s5", "situation": "A delete-account dialog asks the user to type their email to confirm.", "correctBucketId": "helps", "explain": "Friction matched to the cost. Destructive irreversible actions deserve more friction; trivial ones don't." },
+        { "id": "s6", "situation": "A loading spinner that has been spinning for 8 seconds with no progress text.", "correctBucketId": "hurts", "explain": "Anxiety grows with time. After 2 seconds, swap to 'Still working — this usually takes a few seconds.' Even fake progress beats silent spin." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: copying the placeholder",
+      "md": "Junior teams ship microcopy that started life as Lorem Ipsum and got 'good enough' replacement text in week six. Three months later the dashboard's empty state still reads 'Welcome to dashboard' and the error message still says 'An error occurred.' **Microcopy is not done when it is grammatically correct; it is done when it does a job.** The job is to defuse user anxiety, name the next step, or convert a blank screen into onboarding. If your copy doesn't do one of those, rewrite it."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these from highest to lowest impact when auditing microcopy for the first time.",
+      "items": [
+        { "id": "s1", "label": "Empty states", "detail": "The single most persuasive surface in the product because users have nothing else to look at." },
+        { "id": "s2", "label": "Error messages", "detail": "Bad errors train learned helplessness; good ones convert errors into recovery." },
+        { "id": "s3", "label": "Primary CTAs across all screens", "detail": "Generic verbs (Submit, OK) cost conversion at every step in the funnel." },
+        { "id": "s4", "label": "Form labels and helper text", "detail": "Labels and helper text remove the guesswork on what each field expects." },
+        { "id": "s5", "label": "Tooltips and inline tips", "detail": "Lower-impact polish layer. Important, but only after the structural copy is right." }
+      ],
+      "hint": "Start where users get most stuck."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Rewrite this generic error message for a small Bengaluru SaaS that sells expense management: 'An error occurred while processing your request. Please try again later.' Write a version that names the cause (assume it was a network timeout), names the next step, and matches the voice of a calm, opinionated product. 2-3 sentences max.",
+      "lang": "markdown",
+      "starter": "We couldn't save your...",
+      "expected": "We couldn't save your expense — looks like the network dropped before we got it to the server. Your data is still on this screen, so you can try again without re-typing. If this keeps happening, your office WiFi is the most likely culprit; switch to mobile data and retry."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which two are characteristics of good error microcopy? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Names the cause when the system can identify it", "correct": true, "explain": "Cause is actionable; apology is not. The user wants to know what happened and what to do next." },
+        { "id": "b", "label": "Suggests a concrete next step", "correct": true, "explain": "Even 'try again in a minute' is better than a dead-end. Errors are recovery moments, not endings." },
+        { "id": "c", "label": "Includes the technical error code in plain text", "correct": false, "explain": "Stack traces and error codes are for the support inbox, not the user. Translate them." },
+        { "id": "d", "label": "Apologises profusely to soften the blow", "correct": false, "explain": "Profuse apology signals 'we knew this would happen and shipped it anyway.' Calm and specific beats sorry-sorry-sorry every time." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Bank ka SMS wala genius",
+          "md": "ICICI ya HDFC ka transaction SMS dekha hai? 'Rs.2,400 debited from A/c XX1234 to ZOMATO via UPI on 5-May. Ref: 234524.' Sab kuch ek line mein — amount, account, payee, channel, date, ref. Yeh microcopy ka peak hai. Koi 'transaction successful' generic message nahi, sab data jo user ko chahiye, sab there.\n\nAur error wala SMS bhi same — 'Insufficient balance' nahi, 'Insufficient balance — current balance Rs.842, requires Rs.2,400.' Cause + diagnosis + fix, sab inline."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no SMS",
+          "md": "Indian bank transaction SMSes are accidentally great microcopy. Every line tells you the amount, the account, the payee, the channel, the date, and a reference. No 'transaction successful' fluff. The error SMSes follow the same pattern — cause plus diagnosis plus fix. Steal the format."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Every click is a question. The interface owes the user an answer inside 100ms — even if the answer is just 'I heard you.'",
+        "Five button states (idle, hover, pressed, loading, success/error) are the minimum. Most teams ship two.",
+        "Anything over 200ms needs a loading state; anything over 2 seconds needs progress indication.",
+        "Microcopy: name the verb (Save invoice, not Submit), name the cause in errors, treat empty states as onboarding.",
+        "Match the volume of feedback to the importance of the action. A like is a colour change; a milestone deserves a celebration."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one button in a product you ship. Trigger every state it can be in (idle, hover, pressed, loading, success, error). How many of those states are visually distinct? What is the longest the button can spin before the user gets anxious — and is your loading state actually distinct from the idle state?"
+    }
+  ]
+}

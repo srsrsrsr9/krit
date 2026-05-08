@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Feature Nobody Watched Die",
+    "source": "Senior PM at Saral Books, a Bengaluru-based SMB accounting SaaS (~50K paying SMBs)",
+    "date": "September 2023 — March 2024",
+    "story": "On **September 19, 2023**, Saral shipped *'Smart Reconcile'* — an AI-powered bank-statement matching feature that had taken **9 engineer-weeks** and cost ₹6 lakh in vendor LLM credits to build. Launch day went perfectly: 600-word changelog, an in-product banner, a Twitter post that did **2.4K impressions**, and a launch dinner at Karavalli that ran ₹47,000 on the company card.\n\n**Week 1**: 1,840 unique users tried the feature. The team toasted. The CPO Slack-emoji'd a rocket.\n\n**Week 2**: 1,210 unique users. Slight dip but \"normal post-launch settling.\"\n\n**Week 3**: nobody pulled the dashboard.\n\nThe PM moved on to the next quarter's planning. Engineering moved on to a perf project. The growth team moved on to a paid-acquisition push. The dashboard stayed live but unloved.\n\nIn **March 2024 — six months later** — a new analyst joined and ran a routine feature-usage audit. *Smart Reconcile weekly actives*: **94 users**. Out of 50,000 paying SMBs. **0.18%**. The feature had quietly become a maintenance tax: 3 LLM-vendor invoices a month, 1 on-call page per fortnight, 0 measurable revenue impact.\n\nThe analyst's one-line slack: *\"Did anyone ever look at this after launch?\"*\n\nNobody had. The launch was a party. The follow-up was a Google Calendar invite that never got created.",
+    "takeaway": "Shipping is the start of the experiment, not the end of the project. If nobody owns the 7-day, 30-day, and 90-day follow-up loops, the feature will die quietly and the company will pay the rent on its corpse for years."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rhea's First Launch",
+    "setup": "**Week 11, Tarakash.** Rhea's first owned feature — the **Tally integration template** — is shipping in 5 days. Engineering is in QA. Design has done the in-product education. The growth team has a launch email queued.\n\nDevika DMs her: *\"Two things before you ship. (1) Have you done a pre-mortem? (2) What's your post-launch loop look like?\"*\n\nRhea, in a moment of honesty, replies: *\"…what's a post-launch loop?\"*\n\nDevika sends one emoji — the one that's a face with a slight smile and slightly closed eyes — and books a 30-minute room.",
+    "coach": { "name": "Director-PM Devika", "role": "Director of Product, Tarakash · once watched a feature she shipped die in production for 8 months before anyone noticed and she has not forgotten" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Devika starts: *\"A pre-mortem is: imagine it's 30 days post-launch and the feature has flopped. Why?\"* What does Rhea write down?",
+        "options": [
+          { "id": "a", "label": "\"It won't flop. We did good user research and engineering is solid.\"", "correct": false, "explain": "The point of a pre-mortem is to **assume failure** so you can spot blind spots while you can still act. \"It won't flop\" is the cognitive equivalent of refusing to buy travel insurance.", "points": 0 },
+          { "id": "b", "label": "Five plausible failure modes: (1) CFOs don't discover the template in the integrations menu. (2) Tally OAuth flow breaks on Tally Prime vs Tally ERP. (3) Sample webhook payload doesn't match real invoice schemas. (4) First-run error messages are unclear so users churn after one bad sync. (5) Sales has no enablement so they don't tell trial customers it exists.", "correct": true, "explain": "**This is craft.** Five specific, addressable failure modes — not vibes. Now you can pre-empt 3 of these (discoverability, error copy, sales enablement) before launch. Devika says: 'You just saved yourself a re-launch.'", "points": 3 },
+          { "id": "c", "label": "\"It might flop because of unknown unknowns.\"", "correct": false, "explain": "Naming 'unknown unknowns' is just a fancy way of refusing to think. The whole point of the exercise is to convert unknowns into known concerns you can act on.", "points": 0 },
+          { "id": "d", "label": "\"It'll flop if engineering ships bugs.\"", "correct": false, "explain": "True but useless. Bugs are always a risk. A pre-mortem is for the **non-obvious** failure modes — discovery, education, second-order effects, integration edge cases. Pointing at engineering quality is not insight, it's blame-pre-positioning.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Devika says: *\"Good. Now — what's the **single metric** you're judging this feature on at day 7, 30, and 90?\"*",
+        "options": [
+          { "id": "a", "label": "Day 7: page views. Day 30: page views. Day 90: page views.", "correct": false, "explain": "Page views measure **curiosity**, not value. Saral's Smart Reconcile had 1,840 users in week 1 and was dead by week 3. Vanity metrics are how you celebrate features that are quietly failing.", "points": 0 },
+          { "id": "b", "label": "Day 7: % of new trials that *attempt* a Tally sync. Day 30: % of new trials that *complete a successful first sync*. Day 90: % of new-trial **conversions** with at least one successful sync (the actual conversion-lift hypothesis).", "correct": true, "explain": "**Beautiful, layered metrics.** Awareness → activation → outcome. Each window measures a different stage and each can fail differently. If day-7 attempts are high but day-30 successes are low, you have an integration bug, not a discovery problem. Devika is now actively trying to hire-promote you.", "points": 3 },
+          { "id": "c", "label": "Day 7, 30, 90: NPS.", "correct": false, "explain": "NPS is too noisy and too lagging for a single-feature signal. By the time NPS moves on a Tally integration, you'll be 6 months past the failure window. Pick action metrics, not sentiment metrics.", "points": 0 },
+          { "id": "d", "label": "\"I'll figure out what to measure once we ship.\"", "correct": false, "explain": "If you don't know what success looks like before you ship, you can't tell the difference between 'flop' and 'great' once you have data. Saral Books version of you, 6 months later: \"did anyone ever look at this?\"", "points": 0 }
+          ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Devika asks: *\"Last thing. What's actually scheduled in someone's calendar for the post-launch loop?\"*",
+        "options": [
+          { "id": "a", "label": "\"I'll keep an eye on the dashboard.\"", "correct": false, "explain": "\"Keep an eye on it\" is the PM-equivalent of \"the cheque is in the post.\" If it's not on a calendar with a name attached, it doesn't exist. This is exactly how Saral's Smart Reconcile died.", "points": 0 },
+          { "id": "b", "label": "Three calendar invites, owned, dated: (1) **Day 7 review** — me + Shankar + growth, 30 min, look at attempt rate. (2) **Day 30 review** — me + Devika + sales, 45 min, look at activation + qualitative feedback from 3 trial users. (3) **Day 90 ship/kill decision** — me + Devika, 30 min, look at conversion lift, decide: double down, iterate, or sunset.", "correct": true, "explain": "**This is operational maturity.** Three forcing functions, three named owners, three dates, and crucially a **kill criterion at day 90**. The feature can't quietly outlive its usefulness. Devika literally pumps her fist.", "points": 3 },
+          { "id": "c", "label": "A weekly Slack reminder to myself.", "correct": false, "explain": "Self-reminders get snoozed. Half-credit because at least it's something on a schedule, but without a meeting and named co-owners, it'll be the third thing you cancel during a busy week.", "points": 1 },
+          { "id": "d", "label": "Day 30 retrospective only.", "correct": false, "explain": "One review window means you'll catch the wrong things at the wrong time. Day 7 catches discovery/launch bugs while you can still cheaply fix them. Day 90 catches whether the feature actually moves the metric. Skipping either is a different kind of expensive.", "points": 1 }
+          ]
+      },
+      {
+        "id": "s4",
+        "prompt": "**Day 90.** The Tally template hits **27% of new trials use it** and conversion is up from 11% → 16% (target was 18%). It's review time. What does Rhea recommend?",
+        "options": [
+          { "id": "a", "label": "Sunset the feature — we missed the 18% target.", "correct": false, "explain": "5 percentage points of conversion lift is enormous. Killing a working feature because it didn't hit the literal target number is missing the forest for the goalpost. Devika points out: 'A 45% relative improvement is not a flop.'", "points": 0 },
+          { "id": "b", "label": "Double down — extend to Zoho and Quickbooks (2 of the original out-of-scope items from the PRD), and add a one-click 'detected your accounting tool' suggestion in onboarding to push attempt rate from 27% → 50%.", "correct": true, "explain": "**Yes.** The feature has a working signal — extend its reach (more accounting tools) and improve its top-of-funnel (smarter discovery). You also explicitly revisited the **out-of-scope** list from your original PRD because the data now justifies it. This is how good features compound.", "points": 3 },
+          { "id": "c", "label": "Declare victory and move on.", "correct": false, "explain": "Saral's mistake. The feature is 27% adopted — there's still 73% of trials not using it. Moving on now leaves a 5-point gain on the floor when a 10-point gain is plausibly within reach.", "points": 1 },
+          { "id": "d", "label": "Spend the next quarter rebuilding the feature from scratch with a 'better' UI.", "correct": false, "explain": "Premature rewrites are how PMs avoid the harder work of growing adoption. The current implementation works. The opportunity is **distribution and reach**, not a UI redesign.", "points": 0 }
+          ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You ran a real pre-mortem, instrumented layered metrics, scheduled the loops, and made a defensible day-90 call. **Devika promotes you to PM at the end-of-quarter review** with the words: 'Most APMs ship and forget. You ship and learn.' That is the entire job.",
+      "good": "You got most of the operational rigor right but flinched on either metrics design or the day-90 decision. Re-read the section on **awareness → activation → outcome metrics** and the **ship/iterate/kill** decision tree.",
+      "learn": "You shipped the feature the way Saral shipped Smart Reconcile — to applause, then silence. Re-read the lesson, especially the parts on **pre-mortems**, **named-owner follow-up loops**, and **the day-90 kill criterion**. The launch is the easy part. The next 89 days are the job."
+    }
+  }
+}

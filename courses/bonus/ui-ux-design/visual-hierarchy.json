@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The CTA That Was Wearing a Section Header",
+    "source": "Anonymous senior designer at Khaata Cloud, a Pune-based SMB accounting SaaS",
+    "date": "March 2025",
+    "story": "Khaata Cloud's marketing landing page had been converting at **1.8%** for nine months. The growth team blamed ad creative. The PM blamed the price page. The CEO blamed *vibes*. A new designer joined in February and asked one question on her first Monday: *\"Where is the CTA?\"*\n\nIt turned out the CTA — a button labelled `Start free trial` — was styled at **18px, weight 500, charcoal-on-white**, sitting inside a section called \"Get Started.\" The section header, also 18px charcoal, sat 24px above it. To a scanning eye, the button read as a *sub-heading* of the section, not a clickable thing. Eye-tracking from the analytics tool showed users looked at the area for **0.4 seconds** and moved on.\n\nThe fix was one Figma file and one Friday afternoon: button became **#1F6FEB at 16px weight 600 with 14px vertical padding**, the section header dropped to a 14px uppercase eyebrow, and the surrounding 11 paragraphs of marketing prose got nuked. No copy change. No new feature. No A/B test infrastructure either — they shipped to 100% on a Tuesday because the old number was so bad the risk was zero.\n\nNew conversion four weeks later: **4.7%**. The CEO took credit at the next all-hands.",
+    "takeaway": "If your CTA looks like a heading, the eye treats it like one. Hierarchy is not decoration; it is instruction."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Vikram's Three Mockups",
+    "setup": "You are freelancing for **Saral Pay**, a Bengaluru-based consumer fintech. Their founder **Vikram** — ex-payments engineer, first-time design buyer — is about to ship his first major redesign over Q2-Q3 2026. He slacks you at 9:14am on a Tuesday: *\"I made three versions of the new home screen in Figma. Can you tell me which CTA hierarchy is right? Demo to investors is Friday.\"*\n\nYou open the file. There are indeed three frames, and they are *all wrong in different ways*.",
+    "coach": {
+      "name": "Design-Director Diya",
+      "role": "Your old boss from your agency days, now on speed-dial for sanity checks"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "**Mockup A** has three buttons of equal size and weight: `Send Money`, `Pay Bills`, `Invest`. All charcoal-on-white, all 16px, evenly spaced. Vikram says: *\"It's fair — every product gets equal billing.\"* What do you tell him?",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Looks clean. Ship it — fairness is a good principle.\"",
+            "correct": false,
+            "explain": "Fairness is a *political* principle, not a design one. Three equal CTAs means the eye picks one at random, which means **most users pick none**. Vikram's investor demo will show three users hovering, no one clicking. Diya is grimacing.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "\"Pick the one CTA that drives 70% of revenue. Make it primary. Demote the other two to text links or secondary buttons.\"",
+            "correct": true,
+            "explain": "**Yes.** Hierarchy is a forcing function: it asks the business *what matters most on this screen?* Vikram thinks for a second and says *\"Send Money — it's 80% of our volume.\"* Now you have one job, not three.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "\"Make all three buttons bigger and brighter so they pop more.\"",
+            "correct": false,
+            "explain": "If everything shouts, nothing is heard. Three primary buttons is the same problem as three equal buttons, just louder. The eye still can't choose.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Add a hero illustration above to draw the eye, then keep the three equal buttons.\"",
+            "correct": false,
+            "explain": "You added a *fourth* visual element competing with the three equal ones. The eye now travels: illustration, button, button, button, exit. Decoration does not solve a hierarchy problem; it usually compounds it.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "**Mockup B** has `Send Money` as a giant **#0EA5E9 cyan** button taking up 60% of the screen width, with `Pay Bills` and `Invest` as tiny grey text links underneath. Vikram says: *\"You said make the primary one big. I made it big.\"* Your move?",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Perfect. Ship it.\"",
+            "correct": false,
+            "explain": "Big is not the same as *appropriate*. A 60%-width hero button on a home screen feels like a landing-page CTA, not an app primary action. Users will tap it accidentally on the way to their balance. Vikram will spend Friday explaining accidental sends.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "\"Scale it back to about 40% width with comfortable padding. The hierarchy comes from contrast and weight, not size alone.\"",
+            "correct": true,
+            "explain": "**Right.** Three hierarchy levers — size, weight, colour — and you only need two of them firing for the eye to pick a winner. Cranking all three to 11 turns a primary action into an aggressive one.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "\"Keep the size but change the colour to brand-grey so it's less aggressive.\"",
+            "correct": false,
+            "explain": "Now it's a giant grey button — visually loud, semantically muted. The eye goes there but the brain goes *\"is that even clickable?\"* Worst of both worlds.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "\"Add a pulsing animation to the cyan button so users know it's the main action.\"",
+            "correct": false,
+            "explain": "If your hierarchy needs animation to communicate itself, the static design has already failed. Also: a pulsing cyan button on a fintech app reads as a phishing pop-up. Diya is on the verge of sending you a voice note.",
+            "points": 0
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "**Mockup C** has `Send Money` as a properly-sized cyan primary, `Pay Bills` as a secondary outline button next to it, and `Invest` as a quiet text link below. The balance card above is **48px bold**, the welcome message is **24px regular**. Vikram says: *\"This one feels right but I can't say why.\"* What is your one-line answer?",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Because the eye has a path: balance, then primary action, then alternatives. Three stops, in order. That's hierarchy.\"",
+            "correct": true,
+            "explain": "**Exactly the move.** Naming the path makes Vikram a better client for the next 12 weeks. He now has vocabulary for *why* something works, not just *that* it does.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"Because the colours are nicer.\"",
+            "correct": false,
+            "explain": "Vikram leaves the meeting having learned nothing. Next week he'll ask you the same question about a different screen. You billed for an hour of insight and delivered a vibe.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"Because it follows the F-pattern that users scan.\"",
+            "correct": false,
+            "explain": "F-pattern is a finding from 2006 about long-form text on desktop. It does not describe a fintech home screen on a 6-inch phone. You sound smart and are wrong.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "\"Because it has more whitespace.\"",
+            "correct": false,
+            "explain": "Whitespace contributes, but it is the *consequence* of good hierarchy, not the cause. Vikram will respond by adding 80px of padding to every other screen and breaking the layout.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Vikram says: *\"Okay, Mockup C wins. But investors love a wow moment. Should we add a gradient or a glow on the primary button to make it feel premium?\"* You have 30 seconds before he opens Figma to do it himself.",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"No. The button is already the loudest thing on the screen by design. Adding a gradient is volume on top of a clear signal — it muddles, not amplifies.\"",
+            "correct": true,
+            "explain": "**Hold the line.** Hierarchy is the *system*; decoration is the *risk*. You just saved Vikram from a button that looks like a 2014 iOS skeumorph throwback.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"Sure, a subtle gradient is fine if it's on-brand.\"",
+            "correct": false,
+            "explain": "Vikram interprets *subtle* as *visible from across the room*. Friday's demo features a button that looks like the home screen of a 2007 BlackBerry. You are responsible for this.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"Add the glow but only on hover so it's a delight moment.\"",
+            "correct": false,
+            "explain": "Hover does not exist on mobile. The glow will never fire. You added complexity for a state 90% of users will never see, and the 10% who do will think it's a bug.",
+            "points": 1
+          },
+          {
+            "id": "d",
+            "label": "\"Let's A/B test it.\"",
+            "correct": false,
+            "explain": "Vikram has 11,000 monthly users and an investor demo on Friday. You don't have the volume or the time. \"A/B test it\" is what designers say when they don't want to defend a position. Defend the position.",
+            "points": 0
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Investor demo on Friday goes well. Vikram texts you Saturday: *\"Two of them want to know who designed it.\"* You bill the hour, name the path, and protect the design from the gradient. **Diya is, briefly, proud.**",
+      "good": "You got Vikram to the right mockup but let one piece of decoration through. The demo lands fine but the cofounder spends ten minutes asking why the button glows. Re-read the lesson on hierarchy as system, not decoration.",
+      "learn": "Vikram shipped a home screen with three equal CTAs and a pulsing gradient button. The investor demo got *\"interesting energy.\"* Re-read the lesson — especially the section on **size + weight + colour as a small set of levers**, not all three at once."
+    }
+  }
+}

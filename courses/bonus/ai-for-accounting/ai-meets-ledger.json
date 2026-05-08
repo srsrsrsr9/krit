@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 12 Lakh Rows, 31 Hours Saved, 6% Still Yours",
+    "source": "Audit manager at Kothari Joshi & Associates, a Mumbai mid-tier CA firm with 84 staff",
+    "date": "January 2026",
+    "story": "In November 2025, the firm took on the FY24-25 statutory audit of a Vile Parle FMCG distributor doing **₹312 crore turnover** across 1,400 SKUs and 19 warehouses. The general ledger came in at **12,04,387 rows** — three articled assistants, six weeks at planned utilisation, ₹4.8 lakh of write-down already baked into the engagement budget.\n\nThe partner had been quietly piloting a classify-then-verify pipeline. They pointed it at the ledger with a 23-category chart-of-accounts mapping. **94.1% of rows came back high-confidence (above 0.85), 5.9% needed CA review** — about 71,000 rows in the review queue, sorted by confidence ascending.\n\nThe articled assistants worked the queue, not the whole ledger. They closed the categorisation in **9 days instead of 6 weeks**. The partner's review of the high-confidence stratum (a 2,400-row stratified sample) caught **17 misclassifications** — all in one cluster: the AI had been confidently mapping 'sales return — damaged goods' as 'sales return — quality reject'. Material to nobody, but the partner flagged it for the FY25-26 retraining set.\n\n**Net: 31 hours saved per month of bookkeeping support across the engagement; ₹2.1 lakh of recovered margin; one new pattern caught that would have shipped silently the year before.**",
+    "takeaway": "AI does the wide-and-fast 94%. You do the narrow-and-deep 6%. Skip the 6% and you have not innovated, you have just ratified the model's mistakes at speed."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Day 1 of the AI Rollout — Scope the 80/20",
+    "setup": "It is **Monday, 10 February 2026, 9:42 AM**. You are **Anand, second-year articleship at Bharat & Co.**, a Pune mid-size CA firm with 47 SME clients. Your senior partner, **Pramod**, just walked into the conference room holding a printout of last quarter's WIP report.\n\n*'Anand. We are losing margin on bookkeeping. The juniors hate it, the seniors won't touch it, and the clients think we are slow. I want you to scope the firm's AI rollout. 90 days. Bookkeeping first. Tell me where we start, where we do not, and what could go wrong.'*\n\nHe slides the printout across. 47 clients. Turnover from ₹40 lakh kirana shops to a ₹180 crore auto-parts manufacturer. You have until end-of-day to come back with a scope.",
+    "coach": { "name": "Partner Pramod", "role": "Senior partner, 22 years post-qualification, runs the audit and assurance practice" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "**Stage 1.** Pramod asks the obvious first question. *'Which clients do we start with?'* What is your move?",
+        "options": [
+          { "id": "a", "label": "Start with the ₹180 crore auto-parts manufacturer. Biggest fee, biggest impact, biggest signal to the rest of the firm.", "correct": false, "explain": "Wrong starting point. The ₹180 crore client has the most complex chart of accounts, the most regulator-facing artefacts, and the most expensive failure mode. Pilot risk is upside-down. You want a forgiving pilot, not a heroic one.", "points": 0 },
+          { "id": "b", "label": "Pick 6 to 8 mid-sized clients (₹15 to ₹60 crore turnover) with clean ledgers, single-state GST registration, and a CA-side relationship manager who is willing to co-pilot.", "correct": true, "explain": "**Correct.** Mid-sized clients give you statistical signal (enough rows to test confidence thresholds), low blast radius (failure does not threaten the firm), and a relationship manager who can review the AI output without panicking. This is the textbook pilot cohort.", "points": 3 },
+          { "id": "c", "label": "Run it across all 47 clients in parallel. The model needs scale to learn.", "correct": false, "explain": "You are not training a foundation model. You are deploying a workflow. Running 47 simultaneous pilots means 47 simultaneous failure modes, no single owner, and Pramod fielding 47 angry calls. Hard pass.", "points": 0 },
+          { "id": "d", "label": "Start with the ₹40 lakh kirana shops. Simple ledgers, lowest stakes.", "correct": false, "explain": "Too small. Their ledgers are too sparse to test confidence thresholds, their fees do not justify the engineering investment, and you will conclude 'AI works' on data that is not representative. Pilot has to look like the production target.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "**Stage 2.** Pramod nods. Now: *'What does the AI do, and what does the CA do?'* Draw the line.",
+        "options": [
+          { "id": "a", "label": "AI categorises every transaction. CA reviews the final P&L for reasonableness. Done.", "correct": false, "explain": "P&L-level review will not catch the systematic misclassifications that hurt at audit. You need stratified row-level review on the low-confidence tier and sampled review on the high-confidence tier. P&L review is a back-stop, not the primary.", "points": 0 },
+          { "id": "b", "label": "AI does first-pass categorisation with a confidence score per row. CA reviews 100% of low-confidence rows (below threshold) and a stratified sample of high-confidence rows.", "correct": true, "explain": "**This is classify-then-verify.** AI is wide and fast; CA is narrow and deep. The threshold is a parameter you tune; sampling rate is a parameter you tune. Both stay in CA hands. Pramod will recognise this from his own articleship — it is the audit-sampling logic, just applied to bookkeeping.", "points": 3 },
+          { "id": "c", "label": "AI proposes categorisations, CA accepts or rejects each one in a UI. 100% human review of every row.", "correct": false, "explain": "Now you have just added a click to existing manual work. No time saved. No margin recovered. The whole point of AI is to compress the volume the CA has to touch. Reviewing every row defeats the purpose.", "points": 1 },
+          { "id": "d", "label": "AI categorises, CA only intervenes if a client complaint surfaces.", "correct": false, "explain": "No. This is the 'rubber-stamp without even rubber-stamping' workflow. By the time a client complains, the audit working papers are already wrong. CA review is upstream of the artefact, not downstream of the complaint.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "**Stage 3.** Pramod's eyes narrow. *'And when something goes wrong — and it will — how do we know it was the AI and not the junior?'* What do you propose?",
+        "options": [
+          { "id": "a", "label": "We will trust the team to flag issues in the morning huddle.", "correct": false, "explain": "Memory-based defence collapses under regulatory pressure. Two years from now an ICAI inquiry will ask 'what did the AI propose, what did the human change, when'. 'We discussed it in a huddle' is not an answer.", "points": 0 },
+          { "id": "b", "label": "Append-only eval log: every AI categorisation, the row hash, model version, confidence score, who reviewed it, what they changed, timestamp. Retained per the 7-year tax record rule.", "correct": true, "explain": "**Yes.** This is the precondition, not the nice-to-have. Pramod will sleep better knowing that any AI-touched artefact can be reconstructed end-to-end. Two database tables, some middleware, and a retention policy. Boring infrastructure, indispensable.", "points": 3 },
+          { "id": "c", "label": "Screenshots saved to the engagement folder.", "correct": false, "explain": "Screenshots are not queryable, not append-only, and not standardised. They are evidence theatre, not an audit trail. Pramod will see through it the moment he asks 'show me every AI-touched journal entry above ₹50,000 last quarter'.", "points": 1 },
+          { "id": "d", "label": "Trust the AI vendor's logs.", "correct": false, "explain": "The AI vendor's logs are written by the AI vendor, retained per the AI vendor's policy, queryable on the AI vendor's terms. Your audit defence cannot live on someone else's server. Own your eval log.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "**Stage 4.** Pramod asks the question every partner asks. *'What is the failure mode that scares you the most?'*",
+        "options": [
+          { "id": "a", "label": "The AI gets a row wrong.", "correct": false, "explain": "Individual wrong rows are expected and survivable — that is what the review tier exists for. The scary failure modes are systematic, not individual.", "points": 1 },
+          { "id": "b", "label": "Systematic misclassification that the CA review samples miss because every row in the cluster looks confident. Caught at audit. Material restatement.", "correct": true, "explain": "**This is the right fear.** A confident-looking 6,000-row cluster mapped to the wrong head of expense will sail through any reasonable sample. Mitigation: stratify samples by category, not just by confidence. Re-test sampled categories quarterly. Pramod will recognise this — it is the audit assertion-and-population problem, dressed in new clothes.", "points": 3 },
+          { "id": "c", "label": "The AI vendor goes out of business.", "correct": false, "explain": "Real risk, but a procurement and continuity question, not the scariest workflow failure. Mitigate by keeping prompts and evals portable. Not your top fear today.", "points": 1 },
+          { "id": "d", "label": "Junior staff over-trust the AI and stop learning.", "correct": true, "explain": "**Also legitimate, and Pramod will love that you flagged it.** If juniors learn to click 'accept' on AI output without ever doing the reasoning, in five years your firm has no senior CAs. Mitigation: rotate juniors through manual categorisation on a sampled basis; make them defend their accept/reject decisions in review. Half-credit for systematic-misclassification, full-credit if you raise both.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Pramod sits back and says *'Draft the 90-day plan by Friday. You are leading the rollout.'* You picked the right pilot cohort, drew the classify-then-verify line in the right place, demanded an eval log on day one, and named both the systematic-misclassification and skill-atrophy risks. This is the scoping conversation a partner wishes every articled assistant could have.",
+      "good": "Pramod is satisfied but takes the pen from you on one or two answers. You have the right instincts on classify-then-verify, but re-read the lesson on confidence-stratified sampling and the eval log. The 90-day plan is yours to write; come back next Monday with v2.",
+      "learn": "Pramod is patient but firm. *'Anand, this is not a deployment, this is a discipline. Re-read the lesson, especially the sections on classify-then-verify, the review tiers, and why the eval log is the precondition not the postscript. We will have this conversation again on Wednesday.'* The good news: he is willing to have it again. The next firm might not be."
+    }
+  }
+}

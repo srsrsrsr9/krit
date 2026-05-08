@@ -1,0 +1,265 @@
+{
+  "slug": "ai-gst-tds",
+  "title": "GST, TDS, and Indian Tax Workflows with AI",
+  "subtitle": "Tax laws are knowable; AI shouldn't guess",
+  "estimatedMinutes": 14,
+  "skills": ["accounting-ai-tax-india"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-accounting/ai-gst-tds.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — why tax + AI is dangerous without discipline" },
+        { "startSec": 80, "label": "Mental model: tax laws are knowable, not guessable" },
+        { "startSec": 220, "label": "Move 1 — RAG against the actual GST/IT acts" },
+        { "startSec": 410, "label": "Move 2 — The never-ship rule for filings" },
+        { "startSec": 560, "label": "The trap, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-accounting/ai-gst-tds.html",
+      "notesByline": "Notes by Anand, articleship batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Two months ago, an articled assistant in a Hyderabad firm filed a GSTR-3B based on ChatGPT's summary of the input tax credit position. ChatGPT confidently cited \"Notification 24/2023-Central Tax\" as the basis for a partial reversal. The notification number existed; the content did not match. The firm received a notice three weeks later. The articled assistant's batchmates now refer to him, behind his back, as Section-Sixteen Sandeep.\n\nThis lesson exists so you do not become the next Sandeep. Indian tax law is the most complex, most-amended body of practical knowledge any working CA touches. AI can either be your fastest research assistant or your most confident liar. The difference is one design decision."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two paths fork from a CA at the centre. Left path goes to a stack of physical books labelled 'GST Act, IT Act, CBIC Notifications' and ends with a green tick. Right path goes to a chatbot bubble that says 'I think it is...' and ends with a red cross.",
+      "caption": "Same question, two paths. The left one cites the source you can verify. The right one cites itself.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FEF3C7'/><g transform='translate(270 140)'><circle r='32' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text y='-2' text-anchor='middle' font-family='monospace' font-size='10' fill='#7C2D12' font-weight='bold'>CA</text><text y='12' text-anchor='middle' font-family='monospace' font-size='9' fill='#7C2D12'>question?</text></g><path d='M270 145 Q150 120 60 90' stroke='#065F46' stroke-width='2' fill='none' marker-end='url(#g)'/><path d='M330 145 Q450 120 540 90' stroke='#9F1239' stroke-width='2' fill='none' marker-end='url(#r)'/><g transform='translate(20 20)'><rect width='160' height='90' rx='8' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><g font-family='monospace' font-size='9' fill='#065F46'><text x='80' y='22' text-anchor='middle' font-weight='bold'>RAG over corpus</text><text x='80' y='42' text-anchor='middle'>* GST Act 2017</text><text x='80' y='56' text-anchor='middle'>* CGST Rules</text><text x='80' y='70' text-anchor='middle'>* CBIC Notifications</text><text x='80' y='82' text-anchor='middle'>* Case law</text></g></g><circle cx='100' cy='150' r='22' fill='#10B981'/><path d='M88 150 L97 158 L112 142' stroke='#FFF' stroke-width='3' fill='none' stroke-linecap='round'/><text x='100' y='195' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>verifiable</text><g transform='translate(420 20)'><rect width='160' height='90' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><g font-family='monospace' font-size='10' fill='#9F1239'><text x='80' y='22' text-anchor='middle' font-weight='bold'>Direct LLM ask</text><text x='80' y='44' text-anchor='middle'>'I think it is</text><text x='80' y='58' text-anchor='middle'>Notification</text><text x='80' y='72' text-anchor='middle'>24/2023...'</text></g></g><circle cx='500' cy='150' r='22' fill='#F43F5E'/><path d='M488 138 L512 162 M512 138 L488 162' stroke='#FFF' stroke-width='3' stroke-linecap='round'/><text x='500' y='195' text-anchor='middle' font-family='monospace' font-size='10' fill='#9F1239'>plausible. wrong.</text><defs><marker id='g' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker><marker id='r' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#9F1239'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: tax laws are knowable; AI shouldn't guess",
+      "md": "Indian tax law is finite. Every notification, every circular, every section is published, dated, indexed. There is no good reason for an AI to *guess* a section number when the actual document is one retrieval away.\n\n**If your AI workflow asks the model to remember a tax position, you have built it wrong. If it asks the model to read a specific provision and apply it, you have built it right.**\n\nThis is the boundary that separates real tax-AI work from press-release tax-AI work. Memory is unreliable; retrieval is auditable."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-accounting/anim/ai-gst-tds-rag-pipeline.html",
+      "height": 420,
+      "caption": "A query about ITC eligibility on motor vehicles. Watch the system retrieve Section 17(5)(a), surface the verbatim text, and the model produce an answer that cites the section in its response.",
+      "fallbackImage": "/courses/ai-for-accounting/anim/ai-gst-tds-rag-pipeline-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Section-Sixteen Sandeep ki kahaani",
+          "md": "Sandeep ne ChatGPT ko poocha — \"Section 16 ke under ITC kya conditions hain?\" ChatGPT ne paragraph likha. Sandeep ne copy kara, GSTR-3B mein ITC claim kar di.\n\nDo hafte baad — notice. Reason: ChatGPT ne Rule 36(4) ka old version use kara tha, October 2022 wala. Current rule alag hai. ChatGPT ki training data 2024 ki thi par specific notification timeline confused tha.\n\nLearning: jab tu RAG nahi karta, tu basically Wikipedia ki ek 2-saal purani print copy se filing kar raha hai."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The Sandeep cautionary tale",
+          "md": "Sandeep filed a GSTR-3B based on a ChatGPT paragraph that quoted a superseded version of Rule 36(4). The notice arrived in three weeks. Without RAG against the current corpus, you're filing against a stale snapshot."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 1 — RAG against the actual GST/IT Act" },
+    {
+      "type": "markdown",
+      "md": "First named move. Build (or buy) a **RAG (retrieval-augmented generation) pipeline** indexed over the actual primary sources.\n\nFor an Indian tax practice, the corpus is roughly: the CGST Act, IGST Act, SGST Acts of relevant states, CGST Rules, CBIC notifications and circulars (last 5 years minimum), the Income Tax Act, Income Tax Rules, CBDT circulars, the major DTAAs your clients deal with, and selected case law from ITAT, High Courts, and Supreme Court.\n\nThe pipeline does this: when a question comes in, the system retrieves the relevant passages from the corpus, then asks the model to answer *based only on those passages*, with verbatim quotes and section citations.\n\nThe model is no longer recalling; it is reading. The difference is the difference between a notice and no notice."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing a query going into a retriever that pulls 5 relevant passages from an indexed corpus. The passages flow into the LLM along with the query. The LLM emits an answer with explicit citations back to the passages.",
+      "caption": "Three stages: retrieve, ground, cite. Skip any one and the discipline collapses.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#EFF6FF'/><g transform='translate(20 130)'><rect width='110' height='60' rx='8' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='55' y='28' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E3A8A' font-weight='bold'>QUERY</text><text x='55' y='44' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1E3A8A'>'ITC on motor vehicles?'</text></g><path d='M130 160 L160 160' stroke='#1E3A8A' stroke-width='2' marker-end='url(#x)'/><g transform='translate(160 50)'><rect width='130' height='220' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='24' text-anchor='middle' font-family='monospace' font-size='10' fill='#92400E' font-weight='bold'>RETRIEVER</text><g font-family='monospace' font-size='8' fill='#7C2D12'><text x='10' y='52'>* Sec 17(5)(a) CGST</text><text x='10' y='66'>* Circular 156/12/2021</text><text x='10' y='80'>* Notif 22/2018-CT</text><text x='10' y='94'>* Para 12 GST flyer</text><text x='10' y='108'>* ITAT Mum 2024</text></g><text x='65' y='200' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E' font-style='italic'>top 5 passages</text></g><path d='M290 160 L320 160' stroke='#1E3A8A' stroke-width='2' marker-end='url(#x)'/><g transform='translate(320 110)'><rect width='130' height='100' rx='8' fill='#F5F3FF' stroke='#5B21B6' stroke-width='2'/><text x='65' y='28' text-anchor='middle' font-family='monospace' font-size='11' fill='#5B21B6' font-weight='bold'>LLM</text><text x='65' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#5B21B6'>answers ONLY from</text><text x='65' y='66' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#5B21B6'>retrieved passages</text><text x='65' y='86' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#5B21B6' font-style='italic'>refuses if not found</text></g><path d='M450 160 L480 160' stroke='#1E3A8A' stroke-width='2' marker-end='url(#x)'/><g transform='translate(480 90)'><rect width='110' height='140' rx='8' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='55' y='24' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46' font-weight='bold'>ANSWER</text><g font-family='monospace' font-size='8' fill='#1F2937'><text x='8' y='44'>'Blocked under</text><text x='8' y='56'>Sec 17(5)(a)</text><text x='8' y='68'>except for...'</text></g><g transform='translate(8 80)' font-family='monospace' font-size='8' fill='#065F46'><text x='0' y='10'>cites:</text><text x='0' y='22'>* Sec 17(5)(a)</text><text x='0' y='34'>* Cir 156/12/2021</text><text x='0' y='46'>* p.4 of source</text></g></g><defs><marker id='x' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1E3A8A'/></marker></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "What RAG looks like end-to-end for a single tax question",
+      "steps": [
+        {
+          "label": "Step 1 — The question arrives",
+          "body": "Client asks: 'Can we claim ITC on the new Mahindra Bolero we bought for our sales team?' Plain English, full of context the model needs."
+        },
+        {
+          "label": "Step 2 — Retrieve",
+          "body": "The retriever scans the corpus and returns: Section 17(5)(a) CGST Act (the blocked-credit list), Circular 156/12/2021, the relevant ITAT decision on motor vehicles for sales staff, and any state-specific notification."
+        },
+        {
+          "label": "Step 3 — Ground",
+          "body": "The retrieved passages are stuffed into the model's context with the instruction: 'Answer only based on these passages. Quote verbatim. If the passages do not address the question, say so.'"
+        },
+        {
+          "label": "Step 4 — Generate with citation",
+          "body": "Model returns: 'Section 17(5)(a) blocks ITC on motor vehicles for transportation of persons with seating capacity of 13 or fewer, except when used for further supply of such vehicles, transportation of passengers, or driving training. The Bolero, used for sales staff transport, falls within the blocked list. ITC is not available.' Cites Section 17(5)(a) verbatim and the circular."
+        },
+        {
+          "label": "Step 5 — CA verifies",
+          "body": "You open Section 17(5)(a) on the CBIC site or your bare-act subscription, confirm the quote is exact, and confirm the conclusion. Two minutes; high signal."
+        },
+        {
+          "label": "Step 6 — Eval log",
+          "body": "Question, retrieved passages, model response, your verification note, and your final advice all logged with timestamp and reviewer name. If a notice arrives in 2028, you can defend the position."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "What is the most important property of a RAG-based tax answer?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Every assertion is grounded in a retrieved passage that the CA can independently open and verify", "correct": true, "explain": "Right. Verifiability is the entire point. Without it, RAG is just a slower direct LLM ask." },
+        { "id": "b", "label": "It uses the most expensive model available", "correct": false, "explain": "Model choice is secondary. A cheap model with good retrieval beats an expensive model that hallucinates." },
+        { "id": "c", "label": "It returns the answer in under one second", "correct": false, "explain": "Speed is irrelevant for tax research; correctness is the whole game." },
+        { "id": "d", "label": "It uses a fashionable vector database", "correct": false, "explain": "The DB is plumbing. The discipline matters." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "RAG = bare-act ki digital body double",
+          "md": "Bare act humein hamesha bola gaya — \"yahi sach hai, baaki sab opinion.\" RAG basically AI ke liye bare act ki digital body double hai.\n\nBina RAG ke AI woh senior CA hai jo conference mein sun ke aaya hai aur memory se quote kar raha hai. Theek hai shaayad. Galat ho toh defendable nahi.\n\nRAG ke saath AI woh senior CA hai jo bare act khol ke baith ke padh raha hai. Theek hai aur defendable hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "RAG as digital bare-act",
+          "md": "Without RAG, the model is a senior CA quoting from memory at a conference. With RAG, the model is the same CA reading from the bare act with the page open. One is defensible; the other is folklore."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 2 — The never-ship rule for filings" },
+    {
+      "type": "markdown",
+      "md": "Second named move, and the most important rule in this entire course.\n\n**The never-ship rule: AI never produces the version of a statutory filing that is filed.** Not GSTR-1, not GSTR-3B, not Form 26Q, not Form 3CD, not the income tax return, not the audit report. AI may draft. AI may populate. AI may cross-check. The version uploaded to the GST portal or the income tax e-filing portal is the version produced and reviewed by a human CA, signed under the CA's name and ICAI registration.\n\nThis is not a stylistic preference. The Chartered Accountants Act, the Income Tax Act, the GST law, and the relevant ICAI guidance notes all assume — explicitly — that statutory filings are the work product of the chartered accountant. Outsourcing the signature to an LLM is not a workflow innovation; it is a contravention.\n\nIn practice this means: every filing has a CA review step that meaningfully changes or confirms the AI draft. Rubber-stamping is not review."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A pipeline showing AI drafting GSTR-3B, then a CA review step at a desk, then a clear handoff to the GST portal labelled 'CA-signed'. A red barrier stops AI from going past the review step.",
+      "caption": "AI ends at the review desk. The CA's hand is the only one on the upload button.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(20 80)'><rect width='130' height='80' rx='10' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#1E3A8A' font-weight='bold'>AI drafts</text><text x='65' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>populates GSTR-3B</text><text x='65' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>from books</text></g><path d='M150 120 L190 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(190 80)'><rect width='150' height='80' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='75' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#92400E' font-weight='bold'>CA reviews</text><text x='75' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>changes / confirms /</text><text x='75' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>signs the artefact</text></g><line x1='350' y1='40' x2='350' y2='200' stroke='#F43F5E' stroke-width='4' stroke-dasharray='6 4'/><text x='350' y='30' text-anchor='middle' font-family='monospace' font-size='10' fill='#9F1239' font-weight='bold'>NEVER-SHIP LINE</text><path d='M360 120 L400 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(400 80)'><rect width='180' height='80' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='90' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>CA-signed file</text><text x='90' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>uploaded to GST portal</text><text x='90' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>by the CA</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "CA-Veteran Vidya",
+        "role": "Partner, mid-tier Pune firm, 22 years in practice"
+      },
+      "intro": [
+        "GST and TDS season. Decisions made in the last 48 hours, by partners and seniors at firms across India.",
+        "Tell me which ones cross the never-ship line and which stay on the right side."
+      ],
+      "buckets": [
+        { "id": "ok", "label": "On the right side", "tone": "safe" },
+        { "id": "no", "label": "Crosses the line", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "g1",
+          "situation": "An AI tool drafts a GSTR-1 from the sales register. The CA reviews each table, makes 11 corrections (mostly HSN classifications), and uploads the file herself.",
+          "correctBucketId": "ok",
+          "explain": "Right side. AI drafts; CA reviews substantively (11 corrections is meaningful work); CA uploads. Standard workflow."
+        },
+        {
+          "id": "g2",
+          "situation": "An automated pipeline reads books, generates GSTR-3B, files it on the portal via API, and emails the CA the acknowledgement.",
+          "correctBucketId": "no",
+          "explain": "Crosses the line. The CA never reviewed before filing. Doesn't matter how 'good' the pipeline is. The signature is now on a document the CA didn't see."
+        },
+        {
+          "id": "g3",
+          "situation": "A junior uses AI to draft TDS computations for 32 vendors. Senior reviews each one, corrects 4, and signs the consolidated working paper. Junior files the challans.",
+          "correctBucketId": "ok",
+          "explain": "Right side. Substantive senior review with corrections; junior under supervision files. Audit trail intact."
+        },
+        {
+          "id": "g4",
+          "situation": "An AI system generates Form 3CD for a Section 44AB audit, the partner skims for 3 minutes, signs digitally, and uploads.",
+          "correctBucketId": "no",
+          "explain": "Crosses the line. A 3-minute skim of a Form 3CD is not review; it is rubber-stamping. The substantive review is the entire purpose of the auditor's signature."
+        },
+        {
+          "id": "g5",
+          "situation": "AI flags 6 vendors in the TDS run as having a non-resident status that may attract Section 195 with treaty considerations. The CA personally drafts the Section 195 advice, references the relevant DTAA articles, and includes them in the working papers.",
+          "correctBucketId": "ok",
+          "explain": "Right side. AI surfaces the question; CA does the judgment work. Exactly the workflow the never-ship rule envisions."
+        },
+        {
+          "id": "g6",
+          "situation": "A SaaS vendor pitches: 'Our AI files your GSTR-1 directly, no human review needed; we'll re-pay any penalty.' The firm signs up for 47 SME clients.",
+          "correctBucketId": "no",
+          "explain": "Crosses the line, twice. First: vendor cannot waive the CA's statutory liability with a cash guarantee. Second: filing without per-client review is professional misconduct, not innovation."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the rubber-stamp review",
+      "md": "The most common failure mode is not skipping review entirely; it is doing review badly. A senior who 'reviews' a GSTR-3B by clicking through it in 90 seconds and signing has not reviewed it.\n\nThe test is simple: **how many changes did the review produce?** If the answer is consistently zero, you are not reviewing; you are stamping. Either AI is producing a perfect output (extraordinarily unlikely), or you are missing things (overwhelmingly likely).\n\nA review that doesn't change anything 90% of the time is a review that catches nothing 100% of the time."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps for an AI-assisted GSTR-3B filing workflow, first to last.",
+      "items": [
+        { "id": "rec", "label": "Reconcile GSTR-2A/2B against purchase register (with confidence scoring)", "detail": "Resolves ITC eligibility before drafting." },
+        { "id": "draft", "label": "AI drafts GSTR-3B from books and reconciliation results", "detail": "Pre-populated tables with all sources cited." },
+        { "id": "rag", "label": "AI cross-checks treatment of edge cases against current CBIC notifications via RAG", "detail": "Surfaces any new circular affecting current period." },
+        { "id": "review", "label": "CA reviews the draft substantively; documents every change made", "detail": "Review log is part of working papers." },
+        { "id": "sign", "label": "CA signs the working paper attesting to review and approves filing", "detail": "Substantive signoff, not a rubber stamp." },
+        { "id": "file", "label": "CA (or supervised junior) uploads the file to the GST portal", "detail": "Filing happens under CA's credentials and oversight." },
+        { "id": "log", "label": "Save the eval log: prompts, retrieved passages, draft, review changes, signed file, ack", "detail": "Reproducible audit trail." }
+      ],
+      "hint": "AI does not skip the review; review does not skip the file."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write the system prompt for a RAG-based GST advisory assistant. The corpus is indexed CGST/IGST Acts, CGST Rules, CBIC notifications and circulars (last 5 years). The assistant must refuse to answer questions outside the retrieved passages and must cite section + sub-section + clause for every position.",
+      "lang": "markdown",
+      "starter": "## System prompt — GST Advisory RAG\n\n",
+      "expected": "## System prompt — GST Advisory RAG\n\nYou are a GST advisory assistant for a chartered accountant practice in India. Your job is to answer questions about GST law strictly based on the retrieved passages provided in this conversation.\n\n**Sourcing rules**\n1. Every assertion you make MUST be supported by a retrieved passage. Quote the relevant clause verbatim, in quotation marks, before drawing the conclusion.\n2. Cite section, sub-section, clause, and source document for every position. Format: 'Section 17(5)(a), CGST Act, 2017'. For circulars: 'Circular No. 156/12/2021-GST, dated 21 June 2021'. For notifications: 'Notification No. 22/2018-Central Tax, dated 14 September 2018'.\n3. If the retrieved passages do not address the question, respond exactly: 'The retrieved corpus does not contain a passage that addresses this question. Please consult the bare act, the relevant circular, or a senior partner.' Do not attempt to answer from training data.\n4. If you find a conflict between two retrieved passages (e.g., a notification superseded by a later one), surface the conflict and refuse to draw a conclusion until a CA resolves it.\n\n**Output format**\n- Begin with a one-sentence answer.\n- Follow with the verbatim quote(s) from the retrieved passage(s).\n- Follow with a 1 to 3 paragraph reasoned application of the quote to the facts of the question.\n- End with a list of citations: section / sub-section / clause / document title / date.\n- Add a 'For CA review' note flagging any open factual assumptions you made about the client (e.g., 'assumes the vehicle has 13 or fewer seats; verify').\n\n**Forbidden**\n- Do not paraphrase a section without quoting the underlying language first.\n- Do not cite a section number you have not seen in the retrieved passages.\n- Do not give a tax position with confidence above 'highly likely'; the final position is the CA's call.\n- Do not generate the file that will be uploaded; you draft for human review only."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are required for an AI-assisted tax workflow to be defensible? (Select all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "RAG against the actual primary source corpus, not training-data memory", "correct": true, "explain": "Right. Without RAG, you're filing against a stale snapshot." },
+        { "id": "b", "label": "Substantive CA review that produces real changes, not rubber-stamping", "correct": true, "explain": "Right. A review that catches nothing is no review at all." },
+        { "id": "c", "label": "Eval log preserved for the audit retention period", "correct": true, "explain": "Right. If you can't reproduce the workflow, you can't defend the output." },
+        { "id": "d", "label": "Direct API filing with no human in the loop, to maximise efficiency", "correct": false, "explain": "Wrong, on every level. Cuts the never-ship line and the CA's professional responsibility." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "The fake notification number",
+          "md": "Senior ne kaha — \"AI ne fake GST notification number generate kara aur articled assistant ne CBIC site pe check kiye bina client ko forward kar diya. Client ne CFO ko bheja. CFO ne board mein quote kara. Notice 9 hafton mein.\"\n\nGalti articled assistant ki nahi thi. Galti workflow ki thi. Workflow mein verification step nahi tha. Bina verification ke koi citation safe nahi hai — chahe AI bole, chahe articled assistant bole, chahe partner bole. Notification number CBIC site pe verify hoga, tabhi citation hai."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Verify the citation, always",
+          "md": "An AI hallucinated a notification number; a junior didn't verify; a CFO quoted it to the board; a notice arrived. The fault is the workflow. Every citation gets verified against the source, every time, by someone whose name is in the audit trail."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Indian tax law is finite and indexed; there is no excuse for asking AI to recall when retrieval is one query away.",
+        "RAG against the actual GST/IT acts, rules, circulars, and case law turns the model from a hallucinator into a reader.",
+        "The never-ship rule: AI never produces the version of a statutory filing that is filed; the CA does, after substantive review.",
+        "Substantive review is measured by changes made; a review that catches nothing is not a review.",
+        "Every citation is verified against the source by a human whose name is in the eval log; no exceptions, no shortcuts."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one client filing your firm completed this quarter where AI assistance was (or could have been) used. Map the full workflow against the never-ship rule and the substantive-review test. Where, if at all, would you tighten the workflow before next quarter?"
+    }
+  ]
+}

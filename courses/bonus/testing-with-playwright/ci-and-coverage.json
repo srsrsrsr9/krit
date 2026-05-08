@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 88% Coverage, 14 Production Bugs, One Strategy Pivot",
+    "source": "VP Engineering at Khaata Books, a Chennai-based small-business accounting SaaS (~₹120 Cr ARR, 3.2 lakh customers)",
+    "date": "September 2024",
+    "story": "Khaata's engineering org spent Q2 of 2024 chasing a board-mandated test-coverage target: **95% line coverage by year-end**. They started Q2 at 61% and finished at **88%**, on track to hit 95 by December. Engineers were measured on coverage delta in their PRs.\n\nThe problem: Q3 2024 shipped **14 critical-path bugs** to production. Wrong tax calculations on inter-state GST. Invoice PDFs missing the line-item totals on the second page. A reconciliation bug that hid ₹2.1 Cr of customer payments. None caught by the 88% coverage suite.\n\nWhy? Because the coverage was concentrated in the easy-to-test parts: utility functions, formatters, getters. The top-5 user journeys — invoice creation, payment recording, GST filing, bank reconciliation, year-end closing — had between **31% and 54% effective coverage** when measured by 'does a test exist that exercises this journey end-to-end with realistic data?'\n\nIn October the VPE killed the coverage target. Replaced it with: **'every top-10 user journey has at least one Playwright e2e spec, plus integration tests on every server action it touches, plus a golden-master test for any output the customer sees (PDF, CSV, email).'**\n\nQ4 2024 shipped 6 critical bugs (down from 14). Q1 2025 shipped 4. Coverage % is now 79% and nobody cares — because the *right* 79%.",
+    "takeaway": "Coverage measures what your tests touched, not what your customers care about. A 95% coverage suite that misses the top user journey is a 0% coverage suite where it counts."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Coverage-vs-Impact Memo",
+    "setup": "Week 6, the final week. Sneha hit her targets: flake at 0.7%, CI at 11 minutes, suite cut from 289 specs to 84 well-chosen ones. The CTO **Vikram** is happy. The board is not.\n\nThe board read a McKinsey deck about 'engineering quality benchmarks' and now wants Tarakash to commit to **95% test coverage by end of FY26**. Vikram has scheduled a 30-minute meeting with Sneha to either align on the target or push back.\n\nSneha believes the 95% target is wrong. She has 24 hours to write a one-page memo arguing for an alternative. The memo will be read aloud at the next board meeting if Vikram is convinced.",
+    "coach": { "name": "Staff-SDET Saurabh", "role": "Has watched three companies hit their coverage targets and ship the same bugs anyway" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Sneha's memo opens with the **framing**. What's the strongest opening?",
+        "options": [
+          { "id": "a", "label": "\"95% coverage is achievable but it would not have prevented any of our last 8 production incidents. Here's what would have.\"", "correct": true, "explain": "**Strong.** You agreed the target is *achievable* (so the board doesn't think you're being defensive), then immediately pivoted to outcomes (which is what they actually care about). The 'here's what would have' creates anticipation — they have to keep reading.", "points": 3 },
+          { "id": "b", "label": "\"Coverage is a vanity metric. Real quality comes from culture, not numbers.\"", "correct": false, "explain": "Boards hate the word 'vanity' applied to their suggestions, and 'culture' has no measurement attached. You'll be dismissed as the engineering lead who 'won't be held accountable.' Lose the pitch in the first sentence.", "points": 0 },
+          { "id": "c", "label": "\"Per Google's testing blog and Kent Beck's recent essay, coverage targets above 80% have diminishing returns.\"", "correct": false, "explain": "Appeals to authority don't move boards. They have their own consultants who quote different authorities. Lead with *your* data on *their* business.", "points": 0 },
+          { "id": "d", "label": "\"To hit 95% coverage we need 4 more SDETs, ₹95 lakh of additional CI compute per year, and 6 months of work.\"", "correct": false, "explain": "You opened with cost without opening with the problem-with-the-goal. The board will counter-offer 'fine, hire two and we'll revisit' and now you've negotiated yourself into a worse outcome.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "The body of the memo needs **the alternative target**. What does Sneha propose?",
+        "options": [
+          { "id": "a", "label": "\"Every one of our top-10 user journeys has: (1) one Playwright e2e spec, (2) integration tests on every server action it touches, (3) a golden-master test on any customer-visible output. Currently 4 of 10 journeys meet this bar.\"", "correct": true, "explain": "**This is the answer.** Specific, measurable, customer-anchored, and honest about where you are today. The board can track 'journeys covered: 4 → 10' as easily as a percentage, but the metric actually maps to revenue.", "points": 3 },
+          { "id": "b", "label": "\"Replace coverage % with mutation-testing score above 80%.\"", "correct": false, "explain": "Mutation testing is technically excellent and the board will not understand a single sentence about it. They will ask three follow-up questions and walk away unconvinced. Use techniques the board can verify.", "points": 1 },
+          { "id": "c", "label": "\"Set the target at 70% coverage instead of 95% — same metric, lower bar.\"", "correct": false, "explain": "You accepted the framing (coverage % matters) and just argued for a worse number. The board will reasonably ask 'why not 80? Why not 90?' and now you're negotiating the wrong axis.", "points": 0 },
+          { "id": "d", "label": "\"Track production-incident rate (incidents per 1,000 deploys) with a target of <2.\"", "correct": true, "explain": "**Different angle, also valid.** Outcome metric ties tests to what the board actually wants (uptime, customer trust). Best used alongside the journey-coverage metric — one is leading, one is lagging.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Vikram pushes back: *'The board likes round numbers. Can we just hit 95% and also do your journey thing?'* Sneha's response?",
+        "options": [
+          { "id": "a", "label": "\"We can — but the cost is ~28 weeks of engineering time we'd otherwise spend on the next 6 journeys. The marginal coverage will mostly be on code paths customers never see.\"", "correct": true, "explain": "**Lethal.** You quantified the opportunity cost in time the board understands (engineering weeks = features not shipped). You did not say 'no' — you said 'yes, but here's the trade.' Now Vikram has the words to take to the board.", "points": 3 },
+          { "id": "b", "label": "\"Sure, we'll do both.\"", "correct": false, "explain": "You just committed your team to two targets, one of which you don't believe in. In 6 months you'll either miss both or be remembered as the QA lead who burned out the team chasing a vanity number.", "points": 0 },
+          { "id": "c", "label": "\"No. The 95% target is wrong and I won't sign up for it.\"", "correct": false, "explain": "You're now the obstacle, not the solution. Vikram will champion someone who'll say yes, and you'll spend the next quarter being undermined.", "points": 0 },
+          { "id": "d", "label": "\"Let's pilot the journey metric for one quarter, report results to the board, and revisit the 95% target with that data.\"", "correct": true, "explain": "**Smart compromise.** A pilot defers the binary decision and lets evidence accumulate. The board feels heard ('we'll revisit'), you get a quarter to prove the journey metric, and the 95% target quietly dies if the pilot succeeds.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final paragraph — the **one-line summary** that gets read at the board meeting. Pick it.",
+        "options": [
+          { "id": "a", "label": "\"We propose tracking coverage of customer journeys, not lines of code, because customers experience journeys and don't experience lines.\"", "correct": true, "explain": "**Quotable.** A board member will repeat this in the next QBR. It frames the entire memo in one sentence and ties the technical decision to the customer outcome the board actually cares about.", "points": 3 },
+          { "id": "b", "label": "\"Test coverage is a complex topic that requires nuanced trade-offs.\"", "correct": false, "explain": "True, useless, and signals you're afraid to commit. The board will read this as 'engineering is making excuses.' Boards reward conviction, not hedging.", "points": 0 },
+          { "id": "c", "label": "\"Per industry research and our internal data, 95% coverage targets correlate weakly with quality outcomes.\"", "correct": false, "explain": "Accurate but boring. The board will skim past it and remember nothing. You need a line that lands, not a line that's defensible.", "points": 1 },
+          { "id": "d", "label": "\"The right question is not 'how much code did we test?' but 'did we test the code our customers depend on?'\"", "correct": true, "explain": "**Reframes the entire debate.** Hard to argue with, easy to remember, ties to revenue. Either this or option (a) wins the board over.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Vikram presents the memo to the board. They approve the journey-coverage pilot for Q1 FY26. By Q3, Tarakash's production incident rate is down 64% and the 95% coverage target has been quietly retired. Saurabh sends one Slack message: *'You changed how this company measures quality. That's a 6-week rescue that mattered.'*",
+      "good": "You made the right argument but pulled punches at one of the stages. Re-read the section on **opportunity-cost framing** — boards understand 'this costs you 28 weeks of features' better than any quality-philosophy argument.",
+      "learn": "You either accepted the 95% target or refused it without offering an alternative. In six months Tarakash will hit 95% coverage and ship the same incidents. Re-read the lesson — especially **why coverage % is a vanity metric** and **how to propose journey-based targets that boards can track**."
+    }
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "path": {
+    "slug": "product-management",
+    "title": "Product Management Fundamentals",
+    "subtitle": "Make decisions that survive contact with engineering",
+    "summary": "Most first-time PMs think the job is writing JIRA tickets and chairing standups. The job is actually translation and sequencing — taking a vague founder ask and turning it into a thing engineers can build, users can love, and sales can sell. By the end of this path you can scope a stakeholder request, run a real user interview, write a one-page PRD, prioritize a backlog, build a quarterly roadmap, ship a feature, and measure whether it worked.",
+    "kind": "PATH",
+    "level": "NOVICE",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "pm-mental-model",
+      "name": "PM Mental Model",
+      "category": "management",
+      "description": "Frame the PM job as translation plus sequencing rather than ticket-writing",
+      "decayDays": null
+    },
+    {
+      "slug": "pm-user-research",
+      "name": "User Research",
+      "category": "management",
+      "description": "Run interviews that surface real pain instead of polite agreement",
+      "decayDays": null
+    },
+    {
+      "slug": "pm-prd-and-priority",
+      "name": "PRDs and Prioritization",
+      "category": "management",
+      "description": "Write one-page specs and rank work using value, effort, and risk",
+      "decayDays": null
+    },
+    {
+      "slug": "pm-roadmapping",
+      "name": "Roadmapping",
+      "category": "management",
+      "description": "Build a now-next-later roadmap that aligns stakeholders without overpromising",
+      "decayDays": null
+    },
+    {
+      "slug": "pm-launch-and-measure",
+      "name": "Launch and Measurement",
+      "category": "management",
+      "description": "Run pre-mortems, ship features safely, and read post-launch metrics",
+      "decayDays": null
+    },
+    {
+      "slug": "pm-judgment",
+      "name": "Product Judgment",
+      "category": "management",
+      "description": "Apply tradeoff thinking across ambiguous, multi-stakeholder situations",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "pm-user-research", "requires": "pm-mental-model" },
+    { "skill": "pm-prd-and-priority", "requires": "pm-user-research" },
+    { "skill": "pm-roadmapping", "requires": "pm-prd-and-priority" },
+    { "skill": "pm-launch-and-measure", "requires": "pm-roadmapping" },
+    { "skill": "pm-judgment", "requires": "pm-launch-and-measure" }
+  ],
+  "assessment": {
+    "title": "Product Management Fundamentals Assessment",
+    "description": "Tests whether you can apply PM judgment across scoping, user research, prioritization, roadmapping, and launch. Most questions have one defensible right answer; a few have two. Read carefully — the wrong answers are wrong on purpose.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["pm-judgment"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CEO forwards an email from your biggest customer asking for a 'simple feature — just let admins export user data to Excel.' What is the right first move?",
+        "points": 1,
+        "skillSlug": "pm-mental-model",
+        "choices": [
+          { "id": "a", "label": "Open a JIRA ticket and forward it to engineering with the customer email pasted in.", "correct": false, "explanation": "Translation is the PM's job. The engineer needs the why and the constraints, not a forwarded thread." },
+          { "id": "b", "label": "Reply to the CEO with the three-question scope test: who, what change in their day, what happens if we do nothing.", "correct": true, "explanation": "The scope test exposes whether this is one feature, three features, or a workaround for a different missing feature." },
+          { "id": "c", "label": "Schedule a one-hour requirements meeting with the customer and three engineers.", "correct": false, "explanation": "Premature. You don't yet know if this is worth an engineer's hour, let alone four." },
+          { "id": "d", "label": "Estimate it yourself and put it on next sprint.", "correct": false, "explanation": "Estimating something you haven't scoped is how 'just an export' becomes a six-week saga." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of the following count as outcomes (not outputs)? Pick all that apply.",
+        "points": 2,
+        "skillSlug": "pm-mental-model",
+        "choices": [
+          { "id": "a", "label": "Reduce time to first invoice from 4 days to under 1 day", "correct": true, "explanation": "Measurable change in user behavior. Outcome." },
+          { "id": "b", "label": "Ship the new invoicing module by Q3", "correct": false, "explanation": "Output. Says nothing about whether anyone uses it." },
+          { "id": "c", "label": "Increase weekly active admins from 38 percent to 55 percent", "correct": true, "explanation": "Behavior change with a number. Outcome." },
+          { "id": "d", "label": "Launch a redesigned dashboard", "correct": false, "explanation": "A redesign is a thing you ship; whether it moves a metric is the outcome." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You're interviewing a user who says 'I would absolutely use a dark mode if you built one.' What is the highest-signal next question?",
+        "points": 1,
+        "skillSlug": "pm-user-research",
+        "choices": [
+          { "id": "a", "label": "Great — what shade of dark would you prefer?", "correct": false, "explanation": "Designs the feature before you've validated the problem." },
+          { "id": "b", "label": "Tell me about the last time the current screen actually hurt your eyes or your work.", "correct": true, "explanation": "Past behavior beats hypothetical preference. If they can't recall a moment, the demand is theoretical." },
+          { "id": "c", "label": "On a scale of 1 to 10, how likely are you to use it?", "correct": false, "explanation": "Stated intent is a known liar. The 9 becomes a 2 at launch." },
+          { "id": "d", "label": "Would you pay extra for it?", "correct": false, "explanation": "Pricing questions in a discovery call get polite nonsense." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Why does the 'silence move' work in user interviews?",
+        "points": 1,
+        "skillSlug": "pm-user-research",
+        "choices": [
+          { "id": "a", "label": "It makes the interviewer look thoughtful and senior.", "correct": false, "explanation": "Optics, not signal." },
+          { "id": "b", "label": "After a user finishes their first answer, three to five seconds of silence pulls out the second, more honest answer.", "correct": true, "explanation": "The first answer is the social-acceptable one. The second is closer to the truth." },
+          { "id": "c", "label": "It saves time on calls.", "correct": false, "explanation": "It actually slows the call down on purpose." },
+          { "id": "d", "label": "It avoids leading questions.", "correct": false, "explanation": "Silence is unrelated to leading. The point is depth, not bias." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are red flags in a user interview transcript? Select all that apply.",
+        "points": 2,
+        "skillSlug": "pm-user-research",
+        "choices": [
+          { "id": "a", "label": "Every answer starts with 'I would' or 'I might'", "correct": true, "explanation": "Hypotheticals. You want stories about what they actually did." },
+          { "id": "b", "label": "User describes the last time they hit the problem with a date and a workaround", "correct": false, "explanation": "Gold. This is exactly what you want." },
+          { "id": "c", "label": "User suggests a specific UI solution within 2 minutes of the call starting", "correct": true, "explanation": "Solution mode. Reset to the underlying job." },
+          { "id": "d", "label": "User pauses for 4 seconds before answering a question", "correct": false, "explanation": "Pauses are signal, not noise. They mean the user is actually thinking." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A PRD is best understood as:",
+        "points": 1,
+        "skillSlug": "pm-prd-and-priority",
+        "choices": [
+          { "id": "a", "label": "A specification document for the engineers", "correct": false, "explanation": "Too narrow. Engineers are one audience. Sales, support, and future-you also read it." },
+          { "id": "b", "label": "A contract with future-you about what 'done' means", "correct": true, "explanation": "The PRD's job is to make 'done' unambiguous before the work starts. Future-you is the toughest stakeholder." },
+          { "id": "c", "label": "A marketing brief for launch", "correct": false, "explanation": "That's a launch plan, not a PRD." },
+          { "id": "d", "label": "A wireframe with notes", "correct": false, "explanation": "Wireframes are a tool inside a PRD, not the PRD itself." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You're using RICE to score 6 potential features. Feature A scores 800, feature B scores 720. Both have similar effort. The CEO is pushing for B. What does the framework actually tell you to do?",
+        "points": 1,
+        "skillSlug": "pm-prd-and-priority",
+        "choices": [
+          { "id": "a", "label": "Build A, the higher score wins.", "correct": false, "explanation": "RICE is decision support, not a decision oracle. An 11 percent gap is within the noise of your own confidence numbers." },
+          { "id": "b", "label": "Build B, the CEO's gut is the tiebreaker.", "correct": false, "explanation": "Defaulting to HiPPO (highest-paid person's opinion) skips the actual question: what does the CEO know that your inputs missed?" },
+          { "id": "c", "label": "Treat the scores as a tie and decide on a non-RICE factor — strategic fit, dependency unlock, or learning value.", "correct": true, "explanation": "When scores are within ~15 percent, the model is signalling 'these are equivalent; use judgment.' That's the point of decision support." },
+          { "id": "d", "label": "Re-run RICE with stricter inputs until one wins.", "correct": false, "explanation": "Tweaking the inputs to get the answer you want is how RICE becomes theatre." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What does the 'cut, don't compromise' rule mean in practice?",
+        "points": 1,
+        "skillSlug": "pm-prd-and-priority",
+        "choices": [
+          { "id": "a", "label": "Never reduce scope; ship the full thing or ship nothing.", "correct": false, "explanation": "The opposite. The rule is about cutting features, not refusing to cut." },
+          { "id": "b", "label": "When you must reduce scope, drop entire features rather than building half of every feature.", "correct": true, "explanation": "Three good features beat six half-features. Half-features become support tickets." },
+          { "id": "c", "label": "Compromise on quality before scope.", "correct": false, "explanation": "Backwards. Scope flexes; quality doesn't." },
+          { "id": "d", "label": "Cut deadlines, never features.", "correct": false, "explanation": "Sometimes the deadline matters more than the scope. The rule is about how to cut, not whether to." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Why is a roadmap longer than one quarter mostly fiction?",
+        "points": 1,
+        "skillSlug": "pm-roadmapping",
+        "choices": [
+          { "id": "a", "label": "Engineers can't estimate that far out.", "correct": false, "explanation": "True but secondary. Even with perfect estimates, the inputs change." },
+          { "id": "b", "label": "User behavior, competitor moves, and your own learnings invalidate the assumptions every 6 to 10 weeks.", "correct": true, "explanation": "A roadmap is built on assumptions about the world. The world's update frequency is faster than two quarters." },
+          { "id": "c", "label": "Stakeholders forget what was on it.", "correct": false, "explanation": "They don't, actually. They remember it word for word and quote it back at you." },
+          { "id": "d", "label": "Deadlines slip.", "correct": false, "explanation": "Slipping is symptom, not cause." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are valid uses of a roadmap? Select all that apply.",
+        "points": 2,
+        "skillSlug": "pm-roadmapping",
+        "choices": [
+          { "id": "a", "label": "Telling the same coherent story to sales, engineering, and the board", "correct": true, "explanation": "Alignment is the primary job. One story, three audiences." },
+          { "id": "b", "label": "Committing to ship feature X by month Y to a customer", "correct": false, "explanation": "That's a contract. Roadmaps are not contracts." },
+          { "id": "c", "label": "Showing the why behind your sequencing — not just the what", "correct": true, "explanation": "If a roadmap is just a list of features, you've built a backlog, not a roadmap." },
+          { "id": "d", "label": "Listing every JIRA ticket for the next year", "correct": false, "explanation": "That's a backlog dump. Nobody reads past row 7." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Sales asks you to commit a feature to a prospect to close a deal. The feature isn't on the roadmap. What's the strongest first response?",
+        "points": 1,
+        "skillSlug": "pm-roadmapping",
+        "choices": [
+          { "id": "a", "label": "Yes, we can ship it next sprint.", "correct": false, "explanation": "Whiplashed roadmap. Every other customer's feature just got bumped." },
+          { "id": "b", "label": "No, it's not on the roadmap.", "correct": false, "explanation": "Right answer, wrong delivery. Sales loses a deal and respect for product." },
+          { "id": "c", "label": "Help me understand the deal — size, timing, and which 5 other customers want this. I'll come back tomorrow with a yes, no, or a swap.", "correct": true, "explanation": "The polite no template. You're not refusing; you're moving to evidence-based decision." },
+          { "id": "d", "label": "Add it to the backlog and move on.", "correct": false, "explanation": "Hiding from a decision. Sales reads silence as agreement." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is a pre-mortem?",
+        "points": 1,
+        "skillSlug": "pm-launch-and-measure",
+        "choices": [
+          { "id": "a", "label": "A retrospective held before the project starts.", "correct": false, "explanation": "Close, but a retrospective is about what happened. A pre-mortem is about what could go wrong." },
+          { "id": "b", "label": "An exercise where the team imagines the launch failed and lists the most likely reasons, before shipping.", "correct": true, "explanation": "Surfacing failure modes early, while they're cheap to fix, instead of later in the postmortem when they're expensive." },
+          { "id": "c", "label": "A risk register filled in by engineering management.", "correct": false, "explanation": "Risk registers are bureaucratic; pre-mortems are imaginative." },
+          { "id": "d", "label": "A QA test plan.", "correct": false, "explanation": "QA verifies known things; pre-mortem surfaces unknown things." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "On day 7 after launch, which signals are most worth your attention? Select all that apply.",
+        "points": 2,
+        "skillSlug": "pm-launch-and-measure",
+        "choices": [
+          { "id": "a", "label": "Activation rate of users who reached the new feature", "correct": true, "explanation": "Tells you if the feature is even discoverable and usable." },
+          { "id": "b", "label": "Total page views on the launch blog post", "correct": false, "explanation": "Vanity. Tells you about marketing, not product." },
+          { "id": "c", "label": "Day-7 retention of users who tried the feature vs those who didn't", "correct": true, "explanation": "The clearest signal that the feature added real value, not novelty." },
+          { "id": "d", "label": "Number of internal Slack messages from sales about the launch", "correct": false, "explanation": "Internal noise. Useful for politics, not for product decisions." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your B2B SaaS has DAU/MAU of 0.18. Industry good is 0.4. Your CEO says 'great, lots of room to grow.' What's the more accurate read?",
+        "points": 1,
+        "skillSlug": "pm-launch-and-measure",
+        "choices": [
+          { "id": "a", "label": "The CEO is right; we're underpenetrated.", "correct": false, "explanation": "DAU/MAU below 0.2 in B2B usually means you're a 'logged-in occasionally' tool, not a daily habit." },
+          { "id": "b", "label": "We have an engagement problem, not a growth problem; new users won't fix what existing users won't do.", "correct": true, "explanation": "Pouring users into a leaky bucket is the most expensive mistake B2B SaaS makes." },
+          { "id": "c", "label": "DAU/MAU doesn't matter for B2B.", "correct": false, "explanation": "It matters; the threshold is just lower than consumer." },
+          { "id": "d", "label": "Switch to MAU/QAU.", "correct": false, "explanation": "Hiding the problem behind a softer denominator." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You shipped a feature. Activation is good (60 percent of users tried it), but day-30 retention of those users is 8 percent lower than non-users. What does this most likely mean?",
+        "points": 1,
+        "skillSlug": "pm-judgment",
+        "choices": [
+          { "id": "a", "label": "The feature is great; users just need more education.", "correct": false, "explanation": "When usage actively predicts churn, the feature is anti-value, not under-marketed." },
+          { "id": "b", "label": "The feature is creating friction or false expectations; investigate before promoting it further.", "correct": true, "explanation": "Negative correlation with retention is a stop signal. Find out why before you spend on adoption." },
+          { "id": "c", "label": "Day-30 retention is too noisy to read; ignore it.", "correct": false, "explanation": "8 percentage points on a 30-day cohort is well above noise for most products." },
+          { "id": "d", "label": "Retention will recover at day 60.", "correct": false, "explanation": "Hope is not a plan." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "An engineer says 'this will take 2 weeks.' Translated through PM judgment, the realistic ship date is roughly:",
+        "points": 1,
+        "skillSlug": "pm-judgment",
+        "choices": [
+          { "id": "a", "label": "2 weeks", "correct": false, "explanation": "Pure estimate, no buffer for the unknowns. You will be wrong." },
+          { "id": "b", "label": "3 to 4 weeks once you account for review, QA, edge cases, and one mid-project surprise", "correct": true, "explanation": "The 1.5-2x rule on engineering estimates is empirical across most teams. Plan for it." },
+          { "id": "c", "label": "8 weeks; engineers always lie", "correct": false, "explanation": "Cynicism, not judgment. Most estimates are honest, just optimistic about smooth paths." },
+          { "id": "d", "label": "1 week; engineers pad", "correct": false, "explanation": "The opposite assumption is even worse. You'll commit to a date you cannot hit." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are the PM's job? Select all that apply.",
+        "points": 2,
+        "skillSlug": "pm-judgment",
+        "choices": [
+          { "id": "a", "label": "Deciding what NOT to build", "correct": true, "explanation": "Saying no, with reasons, is more of the job than saying yes." },
+          { "id": "b", "label": "Writing the production code", "correct": false, "explanation": "If the PM is writing code, the engineering team is missing a person." },
+          { "id": "c", "label": "Translating between users, engineers, sales, and leadership so each understands the others", "correct": true, "explanation": "The translator role is the load-bearing wall of the job." },
+          { "id": "d", "label": "Approving design pixel-by-pixel", "correct": false, "explanation": "That's design's craft; PM weighs in on flow and tradeoffs, not pixels." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "product-management-capstone",
+    "title": "Capstone: The Sales-Forwarded Feature Request",
+    "prompt": "You are six weeks into your first PM role at **Tarakash**, a Bengaluru-based B2B SaaS that sells warehouse-management software to mid-market 3PL companies. Your VP-Sales, Vivek, forwards you this email at 9:47 PM:\n\n> *Hey, urgent. Acme Logistics (₹38L ARR, second-largest customer, renewal in 11 weeks) wants 'a proper Excel export from the inventory dashboard, with filters and scheduling, plus a Hindi version of the UI for their warehouse staff in Lucknow.' Their COO said this is a 'must-have' for renewal. Can we get this on next sprint? — V*\n\nIt is Tuesday. Renewal conversations start in 4 weeks. Engineering is mid-way through a long-promised reliability sprint. The next planning meeting is Friday morning.\n\nWrite a **one-page response** (around 400-500 words) that you would send back to Vivek before the planning meeting. Your response must:\n\n1. Apply the **3-question scope test** to break the request into separable pieces.\n2. State which pieces (if any) you would commit to, which you would defer, and which you would refuse — with a reason for each.\n3. Identify the **one user-research move** you would make in the next 48 hours to de-risk the decision.\n4. Propose a **concrete next step** for Vivek, the engineering lead, and the customer — each with an owner and a date.\n\nYou may use bullet lists. Do not write a PRD. Do not promise dates you cannot defend. Write in the tone you would actually send to a VP at 10 PM — direct, calm, no jargon padding.",
+    "rubric": [
+      {
+        "criterion": "Clarity",
+        "levels": [
+          { "label": "Decomposes the request into distinct pieces; states a clear yes/no/defer for each with a reason; the VP could forward this email to the CEO without rewriting it", "points": 4 },
+          { "label": "Identifies most pieces and takes a position, but reasoning is partially missing or buried", "points": 2 },
+          { "label": "Treats the request as one undifferentiated ask, or hedges every position", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Empathy",
+        "levels": [
+          { "label": "Acknowledges Vivek's renewal pressure and the customer's underlying job; engages the engineering reliability sprint as a real constraint, not as an excuse", "points": 4 },
+          { "label": "Considers one stakeholder well but dismisses or ignores another", "points": 2 },
+          { "label": "Treats stakeholders as obstacles, or copy-pastes a 'no' template without context", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Concrete next step",
+        "levels": [
+          { "label": "Proposes a specific user-research move within 48 hours, names owners and dates for each next action, and gives Vivek something to send the customer by Friday", "points": 4 },
+          { "label": "Has next steps but they are vague on owners, dates, or sequencing", "points": 2 },
+          { "label": "Ends with 'let's discuss in the meeting' or no actionable steps", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "product-management",
+    "title": "Product Management Fundamentals",
+    "description": "Holder can scope a stakeholder ask, run a real user interview, write a one-page PRD, prioritize a backlog using RICE or value-vs-effort, build a now-next-later roadmap, and read post-launch metrics with judgment.",
+    "issuerName": "Krit Academy"
+  }
+}

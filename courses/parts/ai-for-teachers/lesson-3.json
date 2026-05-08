@@ -1,0 +1,272 @@
+{
+  "slug": "assessment-and-feedback",
+  "title": "Assessment and Feedback Without Burnout",
+  "subtitle": "Rubrics are AI's superpower; meaning is still yours",
+  "estimatedMinutes": 13,
+  "skills": ["ai-assessment-discipline"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-teachers/assessment-and-feedback.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the 30-essay Sunday" },
+        { "startSec": 80, "label": "Mental model: rubrics are the AI's superpower" },
+        { "startSec": 220, "label": "Move 1 — AI-drafted feedback you actually review" },
+        { "startSec": 410, "label": "Move 2 — Formative vs summative discipline" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-teachers/assessment-and-feedback.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "It is Sunday at 9 PM. Thirty Class 11 essays sit on your desk. You have not opened them. Your phone says you have promised to send marks tomorrow.\n\nAI looks like a miracle here. Twenty minutes of prompting, marks done, sleep saved. The miracle is real *and* it is also where most teachers get into trouble. The reason isn't that AI grades badly. It's that AI grades *one part* of the essay well and *another part* terribly, and shipping its output unread is the move that damages your classroom for a year.\n\nThis lesson gives you the discipline to use AI for the part it's good at, while keeping marks-of-record under your hand. The goal isn't to grade everything yourself. The goal is to grade the things only you can grade, and to outsource the rest *with eyes open*."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A three-column diagram. Column 1: 'Structure' (grammar, format, length) with green ticks. Column 2: 'Argument' (logic, evidence) with yellow question marks. Column 3: 'Meaning' (truth, voice, originality) with red exclamation marks.",
+      "caption": "Three layers of an essay. AI is fluent at the left, shaky in the middle, blind on the right.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(20 30)'><rect width='180' height='180' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Structure</text><g transform='translate(20 50)' font-family='sans-serif' font-size='11' fill='#065F46'><circle cx='10' cy='10' r='8' fill='#10B981'/><path d='M5 10 L9 14 L15 6' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='14'>grammar</text><circle cx='10' cy='40' r='8' fill='#10B981'/><path d='M5 40 L9 44 L15 36' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='44'>spelling</text><circle cx='10' cy='70' r='8' fill='#10B981'/><path d='M5 70 L9 74 L15 66' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='74'>paragraph length</text><circle cx='10' cy='100' r='8' fill='#10B981'/><path d='M5 100 L9 104 L15 96' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='104'>format / TOC</text></g><text x='90' y='168' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>AI is fluent here</text></g><g transform='translate(210 30)'><rect width='180' height='180' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>Argument</text><g transform='translate(20 50)' font-family='sans-serif' font-size='11' fill='#92400E'><circle cx='10' cy='10' r='8' fill='#F59E0B'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>?</text><text x='28' y='14'>logic flow</text><circle cx='10' cy='40' r='8' fill='#F59E0B'/><text x='10' y='44' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>?</text><text x='28' y='44'>evidence used</text><circle cx='10' cy='70' r='8' fill='#F59E0B'/><text x='10' y='74' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>?</text><text x='28' y='74'>counter-arguments</text><circle cx='10' cy='100' r='8' fill='#F59E0B'/><text x='10' y='104' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>?</text><text x='28' y='104'>does it conclude?</text></g><text x='90' y='168' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>AI guesses; sometimes wrong</text></g><g transform='translate(400 30)'><rect width='180' height='180' rx='10' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9F1239'>Meaning</text><g transform='translate(20 50)' font-family='sans-serif' font-size='11' fill='#9F1239'><circle cx='10' cy='10' r='8' fill='#9F1239'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>!</text><text x='28' y='14'>is it true?</text><circle cx='10' cy='40' r='8' fill='#9F1239'/><text x='10' y='44' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>!</text><text x='28' y='44'>does it sound like them?</text><circle cx='10' cy='70' r='8' fill='#9F1239'/><text x='10' y='74' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>!</text><text x='28' y='74'>is it original?</text><circle cx='10' cy='100' r='8' fill='#9F1239'/><text x='10' y='104' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>!</text><text x='28' y='104'>did *they* answer the Q?</text></g><text x='90' y='168' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>AI is blind here</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: rubrics are AI's superpower; meaning is yours",
+      "md": "AI is genuinely brilliant at one thing: applying a checklist to text. Give it a 6-criterion rubric and it will tell you, in 12 seconds, which boxes a piece of writing ticks. That's not a bug; that's a feature, and it is the *only* feature you should rely on.\n\nThe trouble starts when you ask AI to evaluate the *meaning* of an essay — whether the argument is true, whether the example is well-chosen, whether the writer believes what they wrote. AI will fluently answer all of these. It will be wrong about a quarter of the time, and it cannot tell you when it is wrong.\n\nUse AI for rubric-shaped grading. Keep meaning-shaped grading on your desk."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-teachers/anim/assessment-and-feedback-rubric-pass.html",
+      "height": 420,
+      "caption": "Watch a single essay flow through a rubric pass — green for structural ticks, red for the meaning checks AI cannot make.",
+      "fallbackImage": "/courses/ai-for-teachers/anim/assessment-and-feedback-rubric-pass-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Apni mummy ka quality control",
+          "md": "Mummy ko khaana check karne ke do mode hain. Mode 1: \"masala daal hai? namak theek hai? thanda toh nahi hua?\" — ye AI ka mode hai. Checklist. 4 seconds mein.\n\nMode 2: \"yaar tu thaki hui hai aaj, kya hua?\" — ye sirf mummy ka mode hai. Roti ke side se baat *baccha* dikha gaya, jo recipe nahi batati.\n\nAI = Mummy ka Mode 1. Mode 2 ke liye tu hi chahiye, AI nahi."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no Hinglish",
+          "md": "There are two kinds of quality check. The checklist kind (\"is the salt right? is it cold?\") and the relational kind (\"why are you tired today?\"). AI does the first one fast and well. The second one was never on its menu."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — AI-drafted feedback you actually review"
+    },
+    {
+      "type": "markdown",
+      "md": "Here is the move that saves you four hours a weekend without costing your classroom anything: **AI drafts the feedback. You review every line before it goes out.**\n\nThe trick is in the verbs. AI doesn't *write* feedback that gets sent. AI *drafts* feedback that you then review, edit, and sign off on. Two minutes of review per student replaces twelve minutes of writing per student. Six-x speedup, zero loss of quality, because you're still the last set of eyes.\n\nThe failure mode is what teachers call \"copy-paste comments.\" Three students this term tell their parents \"ma'am's feedback feels like the same five sentences for everyone.\" That's not because AI was used. It's because AI was used *and not reviewed*. The review is non-negotiable. If you skip it, you lose the relationship signal that feedback is supposed to carry."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A two-step pipeline. Step 1: 30 essays + a rubric flow into an AI box that outputs 30 feedback drafts. Step 2: Each draft passes through a 'teacher review' filter that adds personalised lines and removes generic ones, then is sent.",
+      "caption": "AI drafts; you review. Two minutes per student replaces twelve.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 220' role='img'><rect width='600' height='220' rx='14' fill='#EFF6FF'/><g transform='translate(20 60)'><rect width='100' height='100' rx='8' fill='#FFFFFF' stroke='#1E40AF' stroke-width='1.5'/><text x='50' y='28' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#1E3A8A'>30 essays</text><text x='50' y='44' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>+ rubric</text><g transform='translate(15 56)'><rect x='0' y='0' width='70' height='8' fill='#DBEAFE'/><rect x='0' y='12' width='70' height='8' fill='#DBEAFE'/><rect x='0' y='24' width='70' height='8' fill='#DBEAFE'/></g></g><path d='M120 110 L160 110' stroke='#1E40AF' stroke-width='2' marker-end='url(#a6)'/><g transform='translate(160 60)'><rect width='110' height='100' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='55' y='32' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#1E3A8A'>AI</text><text x='55' y='52' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>drafts 30 sets</text><text x='55' y='68' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>of comments</text><text x='55' y='86' text-anchor='middle' font-family='monospace' font-size='9' fill='#1E40AF'>~3 min total</text></g><path d='M270 110 L310 110' stroke='#1E40AF' stroke-width='2' marker-end='url(#a6)'/><g transform='translate(310 60)'><rect width='110' height='100' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='55' y='32' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#92400E'>YOU</text><text x='55' y='52' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>review each</text><text x='55' y='68' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>add 1-2 lines</text><text x='55' y='86' text-anchor='middle' font-family='monospace' font-size='9' fill='#92400E'>~2 min/student</text></g><path d='M420 110 L460 110' stroke='#1E40AF' stroke-width='2' marker-end='url(#a6)'/><g transform='translate(460 60)'><rect width='110' height='100' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='55' y='32' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Sent</text><text x='55' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>review-checked</text><text x='55' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>your voice</text><text x='55' y='86' text-anchor='middle' font-family='monospace' font-size='9' fill='#065F46'>~65 min total</text></g><defs><marker id='a6' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1E40AF'/></marker></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: from 30 essays to 30 reviewed comment sets, on a Sunday, in 70 minutes",
+      "steps": [
+        {
+          "label": "Step 1 — Write the rubric, then write it again",
+          "body": "Six criteria. Three or four levels each. The rubric is what AI scores against. If your rubric is fuzzy, every comment will be fuzzy. 10 minutes spent here saves 50 later."
+        },
+        {
+          "label": "Step 2 — Paste 5 essays at a time with the rubric",
+          "body": "AI returns scored comments per essay. Don't dump all 30 at once; chunk to keep AI's context honest. 5 chunks of 6 essays."
+        },
+        {
+          "label": "Step 3 — Read the AI's comments before reading the essay",
+          "body": "Counter-intuitive but it works. AI's comment frames your reading. You spot disagreements faster than you spot agreements."
+        },
+        {
+          "label": "Step 4 — Read the essay; flag where AI got it wrong",
+          "body": "About 1 in 4 essays will have a meaning-level miss. AI praised an argument that doesn't hold up; AI penalised a sentence that was actually clever. These are *yours* to override."
+        },
+        {
+          "label": "Step 5 — Add one personal line per student",
+          "body": "\"Your second paragraph reminded me of the way you argued about the canteen rule last term — you're getting better at this.\" One line. AI cannot write this. The line is the relationship."
+        },
+        {
+          "label": "Step 6 — Send",
+          "body": "70 minutes total. The 12-minutes-per-student version was 6 hours. You bought back a Sunday afternoon without losing the relationship signal."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which use of AI for grading 30 essays is most defensible?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Paste essays one by one, accept AI marks, post them", "correct": false, "explain": "Posting AI marks unread is the entire trap of this lesson. Marks of record are yours." },
+        { "id": "b", "label": "Use AI to score essays against your rubric, read each AI comment, edit ones you disagree with, add a personal line per student, then post", "correct": true, "explain": "The disciplined version. AI does the structural triage; you keep the meaning check and the personal line." },
+        { "id": "c", "label": "Don't use AI at all; mark every essay manually from scratch", "correct": false, "explain": "Defensible but expensive. AI's structural pass is useful and cheap; refusing it is leaving free help on the table." },
+        { "id": "d", "label": "Use AI to generate one set of comments and copy-paste it across all 30 students", "correct": false, "explain": "This is the 'copy-paste comments' failure mode. Students notice; parents notice. Trust takes weeks to rebuild." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Riya ka parent meeting",
+          "md": "Riya ki mummy report card lekar aayi. \"Ma'am, yeh comment toh exact same hai jo Aanya ki report mein hai. Bachchon ne compare kiya WhatsApp pe.\"\n\nDono comments AI se generate hue the. Tu review karna bhool gayi thi. Ab Riya ki mummy ke saamne explain karna mushkil — *wo galat nahi hai*. Comments same the.\n\nMoral: copy-paste pakda jata hai. Bachche compare karte hain. Mummies pakad leti hain. AI ka draft hi tha; tujhe review karna tha. Skip nahi kar sakta."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The parent meeting",
+          "md": "A parent walks in with two report cards open on her phone. The comments are word-for-word identical. The students compared them. The parents found out. AI drafted both; the teacher skipped review. The parent isn't wrong, and the trust takes a term to rebuild."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Formative vs summative discipline"
+    },
+    {
+      "type": "markdown",
+      "md": "Here is a small rule that solves 80% of teacher-AI grading anxiety: **AI is for formative assessment; you do summative.**\n\nFormative = work in progress. Practice essays, draft worksheets, weekly quizzes that won't appear on the final mark. Mistakes here are *good*; the whole point is to learn. AI feedback on formative work, even if it's wrong 10% of the time, is fine. The student catches errors and learns; you save hours; the marks don't go on the record.\n\nSummative = marks of record. Term exams, board prelims, capstone projects. Marks live on a transcript and follow the child for years. AI cannot grade these as the final grader. Use it as a triage tool — reading order, structural pass — and *you* mark.\n\nThe distinction is not a guideline; it's a discipline. The day you blur it, you ship marks you can't defend."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A scale labelled 'risk to student' on the y-axis. On the left side, low-risk uses (formative quiz, draft feedback) sit in the green zone. On the right side, high-risk uses (board exam, transcript marks) sit in the red zone with a warning label.",
+      "caption": "AI's role shrinks as the stakes for the student grow. The line is hard, not soft.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 220' role='img'><rect width='580' height='220' rx='14' fill='#FAF5FF'/><line x1='40' y1='180' x2='540' y2='180' stroke='#5B21B6' stroke-width='2'/><line x1='40' y1='180' x2='40' y2='40' stroke='#5B21B6' stroke-width='2'/><text x='290' y='200' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>stakes for student →</text><text x='30' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' transform='rotate(-90 30 110)'>AI involvement</text><g transform='translate(60 60)'><rect width='160' height='100' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='80' y='24' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Formative</text><text x='80' y='44' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>practice quizzes</text><text x='80' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>draft feedback</text><text x='80' y='72' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>weekly worksheets</text><text x='80' y='90' text-anchor='middle' font-family='monospace' font-size='9' fill='#065F46' font-weight='bold'>AI is fine</text></g><g transform='translate(360 60)'><rect width='160' height='100' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='80' y='24' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#9F1239'>Summative</text><text x='80' y='44' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>term exams</text><text x='80' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>board prelims</text><text x='80' y='72' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>capstone projects</text><text x='80' y='90' text-anchor='middle' font-family='monospace' font-size='9' fill='#9F1239' font-weight='bold'>YOU mark</text></g><path d='M220 80 Q290 50 360 90' stroke='#5B21B6' stroke-width='2' fill='none' stroke-dasharray='4 4'/><text x='290' y='40' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' font-style='italic'>the line is hard, not soft</text></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Principal Priya",
+        "role": "Your principal, sketching scenarios on a whiteboard between back-to-back meetings",
+        "avatarSrc": "/coaches/principal-priya.png"
+      },
+      "intro": [
+        "Priya: \"Six grading scenarios from last week. Tell me — is this OK to use AI here, or are we asking for trouble?\""
+      ],
+      "buckets": [
+        { "id": "ok", "label": "AI is fine here", "tone": "safe" },
+        { "id": "trouble", "label": "Trouble — keep AI out", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "a1",
+          "situation": "Your Class 7 students wrote a practice paragraph on their favourite festival. You want quick feedback to send back tomorrow.",
+          "correctBucketId": "ok",
+          "explain": "Formative, low-stakes, structural feedback. AI drafts; you spot-check; it goes back. Exactly what AI exists for."
+        },
+        {
+          "id": "a2",
+          "situation": "Class 12 board prelim essays. Marks count toward the predicted grades sent to admissions.",
+          "correctBucketId": "trouble",
+          "explain": "Summative, high stakes. AI as triage is OK; AI as grader of record is a year-of-the-student decision. You mark."
+        },
+        {
+          "id": "a3",
+          "situation": "An AI tool writes a personalised parent-meeting summary for each Class 8 student. You glance at the first three and they look fine.",
+          "correctBucketId": "trouble",
+          "explain": "\"Glance at the first three\" is not review. The fourth one might be perfectly polite and factually wrong. Sample bias in your favour, classroom risk against you."
+        },
+        {
+          "id": "a4",
+          "situation": "Drafting model answers for a Class 10 sample paper to share with the section before the prelim.",
+          "correctBucketId": "ok",
+          "explain": "Formative scaffolding. AI drafts answers; you review for correctness (this is non-trivial!); students get a study aid. Your review fixes the wrong-answer trap."
+        },
+        {
+          "id": "a5",
+          "situation": "AI detects 'similar phrasing' between two Class 11 essays and tells you it's plagiarism. You're about to mark zero on both.",
+          "correctBucketId": "trouble",
+          "explain": "Detector ≠ verdict. \"Similar phrasing\" is a probabilistic signal. A 5-minute conversation with each student is the actual investigation. Mark zero only after that."
+        },
+        {
+          "id": "a6",
+          "situation": "Generating six exit-ticket multiple-choice questions on Class 9 Algebra to use in tomorrow's last 10 minutes of class.",
+          "correctBucketId": "ok",
+          "explain": "Formative, AI-friendly, structural work. Just check the keys before printing — AI sometimes mislabels the correct option."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: AI feedback shipped without reading it",
+      "md": "Sunday night. 30 essays. AI generates feedback in 4 minutes. You hit send.\n\nMonday morning, three things happen. (1) A student notices her comment is identical to her friend's. (2) A parent emails asking why \"thrilled by your insightful contribution\" appears in their daughter's report when their daughter clearly has not been thrilling anyone. (3) You realise AI praised the *argument* in essay #14, which was actually wrong, and you marked it accordingly.\n\nThe fix is mechanical. **You don't ship feedback you haven't read.** Two minutes of review per student. Non-negotiable. If you don't have time to review, you don't have time to grade with AI; the discipline isn't optional."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps the way a disciplined teacher uses AI to grade a stack of formative essays.",
+      "items": [
+        { "id": "s1", "label": "Write or refine your rubric (6 criteria, 3-4 levels)", "detail": "AI scores against this. Fuzzy rubric = fuzzy comments." },
+        { "id": "s2", "label": "Paste essays in chunks of 5-6 with the rubric", "detail": "Don't overload the AI's context. Chunked input keeps quality up." },
+        { "id": "s3", "label": "Read AI's comment before reading each essay", "detail": "Counter-intuitive but works. AI's frame surfaces disagreements faster." },
+        { "id": "s4", "label": "Read essay; flag any meaning-level mistake AI made", "detail": "About 1 in 4 essays will have one. Override. This is your job." },
+        { "id": "s5", "label": "Add one personal line tied to *this* student's history", "detail": "Cannot be AI-generated. The line carries the relationship." },
+        { "id": "s6", "label": "Post marks", "detail": "After review, not before." }
+      ],
+      "hint": "Rubric, chunked, AI-comment first, your meaning override, personal line, then send."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Take a recent essay prompt you actually used. Write a 6-criterion rubric for it that AI could score against. Each criterion needs 3 levels (e.g. strong / partial / missing).",
+      "lang": "markdown",
+      "starter": "Essay prompt:\n\nRubric:\n1. Criterion: \n   - Strong: \n   - Partial: \n   - Missing: \n2. Criterion: \n   - Strong: \n   - Partial: \n   - Missing: \n3. ... (continue to 6)\n",
+      "expected": "Essay prompt: Write 400-500 words on whether the Indian Constitution's promise of equality has been delivered for women in your lifetime. Use at least one specific example.\n\nRubric:\n1. Criterion: Thesis clarity\n   - Strong: One-sentence thesis stated by paragraph 2; takes a defensible side\n   - Partial: Thesis present but hedged or buried\n   - Missing: No clear position taken\n2. Criterion: Use of specific example\n   - Strong: At least one named example with a date or place; example actually supports the thesis\n   - Partial: Example named but underdeveloped or weakly tied to thesis\n   - Missing: No specific example, only general claims\n3. Criterion: Structure (intro / 2-3 body / conclusion)\n   - Strong: Clear architecture; each paragraph has one job\n   - Partial: Architecture present but one paragraph wanders\n   - Missing: No clear paragraph structure\n4. Criterion: Counter-argument acknowledgement\n   - Strong: Names one objection and addresses it\n   - Partial: Names an objection but doesn't address it\n   - Missing: No counter-argument\n5. Criterion: Language and grammar\n   - Strong: Clean prose; under 3 errors per page\n   - Partial: Frequent errors but meaning preserved\n   - Missing: Errors interfere with meaning\n6. Criterion: Voice and originality\n   - Strong: Sounds like a Class 11 student who has thought about this; not generic\n   - Partial: Some moments of voice, mostly textbook-flavoured\n   - Missing: Reads as ChatGPT or copied from a sample paper\n"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Pick the practices that keep your AI-assisted grading defensible.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Always have your own rubric before opening AI", "correct": true, "explain": "Yes. Without a rubric, AI grades against its own assumptions, which are generic. With one, you control the criteria." },
+        { "id": "b", "label": "Add one personal line per student before posting", "correct": true, "explain": "Yes. The personal line is the relationship signal. AI cannot generate it; it's what tells the child that you read their work." },
+        { "id": "c", "label": "Trust AI marks if the AI gives high confidence scores", "correct": false, "explain": "AI 'confidence' is not the same as accuracy. AI is fluently confident even when wrong; the confidence number is not a safety net." },
+        { "id": "d", "label": "Use AI for marks-of-record on board prelims if you're short on time", "correct": false, "explain": "This is the line you don't cross. Summative is yours. Short-on-time is a planning problem, not an AI problem." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "JEE practice set, real life",
+          "md": "Tu Class 11 Physics padhata hai, JEE prep wala batch. Har Sunday 50 problems ki practice set ChatGPT se banwata hai — *formative*. Bachchon ko Monday subah milti hai, Wednesday tak khol kar nikaal lete hain. Sab khush.\n\nLekin term exam? *Summative*. Wahaan tu khud paper banata hai, khud check karta hai. JEE-Main ka asli paper *bachche ki transcript pe jaata hai*; tu AI ko wahaan beech mein nahi laata.\n\nLine simple hai. Practice set = AI se. Marks-of-record = teri kalam se."
+        },
+        "en": {
+          "tone": "info",
+          "title": "JEE prep, real life",
+          "md": "Weekly practice sets are formative — AI drafts them, students do them, you spot-check. Term exams are summative — they go on a transcript that follows the student to admissions. The line is hard. Practice = AI. Record = your hand."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Rubrics are AI's superpower; meaning is yours. Use AI for the structural pass, never for the meaning verdict.",
+        "AI drafts feedback; you review every line before it goes out. Two minutes per student replaces twelve.",
+        "The personal line per student carries the relationship. AI cannot write it. It is the difference between feedback and noise.",
+        "Formative vs summative is a hard line. AI is fine on practice work; marks-of-record stay under your hand.",
+        "If you don't have time to review AI feedback, you don't have time to use AI. The discipline is the value."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Which student in your class would feel most cheated by copy-paste feedback? Write the personal line you would add to *their* next report. Now you know what AI cannot replace."
+    }
+  ]
+}

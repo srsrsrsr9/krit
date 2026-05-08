@@ -11,6 +11,16 @@ const COURSES = [
   "python-foundations",
   "money-fundamentals",
   "ai-fundamentals",
+  "ui-ux-design",
+  "product-management",
+  "ai-for-accounting",
+  "claude-pro",
+  "testing-with-playwright",
+  "ai-for-teachers",
+  "ai-for-leaders",
+  "data-science-and-analysis",
+  "leadership-in-age-of-ai",
+  "digital-marketing-with-ai",
 ];
 
 // Map course-file-slug → bonus-dir-slug (well-being uses different naming)

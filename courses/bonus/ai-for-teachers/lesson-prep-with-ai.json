@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: From 4 Hours to 45 Minutes (Once She Wrote the Brief)",
+    "source": "Anonymous Class 9 Science teacher at a Pune Municipal Corporation school, 11 years experience",
+    "date": "January 2025",
+    "story": "On January 3, 2025, a science teacher in Pune ran her first \"brief-first\" AI prep session. Until December, she had been spending **4 hours every Sunday** writing weekly lesson plans for her two Class 9 sections — one English-medium, one Marathi-medium, both heterogeneous, with a 4-grade-level reading spread between her strongest and weakest students.\n\nHer first six attempts at AI prep had been disasters. She'd type *\"give me a lesson plan on chemical reactions\"* and get back generic American-curriculum content with experiments her school's lab couldn't run. She'd spend 2 hours fixing it and 2 more hours rewriting it. Net savings: zero.\n\nThe shift came when a colleague made her write a **one-page class brief** before opening the AI tool: 32 students, ages 13-14, Maharashtra State Board syllabus, Marathi-medium, no Bunsen burners (gas line broken since November), reading levels Class 5 to Class 9, exam in 18 days, last week's quiz showed 70% confused acids and bases.\n\nWith the brief pasted as the *first message*, the AI's output went from \"unusable\" to \"80% shippable.\" Her Sunday prep dropped to **45 minutes**. Across one semester she logged a **47% reduction** in total prep time and reused the same brief (lightly edited) for 14 weeks.\n\nThe brief was the unlock. The model was the same model her colleagues were complaining about.",
+    "takeaway": "AI prep doesn't fail because the model is bad. It fails because the teacher hasn't written down who their students actually are."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Heterogeneous Class 9 and the Sunday Brief",
+    "setup": "**Sunday, 3pm. Day 19** of your AI pilot. You're **Ms. Anjali**, and last week's prep took **3 hours 40 minutes** even with the AI — the output was generic, you rewrote half of it, and your Class 9 section walked out confused about ionic bonds. Mukherjee told you on Friday: *\"You're treating the AI like a search engine. Treat it like a substitute teacher who's never met your kids. Brief it.\"*\n\nYou've opened a blank document titled `class-9-brief.md`. Your class is: **34 students, ages 13-15, Maharashtra State Board, Marathi-medium with English science textbooks, 6 students reading at Class 6 level, 4 students writing JEE Foundation prep on the side, broken lab gas line, term-end exam in 22 days.** Mukherjee is on a video call with you, sipping cutting chai, ready to review your brief before you write a single prompt.",
+    "coach": { "name": "Mentor-Master Mukherjee", "role": "Retired DIET faculty, 32 years training teachers, your AI-pilot guide" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Mukherjee asks: *\"Before we write the brief, what is the brief actually for?\"* What's the right answer?",
+        "options": [
+          { "id": "a", "label": "It's a one-page document I paste at the start of every prep session so the AI knows my class.", "correct": true, "explain": "**Yes.** The brief is a *reusable context primer*. You write it once, edit it monthly, paste it as Message 1 of every prep session for the rest of the semester. It saves you from re-explaining 34 students every Sunday.", "points": 3 },
+          { "id": "b", "label": "It's a list of every topic in the syllabus.", "correct": false, "explain": "That's the syllabus. The brief is about the *students*, not the curriculum. The syllabus is in the textbook; the brief is what the textbook can't tell the AI.", "points": 0 },
+          { "id": "c", "label": "It's a backup for when the AI gives me bad output, so I have something to fall back on.", "correct": false, "explain": "Backwards. The brief is what *prevents* bad output, not what salvages it. Mukherjee makes a tutting sound.", "points": 0 },
+          { "id": "d", "label": "It's the answer to: \"What does the AI need to know about my class that the syllabus doesn't tell it?\"", "correct": true, "explain": "**Strongest framing.** Reading levels, language medium, lab constraints, last quiz's confusions, the JEE-prep kids in row 3 — none of that is in the syllabus, and all of it changes what \"a good lesson on ionic bonds\" actually means.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "OK. You start drafting. Which **four facts** must go in the brief? (Pick the strongest single answer.)",
+        "options": [
+          { "id": "a", "label": "Topic, learning objective, time available, materials in the lab.", "correct": false, "explain": "These are fine, but they're all about *the lesson*, not *the students*. The Bandra teachers had this; their AI output was still generic. The brief's edge comes from student facts.", "points": 1 },
+          { "id": "b", "label": "Class size, age range, language medium, the spread of reading/skill levels.", "correct": true, "explain": "**This is the unlock.** A lesson for 34 mixed-ability Marathi-medium kids is structurally different from a lesson for 22 English-medium high-performers. The Pune teacher's 47% time saving came from getting the AI to stop assuming American Honors Chem.", "points": 3 },
+          { "id": "c", "label": "The full syllabus PDF, the school's mission statement, and the exam timetable.", "correct": false, "explain": "You'll burn the AI's context window on documents it doesn't need to read. A 600-page syllabus PDF crowds out the 6 sentences that actually shape the lesson.", "points": 0 },
+          { "id": "d", "label": "Constraints (broken gas line, no projector), the last assessment's confusions, what's coming up (exam in 22 days), the medium of instruction.", "correct": true, "explain": "**Even stronger.** Constraints (no Bunsen burner) prevent the AI from suggesting experiments you can't run. Last quiz's confusions (acids vs bases) tell it what to reinforce. Together they collapse the AI's option space to lessons that *fit your room*.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "You write the brief. **312 words.** Mukherjee reads it. He says: *\"One thing missing — the part the AI will most want to skip.\"* What did you forget?",
+        "options": [
+          { "id": "a", "label": "The exam syllabus chapter list.", "correct": false, "explain": "Important, but not the missing piece. The AI doesn't *skip* this; it just doesn't differentiate between \"in syllabus\" and \"deeply in syllabus.\"", "points": 0 },
+          { "id": "b", "label": "The names of the JEE-prep students so the AI can address them by name.", "correct": false, "explain": "Don't put student names in an AI prompt. PII, consent, data retention — none of those conversations have happened with parents in your pilot agreement. Mukherjee shakes his head firmly.", "points": 0 },
+          { "id": "c", "label": "The 6 students reading at Class 6 level and what \"differentiation\" means for them.", "correct": true, "explain": "**Yes.** AI tools, untreated, write to the median. Without explicit instruction to provide a Class-6-readable variant of each activity, the bottom 6 students get a lesson they can't access — and you spend Monday afternoon reteaching from scratch. The brief must say: *\"Provide a simplified-language version of each activity for the 6 students at Class 6 reading level.\"*", "points": 3 },
+          { "id": "d", "label": "A worked example of what \"good output\" looks like for me — i.e., one past lesson I was happy with.", "correct": true, "explain": "**Excellent.** A single \"this is the kind of lesson I want\" example does more than three paragraphs of instruction. The AI calibrates to your taste. Mukherjee calls this the *show, don't tell* principle of prompting.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Brief is ready. You paste it, then write your first prompt: *\"Plan a 40-minute lesson on ionic bonds.\"* The AI returns a draft. **What do you check first?**",
+        "options": [
+          { "id": "a", "label": "Whether the lesson is exactly 40 minutes.", "correct": false, "explain": "Time-fit matters but it's the easiest thing to fix. Check the load-bearing constraints first — the ones that, if wrong, mean the whole lesson is unusable.", "points": 1 },
+          { "id": "b", "label": "Whether any activity requires the broken gas line / Bunsen burner.", "correct": true, "explain": "**Hard constraint check.** If the AI ignored your \"no Bunsen burner\" line, you've learned something important about how this model handles your brief — and you fix the prompt, not the lesson. The Pune teacher caught this on her first run and it changed her workflow.", "points": 3 },
+          { "id": "c", "label": "Whether the differentiation for the 6 lower-reading-level students is actually present.", "correct": true, "explain": "**Yes.** This is the load-bearing piece you specifically added to the brief. If the AI omitted it (or hand-waved \"adapt as needed\"), the brief failed to land and you need to push back: *\"Show me the simplified-language version explicitly.\"*", "points": 3 },
+          { "id": "d", "label": "Whether the lesson is in Marathi.", "correct": false, "explain": "You said Marathi-medium *with English science textbooks* in the brief — so the lesson plan in English is correct. Mukherjee gently suggests you re-read your own brief.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You wrote a brief that names the students, the constraints, the gaps, and the standard of \"good.\" Sunday prep just dropped from 3h40m to about an hour and the lesson actually fits your classroom. **Mukherjee texts: *\"Save this brief. Reuse it for 14 weeks. Edit it once a month.\"*** That's the whole methodology.",
+      "good": "You got most of the brief right. The differentiation piece or the constraints piece slipped — and that's the difference between an 80% shippable draft and 50%. Re-read the lesson on the **brief-first protocol** and look at the worked example. Try again next Sunday.",
+      "learn": "You're still in the \"AI as search engine\" mode that cost you 4 hours last week. Re-read the lesson, especially the section on **the four facts that change everything** and **why student-facts beat lesson-facts**. The 47% time saving is real, but only after the brief is written. Until then, it's just a frustrating chatbot."
+    }
+  }
+}

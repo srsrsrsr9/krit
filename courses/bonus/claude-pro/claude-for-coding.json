@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Bugfix That Refactored the Auth Module",
+    "source": "Engineering manager at Pratham Logistics, a Gurugram-based series-B B2B logistics platform",
+    "date": "January 2026",
+    "story": "In November 2025, Pratham's platform team adopted Claude Code CLI across 22 engineers. They skipped the `CLAUDE.md` step. *\"We'll add it later — let's just start shipping,\"* one staff engineer said in the kickoff. They started shipping. Things moved fast for about nine days.\n\nOn the tenth day, a junior engineer asked Claude Code to fix a one-line null-check bug in the booking-confirmation flow. Forty-seven minutes later, Claude had refactored the entire **authentication module** because — in the absence of any project context — it decided the *real* problem was that the codebase used callback-style auth handlers and \"modern best practice\" was async/await. The PR was 134 files. The null-check was, in fact, fixed. So was the auth module. So was three weeks of sprint capacity.\n\nThe team paused, wrote a 600-line `CLAUDE.md` over two days, and re-ran the experiment. Same junior. Same bug. **Six minutes**. Two-line PR. Auth module untouched. Over the next quarter, **PR-to-merge time dropped 40%** and the team killed three of the four \"Claude is making things weird\" Slack threads.\n\nThe missing kernel was the entire problem. Nobody at Pratham starts a Claude Code session without one anymore.",
+    "takeaway": "Claude Code without a `CLAUDE.md` is a brilliant contractor who has never seen your codebase and assumes every refactor is welcome. The kernel is the single highest-leverage file in your repo."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Week 4 — Karthik's First Claude Code Task",
+    "setup": "**Week 4 of Q1 2026.** The capability map shipped. The CTO greenlit the dev-productivity copilot rollout. **Velora's 80 engineers** start onboarding to Claude Code Monday. You — Karthik — get to be patient zero.\n\nYour first real task: a flaky integration test in `payments-service` (Velora's mid-size Node service, ~40k lines, 4 active contributors). Test fails 1 in 8 runs. Three engineers have looked at it. You have Claude Code installed, an open terminal, and exactly **zero** project files configured.",
+    "coach": { "name": "Anthropic-Veteran Anuj", "role": "Spent 18 months at a Claude-Code-first startup before joining Velora as principal engineer" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Anuj sits down beside you. *\"Before you type a single prompt, what's your **first move** in the repo?\"*",
+        "options": [
+          { "id": "a", "label": "`claude` and start typing: *\"There's a flaky test in payments-service, fix it.\"*", "correct": false, "explain": "No kernel, no context, no scope. Claude will either spelunk the entire repo guessing what *flaky* means here, or — worse — refactor the test framework because it decides Mocha is 'legacy.' This is exactly how Pratham lost three weeks.", "points": 0 },
+          { "id": "b", "label": "Write a `CLAUDE.md` at repo root: stack, key commands (test, lint, typecheck), conventions, and 'never touch' files.", "correct": true, "explain": "**Yes.** The kernel is the contract. Even a 200-line `CLAUDE.md` with stack nouns and a 'don't touch the migrations directory' line will save you four hours of cleanup. Anuj nods.", "points": 3 },
+          { "id": "c", "label": "Skip the kernel for now — just paste the failing test output into Claude.ai instead.", "correct": false, "explain": "Now you're using a chat interface to debug a codebase, with no agent loop, no file access, and no ability to actually run the test. You traded one bad pattern for a worse one.", "points": 0 },
+          { "id": "d", "label": "Write `CLAUDE.md` *and* a `docs/PLAN.md` since this touches a service three other engineers contribute to.", "correct": true, "explain": "**Top-tier.** Plan-before-act for any change in shared territory. Even a 10-line plan ('hypothesis: race condition in webhook handler; check X, Y, Z; one change at a time') keeps Claude on rails.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You write the kernel. **What goes in it that prevents the Pratham incident?**",
+        "options": [
+          { "id": "a", "label": "Stack list, `npm test`, `npm run typecheck`, that's it.", "correct": false, "explain": "Half a kernel. Stack and commands are necessary but not sufficient — without scope rules, Claude still feels free to refactor anything it touches.", "points": 1 },
+          { "id": "b", "label": "Add a **Hard Rules** section: 'No refactors outside the file you're editing without explicit approval. No new dependencies without `/plan`. Touch only the failing test and its direct call graph.'", "correct": true, "explain": "**This is the load-bearing section.** Hard rules with MUST/SHOULD/MAY semantics give Claude a clear veto framework. The Pratham auth-refactor would have been blocked by a single MUST line.", "points": 3 },
+          { "id": "c", "label": "Add a 'Current Focus' section: 'Debugging flaky test in `payments-service/webhooks.spec.ts`. Hypothesis: timer-related race.'", "correct": true, "explain": "**Excellent.** Current Focus tells Claude what session-level state to optimize for. It also tells *future Karthik* what week-4 Karthik was doing when he got pulled into a meeting.", "points": 3 },
+          { "id": "d", "label": "Just paste in Anthropic's example `CLAUDE.md` from the docs.", "correct": false, "explain": "Generic kernels are worse than no kernel — they give Claude false confidence about a codebase that doesn't match the template. You need *Velora-specific* nouns, paths, and conventions.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Kernel is in. You start the session. Claude proposes a fix that touches 3 files, including one in `auth-service`. **What now?**",
+        "options": [
+          { "id": "a", "label": "Approve. Claude is usually right; let it ship.", "correct": false, "explain": "*Auth-service* is outside the scope you set. The fact that Claude wants to go there is a *signal*, not a green light. Approving silently is how scope rules become decorative.", "points": 0 },
+          { "id": "b", "label": "Stop, ask Claude to *explain* why it needs to touch `auth-service`, then decide.", "correct": true, "explain": "**Right move.** If the explanation is 'the webhook handler reads the auth token through this helper,' that's legitimate — narrow it to a one-line read. If the explanation is 'I noticed the auth code could be cleaner,' that's the Pratham move. Reject.", "points": 3 },
+          { "id": "c", "label": "Reject the fix entirely and ask for one that only touches `payments-service`.", "correct": true, "explain": "**Defensible.** Forcing scope is a valid coaching signal. You may get a less elegant fix, but you'll get one inside your blast radius — and you'll learn whether Claude can solve the problem within the constraint.", "points": 2 },
+          { "id": "d", "label": "Approve, then in the same session ask Claude to *also* refactor `auth-service` to be 'more consistent.'", "correct": false, "explain": "Anuj physically removes your hand from the keyboard. You just turned a one-test bugfix into a multi-service refactor with no plan, no review, and no safety net. This is the Pratham incident in real-time.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Fix lands. Tests green. **Last step before you mark this as 'rollout-ready' for the other 79 engineers?**",
+        "options": [
+          { "id": "a", "label": "Slack the team: 'Claude Code works, here's the install link.'", "correct": false, "explain": "Now 79 engineers install Claude Code, write zero kernels, and Pratham happens to Velora over a single weekend. The CLI is 5% of the rollout; the workflow is 95%.", "points": 0 },
+          { "id": "b", "label": "Promote the `CLAUDE.md` you wrote to a repo template + write a 1-page rollout doc: kernel-first, plan-before-act, scope rules.", "correct": true, "explain": "**Exactly right.** Codify the workflow that worked. The repo template makes the right thing the easy thing — every new service gets a kernel by default, not by hope.", "points": 3 },
+          { "id": "c", "label": "Run the same experiment on two more services, prove the 40% PR-to-merge improvement, *then* roll out.", "correct": true, "explain": "**Top-tier.** Three datapoints beats one. You have a real number to show the CTO and a real artifact (the kernels) to ship with. Anuj is taking notes.", "points": 3 },
+          { "id": "d", "label": "Tell Anuj it worked and move on to the next ticket.", "correct": false, "explain": "Working once is a coincidence. Working three times with documentation is a rollout. You skipped the part where individual success becomes organizational capability.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You wrote the kernel, scoped the work, caught the scope creep, and turned a personal win into a team artifact. **Anuj is already drafting the all-hands slide that uses your kernel as the example.** Velora's rollout starts on rails.",
+      "good": "You avoided the worst mistakes but missed a step or two on codifying the workflow. Re-read the lesson on **kernel-first sessions** — the difference between 'I made it work' and 'the team makes it work' is in the artifacts you leave behind.",
+      "learn": "You shipped a fix and a future Pratham incident in the same week. Re-read the lesson — especially the sections on **CLAUDE.md as a contract** and **plan-before-act in shared code**. Velora has 80 engineers about to copy your habits; make sure the habits are worth copying."
+    }
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "slug": "ai-classroom-experiments",
+  "title": "Run a 14-Day Classroom Experiment",
+  "subtitle": "A baseline, three numbers, and a kill criterion",
+  "estimatedMinutes": 13,
+  "skills": ["ai-classroom-experiments"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-teachers/ai-classroom-experiments.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — vibes are not data" },
+        { "startSec": 80, "label": "Mental model: tracked intervention" },
+        { "startSec": 220, "label": "Move 1 — Design with three numbers" },
+        { "startSec": 410, "label": "Move 2 — Decide on day 14" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-teachers/ai-classroom-experiments.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most of what passes for \"AI works in my classroom\" is vibes. A teacher tries a tool for two weeks, students seem more engaged, the teacher reports it as a win. Two months later the tool is forgotten, the worksheets are back to xerox, and nobody can say whether anything actually changed.\n\nThe problem isn't that the teacher was wrong. The problem is that they didn't run an experiment; they ran a vibe check. A vibe check tells you how *you* feel about the tool. An experiment tells you whether the tool moved the numbers you actually care about.\n\nThis lesson hands you a 14-day experiment template that fits inside one term, costs nothing, and gives you a defensible answer at the end. Do this once and you'll never have to argue with the staff room about \"AI tools\" again — you'll have your own data."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A two-panel comparison. Left panel labelled 'Vibe check': a single happy face with a thought bubble saying 'feels good'. Right panel labelled 'Experiment': three lines on a chart with baseline dotted, intervention solid, and a kill criterion threshold.",
+      "caption": "Two ways to evaluate an AI tool in your classroom. Only one survives a sceptical principal.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#EFF6FF'/><g transform='translate(20 30)'><rect width='250' height='180' rx='10' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='125' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9F1239'>Vibe check</text><circle cx='125' cy='90' r='30' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='115' cy='85' r='3' fill='#1F2937'/><circle cx='135' cy='85' r='3' fill='#1F2937'/><path d='M115 100 Q125 110 135 100' stroke='#1F2937' stroke-width='2' fill='none'/><g transform='translate(50 130)'><ellipse cx='75' cy='14' rx='65' ry='14' fill='#FFFFFF' stroke='#9F1239' stroke-width='1.5'/><text x='75' y='18' text-anchor='middle' font-family='sans-serif' font-size='10' font-style='italic' fill='#9F1239'>\"feels like it's working\"</text></g><text x='125' y='168' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>two months later: \"did it work?\" \"...maybe?\"</text></g><g transform='translate(290 30)'><rect width='270' height='180' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='135' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Experiment</text><g transform='translate(30 50)'><line x1='0' y1='100' x2='210' y2='100' stroke='#065F46' stroke-width='1.5'/><line x1='0' y1='100' x2='0' y2='10' stroke='#065F46' stroke-width='1.5'/><line x1='0' y1='70' x2='210' y2='70' stroke='#9F1239' stroke-width='1' stroke-dasharray='4 3'/><text x='215' y='73' font-family='monospace' font-size='8' fill='#9F1239'>kill</text><line x1='0' y1='80' x2='100' y2='80' stroke='#1E40AF' stroke-width='2' stroke-dasharray='3 3'/><polyline points='100,80 130,72 160,55 190,40' stroke='#10B981' stroke-width='3' fill='none'/><circle cx='100' cy='80' r='3' fill='#1E40AF'/><circle cx='190' cy='40' r='3' fill='#10B981'/><text x='50' y='115' font-family='monospace' font-size='8' fill='#1E40AF' text-anchor='middle'>baseline</text><text x='150' y='115' font-family='monospace' font-size='8' fill='#10B981' text-anchor='middle'>intervention</text></g><text x='135' y='168' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>day 14: \"yes/no\" answer with a number</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: a tracked intervention with three numbers",
+      "md": "Think of the experiment as a small, tracked change. You change one thing — the AI tool — and you watch what happens to *three* numbers across two weeks.\n\nNumber 1: an outcome you care about. Quiz averages, time-on-task, error rate.\nNumber 2: a cost you care about. Your prep time, your grading time, the number of late-night Sundays.\nNumber 3: a relationship signal. \"My teacher knows me\" on a 1-5 scale; or how many times this fortnight you walked over to a struggling student during class.\n\nThree numbers, two weeks, one decision. The whole apparatus fits on one A4 page. The discipline isn't in the rigour; it's in the *commitment to look at the numbers honestly* on day 14."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-teachers/anim/ai-classroom-experiments-three-numbers.html",
+      "height": 420,
+      "caption": "Watch a 14-day experiment unfold across three lines: outcome, cost, relationship. Drag day-14 to see the decision logic.",
+      "fallbackImage": "/courses/ai-for-teachers/anim/ai-classroom-experiments-three-numbers-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Diet wala analogy",
+          "md": "Tu kabhi diet ki hai? Bina baseline weight liye? Bina daily-check kiye? Sirf \"hum healthy kha rahe hain\" feeling pe?\n\nBhai, 3 hafte baad tu khud nahi keh sakta kuch hua bhi ki nahi. Diet *to be tracked* hoti hai, varna woh *vibe* hai, intervention nahi.\n\nClassroom AI experiment bhi waisa hi. 14 din pehle weigh karo (baseline), 14 din baad weigh karo (post). Beech mein 3 numbers track karo — outcome, cost, relationship. Bina baseline ke aap khud ko fool kar rahe ho."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The diet analogy",
+          "md": "Have you ever started a diet without weighing yourself first? Three weeks in, you cannot tell if anything changed. Classroom AI is the same: no baseline, no experiment, just a feeling that something happened."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Design with three numbers"
+    },
+    {
+      "type": "markdown",
+      "md": "The design fits on one page. Three numbers, three captures, one decision rule.\n\n**Pick your three numbers, before day 1.** Not generically; *for this experiment*. If you're testing AI-generated practice problems for Class 10 Maths, your numbers might be: weekly quiz average (outcome), Sunday prep hours (cost), end-of-fortnight \"my teacher knows what I'm struggling with\" 1-5 scale from anonymous student survey (relationship). Three concrete numbers anchored to *this specific tool, this specific class.*\n\n**Capture each number twice: baseline and post.** Day 0: write down the three current values. Day 14: write down the three new values. The act of writing the baseline before you start is the discipline; without it, you remember the past as whatever supports your current feeling.\n\n**Set a kill criterion.** Before you start, write: \"if X drops by Y, I stop.\" Not \"I'll think about it\"; a real number that triggers a real decision. Most experiments don't have one and run forever, which is why most aren't experiments."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A one-page experiment template. Sections: 'Tool', 'Class', '3 numbers tracked', 'Baseline values (day 0)', 'Post values (day 14)', 'Kill criterion (drop in X by Y)', 'Decision rule'.",
+      "caption": "The whole experiment on one A4 page. If it doesn't fit, it's too big.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FFF7ED'/><rect x='40' y='30' width='500' height='220' rx='8' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='290' y='52' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>14-day classroom experiment</text><line x1='60' y1='62' x2='520' y2='62' stroke='#92400E' stroke-width='1' stroke-dasharray='3 3'/><g font-family='sans-serif' font-size='10' fill='#1F2937'><text x='60' y='82' font-weight='bold'>Tool:</text><text x='110' y='82' fill='#9CA3AF'>e.g. ChatGPT for practice problems</text><text x='60' y='102' font-weight='bold'>Class &amp; section:</text><text x='160' y='102' fill='#9CA3AF'>Class 10 CBSE, section B</text><text x='60' y='130' font-weight='bold' fill='#10B981'>Number 1 (outcome):</text><text x='200' y='130' fill='#9CA3AF'>weekly quiz avg</text><text x='400' y='130' fill='#1F2937'>baseline ___ post ___</text><text x='60' y='152' font-weight='bold' fill='#1E40AF'>Number 2 (cost):</text><text x='180' y='152' fill='#9CA3AF'>my Sunday prep hrs</text><text x='400' y='152' fill='#1F2937'>baseline ___ post ___</text><text x='60' y='174' font-weight='bold' fill='#9F1239'>Number 3 (relationship):</text><text x='220' y='174' fill='#9CA3AF'>student survey 1-5</text><text x='400' y='174' fill='#1F2937'>baseline ___ post ___</text><line x1='60' y1='190' x2='520' y2='190' stroke='#92400E' stroke-width='1' stroke-dasharray='3 3'/><text x='60' y='210' font-weight='bold'>Kill criterion:</text><text x='160' y='210' fill='#9CA3AF'>if relationship drops more than 0.5, I stop</text><text x='60' y='232' font-weight='bold'>Decision rule on day 14:</text><text x='220' y='232' fill='#9CA3AF'>keep / kill / extend with revisions</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: 14 days, three numbers, one decision",
+      "steps": [
+        {
+          "label": "Day 0 — Capture baseline",
+          "body": "Write down the three current values *before* starting. \"Last 4 weeks: quiz avg 68%, Sunday prep 4 hrs, last student survey: 3.8/5.\" Five minutes."
+        },
+        {
+          "label": "Days 1-7 — Run intervention week 1",
+          "body": "Use the AI tool consistently as designed. Don't change the design mid-week. Don't combine with other new things — that confounds the experiment."
+        },
+        {
+          "label": "Day 7 — Mid-point gut check (no decisions)",
+          "body": "Quick note on a sticky: how does it *feel*? Worth re-reading on day 14 to see how the gut compared to the data."
+        },
+        {
+          "label": "Days 8-14 — Run intervention week 2",
+          "body": "Same tool, same design. Continue capturing the data points (weekly quiz, time logs, day-13 survey)."
+        },
+        {
+          "label": "Day 14 — Capture post values",
+          "body": "Three numbers, written down. \"Quiz avg 71%, Sunday prep 2.5 hrs, survey 3.7/5.\" Don't editorialise — just the numbers."
+        },
+        {
+          "label": "Day 14 — Make the decision",
+          "body": "Apply your decision rule. Outcome up, cost down, relationship roughly flat → keep. Outcome flat, cost down, relationship dropped → keep but redirect saved time. Any number breached the kill criterion → stop. The rule is the whole point."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "You're about to start a 14-day pilot of an AI worksheet tool for Class 7 Hindi. Day 0 is tomorrow. The single most important thing to do *today* is:",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Pick the most exciting AI tool from a free-trial review", "correct": false, "explain": "Tool selection is necessary but not sufficient. You can pilot the right tool with no baseline and learn nothing." },
+        { "id": "b", "label": "Capture three baseline numbers in writing — outcome, cost, relationship", "correct": true, "explain": "Yes. No baseline means no experiment. Day 0 is the only day you can take the 'before' picture. Miss it and you cannot recover." },
+        { "id": "c", "label": "Write a long blog post about why AI is the future of education", "correct": false, "explain": "Marketing the experiment is not running the experiment. The data either supports a claim or doesn't; opinion pieces don't substitute." },
+        { "id": "d", "label": "Tell parents about the experiment for transparency", "correct": false, "explain": "Communication matters but doesn't change whether the experiment works. Capture the baseline first; communicate this week." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Sneha ma'am ka 14-day sting",
+          "md": "Sneha ma'am, Pune ki Marathi-medium school. Class 8 ko science worksheet AI se banwane ka decide kiya — 14 din. Day 0 pe likh ke rakha: weekly quiz avg 62%, Sunday prep 5 hrs, student-likeability ek small chit pe 3.4/5.\n\nDay 14: avg 64% (no real change), prep 2 hrs (saved 3!), likeability 3.4 (no change).\n\nDecision: KEEP, kyunki cost gir gaya bina kuch break kiye. *Aur* unho ne saved 3 hrs ko 1-on-1 student check-ins mein redirect kiya. Day 28 likeability check pe — 3.8 ho gaya. Yeh wahi loop hai jo course pura sikha raha hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Sneha's 14-day sting",
+          "md": "A Pune Marathi-medium teacher ran a 14-day pilot. Outcome unchanged, cost dropped 3 hrs, relationship flat. She kept the tool, redirected the saved 3 hrs into 1-on-1 check-ins, and watched the relationship score climb the next fortnight. The boring 80% saved time funded the human 20%."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Decide on day 14"
+    },
+    {
+      "type": "markdown",
+      "md": "Day 14 is the only day that matters. Everything before it is data collection; everything after is execution of the decision. The decision itself takes 10 minutes if you've done the design honestly.\n\n**Apply the rule, don't argue with it.** If you wrote \"if relationship drops by more than 0.5, I stop,\" and relationship dropped by 0.7, you stop. Even if the outcome went up. Even if cost dropped. The rule existed to protect you from your own commitment bias — *especially* to a tool you wanted to like.\n\n**The four-quadrant decision.** Outcome ↑ + cost ↓ → keep, expand. Outcome flat + cost ↓ → keep, redirect saved time. Outcome ↓ + cost ↓ → kill (you saved time at the wrong cost). Outcome ↑ + cost ↑ → think harder; what would you give up to keep this?\n\n**The relationship signal beats both.** If \"my teacher knows me\" dropped, no amount of outcome and cost wins justifies continuing. The whole point of saving time on the boring 80% was to protect the human 20%; if you trade them, you've inverted the model."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A 2x2 grid with axes 'outcome' and 'cost'. Top-left (outcome up, cost down): KEEP+EXPAND in green. Top-right (outcome up, cost up): THINK HARDER in yellow. Bottom-left (outcome flat/down, cost down): KEEP, REDIRECT TIME in green. Bottom-right (outcome down, cost up): KILL in red.",
+      "caption": "The day-14 decision grid. Run the relationship-signal check first; if that dropped, you ignore this grid and stop.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(80 30)'><line x1='0' y1='100' x2='400' y2='100' stroke='#5B21B6' stroke-width='2'/><line x1='200' y1='0' x2='200' y2='200' stroke='#5B21B6' stroke-width='2'/><text x='200' y='-10' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>outcome ↑</text><text x='200' y='220' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>outcome ↓</text><text x='-30' y='100' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' transform='rotate(-90 -30 100)'>cost ↓ ←      → cost ↑</text><rect x='8' y='8' width='180' height='80' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='98' y='38' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>KEEP, EXPAND</text><text x='98' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>outcome ↑ + cost ↓</text><text x='98' y='74' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46' font-style='italic'>(rare; cherish it)</text><rect x='212' y='8' width='180' height='80' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='302' y='38' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#92400E'>THINK HARDER</text><text x='302' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>outcome ↑ + cost ↑</text><text x='302' y='74' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E' font-style='italic'>what's the trade?</text><rect x='8' y='112' width='180' height='80' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='98' y='142' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#1E3A8A'>KEEP, REDIRECT</text><text x='98' y='162' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1E3A8A'>outcome flat + cost ↓</text><text x='98' y='178' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1E3A8A' font-style='italic'>spend saved time on kids</text><rect x='212' y='112' width='180' height='80' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='302' y='142' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#9F1239'>KILL</text><text x='302' y='162' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>outcome ↓ + cost ↑</text><text x='302' y='178' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239' font-style='italic'>saved time at wrong cost</text></g><text x='280' y='265' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#5B21B6' font-style='italic'>★ override: if relationship dropped, stop regardless of grid</text></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Principal Priya",
+        "role": "Your principal, holding your one-page experiment template, asking sharp questions",
+        "avatarSrc": "/coaches/principal-priya.png"
+      },
+      "intro": [
+        "Priya: \"Six teachers came to me this week with day-14 numbers. Each one wants to know whether to keep going. Tell me — keep, redirect, or kill?\""
+      ],
+      "buckets": [
+        { "id": "keep", "label": "Keep / expand", "tone": "safe" },
+        { "id": "redirect", "label": "Keep, redirect saved time", "tone": "neutral" },
+        { "id": "kill", "label": "Kill", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "e1",
+          "situation": "Anita ma'am, Class 8 English: quiz avg up from 62% to 71%, prep time down 4hrs to 2hrs, student-knows-me survey 3.6 → 3.7.",
+          "correctBucketId": "keep",
+          "explain": "Outcome up, cost down, relationship steady. Cherish this quadrant — it's rare. Keep, expand to other sections."
+        },
+        {
+          "id": "e2",
+          "situation": "Rajesh sir, Class 11 Physics: quiz avg unchanged at 64%, prep time down 5hrs to 2.5hrs, relationship 3.9 → 3.8.",
+          "correctBucketId": "redirect",
+          "explain": "Cost dropped 50% with no harm. Keep the tool; spend the saved 2.5 hrs on 1-on-1 doubt-clearing, which is the human 20%."
+        },
+        {
+          "id": "e3",
+          "situation": "Pooja ma'am, Class 10 Maths: quiz avg up from 70% to 76%, prep down 3hrs to 1hr, BUT 'my teacher knows me' dropped 4.0 → 3.0.",
+          "correctBucketId": "kill",
+          "explain": "Relationship signal breached. The 1-point drop on the relationship scale is the override. You saved time at the wrong cost. Kill or redesign before continuing."
+        },
+        {
+          "id": "e4",
+          "situation": "Mohan sir, Class 9 Civics: quiz avg dropped from 68% to 61%, prep time down 4hrs to 2hrs, relationship steady.",
+          "correctBucketId": "kill",
+          "explain": "Outcome dropped meaningfully (7 points). Even if cost dropped, you traded student learning for your weekend. That's the wrong way around. Kill."
+        },
+        {
+          "id": "e5",
+          "situation": "Asha ma'am, Class 7 Hindi: quiz avg up 60% to 64%, prep time *increased* 3hrs to 4.5hrs, relationship steady.",
+          "correctBucketId": "redirect",
+          "explain": "This is the 'think harder' quadrant. Outcome up modestly, cost up. Worth it? Probably not for the marginal gain. Iterate the workflow before next fortnight; current setup is wasteful."
+        },
+        {
+          "id": "e6",
+          "situation": "Vikram sir, Class 12 Economics: quiz avg flat at 72%, prep down 5hrs to 1.5hrs, relationship 3.8 → 3.7 (small drop, within margin).",
+          "correctBucketId": "redirect",
+          "explain": "Outcome flat, cost down a *lot*, relationship within noise. Keep, redirect 3.5 saved hours per week into focused 1-on-1 sessions for the bottom-quartile students."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: shipped without baseline",
+      "md": "You started using the AI tool three weeks ago. Things 'feel better.' You're recommending it in the staff room.\n\nBut you didn't write down the baseline. You can't actually compare. Your \"things feel better\" is what every teacher in every fad's first week has felt. You will, two months from now, not remember whether quiz averages went up, stayed flat, or dropped — because the only data you have is your impression of how it felt, which is exactly the kind of data that gets corrected by hindsight.\n\n**Rule:** if you didn't write the baseline before day 1, you are running a vibe check, not an experiment. Don't recommend it to colleagues. Don't write a blog post. Restart with a baseline next term."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps the way a disciplined teacher runs a 14-day classroom AI experiment.",
+      "items": [
+        { "id": "s1", "label": "Pick three numbers (outcome, cost, relationship) specific to the tool and class", "detail": "Generic numbers (\"engagement\") don't help; specific ones do." },
+        { "id": "s2", "label": "Write a kill criterion before day 1", "detail": "\"If relationship drops by 0.5 or more, I stop.\" Real number, real trigger." },
+        { "id": "s3", "label": "Capture baseline values (day 0)", "detail": "In writing. On paper or a sheet. Not in your head." },
+        { "id": "s4", "label": "Run the intervention consistently for 14 days, no other new variables", "detail": "Don't try three new tools at once; you can't tell which one moved the numbers." },
+        { "id": "s5", "label": "Capture post values on day 14", "detail": "Same three numbers. Don't editorialise; just record." },
+        { "id": "s6", "label": "Apply the four-quadrant decision rule", "detail": "Including the relationship-signal override. Decide and execute." }
+      ],
+      "hint": "Numbers, kill rule, baseline, run, post-capture, decide. Six steps, two weeks, one decision."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Design your own 14-day classroom AI experiment. One A4 page. Pick a tool, a class, three numbers, a kill criterion, and a decision rule.",
+      "lang": "markdown",
+      "starter": "Tool: \nClass and section: \nDuration: 14 days, starting [date]\n\nNumber 1 (outcome): \n  baseline (day 0): \n  post (day 14): \nNumber 2 (cost): \n  baseline: \n  post: \nNumber 3 (relationship): \n  baseline: \n  post: \n\nKill criterion: if [number] drops by more than [amount], I stop.\nDecision rule on day 14: \nWhat I will do with saved time, if any: \n",
+      "expected": "Tool: ChatGPT for generating Class 9 weekly Maths practice sets\nClass and section: Class 9 CBSE, section A (38 students)\nDuration: 14 days, starting Monday 13 May 2026\n\nNumber 1 (outcome): weekly chapter test average (out of 20)\n  baseline (day 0): 13.2/20 (4-week trailing average)\n  post (day 14): ___\nNumber 2 (cost): hours I spend on Sunday making practice sets\n  baseline: 3.5 hrs\n  post: ___\nNumber 3 (relationship): anonymous 1-5 student survey 'my teacher knows what I'm finding hardest'\n  baseline: 3.6 (last term-end)\n  post: ___\n\nKill criterion: if relationship drops by 0.4 or more, I stop. Or if test average drops by 1 point or more.\nDecision rule on day 14: outcome up + cost down → keep, expand to section B. Cost down + outcome flat → keep, redirect saved time to 1-on-1 doubt sessions for the bottom 8 students. Outcome down → kill. Relationship breached → kill regardless.\nWhat I will do with saved time, if any: 30-min focused doubt session twice a week for the 8 students with the lowest scores in the last test.\n"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Pick the things that make a 14-day classroom AI experiment *real* (not a vibe check).",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "A baseline number captured in writing before day 1", "correct": true, "explain": "Yes. The day-0 baseline is the only thing that lets you compare. Without it, day-14 numbers are just numbers." },
+        { "id": "b", "label": "A pre-written kill criterion", "correct": true, "explain": "Yes. Without one, the experiment runs forever and you protect a tool you wanted to like, even when it's hurting students." },
+        { "id": "c", "label": "Try a different AI tool every 2 days for variety", "correct": false, "explain": "Confounded variables. You won't know which tool moved which number; you've run 7 experiments at once and can't conclude any." },
+        { "id": "d", "label": "A baseline 'gut feel' that things will work", "correct": false, "explain": "Gut feel is the thing the experiment is meant to *correct*. Capturing your prior gut feeling isn't the same as capturing data." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Staff room mein experimentwallah ban gaya",
+          "md": "Pichle term tu staff room mein bola tha — \"AI ne meri prep change kar di hai.\" Lekin kisi ne pucha: \"kitna change?\" Tu freeze ho gaya. Vibe data tha, real data nahi.\n\nIs term shuru se baseline kar liya. Day 14 pe ek line bola: \"prep time 4 hrs se 2 hrs, quiz avg 65 se 68, relationship 3.7 se 3.8.\" Pura staff room ne sun liya. Principal ne policy team mein invite kar liya.\n\nVibes opinion hai. Numbers credibility hai. Bilkul wahi line jo tu bachchon ko sikhata hai for science fair — abhi tu hi follow kar."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Same point, no Hinglish",
+          "md": "Vibes get you ignored in staff meetings. Numbers get you invited to the policy committee. The credibility difference is just whether you wrote the baseline down on day zero — the smallest possible unit of effort, the largest possible difference in being taken seriously."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "An experiment is a tracked intervention with three numbers — outcome, cost, relationship — captured on day 0 and day 14.",
+        "No baseline, no experiment. The 5 minutes you spend writing baseline numbers on day 0 cannot be recovered later.",
+        "Pre-write a kill criterion. Without one, you'll protect a tool you wanted to like even when the data says stop.",
+        "The relationship signal beats outcome and cost. If 'my teacher knows me' dropped, you stop, regardless of how much time you saved.",
+        "Saved time is not the win; the win is what you redirect the saved time toward. The boring 80% buys you the human 20%."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "What is the *one* AI tool or workflow you'd want to test in your classroom this term? Write your three numbers right now, before reading anything else. If you can't pick three, the experiment isn't ready."
+    }
+  ]
+}

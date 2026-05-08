@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 94 Percent on Validation, 71 Percent on Reality",
+    "source": "Anonymous senior data scientist at Khaata Capital, a Mumbai-based credit-risk NBFC",
+    "date": "January 2025",
+    "story": "Through October and November of 2024, the credit-risk modelling team at Khaata Capital ran what they called the *\"Q4 Sprint.\"* The goal: a new default-prediction model for the salaried-personal-loan book, replacing a tired logistic regression that had been in prod since 2022. The sprint brief was a single line on a whiteboard: *\"Highest validation accuracy wins.\"*\n\nOver six weeks, the team trained **47 model variants**. XGBoost with 12 different hyperparameter grids. LightGBM. CatBoost. A Keras MLP someone had clearly built on a Saturday. They evaluated each variant on the same 20 percent validation slice, picked the leaderboard winner — an XGBoost ensemble at **94.1 percent validation accuracy** — and shipped it on December 18 in time for the year-end push.\n\nThe model was deployed against an unseen holdout test set on January 9, 2025, as part of a routine model-risk-management audit that the team had treated as a formality. **Test accuracy: 71.3 percent.** Worse than the 2022 baseline. The 23-point gap was the cleanest case of validation overfitting the audit committee had seen in three years.\n\nWhat happened: every hyperparameter choice, every feature-engineering decision, every \"let's try one more variant\" iteration had been made by checking the validation set. With 47 variants, the validation set had effectively become a second training set — and the team had memorised it. The honest test set, untouched until January, told the truth.\n\nThe fix took eight weeks. The new modelling protocol now requires a sealed test set, opened once, by the audit lead. The model that finally shipped scored 76 percent on test. Lower than the leaderboard. Real.",
+    "takeaway": "If you check it, you've trained on it. The test set is sacred or it is useless."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The 94 Percent Model",
+    "setup": "It's **Week 14**. Aditi has built her first real model — a fraud-flag classifier on Vyapaar Money's UPI transactions. She's been at it for three weeks. Her latest XGBoost variant, after some careful feature engineering and roughly 30 hyperparameter trials, scores **94.2 percent on validation.** She's elated. She's also two days from the demo to the Risk team.\n\nShe Slacks her boss: *\"Model is at 94 percent val accuracy. Should I write up the demo deck?\"* Boss replies, *\"Great! Get it ready.\"* She opens the deck template. She pings you, half-asking, half-bragging.",
+    "coach": { "name": "Head-of-Data Hema", "role": "Head of Data, owns the model-risk-management framework, has read every Khaata-style audit" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aditi shares the results: 94.2 percent on val, achieved after 30 hyperparameter trials and 6 feature-engineering iterations, all evaluated on the **same validation slice**. **What do you tell her?**",
+        "options": [
+          { "id": "a", "label": "\"94 percent is great. Demo the deck. Risk will love it.\"", "correct": false, "explain": "Hema reads this in the audit. Aditi just walked the Khaata Capital playbook from the field notes. The 94 percent is a leaderboard score on a validation set that's been peeked at 30+ times. It is a memorisation artifact, not a generalisation estimate.", "points": 0 },
+          { "id": "b", "label": "\"You've effectively trained on the validation set with 30 trials. Before the demo, hold out a fresh test set you haven't touched, evaluate once, and report THAT number.\"", "correct": true, "explain": "**Yes.** Repeated validation evaluation is implicit training. The honest evaluation requires data the model and the modeller have never seen. Aditi pulls a clean January-February holdout that wasn't part of the original split. One evaluation. No peeking.", "points": 3 },
+          { "id": "c", "label": "\"Run cross-validation on the 30 best models and report the mean.\"", "correct": false, "explain": "CV on the same data you've been tuning against doesn't fix the leak — it just averages it. The fundamental issue is that the validation set has been a feedback signal for 30 decisions. Averaging the leak is still leaking.", "points": 1 },
+          { "id": "d", "label": "\"What was the validation score of the FIRST model you tried, before any tuning? If it was much lower than 94, that's a tell.\"", "correct": true, "explain": "**Sharp.** Aditi checks: first model scored 81 percent on val. After 30 trials, 94 percent. A 13-point climb on the same slice without architectural changes is the signature of validation overfitting. The number itself is a red flag.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aditi pulls a fresh January-February holdout test set. Evaluates the 94 percent model **once**. Test accuracy: **76.4 percent.** She panics. *\"I have to demo in 36 hours and my real number is 18 points lower than what I thought.\"* **What's the move?**",
+        "options": [
+          { "id": "a", "label": "\"Re-tune on the new test set until you get back to 94. Demo that.\"", "correct": false, "explain": "Hema would in fact resign over this. Re-tuning on the test set is the entire failure mode the test set exists to prevent. Aditi would now have *two* contaminated datasets and zero honest signal. This is a fireable mistake at a regulated NBFC.", "points": 0 },
+          { "id": "b", "label": "\"Demo the 76.4 percent number. Frame the 94-vs-76 gap as a finding about the modelling process and what you've learned.\"", "correct": true, "explain": "**Bold and correct.** Senior people will respect honest 76 over fake 94 every time. Hema has watched a dozen analysts try to fudge the number and exactly one analyst lead with it. That one is now a Director.", "points": 3 },
+          { "id": "c", "label": "\"Cancel the demo, ask for two more weeks to do it properly.\"", "correct": false, "explain": "This is anxiety masquerading as rigor. The demo is a checkpoint, not a launch. Use it to share the real state. Postponing because the number isn't pretty is how analysts get a reputation for over-promising.", "points": 1 },
+          { "id": "d", "label": "\"Investigate the gap: which segments degrade most? Is it temporal drift, feature leakage in training, or generalisation failure?\"", "correct": true, "explain": "**The diagnostic move.** A 18-point gap usually points to *something specific* — often a feature that leaked future information, or a cohort shift between train and test. Aditi finds: a `last_30d_chargeback_count` feature was computed using the WHOLE dataset including future months. Patches it. Re-evaluates. Real number lands at 79 percent. That she can demo with pride.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Demo day. Aditi has a real test number (79.1 percent), a clean test protocol, and a story about how she found and fixed the leak. The Risk Director asks: **\"What's your protocol going forward to make sure this doesn't happen on the next model?\"** What does she say?",
+        "options": [
+          { "id": "a", "label": "\"I'll be more careful next time.\"", "correct": false, "explain": "Process failures need process fixes, not promises. 'Be more careful' is what every analyst says before the next overfit. The Risk Director writes a small note in their pad.", "points": 0 },
+          { "id": "b", "label": "\"Sealed test set, opened once by an independent reviewer, only after the model is finalised. Pre-registered evaluation criteria. Validation set used for tuning, but tuning budget capped at 20 trials with documented hyperparameters.\"", "correct": true, "explain": "**Audit-grade.** This is roughly the protocol Khaata Capital adopted post-failure. Sealed test, independent open, pre-registered metrics, capped tuning budget. The Risk Director nods and asks her to write it up as the team standard.", "points": 3 },
+          { "id": "c", "label": "\"Switch to nested cross-validation and report mean +/- std.\"", "correct": false, "explain": "Nested CV is a useful tool but not a substitute for a held-out test set in a regulated environment. Auditors want evidence that the model has been evaluated on data the modeller has never touched. Means and stds don't replace that.", "points": 1 },
+          { "id": "d", "label": "\"Build a second model, completely independently, and require both to agree before flagging a transaction.\"", "correct": false, "explain": "Different problem. Ensembling is about robustness; the question was about evaluation discipline. Strong-sounding but doesn't address what was asked.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You stopped Aditi from demoing a fairy-tale 94 percent, helped her find a real 79 percent (with a leak fix), and walked her through articulating an audit-grade evaluation protocol. Hema mentions this in the all-hands as 'how we want every model demo to go from now on.' That's a career-bending day.",
+      "good": "Solid on the headline issues. The protocol-design step is where the senior signal lives — re-read the section on **sealed test sets and pre-registered evaluation**. Numbers are easy to fake; processes are what auditors trust.",
+      "learn": "Aditi demoed 94 percent, the number didn't survive Risk's holdout audit on Monday morning, and the model never shipped. Re-read the lesson — especially the sections on **validation overfitting**, **the once-and-only-once test set**, and **how 47 trials becomes 47 ways to memorise the val slice**."
+    }
+  }
+}

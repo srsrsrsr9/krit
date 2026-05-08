@@ -1,0 +1,50 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: ₹14 cr on one bet",
+    "source": "Anonymous CFO at a Series-C Indian fintech",
+    "date": "January 2026",
+    "story": "Our CEO wanted a moonshot. ₹14 crore — entire AI budget — on one bet: an autonomous customer-support agent. Six months of work. No fallback bets. No staged kill criteria.\n\nMonth 9: agent live with 8% of tickets. Quality scores below the human team. Monthly burn ₹40L. CEO doubled down: 'just give it more data.' Month 12: still 9%, quality still down. **Agent shelved.** ₹14 cr written off. AI team morale: gone. Two principal engineers left.\n\nWhat would have changed it: the same ₹14 cr split into 3 bets (₹6cr / ₹5cr / ₹3cr), each with a 90-day kill criterion. Even if the moonshot still failed, the other two would have produced something shippable AND a culture that survives kills. Single-bet portfolios are a culture risk, not just a financial risk.",
+    "takeaway": "Single-bet AI portfolios concentrate risk; staged kill criteria across 3 bets distribute both the loss and the learning."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: 3 bets, ₹3.6 cr",
+    "setup": "Vikrant has ₹3.6 crore for AI in Q1 2026. His engineering team is excited about an autonomous agent moonshot. His CFO wants the safe bet (RAG over docs). The board wants 'transformative.' All three want everything to be the One Big Bet.",
+    "coach": { "name": "Ex-CTO-now-advisor Ananth", "role": "Built, sold, and unwound 4 AI products at scale" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Should Vikrant put all ₹3.6 cr on the moonshot?",
+        "options": [
+          { "id": "a", "label": "Yes — engineering loves it, board wants 'transformative,' send it.", "correct": false, "explain": "Single-bet portfolio. If moonshot fails (and most do), nothing else lands. Culture and capital both burned.", "points": 0 },
+          { "id": "b", "label": "Split into 3: ₹1.8cr safe (RAG over docs), ₹1.2cr stretch (workflow agent), ₹0.6cr moonshot.", "correct": true, "explain": "Right. Tiered exposure. 60/33/16 split lets the moonshot fail without taking the safer wins down.", "points": 3 },
+          { "id": "c", "label": "All-safe: ₹3.6cr on the RAG bet. No moonshot at all.", "correct": false, "explain": "Over-conservative. Diversification works in both directions; you also need at least one stretch bet.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Day 45 of the moonshot bet. It's missing every milestone by 30%+. CEO says 'give it more time.' Vikrant's move?",
+        "options": [
+          { "id": "a", "label": "Honor the pre-committed kill criterion. Stop. Write the post-mortem. Reallocate the engineers.", "correct": true, "explain": "The kill criterion was the discipline. Honoring it preserves trust for ALL future bets, not just this one.", "points": 3 },
+          { "id": "b", "label": "Extend by 30 days to give CEO breathing room.", "correct": false, "explain": "Soft kill criterion = no kill criterion. Every future bet's discipline now leaks.", "points": 0 },
+          { "id": "c", "label": "Quietly let it run while telling CEO it's still on track.", "correct": false, "explain": "Trust-destroying. CEO will find out at month 6 and the trust loss is worse than the kill.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 90: bet 1 hits its outcome (CAC -8%), bet 2 partially hits (mixed signal), moonshot killed at day 45. What does Vikrant report to the board?",
+        "options": [
+          { "id": "a", "label": "All three honestly. The win, the partial, and the kill — with the post-mortem from the kill.", "correct": true, "explain": "Honest portfolio reporting builds board trust. The kill is a feature; the board sees discipline.", "points": 3 },
+          { "id": "b", "label": "Just the win. Soft-pedal the kill.", "correct": false, "explain": "Boards always find out. Soft-pedaling once destroys credibility for the next portfolio.", "points": 0 },
+          { "id": "c", "label": "Frame the kill as 'pivot' to make it sound positive.", "correct": false, "explain": "Euphemism is read as evasion. 'Killed at day 45 per pre-committed criterion' lands far better.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Vikrant ships a 1-win, 1-partial, 1-kill quarter. The board approves Q2 portfolio at ₹4.2 cr because the kill criterion proved discipline. Engineering culture intact.",
+      "good": "Solid. Portfolio held its discipline. Bet 2's partial signal needs another quarter to call.",
+      "learn": "Re-read the kill-criterion section. The criterion has no value if it's negotiable."
+    }
+  }
+}

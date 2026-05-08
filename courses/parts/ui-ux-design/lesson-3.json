@@ -1,0 +1,220 @@
+{
+  "slug": "color-and-typography",
+  "title": "Color and Typography Without the Cargo Cult",
+  "subtitle": "Type is a hierarchy of voices; color is a system of meanings",
+  "estimatedMinutes": 13,
+  "skills": ["ui-color-and-type"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ui-ux-design/color-and-typography.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the cargo cult of #FF0000" },
+        { "startSec": 80, "label": "Mental model: type is a hierarchy of voices" },
+        { "startSec": 220, "label": "Move 1 — Type scale ratios" },
+        { "startSec": 410, "label": "Move 2 — Tokens, not hex codes" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ui-ux-design/color-and-typography.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Two design crimes happen on every junior team. The first: a designer picks 14 distinct font sizes 'because we need flexibility.' The second: an engineer pastes #FF0000 into the error toast component because Stack Overflow said red means error.\n\nBoth come from the same place — the absence of a system. With a system, type sizes get picked once for the whole product, and colour gets a name (`feedback-error`) before it gets a value (`#B91C1C`). Without a system, every screen is a fresh negotiation, and your product slowly looks like fourteen products."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing two columns. Left: a chaotic list of fourteen random font sizes (12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 28, 32, 36). Right: a clean ladder of five sizes (12, 14, 16, 20, 24, 32) on a 1.25 ratio.",
+      "caption": "Left: hand-picked font sizes, each one defended in isolation. Right: a single ratio applied throughout. The right one is shorter, calmer, and easier to ship.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><text x='100' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#7C3AED' font-weight='bold'>The cargo cult</text><g font-family='sans-serif' fill='#1F2937'><text x='10' y='40' font-size='12'>12  13  14  15  16</text><text x='10' y='60' font-size='14'>17  18  19  20  22</text><text x='10' y='85' font-size='18'>24  28  32  36</text><text x='10' y='220' font-family='monospace' font-size='10' fill='#9CA3AF'>14 sizes, no rule</text></g></g><g transform='translate(290 30)'><text x='120' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#10B981' font-weight='bold'>The 1.25 ratio</text><g font-family='sans-serif' fill='#1F2937'><text x='10' y='38' font-size='12'>12px — caption</text><text x='10' y='62' font-size='14'>14px — body small</text><text x='10' y='90' font-size='16'>16px — body</text><text x='10' y='124' font-size='20'>20px — h3</text><text x='10' y='162' font-size='24'>24px — h2</text><text x='10' y='208' font-size='32'>32px — h1</text><text x='10' y='240' font-family='monospace' font-size='10' fill='#10B981'>6 sizes, ratio 1.25</text></g></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: type is a hierarchy of voices",
+      "md": "Imagine your interface is a stage play. The H1 is the lead actor's line. The H2 is supporting cast. The body is dialogue. The caption is the stage direction nobody reads. **A type scale is the casting of voices for that play.** Six voices is a manageable cast; fourteen is a riot. Pick a ratio, derive the sizes, and refuse to add more without rewriting the whole script."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ui-ux-design/anim/color-and-typography.html",
+      "height": 420,
+      "caption": "Slide between three type-scale ratios (1.2, 1.25, 1.333) on the same SaaS screen and watch how the rhythm shifts.",
+      "fallbackImage": "/courses/ui-ux-design/anim/color-and-typography-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Wedding card wala lesson",
+          "md": "Bhai, Indian wedding cards dekho. 14 different fonts, 6 colours, glitter, foil, peacock, om, bride-groom photo, parents ke naam, location, mehndi-haldi-sangeet sab ek hi card pe. Aankh kahin nahi tikti. Aur phir ek minimal Letterpress card aata hai jisme sirf 'Vivah — Aanya & Aarav, 12 December' likha hai. Yaad reh jaata hai woh.\n\nFont scale yeh hi cheez hai. Kam voices, har ek apni jagah."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no wedding",
+          "md": "An old-school Indian wedding card uses fourteen fonts, eight colours, foil, glitter, and three illustrations. You remember none of them. The minimal letterpress card with one font and three lines is the one you keep on the fridge. Less type variety, more memory."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Pick a ratio, derive the scale"
+    },
+    {
+      "type": "markdown",
+      "md": "A type scale is built by multiplying. Pick a base size (16px is the universal default for body text on web; the world has agreed) and a ratio. Each step in the scale is the previous step times the ratio.\n\nThe useful ratios for SaaS:\n\n- **1.2 (minor third)** — subtle, dense, professional. Good for data-heavy dashboards.\n- **1.25 (major third)** — the workhorse. Distinct enough to be hierarchical, calm enough to feel intentional.\n- **1.333 (perfect fourth)** — louder. Marketing pages, content sites.\n- **1.5 (perfect fifth)** — editorial. Long-form. Don't use this on a SaaS app unless you want every H1 to feel like a manifesto.\n\nWith a 1.25 ratio starting at 16: 16 → 20 → 24 → 32 → 40 → 48. Round to the nearest pixel; you don't need to be precious. Six steps is plenty for a SaaS app.\n\n**Don't use seven.** The argument 'we need one between 20 and 24' is the start of cargo-cult typography. If you cannot decide between 20 and 24, the answer is to decide; not to add a 22."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A vertical stair-step diagram showing the 1.25 ratio: 16 → 20 → 24 → 32 → 40 → 48, each step labelled with its semantic role (body, body-large, h3, h2, h1, display).",
+      "caption": "The 1.25 ladder. Six rungs, each with a job. Add a seventh and you've broken the system.",
+      "maxWidth": 480,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320' role='img'><rect width='480' height='320' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#065F46'><g transform='translate(30 270)'><rect width='100' height='16' fill='#A7F3D0' stroke='#065F46' stroke-width='1'/><text x='110' y='12' font-size='11'>16  body</text></g><g transform='translate(30 240)'><rect width='100' height='20' fill='#86EFAC' stroke='#065F46' stroke-width='1'/><text x='110' y='15' font-size='11'>20  body-lg</text></g><g transform='translate(30 205)'><rect width='100' height='24' fill='#6EE7B7' stroke='#065F46' stroke-width='1'/><text x='110' y='18' font-size='11'>24  h3</text></g><g transform='translate(30 162)'><rect width='100' height='32' fill='#34D399' stroke='#065F46' stroke-width='1'/><text x='110' y='22' font-size='11'>32  h2</text></g><g transform='translate(30 110)'><rect width='100' height='40' fill='#10B981' stroke='#065F46' stroke-width='1'/><text x='110' y='26' font-size='11'>40  h1</text></g><g transform='translate(30 50)'><rect width='100' height='48' fill='#059669' stroke='#065F46' stroke-width='1'/><text x='110' y='30' font-size='11' fill='#FFFFFF'>48  display</text></g><text x='240' y='30' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>ratio 1.25</text><text x='240' y='52' font-family='monospace' font-size='10'>16 × 1.25 = 20</text><text x='240' y='68' font-family='monospace' font-size='10'>20 × 1.25 = 25 → 24</text><text x='240' y='84' font-family='monospace' font-size='10'>24 × 1.333 = 32</text><text x='240' y='100' font-family='monospace' font-size='10'>32 × 1.25 = 40</text><text x='240' y='116' font-family='monospace' font-size='10'>40 × 1.2 = 48</text><text x='240' y='150' font-family='sans-serif' font-size='10' font-style='italic' fill='#9CA3AF'>(real systems round)</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Building a type scale from scratch in five minutes",
+      "steps": [
+        { "label": "Step 1 — Set body size", "body": "16px on web. 17 on iOS-influenced apps. Don't overthink." },
+        { "label": "Step 2 — Pick the ratio", "body": "1.25 for SaaS, 1.333 for marketing, 1.2 for dense data tools. If you can't decide, ship 1.25." },
+        { "label": "Step 3 — Generate 5-6 sizes", "body": "Multiply, round to nearest pixel. Stop at 5-6; one for each H level plus body and caption." },
+        { "label": "Step 4 — Name them semantically", "body": "text-display, text-h1, text-h2, text-h3, text-body, text-caption. Numbers are tempting; names survive a redesign." },
+        { "label": "Step 5 — Document the line-heights", "body": "Use a separate scale for line-height: 1.5 for body, 1.3 for headings. The single biggest readability lever you have." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Why is a 1.25 ratio more defensible than hand-picking each font size?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Because each step is mathematically distinct from the one before, so hierarchy is automatic", "correct": true, "explain": "A constant ratio means the visual jump between steps is predictable. The hierarchy is built into the math, not negotiated per-screen." },
+        { "id": "b", "label": "Because 1.25 is what Material Design uses", "correct": false, "explain": "It happens to be common, but the reason is the math, not the brand." },
+        { "id": "c", "label": "Because designers who use ratios are taken more seriously", "correct": false, "explain": "Status arguments aren't engineering arguments. The reason is the consistency, not the optics." },
+        { "id": "d", "label": "Because 1.25 ratio renders faster in browsers", "correct": false, "explain": "Browsers don't care about your ratio. The performance angle is irrelevant." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Mumbai studio ki kahaani",
+          "md": "Mumbai ke ek 6-person design studio mein founder ne ek policy banayi — kisi bhi PR mein agar koi naya font size add hua, designer ko reason likhna padega in 50 words ya less. Pehle hafte 12 reasons aaye. Doosre hafte 4. Teesre hafte 0. Type scale lock ho gaya, automatic.\n\nFriction is a feature."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Same point, no studio",
+          "md": "A small Mumbai design studio added a rule: any new font size in a PR requires a 50-word justification. The PRs with new sizes dropped from 12 in week one to zero by week three. Friction did the design system's job for free."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Tokens, not hex codes"
+    },
+    {
+      "type": "markdown",
+      "md": "Hex codes are technical debt. Every #3B82F6 you paste into a component is a future bug — when the brand changes, when dark mode lands, when accessibility fails, when a designer 'tweaks' it to #3D80F4 in one screen and forgets to update the others.\n\nThe fix is **design tokens**: named values you reference everywhere.\n\nA minimal palette to start with:\n\n- `surface-primary` — the page background.\n- `surface-elevated` — cards, modals, popovers.\n- `text-primary` — main reading copy.\n- `text-muted` — secondary, captions.\n- `interaction-default` — primary CTA fill.\n- `interaction-hover` — primary CTA on hover.\n- `feedback-error`, `feedback-warning`, `feedback-success` — status states.\n- `border-default` — your one default border colour.\n\nNotice these names are about **meaning**, not about colour. `interaction-default` could be navy in one product and orange in another — the components don't change. When the brand rebrand happens (it always happens), you change the value in one file and ship.\n\n**Never use a token name that says the colour.** `blue-500` is the wrong abstraction; `interaction-default` is the right one. The day you decide your brand is no longer blue, you don't want to grep your codebase."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing two columns. Left: hex codes (#3B82F6, #DC2626, #F59E0B) sprinkled randomly across components. Right: token names (interaction-default, feedback-error, feedback-warning) cleanly mapped to one source of values.",
+      "caption": "Left: every component knows the hex. Right: components reference meaning; values live in one place. Rebrand cost: zero in one column, weeks in the other.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(20 30)'><text x='110' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#B91C1C'>Hex everywhere</text><g font-family='monospace' font-size='10' fill='#1F2937'><rect x='0' y='30' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='48'>Button.tsx</text><text x='10' y='62' fill='#3B82F6'>bg: #3B82F6</text><rect x='0' y='80' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='98'>Header.tsx</text><text x='10' y='112' fill='#3D80F4'>bg: #3D80F4 (typo!)</text><rect x='0' y='130' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='148'>Toast.tsx</text><text x='10' y='162' fill='#DC2626'>bg: #DC2626</text><rect x='0' y='180' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='198'>Banner.tsx</text><text x='10' y='212' fill='#EF4444'>bg: #EF4444 (different red)</text></g><text x='110' y='245' text-anchor='middle' font-family='monospace' font-size='10' fill='#B91C1C'>4 hex values, 2 wrong</text></g><g transform='translate(290 30)'><text x='110' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#065F46'>Tokens</text><g font-family='monospace' font-size='10' fill='#1F2937'><rect x='0' y='30' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='48'>Button.tsx</text><text x='10' y='62' fill='#0EA5E9'>bg: interaction-default</text><rect x='0' y='80' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='98'>Header.tsx</text><text x='10' y='112' fill='#0EA5E9'>bg: interaction-default</text><rect x='0' y='130' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='148'>Toast.tsx</text><text x='10' y='162' fill='#B91C1C'>bg: feedback-error</text><rect x='0' y='180' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='198'>Banner.tsx</text><text x='10' y='212' fill='#B91C1C'>bg: feedback-error</text></g><text x='110' y='245' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>2 tokens, 0 typos possible</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Studio-Lead Saanvi", "role": "design lead, 9 years across India and Singapore" },
+      "intro": [
+        "Type and colour today. Let me show you six choices teams make on a token system.",
+        "Tell me whether each is a good token name, a bad token name, or fine but missing context."
+      ],
+      "buckets": [
+        { "id": "good", "label": "Good token", "tone": "safe" },
+        { "id": "bad", "label": "Bad token name", "tone": "danger" },
+        { "id": "fine", "label": "Fine, but needs context", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "`color-blue-500`", "correctBucketId": "bad", "explain": "Names the colour, not the meaning. The day your brand goes orange, every reference is wrong." },
+        { "id": "s2", "situation": "`interaction-default`", "correctBucketId": "good", "explain": "Names the role. Survives a rebrand. Lets dark mode swap the value cleanly." },
+        { "id": "s3", "situation": "`text-primary`", "correctBucketId": "good", "explain": "Generic but meaningful. Pairs cleanly with `text-muted` and `text-inverse`." },
+        { "id": "s4", "situation": "`navy-button-bg`", "correctBucketId": "bad", "explain": "Encodes both the colour (navy) and the use (button-bg). Both bits will betray you eventually." },
+        { "id": "s5", "situation": "`bg`", "correctBucketId": "fine", "explain": "Acceptable shorthand if the system has only one bg. The day you have multiple surfaces, you'll regret the lack of suffix." },
+        { "id": "s6", "situation": "`semantic-error-100` and `semantic-error-700`", "correctBucketId": "good", "explain": "Tiered semantic tokens are great — light fill for backgrounds, dark fill for text. The 100/700 maps to lightness, not absolute values." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: branding the token names",
+      "md": "Junior designers love naming tokens after the brand: `mahindra-orange`, `swiggy-red`, `paytm-blue`. It feels personal. It is also a guaranteed rebrand catastrophe. **Never name a token after a colour or a brand. Name it after the role it plays.** `interaction-default` could be navy today and saffron next year; `paytm-blue` is just a lie waiting to be found."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps for setting up a token system on a new product.",
+      "items": [
+        { "id": "s1", "label": "List the semantic categories you need", "detail": "surface, text, interaction, feedback, border. Five buckets cover most apps." },
+        { "id": "s2", "label": "Pick 2-3 tokens per category", "detail": "Don't ship surface-1 through surface-9 on day one. Start with the ones you actually use." },
+        { "id": "s3", "label": "Assign hex values to each token", "detail": "Pick the values once; this is the only place hex codes should live." },
+        { "id": "s4", "label": "Wire tokens into Tailwind config or CSS variables", "detail": "Make the token names usable in code: bg-surface-elevated, text-text-muted." },
+        { "id": "s5", "label": "Migrate one surface end-to-end", "detail": "Start with the most-used screen. Write down the leftover hex codes that still need a home." }
+      ],
+      "hint": "Think semantic categories first; hex values come last."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Define a minimum token set for a small Indian SaaS dashboard. Write 6-8 token names with their semantic role. Don't include hex values; this is the naming exercise. Defend each name in one short sentence.",
+      "lang": "markdown",
+      "starter": "1. surface-primary — the page background...",
+      "expected": "1. surface-primary — the page background, used on the body. 2. surface-elevated — cards, modals, popovers; gives them visible separation from the page. 3. text-primary — main reading copy. 4. text-muted — captions, helper text, timestamps. 5. interaction-default — primary CTA fill; the only filled brand colour on a screen. 6. interaction-hover — slightly darker shade for the hover state of interaction-default. 7. feedback-error — error states across toasts, banners, inline validation. 8. border-default — the single default border for inputs, cards, and dividers, so dividers don't drift across components."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which two of these are real reasons to use semantic tokens instead of hex codes? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Rebrands cost one diff instead of hundreds", "correct": true, "explain": "Semantic tokens decouple the meaning from the value. One file changes; everything else inherits." },
+        { "id": "b", "label": "Dark mode requires fewer overrides", "correct": true, "explain": "If components reference `surface-elevated`, dark mode just remaps the value of that token. Components don't change." },
+        { "id": "c", "label": "Hex codes render slower in browsers", "correct": false, "explain": "There is no rendering cost. The cost is human, in maintenance and consistency." },
+        { "id": "d", "label": "Designers prefer Figma's colour-style API", "correct": false, "explain": "True but tangential. The reason isn't the tool; it's the abstraction." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Saree shop ka colour system",
+          "md": "Bhai, ek successful saree shop owner se baat ki. Bola — 'mein kabhi colour ka naam nahi rakhta — saari ko sirf woh shade kehta hu jo mood describe karta hai. Bridal-red, summer-cotton-blue, festive-gold. Customer shade nahi puchti, mood puchti hai.'\n\nDesign tokens isi ka coded version hai. Hex code shade hai; token name mood hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no saree shop",
+          "md": "A successful saree-shop owner names every colour by mood, not by hex. 'Bridal red', 'monsoon blue', 'festive gold'. Customers don't ask for shades; they ask for moods. Tokens are the developer version of the same trick."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Pick a type-scale ratio (1.25 for SaaS) and derive 5-6 sizes. Six voices, not fourteen.",
+        "Body text on web is 16px. Anything below 14 is hostile to anyone over 35.",
+        "Line-height is the single biggest readability lever. 1.5 for body, 1.3 for headings.",
+        "Hex codes are technical debt. Use semantic tokens (interaction-default, feedback-error) so rebrands cost one diff.",
+        "Never name a token after a colour or brand. Name it after the role it plays."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Open your product's CSS or Tailwind config. Count the unique font sizes and the unique hex values. How many of each? What is your fastest path to a 6-size scale and a 12-token palette? Write down the first three tokens you'd name."
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 47 Hex Codes That Broke Dark Mode",
+    "source": "Anonymous staff designer at NiyamPay, a Mumbai-based corporate-cards fintech",
+    "date": "June 2024",
+    "story": "NiyamPay shipped dark mode on **June 11, 2024**, after eight months of design work and a lot of internal congratulation. By **June 13**, three customers had filed bug reports about *invisible* receipts in the expense-approvals queue: white text on near-white background. By **June 17**, the engineering lead pulled the dark-mode rollout entirely.\n\nThe root cause, traced over a six-hour war-room: the design files contained **47 distinct hex codes for the colour grey**. `#F4F4F4`, `#F5F5F5`, `#F4F5F6`, `#F2F2F4`, and so on. No one — not the original designer, who had left in March — knew which grey was supposed to be `background-secondary` versus `surface-elevated` versus `divider-subtle`. The dark-mode build had been done by mapping each hex code to a single dark equivalent, but because the *intent* of each grey had never been recorded, several got mapped wrong. The receipt background and the receipt text got mapped to the same value.\n\nThe rebuild took eleven weeks. The team replaced every hex literal with **34 semantic tokens** (`bg-primary`, `bg-elevated`, `text-primary`, `text-muted`, `border-subtle`, etc.) and shipped dark mode again on **September 4, 2024**. Reported colour-related bugs in the next quarter dropped **85%** vs the same period the previous year. The new staff designer added a single rule to the design-system README: *\"If you typed a hex code, you owe an explanation.\"*",
+    "takeaway": "A hex code records what something looks like. A token records what something *is*. Only one of those survives a re-skin."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Vikram Wants a Brand Color",
+    "setup": "Six weeks into the **Saral Pay** engagement. Vikram's cofounder, who handles marketing, wants to add a **\"festive saffron\"** colour for an upcoming Diwali campaign — buttons, badges, the splash screen, *\"maybe the whole top nav for the week.\"* Vikram forwards this to you with a single sentence: *\"Need your help. He wants the hex code by EOD.\"*\n\nIt is 2:47pm. Your job is to keep the Diwali campaign from breaking the design system that you spent the last month establishing.",
+    "coach": {
+      "name": "Design-Director Diya",
+      "role": "Has personally watched four startups paint themselves into a corner with seasonal colours"
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision. Vikram's cofounder wants `#FF6F00` everywhere for Diwali week. **What's your opening question to Vikram?**",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"What is the **role** of this colour — is it a brand-accent, a campaign-flag, a CTA-replacement, or a notification-tone? Each one means a different decision.\"",
+            "correct": true,
+            "explain": "**Right question.** Naming the role first prevents `#FF6F00` from showing up in three contradictory places — like *both* a primary CTA *and* a destructive-action warning, which has happened to actual fintechs.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"What's the hex code? I'll add it.\"",
+            "correct": false,
+            "explain": "You just became a colour-vending machine. The cofounder gives you `#FF6F00` and you put it everywhere with no semantic anchor. Two weeks after Diwali, nobody remembers why the *Delete Account* button is festive saffron.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"Don't do it. Brand colours shouldn't change for seasons.\"",
+            "correct": false,
+            "explain": "You just told the cofounder *no* without offering a yes. He'll do it himself, badly. You're now both excluded from the decision and responsible for the outcome.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Sure, but only on the splash screen — nowhere else.\"",
+            "correct": false,
+            "explain": "Arbitrary scope-limit with no principle behind it. The cofounder will negotiate it back up to four screens by Friday because you didn't anchor *why*.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Vikram replies: *\"He says it's a 'campaign accent' — show users it's Diwali, drive seasonal urgency.\"* You now know the role. **What's the right token strategy?**",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add a new token `accent-campaign-diwali-2026` mapped to `#FF6F00`. Use *only* in campaign components. Set an expiry comment in the file: `// remove after 2026-11-15`.",
+            "correct": true,
+            "explain": "**This is the move.** Scoped name, scoped use, scoped lifetime. The token can't accidentally leak into the design system because its name disqualifies it from anything that isn't a Diwali component. The expiry comment is the kill-switch.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Override `accent-primary` to `#FF6F00` for Diwali week, then change it back.",
+            "correct": false,
+            "explain": "Now every component using `accent-primary` — *including the Send Money button* — turns saffron. Users see a Diwali-coloured CTA on the *Block Card* destructive screen too. You broke the semantic layer to save 30 seconds.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "Hardcode `#FF6F00` directly into the four campaign components.",
+            "correct": false,
+            "explain": "Six months from now someone will refactor those components and lose the hex. Or worse: the cofounder asks for a different shade and you have to find every literal. You traded a small upfront cost for a guaranteed future cleanup.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add a new permanent `accent-festive` token, since festivals come every year.",
+            "correct": false,
+            "explain": "Plausible-sounding mistake. *Festive* is an aesthetic, not a role. Diwali, Holi, Christmas, and Eid all want different colours, and a single `accent-festive` will end up meaning one of them and breaking the others.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Vikram pushes back: *\"This feels like overkill. Why can't I just put the hex code in the file? It's one week.\"* **Your one-paragraph defence?**",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Because every hex you type is a future bug. The token has a name, a scope, and an expiry. The hex has none of those — and in three months the next person will see `#FF6F00` and have no idea if it's a brand colour, a warning, or a leftover.\"",
+            "correct": true,
+            "explain": "**Land it.** You named the cost (future bug), the asymmetry (named vs anonymous), and the human consequence (next person's confusion). Vikram nods.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"Because that's the rule.\"",
+            "correct": false,
+            "explain": "Vikram is the kind of founder who breaks rules he doesn't understand. *\"That's the rule\"* survives until 11pm Thursday when he opens Figma and types the hex anyway.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"Because Apple does it that way.\"",
+            "correct": false,
+            "explain": "Apple has a 200-person design-systems team. Saral Pay has you. The argument is structurally true and rhetorically lazy.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Because if we ever need dark mode, every hex code will need to be re-thought from scratch — but every token already has a slot waiting for its dark-mode partner.\"",
+            "correct": true,
+            "explain": "**Sharp.** You connected today's micro-decision to a real future need (dark mode is on Vikram's roadmap for Q4). The token argument now sells itself.",
+            "points": 3
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Vikram's convinced. Last decision: **how does this token live in the codebase?**",
+        "options": [
+          {
+            "id": "a",
+            "label": "Add to `tailwind.config.ts` under `colors.accent.campaignDiwali2026`, with a code comment linking to the design doc and the kill-date. Reference it in components as `bg-accent-campaign-diwali-2026`.",
+            "correct": true,
+            "explain": "**Clean.** Lives in one place, queryable by grep, removable by deleting one line. Future-you will thank present-you. Diya is, momentarily, satisfied.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "Add it to a new file `seasonal-colors.ts` separate from the main config.",
+            "correct": false,
+            "explain": "Now you have two sources of truth. The next designer will inevitably duplicate or forget about one of them. *Seasonal* is not a separate axis from *colour*; it's a property of one.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "Just inline `#FF6F00` in the Diwali components for now and document it in the PR description.",
+            "correct": false,
+            "explain": "PR descriptions are write-once read-zero. The hex will live in the codebase for 18 months, untraceable. You undid the entire previous stage.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "Add it as a CSS custom property `--diwali-2026: #FF6F00;` in the global stylesheet.",
+            "correct": true,
+            "explain": "**Also valid** if your stack relies on CSS vars. Same shape — named, scoped, queryable, deletable. The principle, not the syntax, is what matters.",
+            "points": 3
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Diwali week ships. Saffron lives on the splash and one campaign card. On November 15, you delete one line and it's gone. The cofounder loved it. **Diya sends you a single thumbs-up emoji**, which is the maximum she gives.",
+      "good": "You got the token in, but the scoping is loose enough that some saffron leaked to a screen it shouldn't have. Not a disaster; flag it for the post-campaign cleanup. Re-read the section on **role-naming**.",
+      "learn": "Either Vikram ended up with `#FF6F00` hardcoded in four files, or `accent-primary` itself got overridden and broke half the app for a week. Re-read the lesson — especially **why a token records intent and a hex records appearance**, and only intent survives the second use case."
+    }
+  }
+}

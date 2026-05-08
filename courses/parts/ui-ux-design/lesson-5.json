@@ -1,0 +1,220 @@
+{
+  "slug": "design-critique-loop",
+  "title": "The Design Feedback Loop",
+  "subtitle": "Critique is the second design step, not the last",
+  "estimatedMinutes": 13,
+  "skills": ["ui-design-judgment"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ui-ux-design/design-critique-loop.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — why critique fails" },
+        { "startSec": 80, "label": "Mental model: critique is step two, not step ten" },
+        { "startSec": 220, "label": "Move 1 — The 3-question critique" },
+        { "startSec": 410, "label": "Move 2 — The spec-first PR" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ui-ux-design/design-critique-loop.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most teams treat design critique as the last gate before shipping. The designer pushes a Figma link to Slack, four people drop unstructured opinions in the thread, the loudest one wins, and the work goes back for a 'revision'. The cycle is slow, demoralising, and rarely produces better design — only different design.\n\nThe fix is not better Figma comments. It's a critique loop run early, structured, and goal-anchored. Three questions and one ritual fix the bulk of it. By the end of this lesson, you will run critiques that improve the work instead of just trading taste."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two timelines side by side. Left: 'design → polish → polish → critique → revise → revise → ship' — long and painful. Right: 'sketch → critique → design → critique → polish → ship' — shorter, tighter loops at the start.",
+      "caption": "Left: critique at the end, when changes are expensive. Right: critique at the front, when changes are cheap. Same total time; very different output.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(20 30)'><text x='0' y='10' font-family='sans-serif' font-size='12' font-weight='bold' fill='#7C3AED'>Critique at the end (slow)</text><line x1='0' y1='35' x2='520' y2='35' stroke='#9CA3AF' stroke-width='2'/><g font-family='sans-serif' font-size='10' fill='#1F2937'><circle cx='10' cy='35' r='8' fill='#A78BFA'/><text x='10' y='55' text-anchor='middle'>sketch</text><circle cx='80' cy='35' r='8' fill='#A78BFA'/><text x='80' y='55' text-anchor='middle'>polish</text><circle cx='150' cy='35' r='8' fill='#A78BFA'/><text x='150' y='55' text-anchor='middle'>polish</text><circle cx='220' cy='35' r='8' fill='#A78BFA'/><text x='220' y='55' text-anchor='middle'>polish</text><circle cx='290' cy='35' r='10' fill='#F43F5E'/><text x='290' y='58' text-anchor='middle' font-weight='bold' fill='#9F1239'>critique</text><circle cx='360' cy='35' r='8' fill='#A78BFA'/><text x='360' y='55' text-anchor='middle'>revise</text><circle cx='430' cy='35' r='8' fill='#A78BFA'/><text x='430' y='55' text-anchor='middle'>revise</text><circle cx='500' cy='35' r='10' fill='#10B981'/><text x='500' y='58' text-anchor='middle' font-weight='bold' fill='#065F46'>ship</text></g></g><g transform='translate(20 140)'><text x='0' y='10' font-family='sans-serif' font-size='12' font-weight='bold' fill='#10B981'>Critique at the front (faster)</text><line x1='0' y1='35' x2='520' y2='35' stroke='#9CA3AF' stroke-width='2'/><g font-family='sans-serif' font-size='10' fill='#1F2937'><circle cx='10' cy='35' r='8' fill='#A78BFA'/><text x='10' y='55' text-anchor='middle'>sketch</text><circle cx='100' cy='35' r='10' fill='#F43F5E'/><text x='100' y='58' text-anchor='middle' font-weight='bold' fill='#9F1239'>critique</text><circle cx='190' cy='35' r='8' fill='#A78BFA'/><text x='190' y='55' text-anchor='middle'>design</text><circle cx='280' cy='35' r='10' fill='#F43F5E'/><text x='280' y='58' text-anchor='middle' font-weight='bold' fill='#9F1239'>critique</text><circle cx='370' cy='35' r='8' fill='#A78BFA'/><text x='370' y='55' text-anchor='middle'>polish</text><circle cx='500' cy='35' r='10' fill='#10B981'/><text x='500' y='58' text-anchor='middle' font-weight='bold' fill='#065F46'>ship</text></g></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: critique is the second design step, not the last",
+      "md": "Treat critique as **step two of the design process, not step ten**. The job of the first sketch is to become wrong on purpose so a critique can pull it toward right. Designers who polish before critique waste polish; teams that critique only at the end produce design that is locally optimal and globally weird. **Make the cost of being wrong cheap by inviting critique while the work is still ugly.**"
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ui-ux-design/anim/design-critique-loop.html",
+      "height": 420,
+      "caption": "Watch the same design move through the 3-question critique loop and emerge sharper at each pass.",
+      "fallbackImage": "/courses/ui-ux-design/anim/design-critique-loop-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Mummy ka unboxing",
+          "md": "Bhai, naya design banaya. Thumb-up Slack pe daala. PM ne emoji react kiya. Founder ne 'looks great' kaha. Tu khush. Ab tu mummy ko phone pe screen dikhata hai. Mummy bolti hai — 'beta yeh button ka kya kaam hai?' Tu rukta hai.\n\nMummy critique single most underrated tool hai. Koi context nahi, koi politeness ki padding nahi. Sirf 'kya hai yeh?' Yahi sawal aapke design ka catch karta hai jo team kabhi nahi pakdegi."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no mummy",
+          "md": "Show your design to your team and you'll get polite agreement. Show it to a person with no product context and they'll ask 'what does this button do?' That single question is the cheapest, harshest critique you can buy. Find your version of the mummy-test."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The 3-question critique"
+    },
+    {
+      "type": "markdown",
+      "md": "Most critique fails because it has no structure. 'I don't like the colour' is not actionable; 'this could be cleaner' is not a critique, it's a vibe. The fix is to anchor every critique to three questions, in order:\n\n1. **What is this screen's single most important action, and how do I know?**\nIf three reviewers give three different answers, the visual hierarchy is broken. This is the cheapest critique question in the world. It catches more design problems than the next ten questions combined.\n\n2. **What would break if a user opened this with no context?**\nThe edge cases hide in the assumed context. The user lands on this screen from an email link, doesn't know what they're looking at, has no onboarding tour. What confuses them? What microcopy assumes too much? What state is missing — empty, loading, error?\n\n3. **What would a cold reviewer push back on?**\nName the most likely critique a senior designer or skeptical engineer would make, before they make it. If you can't name one, you haven't pressure-tested the work yet. If you can name three, write them down and answer them in the PR description.\n\nThe order matters. Question 1 is structural; Question 2 is contextual; Question 3 is anticipatory. Done in order, they catch problems at decreasing levels of severity. Done out of order, you spend an hour debating button colours while the hierarchy is still broken."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A funnel diagram showing the three critique questions stacked top to bottom: Q1 (what's the primary action) at the wide top, Q2 (what breaks with no context) in the middle, Q3 (what would a cold reviewer push back on) at the narrow bottom.",
+      "caption": "The funnel. Each question filters out a class of problems before the next one runs. Don't skip levels.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#ECFDF5'/><g transform='translate(80 30)'><polygon points='0,0 400,0 340,70 60,70' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='200' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Q1. What is the primary action?</text><text x='200' y='50' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>Catches: hierarchy, button competition</text><polygon points='60,80 340,80 290,150 110,150' fill='#6EE7B7' stroke='#065F46' stroke-width='2'/><text x='200' y='110' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Q2. What breaks with no context?</text><text x='200' y='130' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>Catches: empty states, edge cases, microcopy</text><polygon points='110,160 290,160 250,230 150,230' fill='#34D399' stroke='#065F46' stroke-width='2'/><text x='200' y='190' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#FFFFFF'>Q3. Cold reviewer pushback?</text><text x='200' y='210' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#FFFFFF'>Catches: defensibility, edge polish</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Running a 15-minute critique using the 3-question loop",
+      "steps": [
+        { "label": "Min 0-2 — Show the work cold", "body": "No designer commentary, no walkthrough. Reviewers see the screen the way a user would. Silence is fine." },
+        { "label": "Min 2-5 — Question 1: primary action", "body": "Each reviewer points at what they think is the primary action. If you get more than one answer, you have a structural problem to fix before continuing." },
+        { "label": "Min 5-9 — Question 2: cold context", "body": "Pretend the user landed here from a deep link with no onboarding. Walk through what is unclear, missing, or assumed." },
+        { "label": "Min 9-13 — Question 3: anticipated pushback", "body": "Designer names the three most likely senior-design pushbacks. Reviewers add their own. Write them down." },
+        { "label": "Min 13-15 — Decisions", "body": "Three buckets: fix now, fix in next iteration, document and ship. No 'discuss further' — that's procrastination dressed up as care." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "A teammate opens critique with 'I don't like the colour palette.' What is the most useful redirect?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Ask: which goal does the colour fail — accessibility, hierarchy, brand, or emotion?", "correct": true, "explain": "Critique without a goal is taste. Naming the goal turns the conversation into something you can act on or close." },
+        { "id": "b", "label": "Defend the palette by quoting the brand guidelines", "correct": false, "explain": "Defensive moves end critique loops; they don't improve them." },
+        { "id": "c", "label": "Change the colour and move on", "correct": false, "explain": "Changing without learning why guarantees the same critique on the next screen." },
+        { "id": "d", "label": "Open a Figma comment thread to async the discussion", "correct": false, "explain": "Async is fine, but it doesn't change the quality of the critique. The redirect to a goal is what matters." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Pune studio ka critique ritual",
+          "md": "Pune ke ek 6-person design studio mein har Friday 4pm critique. Designer ne sirf ek slide pe pre-fill karna hai — 'is screen ka primary action X hai, kyunki Y, aur main soch raha hu Z reviewer Q ke baare mein puchega.' 30 second me read hota hai, baaki 14 minutes me actual critique. Pehle jo 60 minute lagte the, ab 15 me khatam.\n\nPre-filled context = real critique time."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Same point, no Friday standup",
+          "md": "A Pune studio runs a 15-minute weekly critique where the designer pre-fills one slide naming the primary action and the most likely pushback. Reviewers spend the saved 45 minutes on actual critique instead of decoding context. The format scales from 6 people to 60."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The spec-first PR"
+    },
+    {
+      "type": "markdown",
+      "md": "When design moves to engineering, most teams lose half the work. The Figma file gets copy-pasted into components, the 'why' evaporates, and three sprints later nobody remembers why the modal was 480px wide instead of 520.\n\nThe fix is the **spec-first PR**: write the user-facing change in plain English at the top of the PR description, *before* the code review, and require it on every design-related PR. Three short paragraphs:\n\n1. **What changed for the user.** One sentence. 'Onboarding now asks for company size on step 2 instead of step 4.'\n2. **Why.** One short paragraph. 'Step 4 had a 31% drop-off; moving the question earlier lets us conditionally hide steps 5 and 6 for solo users.'\n3. **What we're not doing.** One short paragraph. 'We're not changing the visual layout or the field validation; that's a separate PR.'\n\nThis costs the designer or engineer five extra minutes. It saves the reviewers an hour of figuring out intent from diff. It also means six months later, when someone wonders why step 2 has the company-size question, the answer is in the git history, not in a Slack thread that's been deleted.\n\nThe spec-first PR is the single highest-leverage ritual you can add to a design-engineering team. It's free, it's writable in any text box, and it kills the 'wait, why did we do this?' meeting before it gets scheduled."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram of a PR description with three labelled sections: 'What changed' (1 line), 'Why' (1 paragraph), 'What we're not doing' (1 paragraph), all above the code diff.",
+      "caption": "The spec-first PR: three short paragraphs of intent before the diff. The diff stops being the source of truth; the prose is.",
+      "maxWidth": 480,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320' role='img'><rect width='480' height='320' rx='14' fill='#FFF7ED'/><g transform='translate(30 30)'><rect x='0' y='0' width='420' height='260' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='15' y='15' width='200' height='18' rx='3' fill='#FED7AA'/><text x='115' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#92400E'>PR #247: Move company-size to step 2</text><line x1='15' y1='40' x2='405' y2='40' stroke='#E5E7EB' stroke-width='1'/><g transform='translate(15 50)'><rect x='0' y='0' width='100' height='14' rx='2' fill='#FCD34D'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#92400E'>What changed</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='320' height='10' rx='2' fill='#F3F4F6'/></g><g transform='translate(15 100)'><rect x='0' y='0' width='40' height='14' rx='2' fill='#A7F3D0'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#065F46'>Why</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='42' width='280' height='10' rx='2' fill='#F3F4F6'/></g><g transform='translate(15 165)'><rect x='0' y='0' width='130' height='14' rx='2' fill='#FCA5A5'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#7F1D1D'>What we&apos;re NOT doing</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='320' height='10' rx='2' fill='#F3F4F6'/></g><line x1='15' y1='220' x2='405' y2='220' stroke='#E5E7EB' stroke-width='1'/><text x='15' y='238' font-family='monospace' font-size='10' fill='#9CA3AF'>+ 47 lines  - 12 lines  ●  3 files</text><text x='15' y='252' font-family='monospace' font-size='10' fill='#9CA3AF'>(diff comes after intent)</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Studio-Lead Saanvi", "role": "design lead, 9 years across India and Singapore" },
+      "intro": [
+        "Last lesson, last scenarios. Today: critique moves you'll use in PRs and reviews.",
+        "Tell me whether each one makes the loop tighter, makes it longer, or has no effect at all."
+      ],
+      "buckets": [
+        { "id": "tighter", "label": "Tighter loop", "tone": "safe" },
+        { "id": "longer", "label": "Longer loop", "tone": "danger" },
+        { "id": "neutral", "label": "No real effect", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "A designer pushes a fully polished Figma file to Slack and asks for 'thoughts.'", "correctBucketId": "longer", "explain": "Polish before critique wastes polish, and 'thoughts' invites unstructured taste. Always invite critique on rough work with specific questions." },
+        { "id": "s2", "situation": "A PR description that opens with 'What changed for the user' in one sentence.", "correctBucketId": "tighter", "explain": "The spec-first move. Reviewers can react to intent before parsing the diff. Saves rebase cycles." },
+        { "id": "s3", "situation": "A reviewer comments 'I don't like this' with no further explanation.", "correctBucketId": "longer", "explain": "Critique without a goal is taste. The designer now has to guess what to fix, and probably guesses wrong." },
+        { "id": "s4", "situation": "Designer attaches a Loom video walking through every screen in the PR.", "correctBucketId": "neutral", "explain": "Videos can be useful but they're a substitute for written intent, and they're harder to grep later. Prefer the prose." },
+        { "id": "s5", "situation": "Reviewer asks 'what's the primary action on this screen?' before commenting on anything else.", "correctBucketId": "tighter", "explain": "Question 1 of the 3-question critique. Catches structural problems before everyone debates colour." },
+        { "id": "s6", "situation": "Critique meeting ends with 'let's discuss further async.'", "correctBucketId": "longer", "explain": "Procrastination dressed up as care. End every critique with three buckets: fix now, fix later, document and ship." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the polish-before-critique cycle",
+      "md": "Designers want to show finished work; reviewers want to be invited to opinion. So designers polish for two days, then 'open up critique' on a thing that is too pretty to change. Reviewers feel rude pointing at structural problems and instead trade taste on colour and copy. **The polished design is the enemy of the good design.** Invite critique while the work is sketchy and the changes are cheap. The polish layer is the last 10%, not the first 90%."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order the steps to fix a stuck design critique loop on a small team.",
+      "items": [
+        { "id": "s1", "label": "Adopt the 3-question critique format", "detail": "Question 1, Question 2, Question 3, in that order, every time." },
+        { "id": "s2", "label": "Make designers invite critique on rough sketches, not polished comps", "detail": "The norm has to shift from 'show your best' to 'show your draft'." },
+        { "id": "s3", "label": "Require spec-first PR descriptions on design changes", "detail": "Three paragraphs: what changed, why, what we're not doing." },
+        { "id": "s4", "label": "End every critique with explicit decisions, not 'let's discuss further'", "detail": "Three buckets: fix now, fix later, document and ship." },
+        { "id": "s5", "label": "Document recurring critique themes in a team doc", "detail": "If the same critique keeps coming up, it's a system gap, not a screen gap. Fix the system." }
+      ],
+      "hint": "Start with the question structure; the rest follows."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write the spec-first PR description for a small change: you've moved the 'Forgot password?' link from below the password field to above it, on the login screen of an Indian SaaS used by accountants. Three paragraphs: what changed, why, what you're NOT doing. 4-6 sentences total.",
+      "lang": "markdown",
+      "starter": "**What changed:** ...",
+      "expected": "**What changed:** The 'Forgot password?' link now sits directly above the password field instead of below it on the login screen. **Why:** Customer support tickets show that 18% of password-reset requests come from users who didn't notice the link below the field on their first scan. Putting it above moves it into the user's natural sight-line as they shift focus from email to password. **What we're not doing:** We're not changing the link's wording, the password field validation, or the visual hierarchy of the primary 'Sign in' button. Those are separate decisions that should be made on their own evidence."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which two are signs your team's critique loop is healthy? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Designers regularly invite critique on rough sketches, not just polished comps", "correct": true, "explain": "The earlier the critique, the cheaper the change. Sketch-stage critique is the highest-leverage moment." },
+        { "id": "b", "label": "PR descriptions consistently name the user-facing change before the code", "correct": true, "explain": "Spec-first PRs make intent reviewable. Reviewers can flag the intent before they read the diff." },
+        { "id": "c", "label": "Critique meetings consistently overrun their 15-minute slot", "correct": false, "explain": "Overrun signals lack of structure. A 15-minute critique that uses the 3-question funnel finishes on time and produces clearer decisions." },
+        { "id": "d", "label": "Senior designers do most of the talking", "correct": false, "explain": "Critique that depends on senior approval doesn't scale. Healthy loops produce clear pushback from anyone with structural questions." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Bollywood film ka first cut",
+          "md": "Bollywood mein editor pehle ek 'rough cut' banata hai — full film, sab scene, koi VFX nahi, koi colour grading nahi. Director, producer, star sab dekhte hain. Critique waise hi hota hai — kahaani level pe, character level pe. Phir polish hota hai.\n\nUI mein bhi same. Pehle wireframe pe critique, phir visual pe, phir microcopy pe. Polished mockup pe 'kahaani' wala critique impossible hai — sab design ki taraf khinch jaate hain."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no movie",
+          "md": "Bollywood editors run a rough-cut screening — full film, no VFX, no grading — to get story-level critique before polish. Same in UI: wireframe critique catches structure, visual critique catches polish, microcopy critique catches voice. Mix the layers up and you get unanchored taste."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Critique is the second design step, not the last. Invite it while changes are cheap.",
+        "The 3-question critique: what's the primary action, what breaks with no context, what would a cold reviewer push back on. In that order, every time.",
+        "If three reviewers give three different answers to 'what's the primary action', you have a hierarchy problem, not a critique problem.",
+        "The spec-first PR: three paragraphs of intent (what changed, why, what we're not doing) above the diff. Free, high-leverage, ritual.",
+        "End every critique with decisions in three buckets: fix now, fix later, document and ship. 'Discuss further' is procrastination."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick a recent design decision from your team. Walk through the 3-question critique on it now: what was the primary action, what would have broken with no context, what would a cold reviewer push back on? What did you miss the first time? Write down the rule you'd add to your team's critique format because of it."
+    }
+  ]
+}

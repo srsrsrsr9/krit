@@ -1,0 +1,325 @@
+{
+  "path": {
+    "slug": "data-science-and-analysis",
+    "title": "Data Science and Analysis",
+    "subtitle": "From spreadsheet to signal — without the PhD",
+    "summary": "Most analysts spend half their day cleaning data and the other half pretending they did not. This path teaches the actual job: forming a question, surviving the cleaning, doing the right test on a sample of 47 not 4700, and writing a memo your CFO will read in 90 seconds. By the end you can take a vague \"figure out why\" prompt and ship a defensible answer.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "data-mental-model",
+      "name": "Data Mental Model",
+      "category": "tech",
+      "description": "Frame any data question as hypothesis to be tested, not data to be browsed",
+      "decayDays": null
+    },
+    {
+      "slug": "data-cleaning",
+      "name": "Data Cleaning Discipline",
+      "category": "tech",
+      "description": "Spot dirty data, run schema-first wrangling, and keep an honest assumption ledger",
+      "decayDays": null
+    },
+    {
+      "slug": "data-statistical-thinking",
+      "name": "Statistical Thinking",
+      "category": "tech",
+      "description": "Use confidence intervals, correct sample sizes, and the right test instead of staring at a p-value",
+      "decayDays": null
+    },
+    {
+      "slug": "data-modeling",
+      "name": "Modeling Fundamentals",
+      "category": "tech",
+      "description": "Pick the simplest model that works, split data honestly, and stop before overfitting",
+      "decayDays": null
+    },
+    {
+      "slug": "data-communication",
+      "name": "Results Communication",
+      "category": "tech",
+      "description": "Write BLUF memos and charts that survive a 90-second CFO read",
+      "decayDays": null
+    },
+    {
+      "slug": "data-judgment",
+      "name": "Data Judgment",
+      "category": "tech",
+      "description": "Decide when to ship a number, when to flag uncertainty, and when to push back on the question itself",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "data-cleaning", "requires": "data-mental-model" },
+    { "skill": "data-statistical-thinking", "requires": "data-cleaning" },
+    { "skill": "data-modeling", "requires": "data-statistical-thinking" },
+    { "skill": "data-communication", "requires": "data-modeling" },
+    { "skill": "data-judgment", "requires": "data-communication" }
+  ],
+  "assessment": {
+    "title": "Data Science and Analysis Assessment",
+    "description": "Tests whether you can frame a question, clean honestly, run the right test, build the simplest model that works, and write a memo a CFO would actually read.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["data-judgment"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CMO at a Mumbai fintech says \"figure out why retention dropped last quarter\". What's the right first move?",
+        "points": 1,
+        "skillSlug": "data-mental-model",
+        "choices": [
+          { "id": "a", "label": "Pull the retention table and start eyeballing cohorts", "correct": false, "explanation": "Tempting, and what most analysts do. You will spend 4 hours and surface 12 things that look interesting but answer no question." },
+          { "id": "b", "label": "Restate the question as a testable hypothesis with a numeric definition of 'retention' and 'dropped', then ask the CMO to confirm", "correct": true, "explanation": "Correct. The always-state-the-question rule. 'Retention' has at least four definitions and 'dropped' could mean 0.5 or 5 percentage points. You answer the wrong question if you skip this step." },
+          { "id": "c", "label": "Build a churn model immediately", "correct": false, "explanation": "Modeling before framing. You will fit a model to the wrong target and explain it confidently." },
+          { "id": "d", "label": "Ask Claude to summarise the dataset", "correct": false, "explanation": "Replaces your judgment with a confident-sounding paragraph. The CMO did not ask for a summary." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the TWO things that should always go in your assumption ledger before you publish any number.",
+        "points": 2,
+        "skillSlug": "data-cleaning",
+        "choices": [
+          { "id": "a", "label": "How you defined the metric (the formula, not the name)", "correct": true, "explanation": "Correct. 'Active user' means three different things to three different teams. The formula is the only honest definition." },
+          { "id": "b", "label": "Which rows you dropped and why", "correct": true, "explanation": "Correct. Most arguments about a number are actually arguments about which rows you excluded. Write it down before someone asks." },
+          { "id": "c", "label": "How long the analysis took you", "correct": false, "explanation": "Not relevant to whether the number is right. Track it for your own time-management, not in the ledger." },
+          { "id": "d", "label": "The colour palette of your dashboard", "correct": false, "explanation": "Cosmetic. Belongs in a style guide, not a ledger." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your A/B test on a Bengaluru SaaS product shows variant B converts at 5.1% vs control at 4.8%, with n=47 per arm. What do you tell the PM?",
+        "points": 1,
+        "skillSlug": "data-statistical-thinking",
+        "choices": [
+          { "id": "a", "label": "Variant B wins, ship it", "correct": false, "explanation": "Classic n=47 trap. Confidence interval is roughly 1.6% wide on each arm. The 0.3pp gap is noise wrapped in a uniform." },
+          { "id": "b", "label": "Inconclusive — sample size is too small to detect a 0.3pp effect; we need n in the low thousands per arm or we are coin-flipping", "correct": true, "explanation": "Correct. Power, not p-value. With this sample size you cannot distinguish a 0.3pp effect from zero. The honest answer is 'I cannot tell yet'." },
+          { "id": "c", "label": "Run the test 5 more times and pool the results", "correct": false, "explanation": "Variant of p-hacking. Pooling re-tests inflates the false positive rate." },
+          { "id": "d", "label": "Variant A wins because the CI overlaps", "correct": false, "explanation": "Overlap means inconclusive, not 'A wins'. Defaulting to control is still a decision dressed up as analysis." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your model gets 94% accuracy on the validation set after 17 rounds of hyperparameter tweaks. What is the most likely problem?",
+        "points": 1,
+        "skillSlug": "data-modeling",
+        "choices": [
+          { "id": "a", "label": "You overfit on the validation set — every tweak peeked at val performance, so 94% is closer to training accuracy than honest test accuracy", "correct": true, "explanation": "Correct. The classic trap from lesson 4. The validation set has effectively become a second training set. Hold out a clean test set and your number will drop." },
+          { "id": "b", "label": "The model is genuinely good", "correct": false, "explanation": "Possible but unlikely after 17 rounds of selection. Treat suspiciously good numbers like suspiciously cheap flights — there is usually a catch." },
+          { "id": "c", "label": "Accuracy is the wrong metric", "correct": false, "explanation": "Could be true (especially with class imbalance), but the 17-tweak red flag points at validation overfitting first." },
+          { "id": "d", "label": "Sample size is too small", "correct": false, "explanation": "Sample size affects variance, not the validation-overfitting bias. Different bug." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the TWO statements that describe the BLUF (bottom-line up front) approach to a results memo.",
+        "points": 2,
+        "skillSlug": "data-communication",
+        "choices": [
+          { "id": "a", "label": "The first sentence states the answer, the recommendation, or the decision being asked for", "correct": true, "explanation": "Correct. If the CFO reads only sentence 1, she should still be able to make the call." },
+          { "id": "b", "label": "Caveats and methodology go in the appendix, not the headline", "correct": true, "explanation": "Correct. Methodology earns the answer; it does not hide it. Stakeholders who want it will scroll." },
+          { "id": "c", "label": "Build up suspense before revealing the conclusion", "correct": false, "explanation": "That is a TED talk, not a memo. Suspense is a luxury executives do not have." },
+          { "id": "d", "label": "Always include all 47 charts you produced", "correct": false, "explanation": "Volume is not rigour. Pick the one chart that proves the headline." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A junior analyst at a Hyderabad SMB firm says \"p = 0.04 so the new pricing works\". Best diagnosis?",
+        "points": 1,
+        "skillSlug": "data-statistical-thinking",
+        "choices": [
+          { "id": "a", "label": "The p-value-as-decision trap — they have not stated the effect size, the confidence interval, or whether the effect is large enough to matter for the business", "correct": true, "explanation": "Correct. 'p < 0.05' is a t-shirt slogan, not a decision. A statistically significant 0.2% revenue lift is not commercially significant." },
+          { "id": "b", "label": "p = 0.04 means the new pricing works", "correct": false, "explanation": "This is the very trap the lesson warns about. p tells you about evidence under a null, not about business decision-making." },
+          { "id": "c", "label": "p must be less than 0.01 to count", "correct": false, "explanation": "Arbitrary threshold-shifting. The bug is not the threshold; the bug is using p as the only input to a multi-million-rupee decision." },
+          { "id": "d", "label": "Switch to Bayesian methods", "correct": false, "explanation": "Different framework, same trap if you treat the posterior probability as a single number that decides for you." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You inherit a 47M-row events table and your manager asks for \"weekly active users\". What is the right next step?",
+        "points": 1,
+        "skillSlug": "data-cleaning",
+        "choices": [
+          { "id": "a", "label": "Look at the data first — sample 1,000 rows, check timestamps, user_id nulls, duplicate events, and define 'active' before writing any aggregate query", "correct": true, "explanation": "Correct. The always-look-at-it rule. Aggregates lie about clean data; rows tell the truth." },
+          { "id": "b", "label": "Run a SELECT COUNT(DISTINCT user_id) GROUP BY week", "correct": false, "explanation": "Skips EDA. You will count duplicate user_ids, bot traffic, and test accounts as 'active'. Your number will be 18% too high and you will not know why." },
+          { "id": "c", "label": "Build a dashboard first", "correct": false, "explanation": "Dashboard before discovery. The classic skip-EDA trap." },
+          { "id": "d", "label": "Ask the manager which definition of 'active'", "correct": false, "explanation": "Better than (b) and (c), but you still need to look at the data — the manager will not know edge cases like duplicate user_ids until you show her the rows." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which TWO are reasons to start with the simplest model that works?",
+        "points": 2,
+        "skillSlug": "data-modeling",
+        "choices": [
+          { "id": "a", "label": "It establishes a baseline that any complex model has to beat by a meaningful margin", "correct": true, "explanation": "Correct. If logistic regression gets 81% and your XGBoost gets 82%, the XGBoost is not paying for itself in maintenance and explainability cost." },
+          { "id": "b", "label": "Simple models are easier to explain, debug, and operate in production", "correct": true, "explanation": "Correct. The model that runs at 3 AM with no Slack escalation is the model that wins." },
+          { "id": "c", "label": "Complex models are illegal under GDPR", "correct": false, "explanation": "Not true. GDPR cares about explainability and consent, not model class." },
+          { "id": "d", "label": "Simple models are always more accurate", "correct": false, "explanation": "Not true. The point is they are often accurate enough, not that they are always best." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CFO sends back your 11-page churn analysis with one comment: \"Just tell me the number.\" Best response?",
+        "points": 1,
+        "skillSlug": "data-communication",
+        "choices": [
+          { "id": "a", "label": "Send a 3-line BLUF: the number, the confidence range, the recommended decision; offer the 11 pages as appendix", "correct": true, "explanation": "Correct. The CFO has not become impatient; you have produced the wrong artifact. The memo always opens with the answer." },
+          { "id": "b", "label": "Defend the 11 pages — every section matters", "correct": false, "explanation": "Maybe to you. Not to her. Length is your insurance, not her information." },
+          { "id": "c", "label": "Send the executive summary only and quietly delete the rest", "correct": false, "explanation": "Throws away the methodology. When she does ask 'how did you get this?' you have nothing." },
+          { "id": "d", "label": "Schedule a 30-minute meeting to walk through it", "correct": false, "explanation": "Adds a calendar invite to a problem that needed a 3-line message." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A stakeholder asks for a chart showing \"month-on-month ARPU growth\". Your data only has 6 months. What do you do?",
+        "points": 1,
+        "skillSlug": "data-judgment",
+        "choices": [
+          { "id": "a", "label": "Show 5 month-on-month deltas, label the small sample, and add a note that 6 points cannot establish a trend", "correct": true, "explanation": "Correct. Honest about the limitation, useful within it. Five points is not enough for a trend; it is enough for a description." },
+          { "id": "b", "label": "Fit a linear regression and project for the next 6 months", "correct": false, "explanation": "5 points and a fitted line is data-science theatre. The CI on a 5-point regression is wide enough to drive a Mahindra Thar through." },
+          { "id": "c", "label": "Refuse to produce the chart", "correct": false, "explanation": "Not your call alone. The right move is produce-with-caveat, not refuse." },
+          { "id": "d", "label": "Make up a 12-month chart from a similar product", "correct": false, "explanation": "Fabrication. Career-ender at most companies and rightly so." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You join a team that ships the model but never the story. What is the most likely consequence?",
+        "points": 1,
+        "skillSlug": "data-communication",
+        "choices": [
+          { "id": "a", "label": "Stakeholders ignore the model, override it with intuition, or stop engaging with the data team altogether", "correct": true, "explanation": "Correct. A 92%-accurate model nobody trusts is an artifact, not a tool. The story is not optional packaging; it is half the deliverable." },
+          { "id": "b", "label": "The model becomes more accurate over time", "correct": false, "explanation": "Accuracy and adoption are independent. A model can be accurate and unused for years." },
+          { "id": "c", "label": "The team gets more headcount", "correct": false, "explanation": "Opposite, usually. Teams that do not communicate impact get cut first in budget season." },
+          { "id": "d", "label": "Compliance auditors are satisfied", "correct": false, "explanation": "Auditors specifically want the story — assumptions, limitations, decisions. Skipping the story fails audits." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the TWO situations where you should push back on the question itself rather than answer it.",
+        "points": 2,
+        "skillSlug": "data-judgment",
+        "choices": [
+          { "id": "a", "label": "The question is unanswerable with the data you have, and the stakeholder does not know that yet", "correct": true, "explanation": "Correct. Producing a number when the data cannot support it is not service; it is malpractice with a chart." },
+          { "id": "b", "label": "The question implicitly assumes a definition you know is wrong (e.g. 'active' means something different to the asker than to the system)", "correct": true, "explanation": "Correct. The translation moment from lesson 1. Wrong definition, wrong answer, no matter how clean the SQL." },
+          { "id": "c", "label": "The question is harder than you expected", "correct": false, "explanation": "Hard is not the same as ill-formed. Hard means do the work." },
+          { "id": "d", "label": "You disagree with the strategy behind the question", "correct": false, "explanation": "Not your call as the analyst. Push back on the question's framing, not the company's strategy." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your dashboard shows revenue is up 14% week-over-week. Before you celebrate, what is the first thing you check?",
+        "points": 1,
+        "skillSlug": "data-cleaning",
+        "choices": [
+          { "id": "a", "label": "Whether last week was a holiday, a data outage, or a definition change — the noise-vs-signal lens", "correct": true, "explanation": "Correct. Big jumps are most often artifacts. Always ask 'what changed' before 'what does this mean'." },
+          { "id": "b", "label": "Email the CEO immediately", "correct": false, "explanation": "Premature celebration is an embarrassing way to learn that a feature flag corrupted the prior week." },
+          { "id": "c", "label": "Build a forecast", "correct": false, "explanation": "Forecasting on potentially corrupt data is forecasting noise." },
+          { "id": "d", "label": "Add more metrics to the dashboard", "correct": false, "explanation": "More metrics, same dirty source. Does not address the root question." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You are running a t-test comparing churn rate between two cohorts (n=2,400 each). The p-value is 0.003 and the difference is 0.4 percentage points. What do you tell the business?",
+        "points": 1,
+        "skillSlug": "data-statistical-thinking",
+        "choices": [
+          { "id": "a", "label": "Statistically significant but commercially marginal — the 0.4pp difference is real, but probably below the threshold that would justify shipping a change", "correct": true, "explanation": "Correct. With n=2,400 per arm you can detect tiny effects; that does not make them business-meaningful. State both in the same sentence." },
+          { "id": "b", "label": "Significant — ship the change", "correct": false, "explanation": "Confuses statistical significance with practical significance. The whole point of lesson 3." },
+          { "id": "c", "label": "Not significant — kill it", "correct": false, "explanation": "p = 0.003 is significant by any conventional threshold. The issue is the magnitude, not the significance." },
+          { "id": "d", "label": "Run a Bayesian test instead", "correct": false, "explanation": "Different framework, same answer. The honest read is 'real but small'." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is the right train/val/test split discipline taught in this course?",
+        "points": 1,
+        "skillSlug": "data-modeling",
+        "choices": [
+          { "id": "a", "label": "Hold the test set out completely until the final reported number; tune only on validation; never let test influence training decisions", "correct": true, "explanation": "Correct. The test set is the audit. If you peek, you have lost the audit." },
+          { "id": "b", "label": "Use the test set for hyperparameter tuning", "correct": false, "explanation": "Direct violation of the lesson 4 rule. Now you have validation; you no longer have a test set." },
+          { "id": "c", "label": "Skip the validation set if data is small", "correct": false, "explanation": "Cross-validation exists for small data. Skipping validation entirely is overfitting on test by another name." },
+          { "id": "d", "label": "Always use 80/10/10", "correct": false, "explanation": "Cargo-cult ratio. Splits depend on data size, class balance, and the question. The rule is 'hold test out', not 'use this number'." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick TWO things that distinguish a memo a CFO will read in 90 seconds from one she will not.",
+        "points": 2,
+        "skillSlug": "data-communication",
+        "choices": [
+          { "id": "a", "label": "Headline is the answer or the recommendation, not the methodology", "correct": true, "explanation": "Correct. BLUF. Methodology earns the answer; it does not lead with it." },
+          { "id": "b", "label": "One chart that visibly proves the headline, not seven that decorate it", "correct": true, "explanation": "Correct. The BLUF chart. One chart that pays for itself; the rest go in the appendix." },
+          { "id": "c", "label": "Detailed footnotes on every regression coefficient", "correct": false, "explanation": "Belong in the appendix. CFO does not need them in the headline." },
+          { "id": "d", "label": "An animated GIF of the model training", "correct": false, "explanation": "No CFO has ever asked for this." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A junior analyst writes you: \"Should I just run every test and report the one with p < 0.05?\" Best answer?",
+        "points": 1,
+        "skillSlug": "data-judgment",
+        "choices": [
+          { "id": "a", "label": "No — that is p-hacking. Pre-register the hypothesis and the test before running anything; multiple-test correction if you must run several", "correct": true, "explanation": "Correct. The classic trap from lesson 1. Running 20 tests at α=0.05 means roughly 1 in 20 will look significant by chance; reporting only that one is statistical fraud, even if accidental." },
+          { "id": "b", "label": "Yes, if it is the only one that supports the hypothesis", "correct": false, "explanation": "Definitionally p-hacking. Unethical and gets caught in code review, peer review, or the CTO Slack." },
+          { "id": "c", "label": "Only if you tell the stakeholder which test you ran first", "correct": false, "explanation": "Disclosure helps but does not fix it. The bug is the search-then-report pattern." },
+          { "id": "d", "label": "Only if you have a Bayesian prior", "correct": false, "explanation": "Frameworks do not save you from p-hacking. Pre-registration does." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Which is the LEAST useful response when a stakeholder asks 'is this significant?'",
+        "points": 1,
+        "skillSlug": "data-statistical-thinking",
+        "choices": [
+          { "id": "a", "label": "\"p = 0.04\" with no further context", "correct": true, "explanation": "Correct. The p-value-as-t-shirt-slogan trap. Tells the stakeholder nothing about effect size, confidence interval, or business meaning." },
+          { "id": "b", "label": "\"The 95% CI is +0.2pp to +0.9pp; the effect is real but smaller than what we agreed would justify a change\"", "correct": false, "explanation": "This is the recommended response: CI + business threshold." },
+          { "id": "c", "label": "\"What threshold of effect would change your decision?\"", "correct": false, "explanation": "Excellent push-back; sets the goalposts before the math." },
+          { "id": "d", "label": "\"We have a real but small effect (~0.5pp), and given our cost-of-shipping it is below threshold\"", "correct": false, "explanation": "Combines effect size, direction, and decision context." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "data-science-and-analysis-capstone",
+    "title": "Capstone: The Q3 Churn Memo",
+    "prompt": "Your CFO at a Mumbai-based fintech walks into your cubicle on Monday morning, drops a USB stick on your desk and says:\n\n*\"Spreadsheet titled 'Q3 churn — figure out why'. I have a board meeting Thursday. Tell me what's going on. One page. No PhD theatre.\"*\n\nThe spreadsheet is real (12,847 rows of monthly user-cohort data, three columns of definitions that don't quite agree, one column called 'flag' with 41% nulls). You have until Thursday.\n\nProduce a one-page memo with:\n\n1. **The hypothesis** — restate the CFO's vague ask as one testable hypothesis. Define 'churn' numerically. State what 'why' means here (which factor moved most). If the data cannot answer the question as asked, say so in the first paragraph and propose what it can answer.\n2. **The evidence** — one chart and one number that prove (or fail to prove) the hypothesis. Include sample size and confidence interval. If the answer is 'we cannot tell yet', that is allowed if defended.\n3. **The decision** — your recommendation in one sentence. Either ship a change, run a follow-up, or kill the question. No 'it depends' without saying what it depends on.\n4. **The assumption ledger** — a 4-6 line appendix listing how you defined the metric, which rows you dropped and why, what the 41% nulls turned out to be, and the one assumption that, if wrong, would flip your recommendation.\n5. **The edge** — one paragraph on what could be wrong with this analysis: a confounder you cannot rule out, a definition disagreement, a sample-size limitation, or a data-collection bug.\n\nThe memo should be the kind of thing the CFO can forward to the board with one line. Specific numbers, not vibes. No 'we observed a trend'. No 'further analysis recommended' as a placeholder for 'I did not finish'.",
+    "rubric": [
+      {
+        "criterion": "Correctness",
+        "levels": [
+          { "label": "Hypothesis is testable and well-defined; chosen test or comparison is appropriate; CI and effect size are reported correctly; conclusion is supported by the numbers shown", "points": 4 },
+          { "label": "Hypothesis is reasonable; test is mostly right; one of CI / effect size / sample size is missing or off", "points": 2 },
+          { "label": "Conclusion does not follow from the evidence, or evidence is misinterpreted (p-hacking, validation overfitting, etc.)", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Craft",
+        "levels": [
+          { "label": "BLUF in the first sentence; one chart that proves the headline; assumption ledger is concrete (formulas, drop rules); memo reads in 90 seconds", "points": 4 },
+          { "label": "Mostly BLUF but conclusion buried below paragraph 1; chart present but cluttered; ledger is partial", "points": 2 },
+          { "label": "Wall of text; chart is decorative; no ledger; reads as analysis-by-paragraph", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Edge handling",
+        "levels": [
+          { "label": "Names at least one specific confounder or limitation; explicitly states what would flip the recommendation; honest about the 41% nulls and the definition disagreement", "points": 4 },
+          { "label": "Acknowledges limitations generically ('caveats apply'); does not name a specific flip condition", "points": 2 },
+          { "label": "No edge handling; memo treats the answer as fully settled", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "data-science-and-analysis",
+    "title": "Data Science and Analysis",
+    "description": "Holder can frame a vague stakeholder ask as a testable question, clean and validate data with an honest assumption ledger, run statistically sound tests with appropriate sample sizes, fit the simplest model that works, and write a one-page memo that survives a 90-second CFO read.",
+    "issuerName": "Krit Academy"
+  }
+}

@@ -1,0 +1,223 @@
+{
+  "slug": "test-pyramid",
+  "title": "The Test Pyramid and What to Test Where",
+  "subtitle": "Three altitudes, three different jobs, one bill at the end of the month",
+  "estimatedMinutes": 13,
+  "skills": ["testing-pyramid"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/testing-with-playwright/test-pyramid.mp3",
+      "audioDurationSec": 705,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the inverted pyramid problem" },
+        { "startSec": 80, "label": "Mental model: tests live at three altitudes" },
+        { "startSec": 220, "label": "Move 1 — Unit-as-fast-feedback" },
+        { "startSec": 410, "label": "Move 2 — E2E for the critical path" },
+        { "startSec": 560, "label": "The triage drill + reflect" }
+      ],
+      "notesPdfUrl": "/notes/testing-with-playwright/test-pyramid.html",
+      "notesByline": "Notes by Sneha, SDET batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most teams have an *ice-cream cone* test suite, not a pyramid: 800 e2e tests on top, 14 integration tests in the middle, 6 unit tests at the bottom (left over from when they used Jest in 2019). The CI run takes 28 minutes, the flake rate is 14%, and nobody can tell you what would actually break if a specific function changed.\n\nThe pyramid is not academic. It's a budget. Every test you add costs *something* — wall time, CI minutes, maintenance attention, on-call sleep. The shape of your suite tells you where you're spending that budget."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320'><rect width='600' height='320' fill='#FFF7ED'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='150' y='30' text-anchor='middle' font-weight='700'>The pyramid</text><polygon points='150,60 90,260 210,260' fill='none' stroke='#6B7280' stroke-width='1' stroke-dasharray='3 3'/><polygon points='150,60 130,120 170,120' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='150' y='100' text-anchor='middle' font-size='10' font-weight='600'>e2e</text><polygon points='130,120 110,190 190,190 170,120' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='150' y='160' text-anchor='middle' font-size='10' font-weight='600'>integration</text><polygon points='110,190 90,260 210,260 190,190' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='150' y='230' text-anchor='middle' font-size='10' font-weight='600'>unit</text><text x='150' y='285' text-anchor='middle' font-size='10' fill='#065F46'>fast, many, cheap</text><text x='450' y='30' text-anchor='middle' font-weight='700'>The ice-cream cone</text><polygon points='450,60 510,120 390,120' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='450' y='100' text-anchor='middle' font-size='10' font-weight='600'>e2e (800)</text><polygon points='390,120 410,180 490,180 510,120' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='450' y='160' text-anchor='middle' font-size='10'>integration (14)</text><polygon points='430,180 470,180 460,240 440,240' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='450' y='220' text-anchor='middle' font-size='10'>unit (6)</text><text x='450' y='285' text-anchor='middle' font-size='10' fill='#9F1239'>slow, flaky, expensive</text></g></svg>",
+      "alt": "Two diagrams: a pyramid with many unit tests at the base, and an inverted ice-cream cone with many e2e tests at the top",
+      "caption": "Most teams *think* they have the pyramid. Run the numbers; you usually have the cone."
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: tests live at three altitudes",
+      "md": "Think of your suite as **three altitudes of flight**:\n\n- **Unit (ground level)** — one function, no I/O, runs in milliseconds. You write hundreds. They give you fast feedback while typing.\n- **Integration (cruising altitude)** — a few units stitched together, maybe a real database, maybe a mocked API. Runs in seconds. You write dozens.\n- **End-to-end (cruising stratosphere)** — the whole plane, real browser, real network, real backend. Runs in minutes. You write the *handful* that matter.\n\nThe higher you go, the slower and flakier the test. The pyramid shape isn't a style preference; it's the only shape where the suite stays runnable as you grow."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/testing-with-playwright/anim/test-pyramid-altitudes.html",
+      "height": 420,
+      "caption": "Watch a feature get tested at each altitude — same logic, very different cost.",
+      "fallbackImage": "/courses/testing-with-playwright/anim/test-pyramid-altitudes.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "The Mumbai local analogy",
+          "tone": "info",
+          "md": "Unit tests = local train. Har station rukti hai, fast hai, sasti hai, har 4 minute mein ek. Integration = express. Fewer stops, thoda mehenga, par reliable. E2E = Rajdhani. Ek hi run hota hai din mein, signal fail ho gaya toh poora schedule barbaad. Sab zaroori hai. Lekin agar tum saara traffic Rajdhani pe daal doge, station par log fight karenge.",
+          "attribution": "— Test-Sensei Tarun, on the 7:48 Western local"
+        },
+        "en": {
+          "title": "The Mumbai local analogy",
+          "tone": "info",
+          "md": "Unit tests are like the Mumbai local train: every stop, fast, cheap, one every 4 minutes. Integration is the express: fewer stops, slightly more expensive, reliable. E2E is the Rajdhani: one run a day, one signal failure ruins the whole schedule. All of them matter. But put all your traffic on the Rajdhani and the platform turns into a brawl."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Unit-as-fast-feedback"
+    },
+    {
+      "type": "markdown",
+      "md": "The first job of unit tests is *not coverage*. It is **fast feedback while you are still holding the problem in your head**. If a unit test takes 30 seconds to run, you'll context-switch, you'll alt-tab to Slack, and by the time the result lands you've forgotten why you cared. Unit tests should run in **single-digit milliseconds**, in the watch mode running on your second monitor, while you type.\n\nUse them for **logic that has shape**: tax rules, currency conversion, validation, state machines. Anything where the input space is large but the function is pure. Skip them for code that is mostly *moving data from A to B* — that's what integration is for.\n\n**The named move:** *unit-as-fast-feedback*. If your unit test makes a network call, it isn't a unit test, it's a slow integration test in a costume. Mock the I/O or move the test up the pyramid."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 220'><rect width='600' height='220' fill='#ECFDF5'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='32' text-anchor='middle' font-weight='700' font-size='15'>Unit-as-fast-feedback loop</text><circle cx='100' cy='130' r='40' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='100' y='128' text-anchor='middle' font-size='11' font-weight='600'>type</text><text x='100' y='144' text-anchor='middle' font-size='10'>code</text><circle cx='250' cy='130' r='40' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='250' y='128' text-anchor='middle' font-size='11' font-weight='600'>save</text><text x='250' y='144' text-anchor='middle' font-size='10'>file</text><circle cx='400' cy='130' r='40' fill='#DBEAFE' stroke='#0EA5E9' stroke-width='2'/><text x='400' y='128' text-anchor='middle' font-size='11' font-weight='600'>test runs</text><text x='400' y='144' text-anchor='middle' font-size='10'>~12 ms</text><circle cx='540' cy='130' r='40' fill='#FAF5FF' stroke='#8B5CF6' stroke-width='2'/><text x='540' y='128' text-anchor='middle' font-size='11' font-weight='600'>green/red</text><text x='540' y='144' text-anchor='middle' font-size='10'>before</text><text x='540' y='158' text-anchor='middle' font-size='10'>blink</text><path d='M 140 130 L 210 130' stroke='#374151' stroke-width='2' fill='none' marker-end='url(#a1)'/><path d='M 290 130 L 360 130' stroke='#374151' stroke-width='2' fill='none' marker-end='url(#a1)'/><path d='M 440 130 L 500 130' stroke='#374151' stroke-width='2' fill='none' marker-end='url(#a1)'/><defs><marker id='a1' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M 0 0 L 10 5 L 0 10 z' fill='#374151'/></marker></defs></g></svg>",
+      "alt": "Four-step loop: type code, save file, test runs in 12ms, green/red before you blink",
+      "caption": "If the loop doesn't fit inside your attention span, you'll stop using it."
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: turning a bug report into the right test, at the right altitude",
+      "steps": [
+        { "label": "1. The customer report", "body": "\"When I check out with a UPI ID that has a dot, like sneha.s@okhdfc, the total shows ₹0.\"" },
+        { "label": "2. Where does the logic live?", "body": "The bug is in the `formatUpiId()` function. Pure input → output. No network, no DOM. This screams unit test." },
+        { "label": "3. Write the unit test", "body": "Three lines. Runs in 4ms. No browser, no DB.", "code": "test('formatUpiId preserves dots in the local part', () => {\n  expect(formatUpiId('sneha.s@okhdfc')).toBe('sneha.s@okhdfc');\n});" },
+        { "label": "4. Resist the urge to write an e2e", "body": "An e2e test for this would take 90 seconds, hit a real Razorpay sandbox, and prove the same thing as the 4ms unit test." },
+        { "label": "5. Add ONE e2e for the critical path", "body": "Yes — *one* test that proves checkout end-to-end works for a UPI user. The unit test catches the formatting bug; the e2e catches the wiring." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these is *not* appropriate for a unit test?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "A function that calculates GST on a cart total based on item categories", "correct": false, "explain": "Pure logic with branching. Perfect unit test territory." },
+        { "id": "b", "label": "A reducer in a state machine that transitions cart states", "correct": false, "explain": "Pure function, deterministic, fast. Ideal for a unit test." },
+        { "id": "c", "label": "A test that fills a form, clicks Submit, and asserts the user is redirected to a confirmation page", "correct": true, "explain": "This is an e2e test pretending to be a unit test. The DOM, the router, and the backend are all involved. Move it up the pyramid." },
+        { "id": "d", "label": "A function that validates an Indian phone number format", "correct": false, "explain": "Pure regex/validation logic. Classic unit test." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "The Selenium widow",
+          "tone": "warn",
+          "md": "Pune ki ek QA team thi, 2,200 Selenium tests. Run karne mein 4 ghante. Maintenance lead bhaag gaya, 'I'm done.' Naye lead ne chart banaya: 2,200 mein se 86 tests asli bug pakadte the. Baaki 2,114 sirf CI ka bijli bill badha rahe the. Unit + integration + 86 e2e mein migrate kiya. Ab run 11 minute. Lead ki neend wapas aa gayi.",
+          "attribution": "— a true story, names changed to protect the formerly sleep-deprived"
+        },
+        "en": {
+          "title": "The Selenium widow",
+          "tone": "warn",
+          "md": "A Pune QA team had 2,200 Selenium tests. The full run took 4 hours. The maintenance lead quit: 'I'm done.' The new lead drew a chart: of the 2,200 tests, 86 had ever caught a real bug. The other 2,114 just inflated the CI electricity bill. They migrated to unit + integration + 86 e2e tests. Run time: 11 minutes. The lead now sleeps."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — E2E for the critical path"
+    },
+    {
+      "type": "markdown",
+      "md": "Now the top of the pyramid. **End-to-end tests are not for everything**. They are for the *critical path*: the small set of user journeys where a regression would cost you actual money or actual customers. For most products, that list is shorter than you think — 5 to 15 flows, not 500.\n\nFor a B2B SaaS like our Pune team: signup, login, the primary feature, billing, and a couple of admin flows. Total: 11 e2e tests. Each test is *important*, *visible*, and *worth the 30-second runtime*. Everything else either belongs in integration (does the API contract hold?) or unit (does this function still produce the right output?).\n\n**The named move:** *e2e for the critical path*. Before adding an e2e test, ask: \"if this test is broken on Friday and I push the broken version to prod, who calls me first — the CEO, the customer, or nobody?\" If the answer is *nobody*, push the test down the pyramid."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#EFF6FF'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>The critical path filter</text><rect x='40' y='60' width='160' height='160' rx='10' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='120' y='90' text-anchor='middle' font-weight='700'>CEO calls</text><text x='120' y='115' text-anchor='middle' font-size='11'>signup</text><text x='120' y='135' text-anchor='middle' font-size='11'>checkout</text><text x='120' y='155' text-anchor='middle' font-size='11'>billing</text><text x='120' y='175' text-anchor='middle' font-size='11'>core feature</text><text x='120' y='200' text-anchor='middle' font-size='10' fill='#9F1239'>e2e: yes</text><rect x='220' y='60' width='160' height='160' rx='10' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='300' y='90' text-anchor='middle' font-weight='700'>Customer calls</text><text x='300' y='115' text-anchor='middle' font-size='11'>password reset</text><text x='300' y='135' text-anchor='middle' font-size='11'>export CSV</text><text x='300' y='155' text-anchor='middle' font-size='11'>2FA setup</text><text x='300' y='200' text-anchor='middle' font-size='10' fill='#92400E'>integration: yes</text><rect x='400' y='60' width='160' height='160' rx='10' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='480' y='90' text-anchor='middle' font-weight='700'>Nobody calls</text><text x='480' y='115' text-anchor='middle' font-size='11'>tooltip text</text><text x='480' y='135' text-anchor='middle' font-size='11'>icon colour</text><text x='480' y='155' text-anchor='middle' font-size='11'>spacing nudge</text><text x='480' y='200' text-anchor='middle' font-size='10' fill='#065F46'>e2e: no</text></g></svg>",
+      "alt": "Three columns: CEO calls (e2e yes), Customer calls (integration), Nobody calls (no e2e)",
+      "caption": "The critical-path filter is brutal but accurate. Most things don't make the cut."
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Test-Sensei Tarun",
+        "role": "Principal SDET, today wearing a t-shirt that says 'flake ≠ feature'"
+      },
+      "intro": [
+        "You're triaging a backlog of test ideas from your PM. Tarun is sitting next to you.",
+        "Classify each by altitude: unit, integration, or e2e (or 'don't write a test for this')."
+      ],
+      "buckets": [
+        { "id": "unit", "label": "Unit", "tone": "safe" },
+        { "id": "integration", "label": "Integration", "tone": "neutral" },
+        { "id": "e2e", "label": "End-to-end", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "A function that converts amounts to Indian numbering format (1,00,000 instead of 100,000).", "correctBucketId": "unit", "explain": "Pure transformation, no I/O. A unit test runs in 1ms and covers 8 edge cases at once." },
+        { "id": "s2", "situation": "Verifying that the `/api/invoices` endpoint returns the right JSON shape when a user has 0, 1, and 50 invoices.", "correctBucketId": "integration", "explain": "Hits a real handler and a real (or test) database. Faster than e2e, more realistic than unit." },
+        { "id": "s3", "situation": "Verifying that a logged-in user can view, download, and email an invoice from the dashboard.", "correctBucketId": "e2e", "explain": "Critical path: full browser, full backend, end-user journey. Worth the 25 seconds." },
+        { "id": "s4", "situation": "Verifying that the 'Forgot password' page has the correct H1 text 'Reset your password'.", "correctBucketId": "unit", "explain": "If you must test this, snapshot a render in jsdom. An e2e for copy is overkill; an integration is wasteful." },
+        { "id": "s5", "situation": "Verifying that the Razorpay webhook handler updates the subscription status when payment succeeds.", "correctBucketId": "integration", "explain": "Backend-only flow, mock the webhook payload, hit your handler, assert DB state. Don't drive a browser for a server-side flow." },
+        { "id": "s6", "situation": "Verifying the new sidebar tooltip says 'Beta'.", "correctBucketId": "unit", "explain": "If at all. Component-level unit. Burning an e2e on tooltip text is a flake-factory." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the inverted pyramid (the ice-cream cone)",
+      "md": "Teams build the cone for one of two reasons: either they hired a contractor who wrote 800 Selenium tests in 2019 and called it a day, or they confused *e2e* with *real testing* and treated unit tests as second-class citizens. Both end in the same place: 28-minute CI runs, 14% flake rates, and devs who learn to ignore the suite.\n\nThe fix is not to delete the e2e tests — it's to *rewrite the same coverage at a lower altitude*. For every e2e test you can demote to integration, you save ~25 seconds per CI run and remove ~3% of your flake surface."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You inherited a codebase with 800 e2e tests. Order these triage steps from first to last:",
+      "items": [
+        { "id": "i1", "label": "Run the suite once with `--reporter=json` and dump the per-test duration + pass rate" },
+        { "id": "i2", "label": "Sort by `(duration × flake_rate)` — these are the most expensive tests" },
+        { "id": "i3", "label": "For each top-20 test, identify the *thing being verified* in one sentence" },
+        { "id": "i4", "label": "Decide which can be rewritten at a lower altitude (unit or integration)" },
+        { "id": "i5", "label": "Rewrite 3-5 per week; keep the e2e until the lower-altitude version proves it" },
+        { "id": "i6", "label": "Delete the redundant e2e once the lower test has been green for 30 days" }
+      ],
+      "hint": "Measure first, then choose what to demote, then rewrite, then delete. Order matters; deleting before measuring is how you lose coverage."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Here's an e2e test that's overkill for what it actually proves. Rewrite it as the right altitude (likely integration or unit). Use real Playwright APIs.",
+      "lang": "typescript",
+      "starter": "import { test, expect } from '@playwright/test';\n\n// E2E: 28 seconds, flakes ~6% of the time\ntest('GST is calculated correctly for an interstate cart', async ({ page }) => {\n  await page.goto('/login');\n  await page.getByLabel('Email').fill('test@example.com');\n  await page.getByLabel('Password').fill('hunter2');\n  await page.getByRole('button', { name: 'Sign in' }).click();\n  await page.goto('/cart?items=A,B,C');\n  await page.getByLabel('State').selectOption('Karnataka');\n  await expect(page.getByText('IGST: ₹540')).toBeVisible();\n});",
+      "expected": "// Demote to a unit test of the GST calculator.\n// Runs in <5ms. No browser, no login, no flake.\nimport { calculateGst } from '../src/lib/gst';\n\ndescribe('calculateGst', () => {\n  test('charges IGST for an interstate cart', () => {\n    const result = calculateGst({\n      items: [{ price: 1000, hsn: '9983' }, { price: 1500, hsn: '9983' }, { price: 500, hsn: '9983' }],\n      sellerState: 'MH',\n      buyerState: 'KA',\n    });\n    expect(result).toEqual({ cgst: 0, sgst: 0, igst: 540 });\n  });\n\n  test('splits to CGST + SGST for an intrastate cart', () => {\n    const result = calculateGst({\n      items: [{ price: 3000, hsn: '9983' }],\n      sellerState: 'KA',\n      buyerState: 'KA',\n    });\n    expect(result).toEqual({ cgst: 270, sgst: 270, igst: 0 });\n  });\n});\n\n// Keep ONE e2e for the full checkout flow, not for every tax permutation."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which signs suggest your suite is shaped like an ice-cream cone, not a pyramid? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "CI takes 28 minutes and most of it is a single e2e shard", "correct": true, "explain": "Heavy e2e weight = top-heavy suite. Classic cone." },
+        { "id": "b", "label": "Devs run unit tests locally but skip e2e until CI tells them what's broken", "correct": false, "explain": "This is normal. The pyramid expects fast tests local, slow tests in CI." },
+        { "id": "c", "label": "You have more snapshot tests than logic tests for a pure data-transformation library", "correct": true, "explain": "Snapshots over assertions is a different bait, but symptomatic of the same 'shape over substance' culture." },
+        { "id": "d", "label": "When a unit test fails, you debug for an hour because three other unit tests also failed downstream", "correct": false, "explain": "That's a coupling problem in your code, not a pyramid problem." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "The 4am page",
+          "tone": "warn",
+          "md": "On-call ko 4am page aaya: e2e suite red. Half-asleep dev ne dekha — ek tooltip text change hua tha 'New' se 'New!'. 47 e2e tests assert kar rahe the exact text. Dev ne sab fix kiya, push kiya, wapas soya. 6am page aaya: ab dusri tooltip ka text change hua tha. Yeh pyramid ka inverse hai. Tooltip text ke liye e2e nahi likhte, bhai."
+        },
+        "en": {
+          "title": "The 4am page",
+          "tone": "warn",
+          "md": "On-call gets paged at 4am: e2e suite is red. Half-asleep dev investigates: a tooltip text changed from 'New' to 'New!'. 47 e2e tests asserted the exact string. They fixed all 47, pushed, went back to sleep. 6am: page again. Different tooltip. This is the inverse pyramid. You don't write e2e tests for tooltip copy."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Tests live at three altitudes — unit, integration, e2e — each with a different cost-to-confidence ratio.",
+        "Unit-as-fast-feedback: if your unit test makes a network call, it isn't a unit test. It's a slow integration test in costume.",
+        "E2E for the critical path: the question is *who calls if this breaks?* If the answer is 'nobody', push the test down.",
+        "The ice-cream cone (lots of e2e, few unit) is the most common shape and the most expensive one. The fix is to rewrite, not delete.",
+        "Measure (duration × flake rate) before triaging. Deleting tests blind is how teams lose real coverage."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "What's the *shape* of your test suite right now? If you had to draw it on a whiteboard, would it be a pyramid, an ice-cream cone, or a triangle missing its base? What's the cheapest single change you could make this week to shift the shape?"
+    }
+  ]
+}

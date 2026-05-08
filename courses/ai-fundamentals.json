@@ -323,6 +323,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/ai-fundamentals/anim/trap-what-an-llm-is.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: the 'magic black box'",
@@ -789,6 +795,12 @@
               "explain": "Theater. None of these phrases improve a simple factual lookup. Modern frontier models ignore the threats and tip claims (and many companies have RLHF'd this out specifically). Just ask the question."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/ai-fundamentals/anim/trap-prompting-without-cargo.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1291,6 +1303,12 @@
               "explain": "Refuse. SEBI regulations around investment advice apply; AI giving fund-specific advice is asking for a regulatory action. Rebrand to 'investor education' (general principles, no specific recommendations), or hire SEBI-registered advisors and build a different product."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/ai-fundamentals/anim/trap-hallucination-trap.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1972,6 +1990,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/ai-fundamentals/anim/trap-tool-fit-judgment.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Three axes pick AI fit: volume, stakes, verifiability",
@@ -2223,6 +2247,12 @@
               "explain": "Intervene immediately. The pass-rate dropped 21 points — that means 22% of outputs aren't even parsing correctly. Likely a downstream API change (model version, JSON-mode flag flipped). Quality on the parsing-correctly subset is fine, but you've got a structural failure on the rest. Pager-worthy in a medical context."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/ai-fundamentals/anim/trap-workflow-design.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",

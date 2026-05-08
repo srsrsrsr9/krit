@@ -1,0 +1,273 @@
+{
+  "slug": "lesson-prep-with-ai",
+  "title": "Lesson Prep That Actually Saves Time",
+  "subtitle": "Brief AI like you'd brief a student teacher",
+  "estimatedMinutes": 13,
+  "skills": ["ai-lesson-prep"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-teachers/lesson-prep-with-ai.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — why most AI prep saves zero minutes" },
+        { "startSec": 80, "label": "Mental model: the student-teacher brief" },
+        { "startSec": 220, "label": "Move 1 — Outcome-first prompts" },
+        { "startSec": 410, "label": "Move 2 — Rewrite for class X" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-teachers/lesson-prep-with-ai.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Here is the dirty secret of teacher AI use. Most teachers who say \"AI saves me hours\" are actually saving *minutes*, and losing the rest in iteration. They paste in something vague, get back something vague, edit, re-prompt, edit again, and end up with a worksheet that is technically a worksheet but isn't actually class-ready.\n\nThe difference between a 10-minute prep and a 35-minute prep isn't the AI; it's the brief you put in front of it. This lesson gives you the brief structure, the two moves that get you to a usable first draft, and the named trap that swallows most teachers' Tuesday evening."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A split image. Left side: a teacher typing 'plan a lesson on photosynthesis' with a sad worksheet output. Right side: the same teacher typing a 6-line brief and getting a structured lesson plan output.",
+      "caption": "Same AI, same teacher, same Tuesday. The brief is the only variable.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(20 30)'><rect width='270' height='220' rx='10' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='135' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9F1239'>Vague brief</text><rect x='20' y='44' width='230' height='40' rx='6' fill='#FFFFFF' stroke='#9F1239' stroke-width='1'/><text x='30' y='66' font-family='monospace' font-size='10' fill='#1F2937'>plan a lesson on photosynthesis</text><path d='M135 90 L135 110' stroke='#9F1239' stroke-width='2' marker-end='url(#a1)'/><rect x='20' y='118' width='230' height='80' rx='6' fill='#FFFFFF' stroke='#9F1239' stroke-width='1.5'/><text x='30' y='138' font-family='monospace' font-size='9' fill='#9CA3AF'># Photosynthesis Lesson</text><text x='30' y='152' font-family='monospace' font-size='9' fill='#9CA3AF'>1. Introduction (5 min)</text><text x='30' y='164' font-family='monospace' font-size='9' fill='#9CA3AF'>2. Concept (15 min)</text><text x='30' y='176' font-family='monospace' font-size='9' fill='#9CA3AF'>3. Activity (TBD)</text><text x='30' y='192' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>generic, needs 25 min of edits</text></g><g transform='translate(310 30)'><rect width='270' height='220' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='135' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Structured brief</text><rect x='20' y='44' width='230' height='66' rx='6' fill='#FFFFFF' stroke='#065F46' stroke-width='1'/><text x='30' y='58' font-family='monospace' font-size='8' fill='#1F2937'>Class 7, ICSE, 35 students, 40 min</text><text x='30' y='70' font-family='monospace' font-size='8' fill='#1F2937'>Outcome: label inputs/outputs</text><text x='30' y='82' font-family='monospace' font-size='8' fill='#1F2937'>1 group activity, 5 min</text><text x='30' y='94' font-family='monospace' font-size='8' fill='#1F2937'>Hindi-medium friendly examples</text><text x='30' y='106' font-family='monospace' font-size='8' fill='#1F2937'>End: 4 quick-check Qs</text><path d='M135 116 L135 130' stroke='#065F46' stroke-width='2' marker-end='url(#a2)'/><rect x='20' y='138' width='230' height='60' rx='6' fill='#FFFFFF' stroke='#065F46' stroke-width='1.5'/><text x='30' y='154' font-family='monospace' font-size='9' fill='#1F2937'>Min 0-3: hook (banyan tree)</text><text x='30' y='166' font-family='monospace' font-size='9' fill='#1F2937'>Min 3-15: input/output diagram</text><text x='30' y='178' font-family='monospace' font-size='9' fill='#1F2937'>Min 15-25: pair labelling</text><text x='30' y='190' font-family='monospace' font-size='9' fill='#1F2937'>Min 25-40: 4 Qs + close</text></g><defs><marker id='a1' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#9F1239'/></marker><marker id='a2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: brief AI like you'd brief a student teacher who flies in tomorrow",
+      "md": "Imagine a student teacher arriving at 7 AM Tuesday to deliver your second period. You have one WhatsApp message worth of words to brief them with before they walk in.\n\nYou would *never* write \"teach photosynthesis.\" You'd write: *Class 7, 35 kids, 40-minute period, mixed ability, no projector, end with a 4-question exit ticket, the kids already know the leaf parts so don't restart there.* Five lines. Specific.\n\nThat is the brief AI deserves. Same five lines, same specificity. Anything less and you're sending a half-trained intern to teach Class 7 with a vibe."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-teachers/anim/lesson-prep-with-ai-the-brief.html",
+      "height": 420,
+      "caption": "Build the brief one line at a time and watch the lesson plan output sharpen.",
+      "fallbackImage": "/courses/ai-for-teachers/anim/lesson-prep-with-ai-the-brief-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Tiffin instructions, lesson plan instructions",
+          "md": "Tu apni saasu maa ko bolta hai \"khaana bana do\" — kya milega? Jo unko theek lage. Aalu paratha bhi ho sakta hai, sago khichdi bhi, kuch bhi.\n\nLekin jab tu bolta hai \"thoda kam tel mein, raat ka bachcha hai isliye light, dahi side mein, 7 baje tak\" — *uss* level pe khana milta hai jo actually khaaya jaata hai.\n\nAI ka prompt bhi waisa hi hai. Vague maango, vague milega. Specific maango, kaam ka milega. Saasu maa AI se zyaada patient hai shayad — par AI session zyaada cheap hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no Hinglish",
+          "md": "If you ask anyone \"make me food,\" you get whatever they feel like making. If you ask for \"low oil, light dinner, ready by 7,\" you get something you can actually eat. AI prompts work the same way."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Outcome-first prompts"
+    },
+    {
+      "type": "markdown",
+      "md": "Most teachers' AI prompts start with the *topic* (\"photosynthesis\"). The good ones start with the *outcome* (\"by the end, students should be able to label inputs and outputs of photosynthesis on a leaf diagram\").\n\nThis seems like a small reordering. It is not. Outcome-first prompts force you to know what success looks like *before* you ask AI for the path. AI is good at finding paths to specified destinations and very bad at picking destinations on your behalf.\n\nThe magic phrase: **\"By the end of the period, students should be able to ____\"** — fill in *one* concrete verb. Then ask AI for the lesson."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A two-row diagram. Top row: 'topic-first' shows 'photosynthesis' branching into 6 vague directions. Bottom row: 'outcome-first' shows 'label inputs/outputs of photosynthesis' arrowing into a single sharp lesson plan.",
+      "caption": "Topic-first scatters; outcome-first focuses. Pick the one that produces a usable lesson.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#EFF6FF'/><g transform='translate(20 20)'><rect width='540' height='100' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='1.5'/><text x='30' y='30' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9F1239'>Topic-first</text><rect x='30' y='42' width='100' height='28' rx='4' fill='#FFFFFF' stroke='#9F1239' stroke-width='1'/><text x='80' y='60' text-anchor='middle' font-family='monospace' font-size='10' fill='#1F2937'>photosynthesis</text><g transform='translate(140 56)' font-family='sans-serif' font-size='10' fill='#9F1239'><line x1='0' y1='0' x2='80' y2='-32' stroke='#9F1239' stroke-width='1' stroke-dasharray='2 2'/><line x1='0' y1='0' x2='80' y2='-12' stroke='#9F1239' stroke-width='1' stroke-dasharray='2 2'/><line x1='0' y1='0' x2='80' y2='8' stroke='#9F1239' stroke-width='1' stroke-dasharray='2 2'/><line x1='0' y1='0' x2='80' y2='28' stroke='#9F1239' stroke-width='1' stroke-dasharray='2 2'/><text x='84' y='-30'>history of discovery?</text><text x='84' y='-10'>chemical equation?</text><text x='84' y='10'>leaf anatomy?</text><text x='84' y='30'>experiment?</text><text x='400' y='10' font-style='italic'>which one???</text></g></g><g transform='translate(20 140)'><rect width='540' height='100' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='1.5'/><text x='30' y='30' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Outcome-first</text><rect x='30' y='42' width='220' height='28' rx='4' fill='#FFFFFF' stroke='#065F46' stroke-width='1'/><text x='140' y='60' text-anchor='middle' font-family='monospace' font-size='9' fill='#1F2937'>label inputs/outputs of photosynthesis</text><line x1='250' y1='56' x2='320' y2='56' stroke='#065F46' stroke-width='2' marker-end='url(#a3)'/><rect x='320' y='42' width='180' height='28' rx='4' fill='#FFFFFF' stroke='#065F46' stroke-width='1.5'/><text x='410' y='60' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46' font-weight='bold'>one focused 40-min plan</text></g><defs><marker id='a3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: from a topic in your head to a prompt that returns a class-ready plan",
+      "steps": [
+        {
+          "label": "Step 1 — Resist the topic",
+          "body": "You think \"I have to teach the French Revolution.\" That is a topic. AI can do anything with a topic, which means it does nothing useful with a topic."
+        },
+        {
+          "label": "Step 2 — Pick the outcome verb",
+          "body": "What should students be able to *do* at the end? Not \"understand the French Revolution\" (untestable). Try: *explain what 'liberty, equality, fraternity' looked like to a 1789 Parisian baker*. Concrete. Testable in one paragraph."
+        },
+        {
+          "label": "Step 3 — Add the audience and constraint",
+          "body": "Class 9 ICSE, 38 students, 35-minute period, no projector. The baker example will land harder than the Robespierre name-drop."
+        },
+        {
+          "label": "Step 4 — Add the format you want back",
+          "body": "\"Hand back: a timed lesson outline, one primary-source extract under 80 words, three quick-check questions at the end.\" Format spec keeps AI from giving you 8 paragraphs of prose you don't have time to read."
+        },
+        {
+          "label": "Step 5 — Read the draft, then iterate once",
+          "body": "First draft will have one weak section. Don't redo the whole prompt. Say: \"replace the hook with one tied to a present-day Indian protest students will recognise.\" Targeted edit."
+        },
+        {
+          "label": "Step 6 — Stop iterating",
+          "body": "Two iterations is the budget. After two, you're polishing fingerprints. Print it, walk in, teach. Quality threshold: would a junior colleague find it usable? Yes? Done."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "You're prepping a Class 10 Civics class on the structure of Indian Parliament. Which prompt is *outcome-first*?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "\"Make a lesson on the Indian Parliament for Class 10.\"", "correct": false, "explain": "Topic-first. \"Indian Parliament\" can be approached six ways; AI will pick a default that may not match yours." },
+        { "id": "b", "label": "\"By the end of a 40-minute period, my Class 10 CBSE students should be able to label Lok Sabha, Rajya Sabha, and the President's role on a one-page diagram. Plan the period.\"", "correct": true, "explain": "Outcome-first. The destination is named in concrete verbs; AI now produces a plan that gets students there." },
+        { "id": "c", "label": "\"Cover everything important about Parliament.\"", "correct": false, "explain": "\"Important\" is undefined. Whose definition? AI's, which means generic." },
+        { "id": "d", "label": "\"Make the Parliament lesson exciting.\"", "correct": false, "explain": "Adjective without scaffolding. Excitement is your job; structure is the AI's." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "B.Ed se sikha tha, ab phir kaam aaya",
+          "md": "B.Ed mein \"learning outcome\" likhwaate the. Tu rolling eyes maar ke likhta tha \"students will be able to demonstrate understanding\" — bekaar, generic, sab class mein chal jaata.\n\nAb jab AI ko brief karta hai, woh hi exact training kaam aati hai. *Concrete verb*: identify, label, calculate, list, contrast. Generic verb: understand, appreciate, learn. Generic verb daala to AI generic plan dega; concrete verb daala to AI concrete plan dega. Bachpan ki training kaam aa gayi — late, but on time."
+        },
+        "en": {
+          "tone": "info",
+          "title": "B.Ed coming back to help",
+          "md": "Remember writing \"students will be able to demonstrate understanding\" in your B.Ed assignments and rolling your eyes? Concrete verbs — identify, label, calculate, contrast — were the actual point. Now AI is the audience that finally rewards you for using them."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 'rewrite for class X' move"
+    },
+    {
+      "type": "markdown",
+      "md": "Here is a tiny, specific move that pays for itself within an hour: **the 'rewrite for class X' move.**\n\nYou wrote a beautiful Class 10 lesson plan last year. This year you have a Class 8 section and a Class 11 section. Both need adapted versions of the same content. Don't replan from scratch.\n\nPaste your Class 10 plan into AI and say: *\"Rewrite this for Class 8 — same outcome, more concrete examples, simpler language, shorter paragraphs.\"* Then: *\"Now rewrite for Class 11 — same outcome, add one challenging extension question, allow more independent work.\"*\n\nYou now have three plans in 15 minutes. The original is yours; the variants are AI-assisted. None are generic, because the *original* wasn't."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A central document labelled 'Class 10 plan (yours)' with two arrows: one going down-left to 'Class 8: simpler examples' and one down-right to 'Class 11: extension question'. AI labels are on the arrows.",
+      "caption": "Your Class 10 plan is the seed. AI grows the variants while keeping your structure intact.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FEF3C7'/><g transform='translate(220 30)'><rect width='120' height='60' rx='8' fill='#FBBF24' stroke='#92400E' stroke-width='2'/><text x='60' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#1F2937'>Class 10 plan</text><text x='60' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>(yours, last year)</text></g><g transform='translate(40 140)'><rect width='160' height='70' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#1E3A8A'>Class 8 variant</text><text x='80' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>simpler examples</text><text x='80' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>shorter paragraphs</text></g><g transform='translate(360 140)'><rect width='160' height='70' rx='8' fill='#EDE9FE' stroke='#5B21B6' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#5B21B6'>Class 11 variant</text><text x='80' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>extension question</text><text x='80' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>more independent work</text></g><path d='M250 90 Q200 110 140 140' stroke='#1E40AF' stroke-width='2' fill='none' marker-end='url(#a4)'/><path d='M310 90 Q360 110 420 140' stroke='#5B21B6' stroke-width='2' fill='none' marker-end='url(#a5)'/><text x='160' y='118' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E40AF'>AI: rewrite simpler</text><text x='400' y='118' text-anchor='middle' font-family='monospace' font-size='10' fill='#5B21B6'>AI: rewrite harder</text><defs><marker id='a4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1E40AF'/></marker><marker id='a5' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#5B21B6'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Principal Priya",
+        "role": "Your principal, dropping in between class observations",
+        "avatarSrc": "/coaches/principal-priya.png"
+      },
+      "intro": [
+        "Priya holds out her phone with five teachers' AI prompts on it.",
+        "\"Quick. Tell me which of these will produce a usable lesson on the first try, and which is going to waste an hour.\""
+      ],
+      "buckets": [
+        { "id": "good", "label": "Will produce a usable plan", "tone": "safe" },
+        { "id": "bad", "label": "Will waste an hour", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "p1",
+          "situation": "\"Plan a Class 8 Hindi lesson on Premchand.\"",
+          "correctBucketId": "bad",
+          "explain": "No outcome, no time, no specific story or theme, no constraint. AI will give you a four-page essay that takes longer to read than to ignore."
+        },
+        {
+          "id": "p2",
+          "situation": "\"By the end of a 35-minute period, my Class 8 ICSE Hindi students should be able to identify three social ironies in *Idgah*. Plan the period with a 5-minute opening hook, a 15-minute close-reading activity, and 4 exit questions.\"",
+          "correctBucketId": "good",
+          "explain": "Outcome, time, format, scaffolding — all present. AI returns something you can teach from with two edits."
+        },
+        {
+          "id": "p3",
+          "situation": "\"Make the Periodic Table fun for Class 9.\"",
+          "correctBucketId": "bad",
+          "explain": "\"Fun\" is your job. AI will give you fake-sounding analogies that the class will see through. \"Fun\" is a result, not an instruction."
+        },
+        {
+          "id": "p4",
+          "situation": "\"Take this Class 10 Maths lesson plan I wrote last year [paste]. Rewrite for a Class 8 section: same outcome (graphing linear equations), simpler examples, more guided practice.\"",
+          "correctBucketId": "good",
+          "explain": "Anchored in your own existing work, with concrete delta instructions. AI does best when it's editing, not inventing."
+        },
+        {
+          "id": "p5",
+          "situation": "\"Give me 12 multiple-choice questions on Class 11 Economics chapter 5, mixed difficulty: 4 easy/recall, 6 medium/application, 2 hard/synthesis. Indian context examples preferred.\"",
+          "correctBucketId": "good",
+          "explain": "Specific count, specific difficulty distribution, specific context. AI delivers; you cull and edit."
+        },
+        {
+          "id": "p6",
+          "situation": "\"Just give me everything important about the Mughal era for Class 7.\"",
+          "correctBucketId": "bad",
+          "explain": "\"Everything important\" is undefined. AI's default for that prompt is a Wikipedia summary; you'll spend 25 minutes editing structure that should have been in the brief."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the generic-worksheet-from-generic-prompt loop",
+      "md": "You write \"give me a worksheet on integers.\" AI returns a passable, generic worksheet. You print it. You walk into class. You realise the worksheet doesn't match what your kids actually struggled with last week. You write another vague prompt. Repeat.\n\nThe trap is *not* that AI is bad. The trap is that vague prompts produce average outputs, and average outputs are *just good enough* to print, which means you never push yourself to write a real brief.\n\nThe fix is mechanical: never paste a prompt under 50 words for a non-trivial task. If your prompt is shorter than that, you haven't briefed it; you've sighed at it."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps the way an efficient teacher writes a lesson prep prompt.",
+      "items": [
+        { "id": "s1", "label": "Identify the audience (class, board, section size)", "detail": "AI doesn't know your second-period section is louder than your fourth." },
+        { "id": "s2", "label": "Pick one concrete outcome verb", "detail": "Identify, label, calculate, contrast — not understand, appreciate, learn." },
+        { "id": "s3", "label": "State the time and physical constraint", "detail": "40 minutes, no projector, board only — AI cannot guess this." },
+        { "id": "s4", "label": "Specify the format you want back", "detail": "Lesson outline + 4 exit questions, not 'a comprehensive plan'." },
+        { "id": "s5", "label": "Add one local context anchor", "detail": "Pune flooding example, JEE practice problem style, Hindi-medium friendly." },
+        { "id": "s6", "label": "Send and read the draft once before iterating", "detail": "First draft is ~70%. Edit once with targeted feedback, then stop." }
+      ],
+      "hint": "Audience, outcome, time, format, context, send. The order keeps you honest."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Pick a topic you teach next week. Write a real, structured prompt for it — 50+ words. Do not skip any of the six brief lines.",
+      "lang": "markdown",
+      "starter": "Audience (class, board, size, anything AI can't guess): \nOutcome (concrete verb, what students do at the end): \nTime + constraints: \nFormat I want back: \nLocal context to use: \nSend (read once, edit once, then stop): \n",
+      "expected": "Audience: Class 10 CBSE Maths, 42 students, mixed ability, the 'after-PT' period (lower energy)\nOutcome: students should be able to identify when a quadratic equation has two real roots, one repeated root, or no real roots, by computing the discriminant\nTime + constraints: 45 minutes, board + chalk, 5 students typically need extra walkthrough\nFormat I want back: a 45-minute timed plan, 3 worked examples (one of each discriminant case), 6 practice questions of mixed difficulty, 1 exit-ticket question\nLocal context to use: JEE-Main style stem framing for the practice questions; mention the discriminant as 'D' (kids see it that way in Hindi-medium board notes too)\nSend (read once, edit once, then stop): plan to iterate only once — replace the weak example with one I write myself\n"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Pick the prep practices that *actually* save time in week one of using AI.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Reuse your own old lesson plans as the seed and ask AI to rewrite for a different class", "correct": true, "explain": "Highest leverage move. Your originals are anchored in your students; AI just remixes." },
+        { "id": "b", "label": "Build a 6-line brief template and reuse it for every prompt this term", "correct": true, "explain": "Yes. Templates are how you skip the Sunday-night iteration spiral. Audience, outcome, time, format, context, send." },
+        { "id": "c", "label": "Always start from a fresh prompt for variety", "correct": false, "explain": "This is how teachers reset to vague prompts and lose time. Variety is good in *examples*, not in *prompt structure*." },
+        { "id": "d", "label": "Iterate with the AI five times until the plan is exactly right", "correct": false, "explain": "Two iterations is the budget. After that, you're polishing fingerprints AI can't see anyway. Open the plan in Word and finish by hand." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Marathi-medium school, Pune",
+          "md": "Sneha ma'am, Marathi-medium school mein, ChatGPT bole 'plan kar de' — ChatGPT ne Marathi mein plan diya, par 'पाठ' aur 'धडा' confuse kar gaya, sab gadbad. Sneha ma'am ne 25 min lagaake fix kiya.\n\nNext din strategy badli: ChatGPT ko English mein structure puchha (outline, question stems, rubric), Marathi version *khud* likha. 12 minute mein ho gaya. Aur acha bhi tha — kyunki language layer Sneha ma'am ke paas thi, structure layer AI ke paas. Apna apna kaam."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Marathi-medium reality",
+          "md": "AI's Indian-language output is uneven. The fix is to ask AI for the *structure* (outline, question stems, rubric) in English and translate yourself. Faster, cleaner, and the local fluency stays where it belongs — with you."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Brief AI like a student teacher arriving at 7 AM: audience, outcome, time, format, constraint, context. Five-line brief; 50-word minimum.",
+        "Outcome-first beats topic-first. Pick one concrete verb (label, identify, contrast) before you open the AI window.",
+        "Reuse your own old plans as the seed. AI is a much better editor than inventor; your originals are the only thing AI can't fake.",
+        "Two iterations is the iteration budget. After that, finish by hand.",
+        "Generic prompts produce average outputs that are just good enough to print — and that's the trap. 50-word minimum keeps you honest."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Write your six-line brief template once, by hand, and stick it on the inside of your laptop lid. What's the one line you most often skip when you're tired?"
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "slug": "ai-detection-and-honesty",
+  "title": "AI Detection vs AI Literacy",
+  "subtitle": "Stop policing the output; start designing the process",
+  "estimatedMinutes": 13,
+  "skills": ["ai-classroom-honesty"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-teachers/ai-detection-and-honesty.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the detection arms race" },
+        { "startSec": 80, "label": "Mental model: detection vs honesty design" },
+        { "startSec": 220, "label": "Move 1 — Assignments that require process" },
+        { "startSec": 410, "label": "Move 2 — The oral-defence move" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-teachers/ai-detection-and-honesty.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Every staff room in India is currently arguing the same fight. \"We need a better AI detector.\" \"Ban phones in homework.\" \"Make them write in class.\" These are downstream symptoms of one upstream design failure: the assignment, as written, can be done by AI in 90 seconds.\n\nDetection is an arms race you cannot win. Models update faster than tools to detect them. Worse, detectors have a real false-positive rate, and the false positives are concentrated on your *strongest* writers — the ones who write in clean, formal English. So the day you mark Riya zero on her board essay because the detector said \"92% AI,\" you may be ending a career on a probability.\n\nThis lesson takes a side. You don't win this with detection. You win it with assignments that *require* the process AI can't do, and with a single conversation move that resolves 90% of suspicions in five minutes."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram of two paths. Top path 'Detection': a teacher chasing students with detector tools, while students upgrade their AI tools faster. Bottom path 'Honesty design': a teacher rebuilds the assignment so AI can't shortcut it.",
+      "caption": "Two paths. The top one is exhausting and you lose. The bottom one is one-time work and you win.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(20 30)'><rect width='560' height='100' rx='10' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='30' y='30' font-family='sans-serif' font-size='13' font-weight='bold' fill='#9F1239'>Detection arms race</text><g transform='translate(40 50)' font-family='sans-serif' font-size='10' fill='#9F1239'><circle cx='10' cy='10' r='8' fill='#9F1239'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>1</text><text x='28' y='14'>buy detector</text></g><g transform='translate(180 50)' font-family='sans-serif' font-size='10' fill='#9F1239'><circle cx='10' cy='10' r='8' fill='#9F1239'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>2</text><text x='28' y='14'>students upgrade AI</text></g><g transform='translate(360 50)' font-family='sans-serif' font-size='10' fill='#9F1239'><circle cx='10' cy='10' r='8' fill='#9F1239'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>3</text><text x='28' y='14'>detector fails</text></g><text x='280' y='86' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>repeat forever; false positives ruin good students</text></g><g transform='translate(20 150)'><rect width='560' height='110' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='30' y='30' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>Honesty design</text><g transform='translate(40 50)' font-family='sans-serif' font-size='10' fill='#065F46'><circle cx='10' cy='10' r='8' fill='#10B981'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>1</text><text x='28' y='14'>require drafts/process</text></g><g transform='translate(220 50)' font-family='sans-serif' font-size='10' fill='#065F46'><circle cx='10' cy='10' r='8' fill='#10B981'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>2</text><text x='28' y='14'>add 5-min oral defence</text></g><g transform='translate(400 50)' font-family='sans-serif' font-size='10' fill='#065F46'><circle cx='10' cy='10' r='8' fill='#10B981'/><text x='10' y='14' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>3</text><text x='28' y='14'>local-context anchor</text></g><text x='280' y='96' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>one-time design work; AI cannot shortcut</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: don't fight the output, design the process",
+      "md": "When you write an assignment, you implicitly assume something about *how* a student will produce the answer. The traditional essay assumes 5 hours of solitary thinking. AI breaks that assumption; the answer can now be produced in 90 seconds with no thinking at all.\n\nDetection tries to *retroactively* tell whether thinking happened. This is hard, and the tools are weak. **Honesty design** does the opposite: it builds an assignment that *cannot be completed* without the thinking happening. AI can't fake a draft history; it can't fake an oral defence; it can't have been in your second-period last Thursday.\n\nMove the load-bearing wall from the final document to the visible process. The cheating problem largely solves itself."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-teachers/anim/ai-detection-and-honesty-process-anchor.html",
+      "height": 420,
+      "caption": "An assignment redesigned: the final-document version vs the process-anchored version, side by side.",
+      "fallbackImage": "/courses/ai-for-teachers/anim/ai-detection-and-honesty-process-anchor-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Pakdo-pakdo wala loop",
+          "md": "School staff room: \"new detector aaya hai, ye pakdega.\" Doosre hafte: \"new detector ne Riya ko galat pakda, parents aa gaye.\" Teesre hafte: \"chalo aur naya detector le lo.\"\n\nBhai yeh tom-and-jerry hai. Tu Tom hai, AI Jerry hai, aur Jerry naya cartoon studio open kar raha hai har hafte.\n\nGame badal. Jerry ko maat de, maze ke set se mat khelo — set hi badal de. Process maango, draft maango, viva maango. Jerry ke paas process nahi hota."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no Hinglish",
+          "md": "Staff rooms across the country are running the same Tom-and-Jerry routine. Buy detector, students upgrade their tools, false positives explode, repeat. The way out isn't a faster Tom; it's a different game. Make process visible. AI doesn't have one."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Assignments that require process"
+    },
+    {
+      "type": "markdown",
+      "md": "The first move is structural: rewrite the assignment so the *only* way to submit is to produce process artefacts. AI cannot produce these. A student using AI can still cheat, but they have to work hard to fake the process — at which point they're learning anyway, which is the actual goal.\n\nFour patterns to use, alone or stacked:\n\n**Drafts over time.** Submit a draft on Monday, peer-feedback on Wednesday, revision on Friday. The Monday draft can be wrong; what matters is that it's *a* draft. AI doesn't iterate on its own work; the trail of edits is uniquely human.\n\n**Local context anchor.** Use a class-specific prompt that AI doesn't know: \"In Tuesday's discussion, Aanya argued X. Take her side and extend the argument.\" AI was not in your room.\n\n**In-class write.** Last paragraph or full piece, written in the room, no devices. 30 minutes, blue book, your eyes on the desks. The boring kind of test, but it works.\n\n**Annotated bibliography of process.** Ask for a 100-word note on \"how I wrote this — what I tried first, what I changed, what I cut.\" Genuine students write this in three minutes; AI users either skip it (caught) or generate a fake one (also caught — it has the wrong texture)."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Four blocks labelled 'Drafts over time', 'Local context anchor', 'In-class write', 'Process bibliography'. Each block has a small icon (calendar, location pin, blue book, sticky note) and the words 'AI cannot fake'.",
+      "caption": "Four honesty-design moves. Stack two and AI shortcutting becomes structurally hard.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#ECFDF5'/><g transform='translate(20 40)'><rect width='130' height='160' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='2'/><g transform='translate(45 20)'><rect x='0' y='0' width='40' height='40' rx='4' fill='#10B981'/><line x1='10' y1='12' x2='30' y2='12' stroke='#FFFFFF' stroke-width='2'/><circle cx='14' cy='22' r='2' fill='#FFFFFF'/><circle cx='22' cy='22' r='2' fill='#FFFFFF'/><circle cx='30' cy='22' r='2' fill='#FFFFFF'/><circle cx='14' cy='32' r='2' fill='#FFFFFF'/></g><text x='65' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Drafts</text><text x='65' y='100' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>over time</text><text x='65' y='130' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>AI doesn't iterate</text><text x='65' y='144' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>on its own draft</text></g><g transform='translate(160 40)'><rect width='130' height='160' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='2'/><g transform='translate(45 20)'><circle cx='20' cy='20' r='18' fill='#10B981'/><circle cx='20' cy='14' r='6' fill='#FFFFFF'/><path d='M20 38 L14 26 L26 26 z' fill='#10B981'/></g><text x='65' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Local context</text><text x='65' y='100' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>anchor</text><text x='65' y='130' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>AI was not in</text><text x='65' y='144' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>your classroom</text></g><g transform='translate(300 40)'><rect width='130' height='160' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='2'/><g transform='translate(40 18)'><rect x='0' y='0' width='50' height='44' rx='3' fill='#10B981'/><line x1='8' y1='10' x2='42' y2='10' stroke='#FFFFFF' stroke-width='1.5'/><line x1='8' y1='18' x2='42' y2='18' stroke='#FFFFFF' stroke-width='1.5'/><line x1='8' y1='26' x2='42' y2='26' stroke='#FFFFFF' stroke-width='1.5'/><line x1='8' y1='34' x2='32' y2='34' stroke='#FFFFFF' stroke-width='1.5'/></g><text x='65' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>In-class write</text><text x='65' y='130' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>blue book</text><text x='65' y='144' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>your eyes on desks</text></g><g transform='translate(440 40)'><rect width='130' height='160' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='2'/><g transform='translate(40 18)'><rect x='0' y='0' width='50' height='44' rx='3' fill='#FCD34D' stroke='#92400E' stroke-width='1.5'/><line x1='8' y1='12' x2='42' y2='12' stroke='#92400E' stroke-width='1'/><line x1='8' y1='22' x2='42' y2='22' stroke='#92400E' stroke-width='1'/><line x1='8' y1='32' x2='32' y2='32' stroke='#92400E' stroke-width='1'/></g><text x='65' y='84' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Process</text><text x='65' y='100' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>bibliography</text><text x='65' y='130' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>fake notes have</text><text x='65' y='144' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>wrong texture</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: rewriting one assignment from AI-shortcutable to honesty-designed",
+      "steps": [
+        {
+          "label": "Step 1 — The vulnerable original",
+          "body": "\"Class 11 English: write a 600-word essay on whether technology has improved education in India. Submit Friday.\" 90-second AI job. Zero learning."
+        },
+        {
+          "label": "Step 2 — Add a local context anchor",
+          "body": "\"Begin with last week's class debate where Karan argued the opposite of what most of the class thought. Take Karan's side or rebut it; either way, name his actual argument.\" AI doesn't know what Karan said."
+        },
+        {
+          "label": "Step 3 — Add a draft requirement",
+          "body": "\"Submit a 200-word draft Monday with one paragraph and three rough notes for the others. Submit revised full draft Friday.\" Two artefacts. One missing = points off."
+        },
+        {
+          "label": "Step 4 — Add the process bibliography",
+          "body": "\"Append a 100-word note: 'what I tried first, what I changed, what I cut.' Honest answers welcome — saying 'I tried two terrible openings' is fine; saying 'I asked ChatGPT' is also fine if you say *what you did with* what it gave you.\" The note is itself the assessment of process."
+        },
+        {
+          "label": "Step 5 — Reserve a 5-minute oral check on Friday",
+          "body": "\"Random sample of 5 students will explain one of their paragraphs to me on submission day. Be ready to talk for 90 seconds.\" Just the *threat* of this changes behaviour."
+        },
+        {
+          "label": "Step 6 — Mark with the new rubric",
+          "body": "Marks for: process artefacts present, local context engaged, voice consistent across drafts, oral defence credible. The final document is one of five things you grade, not the only thing."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which assignment is *structurally* hardest to AI-shortcut?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "A 500-word at-home essay on the French Revolution due Friday", "correct": false, "explain": "Easiest possible target. AI does this in 90 seconds. The final document tells you nothing about whether the student thought." },
+        { "id": "b", "label": "A 500-word essay on the French Revolution, with a Monday draft, a process note, and a 90-second oral check from a 1-in-5 sample", "correct": true, "explain": "Stacked: process artefacts + sampling + oral check. AI can fake any one of these poorly; faking all three takes longer than just learning the material." },
+        { "id": "c", "label": "A multiple-choice quiz on the French Revolution to be done on the school portal", "correct": false, "explain": "MCQ at home with phone access is an honour system. AI / Google handles MCQs trivially." },
+        { "id": "d", "label": "A 500-word essay where you'll run it through three different AI detectors after submission", "correct": false, "explain": "Detection arms race. Detectors share failure modes; running three doesn't fix the false-positive problem and won't catch a careful AI user." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Riya wala mamla — false positive",
+          "md": "Riya, board-topper category, English mein crisp formal style. AI detector ne 92% \"AI-written\" bola. Teacher ne zero diya. Riya ke parents principal ke paas. Principal ne paper read kara — clearly Riya hi likhi hai, formal English ki vajah se detector confuse hua.\n\nTeacher: embarrassed.\nRiya: betrayed.\nPrincipal: \"agli baar conversation pehle, marks zero baad mein.\"\n\nDetector galat tha. Aur sirf ek baar galat hone se bhi career ka score affect ho gaya. False positive rate is real, aur woh accha bachchon ko sabse zyaada maarta hai."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The false positive that hurt the strongest student",
+          "md": "Detectors flag formal, polished writing as AI more often than messy writing. Which means your strongest students take the biggest hit. A 92% confidence score is not a verdict; it is a hint. Always have the conversation before marking the zero."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The oral-defence move"
+    },
+    {
+      "type": "markdown",
+      "md": "The single most powerful tool in your honesty toolkit takes 5 minutes per student and costs nothing: **the oral defence.**\n\nMechanic: pick a paragraph from the student's submission. Ask them to explain *why they made one specific edit, why they chose that example, what they considered and rejected*. A student who wrote the essay can answer this in 30 seconds, even badly. A student who pasted from AI freezes — not because they're stupid, but because the editing decisions never happened in their head.\n\nIt does not matter if the AI is sophisticated. The oral defence isn't testing the writing; it's testing whether the writer's mind owns the writing. There is no current AI workflow that produces this signal.\n\nUse it as policy: *every essay above grade X is subject to a 5% random oral check on submission day. If your essay is selected and you cannot explain a paragraph, marks are reduced.* The 5% is enough; you don't need to interview everyone. The threat alone changes behaviour."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A teacher and student across a desk. The teacher points to a paragraph in the student's essay. A speech bubble from the student says 'I rewrote this third sentence twice; first version called it a *coup* and that wasn't right'. A small icon shows a happy green checkmark.",
+      "caption": "Five minutes. One paragraph. The student either owns the edit history, or doesn't.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 220' role='img'><rect width='580' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(80 40)'><rect width='100' height='130' rx='8' fill='#FBBF24' stroke='#92400E' stroke-width='2'/><circle cx='50' cy='30' r='18' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='44' cy='28' r='2' fill='#1F2937'/><circle cx='56' cy='28' r='2' fill='#1F2937'/><path d='M44 36 Q50 40 56 36' stroke='#1F2937' stroke-width='1.5' fill='none'/><rect x='30' y='52' width='40' height='40' rx='4' fill='#92400E'/><text x='50' y='112' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>teacher</text><text x='50' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>(you)</text></g><g transform='translate(400 40)'><rect width='100' height='130' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><circle cx='50' cy='30' r='18' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='44' cy='28' r='2' fill='#1F2937'/><circle cx='56' cy='28' r='2' fill='#1F2937'/><path d='M44 36 Q50 41 56 36' stroke='#1F2937' stroke-width='1.5' fill='none'/><rect x='30' y='52' width='40' height='40' rx='4' fill='#1E40AF'/><text x='50' y='112' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>student</text><text x='50' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>(any class)</text></g><g transform='translate(200 60)'><rect width='180' height='90' rx='10' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>\"Why did you change</text><text x='90' y='44' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>'coup' to 'revolution'</text><text x='90' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>in your second draft?\"</text><polygon points='40,82 30,90 50,90' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/></g><g transform='translate(200 170)'><circle cx='10' cy='10' r='10' fill='#10B981'/><path d='M5 10 L9 14 L15 6' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='14' font-family='sans-serif' font-size='10' fill='#065F46'>5 minutes; 90% of doubts resolved</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Principal Priya",
+        "role": "Your principal, holding a stack of detector reports and a coffee",
+        "avatarSrc": "/coaches/principal-priya.png"
+      },
+      "intro": [
+        "Priya: \"Six suspicions from this week. Tell me — proceed with consequences, or have a conversation first?\""
+      ],
+      "buckets": [
+        { "id": "convo", "label": "Have the conversation first", "tone": "safe" },
+        { "id": "consequences", "label": "Proceed with consequences", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "h1",
+          "situation": "Aanya submitted a debate speech that's structurally polished and oddly hollow. Detector says 78%. She's a B-grade English student normally.",
+          "correctBucketId": "convo",
+          "explain": "Suggestive, not conclusive. A 90-second oral extension on the topic tomorrow tells you everything. Detector is one signal; conversation is the verdict."
+        },
+        {
+          "id": "h2",
+          "situation": "Karan and Mehul submitted essays where the central paragraph is word-for-word identical, and both contain an Indian historical fact that's *factually wrong*.",
+          "correctBucketId": "consequences",
+          "explain": "Identical paragraph + matching factual error is the actual smoking gun. Same source, near-certainly. You can still ask, but the consequences are warranted."
+        },
+        {
+          "id": "h3",
+          "situation": "Riya, a top student, gets flagged 92% AI by your detector. Her writing has always been polished and formal.",
+          "correctBucketId": "convo",
+          "explain": "Classic false-positive zone. Polished formal writers trigger detectors. Five-minute oral on her draft choices and you'll know in 90 seconds."
+        },
+        {
+          "id": "h4",
+          "situation": "Aarav cheerfully tells you he 'used ChatGPT to fix the grammar' on his English assignment.",
+          "correctBucketId": "convo",
+          "explain": "Self-disclosure is a teaching moment. Ask to see the rough draft *before* the polish; grade the gap. He may have done more work than he thinks."
+        },
+        {
+          "id": "h5",
+          "situation": "An entire batch of 4 essays has the same opening sentence about 'in today's rapidly evolving world'. Detector flags all 4.",
+          "correctBucketId": "consequences",
+          "explain": "Common AI tell, repeated across 4 students. Conversation can still happen, but a class-wide reset on the rubric is warranted; this isn't a one-student situation."
+        },
+        {
+          "id": "h6",
+          "situation": "Mira's essay sounds nothing like her in-class voice. No detector flag, but your gut says something is off.",
+          "correctBucketId": "convo",
+          "explain": "Your gut is calibrated by 20+ essays of Mira's. That signal is more reliable than a detector. Conversation, not consequences. Your gut deserves a 5-minute check."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: false positives ruin a good student",
+      "md": "The detector said 92%. You marked the zero. The student's parents come in. The student is your strongest English writer; her writing has always been formal and clean.\n\nYou now have a problem. The detector was wrong. The marks-of-record have a zero on them. The student's relationship with English class is now poisoned for the rest of the year. Your reputation in the staff room is one explanation away from \"the one who marked Riya zero on a probability score.\"\n\n**Rule:** detectors are hints, never verdicts. Always have the 5-minute conversation before any consequence touches the student's record. If you skip the conversation, you are accepting that some good students will pay for the false-positive rate of a tool you didn't build."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps the way a fair teacher handles a suspected AI submission.",
+      "items": [
+        { "id": "s1", "label": "Note the suspicion privately; don't mark anything yet", "detail": "Do nothing irreversible while the only evidence is a probabilistic signal." },
+        { "id": "s2", "label": "Re-read the submission yourself", "detail": "Does *your* gut agree with the detector? Your gut has more context than the tool." },
+        { "id": "s3", "label": "Ask the student a 5-minute oral about their drafting choices", "detail": "Specific paragraph, specific edit. Why this word, why this example." },
+        { "id": "s4", "label": "Listen for ownership signal: hesitation is fine; total absence of edit history is the tell", "detail": "Real writers know what they cut. AI users don't, because they didn't cut anything." },
+        { "id": "s5", "label": "If unresolved, ask for the rough draft and one extension paragraph in class tomorrow", "detail": "Two more low-stakes data points before any consequence." },
+        { "id": "s6", "label": "Apply consequences only after multiple converging signals, never on one detector score", "detail": "And document the conversation, not the score, as the basis." }
+      ],
+      "hint": "Never mark consequences on a probability score. Conversation is fast; reputation damage is permanent."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Take an assignment you currently use that an AI could complete in 90 seconds. Rewrite it as an honesty-designed version stacking 2-3 of the four moves (drafts, local anchor, in-class write, process bibliography).",
+      "lang": "markdown",
+      "starter": "Original assignment (vulnerable):\n\nRewritten assignment (honesty-designed):\n- Local context anchor:\n- Draft / process artefact:\n- In-class component (if any):\n- Process note / oral check:\n- New rubric (briefly):\n",
+      "expected": "Original assignment (vulnerable): \"Class 10 English: Write a 600-word essay on whether social media is a net positive or negative for Indian teenagers. Submit Friday.\"\n\nRewritten assignment (honesty-designed):\n- Local context anchor: \"Begin by referencing the WhatsApp group rumour that spread through 9-B last week (the 'cricket coach' story). Use it as a case in point or a counter-example, but you must engage with what actually happened.\"\n- Draft / process artefact: \"Submit a 150-word draft Tuesday with thesis + one example. Final 600 words Friday. Both required; missing draft = -10%.\"\n- In-class component: \"Friday's last paragraph (60-80 words) written in class, no devices, on lined paper, 15 minutes. This becomes the closing of your essay.\"\n- Process note: \"Append 80 words: what I tried first, what I changed, what I cut. Honest answers welcome.\"\n- Oral check: \"5% random sample on submission day will be asked to explain one of their paragraph edits in 90 seconds.\"\n- New rubric: 30% argument quality | 20% local-context engagement | 20% process artefacts present | 20% in-class paragraph quality | 10% process note specificity\n"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which combinations of honesty-design moves produce structurally robust assignments? (Pick the strong ones.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Drafts over time + 5% oral defence sampling", "correct": true, "explain": "Yes. Two cheap, low-friction layers that AI shortcutting can't fake at scale." },
+        { "id": "b", "label": "Local context anchor + process bibliography", "correct": true, "explain": "Yes. The anchor blocks generic AI output; the bibliography asks the student to narrate the work, which AI users find awkward." },
+        { "id": "c", "label": "Three different AI detectors run on every submission", "correct": false, "explain": "Detection arms race. Detectors share failure modes; running three doesn't fix the structural problem and amplifies false positives." },
+        { "id": "d", "label": "Banning AI entirely and threatening expulsion", "correct": false, "explain": "Bans push behaviour underground; you lose the signal you'd otherwise see. Discipline is downstream of design." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "VIVA culture, repurposed",
+          "md": "India mein VIVA ka culture purana hai. Class 10 Maths VIVA, Class 12 Practical VIVA — bachche tayar hote the. ChatGPT ne essay culture todi, lekin VIVA culture ko revive kiya hai, in a way.\n\n5 minute ka oral defence — yeh exactly woh skill hai jo VIVA mein kaam aati thi. Bachcha apni hi paper explain kar sake. Wapis se relevant ho gayi.\n\nMatlab AI ne pedagogy ko 1990 ke pre-PowerPoint era mein wapis ek step bheja hai — aur it's *not* a bad thing."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The viva is back",
+          "md": "Indian schools have a long tradition of vivas — students explaining their own answers in person. AI has accidentally made vivas relevant again. The skill of explaining your own paragraph is exactly the skill the AI shortcut bypasses."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Detection is an arms race you cannot win; honesty design is one-time work that holds.",
+        "Stack two or more moves — drafts over time, local anchor, in-class write, process bibliography. Two layers is enough.",
+        "The 5-minute oral defence resolves 90% of suspicions. It tests ownership of edits, which AI cannot fake.",
+        "Detector scores are hints, never verdicts. Always have the conversation before the consequence touches a student's record.",
+        "False positives concentrate on your strongest writers. Marking zero on a probability score is how you damage a top student's year."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Which student would suffer most if your AI detector hit a false positive on them? What conversation would you want to have *before* any consequences? Now write that conversation into your assignment policy."
+    }
+  ]
+}

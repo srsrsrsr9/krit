@@ -1,0 +1,52 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: a debate-club kid flagged as AI",
+    "source": "Anonymous English teacher at a Delhi CBSE school",
+    "date": "August 2025",
+    "story": "Aarush is in Class 12. State-level debate champion. Speaks in fully-formed paragraphs. Writes in fully-formed paragraphs. Three different AI detectors flagged his Term 2 essay as 88-94% AI-written.\n\nI confronted him. He cried. His mother accused me of bias. Principal got involved. We finally agreed on a rerun: Aarush wrote the next essay in class with a stopwatch and process notes. Result: indistinguishable from his Term 2 work.\n\nThe detector was 'right' in the statistical sense — Aarush's writing matches AI-trained patterns. The detector was *catastrophically wrong* in the case-level sense. I wrote the school an apology that week. **I now design assignments that don't require detection at all** — in-class drafts, oral defenses, process journals.",
+    "takeaway": "Detector arms races punish your structured-prose students; honesty-design beats detection every time."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: 5 essays flagged",
+    "setup": "Ms. Anjali's AI detector (free Chrome extension, 'works pretty well') flags 5 of her 32 Class 11 history essays as AI-written. One is from her top student (debate club, native English speaker). One is from a student who has never used the school computers. The remaining 3 are first-year students new to academic writing.",
+    "coach": { "name": "Dean-of-Teaching Devika", "role": "Heads pedagogy at a CBSE school chain across 14 cities" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First instinct: confront all 5 students based on detector output. What does Devika say?",
+        "options": [
+          { "id": "a", "label": "Yes — investigate all 5 immediately, give them zeros if they can't explain.", "correct": false, "explain": "Detector false-positive rate is ~15-25% on structured-prose writers. Confronting all 5 will burn your top student's trust within an hour.", "points": 0 },
+          { "id": "b", "label": "Pause. Detector is a signal, not evidence. Look at writing history for each student first.", "correct": true, "explain": "Right move. Detector is one input among many. Compare to historical writing samples, draft history, in-class work.", "points": 3 },
+          { "id": "c", "label": "Trust the detector — false positives are statistically rare.", "correct": false, "explain": "False. False-positive rate on structured-prose writers can hit 25%+. Statistical rare ≠ case-level rare for this cohort.", "points": 0 },
+          { "id": "d", "label": "Ignore the detector entirely. AI is fine.", "correct": false, "explain": "Overcorrection. Detector signal still matters; it's just not evidence on its own.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "After review: 2 essays show clear AI usage (no draft history, generic structure, factual errors). 3 essays match the students' historical writing (including the debate club kid). What's the move?",
+        "options": [
+          { "id": "a", "label": "Confront the 2 with evidence; have a conversation with the 3 about the false-positive risk and how she'll redesign assignments.", "correct": true, "explain": "Right balance. Action where the evidence is solid; transparency where the signal was false.", "points": 3 },
+          { "id": "b", "label": "Treat all 5 the same — 'fairness'.", "correct": false, "explain": "Equal treatment of unequal evidence is unfair. The 3 students didn't do anything wrong; treating them as if they did damages trust.", "points": 0 },
+          { "id": "c", "label": "Give all 5 a redo with 'no AI allowed'.", "correct": false, "explain": "Punishes the 3 innocent students; doesn't change the 2 actual AI users' incentives unless redo is supervised.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Looking forward: Anjali wants to prevent this whole cycle next term. What's the structural fix?",
+        "options": [
+          { "id": "a", "label": "Buy a better AI detector; pay for the premium tier.", "correct": false, "explain": "Detector arms race. The kids will use better AI; you'll pay more for marginally better detection. Lose-lose.", "points": 0 },
+          { "id": "b", "label": "Redesign assignments to require process — in-class drafting, oral defense, mid-draft check-ins.", "correct": true, "explain": "Honesty-design. AI can produce polished output; it cannot fake a 30-min in-class draft + an oral defense.", "points": 3 },
+          { "id": "c", "label": "Ban AI school-wide and threaten suspension.", "correct": false, "explain": "Unenforceable. Drives the problem underground; trust drops; smart kids find better cover.", "points": 0 },
+          { "id": "d", "label": "Make peace with the detector noise.", "correct": false, "explain": "Detector arms race continues; you keep losing your structured-prose students every term.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Anjali avoids the trust catastrophe with her debate-club kid AND redesigns the next term's assignments around process. The detector becomes one signal among five, never the verdict.",
+      "good": "Solid handling. The 2 actual AI cases get caught; the 3 false positives don't get burned. Worth running the redesign next term.",
+      "learn": "Re-read the false-positive section. The detector's statistical accuracy says nothing about the case in front of you."
+    }
+  }
+}

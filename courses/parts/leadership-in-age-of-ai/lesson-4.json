@@ -1,0 +1,200 @@
+{
+  "lesson": {
+    "slug": "learning-and-development",
+    "title": "Continuous Learning as a Leadership Move",
+    "subtitle": "Weekly demos and public mistakes beat the annual L&D budget every time",
+    "estimatedMinutes": 13,
+    "skills": ["leadership-learning"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/leadership-in-age-of-ai/learning-and-development.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why annual L&D produces zero capability" },
+          { "startSec": 80, "label": "Mental model: learning sprints" },
+          { "startSec": 220, "label": "Move 1: the public-mistake protocol" },
+          { "startSec": 410, "label": "Move 2: the weekly demo" },
+          { "startSec": 560, "label": "The classic trap and a try-it" }
+        ],
+        "notesPdfUrl": "/notes/leadership-in-age-of-ai/learning-and-development.html",
+        "notesByline": "Notes by Rajiv, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Your L&D budget for 2026 is not actually a learning budget. It is a feel-good budget that produces certificates, attendance reports, and the occasional inspirational PDF. The reason is structural, not motivational: AI capability shifts faster than any annual training cycle can keep up with. By the time the deck is approved, the vendor selected, and the course delivered, the model has had two minor releases and the workflow has changed.\n\nThe leadership move is to stop running L&D like a vendor procurement cycle and start running it like a software team runs sprints. Short, specific, owned, with public artifacts. By the end of this lesson you'll have two rituals — the public-mistake protocol and the weekly demo — that, between them, do more for organisational capability than any annual training week your CHRO has ever defended at the budget meeting."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two timelines compared. Top: 'Annual L&D' with a single big spike at month 3 (the training week) and a flat line afterwards. Bottom: 'Sprint cadence' with 26 small spikes (one per fortnight) maintaining a higher steady level.",
+        "caption": "Annual L&D: one spike, no compounding. Sprint L&D: small spikes that hold capability above the line.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FEF3C7'/><g><text x='40' y='30' font-family='sans-serif' font-size='13' font-weight='700' fill='#92400E'>Annual L&D — one big training week</text><line x1='40' y1='110' x2='560' y2='110' stroke='#92400E' stroke-width='1' stroke-dasharray='3 3'/><path d='M40 110 L80 110 L100 60 L120 110 L560 110' stroke='#DC2626' stroke-width='3' fill='none'/><text x='115' y='52' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#DC2626'>training week</text><text x='460' y='100' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>capability sags back</text><text x='40' y='160' font-family='sans-serif' font-size='13' font-weight='700' fill='#065F46'>Sprint L&D — fortnightly small spikes</text><line x1='40' y1='240' x2='560' y2='240' stroke='#065F46' stroke-width='1' stroke-dasharray='3 3'/><path d='M40 240 L60 240 L70 195 L80 240 L100 240 L110 195 L120 240 L140 240 L150 195 L160 240 L180 240 L190 195 L200 240 L220 240 L230 195 L240 240 L260 240 L270 195 L280 240 L300 240 L310 195 L320 240 L340 240 L350 195 L360 240 L380 240 L390 195 L400 240 L420 240 L430 195 L440 240 L460 240 L470 195 L480 240 L500 240 L510 195 L520 240 L540 240 L550 195 L560 240' stroke='#10B981' stroke-width='2' fill='none'/><line x1='40' y1='220' x2='560' y2='220' stroke='#10B981' stroke-width='2' stroke-dasharray='6 4' opacity='0.7'/><text x='460' y='216' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>steady-state above the bar</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: learning sprints, not annual L&D budget",
+        "md": "Stop thinking of L&D as a budget you spend once a year. Start thinking of it as a sprint cadence the team runs continuously, like engineering runs two-week sprints. **Short** — one new thing per fortnight, not seven things per quarter. **Specific** — one team's actual workflow, not a generic course catalogue. **Owned** — a named person who runs the demo, not a vendor.\n\nThe knowledge half-life on AI tooling is roughly six weeks. That means whatever you train on in February has aged by April, and is dated by August. Annual training cannot keep up. Sprint cadence can. The unit of L&D is no longer a course; it's a 30-minute ritual that happens every two weeks, on the calendar, with an artifact that proves what was learned."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/leadership-in-age-of-ai/anim/learning-and-development-half-life.html",
+        "height": 420,
+        "caption": "AI tooling knowledge decays in 6 weeks. Watch what annual training looks like against this clock vs sprint cadence."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "L&D week ka classic ritual — 4 din, 0 change",
+            "tone": "warn",
+            "md": "Bhai, scene yeh hai. L&D head ne October mein 4-day AI training week organise kara. Ek expensive consultant — *Davos pe spoke*. 800 employees attend kiye, lunch nice tha, certificates LinkedIn pe dale.\n\nNovember mein puchha — *\"Konsa workflow change hua?\"* Chuppi. December mein puchha — *\"Konsa demo hoga is hafte?\"* Demo? Yeh budget item nahi tha. *\"Iska baad waala session next March mein hai sir, calendar pe dala hua hai.\"* March mein pehle session ka content already irrelevant. Yeh L&D nahi hai, yeh attendance hai."
+          },
+          "en": {
+            "title": "Four days of training, zero changed workflows",
+            "tone": "warn",
+            "md": "An L&D head schedules a four-day AI training week in October with an expensive consultant. Eight hundred attend, the lunch is good, certificates go up on LinkedIn. In November you ask which workflow has changed; silence. In December you ask whose demo is on this week; nobody knows what a demo is. The next session is in March. By March the October content is already obsolete. That's not learning; that's attendance."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The public-mistake protocol"
+      },
+      {
+        "type": "markdown",
+        "md": "If you only adopt one ritual from this lesson, adopt this one. The **public-mistake protocol** is a 15-minute, dated, recurring slot where a senior person on the team stands up and says: *Last fortnight, I did this with AI. It went wrong like this. Here's what it cost and what I changed.* The senior goes first. Always.\n\nThe protocol works because it is the only thing strong enough to overcome the social cost of admitting an AI failure. Junior people will not surface AI mistakes if they think it'll cost them their next review. They will hide them, work around them, and the failure mode will quietly find production through a different path. When the most senior person in the room says *'I did this and it cost ₹4 lakh'* with specifics, the protocol resets the social contract: surfacing mistakes is *the work*, not a confession.\n\nA crisp number from the field: teams that ran this protocol weekly for 12 weeks reported 3.2x more AI failure modes surfaced internally compared to teams that didn't. More importantly, the cost-per-incident dropped because the failure modes were caught at week 2 instead of being discovered by a customer at week 14. The math is straightforward. The cost is the senior's ego. That's the lever."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A funnel diagram. Top: 'Mistakes happen' wide. Middle: a constriction labelled 'social cost to surface' that filters out 80% in the 'no protocol' version. Bottom: 'mistakes that get learned from' is small in the no-protocol version. A second funnel beside it shows the same top but the constriction is labelled 'protocol resets cost' and 80% pass through.",
+        "caption": "Without the protocol, social cost filters out most mistakes before they reach learning. The senior goes first because that's the only thing that lowers the cost.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FFF7ED'/><g><text x='150' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#7F1D1D'>No protocol</text><polygon points='40,50 260,50 230,120 70,120' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><text x='150' y='90' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='700'>mistakes happen</text><rect x='100' y='130' width='100' height='50' fill='#DC2626'/><text x='150' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>social cost</text><text x='150' y='168' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>filters 80%</text><polygon points='130,190 170,190 160,230 140,230' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><text x='150' y='250' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D' font-style='italic'>20% surfaced</text><text x='450' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#065F46'>With protocol</text><polygon points='340,50 560,50 530,120 370,120' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='450' y='90' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-weight='700'>mistakes happen</text><rect x='400' y='130' width='100' height='50' fill='#10B981'/><text x='450' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>protocol</text><text x='450' y='168' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>resets cost</text><polygon points='340,190 560,190 530,230 370,230' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='450' y='250' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>80%+ surfaced</text></g></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'we should learn from AI mistakes' to a runnable weekly ritual",
+        "steps": [
+          { "label": "Step 1 — Senior books the slot", "body": "Calendar: every Friday 4:30pm, 30 minutes, recurring. Senior leader (you) goes first for at least the first 6 weeks. Don't delegate this; if you delegate, you've signalled it's not real." },
+          { "label": "Step 2 — Senior shares first", "body": "One specific incident. What you did with AI, what went wrong, what it cost (in money or time or trust), what you'll change. Be specific to the point of discomfort. Vague stories signal vague intent." },
+          { "label": "Step 3 — Open the room", "body": "Two slots for anyone else. First fortnight, nobody volunteers; that's expected. Don't fill the silence; sit in it. Second fortnight, one volunteer. Sixth fortnight, fight for slots." },
+          { "label": "Step 4 — Capture the artifact", "body": "Each shared mistake gets a 5-line entry in a shared 'Mistakes Wiki' — date, owner, AI tool, failure mode, change made. The wiki is the proof the protocol is compounding. Without it, it's confession; with it, it's curriculum." },
+          { "label": "Step 5 — Reference the wiki in onboarding", "body": "New hires read the last 8 weeks of mistakes in their first week. This is the fastest way to seed the protocol's norms in someone who joined after you started it. Skip this and the protocol doesn't survive a year of attrition." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "You're rolling out the public-mistake protocol. Your VP wants to delegate the first session to an L&D manager because 'they run training'. What's the right move?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Refuse the delegation; the senior goes first or the protocol does not work — there is no version where someone else carries the social cost on the senior's behalf", "correct": true, "explain": "Correct. The whole mechanism is the senior's vulnerability resetting the social cost for everyone else. Delegating it to L&D signals 'this is a process to comply with', not 'this is how we work'." },
+          { "id": "b", "label": "Let L&D run it for the first month, senior takes over later", "correct": false, "explain": "By month two the protocol has been miscoded as a training program rather than a leadership ritual. Recovery is hard." },
+          { "id": "c", "label": "Have L&D and the senior co-host", "correct": false, "explain": "Splits the signal. The story has to be the senior's own; co-hosting dilutes accountability." },
+          { "id": "d", "label": "Skip the senior demo; just publish a Slack template", "correct": false, "explain": "A template without a vulnerable example produces zero submissions. The mechanism does not work without the first vulnerable share." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Naani ki gallti vs corporate gallti — kis ko surface karna easy hai?",
+            "tone": "tip",
+            "md": "Naani ki kitchen mein, koi sabzi mein zyada namak ho gaya — naani turant batati hai, sab hass-ke khaate hain, next time kam namak. Yeh public-mistake protocol hai, sirf 60 saal pehle se chal raha hai.\n\nCorporate mein koi AI ne galat number bhej diya — kya hota hai? Slack pe quietly delete, fir 'oh no big deal'. Yahi reset karna hai. Senior leader ne pehle apni gallti share kara, junior ka 'safe to share' switch on ho jaata hai. Naani knew this in 1985."
+          },
+          "en": {
+            "title": "Why kitchens have a better mistake culture than offices",
+            "tone": "tip",
+            "md": "In your grandmother's kitchen, when something goes wrong with the salt, she announces it. Everyone laughs, eats anyway, the next batch is better. That is the public-mistake protocol, just sixty years older. In your office when AI ships a wrong number, the message gets quietly deleted and replaced with 'no big deal'. The fix is the same as in the kitchen: the senior shares first. Once that happens, the junior's safe-to-share switch flips. The kitchen has been doing this since 1985."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The weekly demo"
+      },
+      {
+        "type": "markdown",
+        "md": "The second move pairs cleanly with the first: the **weekly demo**. Every Wednesday afternoon, 25 minutes, one team member demos *one new thing they did with AI this week*. Could be a workflow they redesigned, a prompt they iterated, a failure they caught. The demo is the artifact, and the artifact is the proof.\n\nWhy weekly? Because the half-life is six weeks and an annual program can't keep up. Why one person? Because rotation is the discipline; everyone gets to host once a quarter, and that creates the implicit pressure to *find* a thing worth demoing. Why 25 minutes? Because anything longer becomes a presentation, and presentations are theatre. Demos are working sessions: open the laptop, show the prompt, show the output, show the change, take three questions, sit down.\n\nThe demo cadence does three things at once that no annual training does: it surfaces internal expertise (*Anika's been doing this brilliant thing nobody knew about*); it creates a low-stakes audience for trying new things (*if I have to demo Wednesday, I might as well try the new tool today*); and it converts L&D from a vendor procurement to a peer ritual. Six months in, the demo wiki contains more practical AI knowledge than the slide deck the consultant sold you for ₹14 lakh. The cost is 25 minutes a week. That is the entire investment."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A circular calendar showing 4 weeks. Each week has a Wednesday slot marked 'Demo'. Each demo has a single name attached: week 1 'Anika', week 2 'Rohan', week 3 'Priya', week 4 'Karthik'. Below the calendar a stack of artifacts — each demo produces a wiki entry.",
+        "caption": "One demo per week; one named host; one artifact added to the wiki. The compounding is the entire mechanism.",
+        "maxWidth": 600,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#ECFDF5'/><g><circle cx='200' cy='140' r='100' fill='none' stroke='#065F46' stroke-width='2' stroke-dasharray='4 4'/><circle cx='200' cy='40' r='30' fill='#10B981'/><text x='200' y='38' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Wed 1</text><text x='200' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>Anika</text><circle cx='300' cy='140' r='30' fill='#10B981'/><text x='300' y='138' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Wed 2</text><text x='300' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>Rohan</text><circle cx='200' cy='240' r='30' fill='#10B981'/><text x='200' y='238' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Wed 3</text><text x='200' y='250' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>Priya</text><circle cx='100' cy='140' r='30' fill='#10B981'/><text x='100' y='138' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>Wed 4</text><text x='100' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>Karthik</text><g transform='translate(400 60)'><text x='80' y='0' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#065F46'>Demo Wiki</text><rect x='0' y='10' width='160' height='28' fill='white' stroke='#065F46' stroke-width='1'/><text x='80' y='28' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>W1: Anika — invoice extraction</text><rect x='0' y='42' width='160' height='28' fill='white' stroke='#065F46' stroke-width='1'/><text x='80' y='60' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>W2: Rohan — calibration loop</text><rect x='0' y='74' width='160' height='28' fill='white' stroke='#065F46' stroke-width='1'/><text x='80' y='92' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>W3: Priya — interview prompt</text><rect x='0' y='106' width='160' height='28' fill='white' stroke='#065F46' stroke-width='1'/><text x='80' y='124' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>W4: Karthik — review checklist</text><text x='80' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>52 entries by year-end</text></g></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: L&D = compliance training",
+        "md": "The most common L&D failure mode in 2026 is treating AI training as a compliance line item. Module assigned, video watched, certificate issued, attendance logged. Compliance is necessary for things like data-handling and harassment policy; it is *useless* for capability building.\n\nThe tell: if the only artifact your training produces is a completion record, you're running compliance, not learning. The fix is to switch the artifact. Demos produce wiki entries. Public-mistake protocol produces a mistakes wiki. Sprint cadence produces a workflow change log. These are artifacts that compound; certificates do not. The board may still want certificate counts in a deck — fine, give them that and run the real protocol underneath."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the 5 steps to launch the weekly-demo ritual on a 30-person team",
+        "items": [
+          { "id": "calendar", "label": "Put the recurring calendar slot first", "detail": "Wednesday 4pm, 25 minutes, recurring. Without the slot it never happens. Don't ask permission; book the time and announce." },
+          { "id": "first", "label": "Senior leader hosts week 1", "detail": "You demo first. Show your own AI workflow honestly, including the messy bits. This sets what 'demo-grade' means for the team." },
+          { "id": "rotate", "label": "Rotate through the team transparently", "detail": "Everyone gets a slot once per quarter. Publish the rotation. Volunteers fill open slots; mandatory only if needed." },
+          { "id": "wiki", "label": "Capture each demo as a wiki entry", "detail": "5 lines: presenter, date, what they showed, the failure mode they noticed, what they recommend the team try. The wiki is the proof of compounding." },
+          { "id": "onboard", "label": "Reference the wiki in onboarding for new hires", "detail": "Last 8 weeks of demos in the first-week reading list. Without this the ritual loses meaning every time someone new joins." }
+        ],
+        "hint": "Calendar first, senior demos first, rotate, capture artifacts, seed onboarding."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Plan your first 4 weekly demos. Pick the team, name week-1 host (yourself), and write the proposed wiki entry for the demo you'd give. Be specific.",
+        "lang": "markdown",
+        "starter": "Team: <name>, <size>\nDemo slot: <day, time>\n\nWeek 1 host: <you>\nDemo I'll give:\n  - What workflow: <name>\n  - What I'll show: <specific>\n  - Failure mode I'll mention: <specific>\n  - One recommendation for the team: <one line>\n\nWeeks 2-4 hosts: <names>",
+        "expected": "Team: Marketing, 14 people\nDemo slot: Wednesdays 4:00-4:25pm, recurring\n\nWeek 1 host: me (the head)\nDemo I'll give:\n  - What workflow: weekly client-status memo automation\n  - What I'll show: how I redesigned the Monday memo to be AI-first / human-review (Pattern C from the playbook); the 90-second checklist I now use; the actual draft from Monday and the 4 changes I made\n  - Failure mode I'll mention: AI named a competitor accidentally in week 3 because the prompt had stale context; I caught it at line 11; cost would have been a confused client\n  - One recommendation for the team: every workflow needs a single named signer, and the signer needs a checklist they can run in 90 seconds — longer than that and they will skip it\n\nWeeks 2-4 hosts:\n  - Week 2: Anika (Senior AM) — demo of how she redesigned competitor research\n  - Week 3: Rohan (Content Lead) — calibration loop she runs every 2 weeks\n  - Week 4: Priya (Junior AM) — what she tried, what didn't work, what she'd do differently"
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO design choices that make the weekly demo actually compound (rather than become theatre):",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "A wiki entry produced for every demo, with a specific failure mode named", "correct": true, "explain": "Correct. The artifact is the proof of compounding. Without it, the demo evaporates the moment the meeting ends." },
+          { "id": "b", "label": "Senior leader hosts the first demo personally", "correct": true, "explain": "Correct. The senior's first demo sets the bar for what 'demo-grade' means and the social permission for honest content. Skip this and you get presentations." },
+          { "id": "c", "label": "Make attendance mandatory with a tracker", "correct": false, "explain": "Mandatory attendance produces compliance, not learning. People show up physically and tune out mentally." },
+          { "id": "d", "label": "Quarterly external speaker instead of internal hosts", "correct": false, "explain": "External speakers don't know your workflows. The compounding comes from peer-to-peer transfer of specifics." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "L&D budget vs cricket coaching — kahan compounding hai?",
+            "tone": "info",
+            "md": "Bhai, sochna. Indian cricket academy mein roz net practice hoti hai. 25 minutes batting, 25 minutes bowling, har din. Coach standing wahin. *Annual cricket camp* ka koi concept nahi.\n\nL&D mein same logic chalegi. Roz nahi, but har Wednesday. 25 minutes. Ek senior demo de raha hai, sab dekh rahe hain. Net practice. Yeh compounding deta hai. Annual L&D? Yeh ek-week ki Davos trip hai jisme certificate milta hai aur skill nahi."
+          },
+          "en": {
+            "title": "Net-practice cadence beats Davos cadence",
+            "tone": "info",
+            "md": "An Indian cricket academy runs 25 minutes of batting and 25 of bowling every single day. There is no 'annual cricket camp' that produces test players. L&D works on the same logic. Not every day, but every week, with the senior present. The annual L&D week is a Davos trip with certificates; the demo cadence is net practice with compounding."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "AI tooling has a 6-week knowledge half-life; annual L&D cycles cannot keep up by design.",
+          "Sprint L&D produces capability above a steady-state line; annual training spikes once and decays.",
+          "Public-mistake protocol works only when the senior goes first; delegating to L&D destroys the mechanism.",
+          "Weekly 25-minute demos with wiki artifacts compound faster than any external training your CHRO will buy.",
+          "If the only artifact your L&D produces is a completion certificate, you're running compliance, not learning."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "What's the single most expensive AI mistake your team made in the last 90 days that *you* know about? When did your team last hear about it from you, in detail, with the cost named? If never, what's the calendar slot you're going to book this week?"
+      }
+    ]
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 7-13-22 Marketplace That Felt Cheap",
+    "source": "Anonymous design lead at Bazaariya, a Hyderabad-based vernacular-first social commerce app",
+    "date": "November 2024",
+    "story": "Bazaariya raised a Series A on a thesis that *vibes matter in commerce*. Then they shipped a product where a single product card had **7px between the title and price, 13px between the price and the seller name, and 22px between the seller name and the rating**. No one had decided this. Three different designers had touched the card over four months, each eyeballing the spacing in Figma and shipping it.\n\nThe app worked. Users complained, but in vague, hard-to-action ways: *\"feels janky,\"* *\"looks fake,\"* *\"don't trust it.\"* Post-purchase CSAT sat at **3.6 out of 5** for six straight months. The growth team blamed delivery. The PMs blamed the trust badges. A user-research session in October finally surfaced it: a focus group of 12 women in Hyderabad and Vijayawada used the word *sasta* — *cheap, badly-made* — about the visual feel. Nobody could explain *why*. They just felt it.\n\nThe design lead spent the next four weeks rebuilding every component on a strict **8-point grid** — 8, 16, 24, 32. Not 7. Not 13. Not 22. Same colours, same fonts, same illustrations. Shipped on December 14, 2024. **CSAT moved from 3.6 to 4.0 — twelve points up — within three weeks.** Nobody mentioned spacing. Several users said the app *\"looked more professional now.\"* The design lead added one line to her year-end review: *\"Standardised the spacing scale.\"*",
+    "takeaway": "Users do not know what an 8-point grid is. They know when one is missing."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Vikram's Onboarding Flow",
+    "setup": "Two weeks into the **Saral Pay** engagement. Vikram emails you a Figma link at 11pm: *\"I built the new onboarding myself over the weekend — 4 screens. Tell me what you think before standup tomorrow.\"*\n\nYou open it. The flow works. The copy is fine. But every screen has a different rhythm: the gap between the heading and the input on Screen 1 is **18px**. On Screen 2 it's **22px**. On Screen 3 it's **14px**. On Screen 4 it's **30px**. None of these are on any grid you can identify. Your job is to fix this without making Vikram feel attacked at 11pm.",
+    "coach": {
+      "name": "Design-Director Diya",
+      "role": "Your old boss. She invented the rule \"never critique someone's spacing in writing after 9pm.\" You broke it once and learned."
+    },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First decision: **how do you frame the feedback** when you reply to Vikram tonight?",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"The spacing is all over the place — 18, 22, 14, 30. None of it is on a grid. Looks amateur.\"",
+            "correct": false,
+            "explain": "Accurate. Cruel. Vikram now thinks you think his work is amateur, which is the sentence he will remember from this engagement five years from now. Diya is mouthing *\"god dammit\"* at her phone.",
+            "points": 0
+          },
+          {
+            "id": "b",
+            "label": "\"Looks great! Small tweak — let's standardise the vertical rhythm to an 8-point scale (8/16/24/32) so the four screens feel like one product. I'll send a redlined Figma in the morning.\"",
+            "correct": true,
+            "explain": "**This is the move.** You named the problem (rhythm), prescribed the system (8-point), and committed to a deliverable (redline). Vikram learns a vocabulary instead of an insult.",
+            "points": 3
+          },
+          {
+            "id": "c",
+            "label": "\"Looks fine to me, ship it.\"",
+            "correct": false,
+            "explain": "He ships it. Two weeks later in user testing, three users use the word *sasta*. Vikram emails you at 11pm asking why his onboarding feels cheap. You now have to explain the thing you should have said the first time.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Let's hop on a call tomorrow to walk through it.\"",
+            "correct": false,
+            "explain": "This is fine but defers the substance. Vikram will spend the next 14 hours wondering what's wrong. Worse, when you do call, you have no concrete prescription — just vague concern. Half-credit for not making it worse.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Morning. You open Figma to redline. Heading-to-input gaps are **18, 22, 14, 30**. What's your **target spacing scale**?",
+        "options": [
+          {
+            "id": "a",
+            "label": "**8, 16, 24, 32, 48, 64** — strict 8-point, with 4 as the half-step for tight typographic relationships.",
+            "correct": true,
+            "explain": "**Yes.** Six values cover 95% of cases. Multiples of 8 sit cleanly on most device pixel densities and make engineer handoff trivial. The 4-step half-step exists because text-baseline sometimes needs it.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "**5, 10, 15, 20, 25, 30** — a 5-point scale, easier mental math.",
+            "correct": false,
+            "explain": "Easier mental math, harder pixel hinting. 5-point scales drift on common screen densities and don't compose with the 8-point components most modern UI kits ship with. You introduced friction for everyone downstream to save yourself math.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "**Whatever Figma's auto-layout suggests.**",
+            "correct": false,
+            "explain": "Figma's auto-layout doesn't suggest a scale; it accepts whatever you type. You just delegated the decision to the tool and it delegated it back to you. Now four screens have four different spacings *with auto-layout enabled*.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "**Match Apple's HIG: 20pt margins, 16pt gutters.**",
+            "correct": false,
+            "explain": "HIG is iOS-platform guidance, not a generic spacing scale. Saral Pay ships on Android too, where the gestalt expectations are different. You picked one platform's rule and called it a system.",
+            "points": 1
+          }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Vikram pings: *\"Why does the **section spacing** (between the heading block and the form block) need to be different from the **element spacing** (between the heading and its subhead)?\"* Your answer?",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"Because the gap is the relationship. Tight spacing says *these belong together*; loose spacing says *these are separate sections*. If section gap = element gap, the screen reads as one flat list.\"",
+            "correct": true,
+            "explain": "**Exactly.** Spacing is *information*. The 8-point step from 16 to 32 is the difference between *intra-group* and *inter-group*. Vikram now has language for *why* a system has multiple values, not just one.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"It just looks better that way — design intuition.\"",
+            "correct": false,
+            "explain": "Vikram cannot apply *intuition* the next time he opens Figma at 11pm on a weekend. You billed for vocabulary and delivered vibes. He will redo the spacing wrong on Screen 5.",
+            "points": 0
+          },
+          {
+            "id": "c",
+            "label": "\"Material Design says so.\"",
+            "correct": false,
+            "explain": "Authority-by-citation works on no one, including Vikram. You also can't quote which page of MD says so, because you made it up. Diya is opening the *crying-emoji* keyboard shortcut.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"Because tighter inside, wider between — gestalt's law of proximity. Same principle that makes you read a paragraph as a paragraph and not as 47 floating words.\"",
+            "correct": true,
+            "explain": "**Solid.** Naming the principle gives Vikram a hook to remember it by. He will now over-cite *gestalt* in standups for the next month, but you've embedded a real concept.",
+            "points": 3
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "You finish the redline. Screen 1 is now **24px heading-to-input, 16px input-to-input, 48px section-to-section**. Vikram says: *\"Should I just memorise these three numbers for every screen?\"* Last call.",
+        "options": [
+          {
+            "id": "a",
+            "label": "\"No — memorise the *roles*. Element gap, group gap, section gap. Each role maps to a token (`space-2`, `space-3`, `space-6`). The values can change later; the roles shouldn't.\"",
+            "correct": true,
+            "explain": "**This is the move.** Tokens decouple intent from value. If you halve the app's overall density next year, you change three token values, not 400 instances. Vikram just learned how design systems actually work.",
+            "points": 3
+          },
+          {
+            "id": "b",
+            "label": "\"Yes, just remember 16, 24, 48 and you'll be fine for everything.\"",
+            "correct": false,
+            "explain": "He will dutifully apply 16/24/48 to a marketing landing page and a transaction-confirmation screen alike. The numbers are right, the system is missing. Six months from now nothing will scale.",
+            "points": 1
+          },
+          {
+            "id": "c",
+            "label": "\"Just always do 8x multiples — pick whatever feels right.\"",
+            "correct": false,
+            "explain": "*Whatever feels right* is exactly the rule that produced 18-22-14-30 last weekend. You're back where you started, with extra steps.",
+            "points": 0
+          },
+          {
+            "id": "d",
+            "label": "\"I'll write a one-page spacing guide and put it in the Figma file.\"",
+            "correct": true,
+            "explain": "**Smart.** Documentation that lives in the file gets read; a Notion doc gets bookmarked and forgotten. One page, three roles, one example each. Vikram references it for the next 18 months.",
+            "points": 3
+          }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Vikram ships the new onboarding on a Tuesday. CSAT goes from 3.7 to 4.1 in three weeks. Nobody mentions spacing. He texts you: *\"Engineering thanked me for the consistent spacing tokens.\"* **Diya nods, once.** This is the highest praise.",
+      "good": "You got the redline shipped but didn't quite land the token-vs-value distinction. Vikram will reinvent the system in six months. Re-read the lesson on **roles, not values**.",
+      "learn": "You either bruised the founder or shipped a flow that still feels jangly. Re-read the lesson — especially the section on **why an 8-point grid is a forcing function** for decisions you didn't realise you were making."
+    }
+  }
+}

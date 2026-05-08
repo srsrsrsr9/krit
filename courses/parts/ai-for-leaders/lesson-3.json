@@ -1,0 +1,222 @@
+{
+  "slug": "team-and-org-design",
+  "title": "Team Topologies for AI",
+  "subtitle": "AI cell or AI factory? Pick the wrong one and the program dies in queue",
+  "estimatedMinutes": 13,
+  "skills": ["leader-ai-org"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-leaders/team-and-org-design.mp3",
+      "audioDurationSec": 640,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the AI council that became a queue" },
+        { "startSec": 80, "label": "Mental model: AI cell vs AI factory" },
+        { "startSec": 220, "label": "Move 1 — the governance layer (thin)" },
+        { "startSec": 410, "label": "Move 2 — where does the 'why' live?" },
+        { "startSec": 560, "label": "Trap, takeaways, reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-leaders/team-and-org-design.html",
+      "notesByline": "Notes by Vikrant, MBA-2024 batch"
+    },
+    {
+      "type": "markdown",
+      "md": "Six months in, your AI program has 14 ideas, 3 ships, and a 17-week backlog at the central AI team. Product managers have stopped bringing new ideas. The Slack channel that used to have 40 messages a day has 4. The program is not dead; it is centralised, and centralisation has become the disease.\n\nThis lesson is about choosing the structure that lets the program survive month 6. By the end you will be able to tell, in one diagnostic conversation, whether your company should run an AI cell or an AI factory, where the governance layer fits, and the single sentence to ask any team that has built three demos and shipped none."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two side-by-side org diagrams. Left: a 5-person 'AI cell' embedded inside a product team. Right: a 30-person 'AI factory' as a horizontal platform serving 6 product teams above it.",
+      "caption": "Two structures. AI cell is a small embedded team. AI factory is a thick platform that other teams build on. Picking the wrong one is the difference between speed and queue.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><text x='150' y='28' text-anchor='middle' font-weight='bold' fill='#7C2D12'>AI Cell</text><text x='450' y='28' text-anchor='middle' font-weight='bold' fill='#075985'>AI Factory</text><rect x='40' y='50' width='220' height='60' rx='8' fill='#FED7AA' stroke='#9A3412' stroke-width='2'/><text x='150' y='75' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Product Team A</text><text x='150' y='95' text-anchor='middle' font-size='10' fill='#7C2D12'>(5 PMs, 18 engineers)</text><rect x='80' y='130' width='140' height='80' rx='8' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='150' y='155' text-anchor='middle' font-weight='bold' fill='#7C2D12'>AI cell</text><text x='150' y='175' text-anchor='middle' font-size='10' fill='#7C2D12'>2 ML engs + 1 PM</text><text x='150' y='192' text-anchor='middle' font-size='10' fill='#7C2D12'>shares roadmap with team</text><line x1='150' y1='110' x2='150' y2='130' stroke='#9A3412' stroke-width='2'/><text x='150' y='235' text-anchor='middle' font-size='10' fill='#7C2D12' font-style='italic'>Embedded. Owns delivery.</text><text x='150' y='250' text-anchor='middle' font-size='10' fill='#7C2D12' font-style='italic'>'Why' lives in product.</text><rect x='320' y='50' width='80' height='40' rx='6' fill='#DBEAFE' stroke='#1E40AF' stroke-width='1.5'/><text x='360' y='75' text-anchor='middle' font-size='10' fill='#1E3A8A'>Team A</text><rect x='410' y='50' width='80' height='40' rx='6' fill='#DBEAFE' stroke='#1E40AF' stroke-width='1.5'/><text x='450' y='75' text-anchor='middle' font-size='10' fill='#1E3A8A'>Team B</text><rect x='500' y='50' width='80' height='40' rx='6' fill='#DBEAFE' stroke='#1E40AF' stroke-width='1.5'/><text x='540' y='75' text-anchor='middle' font-size='10' fill='#1E3A8A'>Team C</text><rect x='320' y='100' width='260' height='80' rx='8' fill='#7DD3FC' stroke='#075985' stroke-width='2'/><text x='450' y='125' text-anchor='middle' font-weight='bold' fill='#0C4A6E'>AI Factory (platform)</text><text x='450' y='145' text-anchor='middle' font-size='10' fill='#0C4A6E'>Models · Eval harness · LLM gateway</text><text x='450' y='160' text-anchor='middle' font-size='10' fill='#0C4A6E'>Red-team set · Cost monitoring · Kill switch</text><line x1='360' y1='90' x2='360' y2='100' stroke='#075985' stroke-width='1.5'/><line x1='450' y1='90' x2='450' y2='100' stroke='#075985' stroke-width='1.5'/><line x1='540' y1='90' x2='540' y2='100' stroke='#075985' stroke-width='1.5'/><text x='450' y='235' text-anchor='middle' font-size='10' fill='#0C4A6E' font-style='italic'>Horizontal. Owns capability, not feature.</text><text x='450' y='250' text-anchor='middle' font-size='10' fill='#0C4A6E' font-style='italic'>'Why' lives in each product team.</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: AI cell vs AI factory",
+      "md": "Two clean patterns; everything in between is debt.\n\n**AI cell** is a small team — usually 2 to 6 people — embedded inside an existing product team. They share the team's roadmap. They ship features end-to-end. The 'why' lives in the product team, not in the AI cell. Best when you do not yet know which problems will be load-bearing.\n\n**AI factory** is a horizontal platform — usually 15+ people — that owns shared capability (models, eval harness, LLM gateway, red-team set, cost monitoring, kill switch) and serves multiple product teams above it. Product teams own the 'why'; the factory owns the 'how'. Best when you have stable product surfaces, regulatory load, and roughly four or more concurrent AI features.\n\nThe rule of thumb: **start as a cell, graduate to a factory when at least three concurrent product teams need the same capability and the cell becomes a bottleneck.** Centralising before that is org-chart theatre; staying decentralised after that is duplicated work and missed audits."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-leaders/anim/team-and-org-design-cell-to-factory.html",
+      "height": 420,
+      "caption": "Watch a cell become two cells become a factory as concurrent demand crosses the threshold."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "AI Council ne queue ban diya",
+          "md": "Bhai, scene yeh hai. Series-C SaaS, 200 engineers. CEO ne kaha — \"hum AI mein serious hain, council banao.\" Council bana — 7 log, hafte mein ek meeting, har AI launch ko approve karna padta hai. **3 mahine baad** backlog 17 hafte ka. Product teams ne AI features socheneka chod diya — \"council mein 4 mahine lagenge, bhul jao.\"\n\n6 mahine baad CEO ne pucha — \"AI velocity gir kyun gayi?\" Council ne presentation banayi — 14 slides — explaining why velocity is hard. Council apne aap ka project ban gayi. **Centralise too early, queue ban jaata hai. Decentralise too late, har team apna red-team likh raha hota hai.**"
+        },
+        "en": {
+          "tone": "warn",
+          "title": "When the council becomes the queue",
+          "md": "A 200-engineer SaaS spun up an 'AI Council' early. Within three months, the council was a 17-week queue and product teams had stopped bringing AI ideas. Six months later the council produced a 14-slide deck explaining why velocity was hard. The pattern is universal: centralise before the demand exists and the council becomes its own project."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The thin governance layer"
+    },
+    {
+      "type": "markdown",
+      "md": "If you build an AI factory, you also build a governance layer. The mistake is building it thick. A thick layer is a council with monthly meetings, a slide-deck review process, and a 14-page policy doc. A thin layer is one page of rules, one named owner, three things that always block release, and one kill switch.\n\nA thin governance layer fits on a single page. It says, in order:\n\n1. **What gets evaluated** (eval set name, version, threshold).\n2. **What blocks release** (failure rate, missing red-team report, no named owner, no kill switch).\n3. **Who can override** (one human, named).\n4. **What gets logged on every AI inference** (cost, latency, failure flag, user ID, prompt category).\n5. **The kill switch** (who can pull it, in how many minutes, with what fallback).\n\nA crisp number from a 2026 Bengaluru fintech audit: thin governance (one page, signed by the CTO) cleared 11 production AI features through the regulator's review in 9 weeks. The peer company with 47 pages of policy and a council was still on feature 2 at the same date."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two policy stacks. Left: 47 pages of 'AI Ethics Policy'. Right: a single page titled 'AI Release Gate' with 5 numbered bullets.",
+      "caption": "Thick policy is theatre; thin policy is enforceable. The cost is not the writing; it is what the writing forces a release to prove.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(60 50)'><rect x='0' y='0' width='150' height='180' rx='6' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><line x1='10' y1='30' x2='140' y2='30' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='50' x2='140' y2='50' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='70' x2='140' y2='70' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='90' x2='140' y2='90' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='110' x2='140' y2='110' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='130' x2='140' y2='130' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='150' x2='140' y2='150' stroke='#9D174D' stroke-width='1' opacity='0.5'/><line x1='10' y1='170' x2='140' y2='170' stroke='#9D174D' stroke-width='1' opacity='0.5'/><text x='75' y='-10' text-anchor='middle' font-weight='bold' fill='#9D174D'>Thick: 47 pages</text><text x='75' y='205' text-anchor='middle' font-size='10' fill='#9D174D' font-style='italic'>blocks 0 launches</text></g><g transform='translate(370 50)'><rect x='0' y='0' width='150' height='180' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='75' y='25' text-anchor='middle' font-weight='bold' fill='#065F46'>AI Release Gate</text><text x='15' y='55' fill='#065F46'>1. Eval threshold</text><text x='15' y='80' fill='#065F46'>2. Red-team report</text><text x='15' y='105' fill='#065F46'>3. Named owner</text><text x='15' y='130' fill='#065F46'>4. Logging spec</text><text x='15' y='155' fill='#065F46'>5. Kill switch</text><text x='75' y='-10' text-anchor='middle' font-weight='bold' fill='#065F46'>Thin: 1 page</text><text x='75' y='205' text-anchor='middle' font-size='10' fill='#065F46' font-style='italic'>blocks every bad launch</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation moment — 'we need AI ethics' becomes a thin governance page",
+      "steps": [
+        { "label": "Step 1 — The English question", "body": "Board director: 'We need an AI ethics policy.' True. But 'AI ethics policy' decays into 47 pages and zero blocked launches without translation." },
+        { "label": "Step 2 — Pick what the policy actually blocks", "body": "Translate to: 'What concrete things should never reach a user?' Answer: model that fails > X% on the eval set, no red-team report, no named owner, no kill switch, no per-inference logging. Five things." },
+        { "label": "Step 3 — Pick the eval set", "body": "Name it: 'fintech-eval-v3, 1,200 prompts, last red-teamed 18 March 2026.' If the eval set does not exist, that is the first thing to build, not the policy doc." },
+        { "label": "Step 4 — Pick the override", "body": "One named human can override the threshold (e.g. CTO). The override produces a written log entry, automatically. No committee, no slide deck. Override is rare; record-keeping is mandatory." },
+        { "label": "Step 5 — Sign the page", "body": "CTO signs. CISO signs. Date stamped. Lives in version control. The 47-page policy doc, if it ever existed, is now an appendix that no one reads, and that is fine." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "An 'AI ethics policy doc' that runs to 47 pages and has been approved by Legal. What is its leadership-grade weakness?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "It does not specify what concretely blocks a release; therefore in practice nothing is blocked.", "correct": true, "explain": "Correct. A policy that does not name the concrete artefact (eval set, threshold, owner, kill switch) cannot be enforced; it only generates audit trails of compliance theatre." },
+        { "id": "b", "label": "It is too long for engineers to read.", "correct": false, "explain": "Symptom, not cause. Engineers will read 47 pages once if it changes their behaviour; they will skip 4 pages forever if it does not." },
+        { "id": "c", "label": "Legal approval is not the same as engineering approval.", "correct": false, "explain": "True but tangential. The deeper problem is the absence of testable gates regardless of who signed." },
+        { "id": "d", "label": "It will need to be updated quarterly.", "correct": false, "explain": "Operational concern, not the structural one. A 1-page thin policy needs updating too, and that is fine." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Compliance vs Karavarat — Indian governance ka real test",
+          "md": "Bhai, ek RBI inspection mein ek bank ne 480 page ka AI policy doc dikhaya. Inspector ne pucha — \"is policy ne kabhi kuch block kiya hai?\" Bank ne kaha — \"haan, hum bahut serious hain.\" Inspector ne pucha — \"specific example?\" Bank ka silence. Inspector ne report mein likha — *\"governance documentation extensive but functionally inert.\"*\n\nAgli company ne 1 page dikhaya — \"yeh hamari eval threshold hai, yeh kill switch hai, yeh override karne wala banda hai.\" Inspector khush. Audit pass.\n\n**Inspector log nahi padhte. Inspector activity dekhte hain.** Tera 47-page policy nahi, tera last *block* matter karta hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "What a regulator actually checks",
+          "md": "A regulator does not measure your policy by its weight; they measure it by its last enforced action. 'Show me the most recent release this policy blocked.' If the answer is 'we have not had to', the policy is inert. Regulators have stopped finding 480 pages reassuring."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 'where does the why live?' question"
+    },
+    {
+      "type": "markdown",
+      "md": "When you walk into a struggling AI program, ask one question:\n\n> *\"Who, outside this AI team, can articulate the user problem this team is solving in one sentence, without me prompting?\"*\n\nIf the answer is 'no one' — the program is rudderless. The 'why' lives only in the AI team's slide deck, and slide decks are not strategy. This is the failure mode of demo-only teams.\n\nIf the answer is 'three product managers and one customer success lead can each say it, in roughly the same words' — the program has roots. The 'why' lives in the company, not in the AI team. The team can be replaced; the 'why' will pull in a new team.\n\nThe diagnostic is brutal because it is hard to fake. You cannot prep three people for the question without rehearsing them, and rehearsal is visible. A crisp number from a 2026 Pune SaaS rebuild: of the 8 AI initiatives that survived their second year, 7 had three or more non-AI-team employees who could articulate the user problem. Of the 14 that did not, 13 could not produce a single such sentence."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two diagrams. Left: an AI team with all 'why' arrows pointing inward. Right: an AI team where 'why' arrows come from PM, CS, support, and a customer.",
+      "caption": "On the left, the 'why' is trapped in the AI team. On the right, it has roots across functions. Only one of these survives a leadership change.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(40 60)'><rect x='40' y='80' width='160' height='80' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='120' y='115' text-anchor='middle' font-weight='bold' fill='#7C2D12'>AI team</text><text x='120' y='135' text-anchor='middle' font-size='10' fill='#7C2D12'>holds the 'why' alone</text><circle cx='40' cy='40' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='40' y='44' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='200' cy='40' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='200' y='44' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='40' cy='200' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='40' y='204' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='200' cy='200' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='200' y='204' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><text x='120' y='240' text-anchor='middle' font-style='italic' fill='#7F1D1D'>No external articulator. Rudderless.</text></g><g transform='translate(320 60)'><rect x='40' y='80' width='160' height='80' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='115' text-anchor='middle' font-weight='bold' fill='#065F46'>AI team</text><text x='120' y='135' text-anchor='middle' font-size='10' fill='#065F46'>builds; 'why' lives outside</text><g><circle cx='40' cy='40' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='40' y='44' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>PM</text></g><g><circle cx='200' cy='40' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='200' y='44' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>CS</text></g><g><circle cx='40' cy='200' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='40' y='204' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>Sup</text></g><g><circle cx='200' cy='200' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='200' y='204' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>User</text></g><line x1='52' y1='52' x2='90' y2='90' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='188' y1='52' x2='150' y2='90' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='52' y1='185' x2='90' y2='150' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='188' y1='185' x2='150' y2='150' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><text x='120' y='240' text-anchor='middle' font-style='italic' fill='#065F46'>Four articulators. Has roots.</text></g></g><defs><marker id='a3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#047857'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Board-Member Bharat",
+        "role": "Independent director, has personally diagnosed two struggling AI programs by talking to non-AI staff for 20 minutes"
+      },
+      "intro": [
+        "Aap aaye. Aaj scenarios hain — aapko team topology decide karni hai: **AI cell**, **AI factory**, ya **none yet** (matlab abhi structure ki zaroorat hi nahi).",
+        "Yaad rakhiye — wrong structure ka cost ek saal hota hai. Centralise too early, queue. Decentralise too late, duplication. Sahi answer 'depends' ho sakta hai, lekin **kis pe depend karta hai** — woh aapko bolna hai.",
+        "Chaliye shuru karte hain."
+      ],
+      "buckets": [
+        { "id": "cell", "label": "AI cell", "tone": "safe" },
+        { "id": "factory", "label": "AI factory", "tone": "neutral" },
+        { "id": "none", "label": "No structure yet", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "12-person early-stage startup, one product, 1 CEO + 1 CTO + 8 engs + 2 designers. Wants to add AI co-pilot to product. Currently: nothing.", "correctBucketId": "none", "explain": "No structure yet. At 12 people, naming an 'AI cell' is over-engineering. Two engs experiment inside the existing product team and ship. Structure becomes meaningful around 30-50 people, not 12." },
+        { "id": "s2", "situation": "200-engineer Series-C SaaS, 6 product lines, 2 of them starting to play with LLM features independently. No shared eval, no shared gateway, no governance. Each team has rolled its own.", "correctBucketId": "factory", "explain": "Factory time. Two product lines duplicating work and a third about to start is the canonical 'graduate to factory' signal. Build a thin platform: gateway, eval harness, kill switch. Don't build a council." },
+        { "id": "s3", "situation": "60-engineer Series-B fintech with one main product. Wants to add AI to one specific user surface (claims). No prior AI work; no shared infra.", "correctBucketId": "cell", "explain": "Cell. Embed 2 ML engineers and a PM inside the existing claims team. End-to-end ownership. Don't build factory infrastructure for a single bet; you would be supplying capacity that has no demand." },
+        { "id": "s4", "situation": "1,200-engineer enterprise insurance, 4 product lines, regulatory load is heavy (IRDAI), 3 product lines already have AI features in production with separate eval pipelines and no shared logging.", "correctBucketId": "factory", "explain": "Factory, urgently. With this regulatory exposure and three concurrent eval pipelines, an audit will surface inconsistencies you cannot defend. Build a thin factory in 90 days; do not wait for the next IRDAI review to force the issue." },
+        { "id": "s5", "situation": "85-engineer D2C company. CEO wants 'an AI strategy.' No specific user problem named; no team has yet asked for AI tooling.", "correctBucketId": "none", "explain": "No structure yet. The CEO has not done the strategy work; no team is asking for the structure. Building a cell or factory here would be solving for the deck, not for any actual user. Push back: ask which curve shifted, which problem you are attacking." },
+        { "id": "s6", "situation": "300-engineer health-tech, 4 product lines, 2 already shipped LLM features, 1 in active build. Eval is per-team but partially shared via informal Slack channels. Compliance officer is asking for centralised audit trail.", "correctBucketId": "factory", "explain": "Factory. Compliance officer asking for audit trail is the trigger. Health-tech regulatory surface plus three concurrent product lines with informal coordination is exactly where factory pays back fastest." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: centralise too early or decentralise too late",
+      "md": "Both directions kill programs. Centralising before three concurrent product teams need the same capability turns the central team into a queue, and product teams stop bringing ideas. Decentralising past four concurrent product teams produces duplicated eval pipelines, inconsistent kill switches, and an audit that takes 14 weeks to reconstruct.\n\nThe trap exists because the *right* timing is hard to see from the inside. The diagnostic — 'how many concurrent product teams are building AI features today?' — is the cheapest way to know. **Three is the threshold.** Below three, run cells. At three, start the factory. Above four, the factory had better already exist."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're scoping a new AI factory. Order the things you build, in priority order.",
+      "items": [
+        { "id": "1", "label": "The shared eval harness with versioned test sets.", "detail": "Without an eval harness, every team cargo-cults their own. The harness is the cheapest, highest-leverage factory artefact." },
+        { "id": "2", "label": "The LLM gateway with per-team rate limits, logging, and cost monitoring.", "detail": "Logging on every inference is non-negotiable. You cannot diagnose what you do not log." },
+        { "id": "3", "label": "The thin governance page (eval threshold, owner, kill switch, override rule).", "detail": "Single page. Signed by CTO. In version control. Block release on the page, not on a council." },
+        { "id": "4", "label": "The kill switch for any AI feature, with a named on-call rota.", "detail": "Maximum time-to-disable: 15 minutes. Fallback path: defined in writing for each feature." },
+        { "id": "5", "label": "The shared red-team prompt library.", "detail": "Adversarial prompts are too expensive to redo per team. Centralise once; let teams add team-specific extensions." },
+        { "id": "6", "label": "The internal documentation site listing all AI features, owners, eval results, and kill switches.", "detail": "Discoverability. If a regulator asks 'what AI is in production today?' the answer should be one URL, not three weeks of meetings." }
+      ],
+      "hint": "Eval first; it makes everything else honest. Documentation site is necessary but should ride on top of the others."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Walk through your company's current AI footprint. Count concurrent product teams that are building AI features today. Below three: confirm you should be running cells (or nothing). At three: scope a 90-day plan to stand up a thin factory. Above four with no factory: name one thing that an audit would surface as inconsistent across teams. Write your one-line diagnosis.",
+      "expected": "Strong example:\n\n'Currently 4 product teams are shipping LLM features with no shared eval harness; an audit would surface 4 different prompt-handling approaches and 0 consistent failure-rate measurements. Verdict: factory is overdue; first artefact to build is shared eval, signed off in 60 days, owner = staff ML engineer Anika.'\n\nWeak pattern: 'We have AI happening across the company.' (Vague; cannot drive a decision. The point of the exercise is to count and name.)"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of the following are reliable signs your AI team is demo-only, not user-facing? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "No one outside the AI team can articulate, in one sentence, the user problem the team is solving.", "correct": true, "explain": "Yes. The 'where does the why live' diagnostic. If the why lives only in the AI team's deck, you have a demo team." },
+        { "id": "b", "label": "The AI team owns the LLM gateway and eval harness.", "correct": false, "explain": "Healthy factory pattern. Owning shared capability is what factories do; not a sign of a demo team." },
+        { "id": "c", "label": "The team's last 6 months produced 14 demos and 0 features in production.", "correct": true, "explain": "Yes. Demo-to-ship ratio of zero is the unambiguous signature. Sometimes it's because the demos were not connected to a kill criterion; sometimes because no PM owned the surface; the symptom is the same." },
+        { "id": "d", "label": "The team holds a weekly demo session for the rest of the company.", "correct": false, "explain": "Demos *as a ritual* are fine; it's the demo-to-ship ratio that matters. Weekly demos with monthly ships is a healthy cadence." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Joint family vs apartment — same logic",
+          "md": "Joint family mein har bhabhi apna kitchen chalati hai? Nahi. Ek kitchen, ek menu, ek sasur jo budget approve karta hai. Aur har bhabhi apne dish ke liye request daalti hai. Wahi factory hai.\n\nApartment mein har family ka apna kitchen hai. Kyun? Kyunki har family alag hai, alag dietary needs, alag time. Wahi cell hai.\n\n**Joint family chalti hai jab volume zyada hai aur consistency chahiye.** Apartment chalta hai jab har family ka context unique hai. Tera company kaunsa hai? Ye decide kar le, phir structure pick kar."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Joint family vs apartment block",
+          "md": "A joint family runs one kitchen because the volume is high and consistency matters. An apartment block has one kitchen per family because each context is unique. Your AI org is one of these. Pick which, then build for it."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "AI cell and AI factory are the only two clean structures; everything in between is debt.",
+        "Start as a cell; graduate to a factory when at least three concurrent product teams need the same capability.",
+        "Thin governance is a single page that blocks releases; thick policy is 47 pages that block nothing.",
+        "Where the 'why' lives tells you whether the program will survive a leadership change. Three external articulators, minimum.",
+        "Centralise too early and the council becomes a queue; decentralise too late and the audit becomes a scavenger hunt."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Walk to the desk of one product manager, customer success lead, or support manager outside your AI team. Ask them, in one sentence, what user problem your AI work is solving. Listen carefully. If they pause for more than a few seconds, your 'why' has not taken root; that is your first job before any new bet."
+    }
+  ]
+}

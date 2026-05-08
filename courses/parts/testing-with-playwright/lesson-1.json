@@ -1,0 +1,222 @@
+{
+  "slug": "why-tests-survive",
+  "title": "Why Tests Are Worth It (Even When They Slow You Down)",
+  "subtitle": "Tests are documentation for future-you, written in a language the runtime can verify",
+  "estimatedMinutes": 13,
+  "skills": ["testing-mental-model"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/testing-with-playwright/why-tests-survive.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the test you wish you had written" },
+        { "startSec": 80, "label": "Mental model: tests as documentation for future-you" },
+        { "startSec": 220, "label": "Move 1 — The regression bargain" },
+        { "startSec": 410, "label": "Move 2 — The coverage bait" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/testing-with-playwright/why-tests-survive.html",
+      "notesByline": "Notes by Sneha, SDET batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Every engineer has a test they wish they had written. It is usually the one they didn't, the night before the bug shipped, in the code path they were sure couldn't break. Tests feel like overhead until exactly the moment they are the only thing standing between you and a 3am page from on-call.\n\nThis lesson is not a sermon. It is a defence: a clear-eyed argument for why you slow down now to go faster later, and why most teams who say *we don't have time to test* are confusing two completely different costs."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 260'><rect width='600' height='260' fill='#FFF7ED'/><g font-family='ui-sans-serif, system-ui' font-size='14' fill='#1F2937'><rect x='40' y='60' width='160' height='140' rx='12' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='120' y='100' text-anchor='middle' font-weight='700'>You, today</text><text x='120' y='130' text-anchor='middle'>writes a feature</text><text x='120' y='160' text-anchor='middle' fill='#92400E'>knows everything</text><rect x='400' y='60' width='160' height='140' rx='12' fill='#ECFDF5' stroke='#10B981' stroke-width='2'/><text x='480' y='100' text-anchor='middle' font-weight='700'>You, in 6 months</text><text x='480' y='130' text-anchor='middle'>refactors the feature</text><text x='480' y='160' text-anchor='middle' fill='#065F46'>knows nothing</text><path d='M 200 130 L 390 130' stroke='#8B5CF6' stroke-width='2.5' stroke-dasharray='6 4' fill='none' marker-end='url(#arr)'/><defs><marker id='arr' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M 0 0 L 10 5 L 0 10 z' fill='#8B5CF6'/></marker></defs><text x='295' y='120' text-anchor='middle' fill='#5B21B6' font-style='italic'>tests bridge the gap</text></g></svg>",
+      "alt": "Two boxes labelled 'You, today' and 'You, in 6 months', with a dashed arrow between them labelled 'tests bridge the gap'",
+      "caption": "Tests are not for the current you. They are for the version of you who has forgotten everything."
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: tests are documentation for future-you",
+      "md": "Stop thinking of tests as a *safety net*. That metaphor makes them sound like insurance: boring, optional, paid for in case of disaster.\n\nThink of tests as **executable documentation written in a language the runtime can verify**. Comments lie. README files go stale. The test suite is the only document that screams when reality stops matching it. The audience is not your QA team or your CI. The audience is **you, six months from now**, who has forgotten why this code exists and is one bad refactor away from breaking checkout for 12,000 paying customers."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/testing-with-playwright/anim/why-tests-survive-bridge.html",
+      "height": 420,
+      "caption": "Watch a feature decay across 6 months, with and without a test suite holding it up.",
+      "fallbackImage": "/courses/testing-with-playwright/anim/why-tests-survive-bridge.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "Intern story #1",
+          "tone": "warn",
+          "md": "Scene yeh hai: intern ko bola gaya \"yaar, jaldi se ek button banaa do.\" Intern ne button banaa diya. Test? \"Bhai abhi time nahi hai, baad mein likhenge.\" Three months later, button bhi nahi raha, intern bhi nahi raha, lekin button ka bug *raha*. PM aaya, bola \"yeh button kabse toota hai?\" Kisiko nahi pata. Test hota toh git blame mein answer milta. Ab toh sirf prayer hai.",
+          "attribution": "— heard at every Bengaluru standup, ever"
+        },
+        "en": {
+          "title": "Intern story #1",
+          "tone": "warn",
+          "md": "Classic scene: intern is told \"build this button quickly.\" Intern builds the button. Tests? \"No time, will add later.\" Three months on: the button is gone, the intern is gone, but the bug from the button remains. PM walks in: \"how long has this been broken?\" Nobody knows. A test would have left a trail in git blame. Now you have prayer."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The regression bargain"
+    },
+    {
+      "type": "markdown",
+      "md": "Here is the bargain a test makes with you: *I will cost you 20 minutes today, and in exchange I will catch one specific bug forever, automatically, without you having to remember it exists.*\n\nThat's it. That's the entire deal. Most engineers reject the bargain because they overestimate the 20 minutes (it's usually 5) and underestimate *forever* (it's usually a year of nightly CI runs, which is roughly 1,825 free QA passes). The math only looks bad if you assume the bug will never come back. Bugs always come back. Bugs are the cockroaches of the software world; for every one you see, twelve are hiding behind the conditional you didn't read.\n\n**The named move:** before you write a fix, write the test that *would have caught the bug if it had existed yesterday*. The fix follows for free."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 220'><rect width='600' height='220' fill='#EFF6FF'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='34' text-anchor='middle' font-weight='700' font-size='15'>The regression bargain</text><rect x='40' y='70' width='160' height='90' rx='10' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='120' y='100' text-anchor='middle' font-weight='600'>Cost: 20 min</text><text x='120' y='122' text-anchor='middle'>writing the test</text><text x='120' y='144' text-anchor='middle' fill='#9F1239'>(usually 5)</text><rect x='400' y='70' width='160' height='90' rx='10' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='480' y='100' text-anchor='middle' font-weight='600'>Benefit: 1,825</text><text x='480' y='122' text-anchor='middle'>free CI passes</text><text x='480' y='144' text-anchor='middle' fill='#065F46'>(per year)</text><text x='300' y='115' text-anchor='middle' font-weight='700' fill='#0EA5E9' font-size='28'>vs</text></g></svg>",
+      "alt": "Comparison: cost of writing a test (20 minutes) vs benefit (1825 free CI passes per year)",
+      "caption": "The math only looks bad if you forget how many times CI runs in a year."
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "The regression bargain in practice",
+      "steps": [
+        { "label": "1. Bug arrives in prod", "body": "On-call gets paged. Customer screenshot. Stack trace points to a `null` in checkout." },
+        { "label": "2. Reproduce locally", "body": "Spend 15 min finding the input that triggers it. This is the expensive part. Don't waste it." },
+        { "label": "3. Write the failing test FIRST", "body": "Before the fix. Same input. Watch it go red. This proves you actually understood the bug." , "code": "test('checkout handles null shipping address', async ({ page }) => {\n  await page.goto('/cart');\n  await page.getByRole('button', { name: 'Checkout' }).click();\n  await expect(page.getByText('Pick an address')).toBeVisible();\n});" },
+        { "label": "4. Apply the fix", "body": "Now the fix is obvious because the test pinned down the exact behaviour you want." },
+        { "label": "5. Watch the test go green", "body": "And it stays green forever. Future-you, refactoring this in 2027, gets a red CI before the bug ever ships again." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your team finds a bug in production. What's the *first* thing you write?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "The fix, then a test once the fix is verified", "correct": false, "explain": "Tempting and common, but you skip the proof that you actually understood the bug. Half the time the fix solves a *different* version of the problem and the original bug recurs in a month." },
+        { "id": "b", "label": "A failing test that reproduces the bug, then the fix", "correct": true, "explain": "Yes. The failing test is your evidence that you understood the bug. The fix is then mechanical and the regression is locked out forever." },
+        { "id": "c", "label": "A Slack message asking who owns this code", "correct": false, "explain": "Sometimes necessary, but not the *first* engineering action. Triage and reproduction come first." },
+        { "id": "d", "label": "A retry with `--retries=3` to see if it goes away", "correct": false, "explain": "This is how 14% flake rates are born. Retries hide bugs; they don't fix them." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "QA-Aunty Anita's diagnosis",
+          "tone": "info",
+          "md": "QA bola: \"flaky test hai, ignore karo.\" Dev bola: \"mere laptop pe pass hota hai.\" Dono right the. Dono wrong bhi the. Test flaky tha *because* dev ke laptop pe network 200ms tha aur CI pe 800ms. Real bug yeh tha ki code 500ms ke baad timeout maar raha tha. Aunty Anita ne dono ko chai pilayi aur bola \"deterministic clock laga lo, drama band karo.\" Done.",
+          "attribution": "— QA-Aunty Anita, after her third chai"
+        },
+        "en": {
+          "title": "QA-Aunty Anita's diagnosis",
+          "tone": "info",
+          "md": "QA said: \"it's a flaky test, ignore it.\" Dev said: \"it passes on my laptop.\" Both were right. Both were wrong. The test was flaky *because* the dev's laptop had 200ms network latency and CI had 800ms. The real bug was a 500ms timeout in code. Anita made them tea and said \"install a deterministic clock, stop the drama.\" Fixed."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The coverage bait"
+    },
+    {
+      "type": "markdown",
+      "md": "Now the trap. Most teams who *do* invest in tests fall for **the coverage bait**: chasing a number — 80%, 90%, the magical 100% — instead of chasing the property the test should prove. You end up with 1,400 tests, 92% line coverage, and zero confidence the checkout flow works on mobile Safari.\n\nCoverage is a *necessary but not sufficient* signal. A test that asserts `expect(result).toBeDefined()` adds coverage and proves nothing. A test that asserts `the user can complete checkout with a 30-character UPI ID containing dots` proves something specific and valuable. The coverage tool can't tell the difference. Your code review must.\n\n**The named move:** for every test, ask *what specific bug would this catch if it ever shipped?* If you can't answer in one sentence, the test is theatre."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#FAF5FF'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='32' text-anchor='middle' font-weight='700' font-size='15'>The coverage bait</text><circle cx='160' cy='130' r='70' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='160' y='115' text-anchor='middle' font-weight='700'>92%</text><text x='160' y='135' text-anchor='middle' font-size='11'>coverage</text><text x='160' y='160' text-anchor='middle' font-size='11' fill='#92400E'>looks great</text><circle cx='440' cy='130' r='70' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='440' y='115' text-anchor='middle' font-weight='700'>0</text><text x='440' y='135' text-anchor='middle' font-size='11'>real bugs caught</text><text x='440' y='160' text-anchor='middle' font-size='11' fill='#9F1239'>still ships broken</text><path d='M 230 130 L 370 130' stroke='#6B7280' stroke-width='2' stroke-dasharray='4 3' fill='none'/></g></svg>",
+      "alt": "Two circles: 92% coverage on the left, 0 real bugs caught on the right, connected by a dashed line",
+      "caption": "Coverage tells you what code ran. It does not tell you what the code does."
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Test-Sensei Tarun",
+        "role": "Principal SDET, ex-Flipkart, ex-Razorpay, currently arguing with someone on r/QualityAssurance"
+      },
+      "intro": [
+        "Tarun has reviewed 2,400 PRs in his career and seen every flavour of test theatre.",
+        "He'll show you 5 tests. Your job: classify each as 'real signal' (catches a bug worth catching), 'theatre' (looks like a test, isn't one), or 'just delete it' (actively harmful)."
+      ],
+      "buckets": [
+        { "id": "signal", "label": "Real signal", "tone": "safe" },
+        { "id": "theatre", "label": "Theatre", "tone": "neutral" },
+        { "id": "delete", "label": "Just delete it", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "`expect(user).toBeDefined()` after calling `getUser()` that always returns a user object even on error.", "correctBucketId": "delete", "explain": "This passes whether the function works or not. It's worse than no test because it gives false confidence." },
+        { "id": "s2", "situation": "`expect(page.getByRole('button', { name: 'Pay ₹1,200' })).toBeVisible()` after navigating to the checkout page with a ₹1,200 cart.", "correctBucketId": "signal", "explain": "Specific, role-based, asserts a behaviour a customer would notice. This is what 'real signal' looks like." },
+        { "id": "s3", "situation": "A snapshot test of the entire homepage HTML, regenerated whenever it fails.", "correctBucketId": "theatre", "explain": "Snapshots that get regenerated on every failure are just a slow way to ship UI changes. They prove nothing." },
+        { "id": "s4", "situation": "`expect(checkoutTotal('IN', ['UPI'])).toBe(1234)` for a function with 14 conditional branches across currency, payment method, and tax.", "correctBucketId": "signal", "explain": "A specific input → specific expected output, on a function with real branching logic. This catches off-by-one and tax-rule regressions." },
+        { "id": "s5", "situation": "`expect(true).toBe(true)` left at the top of a test file 'as a placeholder' for 18 months.", "correctBucketId": "delete", "explain": "Yes, this is a real PR comment from 2024. Just delete it. It pads the count and slows CI." },
+        { "id": "s6", "situation": "An e2e test that logs in, adds 3 items to cart, and asserts the cart count is `3`.", "correctBucketId": "theatre", "explain": "It looks like an e2e test, but the only thing it proves is that addition works. The actual checkout flow, payment, and confirmation are untested. Push the assertion further." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: confusing coverage with confidence",
+      "md": "A 92% coverage badge on your README does not mean your product works. It means 92% of your lines were *executed* by some test, somewhere, at some point. Whether those tests asserted anything meaningful is a different question, and the badge will not tell you. Teams that optimise for coverage end up with brittle, low-value tests; teams that optimise for *catching the bugs that would actually ship* end up with fewer tests that pull more weight."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these from highest-value test to lowest-value (drag to re-order, top = highest value):",
+      "items": [
+        { "id": "i1", "label": "Asserts the user can complete checkout end-to-end with a real payment method", "detail": "Catches the bugs that lose revenue. Slow but priceless." },
+        { "id": "i2", "label": "Unit test for a tax calculation with 6 representative input combinations", "detail": "Fast, specific, catches the bugs that come back every quarter." },
+        { "id": "i3", "label": "Integration test that verifies the API returns the right shape for 3 product types", "detail": "Catches contract drift between frontend and backend." },
+        { "id": "i4", "label": "Snapshot test of a button component", "detail": "Updates whenever the button changes. Catches almost nothing." },
+        { "id": "i5", "label": "`expect(result).toBeTruthy()` on a function that always returns an object", "detail": "Pure theatre. Delete." }
+      ],
+      "hint": "Value comes from specificity and the cost of the bug it catches, not from how many lines it covers."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Take this real test from a Bengaluru SaaS and rewrite it so it actually proves something. The original asserts the page loaded; you want it to assert the user can do the thing the page exists for.",
+      "lang": "typescript",
+      "starter": "import { test, expect } from '@playwright/test';\n\ntest('dashboard loads', async ({ page }) => {\n  await page.goto('/dashboard');\n  await expect(page).toHaveTitle(/Dashboard/);\n});",
+      "expected": "import { test, expect } from '@playwright/test';\n\ntest('dashboard shows the latest invoice for the logged-in user', async ({ page }) => {\n  await page.goto('/dashboard');\n  // Wait for the real signal: the most recent invoice card.\n  const invoiceCard = page.getByRole('region', { name: 'Latest invoice' });\n  await expect(invoiceCard).toBeVisible();\n  await expect(invoiceCard.getByText(/INV-\\d{6}/)).toBeVisible();\n  await expect(invoiceCard.getByRole('button', { name: 'Download PDF' })).toBeEnabled();\n});"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these is a sign your test suite has fallen into the coverage bait? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Coverage is 91% but a critical bug still shipped to production last week", "correct": true, "explain": "Classic symptom. Coverage was high; signal was low." },
+        { "id": "b", "label": "Most tests assert `toBeDefined()` or `toBeTruthy()` rather than specific behaviours", "correct": true, "explain": "These assertions pass for almost any return value. They're padding, not proof." },
+        { "id": "c", "label": "Your CI run takes 28 minutes because there are 1,400 tests", "correct": false, "explain": "Slow CI is a separate problem. The number of tests doesn't tell you their quality on its own." },
+        { "id": "d", "label": "The team panics whenever coverage drops by 0.5%", "correct": true, "explain": "When the metric becomes the goal, you've lost the plot. Goodhart's Law in test form." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "The 92% badge",
+          "tone": "tip",
+          "md": "Ek startup ne README mein '92% test coverage' ka shiny badge laga rakha tha. Investor pitch deck mein bhi tha. Three months baad, prod down. RCA mein pata chala: woh 92% mein checkout flow ka *zero* coverage tha. Bas utility functions tested the. Aunty bolti hai: \"badge dikhane ke liye nahi, bug pakadne ke liye test likho.\""
+        },
+        "en": {
+          "title": "The 92% badge",
+          "tone": "tip",
+          "md": "A startup had a shiny '92% test coverage' badge on their README. It was in the investor pitch deck. Three months later, prod went down. RCA revealed: that 92% had *zero* coverage of the checkout flow. Only utility functions were tested. Lesson: write tests to catch bugs, not to earn badges."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Tests are documentation for future-you, written in a language the runtime can verify.",
+        "The regression bargain: pay 5-20 minutes today for ~1,800 free CI passes per year. The math only looks bad if you assume the bug will never come back.",
+        "When fixing a bug, write the failing test *first*. The fix becomes obvious and the bug is locked out forever.",
+        "The coverage bait is the trap of optimising for a 92% number while shipping zero real signal. Coverage is necessary, not sufficient.",
+        "For every test, ask: *what specific bug would this catch?* If you can't answer in one sentence, it's theatre."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Think about the most recent bug that shipped to production in your codebase. Could a test have caught it? Why didn't one exist? Be honest about whether the answer is 'we didn't have time' or 'we didn't have the discipline'."
+    }
+  ]
+}

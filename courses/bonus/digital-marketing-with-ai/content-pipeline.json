@@ -1,0 +1,50 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 100 articles, ranking gone in 21 days",
+    "source": "Anonymous SEO consultant at a Mumbai content agency",
+    "date": "October 2025",
+    "story": "Client asked us to publish 100 articles in 7 days. Brief: 'use AI to scale.' We did. 100 AI-drafted, lightly-edited blog posts went live across two weeks.\n\nWeek 3 of week-3: Google's spam-content update hit. **Domain authority dropped from 47 to 11.** 73 of the 100 articles got de-indexed. Organic traffic fell 84%. Client lost ~₹30 lakh in pipeline that quarter.\n\nThe 27 surviving articles? They were the ones we had a writer rewrite top-to-bottom — i.e., the ones where AI was a starter draft, not the shipped artifact. The agency kept the client by spending Q4 doing content cleanup: deleting 73, rebuilding 47 with full human craft. We charged the client extra. Could have charged less and shipped 12 great articles to begin with.",
+    "takeaway": "AI-as-shipped-artifact loses to AI-as-draft + human craft. Volume is a vanity metric; rankings live or die on craft."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: 100 articles or 12?",
+    "setup": "Sneha's content lead pitches: '100 AI-drafted articles per month for ₹47K — agency-quality, SEO-tuned.' Founder loves the numbers. Sneha's been burned before. She has to call it.",
+    "coach": { "name": "VP-Marketing Vrinda", "role": "Scaled 3 D2C brands from ₹5cr to ₹100cr+" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Founder pitches the 100/month plan. What's Sneha's first move?",
+        "options": [
+          { "id": "a", "label": "Counter-propose: 12 great articles per month (AI-drafted, human-crafted to ship), at ₹38K. Same budget, 1/8 volume, far higher craft.", "correct": true, "explain": "Right. Volume is the vanity; craft is the asset. Re-frame the budget around outcome, not output count.", "points": 3 },
+          { "id": "b", "label": "Approve the 100 plan; ship at scale.", "correct": false, "explain": "Same Mumbai agency story plays out. Ranking risk is unbounded.", "points": 0 },
+          { "id": "c", "label": "Reject content entirely.", "correct": false, "explain": "Overcorrection. Content with craft is still leverage; just not at 100/month volumes.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Founder asks: 'why won't the 100/month work? Other brands are doing it.'",
+        "options": [
+          { "id": "a", "label": "Show the Google spam-content update + 3 case studies of de-indexing. Pin to: 'volume is a leading indicator of penalty, not growth.'", "correct": true, "explain": "Evidence-backed framing. Founder updates priors.", "points": 3 },
+          { "id": "b", "label": "'Trust me, 100 is bad.'", "correct": false, "explain": "Founder doesn't update on assertion. Need evidence.", "points": 0 },
+          { "id": "c", "label": "'Other brands are wrong.'", "correct": false, "explain": "Doesn't help. Frame the risk in $ and rankings, not opinions.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "12-article plan approved. What's the pipeline?",
+        "options": [
+          { "id": "a", "label": "Brief (with brand voice anchor) → AI draft → human structure edit → human voice edit → SEO review → ship. 5 stages.", "correct": true, "explain": "Right. Each stage adds craft. The brand voice anchor is what AI cannot replicate without 3 sample posts.", "points": 3 },
+          { "id": "b", "label": "AI draft → ship.", "correct": false, "explain": "Same de-indexing risk; just 12 articles instead of 100.", "points": 0 },
+          { "id": "c", "label": "AI draft → quick proofread → ship.", "correct": false, "explain": "Single human gate insufficient. Three gates (structure, voice, SEO) is the discipline.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Sneha ships 12 great articles in month 1; ranking moves up; founder reframes 'AI for content scale' to 'AI for content craft'. Q2 budget renewed.",
+      "good": "12 articles shipped; rankings stable. One article got rejected mid-pipeline (off-brand). Worth the friction.",
+      "learn": "Re-read the de-indexing case. Volume without craft is a ranking risk, not an asset."
+    }
+  }
+}

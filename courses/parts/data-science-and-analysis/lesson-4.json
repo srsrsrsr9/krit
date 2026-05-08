@@ -1,0 +1,213 @@
+{
+  "lesson": {
+    "slug": "modeling-fundamentals",
+    "title": "Modeling Fundamentals (and When Not to)",
+    "subtitle": "Simplest model first; bigger model only if it pays for itself",
+    "estimatedMinutes": 13,
+    "skills": ["data-modeling"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/data-science-and-analysis/modeling-fundamentals.mp3",
+        "audioDurationSec": 705,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why most models do not pay for themselves" },
+          { "startSec": 80, "label": "Mental model: simplest model first" },
+          { "startSec": 220, "label": "Move 1: train/val/test split" },
+          { "startSec": 410, "label": "Move 2: the OK-line" },
+          { "startSec": 560, "label": "The trap: overfitting on the validation set" }
+        ],
+        "notesPdfUrl": "/notes/data-science-and-analysis/modeling-fundamentals.html",
+        "notesByline": "Notes by Aditi, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Most analyst projects do not need a model. They need a number, a clean comparison, and a memo. The temptation to reach for XGBoost is the analyst equivalent of buying a Mahindra Thar to commute 4 km in Bengaluru: technically capable, mostly overkill, expensive to maintain.\n\nWhen modeling is genuinely the right tool — predicting churn for 50K accounts, ranking which leads to call first, scoring credit risk — the discipline is the same: start with the dumbest baseline that runs, beat it with the simplest model that works, and stop the moment you cannot defend the next layer of complexity. This lesson is about that discipline, plus the one trap nobody warns you about until you've fallen in twice."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A staircase from baseline (always-predict-no, accuracy 87%) to logistic regression (accuracy 89%) to random forest (accuracy 89.5%) to XGBoost+tuning (accuracy 89.7%). The first two steps are tall; the rest are tiny",
+        "caption": "The diminishing-returns staircase. The first two steps pay for themselves. After that, you are paying maintenance for decimal points.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#ECFDF5'/><g><line x1='40' y1='220' x2='540' y2='220' stroke='#1F2937' stroke-width='1.5'/><line x1='40' y1='40' x2='40' y2='220' stroke='#1F2937' stroke-width='1.5'/></g><g><rect x='80' y='160' width='80' height='60' fill='#86EFAC' stroke='#065F46' stroke-width='2'/><text x='120' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-weight='bold'>87%</text><text x='120' y='240' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937'>baseline</text><text x='120' y='252' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#6B7280'>(always no)</text><rect x='180' y='100' width='80' height='120' fill='#34D399' stroke='#065F46' stroke-width='2'/><text x='220' y='90' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-weight='bold'>89%</text><text x='220' y='240' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937'>logistic reg.</text><text x='220' y='252' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#6B7280'>(2 hrs)</text><rect x='280' y='95' width='80' height='125' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='320' y='85' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-weight='bold'>89.5%</text><text x='320' y='240' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937'>random forest</text><text x='320' y='252' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#6B7280'>(2 days)</text><rect x='380' y='93' width='80' height='127' fill='#059669' stroke='#065F46' stroke-width='2'/><text x='420' y='83' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-weight='bold'>89.7%</text><text x='420' y='240' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937'>XGBoost+tune</text><text x='420' y='252' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#6B7280'>(2 weeks)</text></g><text x='285' y='30' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46' font-style='italic'>each step costs 10× more, gains 10× less</text></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: simplest model first",
+        "md": "Hold this picture. Modeling is a staircase, and each step costs roughly 10× more time and adds roughly 10× less accuracy than the step before it. The first two steps usually pay for themselves; the rest usually do not.\n\nThe staircase, in order:\n\n1. **Baseline**: predict the mean, the mode, or 'always say no'. Free, runs in one line, sets the floor.\n2. **Linear / logistic regression**: 2 hours, 1-3pp lift, fully explainable.\n3. **Tree ensemble (Random Forest, XGBoost on defaults)**: 2 days, often another 0.5-2pp.\n4. **Tuned ensemble or deep model**: 2 weeks, often another 0.1-0.5pp.\n\nMost business problems get solved on step 1 or 2. If you are reaching for step 4 in week 1, you are signalling effort, not solving the problem. The rule is: start at step 1, only move up when the next step's lift visibly clears its maintenance cost."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/data-science-and-analysis/anim/modeling-fundamentals-staircase.html",
+        "height": 420,
+        "caption": "Walk up the modeling staircase from baseline to deep model on a real Bengaluru SaaS churn dataset. Notice when accuracy stops moving."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "tip",
+            "title": "Mahindra Thar wala model",
+            "md": "Bhai, scene yeh hai. Naya analyst joining hua, week 2 mein hi PR raise kar raha hai *\"churn prediction with 4-layer transformer\"*. Manager ne pucha *\"baseline kya hai?\"*. Analyst: *\"baseline?\"*\n\nBhai, phele 'always predict no' chala. Accuracy 87%. Phir logistic regression. Accuracy 89%. **Bas. Stop.** Tu transformer banane gaya, 89.4% mila. 0.4pp ke liye 2 hafte aur GPU bill. Yeh Mahindra Thar le ke 4 km commute karne wala scene hai. Capable? Haan. Smart? Nahi.\n\nSenior analyst hamesha baseline pucchhta hai pehla question. Kyunki baseline pe 87% mile, toh bahut saare problems already solved hain — aur uske uppar harek pp ke liye 10x effort lagta hai."
+          },
+          "en": {
+            "tone": "tip",
+            "title": "The transformer for the 4 km commute",
+            "md": "A junior on the team built a 4-layer transformer for churn prediction in week 2. Manager asked 'what's the baseline?'. The answer was 'I haven't computed one'. Always-predict-no would have been 87%. Logistic regression got to 89% in two hours. The transformer added 0.4pp over two weeks and a GPU bill. The model was capable; the choice was not. Always start at the baseline."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The train / val / test split"
+      },
+      {
+        "type": "markdown",
+        "md": "Three datasets, three jobs:\n\n- **Train**: the data the model fits on. Big.\n- **Validation**: the data you check after each tweak. Medium. Used to choose hyperparameters and decide which model to keep.\n- **Test**: the data you touch *exactly once*, at the end, for the number you report. Small to medium, but sacred.\n\nThe rule that breaks more analyses than any other: **the test set is the audit**. If you peek at it during tuning, you have no test set. You have a second validation set wearing a t-shirt that says 'test'. The number you report becomes optimistic by 1-3pp because every tweak you made was implicitly choosing the model that does best on that specific data.\n\nThe discipline: hold test out, lock it in a literal separate file, do not run any metric on it until you are ready to write the final number into the memo. If you find yourself running 'just one more check' on the test set, you have already corrupted it; pretend it is gone and split a new one from fresh data."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A horizontal bar split into three sections: 70% labelled 'train (touch freely)', 15% labelled 'validation (check after tweaks)', 15% labelled 'test (touch ONCE, at the end)' with a padlock icon",
+        "caption": "Train, val, test. The test set has a padlock for a reason.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 200' role='img'><rect width='580' height='200' rx='14' fill='#FFF7ED'/><rect x='30' y='70' width='350' height='60' fill='#86EFAC' stroke='#065F46' stroke-width='2'/><text x='205' y='105' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#064E3B' font-weight='bold'>train (70%)</text><text x='205' y='150' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>touch freely</text><rect x='380' y='70' width='75' height='60' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='417' y='105' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#92400E' font-weight='bold'>val (15%)</text><text x='417' y='150' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>check after tweaks</text><rect x='455' y='70' width='95' height='60' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='502' y='105' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#7F1D1D' font-weight='bold'>test (15%)</text><text x='502' y='150' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D'>touch ONCE</text><g transform='translate(495 38)'><rect x='-3' y='5' width='14' height='10' fill='#7F1D1D'/><path d='M0 5 V0 a4 4 0 0 1 8 0 V5' fill='none' stroke='#7F1D1D' stroke-width='2'/></g><text x='305' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1F2937' font-style='italic'>peek at test = no test set; you have only validation now</text></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "The translation: 'will user X churn?' becomes a defensible model in 6 steps",
+        "steps": [
+          { "label": "Step 1 — Compute the baseline", "body": "Always-predict-no on a churn dataset where 13% churn → 87% accuracy. That is your floor. Anything you build must beat 87%, and beat it by enough to justify the maintenance cost." },
+          { "label": "Step 2 — Split: train (70%) / val (15%) / test (15%)", "body": "Split by user, not by row. Stratify on the outcome (so churn rate is similar in each split). Save test to a separate file you literally do not load." },
+          { "label": "Step 3 — Fit logistic regression on train, evaluate on val", "body": "Standard scaler + logistic regression on engineered features. Look at the val accuracy, AUC, and the top 10 coefficients. Most of the model's reasoning should be human-defensible." },
+          { "label": "Step 4 — Try one or two more model classes (RF, XGBoost on defaults)", "body": "Compare on val. If the lift over logistic regression is < 1pp, stop — the simpler model wins on operations cost." },
+          { "label": "Step 5 — Check for overfitting on the validation set", "body": "Run on a small held-out validation slice that you also haven't peeked at, or use cross-validation. If val accuracy mysteriously drops, you have been tuning on a leaderboard, not learning generalisation." },
+          { "label": "Step 6 — Run ONCE on test, report the number, do not tune further", "body": "Open the test file, evaluate, write the number in the memo. If the number is materially worse than val, report that gap honestly — it is the most useful piece of information about how the model will behave in production." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Your model gets 94% accuracy on the validation set after 17 rounds of hyperparameter tweaks. What is the most likely problem?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "You overfit on the validation set — every tweak peeked at val performance, so 94% is closer to training accuracy than to honest test accuracy", "correct": true, "explain": "Correct. The validation set has effectively become a second training set after 17 rounds of selection. Hold out a clean test set and your number will drop, often by 2-4pp." },
+          { "id": "b", "label": "The model is genuinely good", "correct": false, "explain": "Possible but unlikely after 17 rounds of selection. Treat suspiciously good val numbers like suspiciously cheap flights — there is usually a catch." },
+          { "id": "c", "label": "Accuracy is the wrong metric", "correct": false, "explain": "Could be true (especially with class imbalance), but the 17-tweak red flag points at validation overfitting first." },
+          { "id": "d", "label": "Sample size is too small", "correct": false, "explain": "Sample size affects variance, not the validation-overfitting bias. Different bug." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "warn",
+            "title": "Hyderabad SMB wala 92% model",
+            "md": "Hyderabad ka ek SMB SaaS team, churn model build kar rahe the. Val accuracy 92% pe pohchaya. Saare presentation ho gaye. CEO khush. Production deploy kiya. **Production accuracy 78%.**\n\nKya hua? Team ne 23 baar val pe tweaks chala ke 92% banaya. Test set tha hi nahi — ya tha to 'final check' ke liye 4 baar use kar liya. Production data fresh tha, validation sets ki tarah pre-selected nahi. \n\n**Yaar, val ko leaderboard mat banao. Test ko literally lock karo.** 23 tweaks ke baad val number is just train number with extra steps."
+          },
+          "en": {
+            "tone": "warn",
+            "title": "92% in val, 78% in prod",
+            "md": "A Hyderabad SMB SaaS team shipped a churn model that got 92% in validation and 78% in production. They had tuned on validation 23 times and used the test set as a 'final check' four times. Production data was fresh; their val and test data had been baked into the model class through repeated selection. The test set is the audit. Lose it once and you have no audit until next quarter."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The OK-line"
+      },
+      {
+        "type": "markdown",
+        "md": "Before you start modeling, define the **OK-line**: the level of performance below which the model is not worth shipping, and above which more accuracy is not worth chasing. The OK-line is set by business cost and by the cost of the next-best alternative (often: a rule of thumb, or doing nothing).\n\nWorked example: a Bengaluru SaaS wants to call accounts likely to churn. Their sales team can call 200 accounts a week. The base churn rate is 13%. A random list of 200 accounts catches 13% × 200 = 26 churners; a perfect model would catch all 200 actual churners. Their OK-line is whatever beats 'random' by enough to justify the data team's quarter. If their model surfaces a list where 70 of 200 are real churners (3.5× lift over random), that is OK and ship-able. If it is 35 of 200, the lift is real but probably not worth the maintenance.\n\nThe OK-line replaces the question 'how do I make this more accurate?' with the question 'have I crossed the line yet?'. The first question has no end. The second one ends in a memo."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A horizontal line labelled 'OK-line' at 60% accuracy, with three model dots: model A at 55% (below line, marked NO SHIP), model B at 64% (above line, marked SHIP), model C at 87% (above line, marked SHIP — but with arrow noting 'extra accuracy not worth more weeks of work')",
+        "caption": "The OK-line. Above is ship; below is do not ship; chasing accuracy past the line is procrastination dressed as rigour.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#EFF6FF'/><line x1='30' y1='130' x2='550' y2='130' stroke='#5B21B6' stroke-width='2.5' stroke-dasharray='6 4'/><text x='30' y='120' font-family='sans-serif' font-size='11' fill='#5B21B6' font-weight='bold'>OK-line</text><circle cx='150' cy='180' r='14' fill='#F87171' stroke='#7F1D1D' stroke-width='2'/><text x='150' y='184' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>A</text><text x='150' y='210' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>NO SHIP</text><text x='150' y='225' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#1F2937'>55%</text><circle cx='300' cy='100' r='14' fill='#34D399' stroke='#065F46' stroke-width='2'/><text x='300' y='104' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46' font-weight='bold'>B</text><text x='300' y='80' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>SHIP</text><text x='300' y='65' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#1F2937'>64%</text><circle cx='460' cy='50' r='14' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='460' y='54' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#FFFFFF' font-weight='bold'>C</text><text x='460' y='30' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>SHIP, but stop tuning</text><text x='460' y='15' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#1F2937'>87%</text><line x1='320' y1='100' x2='440' y2='55' stroke='#92400E' stroke-width='1.5' stroke-dasharray='3 3' marker-end='url(#aOK)'/><text x='370' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>chasing C is procrastination once B exists</text><defs><marker id='aOK' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#92400E'/></marker></defs></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Senior-DS Saanya",
+          "role": "Tech lead at a Bengaluru SaaS, 9 years of cleaning other people's data"
+        },
+        "intro": [
+          "Welcome to the modeling clinic. 🛠️",
+          "Six modeling decisions from your week. Tell me each is **good move** (start here), **second-best** (will work but you skipped a cheaper option), or **stop and step back** (you are solving the wrong problem)."
+        ],
+        "buckets": [
+          { "id": "good", "label": "Good move", "tone": "safe" },
+          { "id": "second", "label": "Second-best", "tone": "neutral" },
+          { "id": "stop", "label": "Stop and step back", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "Stakeholder asks for churn prediction. You compute the always-predict-no baseline as your first commit.", "correctBucketId": "good", "explain": "Always start at the baseline. Sets the floor and frames every later model's lift in honest terms." },
+          { "id": "s2", "situation": "Same stakeholder. You start with a 4-layer LSTM in week 1.", "correctBucketId": "stop", "explain": "Skipping logistic regression and tree ensembles. You will get an accurate-looking model you cannot defend, cannot maintain, and probably overfit the validation set on." },
+          { "id": "s3", "situation": "Your val accuracy is 89% after 4 small tweaks. Test accuracy when you finally check it: 88.6%. You report 88.6%.", "correctBucketId": "good", "explain": "Honest. Small val/test gap (4 tweaks is a normal amount). The discipline of running test once and reporting is the gold standard." },
+          { "id": "s4", "situation": "You retrain a logistic regression on the full dataset (train+val+test) before deploying because 'more data is always better'.", "correctBucketId": "second", "explain": "Acceptable practice if (a) you have already locked in the test number for reporting and (b) you re-evaluate against fresh held-out data in production. Dangerous if used to chase a higher reported number." },
+          { "id": "s5", "situation": "Your random forest gets 89% and your XGBoost gets 89.5%. You ship XGBoost.", "correctBucketId": "second", "explain": "The 0.5pp lift may not pay for the maintenance cost of an XGBoost model in production (more deps, more tuning, harder explainability). The right call depends on cost; ship RF unless you have evidence the 0.5pp matters." },
+          { "id": "s6", "situation": "You re-run hyperparameter search 12 times against the test set to push reported accuracy up.", "correctBucketId": "stop", "explain": "Test set has been corrupted. The number you eventually report is overfit on test. Either split a fresh test set from new data or report the val number with a 'no clean test held' caveat." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: overfitting on the validation set",
+        "md": "Most analysts know not to peek at the test set. Almost no analyst notices when they are *overfitting on the validation set* — and that is the trap that quietly poisons production models.\n\nThe symptom: you have run 15-25 rounds of hyperparameter tuning, model selection, feature engineering, all evaluated on val. Each round picks the variant that does best on val. After 20 rounds, the variant you keep is the one whose noise pattern happens to align with val's noise pattern. Your val number is now optimistic by 1-3pp.\n\nThe fixes are unglamorous: limit yourself to a small number of distinct model variants (5-10, not 50), use cross-validation rather than a single val split, and most importantly **set a tweak budget at the start** — e.g. 'I will stop iterating after 10 evaluations on val, regardless of where I am'. The discipline is to stop, not to iterate further. The model you ship at iteration 10 is, on average, better in production than the one you ship at iteration 30."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "A PM asks: 'we want to predict which of our 50,000 active accounts will churn next month so sales can call them. Sales can call 500/week. Base churn rate is 9%. What's the OK-line and how would you defend it?'",
+        "lang": "markdown",
+        "starter": "Random baseline (calling 500 random accounts catches): \nOK-line (lift over random worth shipping): \nWhy: \nWhat to report alongside accuracy: ",
+        "expected": "Random baseline (calling 500 random accounts catches): 9% × 500 = 45 actual churners\nOK-line (lift over random worth shipping): at minimum 2× lift = ~90 churners in the top 500, ideally 3×+ = ~135 churners\nWhy: 2× lift roughly doubles sales effectiveness, justifies the model's quarter of build + maintenance. Below 2× and you might as well let sales pick by gut.\nWhat to report alongside accuracy: precision@500 (how many of the top 500 ranked are real churners), recall@500 (what % of all churners are in the top 500), lift over random, and the val/test gap so the PM knows how much production drift to expect."
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO things that should always go in a modeling memo before the accuracy number.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "The baseline performance (random / always-predict-mode / rule-of-thumb) so the model's lift is interpretable", "correct": true, "explain": "Correct. 89% accuracy is meaningless without knowing whether baseline was 50% or 87%. Every memo opens with the baseline." },
+          { "id": "b", "label": "The OK-line (the level of performance that justifies shipping vs not)", "correct": true, "explain": "Correct. Without an OK-line, every accuracy number is open-ended ('but could it be higher?'). With one, you have a binary decision." },
+          { "id": "c", "label": "The number of GPU hours used", "correct": false, "explain": "Vanity metric. Belongs in cost reporting, not in the modeling memo headline." },
+          { "id": "d", "label": "Which IDE you used", "correct": false, "explain": "Genuinely irrelevant." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "info",
+            "title": "Boolean rule beats LSTM",
+            "md": "Bhai, ek Mumbai fintech ne 6 mahine LSTM model build kara fraud detection ke liye. Final accuracy: 91%. \n\nFraud team ka senior CFO uncle ne Excel kholke 3 boolean rules likhi: *amount > ₹50,000 AND new_account AND foreign_IP*. Accuracy on the same data: 89%. **6 mahine ka LSTM 2pp jeeta, 89% lift over 3 lines of Excel.**\n\nMaintenance cost? LSTM = 1 ML engineer 25% time + GPU bill + retraining. Excel = aunty checks once a month. \n\n**Simplest model first ka matlab yeh nahi hai 'fancy mat banaao'. Iska matlab hai 'pehle dumb wala chala, dekh kya beat karna hai, phir socho fancy chahiye bhi ya nahi'.**"
+          },
+          "en": {
+            "tone": "info",
+            "title": "Three boolean rules vs the LSTM",
+            "md": "A Mumbai fintech spent six months training an LSTM for fraud detection. Final accuracy 91%. The fraud team's CFO wrote three boolean rules in Excel that hit 89%. The LSTM beat the Excel by 2pp; the Excel beat the LSTM by six months and an entire ML engineer's quarter. Always start at the baseline. The dumb thing is often the right thing."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Most analyst questions do not need a model; they need a clean comparison and a memo. Reach for a model only when ranking or scoring at scale is genuinely the job.",
+          "The modeling staircase is logarithmic in cost: each step costs roughly 10× more and adds roughly 10× less than the step before it.",
+          "Train, val, test — and the test set is the audit; touch it once, at the end, or you have no test set.",
+          "Overfitting on the validation set is the trap nobody warns you about; cap your tweaks at 5-10 distinct variants and stop on schedule.",
+          "Define the OK-line at the start; the question is 'have I crossed it?', not 'how high can I go?'."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick the last model you built or wanted to build. Did you compute the baseline before fitting? Did you set an OK-line? Could you tell me, right now, the gap between your val and test numbers, and how many distinct hyperparameter variants you tried? If any answer is 'no' or 'I don't know', that gap is the lesson."
+      }
+    ]
+  }
+}

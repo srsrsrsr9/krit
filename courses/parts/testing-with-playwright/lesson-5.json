@@ -1,0 +1,223 @@
+{
+  "slug": "ci-and-coverage",
+  "title": "CI, Coverage, and the Maintenance Discipline",
+  "subtitle": "Tests rot without a maintenance loop. Build the loop or accept the rot.",
+  "estimatedMinutes": 14,
+  "skills": ["testing-ci-discipline"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/testing-with-playwright/ci-and-coverage.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the suite that ate two engineers" },
+        { "startSec": 80, "label": "Mental model: tests rot without a maintenance loop" },
+        { "startSec": 220, "label": "Move 1 — The failure-budget rule" },
+        { "startSec": 410, "label": "Move 2 — Sharding, not skipping" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/testing-with-playwright/ci-and-coverage.html",
+      "notesByline": "Notes by Sneha, SDET batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Every team that has ever shipped software has a story about *the suite that ate two engineers*: a Playwright project that started healthy in 2024, accumulated entropy through 2025, and by 2026 employed two full-time SDETs who did nothing but keep CI from going red. Their teammates called them maintenance heroes. The CFO called them a line item.\n\nThis is the lesson nobody teaches in tutorials. Writing tests is the easy part. Keeping a 312-test Playwright suite green for three years, across 14 release branches, while shipping features, *that* is the actual skill. It comes down to two named moves and the discipline to apply them every Monday."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#FFF7ED'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>Test suite entropy over time</text><polyline points='40,180 100,170 160,158 220,140 280,118 340,92 400,68 460,50 520,42' fill='none' stroke='#F43F5E' stroke-width='3'/><text x='460' y='35' text-anchor='middle' font-size='11' fill='#9F1239'>flake rate %</text><text x='40' y='205' text-anchor='start' font-size='10'>Q1 2024</text><text x='280' y='205' text-anchor='middle' font-size='10'>Q3 2025</text><text x='520' y='205' text-anchor='end' font-size='10'>Q1 2026</text><line x1='40' y1='195' x2='540' y2='195' stroke='#6B7280' stroke-width='1'/><line x1='40' y1='40' x2='40' y2='195' stroke='#6B7280' stroke-width='1'/><text x='320' y='225' text-anchor='middle' font-size='11' fill='#92400E' font-style='italic'>tests rot the same way databases do — silently, then suddenly</text></g></svg>",
+      "alt": "A line graph showing flake rate trending up over time from Q1 2024 to Q1 2026",
+      "caption": "Without maintenance, every suite trends in one direction. The graph is steeper than you think."
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: tests rot without a maintenance loop",
+      "md": "A test suite is not a deliverable; it's a **living artifact**. Every PR that lands changes the surface the tests cover. Every dependency upgrade changes the runtime. Every product pivot changes which flows are critical. Without an active maintenance loop, your suite gets slower, flakier, and less relevant *every single week*.\n\nThe right model: think of your suite the way an SRE thinks of a service. It has SLOs (flake rate, runtime, coverage of critical paths). It has on-call (someone owns triage when it goes red). It has a budget. It has a deprecation policy. If your suite has none of those, it's not a quality system — it's a graveyard with a CI pipeline."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/testing-with-playwright/anim/ci-and-coverage-shards.html",
+      "height": 420,
+      "caption": "Watch a single 28-minute serial run get sharded across 4 parallel workers — same coverage, 7 minutes total.",
+      "fallbackImage": "/courses/testing-with-playwright/anim/ci-and-coverage-shards.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "Suite jisne do engineer khaye",
+          "tone": "warn",
+          "md": "Pune SaaS mein 2024 mein 80 tests the. 2025 mein 220. 2026 mein 312. Aur do full-time SDETs jo sirf flaky tests theek karte the, nayi feature nahi banate the. CFO ne quarterly review mein chart dekha — 24 lakh per year sirf maintenance pe. CFO ne pucha: \"yeh investment ka ROI kya hai?\" Lead ne bola: \"agar yeh log na ho, prod down ho jaaye.\" CFO ne kaha: \"toh root cause fix karo, na ki band-aid lagao.\" Sahi bola.",
+          "attribution": "— overheard at every Series B finance review"
+        },
+        "en": {
+          "title": "The suite that ate two engineers",
+          "tone": "warn",
+          "md": "A Pune SaaS had 80 tests in 2024, 220 in 2025, 312 in 2026. Plus two full-time SDETs whose entire job was fixing flaky tests, not building features. The CFO saw the chart at quarterly review: ₹24 lakh per year on maintenance alone. CFO asked: 'what's the ROI?' Lead said: 'without them, prod goes down.' CFO replied: 'then fix the root cause, don't keep applying band-aids.' Right call."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The failure-budget rule"
+    },
+    {
+      "type": "markdown",
+      "md": "Borrow from SRE: set an explicit **failure budget** for your suite, expressed as a maximum acceptable flake rate. A reasonable starting target for a healthy CI is **<1% flake rate over a rolling 30 days** — meaning fewer than 1 in 100 test runs fails for non-deterministic reasons.\n\nWhen the budget is exceeded, the rule kicks in: **all feature work pauses until the budget is restored.** No exceptions, no \"just one more PR.\" The team's #qa-help Slack becomes priority. The flakiest 5 tests get the trace-viewer ritual. Either they are fixed (the actual non-determinism is decoded) or demoted (down the pyramid) or deleted (with the regression they were catching documented in `DECISIONS.md`).\n\n**The named move:** *the failure-budget rule.* The budget creates a forcing function. Without it, flake compounds quietly until you have a 14% rate and a 28-minute CI run. With it, you stay honest weekly.\n\n```ts\n// Track flake rate per test in a JSON file your CI updates\n// Example output:\n{\n  \"checkout-with-upi\":      { \"runs\": 412, \"failures\": 4,  \"flakeRate\": 0.0097 },\n  \"dashboard-loads\":        { \"runs\": 412, \"failures\": 28, \"flakeRate\": 0.068 },  // over budget\n  \"signup-with-google-sso\": { \"runs\": 412, \"failures\": 11, \"flakeRate\": 0.027 }   // over budget\n}\n```"
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 260'><rect width='600' height='260' fill='#EFF6FF'/><g font-family='ui-sans-serif, system-ui' font-size='12' fill='#1F2937'><text x='300' y='28' text-anchor='middle' font-weight='700' font-size='15'>The failure-budget rule</text><line x1='40' y1='110' x2='560' y2='110' stroke='#10B981' stroke-width='2' stroke-dasharray='5 3'/><text x='560' y='105' text-anchor='end' font-size='11' fill='#065F46'>budget: 1% flake rate</text><polyline points='60,160 110,150 160,140 210,130 260,118 310,106 360,90 410,72 460,55 510,40' fill='none' stroke='#F43F5E' stroke-width='2.5'/><circle cx='310' cy='106' r='5' fill='#F43F5E'/><text x='310' y='90' text-anchor='middle' font-size='10' fill='#9F1239'>budget breached</text><text x='310' y='225' text-anchor='middle' font-size='11' fill='#5B21B6'>↓ feature work pauses ↓</text><text x='310' y='245' text-anchor='middle' font-size='11'>top 5 flaky tests get the trace-viewer ritual</text></g></svg>",
+      "alt": "A graph showing flake rate trending up and crossing a budget line, after which feature work pauses",
+      "caption": "Budgets create a forcing function. Without one, you'll always find an excuse to ship the flake."
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: from a CFO's question to a defensible test-maintenance plan",
+      "steps": [
+        { "label": "1. CFO: 'Why are we paying 2 SDETs ₹24L/yr on test maintenance?'", "body": "The wrong answer: 'tests are important.' The right answer: a chart with a budget line." },
+        { "label": "2. Define the SLO", "body": "Flake rate <1% over 30 days. Suite runtime p95 <12 minutes. Critical-path coverage 100% of revenue flows." },
+        { "label": "3. Build the dashboard", "body": "Per-test pass/fail counts, sorted by flake rate × duration. Updated nightly. Visible to engineering + finance." },
+        { "label": "4. Define the failure-budget rule", "body": "When flake >1% for 7 consecutive days: feature work pauses, top-5 flaky tests get triaged, decisions logged in DECISIONS.md." },
+        { "label": "5. Show the trend two quarters later", "body": "Flake 0.4%, runtime 8 min, no SDET burnout, no surprise outages. CFO closes the meeting in 15 minutes." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your suite's flake rate just crossed 1.5% and your team has a Big Demo on Friday. What does the failure-budget rule say to do?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Delay the demo until flake is back under 1%", "correct": false, "explain": "Too rigid. The rule pauses *feature work*, not customer commitments. Demo as planned." },
+        { "id": "b", "label": "Pause feature work, triage the top-5 flakiest tests this sprint, demo on Friday with the team aware that maintenance is the focus", "correct": true, "explain": "This is the rule. Demo doesn't move; what moves is what new code lands until the budget is restored." },
+        { "id": "c", "label": "Bump `--retries` so the flake doesn't show up in dashboards before the demo", "correct": false, "explain": "Hides the signal. Exactly the trap the rule exists to prevent." },
+        { "id": "d", "label": "Skip the flaky tests and re-enable them after the demo", "correct": false, "explain": "Skipping = silently dropping coverage. The bug they catch will eventually ship." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "PM ne bola 'flake budget tod do'",
+          "tone": "info",
+          "md": "PM aaya: \"yaar, flake budget temporarily 5% kar do, sprint mein 4 features zyada nikaal lenge.\" Tarun ne dekha PM ko, kuch nahi bola, whiteboard pe likha: 'budget: 1% (PM extension wale 14%-suite ke pita).' PM ne samjha. Vaapas chala gaya. Budget bach gaya.",
+          "attribution": "— Test-Sensei Tarun, refusing nicely"
+        },
+        "en": {
+          "title": "PM asked to break the flake budget",
+          "tone": "info",
+          "md": "PM walked in: 'yaar, can we temporarily bump flake budget to 5% so we can ship 4 more features this sprint?' Tarun looked at the PM, said nothing, and wrote on the whiteboard: 'budget: 1% (the PM-extended budget is the parent of the 14%-suite from before).' PM understood. PM left. Budget intact."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Sharding, not skipping"
+    },
+    {
+      "type": "markdown",
+      "md": "When CI takes 28 minutes, every team has the same dumb instinct: *delete some tests*. This is wrong. The right answer is **sharding**: split the suite across N parallel workers, run them in parallel CI jobs, and combine the results.\n\nPlaywright supports this natively. With 4 shards, your 28-minute serial run becomes a ~7-minute parallel run for the same coverage:\n\n```yaml\n# .github/workflows/test.yml\nstrategy:\n  fail-fast: false\n  matrix:\n    shard: [1, 2, 3, 4]\nsteps:\n  - run: npx playwright test --shard=${{ matrix.shard }}/4\n```\n\nNo tests deleted. No coverage lost. Same flake (now visible 4x faster, which makes it easier to fix). The only cost is CI minutes, which are usually cheaper than engineer time by an order of magnitude.\n\n**The named move:** *sharding, not skipping.* When somebody says \"the suite is too slow, let's delete tests\" — push back with sharding first. Deletion is a last resort after measuring, demoting, and parallelising.\n\nFor configuration sanity, use the `projects` array in `playwright.config.ts` to split tests by browser or by tag:\n\n```ts\nimport { defineConfig, devices } from '@playwright/test';\n\nexport default defineConfig({\n  fullyParallel: true,\n  workers: process.env.CI ? 4 : '50%',\n  projects: [\n    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },\n    { name: 'mobile-safari', use: { ...devices['iPhone 14'] } },\n    { name: 'critical', testMatch: /.*\\.critical\\.spec\\.ts/ },\n  ],\n});\n```"
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#ECFDF5'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='28' text-anchor='middle' font-weight='700' font-size='15'>Serial vs sharded CI</text><text x='150' y='60' text-anchor='middle' font-weight='600'>Serial — 1 worker</text><rect x='40' y='75' width='220' height='22' rx='4' fill='#FEE2E2' stroke='#F43F5E'/><text x='150' y='91' text-anchor='middle' font-size='10'>312 tests · 28 min</text><text x='450' y='60' text-anchor='middle' font-weight='600'>4 shards in parallel</text><rect x='340' y='75' width='220' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='450' y='84' text-anchor='middle' font-size='9'>shard 1 · 78 tests · 7m</text><rect x='340' y='90' width='200' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='440' y='99' text-anchor='middle' font-size='9'>shard 2 · 78 tests · 6.5m</text><rect x='340' y='105' width='220' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='450' y='114' text-anchor='middle' font-size='9'>shard 3 · 78 tests · 7m</text><rect x='340' y='120' width='205' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='440' y='129' text-anchor='middle' font-size='9'>shard 4 · 78 tests · 6.7m</text><text x='150' y='180' text-anchor='middle' font-size='12' fill='#9F1239'>devs alt-tab to Slack</text><text x='450' y='180' text-anchor='middle' font-size='12' fill='#065F46'>devs ship the next PR</text><text x='300' y='215' text-anchor='middle' font-size='11' fill='#5B21B6'>same suite, same coverage, ~4x wall-time</text></g></svg>",
+      "alt": "Bar chart comparing 28-minute serial run vs four 7-minute parallel shards",
+      "caption": "Sharding is free wall-time. The CI bill is rounding error compared to engineer time."
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Test-Sensei Tarun",
+        "role": "Principal SDET, today wearing his 'shard or be sharded' jersey"
+      },
+      "intro": [
+        "Anita comes to you with 4 different proposals from her team for the 28-minute CI problem.",
+        "For each, mark it as 'do this first', 'do this second', or 'don't do this'."
+      ],
+      "buckets": [
+        { "id": "first", "label": "Do this first", "tone": "safe" },
+        { "id": "second", "label": "Do this second", "tone": "neutral" },
+        { "id": "no", "label": "Don't do this", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "'Shard the suite across 4 workers in GitHub Actions matrix.'", "correctBucketId": "first", "explain": "Highest-leverage, lowest-risk change. Same coverage, ~4x faster. Do it tomorrow." },
+        { "id": "s2", "situation": "'Delete the 50 slowest e2e tests.'", "correctBucketId": "no", "explain": "Loses coverage blind. Demote to lower altitude after triage; don't delete on velocity grounds." },
+        { "id": "s3", "situation": "'Triage the top-20 by `duration × flake_rate` and demote each down the pyramid where possible.'", "correctBucketId": "second", "explain": "Excellent second move. Real reductions in load, not just parallelism. Takes 2-3 sprints to see full benefit." },
+        { "id": "s4", "situation": "'Add `test.skip` on every test that's failed in the last 30 days.'", "correctBucketId": "no", "explain": "Sweeping coverage under the rug. Whatever those tests catch will ship to prod silently." },
+        { "id": "s5", "situation": "'Move all tests to use `page.route()` mocks instead of hitting the staging API.'", "correctBucketId": "second", "explain": "Solid second move; cuts both runtime and flake. Keep one e2e per critical path that hits the real API." },
+        { "id": "s6", "situation": "'Pay for a faster CI runner — 16-core instead of 4-core.'", "correctBucketId": "no", "explain": "Throws money at the wrong problem. Sharding gets the same parallelism for cheaper. Big-iron CI is a 2018 answer." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: skipping tests to make CI green",
+      "md": "Every flaky test you `test.skip()` is a small lie you've told future-you. The skip survives the merge. The skip survives the next refactor. The skip is *still there in 2027* when someone else inherits the codebase and assumes it's intentional.\n\nThe rule: **skipping is allowed for one sprint, with an issue link in the skip comment.** If the issue is open after one sprint, the skip itself is a bug. Either the test was capturing real signal (un-skip and fix) or it wasn't (delete and document why in `DECISIONS.md`). The middle path — skip and forget — is how suites die."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order the maintenance loop you should run every Monday morning:",
+      "items": [
+        { "id": "i1", "label": "Pull last week's flake-rate-by-test report from CI" },
+        { "id": "i2", "label": "Identify tests over the 1% budget" },
+        { "id": "i3", "label": "Open the trace viewer for each top-5 flaky test" },
+        { "id": "i4", "label": "Decide: fix the non-determinism, demote down the pyramid, or delete with documentation" },
+        { "id": "i5", "label": "Cap the work at 4 hours; if more, escalate as a focused sprint" },
+        { "id": "i6", "label": "Update DECISIONS.md with what you did and why" }
+      ],
+      "hint": "Measure → identify → diagnose → decide → bound → document. Same loop, every week, takes ~2 hours when it stays small."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write a `playwright.config.ts` for a CI environment that: runs 4 shards in parallel, uses 4 workers, captures trace on first retry, runs Chromium + mobile Safari, retries failing tests twice, and times out individual tests at 30 seconds.",
+      "lang": "typescript",
+      "expected": "// playwright.config.ts\nimport { defineConfig, devices } from '@playwright/test';\n\nexport default defineConfig({\n  // Tests run in parallel within a single worker; sharding across workers is via CLI.\n  fullyParallel: true,\n  workers: process.env.CI ? 4 : '50%',\n\n  // 30 seconds per test; long enough for an e2e, short enough that sleeps stand out.\n  timeout: 30_000,\n  expect: { timeout: 10_000 },\n\n  // 2 retries in CI catches transient infra noise; 0 locally so flake surfaces.\n  retries: process.env.CI ? 2 : 0,\n\n  reporter: [\n    ['list'],\n    ['html', { open: 'never' }],\n    ['json', { outputFile: 'test-results/results.json' }],\n  ],\n\n  use: {\n    baseURL: process.env.BASE_URL ?? 'http://localhost:3000',\n    trace: 'on-first-retry',\n    screenshot: 'only-on-failure',\n    video: 'retain-on-failure',\n    actionTimeout: 10_000,\n    navigationTimeout: 15_000,\n  },\n\n  projects: [\n    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },\n    { name: 'mobile-safari', use: { ...devices['iPhone 14'] } },\n  ],\n});\n\n// In CI, invoke as:\n//   npx playwright test --shard=${{ matrix.shard }}/4\n// where matrix.shard ∈ {1,2,3,4}."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which practices are part of a healthy long-term Playwright maintenance discipline? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Tracking flake rate per test on a rolling 30-day window with a budget", "correct": true, "explain": "Yes. Without measurement, you can't manage; without a budget, you can't prioritise." },
+        { "id": "b", "label": "A weekly 2-hour maintenance window where the team triages the top-5 flakiest tests", "correct": true, "explain": "Yes. Bounded, predictable, prevents the small-leaks-become-flood pattern." },
+        { "id": "c", "label": "`test.skip()` with no follow-up issue, so CI stays green", "correct": false, "explain": "This is how suites die. Skip is a lie if it's not paired with a tracked issue and a deadline." },
+        { "id": "d", "label": "Letting `--retries` quietly creep from 2 to 5 to 10 over time", "correct": false, "explain": "Retries hide flake. Each bump postpones the real fix and trains the team to ignore signal." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "Aunty Anita's Monday morning",
+          "tone": "tip",
+          "md": "Aunty Anita ka Monday morning ritual: chai, dashboard, top-5 flaky tests, trace viewer. 9am se 11am tak. Phir features. Pehle hafte mein sab pareshan hue: \"itna time waste karenge?\" Teesre mahine baad sabne dekha — flake rate 0.4%, CI 8 minute, on-call ko peaceful weekend. Aunty bolti hai: \"compound interest sirf paise mein nahi hota, beta. Maintenance mein bhi.\"",
+          "attribution": "— QA-Aunty Anita, on the Monday ritual she'll never skip"
+        },
+        "en": {
+          "title": "Aunty Anita's Monday morning",
+          "tone": "tip",
+          "md": "Anita's Monday ritual: chai, dashboard, top-5 flaky tests, trace viewer. 9am to 11am. Then features. Week one: 'are we wasting time?' Three months in: flake at 0.4%, CI at 8 min, on-call has peaceful weekends. Anita says: 'compound interest isn't only for money. It's for maintenance too.'"
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Tests rot without a maintenance loop. Treat your suite like a service: SLOs, on-call, budget, deprecation policy.",
+        "The failure-budget rule: a 1% flake rate target. When breached, feature work pauses until the top-5 are fixed.",
+        "Sharding, not skipping: parallelise CI before deleting tests. 4 shards turns a 28-min serial run into ~7 min for the same coverage.",
+        "`test.skip()` is allowed for one sprint with a tracked issue. Beyond that, the skip itself is a bug.",
+        "The Monday morning maintenance ritual — measure, identify, diagnose, decide, bound, document — keeps a suite alive for years."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "What's the maintenance discipline currently in place for your team's test suite? Be honest: is there a flake budget? An on-call rotation? A weekly triage window? If the answer to all three is 'no', which one would you propose to your team this week, and how would you defend it to a CFO who wants engineers shipping features instead?"
+    }
+  ]
+}

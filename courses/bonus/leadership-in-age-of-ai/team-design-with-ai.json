@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The ChatGPT Licence That Nobody Used",
+    "source": "Procurement post-mortem at a 200-person Bengaluru SaaS company (B2B vertical, Series C)",
+    "date": "March 2026",
+    "story": "On March 3, 2025, the COO of a 200-person Bengaluru SaaS firm signed a year-long ChatGPT Enterprise contract for **all 200 employees**. The annual cost, after the standard enterprise discount, was approximately **₹1.7 crore**. The rollout consisted of one email from the CTO — subject line *\"Big news: AI for everyone\"* — and a Notion page with three bullet points and a screenshot.\n\nNo training. No prompt library. No internal champions. No use-case mapping. The Notion page was last edited the day it was created.\n\nA year later, on March 4, 2026, the procurement team pulled usage logs before the renewal call. **Active monthly usage: 14%.** Of that 14%, more than half were the same eleven engineers who would have used a personal account anyway. The marketing team — the supposed power users in the original business case — averaged **2.3 prompts per person per month**. The customer-success team, **0.8**.\n\nThe renewal was negotiated down to half the seat count at half the price, and the budget that came back was redirected — at the new VP-People's insistence — into a **12-week internal training cohort**. Six months in, usage on the smaller licence pool is at 71%.",
+    "takeaway": "Tools without training is just expensive shelfware. The ratio you want is roughly **1:3 — one rupee on tools, three on the humans using them.**"
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The ₹2 Crore Tooling Budget",
+    "setup": "**Week 8.** Rajiv survived the Week 2 CEO ambush. The CFO just signed off a **₹2 crore AI tooling budget** for the next twelve months. The CTO is already forwarding ChatGPT Enterprise quotes. Three vendors are circling. The COO sent a calendar invite titled *\"Tool selection — let's move fast.\"* It is 9:47am. The meeting is at 11.\n\nYou — playing coach — have until 11 to redirect Rajiv. He's a smart director who has not yet seen the Bengaluru SaaS field note.",
+    "coach": { "name": "Org-Design-Veteran Omkar", "role": "Org-design veteran, 25 years across TCS, Wipro Digital, and three startups he refuses to name" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Omkar opens the call. *\"Rajiv, you have ₹2 crore. The CTO wants to spend it on seats. What's your opening move?\"*",
+        "options": [
+          { "id": "a", "label": "Buy ChatGPT Enterprise + Copilot for everyone — get the announcement out this quarter, ride the momentum.", "correct": false, "explain": "You just re-enacted the Bengaluru SaaS field note from memory. Seats without training equals 14% adoption. Twelve months from now you're explaining to the CFO why ₹2 crore bought you a procurement spreadsheet.", "points": 0 },
+          { "id": "b", "label": "Split the budget: 25% on tools, 75% on training — twelve-week cohorts, internal champions, prompt libraries by function.", "correct": true, "explain": "**Correct.** The Bengaluru firm's mistake was the ratio. You're not buying software, you're buying *behaviour change*. Omkar: *\"Now you're spending like a director, not a procurement manager.\"*", "points": 3 },
+          { "id": "c", "label": "Spend the full ₹2 crore on seats but write a memo asking managers to \"encourage usage.\"", "correct": false, "explain": "\"Encourage usage\" is what a memo says when there is no plan. Managers will forward the email and never mention it again. You'll see the same 14% number Bengaluru saw.", "points": 0 },
+          { "id": "d", "label": "Pause the spend entirely until Q3 — do a six-month diagnostic first.", "correct": false, "explain": "Six months of nothing while your competitors ship is its own kind of failure. You don't need a diagnostic — you need a *first cohort*. Action with learning beats paralysis with planning.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "The CTO pushes back: *\"Training is fluffy. People will figure it out.\"* The COO half-agrees. What do you tell Rajiv to say?",
+        "options": [
+          { "id": "a", "label": "*\"Fine, half-and-half. 50% tools, 50% training. Compromise.\"*", "correct": false, "explain": "You split-the-difference'd into a ratio with no evidence behind it. Compromise is not a strategy. Omkar: *\"You traded clarity for everyone-feels-okay. That's how budgets disappear.\"*", "points": 1 },
+          { "id": "b", "label": "*\"Show me one company our size where 'people figured it out' produced more than 20% sustained adoption. I'll wait.\"*", "correct": true, "explain": "**Yes.** Anchor the conversation in evidence the CTO cannot produce. Then offer the alternative: *\"Three internal champions per function, twelve-week cohorts, public prompt library, weekly office hours. That's how you get from 14% to 70%.\"* Omkar: *\"Director-level move.\"*", "points": 3 },
+          { "id": "c", "label": "*\"You're right, the CTO knows engineering. Let's start with engineers and worry about everyone else later.\"*", "correct": false, "explain": "Engineers are the *one* group who will figure it out without training. Spending the budget on them is buying capability you already have. The marketing and CS teams in the field note are the people you actually need to enable.", "points": 0 },
+          { "id": "d", "label": "*\"Let me bring data to next week's meeting. I'll send a Loom.\"*", "correct": false, "explain": "You ducked the room. The CTO will spend the budget while you're recording video. Decisions like this are won live, not asynchronously.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "The room agrees on the 25/75 split. Now the CFO asks: *\"How do I know in six months if this worked?\"* Last call.",
+        "options": [
+          { "id": "a", "label": "*\"Adoption rate — percentage of seats with weekly active usage. Target 60% by Month 6.\"*", "correct": true, "explain": "**Useful but incomplete.** Adoption is the leading indicator. Pair it with one *outcome* metric per function: hours-saved-per-analyst, response-time-on-tickets, deals-touched-by-AI. Omkar: *\"Two layers of metric. That's what the CFO actually buys.\"*", "points": 3 },
+          { "id": "b", "label": "*\"We'll know it worked when people are using it. You can feel that kind of thing.\"*", "correct": false, "explain": "*\"You can feel it\"* is what people say when they don't want to be measured. The CFO will lose patience by Month 4 and the budget will not renew.", "points": 0 },
+          { "id": "c", "label": "*\"Cost-per-seat reduction at renewal. If we can renegotiate down 30%, we win.\"*", "correct": false, "explain": "That's the Bengaluru SaaS outcome, sold as a victory. Lower cost on shelfware is still shelfware. Wrong metric.", "points": 0 },
+          { "id": "d", "label": "*\"Adoption + one outcome metric per function + a quarterly written review of what worked, what didn't, what we're cutting.\"*", "correct": true, "explain": "**Best answer.** Numbers plus narrative. The quarterly review forces the team to actually *think* about the data, not just stare at a dashboard. That's the difference between a transformation and a tooling line item.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You redirected ₹2 crore from seats to humans, anchored the CTO in evidence, and shipped a metric the CFO can actually use. **Omkar opens his veteran's notebook and writes your name in.** On to Week 14.",
+      "good": "You avoided the headline mistake but flinched on one decision. Re-read the **1:3 tool-to-training ratio** before the next budget meeting.",
+      "learn": "You spent like a procurement manager, not a director. Re-read the lesson — the Bengaluru SaaS firm in your field notes spent ₹1.7 crore for 14% usage. Your draw was a drill. The next ₹2 crore won't be."
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 47-tile dashboard, founder couldn't answer 'are we growing?'",
+    "source": "Anonymous Head of Growth at a Bengaluru D2C food brand",
+    "date": "December 2025",
+    "story": "Our Looker dashboard had 47 tiles by Q3. Reach, impressions, sentiment, EngagementRate v3, Composite Funnel Score, regional weekly cohort retention by acquisition channel. Bought a custom dashboard developer for ₹8 lakh to build it.\n\nFounder asked at the all-hands: 'in one number, are we growing?' I opened the dashboard. Pointed to 4 different tiles. Couldn't give one number.\n\nWe scrapped the 47-tile dashboard. Replaced with 3 tiles: paid CAC (north star), D7 retention (gating metric), ROAS (kill criterion). Founder gets the answer in 4 seconds. **Decisions sped up enormously.** The 47 'rich' tiles? Most were vanity. The 3 we kept were the only ones that ever drove decisions.",
+    "takeaway": "A 47-tile dashboard hides decision-making behind data theatre. 3 tiles is the cap; everything else is decoration."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: the dashboard reset",
+    "setup": "Sneha's inherited a marketing dashboard with 47 tiles, ~3 years of accumulated additions. CMO wants 'more visibility'. Sneha has 30 minutes to scope what to do.",
+    "coach": { "name": "VP-Marketing Vrinda", "role": "Scaled 3 D2C brands from ₹5cr to ₹100cr+" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "CMO says 'add 5 more tiles for sentiment, NPS, brand-recall, share-of-voice, AI-content-quality-score.' What's Sneha's response?",
+        "options": [
+          { "id": "a", "label": "Counter: instead of adding, take the 47 + 5 = 52 down to 3. Identify the 3 metrics that drive decisions THIS quarter.", "correct": true, "explain": "Right. The dashboard delusion is solved by subtraction, not addition.", "points": 3 },
+          { "id": "b", "label": "Add the 5 tiles.", "correct": false, "explain": "Repeats the trap. CMO will ask for 5 more next quarter.", "points": 0 },
+          { "id": "c", "label": "Build a separate 'executive' dashboard with the 5 new ones.", "correct": false, "explain": "Now you have 47 + 5 + 1 'executive' dashboard. Trap deepens.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Sneha picks her 3. Which set?",
+        "options": [
+          { "id": "a", "label": "Paid CAC (north star) · D7 retention (gating) · ROAS (kill criterion).", "correct": true, "explain": "Three different roles, one number each. Founder/CMO/Sneha can all read it the same way.", "points": 3 },
+          { "id": "b", "label": "Reach · Impressions · Engagement Rate.", "correct": false, "explain": "Three vanity metrics. None drives a decision; all of these can be huge while CAC tanks.", "points": 0 },
+          { "id": "c", "label": "Revenue · Sessions · Conversions.", "correct": false, "explain": "Better than vanity but redundant — sessions and conversions are upstream of revenue. Pick distinct dimensions.", "points": 1 },
+          { "id": "d", "label": "Pick 7 'just to be safe.'", "correct": false, "explain": "7 is past the readability cap. 3 is the discipline.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "CMO insists on keeping the 47 tiles 'for archival access'. What's the move?",
+        "options": [
+          { "id": "a", "label": "Move them to an 'archive' tab; keep main dashboard at 3 tiles. Anyone can drill in if they need.", "correct": true, "explain": "Right compromise. Default view is 3; the 47 are still accessible if someone insists.", "points": 3 },
+          { "id": "b", "label": "Delete the 47 outright.", "correct": false, "explain": "Politically destabilizing; CMO will reverse. Compromise on placement, not on the 3-tile default.", "points": 1 },
+          { "id": "c", "label": "Surrender; keep all 47 visible.", "correct": false, "explain": "Surrenders the win. Keep the 3-tile default view non-negotiable.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Sneha lands a 3-tile dashboard. Founder gets answers in 4 seconds; decisions speed up. CMO eventually thanks her at Q3 review.",
+      "good": "Solid. Compromise at 5 tiles instead of 3; not perfect but a 90% reduction is real progress.",
+      "learn": "Re-read the dashboard-delusion section. Adding tiles always feels productive; subtracting is what actually moves decisions."
+    }
+  }
+}

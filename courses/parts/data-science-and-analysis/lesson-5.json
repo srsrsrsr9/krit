@@ -1,0 +1,225 @@
+{
+  "lesson": {
+    "slug": "communicating-results",
+    "title": "Communicating Results So They Land",
+    "subtitle": "BLUF, one chart, an assumption ledger; the rest is appendix",
+    "estimatedMinutes": 13,
+    "skills": ["data-communication"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/data-science-and-analysis/communicating-results.mp3",
+        "audioDurationSec": 700,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why most data memos die unread" },
+          { "startSec": 80, "label": "Mental model: BLUF (bottom-line up front)" },
+          { "startSec": 220, "label": "Move 1: the BLUF chart" },
+          { "startSec": 410, "label": "Move 2: the assumption-ledger appendix" },
+          { "startSec": 560, "label": "The trap: ship the model, not the story" }
+        ],
+        "notesPdfUrl": "/notes/data-science-and-analysis/communicating-results.html",
+        "notesByline": "Notes by Aditi, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Most analysis dies in the inbox. Twenty-eight slides, six tabs, three regression tables, no answer in the first paragraph. The CFO scrolls, scrolls, gives up, defaults to whatever the loudest VP said in standup. Your six weeks of work just made the weather.\n\nThe problem is not the analysis. The problem is the artifact. Stakeholders do not read the way analysts write — they scan headlines, they want the answer in sentence one, they decide in 90 seconds whether to keep reading. This lesson is the discipline of producing artifacts that survive that 90 seconds."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two memos side by side. Left: 28-slide deck titled 'Q3 Churn Analysis' with question marks throughout. Right: 1-page memo with a clear headline 'Churn rose from 6.8% to 8.4% in Q3, driven by Tier B; recommend pricing adjustment by Nov 1'",
+        "caption": "Same analysis, two artifacts. Only one of them gets a decision.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='240' height='180' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#9D174D' font-weight='bold'>28-slide deck</text><g font-family='sans-serif' font-size='10' fill='#1F2937'><text x='20' y='55'>Slide 1: Agenda</text><text x='20' y='72'>Slide 2: Methodology</text><text x='20' y='89'>Slide 3: Data sources</text><text x='20' y='106'>Slide 4: Caveats</text><text x='20' y='123'>...</text><text x='20' y='140'>Slide 21: Findings (?)</text><text x='20' y='157'>Slide 28: Q&amp;A</text></g><text x='120' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9D174D' font-style='italic'>CFO closed at slide 4</text></g><g transform='translate(310 30)'><rect width='240' height='180' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#065F46' font-weight='bold'>1-page memo</text><g font-family='sans-serif' font-size='9' fill='#1F2937'><text x='20' y='55' font-weight='bold'>Q3 churn rose 6.8% → 8.4%</text><text x='20' y='72'>Driven by Tier B (61% of lift)</text><text x='20' y='89'>Recommend pricing review</text><text x='20' y='106'>by Nov 1, 2026.</text><text x='20' y='128' fill='#6B7280'>━━━ chart ━━━</text><text x='20' y='150' fill='#6B7280' font-style='italic'>(assumption ledger overleaf)</text></g><text x='120' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>CFO decided in 90 seconds</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: BLUF — bottom-line up front",
+        "md": "Hold this picture. Every memo, slide, Slack message, email opens with the answer. Not the agenda. Not the methodology. Not the caveats. The answer.\n\nThe military invented BLUF for a reason: when stakes are high and time is short, you do not bury the lead. The first sentence should answer the question that was asked. The second sentence should say what to do about it. The third sentence should hint at how confident you are. Everything else — methodology, sample sizes, regression coefficients, the part where you're proud of how clever the join was — goes below the fold.\n\nThe rule: if your reader stops at sentence one, they should still be able to act."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/data-science-and-analysis/anim/communicating-results-bluf.html",
+        "height": 420,
+        "caption": "Watch a 28-slide deck collapse into a one-page BLUF memo. Notice what gets kept, what becomes appendix, what disappears entirely."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "tip",
+            "title": "WhatsApp forward wala scene",
+            "md": "Bhai, mummy ka WhatsApp forward dekh. Pura paragraph. *\"Aaj subah uth ke socha ki tum sab ke liye kuch likhna chahiye, kyunki kal raat tumhare papa ne kaha tha...\"* — 14 lines mein actual message ek line ki hai: *\"Sunday lunch ke liye 12 baje aana.\"*\n\nAnalyst memos bhi same. Method, methodology, scope, caveats, 8 slides, phir actual answer slide 11 pe. **Mummy ki forward ko BLUF mein convert karo:** *\"Sunday lunch 12 baje. Saari details neeche.\"* Done. Pura WhatsApp empire change ho jaaye."
+          },
+          "en": {
+            "tone": "tip",
+            "title": "The fourteen-line WhatsApp forward",
+            "md": "Mothers worldwide write the WhatsApp forward in the worst possible structure: 14 lines of context to a one-line ask. Analyst memos are the same disease in different clothes. The fix is the same: lead with the ask, attach the context. If the reader can act on sentence one, the rest is bonus."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The BLUF chart"
+      },
+      {
+        "type": "markdown",
+        "md": "Every memo gets exactly **one chart that proves the headline**. One. The BLUF chart's job is to make the conclusion visually obvious in 5 seconds. Everything else is appendix.\n\nThe BLUF chart is not the most beautiful chart you produced. It is the chart whose visual gestalt matches the sentence in the headline. If the headline is 'churn rose driven by Tier B', the chart shows churn over time, with Tier B highlighted, with a vertical line at the inflection point. The reader does not have to read axis labels to *get it*. Their eye does the work.\n\nTwo design rules that catch most analysts:\n\n- **Highlight what you mean, not everything you have.** The chart has the conclusion in colour and the rest in grey. If five lines are equally bright, the reader does not know which one is the point.\n- **Annotate.** A short label on the chart pointing at the relevant feature ('Tier B inflects in week 7') saves a paragraph of caption. Captions get skipped; on-chart annotations don't."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two churn-over-time charts. Left: all four tiers in saturated colour, no annotation, hard to read. Right: Tier B in red, all other tiers in grey, with a 'Q3 starts' vertical line and a short text annotation 'Tier B accelerates here'",
+        "caption": "Same data, two charts. The right one is doing the BLUF's job; the left one is a colour wheel.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(30 30)'><rect width='240' height='180' rx='8' fill='#FFFFFF' stroke='#D1D5DB'/><text x='120' y='20' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#9D174D' font-weight='bold'>Decoration chart</text><line x1='30' y1='150' x2='220' y2='150' stroke='#1F2937' stroke-width='1'/><line x1='30' y1='40' x2='30' y2='150' stroke='#1F2937' stroke-width='1'/><polyline points='30,130 70,125 110,120 150,118 190,115 220,113' fill='none' stroke='#F43F5E' stroke-width='2'/><polyline points='30,135 70,128 110,118 150,108 190,98 220,90' fill='none' stroke='#0EA5E9' stroke-width='2'/><polyline points='30,140 70,135 110,128 150,124 190,120 220,118' fill='none' stroke='#10B981' stroke-width='2'/><polyline points='30,128 70,123 110,118 150,113 190,108 220,103' fill='none' stroke='#F59E0B' stroke-width='2'/><text x='120' y='175' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9D174D' font-style='italic'>4 tiers, all bright, no story</text></g><g transform='translate(310 30)'><rect width='240' height='180' rx='8' fill='#FFFFFF' stroke='#D1D5DB'/><text x='120' y='20' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-weight='bold'>BLUF chart</text><line x1='30' y1='150' x2='220' y2='150' stroke='#1F2937' stroke-width='1'/><line x1='30' y1='40' x2='30' y2='150' stroke='#1F2937' stroke-width='1'/><polyline points='30,130 70,125 110,120 150,118 190,115 220,113' fill='none' stroke='#D1D5DB' stroke-width='2'/><polyline points='30,140 70,135 110,128 150,124 190,120 220,118' fill='none' stroke='#D1D5DB' stroke-width='2'/><polyline points='30,128 70,123 110,118 150,113 190,108 220,103' fill='none' stroke='#D1D5DB' stroke-width='2'/><polyline points='30,135 70,128 110,118 150,98 190,80 220,68' fill='none' stroke='#F43F5E' stroke-width='3'/><line x1='150' y1='40' x2='150' y2='150' stroke='#5B21B6' stroke-width='1.5' stroke-dasharray='4 3'/><text x='150' y='35' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#5B21B6'>Q3 starts</text><text x='205' y='65' font-family='sans-serif' font-size='9' fill='#9F1239' font-weight='bold'>Tier B</text><text x='195' y='85' font-family='sans-serif' font-size='8' fill='#9F1239' font-style='italic'>accelerates here</text></g></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "The translation: 28 charts becomes one BLUF chart in 5 steps",
+        "steps": [
+          { "label": "Step 1 — Write the headline first", "body": "Before drawing anything: write the one-sentence answer. 'Churn rose from 6.8% to 8.4% in Q3, driven by Tier B (61% of the lift).' That sentence is the chart's only job." },
+          { "label": "Step 2 — Pick the visual gestalt that matches the sentence", "body": "Lift over time → line chart. Comparison of two groups → side-by-side bars. Composition of a whole → stacked or treemap. Match the gestalt to the verb in the headline." },
+          { "label": "Step 3 — Highlight only what you mean", "body": "Reduce everything not in the headline to grey. Use one bright colour for the variable that proves the point. Five bright colours = five conclusions = no conclusion." },
+          { "label": "Step 4 — Annotate on-chart, not in the caption", "body": "Captions get skipped. Annotations get read. Add a short on-chart label pointing at the inflection or the gap that supports the headline." },
+          { "label": "Step 5 — Delete the rest", "body": "Every other chart you produced goes in the appendix. The reader who wants more will scroll. The reader who does not, you have already served." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Your headline is 'Bengaluru SaaS retention dropped 5pp in Q3, mostly in the SMB segment'. Which BLUF chart fits?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "A line chart of retention over time, with the SMB line in red and other segments in grey, and an annotation arrow pointing at the Q3 drop", "correct": true, "explain": "Correct. Visual gestalt matches the headline (drop over time + segment isolation). One bright colour, one annotation, conclusion in 5 seconds." },
+          { "id": "b", "label": "A heatmap of retention by city × month with all 17 cities and 12 months", "correct": false, "explain": "Heatmap with 200 cells dilutes the message. The point is SMB segment, not city geography." },
+          { "id": "c", "label": "A scatterplot of retention vs ARPU per account", "correct": false, "explain": "Wrong axis. The headline is about time + segment, not the relationship between two metrics." },
+          { "id": "d", "label": "A pie chart of segment composition", "correct": false, "explain": "Pie charts are mostly bad and they cannot show change over time. Wrong tool for this headline." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "warn",
+            "title": "Cricket commentator vs Reuters headline",
+            "md": "Bhai, news ka style dekh. Reuters headline: *\"India GDP grows 6.4% in Q2, slowest in 8 quarters.\"* Sentence one mein number, direction, context. Done.\n\nAnalyst ka style: *\"After careful analysis of multiple data sources spanning the period from April to June 2026, accounting for various seasonal adjustments and methodological considerations, we find that GDP growth was 6.4%.\"* Saaaaaaaaab kuch us se pehle, asli baat slide 7 pe.\n\n**Reuters ka style chura. Sentence 1 mein number, direction, context. Slide 7 ki kahaani slide 1 pe le aao.**"
+          },
+          "en": {
+            "tone": "warn",
+            "title": "Reuters headline vs analyst preamble",
+            "md": "Reuters: 'India GDP grows 6.4% in Q2, slowest in eight quarters.' Number, direction, context, all in sentence one. Most analyst memos: three paragraphs of methodology, then the number on page two. Steal the Reuters opening. Move the answer to sentence one and the methodology to the appendix."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The assumption-ledger appendix"
+      },
+      {
+        "type": "markdown",
+        "md": "BLUF gets you read. The **assumption-ledger appendix** gets you defended.\n\nA stakeholder who acts on your number will, weeks later, be challenged on it. ('Why is your churn 8.4% when sales says 6.4%?', 'Why did you exclude trial users?', 'Why did you cohort by signup date?'). If you do not have an assumption ledger they can hand to the challenger, you become the bottleneck for every meeting where the number comes up. If you do, the ledger does the defending and you can take the day off.\n\nThe ledger goes at the *end* of the memo, never the front. Six to eight lines. Each line: the decision, the reason, the sensitivity (what would the headline number become if you reversed this decision?). The sensitivity column is the part most analysts skip and the part stakeholders care about most — because it tells them which assumptions are load-bearing and which are cosmetic."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A memo with a clear BLUF headline at the top, one BLUF chart in the middle, and an 'Assumption ledger' table at the bottom with three columns: decision, reason, sensitivity",
+        "caption": "The full anatomy. Headline + chart + ledger = a memo a CFO can defend without you in the room.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#ECFDF5'/><rect x='30' y='25' width='520' height='40' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='40' y='42' font-family='sans-serif' font-size='12' fill='#065F46' font-weight='bold'>HEADLINE (BLUF)</text><text x='40' y='58' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>Q3 churn rose 6.8% → 8.4%, driven by Tier B; recommend pricing review by Nov 1.</text><rect x='30' y='75' width='520' height='90' rx='6' fill='#FFFFFF' stroke='#1E40AF' stroke-width='2'/><text x='40' y='92' font-family='sans-serif' font-size='11' fill='#1E40AF' font-weight='bold'>BLUF CHART</text><polyline points='80,140 130,135 180,128 230,118 280,108 330,98 380,88 430,82' fill='none' stroke='#F43F5E' stroke-width='2.5'/><polyline points='80,148 130,145 180,142 230,140 280,138 330,136 380,134 430,132' fill='none' stroke='#D1D5DB' stroke-width='2'/><line x1='280' y1='80' x2='280' y2='160' stroke='#5B21B6' stroke-width='1' stroke-dasharray='3 3'/><text x='280' y='78' text-anchor='middle' font-family='sans-serif' font-size='8' fill='#5B21B6'>Q3</text><rect x='30' y='175' width='520' height='95' rx='6' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='40' y='192' font-family='sans-serif' font-size='11' fill='#92400E' font-weight='bold'>ASSUMPTION LEDGER (appendix)</text><g font-family='monospace' font-size='9' fill='#1F2937'><text x='40' y='208'>decision</text><text x='220' y='208'>why</text><text x='400' y='208'>if reversed</text><line x1='40' y1='212' x2='540' y2='212' stroke='#92400E' stroke-width='0.5'/><text x='40' y='225'>active = ≥1 event/mo</text><text x='220' y='225'>matches dashboard</text><text x='400' y='225'>−12% MAU</text><text x='40' y='240'>cohort by signup_date</text><text x='220' y='240'>signup drives LTV</text><text x='400' y='240'>shifts cohorts 1mo</text><text x='40' y='255'>India = all spellings</text><text x='220' y='255'>same country</text><text x='400' y='255'>+18% to India</text></g></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Senior-DS Saanya",
+          "role": "Tech lead at a Bengaluru SaaS, 9 years of cleaning other people's data"
+        },
+        "intro": [
+          "Welcome to the memo clinic. ✉️",
+          "Six common moves analysts make in their writeups. Tell me each is **good craft**, **defendable but lazy**, or **memo-killer** (the artifact will not get read or acted on)."
+        ],
+        "buckets": [
+          { "id": "good", "label": "Good craft", "tone": "safe" },
+          { "id": "lazy", "label": "Defendable but lazy", "tone": "neutral" },
+          { "id": "killer", "label": "Memo-killer", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "First sentence of memo: 'Q3 churn rose from 6.8% to 8.4%; recommend pricing review by Nov 1.' Then a chart, then a ledger.", "correctBucketId": "good", "explain": "BLUF: number, direction, recommended action, all in sentence 1. Then chart proves it, ledger defends it. Standard issue." },
+          { "id": "s2", "situation": "First sentence of memo: 'In Q3 2026 we conducted a comprehensive analysis of customer attrition leveraging multiple data sources to derive insights.' Headline number is in paragraph three.", "correctBucketId": "killer", "explain": "Buried lead. CFO has stopped reading by paragraph two. The analysis is fine; the artifact is dead." },
+          { "id": "s3", "situation": "Memo includes 11 charts, none highlighted.", "correctBucketId": "killer", "explain": "Eleven charts of equal weight = no signal. The reader cannot tell which one matters. One BLUF chart and ten in appendix is the right mix." },
+          { "id": "s4", "situation": "Memo has a BLUF and a chart but no assumption ledger; analyst is in the meeting to defend.", "correctBucketId": "lazy", "explain": "Works while the analyst is in the room. The moment the memo gets forwarded, no defence travels with it. Always include the ledger." },
+          { "id": "s5", "situation": "Ledger has 6 entries, each with decision + reason, but no sensitivity column.", "correctBucketId": "lazy", "explain": "Halfway there. The sensitivity column ('what would change if reversed') is what stakeholders use to decide which assumptions are load-bearing. Without it, the ledger is descriptive, not defensible." },
+          { "id": "s6", "situation": "Memo opens with 'It depends — here are five scenarios with different conclusions'.", "correctBucketId": "killer", "explain": "'It depends' without a default recommendation is decision-by-handoff. State your best guess, list what would flip it, but commit to a recommendation. Otherwise the stakeholder picks one of your five at random." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: ship the model, not the story",
+        "md": "The trap that gets the most analysts: building a 92%-accurate model and assuming the *number* is the deliverable. The number is the input to the deliverable. The deliverable is a story a non-analyst can act on, with a defensible record of how the number got there.\n\nAnalysts who ship the model and not the story produce work that is technically correct and operationally invisible. The model sits in a notebook nobody opens. The dashboard gets bookmarked and never returned to. The Slack message with 'analysis attached.pdf' gets a 👍 emoji and a quiet decision-by-vibes in the meeting that follows. \n\nThe fix is unglamorous: spend the last 20% of every project on the artifact. BLUF, one chart, one ledger, one paragraph the CFO can forward. If the analysis took 4 weeks, give the writeup half a day. The 4 weeks of work landing in 90 seconds of stakeholder reading is the entire point of the job."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the steps of writing a memo that lands, from first to last.",
+        "items": [
+          { "id": "h", "label": "Write the one-sentence headline (number, direction, action)", "detail": "Before any draft. The whole memo is built around this sentence." },
+          { "id": "c", "label": "Pick the BLUF chart that proves the headline", "detail": "One chart. Highlight what you mean. Annotate on-chart." },
+          { "id": "p", "label": "Write the supporting paragraph (3-5 sentences max)", "detail": "How the headline is supported, with the effect size and CI in plain English." },
+          { "id": "r", "label": "Write the recommendation (what to do, by when, with what threshold)", "detail": "Specific, actionable, with a date." },
+          { "id": "l", "label": "Add the assumption-ledger appendix", "detail": "6-8 lines, decision + why + sensitivity." },
+          { "id": "ed", "label": "Edit ruthlessly: delete every sentence that does not earn its keep", "detail": "Memos shrink in revision; they do not grow." }
+        ],
+        "hint": "Steps 1 and 2 are inseparable; the chart and the headline are written together. Step 6 is the one most analysts skip and the one that triples readability."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "You ran an analysis: SMB customers in Hyderabad use the product 18% less than 6 months ago (signed-rank test, p=0.002, 95% CI: −24% to −12%). Threshold for action was −10%. Write a 3-sentence BLUF + 1-sentence recommendation that a CFO could forward.",
+        "lang": "markdown",
+        "starter": "Headline: \nSupport: \nConfidence: \nRecommendation: ",
+        "expected": "Headline: SMB customers in Hyderabad are using the product 18% less than 6 months ago, comfortably below our −10% action threshold.\nSupport: Median weekly active sessions per Hyderabad SMB account dropped from 24 to 19.6 between April and October 2026, with a 95% CI on the change of −24% to −12% (Wilcoxon signed-rank, p = 0.002).\nConfidence: The CI is fully below threshold and the sample (n = 1,847 accounts with continuous activity over both periods) is large enough that this is unlikely to be measurement noise.\nRecommendation: Brief the SMB success team this week to identify Hyderabad-specific churn drivers; propose a targeted intervention proposal by Nov 30, 2026."
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO statements that describe the BLUF (bottom-line up front) approach.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "The first sentence states the answer, the recommendation, or the decision being asked for", "correct": true, "explain": "Correct. If the CFO reads only sentence 1, she can act." },
+          { "id": "b", "label": "Caveats and methodology go in the appendix, not the headline", "correct": true, "explain": "Correct. Methodology earns the answer; it does not lead with it. Stakeholders who want it scroll to it." },
+          { "id": "c", "label": "Build up suspense before revealing the conclusion", "correct": false, "explain": "TED talk technique, wrong artifact. Suspense is a luxury executives do not have." },
+          { "id": "d", "label": "Always include all 47 charts you produced", "correct": false, "explain": "Volume is not rigour. Pick the one chart that proves the headline; the rest go in appendix or get deleted." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "info",
+            "title": "CFO ne 'just tell me the number' bola",
+            "md": "Bhai, scene yeh hai. Tu ne 11-page memo bheji 'Q3 Churn Analysis'. CFO ne reply kiya: *\"Just tell me the number.\"* \n\nTu offended ho gaya — *\"madam, methodology padhi nahi?\"*. Madam ne padhi nahi, kyunki tu ne **artifact wrong banaya**. Madam impatient nahi hui. Madam ka time tujhe 11-page memo padhne ka nahi tha. **Tu BLUF nahi likha. Tu ne report likha.**\n\nReply: 3 lines. Number, recommendation, link to full memo as appendix. CFO khush, tu khush, board update Thursday ko nikla. **Length aapke insurance ke liye hai. BLUF unke information ke liye hai.**"
+          },
+          "en": {
+            "tone": "info",
+            "title": "'Just tell me the number'",
+            "md": "Your CFO sent back the 11-page memo with one comment: 'Just tell me the number.' She is not impatient; you produced the wrong artifact. The fix is a 3-line reply with the number, the recommendation, and a link to the long memo as appendix. Length is the analyst's insurance; BLUF is the stakeholder's information. Different products."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Most analysis dies in the inbox because the artifact is wrong, not because the analysis is wrong; ship for 90-second reads, not for completeness.",
+          "BLUF is non-negotiable: sentence 1 is the answer, the recommendation, or both; methodology is appendix.",
+          "One chart per memo, and that chart must visually prove the headline in 5 seconds — highlight what you mean, annotate on-chart.",
+          "The assumption-ledger appendix is your defence when you are not in the room; without the sensitivity column, the ledger is descriptive, not defensible.",
+          "Spend the last 20% of every project on the artifact; the four weeks of analysis only matter if they land in the 90 seconds the stakeholder gives you."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick the last memo or deck you sent. Read sentence one. If a stakeholder stopped after that sentence, would they know what you found and what you recommend? If not, write the BLUF version of sentence one now."
+      }
+    ]
+  }
+}

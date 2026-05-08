@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Cookie-Cutter Mockup Pivot",
+    "source": "Head of Design at Yodlee Studio, a Bengaluru product-design consultancy",
+    "date": "March 2026",
+    "story": "In late 2025, Yodlee's design team — 11 designers across 4 client engagements — ran a three-month experiment: ask Claude (Sonnet 4.6, Opus 4.7) to *generate full mockups* for client work. *\"We thought we'd 10x the throughput,\"* the head of design wrote in a post-mortem. They did not 10x throughput.\n\nWhat they got: **134 mockups across 9 weeks**, of which clients shipped **11**. The rest were polite-but-firm rejections: *\"It looks like every other SaaS dashboard.\"* *\"Where's the brand?\"* *\"This is a stock template.\"* The output was technically correct, hierarchically clean, and emotionally flat — what one client called *\"the AI-generated airport-lounge of dashboards.\"*\n\nIn February 2026, the team switched modes. New rule: **Claude does not generate. Claude critiques.** A designer drafts, Claude reviews against a written brief, the designer iterates. Two-week loops, not one-shot generations. Three months later, the team's internal **design quality scores rose 37%** (measured on a rubric of brand fit, hierarchy, originality, accessibility), and client revision rounds dropped from an average of 4.2 to 1.8.\n\nThe head of design now runs a workshop titled *\"Stop Asking Claude For Mockups.\"* It is fully booked.",
+    "takeaway": "Generative-mode Claude in design produces the mean of its training data, which is the airport-lounge aesthetic. Critique-mode Claude makes your designer's work better. Same model, different verb."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Week 12 — Pitching the Design Lead",
+    "setup": "**Week 12 of Q2 2026.** The cowork rollout stuck. The CTO wants to expand Claude into the design team — **6 designers under Priya, Velora's design lead**. Priya is skeptical for the right reasons: she's seen the airport-lounge dashboards, she's read the Yodlee post-mortem, and she has zero patience for *\"AI will speed you up\"* pitches.\n\nYou — Karthik — get the 30-minute meeting. If you walk in pitching *\"Claude generates mockups,\"* Priya kills the rollout in the first five minutes. You need a workflow she'll actually adopt.",
+    "coach": { "name": "Anthropic-Veteran Anuj", "role": "Has personally pitched four skeptical design leads and lost two of them" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Anuj walks you in. *\"What's the **one sentence** you open with?\"*",
+        "options": [
+          { "id": "a", "label": "\"Claude can draft mockups in seconds — let me show you.\"", "correct": false, "explain": "Priya stands up and walks out before the demo loads. You opened with the *exact* claim Yodlee disproved over 9 weeks. You have lost the room.", "points": 0 },
+          { "id": "b", "label": "\"I'm not here to ask Claude to design. I'm here to ask Claude to be the loudest junior critic in your team.\"", "correct": true, "explain": "**This is the open.** Reframes Claude from *replacement* to *augmentation*, names the role specifically, and signals you've read Priya's objections before she had to raise them. She uncrosses her arms.", "points": 3 },
+          { "id": "c", "label": "\"Anthropic released a new design-system feature. Want a demo?\"", "correct": false, "explain": "Feature-led pitches die in design rooms. Priya doesn't care what shipped; she cares what *changes about her team's work*. Lead with the workflow, not the product.", "points": 0 },
+          { "id": "d", "label": "\"Your designers spend 40% of their time on revisions. What if Claude pre-flagged the issues before client review?\"", "correct": true, "explain": "**Strong.** Frames Claude as a *time-shift* tool, not a *replacement*. Numbers up front. Priya leans in to ask where the 40% came from.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You have her attention. **What's the workflow you actually pitch?**",
+        "options": [
+          { "id": "a", "label": "Designer drafts → Claude generates 3 alternative mockups → designer picks one.", "correct": false, "explain": "You just re-pitched the Yodlee experiment. Generative-mode Claude regresses to the mean. Priya recognizes the pattern instantly.", "points": 0 },
+          { "id": "b", "label": "Designer drafts → Claude critiques against a written brief (brand, hierarchy, accessibility, edge cases) → designer iterates → repeat 2-3 times.", "correct": true, "explain": "**Exactly the Yodlee pivot.** Critique-mode is where Claude shines: it has read more design rubrics than any junior on Priya's team and won't get tired by round 4. The brief is the load-bearing artifact.", "points": 3 },
+          { "id": "c", "label": "Claude reviews the entire Velora design system every Monday and posts 'inconsistencies' to Slack.", "correct": false, "explain": "Unsolicited weekly critique creates noise, not signal. Designers will mute the channel by week 3. Critique works *in the loop of a specific design*, not as a standing audit.", "points": 1 },
+          { "id": "d", "label": "Designer drafts → Claude critiques → *and* Claude generates targeted alternatives for one specific element (e.g., 'just the empty-state illustration concept').", "correct": true, "explain": "**Top-tier.** Bounded generation on a specific micro-element is fine — it's the *whole-mockup generation* that fails. Priya is sketching this on her notepad.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Priya pushes back: *\"Where's the brief come from? My designers don't write briefs — they write Figma files.\"* **What's your move?**",
+        "options": [
+          { "id": "a", "label": "\"Claude can write the brief from the Figma file.\"", "correct": false, "explain": "If Claude writes the brief from the file it's about to critique, the critique becomes circular — Claude grading its own interpretation. The brief must come from a human source: client kickoff, design system, brand guide.", "points": 0 },
+          { "id": "b", "label": "\"We extract a 1-page brief from the existing client kickoff doc + Velora's brand guide. Reusable across projects. ~30 min one-time setup.\"", "correct": true, "explain": "**Right answer.** Briefs already exist as scattered artifacts; you're consolidating them. One-time setup, repeated value. Priya can see the math.", "points": 3 },
+          { "id": "c", "label": "\"We don't need a brief — Claude will figure it out from context.\"", "correct": false, "explain": "Without a brief, Claude critiques against generic best practices, which is exactly the airport-lounge problem in feedback form. The brief is what makes critique *Velora-specific*.", "points": 0 },
+          { "id": "d", "label": "\"The brief is a Claude Project — designers can re-use it across files, and it stays current as the brand evolves.\"", "correct": true, "explain": "**Even better.** Claude Projects make the brief a *living artifact* with persistent context. Designers don't re-paste it every session; the project carries it. This is the operational detail that makes the workflow stick.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Priya is mostly sold. *\"Fine — I'll pilot with **2 of my 6 designers** for one sprint. What's the success metric?\"* **Pick one.**",
+        "options": [
+          { "id": "a", "label": "\"Number of mockups generated per week.\"", "correct": false, "explain": "Throughput-as-metric is exactly what produced the 134-to-11 Yodlee disaster. You're measuring the wrong thing on day one. Priya's hand is moving toward the meeting-end button.", "points": 0 },
+          { "id": "b", "label": "\"Client revision rounds per project. Baseline measured today, re-measured at end of sprint.\"", "correct": true, "explain": "**The right metric.** Yodlee saw 4.2 → 1.8 on this exact measure. It captures *quality of first delivery*, which is what critique-mode actually improves. Priya nods.", "points": 3 },
+          { "id": "c", "label": "\"Designer self-reported satisfaction with the workflow.\"", "correct": false, "explain": "Self-reported satisfaction will be glowing in week 1 (novelty) and lukewarm in week 4 (reality). Not a real signal. Use it as a tiebreaker, not the headline.", "points": 1 },
+          { "id": "d", "label": "\"Client revision rounds *and* designer hours per project, both measured against last quarter's baseline.\"", "correct": true, "explain": "**Top-tier.** Quality (revisions) + cost (hours) = the only two-axis measurement that catches both the airport-lounge failure mode *and* the 'critique takes longer than just doing the work' failure mode.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You walked in with the right reframe, the right workflow, and the right metric. Priya is piloting with 2 designers, and if it works the other 4 follow naturally. **Anuj texts you afterward: 'You just saved us six months of design-team friction.'**",
+      "good": "You won the pitch but left some sharp edges (wrong metric, fuzzy brief sourcing). Re-read the lesson on **critique-mode vs. generative-mode** — getting the verb right is 80% of design rollouts.",
+      "learn": "You pitched the Yodlee experiment in a Velora meeting room. Priya killed it, the design team is now a no-go zone for AI rollout, and you've added 6 months of trust-rebuilding to your roadmap. Re-read the lesson — especially the sections on **Claude as critic, not generator** and **briefs as load-bearing artifacts**."
+    }
+  }
+}

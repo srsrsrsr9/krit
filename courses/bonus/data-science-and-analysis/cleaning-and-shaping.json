@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 78 Percent Accuracy, 92 Percent of One Cohort",
+    "source": "Anonymous BI lead at LedgerLeap, a Bengaluru SaaS unicorn with 14,000 SMB customers",
+    "date": "November 2024",
+    "story": "On November 6, 2024, the customer-success-analytics team at LedgerLeap shipped a churn-prediction model into the CSM tooling. The model card, projected on a 65-inch TV in the all-hands, said the magic number: **78 percent accuracy on holdout.** People clapped. The Head of CS asked when she could have one for upsell.\n\nThe team had skipped the unfashionable parts. No EDA. No `df.describe()`. No `value_counts()` on the cohort column. They went straight from `pd.read_csv` to `model.fit`. The training data was a single export from the CRM that an analyst had pulled three months earlier — a snapshot that, unbeknownst to the team, came from a single segment: **mid-market customers acquired through the 2023 enterprise-AE-led GTM motion.** That segment was 92 percent of the rows.\n\nThe model went live on December 1. CSMs started getting churn-risk scores for the **self-serve SMB cohort** — 9,000 customers, almost none of whom were in the training data. By December 14, every score was either 0.04 or 0.97; no middle. CSMs lost trust. The Head of CS asked, at the December 21 retro, the question that ended someone's quarter: *\"Did you actually look at the data before you trained on it?\"*\n\nThe rebuilt model, with a real EDA pass and a stratified sample across cohorts, shipped in February at 71 percent accuracy. Lower number. Real number.",
+    "takeaway": "EDA is not a phase you skip to look more senior. It is the phase that prevents you from looking junior on a stage."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The CFO's CSV",
+    "setup": "It's **Week 4**. Aditi has survived onboarding, stand-ups, and one incident. Her boss forwards an email at 11:14am with the subject *\"Need this by Friday\"* and a 240MB attachment: `transactions_export_v3_FINAL_actually_final.csv`.\n\nThe CFO wants a model that flags 'high-risk' merchant accounts. He's read about ML. He's excited. The deadline is **3 days**. Aditi's hands hover over the keyboard. She wants to look fast. She types `pd.read_csv(...)` and her fingers reach for `model.fit(...)`. She pings you.",
+    "coach": { "name": "Head-of-Data Hema", "role": "Head of Data, ex-McKinsey, now mostly polite" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Aditi has the file loaded. 4.7 million rows, 38 columns. She types `from sklearn.ensemble import RandomForestClassifier`. **Stop her.** What's the first move?",
+        "options": [
+          { "id": "a", "label": "\"Train the random forest. Iterate from there. Speed matters.\"", "correct": false, "explain": "This is the LedgerLeap mistake from the field notes. Aditi will hit 78 percent accuracy on a glorious training set that lives entirely inside one merchant segment, and the model will eat itself the moment a kirana-store account hits production. Hema sighs.", "points": 0 },
+          { "id": "b", "label": "\"Run `df.info()`, `df.describe()`, and `df.isnull().sum()` before anything else. Spend 30 minutes looking at the data.\"", "correct": true, "explain": "**Yes.** Aditi finds: 14 percent of `merchant_category` is null, `transaction_amount` has values from -₹10,000 to ₹4.2 crore (negatives?), and the date column is a string with three different formats. She just saved her week.", "points": 3 },
+          { "id": "c", "label": "\"Drop all rows with any nulls and proceed.\"", "correct": false, "explain": "She just deleted 38 percent of the data, including most of the 'churned' merchants (who fail to fill in optional fields more often). The remaining sample is biased toward healthy accounts. This is the model-rot starter pack.", "points": 0 },
+          { "id": "d", "label": "\"Plot the distribution of the target variable first. If it's 99-1 imbalanced you have a different problem.\"", "correct": true, "explain": "**Smart.** `df['high_risk'].value_counts(normalize=True)` returns 0.987 / 0.013. With that imbalance, raw accuracy is meaningless and stratified sampling becomes mandatory. Aditi just dodged a metric-fooling disaster.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "EDA reveals: 92 percent of rows are from one merchant segment (e-commerce). Almost no rows from kirana stores, even though kiranas are 40 percent of the live population. **What does Aditi do?**",
+        "options": [
+          { "id": "a", "label": "\"Train on what you have. We'll fix it later.\"", "correct": false, "explain": "There is no later. This is exactly the LedgerLeap cohort failure. The model will be confidently wrong on 40 percent of production traffic from day one. 'Later' becomes a P0 in February.", "points": 0 },
+          { "id": "b", "label": "\"Go back to data-eng and ask: where are the kiranas? Is this an export filter, a join bug, or a sampling artifact?\"", "correct": true, "explain": "**The right move.** Two hours with the data engineer reveals the export was filtered to `merchant_type IN ('ecom', 'd2c')` because of a stale view. Aditi gets a corrected pull. Half the day, all the difference.", "points": 3 },
+          { "id": "c", "label": "\"Stratified-sample the e-commerce rows down so kiranas are represented proportionally.\"", "correct": false, "explain": "You can't stratify a cohort that isn't in the data. Downsampling e-comm doesn't add kirana rows; it just gives you a tiny, biased dataset. Wrong remedy.", "points": 1 },
+          { "id": "d", "label": "\"Train the model on e-comm only, scope the deployment to e-comm merchants, document the limitation explicitly.\"", "correct": true, "explain": "**Honest senior move.** If kirana data is genuinely unavailable, scope the model's deployment to where the training data lives. Make the limitation a feature of the model card, not a hidden footnote. Hema approves.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "The corrected pull arrives. 6.1M rows, all merchant types, well-distributed. Aditi finds: `transaction_amount` has 1,847 rows with negative values and 14 rows over ₹10 crore. **Handle the outliers.**",
+        "options": [
+          { "id": "a", "label": "\"Drop everything outside 3 standard deviations.\"", "correct": false, "explain": "Negative refunds and ₹10cr B2B settlements are *real transactions* that the model needs to see. You just deleted half the high-risk signal because it was 'inconvenient.' This is the analyst version of looking under the streetlight.", "points": 0 },
+          { "id": "b", "label": "\"Talk to data-eng. Are negatives refunds, reversals, or data errors? Are ₹10cr rows real or decimal-place bugs?\"", "correct": true, "explain": "**Always.** Turns out negatives are legitimate refunds (keep, but flag), and the ₹10cr rows are real B2B GST settlements (rare but valid). Aditi adds two boolean features: `is_refund` and `is_b2b_settlement`. Her model is now smarter than yesterday's.", "points": 3 },
+          { "id": "c", "label": "\"Winsorize at the 1st and 99th percentile and move on.\"", "correct": false, "explain": "Winsorizing without understanding your data is just a fancy form of throwing it away. The 99th percentile here likely IS the high-risk signal. You're hiding the answer from the model.", "points": 1 },
+          { "id": "d", "label": "\"Cap the values, but log a feature `was_capped` so the model can learn from the fact of capping.\"", "correct": true, "explain": "**Defensible.** If you must cap (for tree-model stability or pipeline reasons), preserving 'this row was extreme' as a feature lets the model recover the signal. Documented, intentional, reviewable.", "points": 2 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You stopped Aditi from shipping a model that would have face-planted on 40 percent of production traffic. EDA, target distribution, cohort coverage, outlier interrogation — the whole boring beautiful pipeline. Hema mentions you favorably in skip-level. CFO gets a model that works.",
+      "good": "Solid. You caught the headline issue but missed one of the cohort or outlier nuances. Re-read the lesson on systematic EDA — the difference between 78 percent on training and 71 percent in production is whether you did the unfashionable work.",
+      "learn": "Aditi shipped fast and broke things. Re-read the lesson — especially the sections on **target distribution checks** and **cohort coverage in training data**. The CFO is asking polite questions in the retro. They will not stay polite."
+    }
+  }
+}

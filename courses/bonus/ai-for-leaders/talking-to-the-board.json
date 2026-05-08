@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 40% promised, 4% delivered",
+    "source": "Anonymous board member, 14 board seats, 6 of them Indian SaaS",
+    "date": "December 2025",
+    "story": "CEO of a Series-D Indian SaaS told us in Q1 2024: *'AI will reduce our CAC by 40% within 6 months.'* No assumption ledger. No kill criterion. Just the headline.\n\n6 months later: 4% reduction. Q3 board meeting: 'we need 6 more months and ₹8 cr more.' Q4 board meeting: 4.5%. Q1 2025: CEO replaced.\n\nThe replacement CEO did Q2's portfolio differently: 3 bets, each with a 90-day kill criterion stated up front, confidence at 50-65% each, rollback plan written. Board approved twice the budget at half the discomfort. **The behavior change was the reframe** — not the AI strategy underneath.\n\nThe original CEO wasn't dishonest. He was selling. The board, after 24 months of overpromised AI, is now sales-allergic. Honest framings are rewarded.",
+    "takeaway": "Boards now reward honest probability + dated kill criteria far more than confident vapor. The market caught on."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: 30 minutes, board next week",
+    "setup": "Vikrant has a 30-minute slot at next week's board meeting to present his Q2 AI portfolio. CEO wants 'transformative.' CFO wants ROI. Board chair was burned by the previous AI pitch and is sales-allergic. Vikrant has 3 bets and ₹3.6 cr.",
+    "coach": { "name": "CFO-Veteran Vinita", "role": "30-year CFO who has seen 12 'governance' efforts work and 47 fail" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Vikrant's draft slide 1: 'AI will transform how we serve customers in 2026.' What does Vinita say?",
+        "options": [
+          { "id": "a", "label": "Replace immediately. Slide 1 is allergen-rich.", "correct": true, "explain": "Right. 'Transform' is the trigger word. Replace with: 'three AI bets, ₹3.6cr, dated kill criteria, expected outcomes by Sep 30.'", "points": 3 },
+          { "id": "b", "label": "Keep — sets aspirational tone.", "correct": false, "explain": "Aspirational tone IS the allergen. Board has heard 'transform' too many times.", "points": 0 },
+          { "id": "c", "label": "Soften to 'AI will significantly improve...'", "correct": false, "explain": "Same allergen, smaller font.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "How does Vikrant frame his confidence on bet 1 (RAG over docs, expected -8% support cost)?",
+        "options": [
+          { "id": "a", "label": "'Confidence: 70%. Here's why higher than 50: we have prior internal pilot data, vendor benchmarks. Why not higher than 70: customer behavior on edge cases is uncertain.'", "correct": true, "explain": "S-tier. Specific probability + the reasons it's not 100% + the reasons it's not 50%. Calibrated honesty.", "points": 3 },
+          { "id": "b", "label": "'Highly confident.'", "correct": false, "explain": "Vague. Board can't calibrate.", "points": 0 },
+          { "id": "c", "label": "Skip the confidence number; just say 'we believe...'", "correct": false, "explain": "Same vagueness, more words.", "points": 0 },
+          { "id": "d", "label": "'90%+ confident.'", "correct": false, "explain": "Overconfident. Board has heard 90% before; the slide that comes after 4% delivery is hard.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Board chair asks: 'what if it doesn't work?' How does Vikrant answer?",
+        "options": [
+          { "id": "a", "label": "'Pre-committed kill criteria on each bet. Bet 1 dies at day 45 if support cost hasn't moved 3%; engineers reallocated to bet 2. Here's the slide with each bet's kill date.'", "correct": true, "explain": "Right. Pre-committed kill criteria is the most trust-positive answer to that question.", "points": 3 },
+          { "id": "b", "label": "'We've planned for success; we'll figure it out if it doesn't work.'", "correct": false, "explain": "Worst answer. Board hears 'no kill plan = open-ended commitment'.", "points": 0 },
+          { "id": "c", "label": "'It will work; here's why we're confident.'", "correct": false, "explain": "Doesn't answer the question. Reads as evasion.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Board approves at full requested ₹3.6 cr; chair publicly notes 'best AI pitch we've seen this year.' Discipline carries forward to next quarter.",
+      "good": "Board approves ₹2.7 cr (75%) — half because of confidence-honesty, half because they want to see 90 days first. Worth re-pitching at Q3 with results.",
+      "learn": "Re-read the allergen list. Boards have heard 'transform/revolutionize/disrupt' enough times that those words now subtract trust."
+    }
+  }
+}

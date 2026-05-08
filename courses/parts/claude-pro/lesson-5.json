@@ -1,0 +1,224 @@
+{
+  "lesson": {
+    "slug": "claude-as-teammate",
+    "title": "Long-Running Workflows: Subagents, Background Jobs, Memory",
+    "subtitle": "Break work into small bounded tasks; orchestrate the rest",
+    "estimatedMinutes": 14,
+    "skills": ["claude-orchestration"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/claude-pro/claude-as-teammate.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why long loops fail" },
+          { "startSec": 80, "label": "Mental model: small bounded tasks" },
+          { "startSec": 220, "label": "Move 1: parallel fan-out" },
+          { "startSec": 410, "label": "Move 2: artifact handoff" },
+          { "startSec": 560, "label": "Memory and the 1M context" }
+        ],
+        "notesPdfUrl": "/notes/claude-pro/claude-as-teammate.html",
+        "notesByline": "Notes by Karthik, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Up to now, every Claude interaction in this course has been you and one Claude in a tight loop. This lesson is about the next level: workflows where multiple Claudes run in parallel, in the background, across hours, with handoffs between them. The word for this is **orchestration**, and it is where Claude either gets ten times more useful or ten times more wrong, with no middle ground. The teams that get orchestration right ship work that would take a 5-person team a week. The teams that get it wrong wake up to logs of a Claude run that touched 230 files based on an assumption it formed in step 4."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 320'><rect width='640' height='320' fill='#EFF6FF'/><circle cx='100' cy='160' r='40' fill='#0EA5E9'/><text x='100' y='165' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>YOU</text><polygon points='150,160 200,140 200,180' fill='#1F2937'/><circle cx='240' cy='160' r='35' fill='#8B5CF6'/><text x='240' y='165' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>orchestrator</text><line x1='275' y1='130' x2='370' y2='80' stroke='#1F2937' stroke-width='2'/><line x1='275' y1='160' x2='370' y2='160' stroke='#1F2937' stroke-width='2'/><line x1='275' y1='190' x2='370' y2='240' stroke='#1F2937' stroke-width='2'/><circle cx='400' cy='80' r='30' fill='#10B981'/><text x='400' y='85' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>worker A</text><circle cx='400' cy='160' r='30' fill='#10B981'/><text x='400' y='165' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>worker B</text><circle cx='400' cy='240' r='30' fill='#10B981'/><text x='400' y='245' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>worker C</text><line x1='430' y1='80' x2='510' y2='160' stroke='#92400E' stroke-width='2' stroke-dasharray='4,2'/><line x1='430' y1='160' x2='510' y2='160' stroke='#92400E' stroke-width='2' stroke-dasharray='4,2'/><line x1='430' y1='240' x2='510' y2='160' stroke='#92400E' stroke-width='2' stroke-dasharray='4,2'/><rect x='510' y='130' width='100' height='60' rx='6' fill='white' stroke='#F59E0B' stroke-width='2'/><text x='560' y='155' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='700' fill='#92400E'>artifact</text><text x='560' y='173' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>(handoff)</text></svg>",
+        "alt": "You feeds an orchestrator which fans out to 3 workers; workers write to an artifact",
+        "caption": "Fan-out and merge. The artifact is the boundary between agents."
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: Claude works best in small bounded tasks",
+        "md": "A 4-hour Claude run is not 240 1-minute Claude runs in a row. It is 240 chances for context to drift, an assumption to harden, or an early mistake to compound. The mental model: **break every long workflow into small bounded tasks with explicit handoffs**. Each task knows its input, its scope, its expected output, and its hard stop. Each handoff is a small artifact a human or another agent can read in 60 seconds. This is exactly how you would run a real engineering team, and Claude responds to the same shape."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/claude-pro/anim/claude-as-teammate-fanout.html",
+        "height": 420,
+        "caption": "Animated: 4 parallel subagents investigate 4 codebase areas, each writes a 5-bullet artifact, the orchestrator merges."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "CA firm ka background backfill",
+            "tone": "tip",
+            "md": "Pune ki ek CA firm. 800 ITRs ko anomaly check karna tha. Junior ne run_in_background mein single job daala — 800 ITRs sequentially, ek context window mein. 6 ghante baad context overflow, partial results, kuch ITRs do baar process huye, kuch ek baar bhi nahi. Senior CA ne plan badla: **Haiku 4.5 batch API, parallel 50 at a time, har batch ek artifact likhe, fir orchestrator merge kare**. Same kaam 47 minute mein, 90% sasta. Lesson? Long sequential chains break. Bounded parallel batches scale."
+          },
+          "en": {
+            "title": "Sequential is the enemy",
+            "tone": "tip",
+            "md": "A Pune CA firm tried to anomaly-check 800 ITRs in one sequential Claude run. Six hours later, half the ITRs were processed twice, half not at all, and the context had overflowed. Switching to Haiku 4.5 in batched parallel calls with one artifact per batch finished the same job in 47 minutes at one-tenth the cost."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1: The Parallel Fan-Out Pattern"
+      },
+      {
+        "type": "markdown",
+        "md": "When you have a task that decomposes into N independent sub-tasks, do not run them in sequence. Fan out N subagents in parallel, each with a bounded brief, each writing a small artifact, and merge at the end. This is **the parallel fan-out pattern**, and it is the single biggest unlock once you understand orchestration.\n\nThe canonical example: investigating a slow build. A serial Claude would walk through the webpack config, then the test config, then the CI logs, then the dependency tree, taking 30 minutes and probably losing context by the end. A fan-out launches four `general-purpose` subagents at once, each with one focus area, each told to return a 5-bullet diagnosis with file references. Five minutes later you merge four artifacts and have the picture. The cost is roughly the same total tokens but the wall-clock is one-quarter and the quality is higher because no single agent's context got muddied.\n\nWhen does fan-out *not* work? When the sub-tasks have dependencies — *'first figure out X, then use X to investigate Y'* is sequential by nature. The fan-out test: *'can these tasks run on different machines that never talk to each other and produce useful results?'* If yes, fan out. If no, sequence."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 240'><rect width='640' height='240' fill='#FAF5FF'/><rect x='40' y='40' width='100' height='40' rx='6' fill='#8B5CF6'/><text x='90' y='65' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>SERIAL</text><rect x='160' y='40' width='80' height='40' rx='4' fill='white' stroke='#8B5CF6' stroke-width='2'/><text x='200' y='65' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>task 1</text><rect x='250' y='40' width='80' height='40' rx='4' fill='white' stroke='#8B5CF6' stroke-width='2'/><text x='290' y='65' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>task 2</text><rect x='340' y='40' width='80' height='40' rx='4' fill='white' stroke='#8B5CF6' stroke-width='2'/><text x='380' y='65' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>task 3</text><rect x='430' y='40' width='80' height='40' rx='4' fill='white' stroke='#8B5CF6' stroke-width='2'/><text x='470' y='65' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>task 4</text><text x='580' y='65' font-family='sans-serif' font-size='10' fill='#5B21B6' font-style='italic'>30 min</text><rect x='40' y='130' width='100' height='40' rx='6' fill='#10B981'/><text x='90' y='155' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>FAN-OUT</text><rect x='160' y='100' width='80' height='30' rx='4' fill='white' stroke='#10B981' stroke-width='2'/><text x='200' y='120' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>task 1</text><rect x='160' y='140' width='80' height='30' rx='4' fill='white' stroke='#10B981' stroke-width='2'/><text x='200' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>task 2</text><rect x='160' y='180' width='80' height='30' rx='4' fill='white' stroke='#10B981' stroke-width='2'/><text x='200' y='200' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>task 3</text><rect x='250' y='130' width='90' height='40' rx='4' fill='#F59E0B'/><text x='295' y='155' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>merge</text><text x='580' y='155' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>8 min</text></svg>",
+        "alt": "Serial 4-task chain takes 30 min vs parallel fan-out + merge takes 8 min",
+        "caption": "Independent tasks fan out. Same total work, one-quarter the wall clock."
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'audit the codebase for security issues' to a real fan-out",
+        "steps": [
+          { "label": "Decompose", "body": "Independent slices: auth code, database queries, API routes, env-var usage, third-party deps." },
+          { "label": "Brief each subagent", "body": "Each gets one slice + a hard scope + the 5-bullet artifact format + a 10-minute soft cap." },
+          { "label": "Launch in parallel", "body": "5 Task tool calls in one message. Each runs in its own context window with bounded budget." },
+          { "label": "Wait for artifacts", "body": "Each writes to docs/audit/<area>.md. The orchestrator does not babysit — it waits for the deliverables." },
+          { "label": "Merge", "body": "The orchestrator reads 5 artifacts (5 short docs), produces one ranked findings doc with severity." },
+          { "label": "Human review", "body": "You read the merged doc. The 5 raw artifacts are there for drill-down. The whole audit took 12 minutes." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Which task is the WORST candidate for parallel fan-out?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Investigating 4 independent areas of a slow build", "correct": false, "explain": "Independent areas, no dependencies. Perfect fan-out." },
+          { "id": "b", "label": "Reading 200 customer support tickets and tagging each by category", "correct": false, "explain": "Each ticket is independent. Batched fan-out is the right move." },
+          { "id": "c", "label": "Migrating a database schema where step 2 depends on step 1's column rename succeeding", "correct": true, "explain": "Sequential dependency. Fan-out would race and break the migration. Sequence with checkpoints." },
+          { "id": "d", "label": "Generating 6 alternate copy variants for a landing page hero", "correct": false, "explain": "Independent variants, no dependencies. Fan-out works." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Mumbai local ka pattern",
+            "tone": "info",
+            "md": "Bhai, Mumbai local mein 9 bogie hote hain, har bogie independently chalti hai par sab ek same destination pe pahunchti hain. Yahi fan-out hai. Agar 9 bogie ki jagah ek lambi train hoti, jisme har bogie pichhli ke saath physically locked rehti — to ek bogie atak gayi, sab atak jaate. Same with Claude. Independent subagents = parallel bogies. Locked sequential dependencies = ek lambi train, ek failure mein sab freeze."
+          },
+          "en": {
+            "title": "Mumbai local as orchestration",
+            "tone": "info",
+            "md": "Mumbai locals run nine independent coaches. One delay does not freeze the others; they all converge at the destination. That is fan-out. The opposite is a single locked train where one breakdown halts everything. Build your Claude workflows like the locals, not like a single articulated train."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2: The Artifact-Handoff Protocol"
+      },
+      {
+        "type": "markdown",
+        "md": "Long workflows fail because context dies. A 4-hour run accumulates 200K tokens of stdout, of which maybe 5K are signal and the rest is noise. The next step is operating on noise. The fix is the **artifact-handoff protocol**: every meaningful unit of work writes a small, structured artifact that the next unit reads instead of the raw stream.\n\nWhat does an artifact look like? Concretely: a markdown file under 500 words with a fixed schema. For an investigation: *finding, evidence, location, severity, suggested next step*. For a code change: *files touched, summary diff, tests added, rollback*. For a data analysis: *question, method, top 3 results, caveats*. The next agent (or the next you) reads the artifact in 60 seconds and continues with high signal-to-noise.\n\nUse this with `run_in_background` for long jobs. The background job writes the artifact at the end; your foreground agent reads only the artifact, never the 50K-line log. Use it across subagents in a fan-out. Use it across days when you pick up tomorrow what you started today. Use it when you hand off to a teammate. The artifact is the unit of agent work, exactly like a commit is the unit of human work."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'><rect width='640' height='280' fill='#ECFDF5'/><circle cx='100' cy='140' r='40' fill='#10B981'/><text x='100' y='138' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>agent A</text><text x='100' y='154' text-anchor='middle' font-family='sans-serif' font-size='9' fill='white'>3hr backfill</text><polygon points='150,140 200,120 200,160' fill='#1F2937'/><rect x='220' y='80' width='180' height='120' rx='8' fill='white' stroke='#F59E0B' stroke-width='3'/><text x='310' y='105' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#92400E'>artifact.md</text><text x='235' y='130' font-family='monospace' font-size='9' fill='#92400E'>finding: ...</text><text x='235' y='148' font-family='monospace' font-size='9' fill='#92400E'>evidence: ...</text><text x='235' y='166' font-family='monospace' font-size='9' fill='#92400E'>severity: high</text><text x='235' y='184' font-family='monospace' font-size='9' fill='#92400E'>next: review by EOD</text><polygon points='410,140 460,120 460,160' fill='#1F2937'/><circle cx='510' cy='140' r='40' fill='#0EA5E9'/><text x='510' y='138' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white' font-weight='700'>agent B</text><text x='510' y='154' text-anchor='middle' font-family='sans-serif' font-size='9' fill='white'>or you</text><text x='320' y='240' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46' font-style='italic'>500 words. Read in 60 seconds. Beats 50K lines of stdout.</text></svg>",
+        "alt": "Agent A produces a small artifact; Agent B reads only the artifact",
+        "caption": "Artifact is the boundary. Stream is the noise. Always pass the artifact."
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Claude-Whisperer Karan",
+          "role": "Fractional CTO, hates wasted prompts",
+          "avatarSrc": "/coaches/claude-whisperer-karan.png"
+        },
+        "intro": [
+          "You are running a long Claude workflow for a real client. Each scenario is a moment of decision.",
+          "Sort by whether to fan out, sequence, or stop and rethink the whole approach."
+        ],
+        "buckets": [
+          { "id": "fanout", "label": "FAN-OUT in parallel", "tone": "safe" },
+          { "id": "sequence", "label": "SEQUENCE with checkpoints", "tone": "neutral" },
+          { "id": "stop", "label": "STOP — rethink before running", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "You need to summarise 60 product reviews and bucket them into themes. Each review is independent.", "correctBucketId": "fanout", "explain": "Independent inputs, structured output. Batch fan-out on Haiku, merge themes." },
+          { "id": "s2", "situation": "Migrating a database where Step 2 needs the new column from Step 1.", "correctBucketId": "sequence", "explain": "Hard sequential dependency. Each step needs a checkpoint to verify before moving on." },
+          { "id": "s3", "situation": "An autonomous loop runs your refactor across 200 files unsupervised for 4 hours.", "correctBucketId": "stop", "explain": "Unsupervised long loops drift. Break into bounded subagents with artifact handoff before launching." },
+          { "id": "s4", "situation": "Investigating 5 independent slices of a slow build — webpack, tests, CI, deps, env.", "correctBucketId": "fanout", "explain": "Five independent investigations, each with a 5-bullet artifact deliverable. Classic fan-out." },
+          { "id": "s5", "situation": "Releasing a feature: deploy backend, then run smoke tests, then flip the feature flag.", "correctBucketId": "sequence", "explain": "Each step depends on the previous succeeding. Sequence with checkpoints; one failure stops the chain." },
+          { "id": "s6", "situation": "An MCP-connected Claude has both database write access and email send permissions, no human review gate.", "correctBucketId": "stop", "explain": "Two unsafe capabilities together with no review is a postmortem waiting to happen. Add a review gate or remove a capability before running." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: the runaway loop",
+        "md": "The single most expensive mistake in orchestration is **the runaway loop**: an agent that keeps going past its useful scope because the stop condition was vague. A loop told to *'fix the test failures'* with no scope might decide that fixing tests requires refactoring the test framework. Forty minutes later it has touched the test runner, the CI config and your package.json. Defenses: every loop needs a hard scope (*'only files matching tests/auth/**'*), a budget (*'stop after 8 tool calls'*), and a deliverable (*'write a 5-bullet summary at the end'*). Without all three, you are gambling."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order a safe long-running Claude workflow",
+        "items": [
+          { "id": "decompose", "label": "Decompose into independent sub-tasks", "detail": "Write them down. If you can't, the workflow isn't ready." },
+          { "id": "brief", "label": "Write a bounded brief for each (scope, budget, artifact format)", "detail": "Three constraints, every brief." },
+          { "id": "launch", "label": "Launch subagents in parallel where possible, sequence only where needed", "detail": "Fan out the locals, sequence only the articulated train." },
+          { "id": "artifact", "label": "Each subagent writes a small structured artifact", "detail": "500 words max, fixed schema." },
+          { "id": "merge", "label": "Orchestrator reads only artifacts, merges into one summary", "detail": "Never reads raw streams. The artifact is the boundary." },
+          { "id": "review", "label": "Human reviews the merged summary; drills into artifacts as needed", "detail": "You stay in the loop. Always." }
+        ],
+        "hint": "Decompose, brief, fan out, write artifacts, merge, review."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Take a real long task you've been avoiding (investigation, audit, migration, backfill). Decompose it into 3-5 independent sub-tasks and write the brief for each (scope + budget + artifact format).",
+        "lang": "markdown",
+        "starter": "TASK:\n\nSUB-TASKS:\n1. \n   - Scope:\n   - Budget:\n   - Artifact format:\n2. \n   - Scope:\n   - Budget:\n   - Artifact format:\n3. \n   - Scope:\n   - Budget:\n   - Artifact format:",
+        "expected": "TASK: Audit the codebase for places that read from production DB without a connection-pool guard\n\nSUB-TASKS:\n1. Find all DB-read call sites in /app/server\n   - Scope: only .ts files under /app/server, exclude tests\n   - Budget: 6 tool calls max\n   - Artifact format: 5-bullet list of {file, line, function, severity, suggested fix}\n2. Find all DB-read call sites in /app/api\n   - Scope: only .ts files under /app/api\n   - Budget: 6 tool calls max\n   - Artifact format: same 5-bullet schema\n3. Cross-check against pool config in /lib/db.ts\n   - Scope: read /lib/db.ts and the two artifacts above\n   - Budget: 4 tool calls max\n   - Artifact format: 1-paragraph summary + ranked list of 5 highest-risk call sites with rationale"
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the two strongest reasons to use the artifact-handoff protocol.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "It keeps signal-to-noise high across long workflows", "correct": true, "explain": "The next agent reads 500 words, not 50K lines of stdout. That is the whole game." },
+          { "id": "b", "label": "It makes the workflow auditable by humans days later", "correct": true, "explain": "Artifacts are the audit log. You can replay any step from its inputs." },
+          { "id": "c", "label": "It makes Claude faster per token", "correct": false, "explain": "Per-token speed is unchanged. The win is wall-clock and quality, not raw speed." },
+          { "id": "d", "label": "It lets you skip code review", "correct": false, "explain": "Never. Artifacts make review easier; they do not replace it." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Tiffin service ka model",
+            "tone": "tip",
+            "md": "Bhai, Mumbai dabbawalas ka famous example. Har dabbawala apna chhota route chalata hai, dabba ek artifact hai (clear marking, ek tag), agla dabbawala bina pucha agla step uthata hai. Pure system 99.9% accuracy pe chalta hai bina kisi central computer ke. Yahi orchestration hai. Each agent does its small bounded task. The dabba is the artifact. Nobody reads the full delivery history; everyone trusts the marking. Build your Claude workflows like the dabbawala system."
+          },
+          "en": {
+            "title": "The dabbawala protocol",
+            "tone": "tip",
+            "md": "The Mumbai dabbawalas run a 200K-meal-a-day system at 99.9% accuracy with no central computer. Each runner does one bounded leg; the tiffin tag is the artifact; the next runner trusts the tag without reading any history. That is exactly how to build Claude orchestration. Bounded leg, clear artifact, trusted handoff."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Long unsupervised Claude loops drift; break work into small bounded tasks with explicit handoffs.",
+          "Parallel fan-out: independent sub-tasks run in parallel subagents, merge at the end. One-quarter wall clock, higher quality.",
+          "Artifact handoff: every agent writes a 500-word structured deliverable. The next agent reads only the artifact, never the stream.",
+          "Every long-running brief needs three constraints: scope, budget, deliverable. Without them you are gambling.",
+          "MCP and tool integrations expand power and risk together; never combine two unsafe capabilities without a human review gate."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Look at the longest Claude run you've done in the last month. Could it have been three subagents in parallel with artifacts at the boundary? What would you do differently if you ran it again tomorrow?"
+      }
+    ]
+  }
+}

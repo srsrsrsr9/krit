@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 30 essays of unread feedback",
+    "source": "Anonymous English teacher at a Bangalore international school",
+    "date": "March 2026",
+    "story": "I had 30 personal-narrative essays to grade in 4 days. I gave each one to AI with my rubric (5 criteria × 4 levels) and asked for individualized comments. AI churned out 30 sets of comments in 14 minutes. They looked great. I shipped them.\n\nDay 3: Vihaan's parents emailed. The feedback contradicted itself — paragraph 2 said *\"strong opening\"*, paragraph 4 said *\"weak opening\"*. AI hallucinated mid-batch on a tired prompt. **3 of the 30 had the same issue when I checked.** I had to reissue feedback to those 3 students with an apology email cc'd to parents.\n\nThe ₹38,000/year ChatGPT Teams subscription paid for itself ten times over in time saved. It also nearly cost me my reputation in 14 minutes of unread output.",
+    "takeaway": "AI handles 80%; the 30-second teacher review per essay is what protects the 80% from being a 100% trust problem."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: 32 essays tonight",
+    "setup": "It's Tuesday 9 PM. Ms. Anjali has 32 personal-narrative essays from her Class 9 students. Parent-teacher conferences are Saturday. She's tired. She's tempted to ship AI feedback unread.",
+    "coach": { "name": "Mentor-Master Mukherjee", "role": "Retired English HOD, 38 years in Pune schools" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Anjali's first instinct: load the rubric, run all 32 through AI, send. What do you tell her?",
+        "options": [
+          { "id": "a", "label": "Yes — ship as drafted; she can correct any complaints later.", "correct": false, "explain": "Cover-the-tracks instinct. By the time complaints come, trust is already damaged.", "points": 0 },
+          { "id": "b", "label": "AI generates 32 drafts; she spends 90 seconds per essay reviewing tone + checking for contradictions before sending.", "correct": true, "explain": "Right balance. ~50 minutes added to a job that was 8 hours; trust preserved.", "points": 3 },
+          { "id": "c", "label": "Drop the AI; hand-write all 32 from scratch.", "correct": false, "explain": "Burnout-instinct. Wastes the AI's 80% leverage and Anjali still won't have time for the 20% that matters most.", "points": 1 },
+          { "id": "d", "label": "Send AI drafts but mark them as 'AI-generated, may contain errors'.", "correct": false, "explain": "Feels honest, is actually worse — students and parents now don't trust either the AI's signal or Anjali's editorial judgment.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "On essay #14, Anjali notices the AI praised the 'strong evidence' even though the essay had only one quote (rubric requires 3+). What's the move?",
+        "options": [
+          { "id": "a", "label": "Override that comment; flag the rest of the AI feedback for closer scrutiny.", "correct": true, "explain": "AI lost calibration mid-batch. The right response is to inspect the rest of THIS batch, not just essay 14.", "points": 3 },
+          { "id": "b", "label": "Send essay 14 with the wrong comment; she's tired.", "correct": false, "explain": "This is the moment that becomes the parent email Friday morning.", "points": 0 },
+          { "id": "c", "label": "Re-prompt the AI for essay 14; trust the rest.", "correct": false, "explain": "Calibration loss usually affects multiple essays. Inspect the batch, not just one." , "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Saturday at PTM, a parent says 'the AI feedback was great — better than your handwritten notes last term.' How does Anjali respond?",
+        "options": [
+          { "id": "a", "label": "'Thank you — I used AI to draft, then reviewed every essay personally before sending.'", "correct": true, "explain": "Honest disclosure + clear ownership. Trust-building.", "points": 3 },
+          { "id": "b", "label": "'Thank you — I worked very hard on these.'", "correct": false, "explain": "Half-truth. Will compound badly when AI tools become normalized in schools and disclosure becomes the standard.", "points": 0 },
+          { "id": "c", "label": "'I can't really discuss the methodology.'", "correct": false, "explain": "Deflection invites suspicion. Honest is easier.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Clean run. Anjali ships 32 reliable feedback packets in 4 hours instead of 8, parents trust the output, and disclosure becomes a teaching habit. The ₹38K subscription pays for itself in week 1.",
+      "good": "Solid. The discipline holds for 32 essays; one or two close calls but no parent emails. Worth re-running in a month with the same setup.",
+      "learn": "Worth a re-read. The trap here is the 'I'm tired, I'll ship it' moment at essay #20. The 30-second review IS the system."
+    }
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "slug": "portfolio-and-bets",
+  "title": "Picking AI Bets That Won't Sink",
+  "subtitle": "Three bets, pre-committed kill criteria, one slot you can't fill yet",
+  "estimatedMinutes": 14,
+  "skills": ["leader-ai-portfolio"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-leaders/portfolio-and-bets.mp3",
+      "audioDurationSec": 670,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the flagship trap" },
+        { "startSec": 80, "label": "Mental model: 3-bet portfolio with a kill switch" },
+        { "startSec": 220, "label": "Move 1 — the hypothesis register" },
+        { "startSec": 410, "label": "Move 2 — the 90-day milestone gate" },
+        { "startSec": 560, "label": "Trap, takeaways, reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-leaders/portfolio-and-bets.html",
+      "notesByline": "Notes by Vikrant, MBA-2024 batch"
+    },
+    {
+      "type": "markdown",
+      "md": "Your VP of Product walks in with a 14-page deck for The Flagship AI Feature. It will cost ₹2.4 crore. It will take 11 months. It will be 'transformative.' It has one team, one timeline, and one outcome.\n\nThis lesson is about why that deck, no matter how good, is the most expensive way to bet on AI. Not because the feature is wrong; because the *structure* is wrong. By the end, you will have a 3-bet portfolio template, a hypothesis register that fits on a single page, and a 90-day milestone gate that will make your less-attached self proud of your future-attached self for honouring it."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A budget circle of ₹2.4 cr split into three slices: 38% bet 1, 32% bet 2, 15% bet 3, 15% reserved slot. Each slice has a flag with a kill criterion attached.",
+      "caption": "The 3-bet portfolio with a reserved slot. The reserve is not a contingency line; it is a deliberate bet you have not yet earned the right to name.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#FAF5FF'/><g transform='translate(180 60)'><circle cx='100' cy='100' r='95' fill='#FFFFFF' stroke='#1F2937' stroke-width='2'/><path d='M100 100 L100 5 A95 95 0 0 1 188 137 z' fill='#10B981' stroke='#065F46' stroke-width='2'/><path d='M100 100 L188 137 A95 95 0 0 1 65 191 z' fill='#0EA5E9' stroke='#075985' stroke-width='2'/><path d='M100 100 L65 191 A95 95 0 0 1 12 78 z' fill='#F59E0B' stroke='#92400E' stroke-width='2'/><path d='M100 100 L12 78 A95 95 0 0 1 100 5 z' fill='#E5E7EB' stroke='#6B7280' stroke-width='2' stroke-dasharray='4 3'/></g><g font-family='sans-serif' font-size='12' fill='#1F2937'><text x='430' y='90' fill='#065F46' font-weight='bold'>Bet 1 (38%)</text><text x='430' y='105' font-size='10' fill='#065F46'>support draft</text><text x='430' y='118' font-size='10' fill='#065F46'>kill: <55% accept@d90</text><text x='430' y='180' fill='#075985' font-weight='bold'>Bet 2 (32%)</text><text x='430' y='195' font-size='10' fill='#075985'>claims pre-fill</text><text x='430' y='208' font-size='10' fill='#075985'>kill: <40% auto@d90</text><text x='40' y='240' fill='#92400E' font-weight='bold'>Bet 3 (15%)</text><text x='40' y='255' font-size='10' fill='#92400E'>internal copilot</text><text x='40' y='268' font-size='10' fill='#92400E'>kill: <8 wkly active@d90</text><text x='40' y='90' fill='#6B7280' font-weight='bold'>Reserved (15%)</text><text x='40' y='105' font-size='10' fill='#6B7280'>do not name yet</text><text x='40' y='118' font-size='10' fill='#6B7280'>fill at d60 review</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: a 3-bet portfolio with one slot you cannot yet fill",
+      "md": "AI bets are not equities. Returns are not continuous; they are mostly binary at the 90-day mark. **Concentration is therefore worse, not better, than diversification.** One bet means one shot at learning; if it fails, you have spent a year and learned only that this team, on this problem, with this scope, did not work. Three independent bets give you three signals.\n\nThe fourth slot — the one you reserve at ~15% and refuse to name — is the one most leaders skip. Don't. The capability curve will move during your year. The bet you should make in month 7 is not knowable in month 1. Reserve the right to be smarter later.\n\nThe pattern: **3 named bets + 1 reserved slot, sized unequally, each with a pre-committed 90-day kill criterion.** Anything else is hope, dressed up as a strategy."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-leaders/anim/portfolio-and-bets-allocation.html",
+      "height": 420,
+      "caption": "A budget circle filling and refilling as bets pass and fail their 90-day gates."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Flagship feature ka flop — ek classic katha",
+          "md": "Bhai, ek SaaS company thi. Funded series-B. Founder ne board ko bola — \"hum AI mein **flagship** banaa rahe hain.\" Naam tha — *NeuroAssist*. Roadmap 11 months. Budget ₹2.4 crore. Single team, 9 engineers, 1 PM.\n\nMonth 8 mein realize hua — model ka quality enough nahi hai shipping ke liye. Month 11 mein launch hua — 47 paying users. Total cost ₹2.6 crore (overshoot 8%). Founder ne board ko bola — \"AI is a long game.\"\n\nAgar woh paisa **3 bets** mein lagta — har 90 din mein gate hota — toh saal ke andar 2 dead-ends mar gaye hote, aur ek bet mein 8x return hota. Single bet ka problem yeh hai — saal khatam, learning zero."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The single-bet flop, in industry-neutral form",
+          "md": "Series-B SaaS, ₹2.4 crore on one flagship AI feature, eleven-month roadmap, single team. Launches at month eleven; finds 47 paying users at month twelve. The lesson is not that AI is hard; it is that one bet means one outcome and one lesson. Three bets at the same total cost would have produced two early kills and one survivor — and your year of learning would have been compounded, not wasted." }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The hypothesis register"
+    },
+    {
+      "type": "markdown",
+      "md": "A hypothesis register is the single page that holds your AI program together. Every bet has one row. The columns are unforgiving:\n\n- **The bet** (one sentence, names the user problem and the cohort).\n- **The capability shift** (which curve moved, in one phrase).\n- **Cost-per-task vs baseline** (a ratio).\n- **The 90-day kill criterion** (cohort + threshold + action).\n- **Owner** (one named human, not 'team').\n- **Date of next review** (an actual date, not 'Q3').\n\nIf any column is empty, the bet does not exist yet. Sounds harsh; that is the point. The register is a forcing function, not a status report.\n\nA crisp number from a Mumbai fintech in early 2026: introducing the register cut the average time-to-kill for failing AI bets from 9.5 months to 91 days, freeing roughly ₹4.1 crore of budget that previously rolled into 'continued exploration.'"
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A schematic table with six columns and three rows. Each cell shows a one-line entry: 'support draft / language quality / 95:1 / 55% accept by day 90 / Priya / 14 Sep 2026'. Empty cells are highlighted red.",
+      "caption": "The hypothesis register as a forcing function. Empty cells are visible debt; the page tells you where the program is not yet a program.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='10' fill='#1F2937'><rect x='30' y='40' width='540' height='30' fill='#FED7AA' stroke='#9A3412' stroke-width='1.5'/><text x='80' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Bet</text><text x='180' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Curve shift</text><text x='270' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Cost ratio</text><text x='370' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Kill criterion</text><text x='470' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Owner</text><text x='540' y='60' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Review</text><rect x='30' y='70' width='540' height='30' fill='#FFFFFF' stroke='#9A3412' stroke-width='1'/><text x='80' y='90' text-anchor='middle'>Support draft</text><text x='180' y='90' text-anchor='middle'>Language quality</text><text x='270' y='90' text-anchor='middle'>95:1</text><text x='370' y='90' text-anchor='middle'>55% accept @ d90</text><text x='470' y='90' text-anchor='middle'>Priya</text><text x='540' y='90' text-anchor='middle'>14 Sep</text><rect x='30' y='100' width='540' height='30' fill='#FFFFFF' stroke='#9A3412' stroke-width='1'/><text x='80' y='120' text-anchor='middle'>Claims pre-fill</text><text x='180' y='120' text-anchor='middle'>Multimodal OCR</text><text x='270' y='120' text-anchor='middle'>45:1</text><text x='370' y='120' text-anchor='middle'>40% auto-approve</text><text x='470' y='120' text-anchor='middle'>Rohan</text><text x='540' y='120' text-anchor='middle'>21 Sep</text><rect x='30' y='130' width='540' height='30' fill='#FFFFFF' stroke='#9A3412' stroke-width='1'/><text x='80' y='150' text-anchor='middle'>Internal copilot</text><rect x='130' y='132' width='100' height='26' fill='#FECACA' stroke='#B91C1C' stroke-width='1.5'/><text x='180' y='150' text-anchor='middle' fill='#7F1D1D' font-style='italic'>(empty)</text><text x='270' y='150' text-anchor='middle'>~12:1</text><rect x='320' y='132' width='100' height='26' fill='#FECACA' stroke='#B91C1C' stroke-width='1.5'/><text x='370' y='150' text-anchor='middle' fill='#7F1D1D' font-style='italic'>(empty)</text><text x='470' y='150' text-anchor='middle'>Anish</text><text x='540' y='150' text-anchor='middle'>—</text><rect x='30' y='180' width='540' height='60' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5' stroke-dasharray='4 3'/><text x='300' y='205' text-anchor='middle' fill='#7F1D1D' font-weight='bold'>Bet 3 has 2 empty cells; not yet a bet.</text><text x='300' y='225' text-anchor='middle' fill='#7F1D1D'>Either fill them by next Monday or remove from the register.</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation moment — 'we want to use AI in claims' becomes a register row",
+      "steps": [
+        { "label": "Step 1 — The English question", "body": "VP of Operations: 'We want to use AI in claims processing.' The deck has 11 slides. The register has zero rows so far." },
+        { "label": "Step 2 — The bet column", "body": "Forced into one sentence: 'Pre-fill the claim form for motor claims under ₹50,000 in our top-3 distributor cities.' Notice what got cut: 'fully automate claims' was the original ask. The register said no." },
+        { "label": "Step 3 — The capability shift column", "body": "'Multimodal OCR on damage photos passed 92% accuracy on our internal eval as of February 2026.' One phrase. If this column is hand-wavy, the bet is research, not a bet." },
+        { "label": "Step 4 — The cost ratio column", "body": "Manual coder ₹180/claim. LLM ₹4/claim. Ratio 45:1. Anything under ~5:1 should make you nervous; anything under 1:1 should kill the bet on the spot." },
+        { "label": "Step 5 — The kill criterion column", "body": "'If auto-approval rate on the cohort is below 40% by 21 September 2026, sunset the pilot. Do not extend.' Cohort, threshold, action, date." },
+        { "label": "Step 6 — Owner and review", "body": "'Rohan owns it. Reviewed 21 September.' Not 'the AI team.' Not 'Q3.' One human, one date." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "A direct report shows you their hypothesis register. Bet 2's 'kill criterion' column reads: 'If user feedback is poor, we'll reassess.' What is your response?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Send it back. 'User feedback is poor' is not a kill criterion; cohort, threshold, action, date are missing.", "correct": true, "explain": "Correct. A kill criterion that the optimistic-future-version-of-you can wriggle out of is not a kill criterion. The whole point is to bind the future you to the choices the present you can defend." },
+          { "id": "b", "label": "Approve. The team will know what 'poor' means in context.", "correct": false, "explain": "Predictable failure mode. By the time 'poor' is debated, three months are gone and the discussion is about extending. The vagueness is the trap." },
+          { "id": "c", "label": "Approve and add 'CSAT below 7' as a metric.", "correct": false, "explain": "Better, but CSAT alone is gameable, lagging, and not cohort-scoped. The full criterion needs cohort + threshold + action + date." },
+          { "id": "d", "label": "Tell them to talk to Legal first.", "correct": false, "explain": "Wrong department. Legal cannot help the team write a kill criterion; product and engineering can." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Bhabhiji ka SIP test",
+          "md": "Bhabhiji ne pucha — \"yeh AI bet ka matlab kya hai?\" Tu samjha — \"3 mutual fund SIPs samjho. Har SIP mein 90 din baad NAV check karte hain. Agar NAV target se neeche hai, SIP rok dete hain. Agar achchi return hai, doosri SIP shuru karte hain.\"\n\nBhabhiji boli — \"toh SIP hi karo na, AI ka tag kyun chahiye?\" Bhabhiji jeet gayi. **Wahi baat hai**: AI bet portfolio = SIP for capability shifts, with cleaner kill rules than most fund managers ever write down."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The same point in fund-manager English",
+          "md": "An AI bet portfolio is a SIP into capability shifts, with kill criteria sharper than most fund managers will commit to in writing. The discipline is not new; only the asset class is."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 90-day milestone gate"
+    },
+    {
+      "type": "markdown",
+      "md": "A 12-month AI roadmap is fiction. Capability shifts every quarter; vendor pricing shifts every month; your assumptions about user adoption are wrong almost every time. **Commit to a 90-day kill criterion or you have committed to nothing.**\n\nThe gate is one meeting at the end of each 90-day window. Pre-committed agenda:\n\n1. Read each bet's kill-criterion line out loud, exactly as it was written 90 days ago.\n2. Place the actual cohort metric next to it.\n3. Apply the action: deepen, narrow, or sunset. No 'extend by one quarter.' No 'the team is showing momentum.'\n4. If a bet survives, set the next 90-day kill criterion before leaving the room.\n5. If a bet sunsets, the budget moves to the reserved slot — which now has a name.\n\nThe gate works because the rule is *boring*. It is not a debate; it is a checklist. The boredom is the feature. Without the boredom, you are back to the slogan economy."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A timeline with three 90-day blocks. At the end of each block: a gate icon with three labelled exits — 'deepen', 'narrow', 'sunset'. Below each, a budget bar showing reallocation.",
+      "caption": "The 90-day gate cycle. Each gate produces a written outcome; the budget bar moves; the reserved slot fills as kills create capacity.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><line x1='40' y1='80' x2='560' y2='80' stroke='#1E40AF' stroke-width='2'/><g><circle cx='180' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='180' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G1</text><text x='180' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 90</text></g><g><circle cx='340' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='340' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G2</text><text x='340' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 180</text></g><g><circle cx='500' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='500' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G3</text><text x='500' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 270</text></g><g transform='translate(40 130)'><rect x='0' y='0' width='160' height='30' fill='#10B981' stroke='#065F46' stroke-width='1.5'/><text x='80' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 1</text><rect x='160' y='0' width='120' height='30' fill='#0EA5E9' stroke='#075985' stroke-width='1.5'/><text x='220' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 2</text><rect x='280' y='0' width='90' height='30' fill='#F59E0B' stroke='#92400E' stroke-width='1.5'/><text x='325' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 3</text><rect x='370' y='0' width='90' height='30' fill='#E5E7EB' stroke='#6B7280' stroke-width='1.5' stroke-dasharray='4 3'/><text x='415' y='20' text-anchor='middle' fill='#374151' font-style='italic'>reserved</text></g><text x='40' y='185' fill='#1E3A8A' font-weight='bold'>After G1:</text><text x='40' y='200' fill='#1E3A8A'>Bet 3 sunset (kill hit). Reserved slot fills with new bet 3': 'AI for QA test generation'.</text><text x='40' y='235' fill='#1E3A8A' font-weight='bold'>After G2:</text><text x='40' y='250' fill='#1E3A8A'>Bet 2 narrowed to motor-only cohort. Bet 1 deepened (passed gate, 67% accept rate).</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Board-Member Bharat",
+        "role": "Independent director, ex-CFO, has watched two CEOs argue at a 90-day gate that 'momentum' should override the metric"
+      },
+      "intro": [
+        "Aap baith jaaiye. Aaj hum 90-day gate ka simulation karte hain.",
+        "Main aapko paanch real-life situations dunga jo aapne *pre-committed* kar diye the. Aap bata sakte ho — yeh **honour the kill** hai, ya **defensible exception** hai, ya **theatre that's pretending to be defensible**?",
+        "Naya rule — agar aap 'extend by one quarter' bolte hain bina kuch defensible reason ke, main aapko mute kar dunga."
+      ],
+      "buckets": [
+        { "id": "honour", "label": "Honour the kill", "tone": "safe" },
+        { "id": "exception", "label": "Defensible exception", "tone": "neutral" },
+        { "id": "theatre", "label": "Theatre", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "Bet 1 (support draft). Kill criterion: 55% draft acceptance by day 90. At day 90, acceptance is 41%. PM argues: 'team morale is high, we are close.'", "correctBucketId": "honour", "explain": "Honour. 'Team morale' and 'close' are exactly the words the pre-commit was meant to defeat. 41 vs 55 is a 25% gap; that's not 'close', that's a 50% miss when you account for typical optimism bias." },
+        { "id": "s2", "situation": "Bet 2 (claims pre-fill). Kill criterion: 40% auto-approval. At day 90, auto-approval is 38% but a regulatory clarification arrived on day 87 that fundamentally changes the eligible-claim definition.", "correctBucketId": "exception", "explain": "Defensible exception, but only because the rule changed mid-flight. Document the regulatory change; reset the kill criterion against the new definition; commit to a new 60-day mini-gate. Do not silently extend." },
+        { "id": "s3", "situation": "Bet 3 (internal copilot). Kill criterion: 8 weekly active users. At day 90, weekly active is 11. PM argues: 'we should expand scope to more teams.'", "correctBucketId": "honour", "explain": "Honour the *deepen* path. The bet passed; that's a kill criterion working in the positive direction. Deepen with a fresh 90-day criterion — say 25 WAU by day 180 — before scope creep eats the win." },
+        { "id": "s4", "situation": "Bet at day 90: kill criterion was 'CSAT > 7.5'. Actual: 7.4. PM argues: 'within margin of error, statistically not different from 7.5.'", "correctBucketId": "theatre", "explain": "Theatre. Statistical-sigificance arguments at the gate are almost always retroactive. Either the kill criterion should have been written with confidence intervals to start with, or 7.4 means 7.4. Honour the kill; the lesson is for the next register." },
+        { "id": "s5", "situation": "Bet at day 90: kill criterion missed by 18%. PM produces a slide showing 'a new model release next month will change everything.'", "correctBucketId": "theatre", "explain": "Theatre. 'Next month's model' is the most-used pivot in the AI playbook and the least-correlated with day-180 outcomes. Sunset the bet; let the new model be the trigger to *reopen* the question, not the excuse to keep the current bet alive." },
+        { "id": "s6", "situation": "Bet at day 90: kill criterion of 40% met at exactly 40.1%. PM asks: 'do we deepen?'", "correctBucketId": "exception", "explain": "Defensible — the rule says deepen — but the margin is so tight that the right deepen action is *narrow* deepen: same cohort, double the volume, fresh 60-day criterion. Don't deepen-and-expand on a barely-passing signal." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: all-in on one flagship feature",
+      "md": "If your AI program has exactly one flagship and your year is built around its launch, you have not built a portfolio; you have built a single point of failure with a budget. The flagship trap survives because it is *legible* — easier to explain to a board, easier to celebrate at all-hands, easier to put on a deck.\n\nIt is also where 87% of AI budgets evaporate. The rule of thumb that earns the right to live: **no AI bet over 50% of program budget, ever.** If a single bet wants more than half, split it into a phase-gated sequence of smaller bets first."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're at the 90-day gate. Order the steps in the meeting, exactly as they should happen.",
+      "items": [
+        { "id": "1", "label": "Read each bet's pre-committed kill criterion out loud, verbatim.", "detail": "Reading aloud is not theatre; it forces the room to remember what was promised, before the new arguments start." },
+        { "id": "2", "label": "Place the actual cohort metric next to the criterion.", "detail": "On a single line. Visible to everyone. No interpretation yet." },
+        { "id": "3", "label": "Apply the action — deepen, narrow, or sunset — by the rule.", "detail": "If the criterion was met: deepen. If close: narrow. If missed: sunset." },
+        { "id": "4", "label": "Set the next 90-day criterion for surviving bets.", "detail": "Before leaving the room. Otherwise, drift sets in." },
+        { "id": "5", "label": "Reallocate sunset budget to the reserved slot.", "detail": "The reserved slot may now get its first name. This is when you earn it." },
+        { "id": "6", "label": "Update the hypothesis register and circulate it within 24 hours.", "detail": "The register is the artefact; the meeting is the rehearsal. Circulating it makes the decisions sticky." }
+      ],
+      "hint": "Read the rule before the metric. The order protects you from your own optimism."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write the kill-criterion line for one AI bet at your company, in 25 words or fewer. It must contain: a cohort, a threshold, an action verb (deepen / narrow / sunset), and a date. If you cannot fit all four, the bet is not yet a bet — say so.",
+      "expected": "Strong example:\n\n'For the support-draft bet on English-only tier-1 tickets, if agent draft-acceptance is below 55% on day 90 (14 September 2026), sunset and reallocate budget.'\n\nNote what's in it: cohort (English-only tier-1), threshold (55%), action (sunset), date (14 Sep). 26 words is acceptable; 47 words means you over-hedged.\n\nWeak pattern: 'If the AI tool is not adding value to the team, we will reconsider.' (No cohort, no threshold, no action, no date. Theatre.)"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of the following are signs your portfolio is at risk of becoming a one-bet program in disguise? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "One bet has grown to 64% of total budget after a mid-year reallocation.", "correct": true, "explain": "Yes. Mid-year creep past 50% on a single bet is the canonical 'flagship in disguise' signature. Forces a portfolio decision back into the room." },
+        { "id": "b", "label": "Three bets each have signed-off, written kill criteria with cohort and date.", "correct": false, "explain": "Opposite. This is exactly what a healthy 3-bet portfolio looks like." },
+        { "id": "c", "label": "Two bets share the same engineering team and the same backend platform with no isolation.", "correct": true, "explain": "Yes. Operational coupling means 'one bet' in disguise — failure or delay on the platform takes both bets down. Independence is what made them three." },
+        { "id": "d", "label": "The reserved slot has been left unfilled at the day-90 gate.", "correct": false, "explain": "Not necessarily a problem. The reserved slot is supposed to be unfilled until you earn the right to name it. Filling it prematurely is the failure mode here, not leaving it empty." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Three SIPs vs one FD — same logic, different asset class",
+          "md": "Mummy ne kabhi ek hi mutual fund mein paise nahi rakhe. Hamesha 3 SIPs — large-cap, mid-cap, ek tax-saver. Logic — \"agar ek girta hai, doosre cover kar lete hain.\"\n\nAur tu yahan ₹2.4 crore ek 'flagship feature' mein daal raha hai? Mummy ko mat dikhana yeh deck. Mummy ka mind sound hai. Tera nahi."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Your mother's portfolio logic",
+          "md": "Your mother never put her savings in a single mutual fund. She runs three concurrent SIPs across categories. The argument she would not make for her own retirement is the argument you are making for ₹2.4 crore of company budget on a single AI flagship. She would notice. So would your CFO if you spelled it out the same way."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Concentration is worse than diversification for AI bets; binary 90-day outcomes punish single-bet programs.",
+        "The 3-bet portfolio with one reserved slot is the only structure that buys you a second cycle.",
+        "The hypothesis register is one page; empty cells are visible debt; the page is the program.",
+        "A 90-day kill criterion missed by 25% is missed; 'momentum' and 'next month's model' are the two phrases that should make you suspicious.",
+        "If a bet exceeds 50% of total program budget, you have a flagship in disguise; split it before the gate, not after."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Look at your current AI program (or a peer's, if you don't run one). Name three bets and the reserved slot. For each named bet, write the one-line kill criterion. The first time you do this, at least one bet will not have a defensible criterion. Note which one and why — that's the bet most at risk of becoming theatre."
+    }
+  ]
+}

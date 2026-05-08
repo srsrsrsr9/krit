@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 4,700 Applicants Who Couldn't Ship",
+    "source": "Hiring post-mortem at a Mumbai-based fintech (Series D, ~600 employees)",
+    "date": "January 2026",
+    "story": "In June 2025, the head of engineering at a Mumbai fintech rewrote three senior-engineer JDs using ChatGPT and a list of trending terms. The required-skills section now read: *\"Demonstrated experience with prompt engineering, RAG architectures, vector databases (Pinecone/Weaviate/Qdrant), agentic frameworks (LangChain/LlamaIndex/AutoGen), embeddings, fine-tuning, and LLMOps.\"*\n\nThe JD was posted on LinkedIn, Naukri, and Instahyre simultaneously. **Within 11 days: 4,712 applications.** The ATS, configured for keyword matching, surfaced 312 \"strong matches.\" Eight made it to onsites. **One was hired** — a candidate whose resume claimed four years of LangChain experience (LangChain was released in October 2022).\n\nThe hire was offered ₹68 lakh fixed plus ESOPs. He started in September. **By December he had not shipped a single feature to production.** When asked, in week 14, to explain a tradeoff between two retrieval strategies, he opened ChatGPT in front of the interviewer-now-colleague. The notice period began that afternoon.\n\nThe hiring manager's review, written for the new VP-Engineering: *\"We hired the resume that matched the JD we wrote. The JD didn't ask for judgement. So we didn't get any.\"*",
+    "takeaway": "Keyword JDs filter for keyword candidates. If you want judgement, write the JD around a problem, not a tool stack."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Senior Engineer JD",
+    "setup": "**Week 14.** Rajiv has a senior-engineer slot to fill. Head of Engineering sent over a draft JD this morning — fourteen bullet points, mostly tool names. The recruiter wants to post it by EOD because *\"the market moves fast.\"* Rajiv reads it once, feels uneasy, opens Slack, and pings you.\n\n*\"Coach. Five minutes? I think this JD is going to bite us.\"*\n\nIt is 2:14pm. The recruiter's deadline is 6pm. You have one short Zoom.",
+    "coach": { "name": "Chief-People-Officer Charumati", "role": "CPO, 22 years, has read more bad JDs than she'd like to admit" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Charumati shares her screen. *\"Rajiv, this draft is fourteen tool names and a salary band. What do you fix first?\"*",
+        "options": [
+          { "id": "a", "label": "Add three more tools to the list — the recruiter says we're behind on \"AI-native\" hiring keywords.", "correct": false, "explain": "You just made the Mumbai fintech mistake. More keywords means more keyword-matched applicants and zero signal on judgement. Charumati: *\"You're optimising for resume volume, not hire quality.\"*", "points": 0 },
+          { "id": "b", "label": "Replace the tool list with a one-paragraph problem statement: the actual broken thing this person will own in their first 90 days.", "correct": true, "explain": "**Correct.** A problem-anchored JD filters for people who can think about *that problem*, not people whose resume happens to mention LangChain. Tools change every six months; the problem doesn't.", "points": 3 },
+          { "id": "c", "label": "Keep the tool list but raise the experience requirement to 8+ years to filter out junior candidates.", "correct": false, "explain": "Years of experience with tools that didn't exist eight years ago is a contradiction. You'll just push the resume-padding from \"4 years of LangChain\" to \"8 years of LangChain\" — which is the Mumbai fintech outcome with extra steps.", "points": 0 },
+          { "id": "d", "label": "Throw the JD away entirely and post nothing — referrals only.", "correct": false, "explain": "Referrals-only on a senior role narrows your pool to your network's pattern, which is usually more of the people you already have. Useful as one channel, not the whole strategy.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Rajiv asks: *\"Okay, problem-anchored. But the recruiter still needs *something* searchable. What goes in the must-haves?\"*",
+        "options": [
+          { "id": "a", "label": "*\"Must have shipped at least one production system that real users depend on. We'll ask them to describe it in the screen.\"*", "correct": true, "explain": "**Yes.** Production experience with stakes is uncopyable on a resume. Anyone can list LangChain; few can describe a 3am pager incident they caused and fixed. Charumati: *\"This is how you filter for judgement.\"*", "points": 3 },
+          { "id": "b", "label": "*\"Must have 5+ years of AI/ML experience.\"*", "correct": false, "explain": "Five years of \"AI/ML\" in 2026 means anything from \"I ran a Kaggle notebook in 2019\" to \"I trained foundation models at DeepMind.\" The phrase has stopped filtering anything.", "points": 0 },
+          { "id": "c", "label": "*\"Must have a Github with 500+ stars on an AI repo.\"*", "correct": false, "explain": "Stars correlate with marketing skill, not engineering judgement. Plenty of 500-star repos don't run, and plenty of production-grade systems are private.", "points": 0 },
+          { "id": "d", "label": "*\"Must be able to articulate when *not* to use AI for a given problem.\"*", "correct": true, "explain": "**Brilliant.** Negative-framing skill is rare and load-bearing. The Mumbai fintech hire failed precisely because he couldn't reason about tradeoffs. Add this to the screening question, not the JD bullet.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "JD is rewritten. Recruiter asks: *\"How do we screen 500 expected applicants in two weeks?\"* Last call.",
+        "options": [
+          { "id": "a", "label": "*\"ATS keyword filter on the new JD's must-haves, then screen the top 50.\"*", "correct": false, "explain": "You just put a keyword filter on a JD you specifically rewrote to *not* be keyword-driven. Charumati: *\"Why did we do the last hour of work then?\"*", "points": 0 },
+          { "id": "b", "label": "*\"One-question written submission: 'Describe a system you shipped that broke in production. What did you change in your design afterwards?' Read every answer.\"*", "correct": true, "explain": "**This is the move.** A 200-word written answer reveals more than 14 keyword bullets ever could. Yes, you read every one. Yes, it takes time. That's the whole point.", "points": 3 },
+          { "id": "c", "label": "*\"Auto-reject anyone whose resume mentions ChatGPT — they're padding.\"*", "correct": false, "explain": "You'll auto-reject half your real candidates because everyone has used ChatGPT by now. Resume signal is too noisy to use as a filter on its own.", "points": 0 },
+          { "id": "d", "label": "*\"Take-home: build a tiny RAG-over-our-docs prototype in 4 hours. Pay for their time.\"*", "correct": true, "explain": "**Solid.** A bounded, paid take-home filters for people who can ship under a deadline. Pair it with the written submission and you have two independent signals. Charumati nods. *\"Director-grade hiring funnel.\"*", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You replaced a keyword JD with a problem statement, filtered for shipped-it experience, and built a screening funnel that rewards judgement. **Charumati saves the JD as a template.** On to Week 20.",
+      "good": "You avoided the resume-soup outcome but flinched once. Re-read the lesson on **JD-as-problem-statement** before the next req opens.",
+      "learn": "You optimised for application volume and got the Mumbai fintech outcome on paper. Re-read the lesson — that fintech paid ₹68 lakh for a hire who couldn't ship in 14 weeks. The good news: this was a drill."
+    }
+  }
+}

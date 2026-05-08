@@ -320,6 +320,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/science-of-well-being/anim/trap-miswanting-basics.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: the finish-line stack",
@@ -797,6 +803,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/science-of-well-being/anim/trap-hedonic-adaptation.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: the intensity arms race",
@@ -1265,6 +1277,12 @@
               "explain": "Cue is fine ('after work'), tiny step is fine (just go), accountability is fine (his trainer texts him). But friction is enormous — gym is on the wrong side of his commute. Either change gym, or go *before* work, or do home workouts. Friction is the load-bearing variable here."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/science-of-well-being/anim/trap-g-i-joe-fallacy.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1773,6 +1791,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/science-of-well-being/anim/trap-two-cheat-codes.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: the spontaneity myth",
@@ -2261,6 +2285,12 @@
               "explain": "All three numbers moved sharply in the right direction. This is what a real effect looks like. Install with the 4-part rewire from lesson 3."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/science-of-well-being/anim/trap-wellbeing-diagnostics.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",

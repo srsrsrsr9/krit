@@ -372,6 +372,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/sql-foundations/anim/trap-what-is-sql.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: 'SELECT * for now'",
@@ -847,6 +853,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#FEF2F2'/><g font-family='monospace' font-size='10' fill='#1F2937'><g transform='translate(40 50)'><text x='60' y='-15' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#064E3B' font-weight='bold'>city = 'Mumbai'</text><rect x='0' y='0' width='120' height='25' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='60' y='17' text-anchor='middle' fill='#064E3B' font-weight='bold'>Mumbai ✓</text><rect x='0' y='30' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='47' text-anchor='middle' fill='#6B7280'>Pune ✗</text><rect x='0' y='60' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='77' text-anchor='middle' fill='#6B7280'>NULL ✗</text><rect x='0' y='90' width='120' height='25' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='60' y='107' text-anchor='middle' fill='#064E3B' font-weight='bold'>Mumbai ✓</text><text x='60' y='140' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>2 kept</text></g><g transform='translate(220 50)'><text x='60' y='-15' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='bold'>city &lt;&gt; 'Mumbai'</text><rect x='0' y='0' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='17' text-anchor='middle' fill='#6B7280'>Mumbai ✗</text><rect x='0' y='30' width='120' height='25' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='60' y='47' text-anchor='middle' fill='#064E3B' font-weight='bold'>Pune ✓</text><rect x='0' y='60' width='120' height='25' rx='4' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='60' y='77' text-anchor='middle' fill='#7F1D1D' font-weight='bold'>NULL ✗ (!)</text><rect x='0' y='90' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='107' text-anchor='middle' fill='#6B7280'>Mumbai ✗</text><text x='60' y='140' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D' font-style='italic'>1 kept (NULL silently dropped)</text></g><g transform='translate(400 50)'><text x='60' y='-15' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A' font-weight='bold'>&lt;&gt; OR IS NULL</text><rect x='0' y='0' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='17' text-anchor='middle' fill='#6B7280'>Mumbai ✗</text><rect x='0' y='30' width='120' height='25' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='60' y='47' text-anchor='middle' fill='#064E3B' font-weight='bold'>Pune ✓</text><rect x='0' y='60' width='120' height='25' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='60' y='77' text-anchor='middle' fill='#064E3B' font-weight='bold'>NULL ✓</text><rect x='0' y='90' width='120' height='25' rx='4' fill='#FEE2E2' stroke='#9CA3AF'/><text x='60' y='107' text-anchor='middle' fill='#6B7280'>Mumbai ✗</text><text x='60' y='140' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A' font-style='italic'>2 kept (correct intent)</text></g></g></svg>"
         },
         {
+          "type": "embedAnimation",
+          "src": "/courses/sql-foundations/anim/trap-sql-filtering.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: WHERE-the-cat-sat-on",
@@ -1301,6 +1313,12 @@
           "caption": "The fan-out: 1 customer × 5 orders = 5 result rows for one customer. SUM of order amount survives the fan-out; AVG of customer.age does not.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(40 30)'><rect width='140' height='30' rx='4' fill='#FED7AA' stroke='#9A3412' stroke-width='2'/><text x='70' y='20' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>Aanya, age 28</text><text x='70' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9A3412' font-style='italic'>customers (1 row)</text></g><g transform='translate(220 30)' font-family='monospace' font-size='10' fill='#1F2937'><rect x='0' y='0' width='130' height='15' rx='2' fill='#FCD34D' stroke='#92400E'/><text x='65' y='11' text-anchor='middle'>order 101: ₹2500</text><rect x='0' y='17' width='130' height='15' rx='2' fill='#FCD34D' stroke='#92400E'/><text x='65' y='28' text-anchor='middle'>order 102: ₹800</text><rect x='0' y='34' width='130' height='15' rx='2' fill='#FCD34D' stroke='#92400E'/><text x='65' y='45' text-anchor='middle'>order 103: ₹1200</text><rect x='0' y='51' width='130' height='15' rx='2' fill='#FCD34D' stroke='#92400E'/><text x='65' y='62' text-anchor='middle'>order 104: ₹950</text><rect x='0' y='68' width='130' height='15' rx='2' fill='#FCD34D' stroke='#92400E'/><text x='65' y='79' text-anchor='middle'>order 105: ₹3300</text><text x='65' y='100' text-anchor='middle' font-family='sans-serif' font-style='italic' fill='#92400E'>orders (5 rows)</text></g><g transform='translate(400 30)' font-family='monospace' font-size='9' fill='#1F2937'><rect x='0' y='0' width='130' height='15' rx='2' fill='#FECACA' stroke='#7F1D1D'/><text x='65' y='11' text-anchor='middle'>Aanya, 28, ₹2500</text><rect x='0' y='17' width='130' height='15' rx='2' fill='#FECACA' stroke='#7F1D1D'/><text x='65' y='28' text-anchor='middle'>Aanya, 28, ₹800</text><rect x='0' y='34' width='130' height='15' rx='2' fill='#FECACA' stroke='#7F1D1D'/><text x='65' y='45' text-anchor='middle'>Aanya, 28, ₹1200</text><rect x='0' y='51' width='130' height='15' rx='2' fill='#FECACA' stroke='#7F1D1D'/><text x='65' y='62' text-anchor='middle'>Aanya, 28, ₹950</text><rect x='0' y='68' width='130' height='15' rx='2' fill='#FECACA' stroke='#7F1D1D'/><text x='65' y='79' text-anchor='middle'>Aanya, 28, ₹3300</text><text x='65' y='100' text-anchor='middle' font-family='sans-serif' font-size='9' font-style='italic' fill='#7F1D1D'>after JOIN (Aanya × 5)</text></g><g transform='translate(60 200)'><rect width='200' height='35' rx='6' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='100' y='15' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#064E3B' font-weight='bold'>SUM(amount) = ₹8,750 ✓</text><text x='100' y='29' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>(survives fan-out)</text></g><g transform='translate(300 200)'><rect width='200' height='35' rx='6' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><text x='100' y='15' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='bold'>AVG(age) = 28 ✓ but ⚠</text><text x='100' y='29' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D'>(weighted by order count!)</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/sql-foundations/anim/trap-sql-joins.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -1882,6 +1900,12 @@
           "caption": "The pipeline. WHERE runs early, on rows. HAVING runs late, on groups. Putting them in the wrong slot is either an error or a wasted operation.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' font-size='10' fill='#FFFFFF' font-weight='bold' text-anchor='middle'><g transform='translate(20 80)'><rect width='80' height='40' rx='6' fill='#1E40AF' stroke='#1E3A8A'/><text x='40' y='25'>FROM</text></g><g transform='translate(110 80)'><rect width='80' height='40' rx='6' fill='#3B82F6' stroke='#1E3A8A'/><text x='40' y='18'>WHERE</text><text x='40' y='32' font-size='8'>(rows)</text></g><g transform='translate(200 80)'><rect width='80' height='40' rx='6' fill='#60A5FA' stroke='#1E3A8A'/><text x='40' y='18'>GROUP BY</text><text x='40' y='32' font-size='8'>(collapse)</text></g><g transform='translate(290 80)'><rect width='80' height='40' rx='6' fill='#3B82F6' stroke='#1E3A8A'/><text x='40' y='18'>HAVING</text><text x='40' y='32' font-size='8'>(groups)</text></g><g transform='translate(380 80)'><rect width='80' height='40' rx='6' fill='#1E40AF' stroke='#1E3A8A'/><text x='40' y='25'>SELECT</text></g><g transform='translate(470 80)'><rect width='80' height='40' rx='6' fill='#1E3A8A' stroke='#1E3A8A'/><text x='40' y='18'>ORDER</text><text x='40' y='32' font-size='8'>+ LIMIT</text></g></g><g><line x1='100' y1='100' x2='110' y2='100' stroke='#1E3A8A'/><line x1='190' y1='100' x2='200' y2='100' stroke='#1E3A8A'/><line x1='280' y1='100' x2='290' y2='100' stroke='#1E3A8A'/><line x1='370' y1='100' x2='380' y2='100' stroke='#1E3A8A'/><line x1='460' y1='100' x2='470' y2='100' stroke='#1E3A8A'/></g><g transform='translate(150 150)'><rect width='80' height='25' rx='4' fill='#FED7AA' stroke='#9A3412'/><text x='40' y='17' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7C2D12' font-weight='bold'>per row</text></g><g transform='translate(330 150)'><rect width='80' height='25' rx='4' fill='#FCD34D' stroke='#92400E'/><text x='40' y='17' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7C2D12' font-weight='bold'>per group</text></g><line x1='150' y1='130' x2='150' y2='150' stroke='#9A3412'/><line x1='330' y1='130' x2='330' y2='150' stroke='#92400E'/></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/sql-foundations/anim/trap-sql-aggregation.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",
@@ -2475,6 +2499,12 @@
               "explain": "Clean two-stage pipeline. CTEs are named (paid_q1, city_rev), no nesting, top-to-bottom flow. Ship as-is; mild nit: replace `SELECT *` in the final SELECT with explicit column list."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/sql-foundations/anim/trap-sql-query-patterns.html",
+          "height": 420,
+          "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
           "type": "callout",

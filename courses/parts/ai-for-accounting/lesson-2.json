@@ -1,0 +1,264 @@
+{
+  "slug": "prompting-for-financials",
+  "title": "Prompting for Financials Without Hallucinating",
+  "subtitle": "Numbers are not text — verify every figure",
+  "estimatedMinutes": 13,
+  "skills": ["accounting-ai-prompting"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-accounting/prompting-for-financials.mp3",
+      "audioDurationSec": 715,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — why prompts for numbers are different" },
+        { "startSec": 80, "label": "Mental model: numbers are not text" },
+        { "startSec": 220, "label": "Move 1 — Structured-output prompts" },
+        { "startSec": 410, "label": "Move 2 — Show your sources demand" },
+        { "startSec": 560, "label": "The trap, reflect, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-accounting/prompting-for-financials.html",
+      "notesByline": "Notes by Anand, articleship batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Prompting for blog posts is forgiving. If a model writes \"the cat sat on the mat\" instead of \"the cat slept on the mat,\" the world keeps turning. Prompting for financial work is unforgiving. If a model writes ₹14,82,000 instead of ₹14,28,000, your client pays the wrong tax.\n\nThe difference is not subtle. Text errors are stylistic; number errors are material. By the end of this lesson you will have two named moves that catch the model before the client sees the damage."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two chat bubbles. Top one shows a prompt asking 'summarise this contract' and a chatty paragraph response with a green tick. Bottom one shows a prompt asking 'what is the total IGST' and a number response with a red question mark and a magnifying glass.",
+      "caption": "Same model, two completely different verification disciplines. Text accepts judgment; numbers demand reconciliation.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#FEF3C7'/><g transform='translate(40 30)'><rect width='200' height='110' rx='12' fill='#FFF' stroke='#F59E0B' stroke-width='2'/><text x='14' y='30' font-family='monospace' font-size='11' fill='#92400E'>summarise the</text><text x='14' y='46' font-family='monospace' font-size='11' fill='#92400E'>contract</text><text x='14' y='80' font-family='sans-serif' font-size='11' fill='#1F2937'>'The party agrees</text><text x='14' y='96' font-family='sans-serif' font-size='11' fill='#1F2937'>to deliver in 30 days...'</text></g><circle cx='280' cy='85' r='28' fill='#10B981'/><path d='M268 85 L278 95 L294 75' stroke='#FFF' stroke-width='4' fill='none' stroke-linecap='round'/><text x='280' y='130' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>text: usually fine</text><g transform='translate(40 180)'><rect width='200' height='110' rx='12' fill='#FFF' stroke='#F43F5E' stroke-width='2'/><text x='14' y='30' font-family='monospace' font-size='11' fill='#9F1239'>what is the total</text><text x='14' y='46' font-family='monospace' font-size='11' fill='#9F1239'>IGST in this file?</text><text x='14' y='80' font-family='monospace' font-size='14' fill='#1F2937' font-weight='bold'>Rs. 14,82,000</text><text x='14' y='100' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>(actual: 14,28,000)</text></g><circle cx='280' cy='235' r='28' fill='#F43F5E'/><text x='280' y='244' text-anchor='middle' font-family='sans-serif' font-size='32' fill='#FFF' font-weight='bold'>?</text><text x='280' y='280' text-anchor='middle' font-family='monospace' font-size='10' fill='#9F1239'>numbers: verify</text><g transform='translate(360 180)'><circle cx='40' cy='40' r='28' fill='none' stroke='#1F2937' stroke-width='3'/><line x1='62' y1='62' x2='90' y2='90' stroke='#1F2937' stroke-width='4' stroke-linecap='round'/></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: numbers are not text — verify every figure",
+      "md": "When a model produces text, errors are usually obvious or harmless — wrong tone, missed nuance, awkward phrasing. When a model produces numbers, errors are usually invisible and material. **A number that is wrong by one digit looks identical to a number that is right.**\n\nSo: every prompt that asks for a number must also ask for the source, and every output must be reconciled to a total. No exceptions, no shortcuts. The number is the artefact; everything else is workflow."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-accounting/anim/prompting-financials-totals-check.html",
+      "height": 420,
+      "caption": "Watch a 47-line invoice extract: AI returns the table, then the totals from the source and the totals from the AI output line up side by side. The 14-rupee mismatch glows red instantly.",
+      "fallbackImage": "/courses/ai-for-accounting/anim/prompting-financials-totals-check-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Office story — comma ka kahar",
+          "md": "Articled ne ChatGPT ko bola — \"is invoice ka total nikaal\". AI ne bola — Rs. 14,28,000.\n\nClient ne dekha — \"haan sahi hai\". Submission ke baad realise hua — invoice mein actual total tha Rs. 14,82,000. Comma place change ho gaya tha. ₹54,000 ka ITC chala gaya kyunki vendor ka GSTIN mismatched ho gaya tha aur reconciliation pe pakda nahi.\n\nBhai — number aur text alag chiz hai. Text mein typo dikhta hai. Number mein typo *paisa* hai."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The lakh comma trap",
+          "md": "An LLM cheerfully returned ₹14,28,000 as a total. The actual figure was ₹14,82,000. Two digits swapped, comma placement identical, ₹54,000 of ITC marooned. With text, a typo is visible. With numbers, a typo is money."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 1 — Structured-output prompts" },
+    {
+      "type": "markdown",
+      "md": "First named move. Stop asking for paragraphs. Start asking for JSON.\n\nA **structured-output prompt** specifies, in the prompt itself, the exact shape of the response: every field, every type, every required key. The model returns JSON that either parses cleanly into your schema or fails loudly. Free-form prose hides errors; structured output exposes them.\n\nIn practice this means: instead of \"summarise this purchase invoice,\" you write \"return JSON with exactly these keys: vendor_name (string), gstin (15-character string), invoice_number (string), invoice_date (YYYY-MM-DD), taxable_value (number, rupees), igst (number, rupees), cgst (number, rupees), sgst (number, rupees), total (number, rupees). If a field is missing, return null. Do not include any text outside the JSON object.\"\n\nNotice what changed. The model can no longer slip in a hedged summary or invent a category; the schema is the contract."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two prompts side by side. Left: a vague prompt 'summarise this invoice'. Right: a structured prompt with a JSON schema. The right side has a green checkmark and a parser symbol underneath.",
+      "caption": "Same task, two prompts. The left one returns a paragraph you can't audit. The right one returns data you can.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300' role='img'><rect width='600' height='300' rx='14' fill='#EFF6FF'/><g transform='translate(20 30)'><rect width='270' height='240' rx='12' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='135' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#9F1239' font-weight='bold'>FREE-FORM</text><g font-family='monospace' font-size='10' fill='#1F2937'><text x='14' y='58'>Prompt:</text><text x='14' y='74'>'Summarise this</text><text x='14' y='90'> invoice for me'</text><text x='14' y='124'>Output:</text><text x='14' y='140'>'This is a tax</text><text x='14' y='156'> invoice from ABC</text><text x='14' y='172'> Industries dated</text><text x='14' y='188'> approximately</text><text x='14' y='204'> mid-March...'</text></g><text x='135' y='228' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>cannot parse, cannot verify</text></g><g transform='translate(310 30)'><rect width='270' height='240' rx='12' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='135' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>STRUCTURED</text><g font-family='monospace' font-size='9' fill='#1F2937'><text x='14' y='52'>Return JSON:</text><text x='14' y='66'>{</text><text x='20' y='80'>'vendor': string,</text><text x='20' y='94'>'gstin': string(15),</text><text x='20' y='108'>'taxable': number,</text><text x='20' y='122'>'igst': number,</text><text x='20' y='136'>'total': number,</text><text x='20' y='150'>'source_lines': [int]</text><text x='14' y='164'>}</text><text x='14' y='184'>Output:</text><text x='14' y='198'>{vendor:'ABC Ind',</text><text x='14' y='212'>gstin:'27ABCDE...'}</text></g><text x='135' y='228' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>parses, validates, reconciles</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Building a structured-output prompt for vendor invoice extraction",
+      "steps": [
+        {
+          "label": "Step 1 — Define the schema first",
+          "body": "Before you write a single English word, write the JSON schema. Field names, types, required vs optional, format constraints (GSTIN is exactly 15 chars, dates are YYYY-MM-DD)."
+        },
+        {
+          "label": "Step 2 — Wrap with a system prompt that demands strict adherence",
+          "body": "'You return JSON only. No prose, no markdown fences, no explanation. If a field cannot be extracted, return null. If the document is not a tax invoice, return {\"error\": \"not_invoice\"}.'"
+        },
+        {
+          "label": "Step 3 — Add a citation field",
+          "body": "Include a 'source_lines' array — the line numbers in the source document where each value came from. This is the audit trail at the row level."
+        },
+        {
+          "label": "Step 4 — Include 1 or 2 examples",
+          "body": "Few-shot examples beat instructions. Show the model one good input/output pair. Watch the consistency improve immediately."
+        },
+        {
+          "label": "Step 5 — Validate on parse",
+          "body": "Your code attempts to parse the JSON. If it fails — missing field, wrong type, GSTIN of wrong length — re-prompt or flag. Never silently accept malformed output."
+        },
+        {
+          "label": "Step 6 — Reconcile totals before trusting",
+          "body": "Sum extracted taxable + IGST + CGST + SGST and compare with the model's 'total' field and the source-document total. If they don't match within ₹1, the row is flagged."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Why is structured output better than free-form prose for financial extraction?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Because the schema is a contract — malformed output fails loudly instead of silently containing errors", "correct": true, "explain": "Right. Free-form output looks fine even when it is wrong. Structured output either parses or doesn't." },
+        { "id": "b", "label": "Because LLMs are faster on JSON", "correct": false, "explain": "Slightly true on tokenisation; not the point." },
+        { "id": "c", "label": "Because JSON looks more professional in client decks", "correct": false, "explain": "The point is verifiability, not aesthetics." },
+        { "id": "d", "label": "Because structured output costs less", "correct": false, "explain": "Cost is incidental; some structured prompts use more tokens because of the schema description." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Schema = engagement letter",
+          "md": "Sochta hu — JSON schema basically engagement letter ka chhota version hai. Pehle clearly likh diya — \"yeh deliverable, yeh format, yeh fields\". Phir AI ko deliver karna padta hai uss exact contract pe.\n\nBina schema ke prompt — \"summarise this\" — woh same hai jaise client ko bolna \"kuch karke do\". Dono cases mein kuch bhi mil sakta hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Schema as engagement letter",
+          "md": "Think of the schema as the engagement letter for the model. \"Summarise this\" is the equivalent of \"do something useful.\" The schema makes the deliverable enforceable."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 2 — The 'show your sources' demand" },
+    {
+      "type": "markdown",
+      "md": "Second named move. For every figure the model produces, demand a citation back to the source.\n\nThe **show your sources demand** is a single line in your prompt: *'For every value, also return the page number, line number, or row reference in the source document where you read it.'* The model now produces extracted values *plus* a pointer back to the original. You spot-check the pointer; if the pointer is wrong or fabricated, you discard the value.\n\nThis catches three failure modes at once. One: the model invented the number from training data instead of reading it. Two: the model read the wrong row. Three: the model averaged or interpreted when you wanted a literal extract.\n\nFor reading PDFs, ask for page + line. For Excel, ask for sheet + cell address. For long contracts, ask for clause number. The model will sometimes refuse or invent a citation; both are useful failure signals."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A document on the left with line numbers visible. An arrow from each extracted value on the right (vendor name, GSTIN, total) points back to a specific line in the source document.",
+      "caption": "Every extracted value carries a pointer home. If the pointer is missing or fabricated, the value is suspect.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='220' height='220' rx='10' fill='#FFF' stroke='#8B5CF6' stroke-width='2'/><text x='110' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#5B21B6' font-weight='bold'>SOURCE INVOICE</text><g font-family='monospace' font-size='10' fill='#1F2937'><text x='14' y='50'>L1: ABC Industries Pvt Ltd</text><text x='14' y='66'>L2: 14, MIDC Hinjewadi, Pune</text><text x='14' y='82'>L3: GSTIN 27ABCDE1234F1Z5</text><text x='14' y='98'>L4: Inv #INV-2026-0421</text><text x='14' y='114'>L5: Date: 14-Apr-2026</text><text x='14' y='130'>L6: --- ITEMS ---</text><text x='14' y='146'>L7: Cotton yarn... 12,40,000</text><text x='14' y='162'>L8: Add IGST 18%   2,23,200</text><text x='14' y='178'>L9: --- ---</text><text x='14' y='194'>L10: Total 14,63,200</text></g></g><g transform='translate(330 50)'><rect width='240' height='180' rx='10' fill='#F5F3FF' stroke='#8B5CF6' stroke-width='2'/><text x='120' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#5B21B6' font-weight='bold'>EXTRACTED + CITED</text><g font-family='monospace' font-size='10' fill='#1F2937'><text x='14' y='52'>vendor: 'ABC Industries' (L1)</text><text x='14' y='72'>gstin: '27ABCDE...' (L3)</text><text x='14' y='92'>invoice: 'INV-2026-0421' (L4)</text><text x='14' y='112'>taxable: 12,40,000 (L7)</text><text x='14' y='132'>igst: 2,23,200 (L8)</text><text x='14' y='152'>total: 14,63,200 (L10)</text></g></g><g stroke='#8B5CF6' stroke-width='1.5' fill='none' opacity='0.6'><path d='M252 60 Q300 70 330 65' stroke-dasharray='3 3'/><path d='M252 90 Q300 100 330 105' stroke-dasharray='3 3'/><path d='M252 195 Q300 180 330 165' stroke-dasharray='3 3'/></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "CA-Veteran Vidya",
+        "role": "Partner, mid-tier Pune firm, 22 years in practice"
+      },
+      "intro": [
+        "Right. You've seen the moves; now tell me how you'd handle a few prompts that landed on my desk last month.",
+        "For each one, decide whether the prompt is safe to run as-is or whether you'd rewrite it before letting an articled assistant use it."
+      ],
+      "buckets": [
+        { "id": "ship", "label": "Ship as-is", "tone": "safe" },
+        { "id": "fix", "label": "Rewrite before running", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "p1",
+          "situation": "'Read this invoice and tell me the total.'",
+          "correctBucketId": "fix",
+          "explain": "No structure, no citation, no schema. Could return any of three plausible numbers depending on parsing. Rewrite as a structured-output prompt with source line citation."
+        },
+        {
+          "id": "p2",
+          "situation": "'Return JSON with keys vendor, gstin (15 chars), taxable (number), igst (number), cgst (number), sgst (number), total (number), source_lines (array). Verify total = taxable + igst + cgst + sgst before returning.'",
+          "correctBucketId": "ship",
+          "explain": "Schema, types, validation, citation request. This is what a real production prompt looks like. Ship it (with parsing on your end)."
+        },
+        {
+          "id": "p3",
+          "situation": "'Summarise the financials of this annual report in 200 words.'",
+          "correctBucketId": "ship",
+          "explain": "This is a text task, not a number-extraction task. Free-form prose is acceptable; the deliverable is a summary, not a figure to file. Different discipline."
+        },
+        {
+          "id": "p4",
+          "situation": "'What is the GST rate on solar panels? Give me the section number.'",
+          "correctBucketId": "fix",
+          "explain": "Asks the model to answer from training data with no source. Rewrite with RAG over the actual GST notifications, and demand a verbatim quote."
+        },
+        {
+          "id": "p5",
+          "situation": "'Extract the closing balance for cash from this trial balance and tell me the line number you read it from.'",
+          "correctBucketId": "ship",
+          "explain": "Specific task, citation requirement, single value. Tight enough to ship after a one-row sanity check."
+        },
+        {
+          "id": "p6",
+          "situation": "'You're a senior CA. Tell me how to handle the ITC mismatch.'",
+          "correctBucketId": "fix",
+          "explain": "Role-play prompts on judgment topics produce confident-sounding generic advice. Rewrite to ask for options surfaced from CBIC circulars with citations, then exercise CA judgment yourself."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the well-formatted hallucination",
+      "md": "The most dangerous output is one that *looks* right. Clean tables, neat columns, GSTINs that pass format validation — and one number that is silently wrong by ₹54,000.\n\n**Format quality and number quality are uncorrelated.** A model that produces beautiful JSON can still invent the IGST. The defence is reconciliation, not aesthetics."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're processing 800 vendor invoices for a client. Order these prompt-engineering steps from first to last.",
+      "items": [
+        { "id": "schema", "label": "Define the JSON output schema with field types and constraints", "detail": "Vendor name (string), GSTIN (15 chars), taxable value (number), etc." },
+        { "id": "fewshot", "label": "Add 1 to 2 worked examples (input → expected output) to the prompt", "detail": "Few-shot examples beat instructions for consistency." },
+        { "id": "cite", "label": "Add the 'show your sources' demand for every numeric field", "detail": "Each value carries a back-pointer to the source line/page/cell." },
+        { "id": "guard", "label": "Add the system instruction: 'JSON only, no prose; null for missing fields'", "detail": "Removes any temptation for the model to slip in commentary." },
+        { "id": "parse", "label": "Run on a 10-invoice pilot and validate parsing + reconciliation", "detail": "Catch schema mismatches and totals errors on a small set first." },
+        { "id": "scale", "label": "Run on the full 800 with logging of every prompt, response, and override", "detail": "The eval log captures the full trail." }
+      ],
+      "hint": "Decide what shape you want before you write what to extract."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write a structured-output prompt to extract key fields from a TDS Form 16A. The model must return JSON with: deductor name, deductor TAN, deductee name, deductee PAN, period, total amount paid, total TDS deducted, challan numbers (array). Include the 'show your sources' demand and the JSON-only guardrail.",
+      "lang": "markdown",
+      "starter": "## Prompt for Form 16A extraction\n\nSystem: \n\nUser: \n\nReturn JSON with exactly these keys:\n",
+      "expected": "## Prompt for Form 16A extraction\n\nSystem: You are a data extractor for tax forms. You return JSON only — no prose, no markdown fences, no explanation. If a field cannot be located in the document, return null for that field. If the document is not a Form 16A, return {\"error\": \"not_form_16a\"}.\n\nUser: Extract the following fields from the attached Form 16A. For every value, include the page number and line/row reference where it was read from.\n\nReturn JSON with exactly these keys:\n{\n  \"deductor_name\": string,\n  \"deductor_tan\": string (10 chars, alphanumeric, format AAAA00000A),\n  \"deductee_name\": string,\n  \"deductee_pan\": string (10 chars, alphanumeric, format AAAAA0000A),\n  \"period_from\": string (YYYY-MM-DD),\n  \"period_to\": string (YYYY-MM-DD),\n  \"total_amount_paid\": number (rupees, no commas),\n  \"total_tds_deducted\": number (rupees, no commas),\n  \"challan_numbers\": [string],\n  \"sources\": {\n    \"deductor_tan\": {\"page\": int, \"line\": int},\n    \"deductee_pan\": {\"page\": int, \"line\": int},\n    \"total_amount_paid\": {\"page\": int, \"line\": int},\n    \"total_tds_deducted\": {\"page\": int, \"line\": int}\n  }\n}\n\nBefore returning, verify total_tds_deducted is roughly 1% to 30% of total_amount_paid (sanity range for typical TDS rates); if outside this range, set \"warning\": \"unusual_tds_ratio\"."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are good practices for prompts that extract numbers? (Select all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Demand JSON output with explicit field types", "correct": true, "explain": "Right. Schemas catch structural errors at parse time." },
+        { "id": "b", "label": "Demand a source citation (page/line/cell) for every numeric value", "correct": true, "explain": "Right. Citations turn invisible errors into visible ones." },
+        { "id": "c", "label": "Trust the output if the formatting looks neat", "correct": false, "explain": "Wrong. Format quality and number quality are uncorrelated. Neat output can still be wrong." },
+        { "id": "d", "label": "Reconcile extracted totals against the source-document total before trusting", "correct": true, "explain": "Right. The reconciliation is the only thing standing between you and a comma-displacement disaster." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Articled assistant ka golden rule, AI ke liye bhi",
+          "md": "Senior ne hamesha bola tha — \"figure de raha hai toh source bata.\" Trial balance se number nikaal ke aaye toh page number, ledger book ka line number, kuch toh chahiye.\n\nVahi rule AI ke liye. Number bata raha hai toh source dikha. Source nahi hai toh trust nahi hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The same rule, applied to a different junior",
+          "md": "Every senior teaches the same lesson on day one: if you give me a number, give me the source. The rule applies cleanly to AI; the only thing that changes is how fast you can demand it."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Numbers are not text. A wrong number looks identical to a right one; verification is non-negotiable.",
+        "Structured-output prompts make the schema a contract: malformed responses fail at parse time instead of in production.",
+        "The 'show your sources' demand turns invisible errors into visible ones; demand page/line/cell for every figure.",
+        "Format quality and number quality are uncorrelated; neat output can still be wrong by ₹54,000.",
+        "Always reconcile extracted totals against the source-document total before trusting any row."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Take one prompt you (or your team) currently use for any financial extraction or summarisation task. Rewrite it as a structured-output prompt with a JSON schema and a source-citation demand. What did you have to make explicit that was previously left implicit?"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "lesson": {
+    "slug": "cleaning-and-shaping",
+    "title": "The Clean-Data Discipline",
+    "subtitle": "Half the job is wrangling; the other half is admitting you wrangled",
+    "estimatedMinutes": 13,
+    "skills": ["data-cleaning"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/data-science-and-analysis/cleaning-and-shaping.mp3",
+        "audioDurationSec": 705,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why cleaning is the job" },
+          { "startSec": 80, "label": "Mental model: schema-first wrangling" },
+          { "startSec": 220, "label": "Move 1: the always-look-at-it rule" },
+          { "startSec": 410, "label": "Move 2: the assumption ledger" },
+          { "startSec": 560, "label": "The trap: skip EDA, jump to modeling" }
+        ],
+        "notesPdfUrl": "/notes/data-science-and-analysis/cleaning-and-shaping.html",
+        "notesByline": "Notes by Aditi, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "There is a famous statistic that 80% of a data scientist's time is spent on cleaning. The statistic is wrong because it understates. The truth is closer to 95%, and the remaining 5% is spent denying it on LinkedIn.\n\nCleaning is not a chore that comes before the *real* work. Cleaning **is** the work. The decisions you make while cleaning — which rows to drop, how to define a metric, what to do with the 41% of nulls in column `flag` — determine 80% of the eventual answer. The model on top is decoration. This lesson teaches you to do the cleaning honestly, in writing, with a paper trail."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "An iceberg diagram. Above the waterline is a small slice labelled 'modeling'. Below the waterline are large slices labelled 'cleaning, joining, deduping, defining, validating'",
+        "caption": "What stakeholders see: the model. What actually carries the weight: everything below the waterline.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#EFF6FF'/><line x1='40' y1='110' x2='540' y2='110' stroke='#0EA5E9' stroke-width='2' stroke-dasharray='6 4'/><text x='50' y='100' font-family='sans-serif' font-size='10' fill='#0369A1'>waterline (what stakeholders see)</text><polygon points='240,40 340,40 320,110 260,110' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='290' y='80' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#1F2937' font-weight='bold'>modeling</text><text x='290' y='95' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937'>5%</text><polygon points='180,110 400,110 460,250 120,250' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><g font-family='sans-serif' font-size='12' fill='#064E3B'><text x='290' y='140' text-anchor='middle' font-weight='bold'>cleaning</text><text x='290' y='160' text-anchor='middle'>joining</text><text x='290' y='180' text-anchor='middle'>deduping</text><text x='290' y='200' text-anchor='middle'>defining metrics</text><text x='290' y='220' text-anchor='middle'>validating</text><text x='290' y='240' text-anchor='middle' font-style='italic'>~95%</text></g></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: schema-first wrangling",
+        "md": "Hold this picture. Before you write a single transform, write the **target schema**: the shape of the dataframe you need at the end. Columns, types, primary key, expected row count, what 'one row' represents. \n\nThen wrangle towards that schema, one transform at a time, validating after each step. *What you write*, you can read; *what runs*, you can verify. The mistake is to start cleaning without a schema and discover at row 7 of the join that 'one row per user' became 'one row per user-session-event' three transforms ago. Schema-first wrangling means you always know what good looks like."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/data-science-and-analysis/anim/cleaning-and-shaping-schema.html",
+        "height": 420,
+        "caption": "Watch a messy events table reshape towards a target schema, with row-count and key-uniqueness assertions firing at each step."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "tip",
+            "title": "Maa ki kitchen mein mise en place",
+            "md": "Bhai, mummy ka chhole banana dekh. Pehle kya karti hai? Pyaaz kaata, tamatar kaata, masale taiyaar kiye, ginger-garlic paste alag rakha. *Phir* kadhai chadhaayi.\n\nYeh schema-first hai. Pehle target shape: 'plate ke uppar chhole, garam'. Phir saare ingredients waisi shape mein laao jaisi recipe maangti hai. **Beech mein pyaaz kaatna shuru nahi karte agar aate ne pehle se gas pe rakh diya.** Coding mein bhi waise hi: pehle target schema likh, phir transforms chala. Otherwise tu pyaaz aadhi katti haalat mein kadhai mein gir gayi, aur ab kuch bhi clean nahi hai."
+          },
+          "en": {
+            "tone": "tip",
+            "title": "Mise en place is schema-first",
+            "md": "Watch any cook who finishes on time. They prep every ingredient to its target shape before the pan goes on the stove. They are doing schema-first wrangling. The chaos costs of mid-cook chopping are exactly the chaos costs of mid-pipeline transforms; both of them produce undercooked results in suspicious shapes."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The always-look-at-it rule"
+      },
+      {
+        "type": "markdown",
+        "md": "Aggregates lie. Rows tell the truth. The most senior analyst on every team I have worked with has the same habit: before any aggregation, they pull a random sample of 200 rows and *look at them*. Not query them. Look. Eyes on the screen.\n\nThis catches the things SQL hides:\n\n- The `created_at` column that is sometimes a Unix timestamp and sometimes an ISO string because the schema changed in March 2025 and never got backfilled.\n- The 'India' country column that contains *India*, *INDIA*, *Bharat*, *IN*, and three rows of *NaN*.\n- The user_id column where 0.4% of rows are literally the string 'NULL' (in quotes) because someone wrote `.fillna('NULL')` once.\n- The amount column that is in paise on rows before April and in rupees after.\n\nNo aggregate query will surface these. A 5-minute eyeball will. The always-look-at-it rule is non-negotiable for any number you intend to publish."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A table with mixed-format cells highlighted: a Unix timestamp next to an ISO date, 'India' next to 'IN', a quoted 'NULL' string, an amount in paise next to one in rupees",
+        "caption": "What aggregates hide. The pivot table summed it all to one number; the rows tell five different stories.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FEF3C7'/><g font-family='monospace' font-size='11'><rect x='30' y='30' width='520' height='30' fill='#1F2937'/><text x='50' y='50' fill='#FCD34D'>user_id</text><text x='160' y='50' fill='#FCD34D'>created_at</text><text x='290' y='50' fill='#FCD34D'>country</text><text x='400' y='50' fill='#FCD34D'>amount</text><g fill='#1F2937'><rect x='30' y='65' width='520' height='25' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='82'>4821</text><text x='160' y='82' fill='#9D174D'>1715890234</text><text x='290' y='82'>India</text><text x='400' y='82' fill='#1F2937'>49900</text><rect x='30' y='95' width='520' height='25' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='112'>4822</text><text x='160' y='112' fill='#9D174D'>2026-03-15T10:00Z</text><text x='290' y='112'>IN</text><text x='400' y='112'>499</text><rect x='30' y='125' width='520' height='25' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='142' fill='#9D174D'>'NULL'</text><text x='160' y='142'>2026-03-16T11:30Z</text><text x='290' y='142' fill='#9D174D'>Bharat</text><text x='400' y='142'>649</text><rect x='30' y='155' width='520' height='25' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='172'>4824</text><text x='160' y='172'>2026-03-17T09:00Z</text><text x='290' y='172'>INDIA</text><text x='400' y='172' fill='#9D174D'>NaN</text><rect x='30' y='185' width='520' height='25' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='202'>4825</text><text x='160' y='202'>2026-03-17T10:00Z</text><text x='290' y='202'>India</text><text x='400' y='202'>1199</text></g></g><text x='290' y='250' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#92400E' font-style='italic'>Five rows, five different problems. SUM(amount) hides all of them.</text></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "The translation: 'how many MAU did we have?' becomes a clean number in 5 steps",
+        "steps": [
+          { "label": "Step 1 — Define MAU numerically", "body": "'A user who appeared in events.user_id at least once in a calendar month, where user is not in the test_accounts list, and event is not type=server_health'." },
+          { "label": "Step 2 — Eyeball 200 random rows", "body": "Print them. Spot the test accounts that did not get the team's @company.com filter, the duplicate user_ids from the SSO migration, the bot traffic from a load test on March 14." },
+          { "label": "Step 3 — Write the schema first", "body": "Target: one row per user_id per month. Columns: user_id (int), month (date), event_count (int). Primary key: (user_id, month). Expected ~125K rows for a month." },
+          { "label": "Step 4 — Transform with assertions", "body": "After each transform: assert row count in expected range, assert primary key uniqueness, assert no nulls in user_id. Three lines of pytest catch most pipeline bugs." },
+          { "label": "Step 5 — Cross-check against a known number", "body": "Compare your monthly active count for January 2026 against the company's already-published number. If yours differs by more than 2%, find the gap before publishing. The gap is almost always a definition difference." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Your manager asks for `daily_active_users`. You run `SELECT COUNT(DISTINCT user_id) FROM events GROUP BY DATE(created_at)` and get 28,400 for yesterday. What is missing?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "You did not eyeball rows; you have probably included test accounts, bot traffic, server-health events, and 'NULL' user_ids; you have not defined what an 'event' is", "correct": true, "explain": "Correct. The always-look-at-it rule, ignored. Aggregate-first analysis hides 5-15% noise on most events tables." },
+          { "id": "b", "label": "Nothing — the query is correct", "correct": false, "explain": "The query runs; that is not the same as being right. SQL is happy to count anything you tell it to count, including test accounts you did not exclude." },
+          { "id": "c", "label": "You should have used `COUNT(*)` instead", "correct": false, "explain": "Wrong direction. COUNT(*) overcounts users who fired multiple events; COUNT(DISTINCT user_id) is the right aggregator. The bug is in the inputs, not the function." },
+          { "id": "d", "label": "Need a faster query plan", "correct": false, "explain": "Performance is not the issue. Correctness is." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "info",
+            "title": "Sasta hai par Pune-from-Bengaluru ka problem",
+            "md": "Bhai, ek Pune-based SaaS team ne saari city-level revenue analysis chala di. Bengaluru #1, Mumbai #2, **Banglore #4**, **bangalore #7**, Hyderabad #6. \n\nKisi ne rows nahi dekhi. CMO ne board update mein 'Bengaluru is our top market' likha. Reality? Top market 'Bengaluru + Banglore + bangalore' tha, lekin alag-alag spelling ki vajah se teen alag entries ban gaye. **Yaar, eyeball karo.** Aggregate ne saari spellings alag-alag dikhayi; rows ne sach bola hota."
+          },
+          "en": {
+            "tone": "info",
+            "title": "The case-insensitive country column",
+            "md": "A Pune SaaS reported 'India is our #2 market'. The actual #2 was 'India + INDIA + Bharat + IN + In', summed they would have been #1. Aggregates respected the casing; rows would have shown the truth. The reported answer was wrong, by enough to matter, for almost a quarter."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The assumption ledger"
+      },
+      {
+        "type": "markdown",
+        "md": "Every cleaning decision you make adds an assumption. Drop rows where `country IS NULL`. Treat 'IN' and 'India' as the same. Use `created_at` not `signed_up_at` for cohort assignment. Define 'active' as 'fired ≥ 1 event'. Each one is defensible; each one shifts the eventual number; collectively they explain most of the disagreement between two analysts working on the same dataset.\n\nThe **assumption ledger** is a 4-8 line document, lived in the README of the analysis, that records every non-trivial decision: the choice, why you made it, and what the number would look like if you had chosen differently. \n\nIt is not a bureaucracy. It is the only way to defend a number when a stakeholder asks 'why is your churn different from sales's churn?' three months later. The two churn numbers are different because the two analysts made different decisions; if neither has a ledger, neither can defend their number, and the company defaults to whichever stakeholder is louder."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A ledger-style page with three columns: 'decision', 'why', 'sensitivity (what would change if reversed)' — five rows filled in",
+        "caption": "The assumption ledger. Five lines that turn a number from 'trust me' into 'here is the spreadsheet'.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FFF7ED'/><rect x='30' y='30' width='520' height='30' fill='#1F2937'/><g font-family='sans-serif' font-size='12' fill='#FCD34D' font-weight='bold'><text x='50' y='50'>decision</text><text x='240' y='50'>why</text><text x='420' y='50'>if reversed → number changes</text></g><g font-family='monospace' font-size='10' fill='#1F2937'><rect x='30' y='65' width='520' height='35' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='80'>drop test accounts</text><text x='240' y='80'>they are us, not users</text><text x='420' y='80'>+8% MAU</text><text x='50' y='95' fill='#6B7280' font-style='italic'>(exclude domain @company.com)</text><rect x='30' y='105' width='520' height='35' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='120'>active = ≥1 event/month</text><text x='240' y='120'>matches dashboard def</text><text x='420' y='120'>−12% if ≥3 events</text><rect x='30' y='145' width='520' height='35' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='160'>India = India + INDIA + IN</text><text x='240' y='160'>same country</text><text x='420' y='160'>+18% to India total</text><rect x='30' y='185' width='520' height='35' fill='#FFFFFF' stroke='#D1D5DB'/><text x='50' y='200'>cohort by created_at</text><text x='240' y='200'>signup date drives LTV</text><text x='420' y='200'>shifts cohort by 1mo</text><rect x='30' y='225' width='520' height='35' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><text x='50' y='240' fill='#9D174D'>imputed null amount = 0</text><text x='240' y='240' fill='#9D174D'>most likely free trial</text><text x='420' y='240' fill='#9D174D'>−4% revenue if = mean</text></g></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Senior-DS Saanya",
+          "role": "Tech lead at a Bengaluru SaaS, 9 years of cleaning other people's data"
+        },
+        "intro": [
+          "Welcome back. Today we audit cleaning decisions. 🧹",
+          "I'll show you 6 real-shaped decisions. Tell me each is **legit** (defensible, log it), **needs caveat** (defensible only if you write a sensitivity note), or **red flag** (likely to corrupt the answer; stop and rethink)."
+        ],
+        "buckets": [
+          { "id": "legit", "label": "Legit", "tone": "safe" },
+          { "id": "caveat", "label": "Needs caveat", "tone": "neutral" },
+          { "id": "red", "label": "Red flag", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "Drop rows where `user_id IS NULL` (0.3% of data). Note in ledger: 'unidentifiable; non-attributable to a user'.", "correctBucketId": "legit", "explain": "Defensible at 0.3%. Logged with reason. The ledger entry is the difference between this being legit and being a red flag." },
+          { "id": "s2", "situation": "Impute missing `country` as 'India' because most users are Indian.", "correctBucketId": "red", "explain": "Defaulting an unknown to the mode is correlation laundering. You are inflating India's share with synthetic data. Either drop the rows, treat them as 'unknown' as a separate category, or skip the country breakdown." },
+          { "id": "s3", "situation": "Treat the 41% of `flag` column nulls as 'flag = false' because the flag was added in March and didn't backfill.", "correctBucketId": "caveat", "explain": "Defensible if you note the backfill issue and report sensitivity. Without the caveat, you are conflating 'flag did not exist' with 'flag was false', which biases everything pre-March." },
+          { "id": "s4", "situation": "Convert all timestamps to UTC before joining tables.", "correctBucketId": "legit", "explain": "Timezone normalisation before joins is mandatory hygiene; not even worth a ledger line unless you discovered a data source that lied about its TZ." },
+          { "id": "s5", "situation": "Replace negative `amount` values with their absolute value because 'they're probably refunds'.", "correctBucketId": "red", "explain": "You are silently turning revenue-decreasing events into revenue-increasing ones. A refund is an event; flipping its sign is fraud-shaped behaviour. Either keep refunds as negative or model them as a separate event type." },
+          { "id": "s6", "situation": "Cap outliers at the 99th percentile because 'they distort the mean'.", "correctBucketId": "caveat", "explain": "Sometimes correct, often a smell. Outliers may be the most informative rows (top 1% of revenue, fraud cases, etc.). Capping is fine only if the question is about 'typical' behaviour and you log the cap." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: skip EDA, jump to modeling",
+        "md": "The most common failure mode in any data project: skip exploratory data analysis (EDA), feed the dirty data into a model, and report the model's accuracy as if it meant something. The model has no idea your `amount` column flipped from paise to rupees in April. It happily fits both regimes as one continuous variable and produces a confident, polished, completely wrong number.\n\nWatch for the symptoms: 'we don't have time for EDA', 'the data team already cleaned this', 'the model is accurate so the data must be fine'. All three are how juniors learn the lesson the expensive way. **The model does not validate the data; the data validates itself before the model runs.**"
+      },
+      {
+        "type": "tryIt",
+        "instruction": "You are handed a `users.csv` with columns `user_id, signup_date, country, plan, last_active`. Write 5 SQL or pandas assertions you would run *before* any aggregate query, to catch dirty data.",
+        "lang": "sql",
+        "starter": "-- Assertion 1:\n-- Assertion 2:\n-- Assertion 3:\n-- Assertion 4:\n-- Assertion 5:",
+        "expected": "-- Assertion 1: SELECT COUNT(*) FROM users WHERE user_id IS NULL OR user_id = '' OR user_id = 'NULL'; expect 0\n-- Assertion 2: SELECT user_id, COUNT(*) FROM users GROUP BY user_id HAVING COUNT(*) > 1; expect 0 rows (uniqueness)\n-- Assertion 3: SELECT DISTINCT country FROM users ORDER BY country; eyeball for casing/spelling collisions ('India' vs 'INDIA' vs 'IN')\n-- Assertion 4: SELECT MIN(signup_date), MAX(signup_date) FROM users; check the range is plausible (no 1970 epoch nulls, no future dates)\n-- Assertion 5: SELECT plan, COUNT(*) FROM users GROUP BY plan; check each plan name is spelled identically across rows ('Pro' vs 'pro' vs 'PRO')"
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the TWO things that should always be in your assumption ledger before you publish any number.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "How you defined the metric (the formula, not the name)", "correct": true, "explain": "Correct. 'Active user' has multiple definitions; the formula is the only honest specification." },
+          { "id": "b", "label": "Which rows you dropped and why", "correct": true, "explain": "Correct. Most disagreements about a number are actually disagreements about exclusions. Log them or you cannot defend them." },
+          { "id": "c", "label": "How long the analysis took you", "correct": false, "explain": "Track for personal time-management; not relevant to the number's defensibility." },
+          { "id": "d", "label": "The colour palette of your dashboard", "correct": false, "explain": "Cosmetic. Belongs in the style guide, not the ledger." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "warn",
+            "title": "Two analysts, two churn numbers, one CFO",
+            "md": "Scene: Sales team ka analyst bola Q3 churn = **6.4%**. Finance team ka analyst bola Q3 churn = **9.1%**. CFO confused. Meeting. Dono ne defend kiya, dono ke paas dashboard tha, dono ke paas SQL tha.\n\nKisi ke paas **assumption ledger nahi tha.** Difference yeh nikla:\n- Sales ne 'churn' = subscription cancelled\n- Finance ne 'churn' = subscription cancelled OR downgraded OR didn't renew within 14 days\n- Sales ne free-trial users include kiye\n- Finance ne sirf paid users ginne\n\nDono numbers sahi the apne-apne definitions ke liye. Lekin assumption ledger nahi tha to defend nahi kar saka koi. CFO ne loud-est aadmi pe believe kiya. **Tu ledger likh, ya tu loud ban. Tisra option nahi hai.**"
+          },
+          "en": {
+            "tone": "warn",
+            "title": "Two analysts, two churn numbers",
+            "md": "Sales says Q3 churn is 6.4%. Finance says it is 9.1%. Both are right by their own definitions; neither has an assumption ledger. The CFO defaults to whoever sounds more confident. The number that gets reported to the board is decided by personality, not method. The ledger is the cheapest defence against this exact loop."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Cleaning is not preamble to the work; cleaning is the work, and the model on top is decoration.",
+          "Schema-first wrangling: write the target shape before you write the first transform, validate after each transform.",
+          "Aggregates lie; rows tell the truth. Eyeball 200 random rows before publishing any number.",
+          "An assumption ledger turns every non-trivial cleaning decision from an opinion into a defensible record.",
+          "If two analysts produce different numbers from the same data, the difference is in their assumption ledgers — and the one without a ledger always loses the argument."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick the last analysis where you produced a number. Could you reconstruct your top 5 cleaning decisions from memory? If yes, write them down now in the ledger format from this lesson. If no, that is the lesson."
+      }
+    ]
+  }
+}

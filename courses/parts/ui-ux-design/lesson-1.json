@@ -1,0 +1,220 @@
+{
+  "slug": "visual-hierarchy",
+  "title": "Visual Hierarchy: How the Eye Travels",
+  "subtitle": "The eye is a lazy heuristic engine; your job is to bait it on purpose",
+  "estimatedMinutes": 13,
+  "skills": ["ui-visual-hierarchy"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ui-ux-design/visual-hierarchy.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the eye is lazy" },
+        { "startSec": 80, "label": "Mental model: the lazy heuristic engine" },
+        { "startSec": 220, "label": "Move 1 — Contrast as hierarchy" },
+        { "startSec": 410, "label": "Move 2 — Position as weight" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ui-ux-design/visual-hierarchy.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Open any SaaS dashboard in India built between 2019 and 2024. Count the buttons that are competing to be 'the' button on the screen. The number is rarely zero, often three, sometimes seven.\n\nThe people who built these screens were not careless. They had taste, they had Material guidelines, they had a Figma library. What they did not have is a clear opinion about where the eye should land first, second, and not-at-all. This lesson is that opinion."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A cartoon eye on a treadmill, scanning a screen full of buttons, picking the loudest one labelled 'PAY NOW' while ignoring six grey ones around it.",
+      "caption": "The eye does not read; it scans. Whatever has the most contrast wins, regardless of where it sits.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(40 50)'><rect x='0' y='0' width='220' height='180' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='20' y='20' width='80' height='28' rx='6' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><rect x='115' y='20' width='80' height='28' rx='6' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><rect x='20' y='60' width='80' height='28' rx='6' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><rect x='115' y='60' width='80' height='28' rx='6' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><rect x='20' y='100' width='80' height='28' rx='6' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><rect x='115' y='100' width='80' height='28' rx='6' fill='#F59E0B' stroke='#92400E' stroke-width='2'/><text x='155' y='119' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#1F2937'>PAY NOW</text><rect x='20' y='140' width='175' height='20' rx='4' fill='#F3F4F6'/></g><g transform='translate(310 110)'><ellipse cx='90' cy='40' rx='80' ry='35' fill='#FFFFFF' stroke='#1F2937' stroke-width='3'/><circle cx='90' cy='40' r='22' fill='#0EA5E9'/><circle cx='90' cy='40' r='10' fill='#1F2937'/><circle cx='95' cy='35' r='3' fill='#FFFFFF'/><path d='M30 90 Q90 130 150 90' stroke='#1F2937' stroke-width='2' fill='none' stroke-dasharray='4 3'/><text x='90' y='150' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1F2937'>scans for the loudest thing</text></g><path d='M280 130 Q300 100 200 110' stroke='#F43F5E' stroke-width='2.5' fill='none' marker-end='url(#arr1)'/><defs><marker id='arr1' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#F43F5E'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: the eye is a lazy heuristic engine",
+      "md": "The visual system burns calories. To save them, it picks shortcuts: scan for the brightest, the most isolated, the most differently-coloured patch on the screen, and start there. **You don't get to override this. You get to design with it.** A screen that fights the heuristic loses; a screen that bait-and-switches it wins."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ui-ux-design/anim/visual-hierarchy.html",
+      "height": 420,
+      "caption": "Watch the eye-track heat-map travel across two versions of the same screen — same content, different hierarchy.",
+      "fallbackImage": "/courses/ui-ux-design/anim/visual-hierarchy-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "IRCTC ka case",
+          "md": "Bhai, IRCTC khol ke dekho. Tatkal book karna hai. Screen pe 47 cheezein hai — ad, banner, login, captcha, sponsored ads, train list, fare, refund link. Sab ek hi shade ka neela. Eye thak gayi, finger Tatkal button dhundh raha hai bottom right mein. Yeh hierarchy nahi, yeh democracy hai. Aur democracy interfaces mein nahi chalti."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no train booking",
+          "md": "Open the IRCTC site at peak Tatkal hour. Forty-seven elements, all the same shade of blue, none of them visibly the answer. The eye gives up; the user does too. A screen where everything is equally important is a screen with no hierarchy at all."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Contrast as hierarchy"
+    },
+    {
+      "type": "markdown",
+      "md": "**Contrast** is the cheapest, fastest, most reliable way to set hierarchy. Not size. Not colour-as-decoration. Contrast: the difference between the element and its surroundings.\n\nA dark navy button on a pale grey card jumps off the page even at 12px tall. A 24px headline rendered in #6B7280 on a #F3F4F6 background disappears. The size doesn't matter; the contrast ratio does.\n\nA quick number to anchor: WCAG AA wants 4.5:1 for body text. A primary CTA usually wants 7:1 or more against its surroundings, because you want the eye to land there first. If your primary button passes contrast checks but doesn't *visibly* dominate the screen, your contrast ratio is fine; your hierarchy still failed."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two versions of the same login screen side by side. On the left, all elements are the same shade of grey; on the right, only the Sign-in button is in deep navy and pops immediately.",
+      "caption": "Same layout, two contrast strategies. The right-hand screen tells you what to do; the left-hand one asks you to figure it out.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect x='0' y='0' width='240' height='180' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#9CA3AF' font-weight='bold'>Sign in</text><rect x='20' y='50' width='200' height='28' rx='4' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='20' y='90' width='200' height='28' rx='4' fill='#F3F4F6' stroke='#D1D5DB' stroke-width='1'/><rect x='20' y='130' width='200' height='32' rx='4' fill='#E5E7EB' stroke='#9CA3AF' stroke-width='1'/><text x='120' y='151' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#6B7280'>Sign in</text><text x='120' y='200' text-anchor='middle' font-family='monospace' font-size='10' fill='#9CA3AF'>everything 6B7280</text></g><g transform='translate(290 30)'><rect x='0' y='0' width='240' height='180' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#1F2937' font-weight='bold'>Sign in</text><rect x='20' y='50' width='200' height='28' rx='4' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><rect x='20' y='90' width='200' height='28' rx='4' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><rect x='20' y='130' width='200' height='32' rx='6' fill='#1F2937'/><text x='120' y='151' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#FFFFFF' font-weight='bold'>Sign in</text><text x='120' y='200' text-anchor='middle' font-family='monospace' font-size='10' fill='#10B981'>primary contrast 7:1</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "How to bait the eye in four steps",
+      "steps": [
+        { "label": "Step 1 — Pick one primary action per screen", "body": "If you have two primary buttons, you have one primary button and one regret. Decide which is the answer to the screen's question." },
+        { "label": "Step 2 — Mute everything else", "body": "Drop secondary buttons to outline-only or text-only. Push body text to a 70% opacity grey. The job is to make the primary stand out by contrast, not by being louder." },
+        { "label": "Step 3 — Maximise the contrast on the primary", "body": "Filled, dark, branded. Aim for 7:1 contrast against its background. If the rest of the screen is muted, even a small button dominates." },
+        { "label": "Step 4 — Squint test", "body": "Blur your eyes or shrink the screen to 25%. The primary action should still be the first thing you can identify. If not, you have a contrast failure." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "On a settings screen with twelve form fields and a 'Save changes' button, what is the cheapest fix to direct the eye?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Make 'Save changes' the only filled, dark button on the screen", "correct": true, "explain": "Removes competition. The button doesn't need to be bigger; it needs to be the only one that looks like an answer." },
+        { "id": "b", "label": "Add a coloured shadow under 'Save changes'", "correct": false, "explain": "Shadows add depth, not hierarchy. If everything has a shadow, the trick is gone." },
+        { "id": "c", "label": "Rearrange the fields by importance", "correct": false, "explain": "Worth doing later, but does not direct the eye to the action. The eye is still hunting." },
+        { "id": "d", "label": "Add a tooltip explaining the button", "correct": false, "explain": "Microcopy fixes confusion, not invisibility. A tooltip you have to hover to see does not solve a discovery problem." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Pune ka design studio",
+          "md": "Ek Pune-based design studio mein junior designer ne kaha 'sir, button bada karna hai, pop nahi ho raha.' Lead designer ne pucha — 'screen pe aur kitne dark elements hai?' Junior bola — 'sab dark hai sir.' Lead bola — 'toh button bade karne se nahi, baaki sab halka karne se pop hoga.'\n\nYeh do ghante ki conversation thi. Insight free hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Same insight, no studio",
+          "md": "A junior designer wants to make the button 'pop' by making it bigger. The lead asks how many other dark elements are on the screen. Answer: all of them. The fix isn't a bigger button; it's a quieter everything-else."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — Position as weight"
+    },
+    {
+      "type": "markdown",
+      "md": "After contrast comes **position**. The eye has priors — left-to-right reading, top-to-bottom flow, the F-pattern on text-heavy pages, the Z-pattern on landing pages. These priors are real but weaker than contrast. They tie-break.\n\nThe useful version: **for two elements at equal contrast, position decides which the eye lands on first.** Top-left wins over bottom-right; the upper third of the screen wins over the lower two-thirds; isolated elements win over clustered ones. None of this beats a dark button on a pale background, but all of it matters when contrast is constant.\n\nA practical rule: the most important action on a screen should sit either in the top-right of the header, or at the bottom-right of a card or form. Both positions are conventional, both are reachable on mobile, both are the last thing the eye sees on a left-to-right scan."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram showing the F-pattern reading flow on a text-heavy screen, with the eye sweeping the top, then the second line, then dropping down the left edge.",
+      "caption": "On text-heavy screens, the eye traces an F. Most of the right column is read in peripheral vision only; that is where you put the things you do not need them to read.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#ECFDF5'/><g transform='translate(40 30)'><rect x='0' y='0' width='480' height='200' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><line x1='15' y1='25' x2='450' y2='25' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='55' x2='350' y2='55' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='85' x2='200' y2='85' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='115' x2='180' y2='115' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='145' x2='150' y2='145' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='175' x2='160' y2='175' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><path d='M15 25 L450 25 L15 30 L350 55 L15 60 L15 175' stroke='#10B981' stroke-width='3' fill='none' marker-end='url(#arr2)'/><circle cx='15' cy='25' r='8' fill='#10B981'/><text x='15' y='29' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#FFFFFF' font-weight='bold'>1</text></g><defs><marker id='arr2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#10B981'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Studio-Lead Saanvi", "role": "design lead, 9 years across India and Singapore" },
+      "intro": [
+        "Hi, I'm Saanvi. I've been a design lead at three SaaS companies, two in Bengaluru and one in Singapore.",
+        "I'm going to show you four real-ish design choices. Tell me whether each one strengthens visual hierarchy, weakens it, or has no effect.",
+        "There's no trick scoring; the goal is to build the muscle of seeing hierarchy as a property of the whole screen, not a property of one element."
+      ],
+      "buckets": [
+        { "id": "stronger", "label": "Stronger hierarchy", "tone": "safe" },
+        { "id": "weaker", "label": "Weaker hierarchy", "tone": "danger" },
+        { "id": "neutral", "label": "No real effect", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "On a dashboard with five filled blue buttons of equal weight, you change four of them to outline-only and leave one filled.", "correctBucketId": "stronger", "explain": "Classic mute-everything-else move. The remaining filled button now wins by contrast." },
+        { "id": "s2", "situation": "You add a red border around your primary CTA so it 'really stands out'.", "correctBucketId": "weaker", "explain": "You now have two competing dark colours on the same element — the navy fill and the red outline. The eye reads it as warning, not as primary action." },
+        { "id": "s3", "situation": "You move the 'Save' button from the top-right of the form to the bottom-right of the form.", "correctBucketId": "neutral", "explain": "Both are conventional. Contrast is unchanged; position is still strong. This is a taste call, not a hierarchy call." },
+        { "id": "s4", "situation": "You bold every label in your form because 'labels are important'.", "correctBucketId": "weaker", "explain": "If everything is bold, nothing is bold. You have flattened the hierarchy, not strengthened it." },
+        { "id": "s5", "situation": "You add 32px of vertical space above the 'Submit application' button on a long form.", "correctBucketId": "stronger", "explain": "Isolation is hierarchy. White space around a button reads as 'this is the answer' even when contrast is identical to surrounding text." },
+        { "id": "s6", "situation": "You add a tooltip icon next to your primary CTA labelled 'Click here for more info.'", "correctBucketId": "weaker", "explain": "Adds visual noise next to the most important element. The eye now has to disambiguate two dots of attention. Tooltip belongs further away or not at all." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: bigger is hierarchy",
+      "md": "The instinct of every untrained designer is to make the thing they care about **bigger**. Bigger heading, bigger button, bigger badge. The result is two things competing on size, neither winning on contrast, and a screen that feels shouty and confused. **Hierarchy is a relative property of the whole screen, not an absolute property of one element.** Most hierarchy fixes happen by making other things smaller or quieter, not by making the hero thing louder."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order the steps of a 5-minute hierarchy audit on an existing screen.",
+      "items": [
+        { "id": "s1", "label": "Squint test", "detail": "Blur your eyes; what is the first thing you see?" },
+        { "id": "s2", "label": "Identify the screen's intended primary action", "detail": "Ask three teammates; if you get three answers, the hierarchy is broken." },
+        { "id": "s3", "label": "List every element competing for attention", "detail": "Buttons, badges, banners, anything saturated." },
+        { "id": "s4", "label": "Mute everything that is not the primary", "detail": "Outline buttons, drop opacity on labels, kill decorative shadows." },
+        { "id": "s5", "label": "Re-run the squint test", "detail": "If the primary still does not win, the contrast ratio is still wrong, not the position." }
+      ],
+      "hint": "Start with the squint test — it tells you whether you have a problem before you start solving."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You're designing the empty state of an invoicing dashboard. There are four things on screen: a heading 'No invoices yet', a paragraph explaining what invoices do, a screenshot of a sample invoice, and a button 'Create your first invoice'. Write 3-4 sentences specifying the contrast and position choices that would make 'Create your first invoice' the first thing the eye lands on.",
+      "lang": "markdown",
+      "starter": "I would make the button...",
+      "expected": "I would make the button the only filled, dark element on the screen — primary blue at 7:1 contrast against the off-white background — and place it directly below the heading with at least 32px of breathing room around it. The heading would be dark but smaller than the button's visual weight. The paragraph would be in a 70% opacity grey, and the screenshot would be muted further with reduced saturation, so it reads as supporting evidence rather than as a competing focal point. Squint test: only the button should be identifiable when the screen is blurred."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are hierarchy moves you can make WITHOUT changing the size of any element? (pick two)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Increase contrast between the primary action and its surroundings", "correct": true, "explain": "The cheapest hierarchy lever in your kit." },
+        { "id": "b", "label": "Add 32px of white space around the primary action", "correct": true, "explain": "Isolation is hierarchy. Same size, more weight." },
+        { "id": "c", "label": "Bold every heading on the page", "correct": false, "explain": "Bolding everything resets the hierarchy at a higher weight; the relative differences are still flat." },
+        { "id": "d", "label": "Add a drop-shadow under the heading", "correct": false, "explain": "Adds depth, not hierarchy. The eye does not go to whatever has a shadow; it goes to whatever differs from its surroundings." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Saas-bahu serial wala lesson",
+          "md": "Ek Bengaluru SaaS ki founder ne saas-bahu serial dekha aur kaha — 'inka camera kya kamaal hai, jis pe focus karna hai usi pe focus rehta hai.' Sahi baat hai. Camera mein blur, lighting, framing — sab ek hi cheez ke liye: jis pe attention chahiye, woh pop kare. UI mein bhi same: ek primary CTA, baaki sab background score."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no serial",
+          "md": "A Bengaluru SaaS founder once said the trick of soap-opera cinematography is that whatever they want you to look at is the only sharp, lit, framed thing in the shot. UI is the same. One sharp button. Everything else is set dressing."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "The eye is a lazy heuristic engine. It scans for the loudest, most isolated patch first. Design with that, not against it.",
+        "Contrast outranks size. A small dark button on a pale screen beats a giant grey button every time.",
+        "One primary action per screen. Two primary buttons mean one primary button and one regret.",
+        "Position tie-breaks when contrast is constant. Top-right of the header or bottom-right of the card both win.",
+        "When a button doesn't 'pop', the answer is almost always to mute everything else, not to make the button louder."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Open one screen in any product you used today. Run the squint test: what is the first thing you can identify when the screen is blurred? Is it what the product wanted you to see? If not, where did the hierarchy go wrong — competing buttons, equal contrast, no isolation?"
+    }
+  ]
+}

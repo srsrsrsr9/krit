@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: ROAS unchanged, CAC up 14%",
+    "source": "Anonymous founder of a Pune skincare D2C, 12-person team",
+    "date": "March 2026",
+    "story": "Q1 2026 was our 'AI-powered marketing' quarter. We added Jasper for ads copy, Mailchimp's AI for email subject lines, an AI chatbot, AI-personalized product recs, AI-driven creative generation. Marketing lead spent 14 weeks integrating tools. Investor decks were thrilling.\n\nQuarter close: ROAS unchanged from Q4. CAC up 14%. The AI tactics added cost on the input side (subscriptions ₹4.2 lakh/quarter) and noise on the output side (3% of ad copy got flagged for brand-tone issues, ate up review cycles).\n\n**The mistake was the framing.** I'd told my team 'use AI for everything.' I should have told them 'pin the metric first, then ask what AI move moves IT.' The metric we cared about was return on D7 (D7 retention × first-purchase margin). None of our AI tactics targeted D7 retention. We were AI-decorating the funnel without moving anything.",
+    "takeaway": "AI tactics without a pinned metric inflate cost without moving outcome. Always reverse: metric first, AI move second."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: ₹40L for AI marketing",
+    "setup": "Sneha just got handed ₹40 lakh for Q2 marketing. Her founder said 'use AI to do the work of 5 people.' Her CMO sent her a list of 14 AI tools to try. Sneha has 10 minutes to decide where to start.",
+    "coach": { "name": "VP-Marketing Vrinda", "role": "Scaled 3 D2C brands from ₹5cr to ₹100cr+" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Sneha's instinct: split ₹40L across the top 7 AI tools. What does Vrinda say?",
+        "options": [
+          { "id": "a", "label": "Yes — 'AI everywhere' is the directive.", "correct": false, "explain": "Same trap as the Pune skincare brand. Multiplies cost without moving any single outcome.", "points": 0 },
+          { "id": "b", "label": "Pin the north-star metric first. Then pick the 1-2 AI moves that target it.", "correct": true, "explain": "Right. 'Use AI for everything' becomes 'use AI to move metric Z by ≥X% by Date Y'.", "points": 3 },
+          { "id": "c", "label": "Split across 14 tools to maximize coverage.", "correct": false, "explain": "Most decorative possible move. Each tool gets ₹2.8L; none gets shipped properly.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Sneha picks D7 retention × first-purchase margin as her north star. Which AI move targets it best?",
+        "options": [
+          { "id": "a", "label": "AI-personalized post-purchase email sequence (segments-based, A/B tested) targeting day-7 re-engagement.", "correct": true, "explain": "Right. Direct lever on D7 retention. Segments-based avoids creepiness; A/B testing keeps it honest.", "points": 3 },
+          { "id": "b", "label": "AI-generated brand awareness ads (top-of-funnel).", "correct": false, "explain": "Decorative for D7 retention; ToF doesn't move retention metrics.", "points": 0 },
+          { "id": "c", "label": "AI chatbot on the website.", "correct": false, "explain": "Mid-funnel. Useful but doesn't directly target D7 retention.", "points": 1 },
+          { "id": "d", "label": "AI-generated social media content for engagement.", "correct": false, "explain": "Vanity-metric trap.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Day 14 of the campaign. D7 retention up 6%. CAC unchanged. ROAS up 8%. CMO says 'apply AI everywhere now!'",
+        "options": [
+          { "id": "a", "label": "Hold the line. Validate at day 30 with another 14-day cycle. Don't expand until D7 lift is replicated.", "correct": true, "explain": "Right. 14-day signal is encouraging; not a cleared replication. Apply discipline.", "points": 3 },
+          { "id": "b", "label": "Expand immediately to all funnel stages.", "correct": false, "explain": "Same Q1 mistake one quarter later. Validation first, then expansion.", "points": 0 },
+          { "id": "c", "label": "Kill the campaign because CAC didn't move.", "correct": false, "explain": "Wrong metric. The campaign targeted D7 retention, not CAC.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Sneha walks out with a clean experiment + a discipline she'll reuse for Q3 and Q4. Founder asks for AI strategy doc; Sneha shares the 1-page.",
+      "good": "Solid signal. The AI-everywhere instinct held off this time; needs reinforcement on the next campaign.",
+      "learn": "Re-read the metric-first section. AI without a pinned outcome is decoration, not strategy."
+    }
+  }
+}

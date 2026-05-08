@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The 4-Hour CI That Became a 22-Minute CI",
+    "source": "Engineering manager at Vyaapar Cloud, a Hyderabad-based GST-filing SaaS (~80 engineers, 1.4 lakh SMB customers)",
+    "date": "November 2024",
+    "story": "When the new EM joined Vyaapar in October 2024, the test suite looked like a team that had read 'always test the user flow' as an instruction, not a heuristic. The breakdown:\n\n- **3 unit tests.** Two of them tested `Math.floor`. One tested a constant.\n- **9 integration tests.** All flaky.\n- **214 Playwright e2e specs.** Average duration 7.2s. Total CI runtime: **4 hours 11 minutes** on a 4-shard runner. Flake rate: 19%.\n\nDevs had stopped reading test failures by August. A merge-to-main average of 3 days had become 8.\n\nThe rebuild took 6 weeks. The new pyramid:\n\n- **840 unit tests** (Vitest, ~14s total) — every pure function, every reducer, every formatter\n- **62 integration tests** (Vitest + msw, ~90s) — every server action, every API route\n- **38 Playwright e2e specs** (~6 min sharded × 4) — only the top 8 user journeys, plus the 4 paths that had caused production incidents\n\nTotal CI runtime: **22 minutes**. Flake rate: 0.6%. Bugs caught at PR-time **doubled**, because faster feedback meant devs actually waited for green before merging. Merge-to-main is now 11 hours, p50.\n\nThe deleted 176 e2e specs were not 'lost coverage.' They were duplicate coverage at 50× the cost. Most had been testing the same login flow with cosmetic variations.",
+    "takeaway": "The pyramid isn't dogma — it's economics. Each altitude costs ~10× the one below it. Inverted pyramids don't fall over because the geometry is wrong; they fall over because the bill comes due."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Auditing Tarakash's Test Mix",
+    "setup": "Week 2 of Sneha's 6-week rescue. She's done a triage of the existing suite at **Tarakash**:\n\n- 47 unit tests (most testing trivial getters)\n- 12 integration tests (8 of which are commented out)\n- **289 Playwright e2e specs**, of which:\n  - 71 test the login flow with minor variations\n  - 44 test the same 'create expense' happy path\n  - 31 are skipped with `test.skip(...)` and a TODO from 2024\n  - The remaining 143 cover ~5 actual user journeys, with heavy redundancy\n\nCI takes 38 minutes. Flake rate is 14%. Sneha has to write a one-page memo to the platform team recommending **what to cut, what to add, and at which altitude**.",
+    "coach": { "name": "Staff-SDET Saurabh", "role": "Treats the test pyramid like the Bhagavad Gita — quotes it without warning" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First call: the **71 login specs**. What does Sneha recommend?",
+        "options": [
+          { "id": "a", "label": "Delete 68 of them. Keep 1 e2e (happy path login → dashboard). Move the rest to unit tests on the auth reducer + 2 integration tests on the `/api/auth/login` route.", "correct": true, "explain": "**Correct.** Login is one user journey, not 71. The variations (wrong password, locked account, MFA prompt, etc.) belong in unit tests on the auth state machine. You'll go from ~6 min of CI to ~8 seconds for the same coverage.", "points": 3 },
+          { "id": "b", "label": "Keep all 71 — login is critical, more tests = more safety.", "correct": false, "explain": "Saurabh sighs. Login *is* critical, which is why you want it tested *fast and reliably*, not 71 times slowly. More e2e ≠ more safety; it means more flake, slower CI, and devs ignoring failures.", "points": 0 },
+          { "id": "c", "label": "Keep all 71 but parallelize them across more shards.", "correct": false, "explain": "You're paying ~₹40k/month more in CI compute to run a suite that's still 71× redundant. Sharding hides the smell, doesn't fix the rot.", "points": 0 },
+          { "id": "d", "label": "Delete all 71. Trust manual QA on login.", "correct": false, "explain": "Manual QA on every PR doesn't scale and won't happen. You correctly identified the redundancy but threw out the safety net with the bathwater. The lesson is to *re-platform* the coverage, not abandon it.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Next: the **31 skipped specs** with TODOs from 2024. What's the move?",
+        "options": [
+          { "id": "a", "label": "Delete all 31. Open one ticket for 'evaluate skipped test scenarios' if the team wants to revisit later.", "correct": true, "explain": "**Yes.** A skipped test is a lie — it looks like coverage, provides none, and rots in the repo. Delete them. The git history exists if you need them back, and the 'maybe later' ticket gives the team an out without keeping dead code in the suite.", "points": 3 },
+          { "id": "b", "label": "Un-skip them all and fix whatever's broken.", "correct": false, "explain": "You just added 31 likely-broken specs to a suite already at 14% flake. Devs revolt by Friday. Fixing 18-month-old skipped tests is rarely worth it — the code under test has changed, the assumptions are stale.", "points": 0 },
+          { "id": "c", "label": "Leave them skipped — they're not hurting anyone.", "correct": false, "explain": "They are. They confuse new joiners ('why is this skipped?'), they show up in coverage reports, and they signal 'we don't take this suite seriously' to everyone who reads the repo. Dead code is debt.", "points": 0 },
+          { "id": "d", "label": "Convert them to a TODO list in `docs/test-backlog.md` and delete the spec files.", "correct": true, "explain": "**Even cleaner.** Captures the intent (so it's not lost) without the cost. The doc is the right place for 'here are scenarios we considered'; the spec file is not.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Now the additions. Tarakash has **zero integration tests** for its 64 server actions. Sneha's recommendation?",
+        "options": [
+          { "id": "a", "label": "Add ~50 integration tests using Vitest + a test database, covering every server action that touches money or auth. Skip getters and pure read paths — those go in unit tests.", "correct": true, "explain": "**This is the missing middle.** Integration tests for server actions catch the bugs that unit tests can't see (DB constraints, transaction boundaries) and that e2e shouldn't have to (you don't need to drive a browser to know the action returns a 422 on bad input).", "points": 3 },
+          { "id": "b", "label": "Skip integration tests; cover the actions with Playwright e2e specs.", "correct": false, "explain": "You'd be adding 50 e2e specs at ~8s each = ~7 minutes more CI, with higher flake, to test logic a 200ms integration test would cover. This is exactly the inverted-pyramid mistake the field notes describe.", "points": 0 },
+          { "id": "c", "label": "Cover them with unit tests and mock the database.", "correct": false, "explain": "Unit tests with mocked DBs prove your code matches your mocks, not that it matches reality. Server actions live and die at the DB boundary — that's what you have to test.", "points": 0 },
+          { "id": "d", "label": "Add ~50 integration tests, but only for the 12 actions with the most production incidents in the last 6 months.", "correct": true, "explain": "**Pragmatic.** Coverage targeted by incident history is the highest-ROI you can buy. The other 38 can come later — start where you've already paid in pain.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "The memo lands. Platform agrees to cut 220 e2e specs, add 50 integration tests, and re-platform login coverage. Saurabh DMs you: *'You just bought back 16 minutes of CI per PR. Multiply by 80 devs × 4 PRs/day. That's ₹38 lakh of dev time per quarter.'*",
+      "good": "Reasonable cuts but you left some redundancy and skipped the integration-test add. Re-read the section on **the missing middle** — integration tests are usually the highest-ROI tier nobody writes.",
+      "learn": "You either cut too aggressively (no safety net) or too timidly (CI still 30+ min). Re-read the lesson — especially **why the pyramid is economics, not dogma** and **how to decide which e2e specs earn their seat**."
+    }
+  }
+}

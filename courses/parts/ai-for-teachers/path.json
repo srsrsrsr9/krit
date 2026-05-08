@@ -1,0 +1,319 @@
+{
+  "path": {
+    "slug": "ai-for-teachers",
+    "title": "AI for Teachers",
+    "subtitle": "Cut the boring 80%; protect the human 20%",
+    "summary": "Teaching has two parts. The boring 80%, which is photocopying worksheets, drafting feedback stems, formatting question papers, summarising NCERT chapters; and the human 20%, which is reading a child's face and deciding when to push, when to wait. AI does the first part well and the second part terribly. This path makes that line crisp, hands you a working playbook for prep, assessment and classroom honesty, and ends with a 14-day experiment you actually run with your own students.",
+    "kind": "PATH",
+    "level": "NOVICE",
+    "estimatedMinutes": 65
+  },
+  "skills": [
+    {
+      "slug": "ai-teaching-mental-model",
+      "name": "AI Teaching Mental Model",
+      "category": "management",
+      "description": "Draw the line between the boring 80% AI handles and the human 20% you protect",
+      "decayDays": null
+    },
+    {
+      "slug": "ai-lesson-prep",
+      "name": "AI-Assisted Lesson Prep",
+      "category": "management",
+      "description": "Brief AI like a student teacher and walk away with a class-ready plan in 12 minutes",
+      "decayDays": null
+    },
+    {
+      "slug": "ai-assessment-discipline",
+      "name": "AI-Assessment Discipline",
+      "category": "management",
+      "description": "Use AI for rubric drafts and feedback skeletons without shipping unread comments",
+      "decayDays": null
+    },
+    {
+      "slug": "ai-classroom-honesty",
+      "name": "AI Classroom Honesty",
+      "category": "management",
+      "description": "Design assignments and conversations so honesty is the path of least resistance",
+      "decayDays": null
+    },
+    {
+      "slug": "ai-classroom-experiments",
+      "name": "AI Classroom Experiments",
+      "category": "management",
+      "description": "Run a tracked 14-day intervention with a baseline, three numbers, and a kill criterion",
+      "decayDays": null
+    },
+    {
+      "slug": "ai-pedagogy-judgment",
+      "name": "AI Pedagogy Judgment",
+      "category": "management",
+      "description": "Decide when AI helps the child learn versus when it just helps the child look done",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "ai-lesson-prep", "requires": "ai-teaching-mental-model" },
+    { "skill": "ai-assessment-discipline", "requires": "ai-lesson-prep" },
+    { "skill": "ai-classroom-honesty", "requires": "ai-assessment-discipline" },
+    { "skill": "ai-classroom-experiments", "requires": "ai-classroom-honesty" }
+  ],
+  "assessment": {
+    "title": "AI for Teachers Assessment",
+    "description": "Tests whether you can apply the boring-80/human-20 line to real classroom decisions: prep, assessment, honesty design, and a tracked experiment. The wrong answers are the well-meaning ones; that is the point.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": [
+      "ai-teaching-mental-model",
+      "ai-lesson-prep",
+      "ai-assessment-discipline",
+      "ai-classroom-honesty",
+      "ai-classroom-experiments",
+      "ai-pedagogy-judgment"
+    ],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You teach Class 9 Science in a CBSE school. You have 90 minutes before the next class. Which of these is the *least* defensible use of AI?",
+        "points": 1,
+        "skillSlug": "ai-teaching-mental-model",
+        "choices": [
+          { "id": "a", "label": "Drafting six exit-ticket questions on chemical reactions", "correct": false, "explanation": "Boring 80%. AI does this well. You still pick which six to actually use." },
+          { "id": "b", "label": "Writing a summary of yesterday's class for an absent student", "correct": false, "explanation": "Boring 80%. Cheap, fast, harmless if you skim it." },
+          { "id": "c", "label": "Reading the AI's three-paragraph reply to Aarav's bereavement email and deciding whether to send it as is", "correct": true, "explanation": "Correct. The AI may produce technically polite words, but the human 20% is reading the room. You don't outsource a condolence; you draft, then write your own." },
+          { "id": "d", "label": "Generating five MCQs from the NCERT chapter on the Periodic Table", "correct": false, "explanation": "Boring 80% with mandatory review. Fine to draft; you check the keys before printing." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the prompts that are likely to give you a *usable* lesson plan on the first try (not the third).",
+        "points": 2,
+        "skillSlug": "ai-lesson-prep",
+        "choices": [
+          { "id": "a", "label": "\"Write a lesson plan on photosynthesis.\"", "correct": false, "explanation": "Generic prompt, generic output. No grade, no time, no outcome. You'll spend 20 minutes editing what 90 seconds of context would have prevented." },
+          { "id": "b", "label": "\"You are a Class 7 ICSE Science teacher in a Pune school. 35 mixed-ability students, 40 minute period. By the end, students should be able to label inputs and outputs of photosynthesis on a leaf diagram. Plan it.\"", "correct": true, "explanation": "Outcome-first, grade-anchored, time-bounded. AI now has a real brief and produces something close to class-ready." },
+          { "id": "c", "label": "\"Make this lesson harder, but do not use the word 'photosynthesis' in the first 3 minutes.\"", "correct": true, "explanation": "Iterative refinement after a first draft. Constraint plus revision is where AI earns its keep; you are now directing, not begging." },
+          { "id": "d", "label": "\"Be creative.\"", "correct": false, "explanation": "Adjective without scaffolding. AI will produce a creative-sounding mush. 'Creative' is your job; structure is its job." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You ran 30 Class 10 essays through an AI feedback tool. The AI marked Anika's essay as the strongest. You haven't read any of them yet. What's the right next step?",
+        "points": 1,
+        "skillSlug": "ai-assessment-discipline",
+        "choices": [
+          { "id": "a", "label": "Trust the AI's ranking and post the marks tonight; you have a parent meeting at 8am", "correct": false, "explanation": "This is exactly the trap. AI grades structure well and meaning poorly. Anika's essay may be a polished argument that's wrong. Marks posted unread is reputation roulette." },
+          { "id": "b", "label": "Read the top-ranked and bottom-ranked essays first to calibrate, then sample five from the middle", "correct": true, "explanation": "Correct. Calibrate, then sample. AI's role is to triage your reading order, not replace it. Middle-band sampling catches the cases where structure and meaning diverge." },
+          { "id": "c", "label": "Mark every essay yourself ignoring the AI output to be safe", "correct": false, "explanation": "Not wrong, but it throws away the cheap signal. The AI's ranking is useful as a reading order even if you don't trust the marks." },
+          { "id": "d", "label": "Ask the AI to mark again with a stricter prompt and trust the second pass", "correct": false, "explanation": "Two AI passes are still no human read. The fundamental issue is meaning; doubling the structure check doesn't fix it." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which assignments make AI cheating *structurally* harder, not just punishable?",
+        "points": 2,
+        "skillSlug": "ai-classroom-honesty",
+        "choices": [
+          { "id": "a", "label": "An essay submitted as a final document", "correct": false, "explanation": "Easiest possible thing for AI to produce. The student's final document tells you nothing about the process behind it." },
+          { "id": "b", "label": "An essay where the student must submit three drafts plus a 5-minute oral defence on chosen edits", "correct": true, "explanation": "Process-anchored. The defence reveals whether the student actually owns the argument; AI cannot defend an essay it wrote without you noticing." },
+          { "id": "c", "label": "A worksheet that tests recall of yesterday's lecture", "correct": false, "explanation": "Recall is exactly what AI is best at. Recall worksheets are an AI honor system." },
+          { "id": "d", "label": "A class-specific case study using a local example only your students saw, with a 15-minute in-class write", "correct": true, "explanation": "Local context plus in-class constraint is the cleanest defence. AI doesn't know what happened in your second period; you do." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your AI detector flags Riya's essay as 92% AI-written. Riya is your strongest English student. What is the most defensible move?",
+        "points": 1,
+        "skillSlug": "ai-classroom-honesty",
+        "choices": [
+          { "id": "a", "label": "Mark it zero with the detector report attached as evidence", "correct": false, "explanation": "Detectors have a real false-positive rate, especially on strong, formal writers. A zero based on this is the kind of decision that ends up in the principal's office, with you on the wrong side." },
+          { "id": "b", "label": "Have a 10-minute conversation with Riya about her draft choices: which paragraph she rewrote, why she chose her examples", "correct": true, "explanation": "Correct. The detector is a hint, not a verdict. A short oral check costs you 10 minutes and tells you what 10 detectors won't." },
+          { "id": "c", "label": "Forward the detector report to her parents and let them handle it", "correct": false, "explanation": "Outsourcing a judgment call to people with less context, on the strength of a probabilistic score. Bad for Riya, bad for your relationship with the family." },
+          { "id": "d", "label": "Run the essay through three more detectors and average the scores", "correct": false, "explanation": "Detectors share failure modes. Averaging three fragile signals doesn't produce a robust one." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You want to test whether AI-generated practice problems improve your Class 12 Maths students' JEE prep. You are about to start a 14-day pilot. The most important thing to do *before* day 1 is:",
+        "points": 1,
+        "skillSlug": "ai-classroom-experiments",
+        "choices": [
+          { "id": "a", "label": "Pick an exciting AI tool with a free trial", "correct": false, "explanation": "The tool isn't the experiment. You can trial five tools and learn nothing if you skipped the next step." },
+          { "id": "b", "label": "Capture a baseline: current weekly test averages and the time you currently spend making practice sets", "correct": true, "explanation": "Correct. No baseline, no experiment. You are running a vibe check. The whole point of 14 days is comparing two numbers; one of them has to exist before day 1." },
+          { "id": "c", "label": "Tell parents you're doing an AI experiment", "correct": false, "explanation": "Communication matters, but it doesn't change whether the experiment works. It changes blame allocation, which is not the same thing." },
+          { "id": "d", "label": "Decide whether to keep using AI long-term", "correct": false, "explanation": "That decision is what the experiment produces. Making it on day 0 means you don't need an experiment." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these signals tell you the boring 80% / human 20% line has been *crossed* in the wrong direction?",
+        "points": 2,
+        "skillSlug": "ai-pedagogy-judgment",
+        "choices": [
+          { "id": "a", "label": "You haven't read a student essay in two weeks because the AI summary is good enough", "correct": true, "explanation": "Yes. The summary may be good. Your relationship with the student's actual writing is gone. That's the human 20% leaking out." },
+          { "id": "b", "label": "You used AI to draft 12 questions, picked 5, edited 2", "correct": false, "explanation": "This is the line working as designed. Draft, select, edit." },
+          { "id": "c", "label": "Three students this week told you their feedback comments felt copy-pasted", "correct": true, "explanation": "Yes. They can tell. The whole point of feedback is the child knowing you saw their work; AI feedback shipped without your hand on it loses that signal." },
+          { "id": "d", "label": "You tried Claude this morning and made an exit ticket in 90 seconds", "correct": false, "explanation": "That's the win. 90 seconds saved is 90 seconds you have to walk past Aarav's desk." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Aarav is in Class 8, struggles with English, and tells you he uses ChatGPT to \"polish\" his homework. The pedagogically defensible response is:",
+        "points": 1,
+        "skillSlug": "ai-pedagogy-judgment",
+        "choices": [
+          { "id": "a", "label": "Ban ChatGPT and warn him you'll mark zero next time", "correct": false, "explanation": "Bans push the behaviour underground; you lose the signal he just gave you. A child who tells you what tool he used is a teaching opportunity, not a discipline case." },
+          { "id": "b", "label": "Ask him to show you the version *before* polishing and the version after, and grade the gap", "correct": true, "explanation": "Correct. You preserved the learning signal (the rough draft is his thinking) and made the AI's role visible. Now you can teach him to write, not police him." },
+          { "id": "c", "label": "Tell him polishing is fine and stop asking", "correct": false, "explanation": "You handed back a learning event for an easier life. He'll keep submitting polished mush; you'll never see how his sentences actually move." },
+          { "id": "d", "label": "Run his work through an AI detector first and then decide", "correct": false, "explanation": "He already told you. You don't need a detector. You need a teaching move." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You teach in a Marathi-medium school in Pune. AI tools are mostly trained on English. The best first use of AI in your prep is:",
+        "points": 1,
+        "skillSlug": "ai-lesson-prep",
+        "choices": [
+          { "id": "a", "label": "Have the AI translate everything to Marathi and use it directly", "correct": false, "explanation": "AI Marathi is uneven. Direct paste means you'll find idiom-level errors in front of 35 children, on the board." },
+          { "id": "b", "label": "Have the AI draft structure (lesson outline, question stems, rubric) in English; you write the Marathi version", "correct": true, "explanation": "Correct. Use AI where it's strong (structure, taxonomy of question types). Keep the language layer with you, where the local fluency lives." },
+          { "id": "c", "label": "Avoid AI until it's good in Marathi", "correct": false, "explanation": "You're leaving the structural help on the table. Lesson outlines, rubric drafts, summary templates work in English just fine; you don't need AI to speak Marathi to use those." },
+          { "id": "d", "label": "Use only Marathi-trained models", "correct": false, "explanation": "There aren't really good ones at this scale yet. You're picking weaker tools to avoid an easy translation step you do anyway." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "A 14-day classroom AI experiment passes the \"is this real\" test only if it has at least two of:",
+        "points": 2,
+        "skillSlug": "ai-classroom-experiments",
+        "choices": [
+          { "id": "a", "label": "A baseline number captured before day 1", "correct": true, "explanation": "Yes. No baseline, no comparison." },
+          { "id": "b", "label": "A specific numeric outcome (e.g. 'weekly quiz average', 'minutes I spend on prep')", "correct": true, "explanation": "Yes. Vague outcomes ('students seemed engaged') aren't measurable." },
+          { "id": "c", "label": "A new AI tool every 2 days to test variety", "correct": false, "explanation": "No. Switching the tool every 2 days means you're testing 7 things, none of them properly. Confounded variables, useless conclusion." },
+          { "id": "d", "label": "A pre-committed kill criterion (\"if X drops, I stop\")", "correct": false, "explanation": "Strictly speaking this strengthens the experiment, but it's not as load-bearing as baseline + numeric outcome. Pick the two that are; this is the third nice-to-have." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Which of these is the cleanest example of \"brief AI like a student teacher\"?",
+        "points": 1,
+        "skillSlug": "ai-lesson-prep",
+        "choices": [
+          { "id": "a", "label": "\"Make a lesson on the French Revolution.\"", "correct": false, "explanation": "Same instruction you'd give an exhausted intern at midnight. Output quality follows input quality." },
+          { "id": "b", "label": "\"Make a 30-minute lesson on the French Revolution for Class 9 ICSE. Open with a hook tied to mob behaviour, end with a 5-minute discussion question. Mid-lesson, 1 short primary-source extract. Indian context welcome.\"", "correct": true, "explanation": "Correct. Audience, time, structure, named anchors, locale. A new student teacher could deliver this." },
+          { "id": "c", "label": "\"Lesson on French Revolution. 9th. ICSE.\"", "correct": false, "explanation": "Better than option A but still missing structure and outcome. You'll iterate three times to get to where option B starts." },
+          { "id": "d", "label": "\"French Revolution.\"", "correct": false, "explanation": "This is a Wikipedia search, not a brief." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You read AI-generated feedback before sending it. You spot one phrase that doesn't sound like you (\"I am thrilled by your insightful contribution\"). The right move:",
+        "points": 1,
+        "skillSlug": "ai-assessment-discipline",
+        "choices": [
+          { "id": "a", "label": "Rewrite that one phrase in your own voice and send", "correct": true, "explanation": "Correct. The point of reviewing AI feedback isn't to ship verbatim; it's to ship something that sounds like the teacher the child knows. Five-second fix, big trust dividend." },
+          { "id": "b", "label": "Send it; the child won't notice", "correct": false, "explanation": "They notice. Children are pattern matchers. \"This doesn't sound like ma'am\" is a thought you do not want planted." },
+          { "id": "c", "label": "Throw the AI draft away and rewrite from scratch", "correct": false, "explanation": "Possible, but wasteful. You used AI for the heavy lift; one phrase doesn't invalidate ten paragraphs." },
+          { "id": "d", "label": "Ask the AI to rewrite without using the word 'thrilled'", "correct": false, "explanation": "More iterations to dodge a 10-second manual edit. Voice is yours; do the edit." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are good reasons to *not* use AI in a particular lesson, even when it would save time?",
+        "points": 2,
+        "skillSlug": "ai-pedagogy-judgment",
+        "choices": [
+          { "id": "a", "label": "The lesson's purpose is for students to struggle with a problem unaided to build resilience", "correct": true, "explanation": "Yes. If the friction is the lesson, removing the friction with AI defeats the lesson." },
+          { "id": "b", "label": "You're tired and want a break", "correct": false, "explanation": "That's a reason to *use* AI, not avoid it. Tired teachers ship worse lessons; AI-assisted prep at 80% is better than fully manual prep at 60%." },
+          { "id": "c", "label": "The content is one you teach with strong personal voice and stories", "correct": true, "explanation": "Yes. A signature class on Partition is yours; AI dilutes the voice that makes it land." },
+          { "id": "d", "label": "AI made a small factual error last time", "correct": false, "explanation": "Mitigated by review, not by abandonment. One wrong fact is a process problem, not a tool problem." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Principal Priya asks: \"Should we ban AI in homework?\" The single most useful clarifying question is:",
+        "points": 1,
+        "skillSlug": "ai-pedagogy-judgment",
+        "choices": [
+          { "id": "a", "label": "\"Which subjects? Which grades? Which type of homework?\"", "correct": true, "explanation": "Correct. \"Ban AI in homework\" is a five-policy question pretending to be one. Class 4 craft project and Class 11 essay aren't the same problem." },
+          { "id": "b", "label": "\"What detection tool will we use?\"", "correct": false, "explanation": "Detection-first thinking is downstream of policy; the policy isn't defined yet." },
+          { "id": "c", "label": "\"What's the punishment?\"", "correct": false, "explanation": "Same — punishment without scope is a policy that lawyers itself. Scope first." },
+          { "id": "d", "label": "\"Can we just ban phones?\"", "correct": false, "explanation": "Different problem. Phones aren't the only access path." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your Class 11 student submits a debate speech that is structurally perfect, grammatically tight, and emotionally hollow. You suspect AI. The honesty-design move that respects the student is:",
+        "points": 1,
+        "skillSlug": "ai-classroom-honesty",
+        "choices": [
+          { "id": "a", "label": "Have her deliver a 90-second extempore extension on the same topic in class tomorrow", "correct": true, "explanation": "Correct. Extempore reveals whether the argument lives inside her or in a chat window. No accusation needed; performance speaks." },
+          { "id": "b", "label": "Confront her in front of the class to make an example", "correct": false, "explanation": "Public shame is a permanent solution to a possibly-not-permanent problem. Even if you're right, you've burned the relationship." },
+          { "id": "c", "label": "Quietly mark it lower without saying why", "correct": false, "explanation": "Worst of both worlds. She doesn't learn what happened; you don't learn whether you were right." },
+          { "id": "d", "label": "Ask the AI detector to confirm before you decide", "correct": false, "explanation": "Detectors are weak. The 90-second extempore tells you in 90 seconds what the detector won't tell you in 90 minutes." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "You're three weeks in. The data from your 14-day AI experiment shows: prep time fell 40%, weekly test averages unchanged, but student-reported \"I feel my teacher knows me\" fell 1.2 points. Pick the *correct* readings.",
+        "points": 2,
+        "skillSlug": "ai-classroom-experiments",
+        "choices": [
+          { "id": "a", "label": "Time saved is real and worth keeping; the relationship score is the warning", "correct": true, "explanation": "Yes. A win on the boring 80% with a loss on the human 20% is the exact pattern this course teaches you to spot. Don't kill the time saving; redirect it." },
+          { "id": "b", "label": "Test averages didn't move, so the experiment failed", "correct": false, "explanation": "Test averages were unchanged. That's a *neutral* finding, not failure. Failure was somewhere else, and you have to read all three numbers to see it." },
+          { "id": "c", "label": "The 40% time saved should be redirected toward 1-on-1 student check-ins", "correct": true, "explanation": "Yes. This is the whole game: you didn't save time to leave early; you saved time to be more present where AI cannot be." },
+          { "id": "d", "label": "Roll the experiment out school-wide immediately", "correct": false, "explanation": "Not yet. The relationship signal is unresolved; school-wide rollout amplifies an unsolved problem." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "After this course, your sharpest one-line definition of \"AI as teaching assistant, not replacement\" is:",
+        "points": 1,
+        "skillSlug": "ai-teaching-mental-model",
+        "choices": [
+          { "id": "a", "label": "AI does the boring 80%; you protect the human 20%", "correct": true, "explanation": "Correct. The line is real and load-bearing. Everything else in the course is a corollary." },
+          { "id": "b", "label": "AI is a junior colleague who never sleeps", "correct": false, "explanation": "Pleasant metaphor; insufficient discipline. A junior colleague has judgment; AI has fluency." },
+          { "id": "c", "label": "AI is just another EdTech wave", "correct": false, "explanation": "Cynical undersell. EdTech mostly didn't change daily prep. Generative AI does, when used with the line drawn correctly." },
+          { "id": "d", "label": "Use AI everywhere except for grading", "correct": false, "explanation": "Too narrow. The boring/human line is finer than that — there's grading-shaped work AI can absolutely help with (rubric drafting, calibration), and there's non-grading work it shouldn't touch (a parent call about a sensitive child)." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "school-ai-policy-capstone",
+    "title": "Capstone: Draft a 2-Page AI Policy for Your Principal",
+    "prompt": "**The ask.**\n\nPrincipal Priya catches you outside the staff room. \"In two weeks, the trustees want a school AI policy. Single page if possible, two pages max. Something we can defend to parents *and* still let our better teachers actually use AI. You teach a senior class and you've been reading about this — can you draft it?\"\n\nShe walks off before you can ask the right question.\n\n**Your job.**\n\nWrite the policy. It should answer, in plain prose:\n\n1. **Where AI is encouraged.** Specific use cases: lesson prep, draft feedback, rubric scaffolding, exit tickets. Name them.\n2. **Where AI is restricted, and why.** In-class assessments, sensitive parent communications, condolence letters, marks-of-record. Be specific about the *why*; banning by category is lazy.\n3. **What students may and may not do.** A short, kind student-facing paragraph. The student is not the enemy.\n4. **Detection and false-positive policy.** What you will and will not do when an AI detector flags an essay. Riya from Class 11 should not lose her board year because of a probability score.\n5. **A 14-day pilot proposal.** The first thing you will measure, the kill criterion, the three numbers tracked. One paragraph.\n\n**Constraints.**\n\n- 2 pages max. Trustees do not read 6 pages.\n- Voice should sound like a teacher who has *taught*, not a consultant. Specific examples beat policy jargon.\n- At least one paragraph must explicitly identify what *cannot* be measured (the human 20%) and how the policy protects it.\n- Pre-empt at least one parent objection (\"my child should not have to compete with AI-assisted classmates\").\n\n**Submit.**\n\n- The 2-page policy as a single document.\n- A separate 200-word note to Principal Priya explaining the *one* clarifying question you would have asked her if she hadn't walked off.",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Every restriction is justified by a specific failure mode (false positives, AI grading meaning poorly, condolence-letter dilution); the policy survives a hostile parent and a sceptical trustee", "points": 4 },
+          { "label": "Most restrictions are justified, but one or two read as cargo-cult bans", "points": 2 },
+          { "label": "Restrictions are by category (\"AI not allowed in homework\") with no failure mode named", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity",
+        "levels": [
+          { "label": "Treats students as collaborators, not adversaries; the human 20% is named and protected by at least one concrete clause; the false-positive policy specifically protects the strongest writers from being punished by detectors", "points": 4 },
+          { "label": "Acknowledges the human 20% but only in abstract language; the false-positive policy is implied, not stated", "points": 2 },
+          { "label": "Treats AI as a discipline problem; students-as-suspects framing dominates", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "Reads like a teacher with chalk on her hands wrote it; specific examples (CBSE Class 10 essay, JEE practice set, Marathi-medium constraint) ground the policy; the clarifying-question note shows you saw the unstated assumption Principal Priya was making", "points": 4 },
+          { "label": "Clear writing, but generic examples that could apply to any school anywhere", "points": 2 },
+          { "label": "Policy jargon, no specific examples, the clarifying question is also generic", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "ai-for-teachers",
+    "title": "AI for Teachers",
+    "description": "The holder can integrate AI into classroom prep, assessment and honesty design without diluting the human work that actually teaches a child.",
+    "issuerName": "Krit Academy"
+  }
+}

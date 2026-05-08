@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Slack Auto-Send That Cited a Fake Metric",
+    "source": "Director of Engineering at Khaata Cloud, a Pune-based series-A SaaS startup",
+    "date": "December 2025",
+    "story": "On December 3, 2025, Khaata's growth lead set up a Claude-Slack MCP integration with a single autonomous workflow: *\"Every Monday at 9am, post a one-paragraph weekly metrics summary to #all-hands.\"* He hooked it to a metrics dashboard, gave it the channel write-permission, and went on holiday. He did not put a human in the loop.\n\nThe first three Mondays were fine. On December 22 — the fourth Monday — the metrics API timed out. Claude, helpfully, did not fail loudly. It produced a summary anyway, drawing on the *previous week's cached numbers* and a vague memory of the company's general trajectory. The post claimed **\"Weekly active users grew 18% week-on-week to 47,000.\"**\n\nReal number, that morning: **a 4% decline to 31,200**. Off by 51% on the trend, off by 16,000 on the absolute. The post stayed up for 4 hours before the head of data noticed. It had been **screenshotted by 11 employees**, two of whom forwarded it to LPs as part of casual investor updates. The retraction post got 1/8th the views.\n\nInternal post-mortem found no malice and no bug — the system worked as designed. The design was the bug. **It took the team 4 weeks to rebuild trust** in any AI-generated number going into Slack. The integration is now draft-only with a named human approver per channel.",
+    "takeaway": "Auto-send is the most expensive feature you can enable in any cowork integration. The right default is *draft + notify*, not *send*."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Week 8 — The First AI-Drafted Email to the CFO",
+    "setup": "**Week 8 of Q1 2026.** Velora's Claude Code rollout is humming. The cowork rollout starts this week — Claude in Slack (via MCP), Claude in Gmail (via the Workspace connector), Claude in meeting notes. You — Karthik — get tapped to draft Velora's *first* AI-assisted email **to the CFO** explaining a Q1 engineering budget overrun (₹14 lakh over plan, mostly AWS).\n\nThe CFO, **Meera**, is famously skeptical of AI. She has read three of those *\"ChatGPT made up case law\"* news stories and quotes them at meetings. You have one shot to make her trust this workflow — or to set the cowork rollout back six months.",
+    "coach": { "name": "VP-of-AI Vidya", "role": "Has watched four companies fumble exactly this email" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Vidya plants herself at your desk. *\"Step one. What's the **single rule** for this email?\"*",
+        "options": [
+          { "id": "a", "label": "\"Claude drafts. I read every line. I send. No auto-send, ever, for this surface.\"", "correct": true, "explain": "**The right rule, full stop.** *Draft → human review → human send.* This is the rule that survives the Khaata incident and 90% of all other AI cowork failures. Vidya audibly exhales.", "points": 3 },
+          { "id": "b", "label": "\"Use Claude for the first draft, then have Claude review its own draft.\"", "correct": false, "explain": "Self-review is theater. Claude marking its own homework will catch typos and miss the fabricated number. The reviewer must be a human who knows the actual ₹14 lakh story.", "points": 0 },
+          { "id": "c", "label": "\"Set up the Gmail MCP to send automatically once Claude is 'confident.'\"", "correct": false, "explain": "Confidence is not calibration. Claude was confident at Khaata too. Auto-send to a CFO is the Slack incident with longer paper trail and senior recipients.", "points": 0 },
+          { "id": "d", "label": "\"Draft, review, *and* attach the source numbers as a separate doc so Meera can verify.\"", "correct": true, "explain": "**Top-tier.** Verifiable claims build trust faster than confident prose. Meera will check the doc once, find the numbers match, and trust the next draft 30% more.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "You open Claude.ai, start a new project, and feed it context. **What goes in?**",
+        "options": [
+          { "id": "a", "label": "Just the budget overrun number and 'write a one-paragraph email to the CFO.'", "correct": false, "explain": "Claude will produce a beautifully-written paragraph that hallucinates the *cause*, the *plan*, and possibly Meera's preferred salutation. Garbage in, fluent garbage out.", "points": 0 },
+          { "id": "b", "label": "The original Q1 budget plan, the actual AWS bills broken down by service, the engineering team's note on what drove the overrun, and Meera's last 3 emails (to match her tone).", "correct": true, "explain": "**Right level of context.** Now Claude has the real story to summarize and the real voice to mimic. The draft will be 80% there, and your edits will be substantive (numbers, framing) not cosmetic (tone).", "points": 3 },
+          { "id": "c", "label": "Everything from the Velora finance Notion + every CFO-related Slack channel, just in case.", "correct": false, "explain": "Now you've leaked half the company's financial context into a chat session and given Claude so much noise it'll cherry-pick whichever facts produce the most flattering story. Less is more.", "points": 1 },
+          { "id": "d", "label": "The budget plan, the AWS breakdown, the engineering note — *and* a one-line constraint: 'Do not invent root causes; if uncertain, say so.'", "correct": true, "explain": "**Excellent.** The instruction is the load-bearing line. It tells Claude that *uncertainty is a valid output*. Without it, you get false confidence; with it, you get '...the remaining ₹2 lakh is unaccounted for and we are investigating.'", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Draft is back. It's good. **One sentence catches your eye:** *\"This overrun was driven primarily by a 34% spike in S3 egress related to the new analytics pipeline.\"* You don't actually know if 34% is right. **What do you do?**",
+        "options": [
+          { "id": "a", "label": "Send it. The number sounds plausible and the email is otherwise great.", "correct": false, "explain": "This is the Khaata move in a 1:1 channel. *Plausible* is not *true*. Meera will check the AWS console in 90 seconds and find the real number is 12%. Trust gone, possibly permanently.", "points": 0 },
+          { "id": "b", "label": "Open the AWS console, verify the number, edit if wrong.", "correct": true, "explain": "**This is the job.** Every load-bearing number gets verified before it leaves your outbox. The friction is the point — it forces a human between the model and the recipient.", "points": 3 },
+          { "id": "c", "label": "Ask Claude: 'Are you sure about 34%?'", "correct": false, "explain": "Claude will confidently double down or confidently retract — neither is verification. The model has no way to check the actual S3 bill. Only you do.", "points": 0 },
+          { "id": "d", "label": "Replace the specific number with 'a significant spike' and move on.", "correct": true, "explain": "**Acceptable.** Removing the unverified specific is safer than guessing. The email loses some sharpness but gains zero risk of being wrong. Meera will respect the precision-where-precise approach.", "points": 2 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "You hit send. Email lands well. Meera replies *\"thanks for the clear breakdown.\"* **Now what?**",
+        "options": [
+          { "id": "a", "label": "Slack the team: 'Claude wrote that CFO email — see, it works!'", "correct": false, "explain": "You just told 80 engineers that AI-drafted CFO emails are fine. Some of them will skip the *human review* step entirely. You have repeated Khaata's onboarding error.", "points": 0 },
+          { "id": "b", "label": "Write a short internal post: 'I used Claude to draft, I verified every number, I sent. Here's the workflow — copy *this*, not the shortcut.'", "correct": true, "explain": "**Exactly the right framing.** Codify the *workflow*, not the *outcome*. The post becomes the template; the template becomes the norm. Vidya pins it.", "points": 3 },
+          { "id": "c", "label": "Set up a Slack reaction-based 'AI-drafted, human-sent' tag so anyone using this pattern marks their messages.", "correct": true, "explain": "**Light-touch governance.** The tag is voluntary, transparent, and creates a soft norm without bureaucracy. Six months later you can audit which channels use it and where the workflow needs reinforcement.", "points": 3 },
+          { "id": "d", "label": "Quietly enable Gmail auto-send for low-stakes threads like 'meeting reschedules.'", "correct": false, "explain": "There is no such thing as 'low-stakes' auto-send. The first auto-sent meeting reschedule that mis-states the time wastes 8 people's morning. Stay in draft mode until you have *measured* false-positive rates.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You drafted, verified, sent, *and* taught the team. Meera trusts the workflow, Vidya is taking notes for next quarter's ops review, and Velora's cowork rollout has a real artifact to copy. **The Khaata incident is now a story you can tell, not one you'll relive.**",
+      "good": "You handled your own email well but left the team rollout slightly under-codified. Re-read the lesson on **draft → review → send** as a *cultural norm*, not a personal habit — the second one doesn't scale to 80 engineers.",
+      "learn": "You either auto-sent a number you couldn't verify, or you sent a great email and let the team draw the wrong lesson. Re-read the lesson — especially the section on **why auto-send is the highest-cost cowork feature**. Trust takes 4 weeks to rebuild and 4 minutes to lose."
+    }
+  }
+}

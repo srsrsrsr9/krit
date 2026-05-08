@@ -1,0 +1,292 @@
+{
+  "path": {
+    "slug": "ui-ux-design",
+    "title": "UI/UX Design Foundations",
+    "subtitle": "Make interfaces people don't have to read twice",
+    "summary": "Most product folks treat design like wallpaper; pick a colour, add a gradient, ship. Then they wonder why every onboarding screen needs a Loom explainer. This path teaches the small set of decisions that separate an interface people glance at and use, from one they squint at and abandon. Five lessons, two named moves each, one capstone where you redesign a real-world Indian SaaS flow that almost works.",
+    "kind": "PATH",
+    "level": "NOVICE",
+    "estimatedMinutes": 75
+  },
+  "skills": [
+    {
+      "slug": "ui-mental-model",
+      "name": "UI Mental Models",
+      "category": "creative",
+      "description": "Read an interface the way a designer reads it — affordances, hierarchy, friction",
+      "decayDays": null
+    },
+    {
+      "slug": "ui-visual-hierarchy",
+      "name": "Visual Hierarchy",
+      "category": "creative",
+      "description": "Direct the eye on purpose using contrast, position, size, and white space",
+      "decayDays": null
+    },
+    {
+      "slug": "ui-layout-systems",
+      "name": "Layout and Grid Systems",
+      "category": "creative",
+      "description": "Use 8-point grids, gutters, and spacing scales so a screen feels structured without feeling stiff",
+      "decayDays": null
+    },
+    {
+      "slug": "ui-color-and-type",
+      "name": "Color and Typography",
+      "category": "creative",
+      "description": "Build small, defensible type scales and color tokens that beat hand-picked hex codes",
+      "decayDays": null
+    },
+    {
+      "slug": "ui-interaction-design",
+      "name": "Interaction and Microcopy",
+      "category": "creative",
+      "description": "Design state changes, empty states, and microcopy that carry their weight",
+      "decayDays": null
+    },
+    {
+      "slug": "ui-design-judgment",
+      "name": "Design Judgment",
+      "category": "creative",
+      "description": "Critique work — your own and others' — using a structured loop, not vibes",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "ui-visual-hierarchy", "requires": "ui-mental-model" },
+    { "skill": "ui-layout-systems", "requires": "ui-visual-hierarchy" },
+    { "skill": "ui-color-and-type", "requires": "ui-layout-systems" },
+    { "skill": "ui-interaction-design", "requires": "ui-color-and-type" },
+    { "skill": "ui-design-judgment", "requires": "ui-interaction-design" }
+  ],
+  "assessment": {
+    "title": "UI/UX Design Foundations — Final Assessment",
+    "description": "Seventeen scenario-based questions. Every wrong answer is the kind of thing a smart-but-untrained engineer or PM would actually pick. Pick the answer a senior designer would defend on a Monday standup, not the one that sounds nicest.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": [
+      "ui-mental-model",
+      "ui-visual-hierarchy",
+      "ui-layout-systems",
+      "ui-color-and-type",
+      "ui-interaction-design",
+      "ui-design-judgment"
+    ],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "A teammate says 'the eye naturally goes to the top-left.' On a left-to-right SaaS dashboard with a green Save button at top-right and a grey Save button at bottom-left, where does the eye actually land first?",
+        "choices": [
+          { "id": "a", "label": "Top-left, because users always start there", "correct": false, "explanation": "The top-left rule comes from blank-page reading studies, not from interfaces with active visual elements." },
+          { "id": "b", "label": "On the green Save button at top-right, because contrast outranks position", "correct": true, "explanation": "Contrast with surroundings beats reading-order priors. The eye is a lazy heuristic engine; it follows the loudest signal." },
+          { "id": "c", "label": "Bottom-left, because that is where the action button is", "correct": false, "explanation": "Position alone is not a strong enough cue when contrast disagrees. A grey button on a grey screen is camouflage." },
+          { "id": "d", "label": "Wherever the cursor was last hovering", "correct": false, "explanation": "The cursor's last position influences the second saccade, not the first one." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "prompt": "Which of these are reliable ways to create primary visual hierarchy without using bigger fonts? (pick two)",
+        "choices": [
+          { "id": "a", "label": "Increase contrast between the element and its background", "correct": true, "explanation": "Contrast is the cheapest hierarchy. A dark button on a pale card outranks a 24px headline next to it." },
+          { "id": "b", "label": "Add a coloured drop-shadow", "correct": false, "explanation": "Shadows add depth, not hierarchy. Two shadowed elements still compete for the same attention slot." },
+          { "id": "c", "label": "Surround the element with white space", "correct": true, "explanation": "Isolation is hierarchy. Anything with breathing room reads as the answer; anything in a crowd reads as a footnote." },
+          { "id": "d", "label": "Bold every label in the form", "correct": false, "explanation": "If everything is bold, nothing is bold. You have just reset the hierarchy at a higher weight." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "Your engineer pushes back: 'Why an 8-point grid? Why not 7 or 10?' Which answer would you defend in code review?",
+        "choices": [
+          { "id": "a", "label": "Because 8 is divisible by 2 and 4, so half-steps and quarter-steps stay on integers across density modes", "correct": true, "explanation": "8 has clean factors. A 4px half-step still lands on a pixel; a 7px grid gives you 3.5px half-steps and blurry rendering." },
+          { "id": "b", "label": "Because Apple and Google said so", "correct": false, "explanation": "Cargo-culting Material guidelines is not a defence. The reason both teams picked 8 is the divisibility, not the brand." },
+          { "id": "c", "label": "Because most screens are 800px or 1600px wide", "correct": false, "explanation": "Screen width does not interact with the spacing scale in any meaningful way." },
+          { "id": "d", "label": "Because 8 is what Tailwind defaults to", "correct": false, "explanation": "Tailwind defaults to 4px steps that compose into 8s. Even Tailwind's reason is the divisibility." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "You inherit a settings page where every input has the same 12px padding, every section has 12px between fields, and every section is 12px from the next section. What is the most likely complaint from users?",
+        "choices": [
+          { "id": "a", "label": "It feels claustrophobic and the sections blur together", "correct": true, "explanation": "Without varied spacing the eye cannot tell what is grouped with what. Identical spacing kills hierarchy." },
+          { "id": "b", "label": "It loads too slowly", "correct": false, "explanation": "Spacing has nothing to do with load time." },
+          { "id": "c", "label": "The colour palette is wrong", "correct": false, "explanation": "Colour might be a separate problem; the spacing-only symptom here is the grouping confusion." },
+          { "id": "d", "label": "The buttons are not bold enough", "correct": false, "explanation": "Buttons can be loud, but if everything around them is the same density, the loudness still feels chaotic." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "prompt": "Which of these is true about a good type scale on a SaaS app? (pick two)",
+        "choices": [
+          { "id": "a", "label": "A 1.25 ratio (major third) keeps headings distinguishable without shouting", "correct": true, "explanation": "1.25 to 1.333 are workable for dense interfaces. 1.5 (perfect fifth) is for marketing pages where scale is a feature." },
+          { "id": "b", "label": "You should ship at least seven distinct font sizes so designers have flexibility", "correct": false, "explanation": "Five is plenty. Seven sizes invites fights about which is the 'right' H3 and produces visual noise." },
+          { "id": "c", "label": "Body text below 14px on web is hostile to users over 35", "correct": true, "explanation": "16px body, 14px secondary is a defensible floor. 12px is for badges and timestamps, not paragraphs." },
+          { "id": "d", "label": "Always use two different font families for visual interest", "correct": false, "explanation": "Two families is for editorial design. SaaS apps rarely need more than one well-chosen family." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "Why should you stop pasting hex codes directly into your Tailwind config?",
+        "choices": [
+          { "id": "a", "label": "Because hex codes are technical debt; the moment you ship two shades of #3B82F6, you have committed to a manual rename later", "correct": true, "explanation": "Tokens like primary-500 abstract the meaning from the value. You can swap the brand colour in one line; you cannot grep your way out of #3B82F6 vs #3D80F4 in 200 components." },
+          { "id": "b", "label": "Because hex codes are slower to render than named colours", "correct": false, "explanation": "There is no rendering cost difference. The cost is human." },
+          { "id": "c", "label": "Because designers prefer HSL", "correct": false, "explanation": "HSL is useful for picking, but the actual win is naming, not the format." },
+          { "id": "d", "label": "Because hex codes do not work in dark mode", "correct": false, "explanation": "Hex codes work fine; what fails is the assumption that one shade of grey covers both modes." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "A user clicks 'Send invoice' and the button does nothing visible for 1.4 seconds. The most surgical fix is:",
+        "choices": [
+          { "id": "a", "label": "Add a loading spinner and disable the button until the request resolves", "correct": true, "explanation": "Every click is a question; the user is asking 'did it hear me?' A state change inside 100ms is the answer." },
+          { "id": "b", "label": "Show a confirmation modal before sending", "correct": false, "explanation": "Adds a click. Solves a different problem (intent confirmation), not the unresponsive feeling." },
+          { "id": "c", "label": "Speed up the backend to under 200ms", "correct": false, "explanation": "Worth doing eventually, but the perceived-responsiveness problem is solved in the UI in five minutes; the backend fix is a sprint." },
+          { "id": "d", "label": "Add a toast that says 'Sent!' on success", "correct": false, "explanation": "Useful for the success state, but the silent 1.4 seconds is the bug. The toast comes after." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "prompt": "Which of these are good microcopy practices? (pick two)",
+        "choices": [
+          { "id": "a", "label": "Replace 'An error occurred' with 'We could not save your invoice; your card was declined'", "correct": true, "explanation": "Good microcopy names the cause and points at the next step. Generic errors train learned helplessness." },
+          { "id": "b", "label": "Use 'Submit' on every form button so users learn the pattern", "correct": false, "explanation": "Buttons should describe the verb the user is doing — 'Save invoice', 'Send link', 'Confirm payment'. 'Submit' is institutional." },
+          { "id": "c", "label": "In an empty state, show what the user would see when full and how to get there", "correct": true, "explanation": "Empty states are the best onboarding moment in your app. Wasting them on a sad cloud illustration is criminal." },
+          { "id": "d", "label": "Capitalise every noun in CTAs to look more formal", "correct": false, "explanation": "Title-case CTAs feel like 1990s government forms. Sentence case is friendlier and easier to scan." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "Your design lead opens a critique with 'I don't like the colour.' What is the most useful redirect?",
+        "choices": [
+          { "id": "a", "label": "Ask: which goal does the colour fail — accessibility, hierarchy, brand, or emotion?", "correct": true, "explanation": "Critique without a goal is taste. Naming which goal is at risk turns the conversation into something you can act on." },
+          { "id": "b", "label": "Defend the colour by quoting the brand guidelines", "correct": false, "explanation": "Defensive moves end critique loops; they do not improve them." },
+          { "id": "c", "label": "Change the colour and move on", "correct": false, "explanation": "If you change without learning why, you will get the same critique on the next screen." },
+          { "id": "d", "label": "Open a Figma comment thread to async the discussion", "correct": false, "explanation": "Async is fine, but it does not change the quality of the critique. The redirect to a goal is what matters." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "What is the spec-first PR move?",
+        "choices": [
+          { "id": "a", "label": "Write the user-facing change in plain English at the top of the PR description, then the implementation", "correct": true, "explanation": "Reviewers can then critique the intent before the code. Saves rebase cycles when the intent is wrong." },
+          { "id": "b", "label": "Write the spec doc only after the PR is merged", "correct": false, "explanation": "That is documentation, not specification. Specs guide; docs record." },
+          { "id": "c", "label": "Always attach a Figma link and skip the prose", "correct": false, "explanation": "Figma shows what; prose shows why. PRs need the why." },
+          { "id": "d", "label": "Write the migration before the feature", "correct": false, "explanation": "Useful for DB work; not the spec-first move described in the lesson." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "A 12-column grid with 24px gutters on a 1280px-wide canvas. Roughly what column width does each column get?",
+        "choices": [
+          { "id": "a", "label": "About 86px", "correct": true, "explanation": "1280 minus 11 gutters of 24px (264) leaves 1016 across 12 columns, giving ~84-86px each. The exact number matters less than knowing how to do the math." },
+          { "id": "b", "label": "About 107px", "correct": false, "explanation": "That ignores gutters entirely. 1280 / 12 = 107 only if you forget the spaces between columns." },
+          { "id": "c", "label": "About 64px", "correct": false, "explanation": "Too narrow; you have over-counted gutters." },
+          { "id": "d", "label": "It does not matter; the grid auto-fits", "correct": false, "explanation": "Auto-fit hides the math but does not eliminate it. A designer who cannot derive column width has no way to spec a card layout." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "prompt": "Which two of these belong in a basic design-token system?",
+        "choices": [
+          { "id": "a", "label": "Semantic colour names like 'bg-surface' and 'text-muted'", "correct": true, "explanation": "Semantic tokens decouple meaning from value. You can swap the value in dark mode without touching components." },
+          { "id": "b", "label": "Spacing scale with named steps (4, 8, 12, 16, 24, 32, 48)", "correct": true, "explanation": "Named spacing keeps the team off arbitrary 17px paddings. The constraint is the feature." },
+          { "id": "c", "label": "A list of every screen the brand has ever shipped", "correct": false, "explanation": "That is an inventory, not a token system." },
+          { "id": "d", "label": "All marketing illustrations in SVG", "correct": false, "explanation": "Useful for a design system, not a token system. Tokens are atomic values." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "When is a modal the right pattern?",
+        "choices": [
+          { "id": "a", "label": "When the user must complete or explicitly dismiss a single decision before continuing", "correct": true, "explanation": "Modals trade context for focus; you should only spend that trade when the decision is genuinely blocking." },
+          { "id": "b", "label": "Whenever you want to draw attention to something new", "correct": false, "explanation": "That is what banners and inline highlights are for. Modals interrupt; interruptions are expensive." },
+          { "id": "c", "label": "For multi-step settings flows", "correct": false, "explanation": "Multi-step belongs in a side-sheet or full-screen flow; modals trap state and prevent reference back." },
+          { "id": "d", "label": "Never — modals are always wrong", "correct": false, "explanation": "Overcorrection. Modals are the right tool for blocking decisions; they are the wrong tool for everything else." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "A mid-size Bengaluru SaaS ships a settings screen that uses #FF0000 for error, #00FF00 for success, and #FFFF00 for warning. What is the senior-design objection?",
+        "choices": [
+          { "id": "a", "label": "Pure RGB primaries fail accessibility on contrast and look like a 1998 status page; semantic tokens with darker, desaturated values are the fix", "correct": true, "explanation": "Pure red on white is harsh and often fails WCAG AA on small text. Use a semantic token like 'feedback-error' bound to a darker, desaturated red." },
+          { "id": "b", "label": "Red, green, and yellow are culturally inappropriate in India", "correct": false, "explanation": "They are culturally fine; the objection is craft, not culture." },
+          { "id": "c", "label": "Browsers render pure RGB primaries slower", "correct": false, "explanation": "There is no rendering penalty; the objection is visual quality and accessibility." },
+          { "id": "d", "label": "There is no objection — these are the standard error colours", "correct": false, "explanation": "They were the standard in 2005. Modern systems use desaturated values for the same reason." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "What does 'the eye is a lazy heuristic engine' mean in practice?",
+        "choices": [
+          { "id": "a", "label": "Users do not read screens; they scan for the loudest, most isolated, most differently-coloured element first", "correct": true, "explanation": "The visual system optimises for energy. It picks shortcuts; your job is to make the shortcuts lead to the right place." },
+          { "id": "b", "label": "Users have lower IQ than designers think", "correct": false, "explanation": "Has nothing to do with IQ. The same shortcuts apply to the designer's own eye." },
+          { "id": "c", "label": "Users always click the first button they see", "correct": false, "explanation": "Often, but not always. The 'first button' is whatever wins the contrast war, which may not be top-left." },
+          { "id": "d", "label": "Animations distract users from the main content", "correct": false, "explanation": "Animations can compete for attention, but the lazy-heuristic point applies to static screens too." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "prompt": "You are running a design critique. Which two questions are most likely to surface a real problem?",
+        "choices": [
+          { "id": "a", "label": "What is this screen's single most important action, and how do I know?", "correct": true, "explanation": "If three people answer differently, the hierarchy is broken. This is the cheapest critique question in the world." },
+          { "id": "b", "label": "What would break if the user opened this with no context?", "correct": true, "explanation": "Edge cases hide in the assumed context. Asking the cold-open question surfaces them." },
+          { "id": "c", "label": "Is this on-brand?", "correct": false, "explanation": "Brand is a useful filter, not a critique question. It rarely surfaces structural problems." },
+          { "id": "d", "label": "Did the engineer follow the spec?", "correct": false, "explanation": "Process question, not a design question. Belongs in a different review." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "prompt": "A PM at your Pune-based SaaS asks 'can we just move the button to make it pop?' What is the senior-design response?",
+        "choices": [
+          { "id": "a", "label": "Ask which job the button should pop for — primary action, edge case, or compliance — and design the contrast accordingly", "correct": true, "explanation": "'Pop' is a symptom request. Naming the job converts it into a hierarchy decision you can defend." },
+          { "id": "b", "label": "Move the button. Customer is always right.", "correct": false, "explanation": "PMs are not customers, and 'pop' is not a spec. Moving without asking why guarantees a follow-up move next sprint." },
+          { "id": "c", "label": "Refuse and say 'design owns the layout'", "correct": false, "explanation": "Tribal moves kill cross-functional trust. Better to translate the request into a clear question." },
+          { "id": "d", "label": "Add a red border", "correct": false, "explanation": "Adds noise without adding hierarchy. The screen now has two loud things instead of one." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "ui-ux-design-capstone",
+    "title": "Capstone: Rescue the 11pm onboarding screen",
+    "prompt": "## The ask\n\nIt is 11pm on a Friday. Your co-founder, who runs a 25-person Bengaluru SaaS that sells expense-management to small businesses, slacks you a screenshot of their current onboarding screen. There are 14 form fields, three of which are optional, and a grey 'Submit' button at the bottom-left. The activation rate is 38%. He says: *'bro design this properly na, kuch toh kar.'*\n\nYou have until Sunday night.\n\n## Deliverables\n\n1. **A redesigned onboarding flow** in your tool of choice (Figma, Excalidraw, or even hand-drawn and photographed). Cover at minimum:\n   - the welcome / first-screen state\n   - the data-entry steps (you may split the 14 fields across multiple screens or remove some — defend your choices)\n   - the success state\n   - one error state\n2. **A short written defence (300-500 words)** that names:\n   - the visual hierarchy you chose, and why\n   - the grid and spacing scale you used\n   - the type and color tokens you defined (even just five values is fine)\n   - one interaction or microcopy change you made and the user behaviour it should change\n3. **A self-critique using the 3-question critique** from Lesson 5: what is the single most important action, what breaks with no context, and what would a cold reviewer push back on.\n\n## Submission rules\n\n- Be specific. 'A friendly colour palette' is not a defence. 'A primary blue (#1F6FEB) bound to `interaction-default`, used only on the single primary action per screen, with a desaturated neutral surface to keep the form quiet' is.\n- Name your tradeoffs. If you cut three fields, say which three and what you assume happens to the data.\n- Keep India-anchored. Your user is a 35-year-old accountant at a 12-person firm in Indore who has used Tally for fifteen years and Excel for twenty.",
+    "rubric": [
+      {
+        "name": "Voice",
+        "description": "Does the design and the written defence have an opinionated point of view? Are the choices defended in the language of hierarchy, tokens, and tradeoffs, not in the language of taste?",
+        "levels": [
+          { "label": "Vague", "points": 1, "description": "The defence reads as 'I picked this because it looks nice.' No tokens named, no tradeoffs surfaced." },
+          { "label": "Adequate", "points": 2, "description": "Some specific choices defended with named concepts, but most decisions are still left to taste." },
+          { "label": "Strong", "points": 3, "description": "Every major decision (primary action, type scale, color tokens, spacing) is defended in the language of the course. At least one tradeoff is explicitly named." },
+          { "label": "Distinctive", "points": 4, "description": "Defends choices crisply, anticipates likely critiques, and names a specific user behaviour each change should produce." }
+        ]
+      },
+      {
+        "name": "Structure",
+        "description": "Is the redesign actually built on a grid and spacing scale, with a coherent type and color token set? Does the screen hierarchy guide the eye to the right action?",
+        "levels": [
+          { "label": "Inconsistent", "points": 1, "description": "Spacing and sizing are eyeballed; multiple competing primary actions on a single screen." },
+          { "label": "Workable", "points": 2, "description": "A grid and spacing scale exist but are inconsistently applied. Hierarchy is mostly clear." },
+          { "label": "Solid", "points": 3, "description": "8-point spacing, a defined type scale of 4-5 sizes, named color tokens, single primary action per screen." },
+          { "label": "Crafted", "points": 4, "description": "All of solid, plus deliberate use of white space to group fields and a clearly designed empty / loading / error state." }
+        ]
+      },
+      {
+        "name": "Specificity",
+        "description": "Are the choices grounded in this user (the Indore accountant) and this product (a small-business expense tool)? Are the microcopy, error states, and field choices defended against that specific user?",
+        "levels": [
+          { "label": "Generic", "points": 1, "description": "The flow could be for any SaaS in the world. No India-anchored or product-anchored choices." },
+          { "label": "Contextual", "points": 2, "description": "Some product-specific choices, but the user's context (Tally, Excel, expense management) is not referenced." },
+          { "label": "Targeted", "points": 3, "description": "Microcopy and field choices reference the user's actual mental model. The flow handles at least one Indore-specific edge case (PAN, GST, Hindi name in English form)." },
+          { "label": "Tailored", "points": 4, "description": "All of targeted, plus at least one defendable opinion about what NOT to ask in onboarding because the user can supply it later." }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "ui-ux-design",
+    "title": "UI/UX Design Foundations",
+    "description": "Holder can design a small SaaS interface from the ground up — set a grid, build a token system, direct the eye through visual hierarchy, write microcopy that carries weight, and run a critique loop on their own work without flinching.",
+    "issuerName": "Krit Academy"
+  }
+}

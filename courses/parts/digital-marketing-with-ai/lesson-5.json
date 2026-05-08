@@ -1,0 +1,222 @@
+{
+  "slug": "measure-and-iterate",
+  "title": "Measuring What Matters in 2026",
+  "subtitle": "One north-star, a 14-day loop, and a kill criterion that survives Friday night",
+  "estimatedMinutes": 14,
+  "skills": ["marketing-measurement"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/digital-marketing-with-ai/measure-and-iterate.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the 47-widget dashboard" },
+        { "startSec": 80, "label": "Mental model: north-star over vanity" },
+        { "startSec": 220, "label": "Move 1 — The 14-day campaign loop" },
+        { "startSec": 410, "label": "Move 2 — The kill criterion that holds" },
+        { "startSec": 560, "label": "Trap, try-it, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/digital-marketing-with-ai/measure-and-iterate.html",
+      "notesByline": "Notes by Sneha, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Open any marketing dashboard in 2026 and you'll find 47 widgets, 9 filters, 3 sparkline rails. Reach. Engagement. Sentiment. Brand recall index. Share-of-voice quintiles. The dashboard cost ₹4.5 lakh to commission and is updated nightly by an AI pipeline.\n\nThe founder looks at it once a week, says 'looks healthy', and goes back to worrying about cash. Nobody, including you, can name the *one* number that would make you kill a campaign tomorrow if it dropped 25%.\n\nThat is a vanity dashboard. It feels like measurement. It is decoration. The fix is not 'better dashboard'; the fix is *fewer numbers, attached to actions, attached to deadlines*. This lesson is the discipline."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two screens side by side. Left: a chaotic dashboard with 47 widgets, lots of charts, no clear focus, labelled 'vanity'. Right: a single big number with a smaller subline below it ('repeat purchase, 90 days: 28%'), labelled 'north-star'. Below: 'one number, attached to an action'.",
+      "caption": "47 numbers no one acts on vs 1 number that drives kills, scales, and pivots.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FEF3C7'/><g transform='translate(40 30)'><rect width='240' height='220' rx='10' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='120' y='22' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>vanity dashboard</text><g transform='translate(15 35)'><rect width='50' height='30' rx='3' fill='#FCA5A5'/><rect x='60' width='50' height='30' rx='3' fill='#FCD34D'/><rect x='120' width='50' height='30' rx='3' fill='#A7F3D0'/><rect x='180' width='30' height='30' rx='3' fill='#BFDBFE'/><rect y='40' width='30' height='30' rx='3' fill='#DDD6FE'/><rect x='35' y='40' width='60' height='30' rx='3' fill='#FBCFE8'/><rect x='100' y='40' width='40' height='30' rx='3' fill='#FCA5A5'/><rect x='145' y='40' width='65' height='30' rx='3' fill='#FCD34D'/><rect y='80' width='80' height='30' rx='3' fill='#A7F3D0'/><rect x='85' y='80' width='40' height='30' rx='3' fill='#BFDBFE'/><rect x='130' y='80' width='80' height='30' rx='3' fill='#DDD6FE'/><rect y='120' width='40' height='30' rx='3' fill='#FBCFE8'/><rect x='45' y='120' width='60' height='30' rx='3' fill='#FCA5A5'/><rect x='110' y='120' width='100' height='30' rx='3' fill='#A7F3D0'/></g><text x='120' y='205' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>looks healthy. drives nothing.</text></g><g transform='translate(320 30)'><rect width='240' height='220' rx='10' fill='#FFFFFF' stroke='#065F46' stroke-width='3'/><text x='120' y='22' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#065F46'>north-star</text><text x='120' y='110' text-anchor='middle' font-family='sans-serif' font-size='52' font-weight='bold' fill='#065F46'>28%</text><text x='120' y='140' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46'>repeat purchase, 90 days</text><line x1='40' y1='170' x2='200' y2='170' stroke='#10B981' stroke-width='2'/><text x='120' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#10B981'>kill criterion: drops below 22%</text><text x='120' y='208' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#10B981'>scale criterion: tops 35%</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: one north-star, attached to an action",
+      "md": "A real north-star metric has three properties:\n\n1. **It maps to economic outcome.** Not awareness, not engagement; revenue, margin, retention, or payback.\n2. **It changes slowly enough to mean something, fast enough to drive a decision.** Daily revenue is too noisy; quarterly retention is too slow. 14-90 day metrics are usually the sweet spot.\n3. **It has a kill threshold and a scale threshold *in writing, before launch*.** 'If north-star drops below X by day Z, we kill. If above Y, we scale.'\n\nWithout #3, you don't have a metric. You have decoration.\n\nFor most Indian D2C brands, the cleanest north-stars are: **90-day repeat purchase rate**, **6-month contribution margin per customer**, or **paid-CAC payback in days**. Pick one. Demote the rest to supporting cast."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/digital-marketing-with-ai/anim/measure-and-iterate-northstar-loop.html",
+      "height": 420,
+      "caption": "Watch a 14-day loop play out — north-star rising, vanity metrics oscillating, kill criterion deciding the fate."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Mummy ka 'kitni bachat hui' question",
+          "md": "Tu mummy ko bata raha hai naya phone bahut sasta mil gaya. \"60% off! Original ₹80,000 tha, 32,000 mein mil gaya!\"\n\nMummy: \"Beta. Tu pehle phone use kar raha tha 18,000 ka. Nayi mein kaunsi feature actually use karega? Aur monthly bachat kya hui?\"\n\nMummy ne north-star metric maanga. Tu ne vanity metric (60% off) diya. Mummy ne reject kiya. Mummy hamesha sahi hoti hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The 'how much did you actually save' test",
+          "md": "When you brag about a 60% discount on a phone you didn't need, your mom asks how much you actually saved versus your old working phone. She's asking for the north-star metric. The 60% off is a vanity headline. The two-question discipline of 'compared to what?' and 'attached to what action?' is what separates measurement from theatre."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The 14-day campaign loop"
+    },
+    {
+      "type": "markdown",
+      "md": "The right cadence for marketing iteration in 2026 is 14 days. Not weekly (too noisy, churns the team), not quarterly (too slow, kills agility). 14 days is enough sample to make honest calls and short enough to not bleed money on bad ideas.\n\nThe loop has four beats:\n\n1. **Day 0 (Launch day).** Pre-register the campaign: target audience, channels, expected CAC and ROAS, *the kill criterion*, and the scale criterion. This is a one-pager. If it takes more than an hour to write, your scope is too big.\n2. **Day 7 (Mid-loop check).** Look at the data; do not act on it. (Sample size is usually still inside the noise band on day 7.) Note any directional signal. Do not pivot.\n3. **Day 10 (The hard date).** This is the kill-criterion checkpoint. If north-star is below the kill threshold, you stop. Even if you have a good story for why. *Especially* if you have a good story for why.\n4. **Day 14 (Decide).** Scale, kill, or extend. Each option has a specific spend implication. Document the decision and the reason.\n\nWhy day 10 instead of day 14 for the kill check? Because the cost of running a losing campaign for 4 extra days is real money, and 'just give it more time' is the most common excuse for letting a kill criterion decay. The hard date is the discipline."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A horizontal timeline with four checkpoints: Day 0 'Launch — pre-register', Day 7 'Look — don't act', Day 10 'Kill check', Day 14 'Decide'. Below each, the action and the spend implication.",
+      "caption": "The 14-day loop. Day 10 is the kill date; day 14 is the scale-or-extend decision.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#EFF6FF'/><line x1='40' y1='120' x2='560' y2='120' stroke='#1E3A8A' stroke-width='3'/><g font-family='sans-serif' font-size='11' fill='#1E3A8A'><g transform='translate(40 120)'><circle cx='0' cy='0' r='12' fill='#1E40AF'/><text x='0' y='4' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>0</text><text x='0' y='-25' text-anchor='middle' font-weight='bold'>Launch</text><text x='0' y='30' text-anchor='middle' font-size='10'>pre-register</text><text x='0' y='44' text-anchor='middle' font-size='10' fill='#3730A3'>kill + scale criteria</text></g><g transform='translate(220 120)'><circle cx='0' cy='0' r='12' fill='#F59E0B'/><text x='0' y='4' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>7</text><text x='0' y='-25' text-anchor='middle' font-weight='bold'>Look</text><text x='0' y='30' text-anchor='middle' font-size='10'>do not act</text><text x='0' y='44' text-anchor='middle' font-size='10' fill='#92400E'>note signals only</text></g><g transform='translate(360 120)'><circle cx='0' cy='0' r='12' fill='#EF4444'/><text x='0' y='4' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>10</text><text x='0' y='-25' text-anchor='middle' font-weight='bold' fill='#7F1D1D'>Kill check</text><text x='0' y='30' text-anchor='middle' font-size='10' fill='#7F1D1D'>hard date</text><text x='0' y='44' text-anchor='middle' font-size='10' fill='#7F1D1D'>no extensions</text></g><g transform='translate(540 120)'><circle cx='0' cy='0' r='12' fill='#10B981'/><text x='0' y='4' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='10'>14</text><text x='0' y='-25' text-anchor='middle' font-weight='bold' fill='#065F46'>Decide</text><text x='0' y='30' text-anchor='middle' font-size='10' fill='#065F46'>scale / extend</text><text x='0' y='44' text-anchor='middle' font-size='10' fill='#065F46'>document &amp; ship</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: 'Test if AI ad-copy lowers CAC' → an answerable 14-day loop",
+      "steps": [
+        { "label": "Day 0 — Pre-register", "body": "Launch AI-drafted Meta ads against current human-written control. Target: ₹40k spend per arm. North-star metric: paid-CAC over 14 days. Kill criterion: 'If by day 10, AI arm CAC is > ₹1,200 (current control is ₹847), we kill.' Scale: 'If AI arm CAC is < ₹720 by day 14 with n>4,000 conversions, we shift 60% of budget.'" },
+        { "label": "Day 7 — Look", "body": "AI arm CAC at day 7: ₹980 (n=820 conversions). Control: ₹860. Note: AI is trending up but sample inside noise band. Don't act. Continue." },
+        { "label": "Day 10 — Kill check", "body": "AI arm CAC: ₹1,090 (n=1,400). Below the kill threshold of ₹1,200, but only barely. Continue running by the rule. Note: temptation to kill early ('it's clearly trending bad') is also an unauthorized override of the rule. Honor the threshold." },
+        { "label": "Day 14 — Decide", "body": "AI arm CAC: ₹1,140 (n=2,200). Control: ₹880. Result: AI arm is worse, but not catastrophically so. Decision: kill the AI arm; document the learning ('AI ads underperform our anchored human voice for this audience at this stage'); rerun the test on a different funnel stage where stakes per piece are lower." },
+        { "label": "Wrap — Decision Doc", "body": "Write the one-paragraph 'what we learned' note. Without it, the loop is just churn. With it, the team has a memory and the next experiment is sharper." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Day 11 of a campaign. North-star metric is just barely below the kill threshold. The team argues 'it's only 4 days from end; let it run'. The honest call is:",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Honor the kill criterion. The threshold existed precisely for the moment when you don't like the answer.", "correct": true, "explain": "Right. A criterion you only honor when it confirms what you wanted is a wish, not a criterion. Kill at the threshold." },
+        { "id": "b", "label": "Extend to day 14; maybe it recovers.", "correct": false, "explain": "This is how kill criteria die — the death-by-extension mode. Document and avoid." },
+        { "id": "c", "label": "Increase budget to lower CAC.", "correct": false, "explain": "Doubling down on a campaign that's missing the target is the failure mode the criterion was designed to stop." },
+        { "id": "d", "label": "Switch attribution windows until the metric looks fine.", "correct": false, "explain": "Attribution-window p-hacking. The most expensive way to lie to yourself." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Founder ka '14 din chhoti window hai' speech",
+          "md": "Day 11. AI ad campaign band karne ka time hai. Founder Slack pe: \"Yaar, 14 din chhoti window hai. Long-term branding mein aisi cheezein 60-90 din mein dikhti hain. Continue karte hain.\"\n\nBhai. Wahi founder day 5 par kya bola tha? \"Yeh kaam kyun nahi kar raha?\" Same campaign. Same data. Same person. Sirf direction badal gayi.\n\nKill criterion exactly is liye written hota hai launch se pehle. Ki day 11 par tu apne aap se argue na kare. Tu ne pehle written kiya tha — \"day 10, CAC > ₹1,200, kill.\" Day 10 aaya. Threshold cross hua. Kill hai. Aur kuch nahi."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The day-11 'we need more time' move",
+          "md": "On day 5 the founder asks why the campaign isn't working. On day 11 the same founder asks for 'more time to let branding compound'. Same campaign, same data, mood-driven framing. The kill criterion is written before launch precisely so day-11 you can't argue with day-0 you. Honor what you wrote."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The kill criterion that holds"
+    },
+    {
+      "type": "markdown",
+      "md": "A kill criterion that survives Friday night at 11pm has four properties:\n\n1. **Pre-registered.** Written before launch, sent to the team, dated.\n2. **Specific.** A number, a date, a metric. Not 'we'll know it when we see it'.\n3. **Cheap to honor.** Killing should be a single Slack message and an ad pause, not a five-meeting deliberation.\n4. **Pre-emptively immune to the three excuses.**\n\nThe three excuses are nearly universal:\n\n- *'Give it more time.'* — Cure: write into the criterion *what would actually change* with more time. If you can't name a structural reason, more time is just hope.\n- *'The creative just needs a tweak.'* — Cure: pre-commit that creative tweaks are a *new* test (with its own kill criterion), not an extension of this one.\n- *'The comparison window is wrong; let's switch to last-touch / first-touch / view-through.'* — Cure: lock the attribution model in writing on day 0. Switching mid-test is p-hacking.\n\nThe written kill criterion looks like this for the Pune wellness brand:\n\n> *'If by day 10 of the AI-ads test, paid CAC is above ₹1,200 (vs control's ₹847), we will pause the test. We will not extend, we will not retune creative, and we will not switch from last-click to view-through attribution. The test ends; we document; the next experiment is on a different stage of the funnel.'*\n\nThree sentences. The team can hold it. The founder can argue with it on day 11, but the criterion will win, because the criterion was right when both of them agreed."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A document titled 'Kill Criterion' with four checkpoints listed: pre-registered, specific, cheap to honor, immune to excuses. Below, three excuse balloons floating but bouncing off the document — 'just give it more time', 'creative needs a tweak', 'switch attribution'.",
+      "caption": "A kill criterion is a small written document. The three excuses are bouncing balloons. Pre-emption is the wall.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#FFF7ED'/><g transform='translate(180 30)'><rect width='200' height='160' rx='8' fill='#FFFFFF' stroke='#1F2937' stroke-width='2'/><text x='100' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#1F2937'>KILL CRITERION</text><line x1='20' y1='40' x2='180' y2='40' stroke='#9CA3AF' stroke-width='1'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><text x='20' y='60'>✓ Pre-registered</text><text x='20' y='82'>✓ Specific (number, date)</text><text x='20' y='104'>✓ Cheap to honor</text><text x='20' y='126'>✓ Immune to excuses</text></g><text x='100' y='150' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937' font-style='italic'>signed: day 0</text></g><g transform='translate(40 220)'><ellipse cx='50' cy='40' rx='55' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'just give it</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>more time'</text></g><g transform='translate(220 230)'><ellipse cx='50' cy='40' rx='65' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'creative just</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>needs a tweak'</text></g><g transform='translate(420 220)'><ellipse cx='50' cy='40' rx='60' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'switch the</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>attribution'</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Growth-Lead Gauri",
+        "role": "D2C veteran, has killed 23 campaigns at the threshold and saved roughly ₹1.6 crore by doing it"
+      },
+      "intro": [
+        "Last round. I'll give you six day-10 checkpoints. You tell me: **kill**, **continue**, or **escalate** (founder/team needs to decide).",
+        "The pre-registered kill criterion is what guides you. Don't import new logic on the fly.",
+        "Easy to be hard before launch. Hard to be hard at 11pm. We practice for the second one."
+      ],
+      "buckets": [
+        { "id": "kill", "label": "Kill", "tone": "danger" },
+        { "id": "continue", "label": "Continue", "tone": "safe" },
+        { "id": "escalate", "label": "Escalate", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "Pre-registered: 'Kill if CAC > ₹1,200 by day 10.' Day 10: CAC = ₹1,340. Founder: 'It's only 4 days from end.'", "correctBucketId": "kill", "explain": "Kill. The criterion was clear. Day-11-founder doesn't override day-0 founder. This is the canonical kill case." },
+        { "id": "s2", "situation": "Pre-registered: 'Kill if ROAS < 2.5 by day 10.' Day 10: ROAS = 2.6. Performance marketer: 'Trending down; let's pull the plug now.'", "correctBucketId": "continue", "explain": "Continue. ROAS is *above* the threshold. Pulling the plug now imports new logic mid-test. The criterion is the criterion both ways." },
+        { "id": "s3", "situation": "Pre-registered: 'Kill if conversion rate < 1.8% by day 10.' Day 10: conversion = 1.7% — but a national-news event two days ago temporarily depressed all e-commerce by ~12% measured industry-wide.", "correctBucketId": "escalate", "explain": "Escalate. The criterion is breached, but a documented external shock affected all numbers. Bring the data to the team and decide explicitly whether to kill or extend by 5 days. Document the override; don't make it silent." },
+        { "id": "s4", "situation": "Pre-registered: 'Kill if north-star (90-day repeat purchase) is on pace below 22% by day 10.' Day 10: pace = 19%.", "correctBucketId": "kill", "explain": "Kill. Pace metrics are valid criteria; honor them. The 90-day full data won't arrive in time to save the campaign; the leading indicator is what you committed to." },
+        { "id": "s5", "situation": "No pre-registered criterion was written. Day 10: CAC has crept from ₹780 to ₹990. Team is split.", "correctBucketId": "escalate", "explain": "Escalate. Without a criterion you literally cannot kill or continue 'by the rules'. Use this as the moment to write a criterion *now* for the remaining four days, get team sign-off, and then honor it. Document the gap so it doesn't happen next time." },
+        { "id": "s6", "situation": "Pre-registered: 'Kill if CAC > ₹1,200 by day 10.' Day 10: CAC = ₹1,180. Founder: 'It's basically there; let's kill anyway.'", "correctBucketId": "continue", "explain": "Continue. CAC is *below* the kill threshold; killing now is again importing new logic. The whole point is that day-0 you and day-10 you have to agree only on the threshold, not on the call. The threshold spoke; you continue." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: vanity metrics dashboard",
+      "md": "The trap is identifiable in a sentence: **a dashboard is a vanity dashboard if no number on it has a kill threshold attached.** Every metric without a threshold is decoration. The dashboard might look beautiful, cost money, and update nightly via an AI pipeline; without thresholds, it cannot drive a single decision.\n\nThe cure is brutal subtraction. Take the dashboard. For each widget, ask 'what number on this widget would make us kill or scale a campaign?' If the answer is 'we'd discuss it', the widget gets demoted to an FYI tab. The main view holds only metrics with attached actions. You will end up with 3-6 numbers. That is correct. That is the point."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Drag these into the right order — running a clean 14-day campaign loop end to end.",
+      "items": [
+        { "id": "1", "label": "Pre-register: north-star, kill criterion, scale criterion, attribution model, signed by team", "detail": "One page. Hour to write. Dated." },
+        { "id": "2", "label": "Launch on day 0; instrument so daily numbers are visible", "detail": "Visibility is fine; acting on day-2 numbers is not." },
+        { "id": "3", "label": "Day 7 mid-loop check: look, note signals, do not act", "detail": "The discipline is *not* pivoting." },
+        { "id": "4", "label": "Day 10 kill checkpoint: honor the criterion", "detail": "If breached, kill. If not, continue. Don't import new logic." },
+        { "id": "5", "label": "Day 14 decide: scale, extend, or shut down", "detail": "Each option has a specific spend implication; document the choice." },
+        { "id": "6", "label": "Write the one-paragraph 'what we learned' note", "detail": "Without it, the loop is churn. With it, the next experiment is sharper." }
+      ],
+      "hint": "Pre-register → launch → look (don't act) → kill check → decide → document."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You're launching a 14-day Meta-ads test for a Coimbatore-based D2C brand. Current paid CAC: ₹847. LTV: ₹4,200. Test variant: AI-generated dynamic creative against current human-written control. Daily impressions per variant: 2,000.\n\nWrite the day-0 pre-registration document. Cover:\n- North-star metric and why\n- Specific kill criterion (number + date)\n- Specific scale criterion (number + date)\n- Attribution model (lock it now)\n- The three excuses you anticipate, and the pre-emption for each\n\nMax one page.",
+      "expected": "Pre-Registration: AI-Ads Test, 14-Day Loop\n\nNorth-star: Paid CAC over 14 days, last-click attribution, fully loaded (ad spend / new acquired customers).\n\nKill criterion (day 10): If AI variant CAC is > ₹1,150 at day 10, with n > 1,200 conversions, we pause the AI variant. (Threshold = current control ₹847 + 35% buffer; below this we are not learning anything actionable.)\n\nScale criterion (day 14): If AI variant CAC is < ₹720 with n > 4,000 conversions, we shift 50% of next month's budget to AI dynamic creative.\n\nAttribution: Last-click on the platform's reported window. Locked. We will not switch to view-through, multi-touch, or first-click during this test.\n\nPre-empted excuses:\n- 'Give it more time.' — No. The 14-day window is the answer; there is no structural reason a campaign that fails day-10 would recover by day-14.\n- 'Creative just needs a tweak.' — Tweaks are a new test, with its own pre-registration. Mid-flight tuning is excluded.\n- 'Comparison window is wrong.' — The window was chosen on day 0 with team sign-off. Locked.\n\nSigned: [name], [date]."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your CMO commissions a new dashboard from an AI-pipeline vendor: 47 widgets, daily refresh, ₹4.5L per year. Three months in, no campaign has been killed or scaled because of any number on it. The most defensible thing to do is:",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Audit each widget against the kill-or-scale test; demote anything that hasn't driven a decision in 3 months.", "correct": true, "explain": "Right. The cure for a vanity dashboard is brutal subtraction. Most widgets will lose the test." },
+        { "id": "b", "label": "Identify the 3-5 numbers worth reading first thing every morning, with attached thresholds; everything else moves to 'on demand' tabs.", "correct": true, "explain": "Right. Few-numbers-with-thresholds beats many-numbers-without every time." },
+        { "id": "c", "label": "Keep all 47 widgets; redundancy is good for marketing.", "correct": false, "explain": "Redundancy without action is decoration. Keeps the cost; loses the decision-driving power." },
+        { "id": "d", "label": "Replace the dashboard with a Notion doc; tools are the problem.", "correct": false, "explain": "The metric structure is the problem; the tool is downstream. Tool swap doesn't fix vanity." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Pune D2C ke 14-din ka loop",
+          "md": "Pune D2C wellness brand. Q1 mein 6 campaigns chalaye, sab 14-day loops. Pre-registration written, kill criteria written, founder ne sign kiya.\n\nResults: 4 campaigns kill ho gaye day 10 par. Ek scale hua. Ek extend hua. Total spend ₹18L; saved ₹14L (jo loser campaigns pe additional 30 din chala dete toh nikal jata).\n\nFounder ka favourite line ban gaya: \"jo write nahi hua woh exist nahi karta.\" Pre-registration ke baad arguments khatam, decisions tez. Yeh 14-day loop ka real ROI hai — speed of learning, not speed of shipping."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The Pune brand's 14-day discipline",
+          "md": "A Pune D2C wellness brand ran six campaigns on 14-day loops in Q1, all pre-registered. Four killed at day 10; one scaled; one extended. Total spend ₹18 lakh; saved roughly ₹14 lakh that would have leaked into losing campaigns over the next 30 days. The founder's mantra became 'what isn't written doesn't exist'. The 14-day loop's real ROI is speed of learning, not speed of shipping."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "A north-star metric maps to economic outcome, moves on a 14-90 day timescale, and has a written kill threshold and scale threshold.",
+        "If no number on your dashboard has a kill threshold attached, the dashboard is decoration — not measurement.",
+        "Run on a 14-day campaign loop: pre-register day 0, look (don't act) day 7, kill-check day 10, decide day 14.",
+        "A kill criterion that survives Friday night at 11pm is pre-registered, specific, cheap to honor, and pre-emptively immune to the three excuses (more time, creative tweak, switch attribution).",
+        "Speed of learning beats speed of shipping; without the documented loop, you ship faster and learn nothing."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Look at the most recent campaign your team ran. Was there a written kill criterion before launch? If yes, was it honored? If no, what did 'we'll see' actually cost the company in delayed kills?"
+    }
+  ]
+}

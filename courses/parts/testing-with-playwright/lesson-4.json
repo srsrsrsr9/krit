@@ -1,0 +1,225 @@
+{
+  "slug": "flake-and-debugging",
+  "title": "Killing Flakiness — Debugging the Hardest Failures",
+  "subtitle": "Flake is information you haven't decoded yet",
+  "estimatedMinutes": 14,
+  "skills": ["playwright-debugging"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/testing-with-playwright/flake-and-debugging.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the on-call who got paged at 3am" },
+        { "startSec": 80, "label": "Mental model: flake is information you haven't decoded" },
+        { "startSec": 220, "label": "Move 1 — The trace viewer ritual" },
+        { "startSec": 410, "label": "Move 2 — The deterministic-clock fix" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/testing-with-playwright/flake-and-debugging.html",
+      "notesByline": "Notes by Sneha, SDET batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "There's an on-call engineer at a Bengaluru fintech who got paged at 3am because a Playwright test `await page.waitForTimeout(3000)`'d on a flow that, on AWS that night, took 3,200 milliseconds. The test went red. CI auto-rolled back a green deploy. Customers couldn't transact for 47 minutes. The post-mortem blamed \"test flakiness.\"\n\nThe post-mortem was wrong. The flake was a *symptom*. The actual bug was that the team had been treating flake as noise instead of as data.\n\nThis lesson teaches you to read flake the way a doctor reads a fever: not as a thing to suppress, but as a signal pointing at the actual problem."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#FEE2E2'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>Flake is data, not noise</text><circle cx='150' cy='130' r='60' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='150' y='115' text-anchor='middle' font-weight='700'>Symptom</text><text x='150' y='135' text-anchor='middle' font-size='11'>red CI run</text><text x='150' y='155' text-anchor='middle' font-size='11'>that goes green</text><text x='150' y='171' text-anchor='middle' font-size='11'>on retry</text><circle cx='450' cy='130' r='60' fill='#FFE4E6' stroke='#F43F5E' stroke-width='2'/><text x='450' y='115' text-anchor='middle' font-weight='700'>Real bug</text><text x='450' y='135' text-anchor='middle' font-size='11'>race condition,</text><text x='450' y='155' text-anchor='middle' font-size='11'>timing assumption,</text><text x='450' y='171' text-anchor='middle' font-size='11'>or unstated dep</text><path d='M 215 130 L 385 130' stroke='#8B5CF6' stroke-width='3' fill='none' marker-end='url(#aa1)'/><defs><marker id='aa1' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M 0 0 L 10 5 L 0 10 z' fill='#8B5CF6'/></marker></defs><text x='300' y='115' text-anchor='middle' fill='#5B21B6' font-style='italic'>decode the signal</text></g></svg>",
+      "alt": "A flake symptom on the left, a real bug on the right, with an arrow labelled 'decode the signal'",
+      "caption": "Every flake is pointing at something. Your job is to follow the finger."
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: flake is information you haven't decoded yet",
+      "md": "Most teams treat a flaky test as a bug *in the test*. Sometimes it is. More often, it's a bug in your **timing assumptions**: you assumed a network call always takes <500ms, the page always finishes hydrating in <200ms, the spinner always appears before the real content. The test passes 95% of the time because those assumptions hold 95% of the time. The other 5% is reality.\n\nThe shift in mindset: **a flaky test has discovered a non-determinism in your system you didn't know existed.** The test isn't lying. It's whistleblowing. Your job is to decode the message and either (a) fix the actual non-determinism or (b) tell the test about the timing reality so it can wait correctly."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/testing-with-playwright/anim/flake-and-debugging-trace.html",
+      "height": 420,
+      "caption": "Walk through a Playwright trace of a flaky checkout test: the timeline reveals the race condition the eye missed.",
+      "fallbackImage": "/courses/testing-with-playwright/anim/flake-and-debugging-trace.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "On-call ko 3am page",
+          "tone": "warn",
+          "md": "Bengaluru fintech mein on-call ko 3am page aaya: deploy auto-rollback. Reason? `await page.waitForTimeout(3000)` waala test fail ho gaya. AWS Mumbai region pe us raat latency 3,200ms thi. 200ms extra ke chakkar mein 47 minute ka outage hua. Post-mortem mein bola \"flaky test ka problem hai.\" Nahi bhai, *teri timing assumption ka* problem hai. Test ne sirf complain kiya. Asli bug toh yeh tha ki tu sleep pe rely kar raha tha.",
+          "attribution": "— from a real RCA, lightly fictionalised"
+        },
+        "en": {
+          "title": "On-call paged at 3am",
+          "tone": "warn",
+          "md": "On-call at a Bengaluru fintech got paged at 3am: deploy auto-rolled back. The cause? An `await page.waitForTimeout(3000)` test failed. AWS Mumbai latency was 3,200ms that night. 200ms over the assumption became a 47-minute outage. The post-mortem said 'flaky test.' No: *your timing assumption* was the problem. The test just whistled. The real bug was relying on sleep."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The trace viewer ritual"
+    },
+    {
+      "type": "markdown",
+      "md": "Playwright ships with a **trace viewer** — a step-by-step replay of every action, every locator query, every network request, every console message, with screenshots before and after each step. It's the single most valuable debugging tool in the ecosystem and most teams discover it three years too late.\n\nTurn it on for *every CI failure* with `--trace=on-first-retry` in `playwright.config.ts`. When a test fails, you get a `trace.zip` artifact you open with `npx playwright show-trace trace.zip`. You see exactly what the test saw, when, and why it gave up.\n\n**The named move:** *the trace viewer ritual.* When a test flakes, do not retry locally. Do not re-run CI. Do not blame infra. Open the trace. Find the step that failed. Read the locator output, the screenshot, the network panel. The cause is almost always visible within 60 seconds.\n\n```ts\n// playwright.config.ts\nimport { defineConfig } from '@playwright/test';\n\nexport default defineConfig({\n  retries: process.env.CI ? 2 : 0,\n  use: {\n    trace: 'on-first-retry',  // capture trace when a test retries\n    screenshot: 'only-on-failure',\n    video: 'retain-on-failure',\n  },\n});\n```"
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280'><rect width='600' height='280' fill='#EFF6FF'/><g font-family='ui-sans-serif, system-ui' font-size='12' fill='#1F2937'><text x='300' y='28' text-anchor='middle' font-weight='700' font-size='15'>The trace viewer ritual</text><rect x='40' y='55' width='140' height='180' rx='8' fill='white' stroke='#0EA5E9' stroke-width='2'/><text x='110' y='80' text-anchor='middle' font-weight='600'>Timeline</text><rect x='55' y='95' width='110' height='10' rx='2' fill='#10B981'/><rect x='55' y='110' width='90' height='10' rx='2' fill='#10B981'/><rect x='55' y='125' width='110' height='10' rx='2' fill='#F43F5E'/><text x='110' y='150' text-anchor='middle' font-size='10' fill='#9F1239'>step 3 failed</text><text x='110' y='168' text-anchor='middle' font-size='10'>at 4.8s</text><rect x='200' y='55' width='190' height='180' rx='8' fill='white' stroke='#10B981' stroke-width='2'/><text x='295' y='80' text-anchor='middle' font-weight='600'>Before / after</text><rect x='215' y='95' width='80' height='60' fill='#FEF3C7' stroke='#F59E0B'/><rect x='305' y='95' width='80' height='60' fill='#FEE2E2' stroke='#F43F5E'/><text x='255' y='130' text-anchor='middle' font-size='9'>spinner</text><text x='345' y='130' text-anchor='middle' font-size='9'>still spinner</text><text x='295' y='180' text-anchor='middle' font-size='10' fill='#374151'>(content never loaded)</text><rect x='410' y='55' width='150' height='180' rx='8' fill='white' stroke='#8B5CF6' stroke-width='2'/><text x='485' y='80' text-anchor='middle' font-weight='600'>Network</text><text x='485' y='105' text-anchor='middle' font-size='10'>POST /api/cart</text><text x='485' y='123' text-anchor='middle' font-size='10' fill='#9F1239'>500 — timeout</text><text x='485' y='150' text-anchor='middle' font-size='10' fill='#5B21B6'>aha</text><text x='485' y='180' text-anchor='middle' font-size='10'>not a flake</text><text x='485' y='198' text-anchor='middle' font-size='10'>a real bug</text></g></svg>",
+      "alt": "Three trace viewer panels: timeline showing failure at step 3, before/after screenshots showing spinner stuck, network panel showing 500 error",
+      "caption": "Sixty seconds with the trace viewer beats six hours of guessing."
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: from a flaky CI failure to the actual root cause",
+      "steps": [
+        { "label": "1. Test went red on PR #4421, retry #2", "body": "Locally it passes. Slack messages start: 'flaky test, can you re-run?'" },
+        { "label": "2. Open the artifact", "body": "Download `trace.zip` from the GitHub Actions artifact list." , "code": "gh run download 12345 -n playwright-trace\nnpx playwright show-trace trace.zip" },
+        { "label": "3. Find the failing step", "body": "Trace viewer shows: `await page.getByRole('button', { name: 'Place order' }).click()` waited 5 seconds, then timed out. Button never became enabled." },
+        { "label": "4. Read the network panel", "body": "`POST /api/quote` returned 500 at 4.8s. The button is gated behind a successful quote." },
+        { "label": "5. The actual bug", "body": "Quote API has a 1-in-200 race when the user changes shipping address mid-quote. *Not* a flaky test. A real production bug the test caught for you." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "A test fails 3% of the time in CI. What's your *first* move?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Add `await page.waitForTimeout(2000)` before the failing assertion", "correct": false, "explain": "This buries the signal under a sleep. The next time the underlying issue takes 2.1 seconds, you're back to flaky. Worse: you've taught the team that sleep is a fix." },
+        { "id": "b", "label": "Open the trace viewer for the failing run and read the timeline + network panel", "correct": true, "explain": "Right. The trace will tell you in 60 seconds whether the test is wrong, the app is wrong, or your timing assumption is wrong." },
+        { "id": "c", "label": "Bump `--retries` from 2 to 5 and ship the PR", "correct": false, "explain": "Retries hide flake; they don't fix it. They also slow CI by 2.5x for the failing tests. Do not pass go." },
+        { "id": "d", "label": "Mark the test as `test.skip()` with a `// TODO: fix later` comment", "correct": false, "explain": "The test had information for you. Now it has been gagged. The bug it was catching will eventually ship to prod." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "Trace viewer ka chakkar",
+          "tone": "info",
+          "md": "Pune SDET team mein ek dev tha jo har flaky test ko 'just retry' bolta tha. Lead ne ek hafte ke liye `--retries` zero kar diya. Pehle din 38 tests fail. Trace viewer kholne pe pata chala 14 mein actual race condition tha, 9 mein bad locator, 8 mein backend bug. Sirf 7 'genuine' flake the. Lead ne pizza party ki — bug-fixers ke liye, retry-walon ke liye nahi.",
+          "attribution": "— from a Pune sprint retro, names omitted to protect the retry-happy"
+        },
+        "en": {
+          "title": "The trace-viewer reckoning",
+          "tone": "info",
+          "md": "A Pune SDET team had a dev who answered every flaky test with 'just retry.' The lead set `--retries=0` for a week. Day one: 38 tests failed. Opening traces revealed 14 had real race conditions, 9 had bad locators, 8 were genuine backend bugs. Only 7 were 'true' flake. The lead threw a pizza party for the bug-fixers. The retry-happy got a tutorial."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The deterministic-clock fix"
+    },
+    {
+      "type": "markdown",
+      "md": "A huge category of flake comes from **time**: tests that depend on `Date.now()`, animations that take a different number of milliseconds on different machines, debouncing that fires after exactly 300ms when CI is busy. The fix is not to add sleeps. The fix is to **take time itself out of the equation.**\n\nPlaywright's `page.clock` API installs a fake clock that you control:\n\n```ts\nimport { test, expect } from '@playwright/test';\n\ntest('debounced search fires after the user stops typing', async ({ page }) => {\n  await page.clock.install();\n  await page.goto('/search');\n\n  await page.getByLabel('Search').fill('p');\n  await page.getByLabel('Search').fill('pl');\n  await page.getByLabel('Search').fill('playwright');\n\n  // Advance virtual time past the 300ms debounce.\n  await page.clock.runFor(310);\n\n  await expect(page.getByRole('list', { name: 'Results' })).toBeVisible();\n});\n```\n\nThe test runs in milliseconds, not seconds. CI load doesn't change the result. The clock is yours. Real time is not invited.\n\n**The named move:** *the deterministic-clock fix.* For any test that depends on time, install the clock. For any test using `waitForTimeout` to wait for a debounce, animation, or scheduled job — convert it to `clock.runFor()`."
+    },
+    {
+      "type": "svgFigure",
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#ECFDF5'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>Real clock vs page.clock</text><rect x='40' y='60' width='240' height='160' rx='10' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='160' y='90' text-anchor='middle' font-weight='700'>Real clock</text><text x='160' y='115' text-anchor='middle' font-size='11'>waitForTimeout(300)</text><text x='160' y='135' text-anchor='middle' font-size='11'>= 300ms wall time</text><text x='160' y='160' text-anchor='middle' font-size='11'>+ 250ms CI jitter</text><text x='160' y='185' text-anchor='middle' font-size='11' fill='#9F1239'>= flaky 4% of runs</text><rect x='320' y='60' width='240' height='160' rx='10' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='440' y='90' text-anchor='middle' font-weight='700'>page.clock.install()</text><text x='440' y='115' text-anchor='middle' font-size='11'>clock.runFor(310)</text><text x='440' y='135' text-anchor='middle' font-size='11'>= 0ms wall time</text><text x='440' y='160' text-anchor='middle' font-size='11'>+ no jitter</text><text x='440' y='185' text-anchor='middle' font-size='11' fill='#065F46'>= deterministic, fast</text></g></svg>",
+      "alt": "Comparison: real clock with sleeps and CI jitter vs page.clock with deterministic time control",
+      "caption": "If the clock is in your control, time can never make your test flaky."
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Test-Sensei Tarun",
+        "role": "Principal SDET, today wearing a hoodie that reads '`waitForTimeout` is a code smell'"
+      },
+      "intro": [
+        "You're on the rotation triaging 6 flaky test reports from the team's #qa-help Slack channel.",
+        "For each, classify the *root cause*: is this a clock/timing issue, a network issue, a bad locator, or a real product bug?"
+      ],
+      "buckets": [
+        { "id": "clock", "label": "Clock / timing", "tone": "neutral" },
+        { "id": "network", "label": "Network / mocking", "tone": "neutral" },
+        { "id": "locator", "label": "Bad locator", "tone": "neutral" },
+        { "id": "bug", "label": "Real product bug", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "Test fails ~3% of runs on the search page. Trace shows the search results appear at 290ms one time, 310ms the next. Test asserts visible at 300ms.", "correctBucketId": "clock", "explain": "Classic debounce race. Install `page.clock` and advance time deterministically." },
+        { "id": "s2", "situation": "Test for the dashboard fails when the staging API returns 502 Bad Gateway during the morning deploy window.", "correctBucketId": "network", "explain": "Mock the API with `page.route()` for the test. Don't depend on a real backend's mood." },
+        { "id": "s3", "situation": "Test passes alone, fails when run in parallel with other tests. Trace shows the locator `getByRole('button', { name: 'Save' })` matched 3 buttons.", "correctBucketId": "locator", "explain": "Two open dialogs in the test environment have a 'Save' button. Scope the locator to the dialog: `page.getByRole('dialog').getByRole('button', { name: 'Save' })`." },
+        { "id": "s4", "situation": "Test fails when the user has more than 50 invoices. The pagination logic skips the last page.", "correctBucketId": "bug", "explain": "Real off-by-one. The test caught a product bug. Fix the code, not the test." },
+        { "id": "s5", "situation": "Test for the Razorpay webhook flow fails because the test database hasn't seeded the new schema field.", "correctBucketId": "network", "explain": "More precisely: a test-fixture / setup issue. Mock the webhook payload or fix the seed. Don't add a sleep hoping it'll appear." },
+        { "id": "s6", "situation": "Test for the announcement banner fails on the second run because the modal-dismissed cookie persists across tests.", "correctBucketId": "locator", "explain": "Loosely: state leakage. Use a fresh browser context per test (Playwright does this by default; somebody disabled it). Locator was fine, isolation wasn't." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the retry crutch",
+      "md": "Setting `retries: 3` in `playwright.config.ts` and calling it a fix is the developer equivalent of pressing snooze. Each retry hides a real signal: the test failed, you didn't read the trace, you re-ran until it passed, and you shipped.\n\nRetries have one legitimate use: **smoothing over genuinely random infrastructure noise** (a flaky CI runner, a transient DNS hiccup) so your CI dashboard isn't a wall of red. They are *not* a substitute for the trace-viewer ritual or the deterministic-clock fix. A team that trends `retry rate` per week and does not let it grow has a healthy suite. A team that sets `retries: 5` and looks the other way is two months from disaster."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "A test starts flaking this morning. Order your debugging steps:",
+      "items": [
+        { "id": "i1", "label": "Reproduce locally with `--repeat-each=20` to confirm the flake exists" },
+        { "id": "i2", "label": "Open the trace viewer for the most recent failing CI run" },
+        { "id": "i3", "label": "Look at the failing step's screenshot, locator, and network panel" },
+        { "id": "i4", "label": "Form a single hypothesis (race condition? locator? real bug?)" },
+        { "id": "i5", "label": "Apply the targeted fix (clock, mock, scoped locator, or product fix)" },
+        { "id": "i6", "label": "Run `--repeat-each=50` to verify the fix and update the failure-budget log" }
+      ],
+      "hint": "Reproduce → trace → hypothesise → fix → verify. If you skip step 2, you'll spend 4 hours guessing."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "This test is flaky. Rewrite it using `page.clock` and `page.route()` so it's deterministic. The test verifies that a debounced search shows results from the API after the user stops typing for 300ms.",
+      "lang": "typescript",
+      "starter": "import { test, expect } from '@playwright/test';\n\ntest('search shows results after debounce', async ({ page }) => {\n  await page.goto('/search');\n  await page.getByLabel('Search').fill('playwright');\n  await page.waitForTimeout(500);  // hopefully > 300ms debounce\n  await expect(page.getByText('15 results found')).toBeVisible();\n});",
+      "expected": "import { test, expect } from '@playwright/test';\n\ntest('search shows results after debounce', async ({ page }) => {\n  // Mock the search API so we control the response and the count.\n  await page.route('**/api/search?q=playwright', (route) =>\n    route.fulfill({\n      status: 200,\n      contentType: 'application/json',\n      body: JSON.stringify({ count: 15, items: [] }),\n    }),\n  );\n\n  // Take real time out of the equation.\n  await page.clock.install();\n\n  await page.goto('/search');\n  await page.getByLabel('Search').fill('playwright');\n\n  // Advance virtual time past the 300ms debounce.\n  await page.clock.runFor(310);\n\n  // Web-first assertion auto-retries until the count appears.\n  await expect(page.getByText('15 results found')).toBeVisible();\n});"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are *legitimate* reasons to use `--retries` in CI? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Smoothing over a known-flaky CI runner so dashboards aren't all red while you fix it", "correct": true, "explain": "Acceptable as a temporary measure with a tracked deadline. Not a permanent solution." },
+        { "id": "b", "label": "Hiding a debounce race so you can ship the PR before the demo", "correct": false, "explain": "This is exactly the trap. Use `page.clock` and ship a real fix. Demos don't excuse buried signals." },
+        { "id": "c", "label": "As a final guard against transient network blips between CI and a third-party service", "correct": true, "explain": "Acceptable when the third party is genuinely flaky and outside your control. Better: mock the third party with `page.route()` if possible." },
+        { "id": "d", "label": "Because the team agreed flakes are 'normal' and 3 retries usually works", "correct": false, "explain": "Cultural version of the trap. The day a real bug starts flaking 51% of the time, your retry strategy ships it to prod." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "title": "Tarun ka punishment system",
+          "tone": "tip",
+          "md": "Tarun ne team mein ek rule banaya: jo bhi `waitForTimeout` PR mein add karega, woh chai banayega next week ke liye, har subah. Pehle hafte 4 chai ki wajah huyi. Doosre hafte 1. Teesre hafte se chai voluntary ho gayi. Maintenance discipline yahin se shuru hoti hai.",
+          "attribution": "— Test-Sensei Tarun's leadership style"
+        },
+        "en": {
+          "title": "Tarun's punishment system",
+          "tone": "tip",
+          "md": "Tarun introduced one rule: anyone who adds a `waitForTimeout` to a PR makes morning chai for the team for a week. Week one: 4 chai-makers. Week two: 1. By week three, chai-making was voluntary. That's where maintenance discipline starts."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Flake is information you haven't decoded yet. Treat it as a signal pointing at a non-determinism, not noise to suppress.",
+        "The trace viewer ritual: when a test flakes, open the trace before doing anything else. Set `trace: 'on-first-retry'` in your config.",
+        "The deterministic-clock fix: for tests that depend on time, install `page.clock` and advance virtual time. Real clocks make flaky tests.",
+        "Mock the network with `page.route()` instead of relying on real third-party services for tests that don't need them.",
+        "Retries are a temporary band-aid for genuine infra noise, not a substitute for fixing the actual cause."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick the flakiest test in your suite (the one that everyone re-runs without thinking). Open its trace from the last failure. What is the trace actually showing you? Write a one-sentence hypothesis for the root cause before reading any code."
+    }
+  ]
+}

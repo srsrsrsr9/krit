@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: n=47, p=0.04, -2 Percent",
+    "source": "Anonymous growth analyst at Chai Cart, a Gurugram D2C beverage brand",
+    "date": "September 2024",
+    "story": "On September 9, 2024, Chai Cart's marketing team kicked off an A/B test on the homepage hero. Variant A: 'Premium Assam, Brewed Daily.' Variant B: 'Tea Like Your Naani Made.' The test ran for **two days**. n=47 visitors saw A, n=51 saw B. B converted 6 of 51 (11.8 percent), A converted 2 of 47 (4.3 percent). The growth lead ran a chi-square in a Google Sheet, got **p = 0.04**, and Slack-shouted: *\"Naani wins! Ship it!\"*\n\nOn September 12, the team rolled Variant B to 100 percent of traffic — **47,237 visitors** over the next four weeks. Conversion landed at **9.1 percent**. Variant A's historical baseline, before the test, had been **9.3 percent**. The 'winning' headline was costing them about **₹4 lakh a week** in lost revenue against the prior baseline.\n\nThe post-mortem on October 17 had three slides. Slide one: the original p-value. Slide two: a power-analysis calculator showing the test would have needed n ≈ 4,700 *per arm* to detect a true 2-point lift with 80 percent power. Slide three, in 60-point font: **\"We declared a winner from noise.\"**\n\nThe growth lead now keeps a sticky note above her monitor: *\"p < 0.05 ≠ true.\"* The headline was reverted on October 19.",
+    "takeaway": "A small sample with a low p-value is a coin flip wearing a confidence interval. Calculate the n you need before you start, not after you peek."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Two-Day Winner",
+    "setup": "It's **Week 8**. Aditi has been running her first A/B test — Vyapaar Money's onboarding screen, two variants of a KYC explainer. The PM, Rohan, slides into her DMs at **9:42am on Day 2**: *\"Hey Aditi! I peeked at the dashboard. Variant B is up 18 percent, p=0.04. Can we just ship it? Marketing wants to launch the campaign Friday.\"*\n\nAditi has 12 hours of data, 312 users in each arm, and a PM with a campaign deadline. She drafts a Slack reply that starts with *\"Sure, I think we can—\"*. She pauses. She pings you.",
+    "coach": { "name": "Staff-DS Sandeep", "role": "Staff data scientist, has watched seven 'winning' A/B tests revert in production" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Rohan wants to declare a winner at 312 vs 312 users, p=0.04, +18 percent lift. **What's Aditi's first move?**",
+        "options": [
+          { "id": "a", "label": "\"Ship Variant B. p<0.05 is the bar. Don't be the analyst who blocks growth.\"", "correct": false, "explain": "This is the Chai Cart story word for word. p=0.04 at n=312 with an 18-point claimed lift is almost certainly noise. Aditi will declare a winner that costs the company ₹4 lakh a week. Sandeep is already drafting the post-mortem.", "points": 0 },
+          { "id": "b", "label": "\"Before we declare anything, do a power analysis. What's the minimum detectable effect we actually have power for at n=312?\"", "correct": true, "explain": "**Yes.** Aditi runs the calc: at n=312/arm, baseline 8 percent conversion, alpha=0.05, power=0.8 — minimum detectable effect is roughly **+3.4 percentage points**. The observed +1.4 point lift (8 to 9.4 percent) is well below detectable. The 18 percent relative figure is misleading framing of a small absolute move.", "points": 3 },
+          { "id": "c", "label": "\"Just keep the test running for one more week and re-check.\"", "correct": false, "explain": "Right instinct, wrong rigor. *How long* is the question power analysis answers. 'One more week' is a guess; you need the actual n.", "points": 1 },
+          { "id": "d", "label": "\"Check what the planned sample size was at the start of the test.\"", "correct": true, "explain": "**Critical.** Sandeep wrote a test-plan template for exactly this. Aditi pulls it up: planned n = 4,200 per arm, planned duration = 14 days. Rohan is asking her to call a winner at 7 percent of the planned sample. The answer writes itself.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Aditi explains to Rohan: *\"We don't have power for this lift size yet.\"* Rohan replies: *\"But the p-value is 0.04! That's significant!\"* **How does Aditi respond?**",
+        "options": [
+          { "id": "a", "label": "\"You're right, p<0.05 is the bar. I was overthinking. Shipping.\"", "correct": false, "explain": "Aditi just got argued out of doing her job. p<0.05 with low power means the *false positive rate conditional on detecting* something is enormous — the 'winning' lift is more likely to be illusion than insight. Sandeep would like a word.", "points": 0 },
+          { "id": "b", "label": "\"p<0.05 controls Type I error at 5 percent IF the test is properly powered. With low power, most p<0.05 results are flukes — and the effect size you see will be inflated. We'd ship a phantom and watch it disappear in prod.\"", "correct": true, "explain": "**This.** The technical name is 'winner's curse' — under-powered tests systematically inflate effect sizes for the 'winners' you happen to see. Rohan's 18 percent lift, if real, is probably more like 2 to 3 percent. Probably zero.", "points": 3 },
+          { "id": "c", "label": "\"Let's do a Bayesian re-analysis with a skeptical prior.\"", "correct": false, "explain": "Technically reasonable but a deflection. The PM doesn't need a different statistical framework; he needs to understand why the current evidence is weak. Don't switch tools to avoid a conversation.", "points": 1 },
+          { "id": "d", "label": "\"Let's set a stop rule: continue to planned n=4,200, OR until the lower bound of the 95 percent CI is above zero. Whichever comes first. Document it now.\"", "correct": true, "explain": "**Operational and rigorous.** Pre-registers the stopping criterion so neither of you is tempted to peek-and-stop. Sandeep nods approvingly from across the office.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Test runs to planned n=4,200 per arm. Final result: Variant B converts at 8.3 percent vs A at 8.1 percent. Lift = +0.2 points. p = 0.41. **What does Aditi tell Rohan?**",
+        "options": [
+          { "id": "a", "label": "\"Variant B won by 0.2 points but it's not significant. Marketing should still ship it because the direction is positive.\"", "correct": false, "explain": "'Not significant but the direction is positive' is how every weak result gets shipped anyway. Either you have evidence or you don't. Aditi just turned a null result into a soft-sell. Sandeep is unhappy.", "points": 0 },
+          { "id": "b", "label": "\"At full power, the lift is 0.2 points and not statistically distinguishable from zero. We can't conclude B is better. The 18 percent we saw at Day 2 was noise — exactly as the power analysis warned.\"", "correct": true, "explain": "**Clean.** Calls the null result honestly. References the original framing so the team learns from it. This is the analyst Rohan will want on his next test.", "points": 3 },
+          { "id": "c", "label": "\"Result is null. Recommend we test a more aggressive variant — bigger headline, more contrast — and re-run.\"", "correct": true, "explain": "**Constructive.** Doesn't just deliver a null; suggests the next experiment. The minimum detectable effect tells you how big a difference your test was actually built to find — design the next variant to clear that bar.", "points": 3 },
+          { "id": "d", "label": "\"Result is technically null but if we slice by city tier, Tier-2 users show a +6 percent lift in B with p=0.03.\"", "correct": false, "explain": "This is the Paisa Vault mistake from Lesson 1, on a Friday. Slicing post-hoc until something hits p<0.05 is exactly the multiple-comparisons trap. Pre-register your subgroups or don't claim them.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You walked Aditi from 'PM wants to ship at Day 2' to a properly powered test with a clean null result and a constructive next step. She shipped nothing she couldn't defend, learned the difference between p-value and power, and Rohan now schedules tests through her. Sandeep buys you both a kulhad chai.",
+      "good": "Most of the instincts are right. The one to drill is the **winner's curse** intuition — that under-powered tests inflate the effect sizes you happen to see, so 'p<0.05 with low power' is worse than no evidence. Re-read the section on power analysis.",
+      "learn": "Aditi shipped a phantom. Re-read the lesson — especially the sections on **power analysis**, **minimum detectable effect**, and **why early peeking is poison**. Chai Cart reverted in 38 days. You may not be that lucky."
+    }
+  }
+}

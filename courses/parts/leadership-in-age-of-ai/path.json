@@ -1,0 +1,320 @@
+{
+  "path": {
+    "slug": "leadership-in-age-of-ai",
+    "title": "Leadership in the Age of AI",
+    "subtitle": "Lead a team where AI is the new junior — without losing the humans",
+    "summary": "Most leaders are getting AI advice from people who have never managed a team through real change. This path is for the ones who actually have to make it work: rewire how knowledge work flows, redesign teams where AI is a member, hire and develop talent for judgment over execution, and protect trust while everyone around you is shouting 'AI-first'. By the end you can walk into your CEO's office with a 6-month plan that changes one team's daily rituals, not just the org chart.",
+    "kind": "PATH",
+    "level": "PROFICIENT",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "leadership-ai-mental-model",
+      "name": "Leadership AI Mental Model",
+      "category": "management",
+      "description": "Hold the right picture of what AI changes about knowledge work, at the task level not the job level",
+      "decayDays": null
+    },
+    {
+      "slug": "leadership-team-design",
+      "name": "Team Design with AI",
+      "category": "management",
+      "description": "Design human-AI handoffs so a team gets faster without losing accountability",
+      "decayDays": null
+    },
+    {
+      "slug": "leadership-talent",
+      "name": "Talent and Hiring",
+      "category": "management",
+      "description": "Hire for judgment-shaped roles in an era where execution is cheap",
+      "decayDays": null
+    },
+    {
+      "slug": "leadership-learning",
+      "name": "Continuous Learning Design",
+      "category": "management",
+      "description": "Run AI-era L&D as weekly sprints and public mistakes, not annual workshops",
+      "decayDays": null
+    },
+    {
+      "slug": "leadership-ethics",
+      "name": "Ethics and Trust at Work",
+      "category": "management",
+      "description": "Build the boring repeated behaviors that create trust when AI is in the loop",
+      "decayDays": null
+    },
+    {
+      "slug": "leadership-judgment",
+      "name": "Leadership Judgment",
+      "category": "management",
+      "description": "Decide where to use AI, where to hold the line, and when transformation theater is hurting you",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "leadership-team-design", "requires": "leadership-ai-mental-model" },
+    { "skill": "leadership-talent", "requires": "leadership-team-design" },
+    { "skill": "leadership-learning", "requires": "leadership-talent" },
+    { "skill": "leadership-ethics", "requires": "leadership-learning" },
+    { "skill": "leadership-judgment", "requires": "leadership-ethics" }
+  ],
+  "assessment": {
+    "title": "Leadership in the Age of AI Assessment",
+    "description": "Tests whether you can think at the task level, design human-AI handoffs that don't drift, hire for judgment, run L&D as a weekly habit, and tell the difference between a values poster and an actual behavior change.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": [
+      "leadership-ai-mental-model",
+      "leadership-team-design",
+      "leadership-talent",
+      "leadership-learning",
+      "leadership-ethics",
+      "leadership-judgment"
+    ],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CEO declares 'we are an AI-first company now'. Six months later, every team has a Claude license but nobody has changed how they work. What is the first thing you should diagnose?",
+        "points": 1,
+        "skillSlug": "leadership-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "Nobody redesigned a single team's daily ritual; tools were given but tasks were not relabeled", "correct": true, "explanation": "Correct. AI changes tasks, not jobs. If the standup, the review, and the handoff still look the same as last year, no transformation has happened. Licenses are the cheap part." },
+          { "id": "b", "label": "The CEO did not pick a strong enough model", "correct": false, "explanation": "Tempting but wrong. Even the best model produces the same nothing if no team's process changed." },
+          { "id": "c", "label": "People are resistant to change and need motivation", "correct": false, "explanation": "Resistance is downstream of unclear asks. Nobody knows what they are supposed to do differently on Tuesday. That is a leadership failure, not a motivation failure." },
+          { "id": "d", "label": "The training budget was too small", "correct": false, "explanation": "Budget is the second-order question. The first-order question is whether anyone changed a single workflow." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Roughly what fraction of knowledge-work tasks are 80%-or-more automatable, versus what fraction of jobs are 0% automatable?",
+        "points": 1,
+        "skillSlug": "leadership-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "About 47% of tasks; about 80% of jobs are 0% automatable", "correct": true, "explanation": "Correct. The task layer moves fast; the job layer barely budges in the same window. This is why 'automate everyone' is the wrong frame." },
+          { "id": "b", "label": "About 80% of tasks; about 80% of jobs", "correct": false, "explanation": "If both numbers were 80%, half of knowledge work would already be automated. It isn't, because tasks compose into jobs in ways that resist full automation." },
+          { "id": "c", "label": "About 10% of tasks; about 0% of jobs", "correct": false, "explanation": "Too low on tasks. The task disruption is real and substantial; the job disruption lags by years." },
+          { "id": "d", "label": "About 100% of both, eventually", "correct": false, "explanation": "Eventually is not a planning horizon. Lead for the next 18 months, not the long run." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the TWO statements that match the 70-20-10 split for AI-augmented knowledge work in 2026:",
+        "points": 2,
+        "skillSlug": "leadership-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "About 70% of work hours are still purely human (judgment, relationship, ambiguous calls)", "correct": true, "explanation": "Correct. The boring stuff at the top of the funnel gets compressed; the hard stuff at the bottom does not." },
+          { "id": "b", "label": "About 20% becomes human-with-AI co-work where the artifact is jointly produced", "correct": true, "explanation": "Correct. This is the largest design challenge: the handoff, the review, the trust calibration." },
+          { "id": "c", "label": "About 70% becomes fully automated end-to-end", "correct": false, "explanation": "End-to-end automation is rare in knowledge work because the last mile needs context AI does not have." },
+          { "id": "d", "label": "About 50% disappears entirely", "correct": false, "explanation": "Work shifts; work does not vanish. The mistake is conflating 'task automated' with 'role eliminated'." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A team adds an AI step to their content pipeline. Output volume triples. Three weeks later, three errors slip into a customer-facing email. The team blames Claude. What is the right diagnosis?",
+        "points": 1,
+        "skillSlug": "leadership-team-design",
+        "choices": [
+          { "id": "a", "label": "The trust calibration loop never ran; humans stopped reviewing line by line because the first 200 outputs looked good", "correct": true, "explanation": "Correct. Trust calibration is the explicit, periodic re-check of where AI fails. Skip it and you discover failure modes through customers, not internal review." },
+          { "id": "b", "label": "Claude got worse over those three weeks", "correct": false, "explanation": "Models do not silently degrade between releases. The review discipline degraded." },
+          { "id": "c", "label": "The team needed a more expensive model", "correct": false, "explanation": "Spending more on the same broken loop produces the same errors at higher cost." },
+          { "id": "d", "label": "AI is unsuitable for content work", "correct": false, "explanation": "Tempting overcorrection. The pipeline did triple output; the failure was in the design of the human checkpoint, not the AI step." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "You're designing a human-AI handoff for legal-contract review. Which TWO are essential for the artifact-not-output rule?",
+        "points": 2,
+        "skillSlug": "leadership-team-design",
+        "choices": [
+          { "id": "a", "label": "AI produces a flagged-clause list with citations; the lawyer signs the final memo", "correct": true, "explanation": "Correct. The lawyer signs an artifact, not Claude's output. AI is upstream of judgment, not the producer of it." },
+          { "id": "b", "label": "Every flag has a 'why' the lawyer can verify in under 90 seconds", "correct": true, "explanation": "Correct. The artifact rule only works if review is faster than re-doing the work; otherwise the lawyer ignores the AI." },
+          { "id": "c", "label": "Claude's draft is sent directly to the client with a footer disclaimer", "correct": false, "explanation": "This is the no-review-without-signature failure. The disclaimer protects nobody." },
+          { "id": "d", "label": "The team rotates which lawyer is 'AI-supervisor' each week", "correct": false, "explanation": "Rotation distributes the failure surface. One owner per artifact, always." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You're hiring a senior product manager. The new T-shape says the depth bar is...",
+        "points": 1,
+        "skillSlug": "leadership-talent",
+        "choices": [
+          { "id": "a", "label": "Judgment in one specific domain — they can tell when the AI's plausible answer is the wrong one", "correct": true, "explanation": "Correct. Execution is cheap; spotting a plausible-but-wrong AI plan is the new senior-PM differentiator." },
+          { "id": "b", "label": "Number of frameworks memorised", "correct": false, "explanation": "Frameworks are now the cheapest part of the job. AI knows more frameworks than your candidate." },
+          { "id": "c", "label": "Speed of typing prompts", "correct": false, "explanation": "Prompt speed is a 2-week skill. You are hiring for 4-year judgment, not 2-week tooling." },
+          { "id": "d", "label": "Years of experience at FAANG-equivalent companies", "correct": false, "explanation": "Branded resumes correlate with confidence, not with judgment about AI failure modes." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A candidate's resume says 'AI-fluent' and lists 14 tools. What should this tell you?",
+        "points": 1,
+        "skillSlug": "leadership-talent",
+        "choices": [
+          { "id": "a", "label": "Almost nothing about whether they can do the actual job; tool fluency is a vanity metric without an outcome attached", "correct": true, "explanation": "Correct. 'Hire for AI fluency, not the actual job' is the trap. The job is product strategy, or hiring, or growth — AI is a means. Filter on the job's outcomes, then ask 'where did AI help and where did it fail you'." },
+          { "id": "b", "label": "They are clearly the strongest candidate because they are AI-native", "correct": false, "explanation": "Strong AI-resume signal is also strong 'I copy buzzwords' signal. Test the underlying skill, not the keyword list." },
+          { "id": "c", "label": "They are too junior because they are tooling-focused", "correct": false, "explanation": "Premature judgment. The list tells you nothing about depth. Run the interview." },
+          { "id": "d", "label": "They will demand a higher salary", "correct": false, "explanation": "Maybe; irrelevant to whether they can do the job. Decision first, salary second." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick TWO behavioral interview questions that probe judgment for an AI-era senior role:",
+        "points": 2,
+        "skillSlug": "leadership-talent",
+        "choices": [
+          { "id": "a", "label": "'Tell me about a time AI gave you a confident answer that turned out to be wrong. How did you catch it?'", "correct": true, "explanation": "Correct. This separates the people who use AI from the people who supervise AI. Anyone senior should have this story." },
+          { "id": "b", "label": "'Walk me through a decision where you chose not to use AI even though you could have'", "correct": true, "explanation": "Correct. Restraint is the senior signal. If they have never said no to AI, they have not led with it; they have just adopted it." },
+          { "id": "c", "label": "'How many tokens did you process last month?'", "correct": false, "explanation": "Throughput vanity. Tells you nothing about whether the work was good." },
+          { "id": "d", "label": "'Which AI model do you think is best?'", "correct": false, "explanation": "Brand loyalty is not skill. Anyone can have a model preference; few can defend a workflow." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your CEO approves a one-week annual AI training week for all 800 staff. What is the most important thing you should push back on?",
+        "points": 1,
+        "skillSlug": "leadership-learning",
+        "choices": [
+          { "id": "a", "label": "Annual L&D produces zero behavior change; weekly demos and learning sprints with one new habit per fortnight is the only format that survives", "correct": true, "explanation": "Correct. Knowledge half-life in AI tooling is roughly six weeks. Annual training is compliance theater. The format must match the rate of change." },
+          { "id": "b", "label": "The week should be two weeks", "correct": false, "explanation": "Doubling the duration of the wrong format does not fix the format. People forget weekend-2 the same way they forget weekend-1." },
+          { "id": "c", "label": "The trainer should be external", "correct": false, "explanation": "Internal vs external is a second-order choice. The frequency is the first-order failure." },
+          { "id": "d", "label": "It should be made mandatory with attendance tracking", "correct": false, "explanation": "Compliance ≠ learning. Mandatory attendance produces certificates, not capability." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which TWO are core to the public-mistake protocol that makes AI L&D actually compound?",
+        "points": 2,
+        "skillSlug": "leadership-learning",
+        "choices": [
+          { "id": "a", "label": "Senior leaders share their own AI mistakes first, with specific cost numbers", "correct": true, "explanation": "Correct. Nothing else creates psychological safety to surface AI failures. If the VP didn't admit one, the AVP won't, and the manager won't, and the cost stays buried." },
+          { "id": "b", "label": "A standing weekly slot where one team demos a failure plus what they changed", "correct": true, "explanation": "Correct. Weekly cadence and a fixed slot make 'I learned from a mistake' a normal report, not a confession." },
+          { "id": "c", "label": "Performance-management consequences for any AI mistake", "correct": false, "explanation": "Punishing surfaced mistakes is how you get hidden ones. Fastest path to opaque failures." },
+          { "id": "d", "label": "Annual external training certificates for everyone", "correct": false, "explanation": "Certificates document attendance, not capability. They do not make mistakes safer to surface." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your company's 'AI Ethics Committee' has produced a 12-page values document. Six months later, customers are complaining that an automated decision was unfair. The document didn't help. Why?",
+        "points": 1,
+        "skillSlug": "leadership-ethics",
+        "choices": [
+          { "id": "a", "label": "Behavior beats values posters; nobody changed how a single decision was made or escalated", "correct": true, "explanation": "Correct. Values without behavior changes are PR. The test of an ethics policy is whether one specific Tuesday-morning decision happens differently than it would have without the policy." },
+          { "id": "b", "label": "The document was too short", "correct": false, "explanation": "Length is not the bug. The 12 pages told nobody what to do at 11 am on a Tuesday when the model output looked off." },
+          { "id": "c", "label": "Customers misunderstand AI", "correct": false, "explanation": "Blaming the customer is the polite version of blaming the user. The customer noticed; you did not." },
+          { "id": "d", "label": "The committee did not have the right people", "correct": false, "explanation": "Adjusting committee composition does not change a single behavior on the ground. Behaviors live in workflows, not committees." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick TWO things that should be in every transparent failure post-mortem:",
+        "points": 2,
+        "skillSlug": "leadership-ethics",
+        "choices": [
+          { "id": "a", "label": "The exact decision and what AI's role in it was", "correct": true, "explanation": "Correct. Vague post-mortems ('we'll do better') skip the AI role entirely; that's the part most likely to repeat." },
+          { "id": "b", "label": "One concrete behavior change with an owner and a date", "correct": true, "explanation": "Correct. Without a behavior change, the post-mortem is decorative. Without an owner and date, the change is decorative." },
+          { "id": "c", "label": "An apology essay from the CEO", "correct": false, "explanation": "Apologies that are not paired with behavior changes accelerate cynicism." },
+          { "id": "d", "label": "A list of which model was used", "correct": false, "explanation": "Useful detail but secondary. The model is the actor; the workflow is the system. Fix the system." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "The 'explicit ladder' for AI-aided decisions defines four levels. Which is the right ordering, lowest to highest oversight?",
+        "points": 1,
+        "skillSlug": "leadership-ethics",
+        "choices": [
+          { "id": "a", "label": "AI-only → AI-with-spotcheck → AI-with-human-signoff → human-only", "correct": true, "explanation": "Correct. Every AI-touched workflow lives at one of these four rungs. Naming the rung is the entire point; ambiguity is where errors hide." },
+          { "id": "b", "label": "Human-only → AI-only → spotcheck → signoff", "correct": false, "explanation": "Out of order. The ladder is about how much human oversight is in the loop, not when AI was introduced." },
+          { "id": "c", "label": "AI-only → human-only → AI-with-signoff → spotcheck", "correct": false, "explanation": "Random ordering. The point of the ladder is the gradient, not a list." },
+          { "id": "d", "label": "There is no ladder; teams should just use judgment", "correct": false, "explanation": "Refusing to name the rungs is how you end up with five teams operating at four different rungs and nobody knowing." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You're about to launch an AI-augmented hiring tool. Pick the strongest first move:",
+        "points": 1,
+        "skillSlug": "leadership-judgment",
+        "choices": [
+          { "id": "a", "label": "Pilot on one role family for 60 days, sample 100% of decisions for human review, measure adverse-impact ratio against the prior baseline", "correct": true, "explanation": "Correct. Hiring is high-stakes, regulated, and reputational. A bounded pilot with full sampling is the only responsible first move." },
+          { "id": "b", "label": "Roll it out to all 14 role families to learn faster", "correct": false, "explanation": "Faster is not better when the failure mode is bias propagation. Bounded scope first." },
+          { "id": "c", "label": "Run it shadow-mode forever and never decide", "correct": false, "explanation": "The other failure mode: pilots that never end. Define the decision date in advance." },
+          { "id": "d", "label": "Skip the pilot because the vendor demoed it well", "correct": false, "explanation": "Vendor demos are sales; pilots are evidence. Never substitute one for the other on something this consequential." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Pick the TWO strongest signals that an 'AI transformation' is theater rather than real:",
+        "points": 2,
+        "skillSlug": "leadership-judgment",
+        "choices": [
+          { "id": "a", "label": "Six months in, no team's daily standup or weekly review has changed", "correct": true, "explanation": "Correct. Real transformation lives in rituals; if the rituals are unchanged, nothing has changed regardless of slide decks." },
+          { "id": "b", "label": "Leadership cannot name a single workflow that runs differently than it did 12 months ago", "correct": true, "explanation": "Correct. If the leader cannot point to one specific changed workflow, there is no transformation to point at." },
+          { "id": "c", "label": "AI license utilisation is high", "correct": false, "explanation": "License utilisation is a proxy that's easy to game. People can use AI all day and produce the same output the same way." },
+          { "id": "d", "label": "External press coverage is positive", "correct": false, "explanation": "Press is a marketing outcome. It tells you nothing about whether work changed." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your engineering manager says 'AI does 60% of the coding now, so we can cut headcount by 60%'. The strongest pushback is:",
+        "points": 1,
+        "skillSlug": "leadership-judgment",
+        "choices": [
+          { "id": "a", "label": "60% of coding-tasks ≠ 60% of an engineer's job; specification, review, debugging cascades, and stakeholder calibration are the harder 40% and they grew, not shrank", "correct": true, "explanation": "Correct. Confusing task automation with role automation is the most expensive mistake an engineering leader can make in 2026. The remaining 40% is what produces working software, and AI made it heavier, not lighter." },
+          { "id": "b", "label": "AI cannot really do 60% of coding", "correct": false, "explanation": "Denying the task-level shift is dishonest and unhelpful. The argument is about how task share converts to role share." },
+          { "id": "c", "label": "We need to cut 80% to stay competitive", "correct": false, "explanation": "Doubling down on the same logic error makes it twice as expensive to recover from." },
+          { "id": "d", "label": "Hire more juniors because AI levels the field", "correct": false, "explanation": "Mid-level squeeze is real, but this isn't the rebuttal to a headcount-cut argument; it is a separate question about pyramid shape." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is the most useful single number to track for AI-leadership maturity in the first year?",
+        "points": 1,
+        "skillSlug": "leadership-judgment",
+        "choices": [
+          { "id": "a", "label": "Number of team rituals (standup, review, handoff) that have a named, dated change tied to AI", "correct": true, "explanation": "Correct. Counts a behavior, not a tool, not a perception. A leader who can name 12 changed rituals has done real work; a leader who cannot has not." },
+          { "id": "b", "label": "Number of AI licenses purchased", "correct": false, "explanation": "Inputs not outputs. Buying licenses is the easy part." },
+          { "id": "c", "label": "Cost saved per quarter", "correct": false, "explanation": "Tempting but lagging and easy to fudge. Cost-savings without ritual changes is suspect." },
+          { "id": "d", "label": "Survey score for 'AI excitement'", "correct": false, "explanation": "Sentiment leads nowhere. Excitement at month 1 is uncorrelated with capability at month 12." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "leadership-ai-capstone",
+    "title": "Capstone: A Six-Month Plan to Become an AI-Native Company",
+    "prompt": "Your CEO catches you outside the lift on a Wednesday afternoon and says:\n\n*\"I need a 6-month plan to become an AI-native company. Org changes, training rollout, the works. Have it on my desk by next Friday. Make it real, please. We've already done two of these and nothing changed.\"*\n\nShe's not wrong. The last two attempts were a values poster, an external training week, and a Microsoft Copilot license rollout. Nothing measurably changed. You have her ear for the third try.\n\nWrite the plan. It should be the kind of memo you would actually send a CEO who is tired of theater. Specific, defensible, India-anchored where context matters.\n\nDeliver:\n\n1. **Diagnose the last two attempts.** Name what they got wrong using the language of this course (task vs job confusion, license without ritual change, annual L&D, values without behavior, etc.). Two paragraphs.\n2. **Pick ONE pilot team** for the first 60 days. Justify why this team and not the obvious choice. Specify the workflow that will change, the AI surface and model, and the weekly demo cadence.\n3. **Design ONE org change** to make in month 3. Could be a role, a reporting line, a review gate, or a kill of an existing role. One change, justified against what you would lose.\n4. **Specify the training rollout.** Format (cadence, who teaches, what gets demo'd), the public-mistake protocol, and how you'll know in 90 days whether it's compounding or theatre.\n5. **Pick the ONE behavior** you will measure as the proof of transformation. State the baseline, the 6-month target, and how you'll capture the number weekly without it becoming reportable theater.\n6. **Anticipate the failure mode.** What is the single likeliest way this plan dies in months 4-5, and the one guardrail you've built for it?\n\nAt the bottom, a one-paragraph executive summary the CEO can forward to the board, and a single bullet titled **'What I would cut if budget halved'** because the CFO will ask.\n\nNo buzzwords. No 'AI-first culture'. No values posters. If you write 'transformation journey' once, the CEO is going back to the lift.",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Diagnoses both prior attempts using 2+ specific course-named failure modes; the pilot team, org change, and behavior measure are each justified against alternatives; the failure-mode anticipation is concrete and pre-mortemed", "points": 4 },
+          { "label": "Diagnoses one prior attempt with one course-named failure mode; pilot and behavior measure are reasonable but lightly defended; failure mode is generic", "points": 2 },
+          { "label": "Generic transformation language; no named failure modes from the course; no clear reasoning behind the picks", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity to context",
+        "levels": [
+          { "label": "Plan is tailored to the company's actual prior failures, the Indian operating context (regulators, talent market, hierarchy norms, Hinglish standups), the team chosen, and a CEO who is tired of theater; the role being cut/changed is named", "points": 4 },
+          { "label": "Plan acknowledges company size and prior history but treats Indian context as scenery; the org change is named but not contextualised", "points": 2 },
+          { "label": "Generic plan that could be sent to any company in any country; ignores stated context and the CEO's stated frustration", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "Executive summary is one tight paragraph the CEO would forward; the 6 sections are skimmable; the budget-halved bullet shows real prioritisation; voice is direct and specific without buzzwords", "points": 4 },
+          { "label": "Mostly clear but the executive summary buries the lead, or the budget-halved bullet just removes the cheapest item", "points": 2 },
+          { "label": "Wall of text; missing executive summary or budget bullet; reads like consulting deck text", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "leadership-in-age-of-ai",
+    "title": "Leadership in the Age of AI",
+    "description": "Holder can think at the task level rather than the job level, design human-AI handoffs that preserve accountability, hire for judgment over execution, run AI-era L&D as a weekly ritual, and turn ethics policy into measurable behavior change.",
+    "issuerName": "Krit Academy"
+  }
+}

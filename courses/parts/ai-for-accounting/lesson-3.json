@@ -1,0 +1,269 @@
+{
+  "slug": "ai-reconciliation",
+  "title": "AI in Reconciliation and Bank Statement Matching",
+  "subtitle": "Reconciliation is fuzzy matching at scale; AI was built for fuzzy matching at scale",
+  "estimatedMinutes": 14,
+  "skills": ["accounting-ai-reconciliation"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-accounting/ai-reconciliation.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the agony of manual reconciliation" },
+        { "startSec": 80, "label": "Mental model: reconciliation is fuzzy matching at scale" },
+        { "startSec": 220, "label": "Move 1 — Confidence-scored matches" },
+        { "startSec": 410, "label": "Move 2 — The human-in-the-loop tier" },
+        { "startSec": 560, "label": "Trap, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-accounting/ai-reconciliation.html",
+      "notesByline": "Notes by Anand, articleship batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Bank reconciliation is the activity that articled assistants think defines accounting. A 14,000-line statement, a 14,000-line ledger, and the patient question: which line on each side corresponds to which line on the other? It used to take three days. With AI, it takes three hours, and most of those three hours are you being a CA instead of a sorter.\n\nBut only if you do it right. Most firms doing AI reconciliation today are doing it the wrong way — exact-match-only against text strings, no confidence scoring, no review tier — and quietly missing 6 to 12 percent of the matches that a careful pattern-matcher would have caught."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two columns of transactions, left and right. Lines connect matches: most are green (high confidence), some are yellow (medium), some red (low). A few transactions on each side are unmatched and circled.",
+      "caption": "Reconciliation is fuzzy matching at scale. The fuzzy part is amount-plus-date-plus-narration, not exact-string equality.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#ECFDF5'/><g transform='translate(40 40)'><rect width='200' height='240' rx='10' fill='#FFF' stroke='#065F46' stroke-width='2'/><text x='100' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#065F46' font-weight='bold'>BANK STMT</text><g font-family='monospace' font-size='9' fill='#1F2937'><text x='14' y='52'>14-04 NEFT/RPL/2,40,000</text><text x='14' y='72'>15-04 IMPS/RAJESH/12,500</text><text x='14' y='92'>16-04 CHQ-104382/47,800</text><text x='14' y='112'>17-04 UPI@MERCH/3,200</text><text x='14' y='132'>18-04 NEFT/SUR-EXP/85,000</text><text x='14' y='152'>19-04 BANK CHARGES/680</text><text x='14' y='172'>20-04 IMPS/UNKNOWN/24,000</text><text x='14' y='192'>21-04 NEFT/HDFC INS/15,400</text></g></g><g transform='translate(360 40)'><rect width='200' height='240' rx='10' fill='#FFF' stroke='#065F46' stroke-width='2'/><text x='100' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#065F46' font-weight='bold'>LEDGER</text><g font-family='monospace' font-size='9' fill='#1F2937'><text x='14' y='52'>14-04 Repl Industries 2,40,000</text><text x='14' y='72'>15-04 Rajesh Kumar 12,500</text><text x='14' y='92'>16-04 Salary Adv 47,800</text><text x='14' y='112'>17-04 Petrol pump 3,200</text><text x='14' y='132'>18-04 Surat Exporters 85,000</text><text x='14' y='152'>--- (no entry) ---</text><text x='14' y='172'>--- (no entry) ---</text><text x='14' y='192'>21-04 HDFC Premium 15,400</text></g></g><g stroke-width='2' fill='none'><path d='M240 50 L360 50' stroke='#10B981'/><path d='M240 70 L360 70' stroke='#10B981'/><path d='M240 90 L360 90' stroke='#FCD34D'/><path d='M240 110 L360 110' stroke='#10B981'/><path d='M240 130 L360 130' stroke='#FCD34D'/><path d='M240 190 L360 190' stroke='#10B981'/></g><g transform='translate(20 295)' font-family='monospace' font-size='9' fill='#065F46'><line x1='0' y1='5' x2='12' y2='5' stroke='#10B981' stroke-width='2'/><text x='18' y='9'>high conf</text><line x1='80' y1='5' x2='92' y2='5' stroke='#FCD34D' stroke-width='2'/><text x='98' y='9'>medium</text><circle cx='160' cy='5' r='5' fill='none' stroke='#F43F5E' stroke-width='2'/><text x='170' y='9'>unmatched</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: reconciliation is fuzzy matching at scale",
+      "md": "Stop thinking of reconciliation as a sorting problem. Start thinking of it as a **fuzzy matching** problem.\n\nThe bank says \"NEFT/RPL/2,40,000\". The ledger says \"Repl Industries — 2,40,000\". A human knows these are the same transaction; an exact-string match misses it; a fuzzy matcher catches it because the date matches, the amount matches, and there is a partial-name overlap.\n\n**AI is, structurally, a fuzzy matcher.** Reconciliation is, structurally, fuzzy matching. The two were waiting for each other."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-accounting/anim/ai-reconciliation-confidence-flow.html",
+      "height": 420,
+      "caption": "A 14,000-line bank statement and a 14,000-line ledger flow into the matcher. Watch the confidence-scored output emerge in three colour-coded streams: high, medium, low. The low stream queues up for human review.",
+      "fallbackImage": "/courses/ai-for-accounting/anim/ai-reconciliation-confidence-flow-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Bank narration ka kavita problem",
+          "md": "Bhai, Indian bank narration kavita hoti hai. Same vendor, same amount, har month alag spelling.\n\nMonth 1: 'NEFT-N123-RAJ ENT'  \nMonth 2: 'RTGS/RAJ ENTERPRISES'  \nMonth 3: 'IMPS-RAJ ENTERPRIS' (truncated, comma katwa diya)  \nMonth 4: 'NEFT-RAJ ENT PVT LTD'\n\nException-based matching ke liye yeh nightmare hai. AI ke liye yeh sirf Tuesday hai. Embedding similarity 0.92 — same vendor, ship the match, move on."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The narration poetry problem",
+          "md": "Indian bank narrations vary every month for the same vendor — abbreviations, truncations, channel codes, capitalisation. Exact matching gives up. A model that does embedding similarity does not."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 1 — Confidence-scored matches" },
+    {
+      "type": "markdown",
+      "md": "First named move. Stop producing binary match/no-match outputs. Start producing **confidence-scored matches**.\n\nA confidence-scored match is a triple: (bank line, ledger line, score from 0 to 100). The score reflects how strongly the matcher believes these two lines are the same transaction, based on amount equality (high weight), date proximity (medium), narration similarity (variable), and reference number overlap when present.\n\nBy outputting scores instead of binaries, you turn a 14,000-line opaque match into a triaged worklist. You can now say: above 95, accept (with sampling). Between 70 and 95, eyeball. Below 70, treat as unmatched and investigate. The threshold is yours to set; the score is the model's job."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A horizontal bar showing confidence ranges 0-100. Three coloured zones: 0-70 in red labelled 'investigate', 70-95 in yellow labelled 'review', 95-100 in green labelled 'accept after sampling'.",
+      "caption": "Three tiers, two thresholds, one workflow. Move the thresholds with experience; never collapse the tiers into one.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200' role='img'><rect width='600' height='200' rx='14' fill='#FFF7ED'/><g transform='translate(40 60)'><rect x='0' y='0' width='350' height='40' rx='6' fill='#F87171'/><rect x='350' y='0' width='100' height='40' rx='0' fill='#FCD34D'/><rect x='450' y='0' width='75' height='40' rx='0' fill='#10B981'/><line x1='350' y1='-5' x2='350' y2='45' stroke='#1F2937' stroke-width='2'/><line x1='450' y1='-5' x2='450' y2='45' stroke='#1F2937' stroke-width='2'/><text x='350' y='-12' text-anchor='middle' font-family='monospace' font-size='11' fill='#1F2937'>70</text><text x='450' y='-12' text-anchor='middle' font-family='monospace' font-size='11' fill='#1F2937'>95</text><text x='525' y='-12' text-anchor='middle' font-family='monospace' font-size='11' fill='#1F2937'>100</text><text x='0' y='-12' text-anchor='start' font-family='monospace' font-size='11' fill='#1F2937'>0</text><text x='175' y='25' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#FFF' font-weight='bold'>investigate</text><text x='400' y='25' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#7C2D12' font-weight='bold'>review</text><text x='487' y='25' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#FFF' font-weight='bold'>accept</text><text x='175' y='62' text-anchor='middle' font-family='monospace' font-size='10' fill='#9F1239'>treat as unmatched</text><text x='400' y='62' text-anchor='middle' font-family='monospace' font-size='10' fill='#92400E'>row-by-row</text><text x='487' y='62' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>50 sample</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "What confidence-scored matching looks like in practice (a 14,000-line bank rec for a Bangalore restaurant chain)",
+      "steps": [
+        {
+          "label": "Step 1 — Load both sides into a common schema",
+          "body": "Bank: date, amount, narration, channel. Ledger: date, amount, party, narration. One row per transaction; no merged cells, no totals rows."
+        },
+        {
+          "label": "Step 2 — Score every plausible pair on amount + date + similarity",
+          "body": "For each bank line, the matcher considers ledger lines within ±3 days and ±0 rupees, scores narration similarity, and returns top-3 candidate matches with scores."
+        },
+        {
+          "label": "Step 3 — Pick the best match per row, score 0 to 100",
+          "body": "Of the 14,000 bank lines: 12,400 score above 95, 1,200 score between 70 and 95, 320 score below 70, 80 have no candidate (unmatched on the bank side)."
+        },
+        {
+          "label": "Step 4 — Accept-zone sampling",
+          "body": "Sample 100 random matches from the 12,400 high-confidence pile. Verify each by hand. Sample error rate: 0.3 percent. Acceptable; accept the pile."
+        },
+        {
+          "label": "Step 5 — Review zone, row by row",
+          "body": "All 1,200 medium-confidence matches reviewed at roughly 5 seconds each — 100 minutes. Override rate: about 8 percent. Pattern: most overrides are near-duplicate vendor names that need a manual disambiguation."
+        },
+        {
+          "label": "Step 6 — Investigate zone",
+          "body": "All 320 low-confidence and 80 unmatched lines get a real conversation with the file. About 60 percent are timing differences (cleared in next month), 30 percent are missing ledger entries (booking errors), 10 percent are genuine reconciling items requiring follow-up."
+        },
+        {
+          "label": "Step 7 — Eval log + signoff",
+          "body": "Full match table with scores, override log, and unresolved exceptions go into the working papers. Partner reviews exception list, signs off, files."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "What is the right way to handle the high-confidence pile in a confidence-scored reconciliation?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Sample a random subset and verify by hand; accept the pile if sample error rate is acceptable", "correct": true, "explain": "Right. Sampling is the audit-grade discipline; full review of high-confidence rows defeats the time savings." },
+        { "id": "b", "label": "Skip review entirely — that's why they're high-confidence", "correct": false, "explain": "Skipping all review of any pile is the failure mode that gets firms in trouble. Sample, don't skip." },
+        { "id": "c", "label": "Review every single high-confidence row by hand", "correct": false, "explain": "Defeats the purpose; you've now done the same work as before plus an AI bill." },
+        { "id": "d", "label": "Re-run the AI to see if the confidence changes", "correct": false, "explain": "Confidence is calibrated, not random; re-running just gives you another opinion." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Old-school reconciliation ki memory",
+          "md": "Articleship ke pehle saal mein, mereko HSBC ka bank reconciliation milta tha — 22 pages ka statement, ledger ki 18 pages, sab tally karna haath se. Tick mark ka stationery khatam ho jaata tha.\n\nAaj — same kaam 90 minute mein, aur exception list zyada complete hoti hai jitna humne kabhi haath se kiya. Time saved is real. But discipline same: low confidence wala pile humein dekhna hi padta hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The tick-mark generation",
+          "md": "Old reconciliation work was tick marks and a magnifying glass. New reconciliation work is confidence thresholds and a sample plan. The work is shorter; the discipline is identical."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 2 — The human-in-the-loop tier" },
+    {
+      "type": "markdown",
+      "md": "Second named move. The **human-in-the-loop tier** is where the CA actually adds value. It is the bottom 5 to 15 percent of matches — the ones the model couldn't confidently resolve, and the ones above the rupee-value threshold regardless of confidence.\n\nWhy include high-rupee items even when they're high-confidence? Because the cost of a wrong match scales with the rupee value. A wrong ₹3,200 categorisation is a rounding error. A wrong ₹2,40,000 categorisation is a disclosure event.\n\nThe human-in-the-loop tier is not a fallback for AI failure; it is the part of the workflow where a CA's judgment, training, and signature are intentionally put on the line. Done well, this tier captures every item where being wrong would matter, while leaving the boring 80-percent to AI."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A pyramid divided into three tiers. Bottom (largest) is 'AI auto-accepted with sampling'. Middle is 'AI proposes, CA reviews'. Top (smallest) is 'CA-only investigation'. An arrow on the right shows 'rupee value at stake' increasing top-down... wait, increasing bottom-up. Actually showing it from top.",
+      "caption": "The human-in-the-loop tier is at the top of the pyramid — small in volume, decisive in impact.",
+      "maxWidth": 540,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 320' role='img'><rect width='540' height='320' rx='14' fill='#FAF5FF'/><g transform='translate(170 30)'><polygon points='100,0 60,80 140,80' fill='#F43F5E' stroke='#9F1239' stroke-width='2'/><polygon points='60,80 30,180 170,180 140,80' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><polygon points='30,180 0,260 200,260 170,180' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='100' y='52' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF' font-weight='bold'>CA only</text><text x='100' y='65' text-anchor='middle' font-family='monospace' font-size='8' fill='#FFF'>~5%</text><text x='100' y='130' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>AI proposes</text><text x='100' y='145' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>CA reviews</text><text x='100' y='160' text-anchor='middle' font-family='monospace' font-size='9' fill='#7C2D12'>~15%</text><text x='100' y='220' text-anchor='middle' font-family='monospace' font-size='12' fill='#FFF' font-weight='bold'>AI auto-accepted</text><text x='100' y='236' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF'>(with sampling)</text><text x='100' y='250' text-anchor='middle' font-family='monospace' font-size='9' fill='#FFF'>~80%</text></g><g transform='translate(440 50)'><line x1='0' y1='0' x2='0' y2='220' stroke='#1F2937' stroke-width='2' marker-start='url(#arr)' marker-end='url(#arr)'/><text x='10' y='30' font-family='monospace' font-size='10' fill='#9F1239'>high ₹</text><text x='10' y='200' font-family='monospace' font-size='10' fill='#065F46'>low ₹</text><text x='10' y='115' font-family='monospace' font-size='9' fill='#1F2937'>at stake</text></g><defs><marker id='arr' viewBox='0 0 10 10' refX='5' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "CA-Veteran Vidya",
+        "role": "Partner, mid-tier Pune firm, 22 years in practice"
+      },
+      "intro": [
+        "Reconciliation week. Eight clients, four staff, one me. Here are the calls I had to make on the phone yesterday.",
+        "Pick whether each is genuinely human-in-the-loop work or whether the AI should have handled it on its own."
+      ],
+      "buckets": [
+        { "id": "ai", "label": "AI handles", "tone": "safe" },
+        { "id": "human", "label": "Human-in-the-loop", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "r1",
+          "situation": "A bank line for ₹2,40,000 NEFT to 'REPL IND' matches a ledger entry for 'Repl Industries Pvt Ltd' for ₹2,40,000 on the same date. Confidence 97.",
+          "correctBucketId": "ai",
+          "explain": "Auto-accept zone. Sample as part of the high-confidence batch; do not review individually."
+        },
+        {
+          "id": "r2",
+          "situation": "A bank credit of ₹47,00,000 from a party never seen before, narration 'INWARD REMITTANCE'. No ledger match. The amount is 12 percent of monthly turnover.",
+          "correctBucketId": "human",
+          "explain": "High rupee value, no match, possible regulatory implication (FEMA/source of funds). Stop the workflow, investigate, signoff before proceeding."
+        },
+        {
+          "id": "r3",
+          "situation": "847 small UPI payments under ₹500 each, all matching electricity-bill style narrations to 'Bescom payment' ledger heads. Confidence 96 across all.",
+          "correctBucketId": "ai",
+          "explain": "Auto-accept; sample 30 of the 847; the rupee value per row is too low to demand individual review."
+        },
+        {
+          "id": "r4",
+          "situation": "A ledger entry for ₹3,80,000 to 'Director Loan Repayment' with no corresponding bank debit in the period. Period-end mismatch.",
+          "correctBucketId": "human",
+          "explain": "Director-related party transaction with no bank evidence. Audit-sensitive; CA must investigate, classify, and sign."
+        },
+        {
+          "id": "r5",
+          "situation": "Bank charges of ₹680 on the 19th, no ledger entry. Confidence 0 (no match).",
+          "correctBucketId": "ai",
+          "explain": "AI flags the unmatched bank charges and proposes a journal entry. CA reviews the proposed entry as a batch with the other 12 unmatched bank charges. Within the AI workflow."
+        },
+        {
+          "id": "r6",
+          "situation": "A bank credit for ₹14,28,000 matches a ledger entry for ₹14,82,000 for the same vendor on the same date. Confidence 72.",
+          "correctBucketId": "human",
+          "explain": "Same vendor, same date, ₹54,000 difference. Classic sign of a comma-displacement booking error or a partial payment. CA judgment required to determine which."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: collapsing the tiers",
+      "md": "Under deadline pressure, every firm tries the same shortcut: \"let's just review everything with confidence below 90 and accept the rest.\" Two months later you realise you've been auto-accepting matches above 90 with no sampling at all, and the high-rupee mismatches above 90 have been silently flowing through for a quarter.\n\n**Sampling is not optional. Rupee-value thresholds are not optional. The two layers exist for a reason.** When you collapse them, you've stopped doing reconciliation; you've started doing wishful thinking."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're starting an AI-assisted reconciliation engagement for a 47-outlet retail chain. Order these design decisions, first to last.",
+      "items": [
+        { "id": "thresh", "label": "Define confidence thresholds (e.g., 70 / 95) for the engagement", "detail": "Set in writing in the engagement letter; revisit quarterly." },
+        { "id": "rupee", "label": "Define the rupee-value threshold for mandatory CA review regardless of confidence", "detail": "Single threshold in rupees; common starting point: ₹50,000 or 0.5% of monthly turnover." },
+        { "id": "sample", "label": "Define the sampling plan for the auto-accept tier", "detail": "Sample size, sampling method (random or stratified), error tolerance." },
+        { "id": "input", "label": "Standardise input data — bank statement and ledger into common schema", "detail": "Date, amount, party, narration; one row per transaction." },
+        { "id": "run", "label": "Run the matcher and produce the scored match table", "detail": "Output: bank_line_id, ledger_line_id, score, top-3 alternates." },
+        { "id": "review", "label": "Apply the review tiers — sample auto, review medium, investigate low + high-rupee", "detail": "Single workflow with three queues." },
+        { "id": "signoff", "label": "Partner reviews exception list and signs off", "detail": "Working papers preserved with the eval log." }
+      ],
+      "hint": "The design comes before the run. Most firms get this backwards and bolt review tiers on later."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Write the confidence-scoring rule for a bank-to-ledger match in plain English. The rule should produce a score from 0 to 100 based on amount equality, date proximity, narration similarity, and (if present) reference-number match. Be specific about weights.",
+      "lang": "markdown",
+      "starter": "## Match scoring rule\n\nGiven a bank line and a ledger line, compute the score:\n\n",
+      "expected": "## Match scoring rule\n\nGiven a bank line and a ledger line, compute the score from 0 to 100:\n\n1. **Amount match (50 points)**\n   - Exact match: 50\n   - Within ₹1: 48\n   - Within ₹100: 30\n   - Otherwise: 0 (and the match is rejected — no further scoring)\n\n2. **Date proximity (20 points)**\n   - Same date: 20\n   - Within 1 day: 16\n   - Within 3 days: 10\n   - Within 7 days: 4\n   - Beyond 7 days: 0\n\n3. **Narration similarity (20 points)**\n   - Embedding similarity 0.95+: 20\n   - 0.85 to 0.95: 14\n   - 0.70 to 0.85: 8\n   - Below 0.70: 0\n\n4. **Reference number / cheque number / UPI ID match (10 points)**\n   - Exact match present on both sides: 10\n   - Partial match (e.g. last 6 digits): 6\n   - No reference present on either side: 5 (neutral; can't penalise the absence)\n   - Reference present on one side, not the other: 0\n\nFinal score = sum of the four. Cap at 100.\n\n**Notes**\n- If amount match scores 0, do not produce a candidate at all.\n- If amount, date, and reference all match exactly, score is at least 80 even without narration.\n- Embedding-similarity threshold is calibrated against the client's own narration vocabulary; recompute every 6 months."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are valid reasons to escalate a match into the human-in-the-loop tier? (Select all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Confidence below the review threshold (e.g., under 70)", "correct": true, "explain": "Right. Low-confidence matches need human eyes regardless of value." },
+        { "id": "b", "label": "Rupee value above the engagement threshold even if confidence is high", "correct": true, "explain": "Right. Wrong matches scale in cost with rupee value; high-value items always get human review." },
+        { "id": "c", "label": "Counterparty appears for the first time in the period", "correct": true, "explain": "Right. New counterparties — especially with significant amounts — warrant CA judgment for KYC and source-of-funds reasons." },
+        { "id": "d", "label": "It's a Friday afternoon", "correct": false, "explain": "Workflow design should be deterministic, not weather-dependent." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "The 'fully automated' bank rec sales pitch",
+          "md": "SaaS bhai phone karta hai — \"sir, hamara tool fully automated bank reconciliation karta hai, koi human review ki zaroorat nahi.\"\n\nAccha. Toh ₹14,28,000 jab ₹14,82,000 ho jaata hai, kaun signature karta hai working papers pe? Tool ke CEO toh client ke saamne kabhi nahi baithenge.\n\nFully automated reconciliation matlab fully automated risk transfer — *to you*."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Buyer beware: 'no human review needed'",
+          "md": "Any vendor selling 'fully automated' reconciliation is selling you full automation of the risk, not full automation of the work. The signature is still yours."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Reconciliation is fuzzy matching at scale; AI is a fuzzy matcher; the alignment is structural, not magical.",
+        "Confidence-scored matches are the only output worth shipping — binary match/no-match throws away the most useful information AI produces.",
+        "Three tiers: auto-accept with sampling, medium review row-by-row, low investigate fully. Plus a rupee-value override that promotes high-value matches regardless of confidence.",
+        "The human-in-the-loop tier is not a fallback; it is where the CA's judgment is intentionally placed — small in volume, decisive in impact.",
+        "Collapsing the tiers under deadline pressure is the failure mode every firm rediscovers; sampling and rupee thresholds are non-negotiable."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick a recent bank reconciliation you (or your team) completed manually. Estimate how the workflow would have changed if it had been done with confidence-scored AI matching. Where would the human attention have shifted, and what would have been caught (or missed) differently?"
+    }
+  ]
+}

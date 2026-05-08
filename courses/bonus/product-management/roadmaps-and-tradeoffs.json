@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Now/Now/Now Roadmap",
+    "source": "Group PM at Sahara Edu, a Gurgaon-based K-12 ed-tech (Series C, ~450 staff)",
+    "date": "April 2024 — January 2025",
+    "story": "On **April 8, 2024**, Sahara's product org adopted a 'now/next/later' roadmap framework after reading a popular Medium post. The Q2 plan had **6 things in 'now', 9 in 'next', 12 in 'later'**. Beautiful. Colour-coded. Linked to OKRs. The CPO showed it at the all-hands.\n\nBy **May 6**, two of the 'next' items had been pulled into 'now' because *\"the customer demoed and really wants it.\"* By **June 11**, four more had been pulled in. By **end of Q2**, 'now' contained **14 items** and 'next' contained 1. Nothing was 'later' anymore — they had all become 'now-but-quieter.'\n\nNobody had cut anything. The roadmap had become a wishlist with a colour scheme.\n\nThe team shipped **8 of the 14**. Two shipped late and broken. Four shipped on time but were thinner than promised. The remaining six slipped to Q3, where the same pattern repeated.\n\nBy **September 2024**, the on-call rotation had **4 engineers on stress leave** in a 22-person team. The two senior PMs had quit citing 'roadmap whiplash.' Sahara's NPS dropped from 42 to 19 over six months because *every single feature shipped felt half-baked.*\n\nIn the **January 2025** post-mortem, the new VP-Product wrote one line at the top of the doc: *\"A roadmap that doesn't say no isn't a roadmap. It's a hostage list.\"*",
+    "takeaway": "'Now/next/later' isn't a framework. It's a discipline. If everything keeps becoming 'now', you've adopted the colour scheme without the discipline."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rhea's Q3 Polite-No",
+    "setup": "**Week 8, Tarakash.** Rhea's Q3 plan is locked: Tally template, guided tour, pricing A/B test. 6 weeks of work, 18 weeks of buffer, all aimed at the trial-to-paid metric.\n\n**It is Tuesday, 11:14am.** The CEO walks into Rhea's standup, smiles at the team, and says: *\"Quick one. I had a great call with Aanya from BigBank Capital last night. They're considering us for a 50-seat pilot. They need: (1) SAML SSO, (2) custom branding, (3) a usage-based billing add-on, (4) audit log exports, (5) an EU data-residency option. Can we get all 5 in Q3?\"*\n\nThe team looks at Rhea. Engineering lead Shankar's left eye is twitching. The CEO is still smiling. Rhea has to respond now, on her feet, in front of seven people.",
+    "coach": { "name": "Director-PM Devika", "role": "Director of Product, Tarakash · has said no to 14 CEOs across 3 companies and is still alive" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "What does Rhea say in the room, **right now**?",
+        "options": [
+          { "id": "a", "label": "\"Yes! Let's do it. We'll figure out a way.\"", "correct": false, "explain": "You just committed your team to ~22 weeks of work in a 12-week quarter, in front of witnesses, and abandoned the conversion-lift objective. Shankar's twitch is now seismic. Devika, watching on Slack, types and deletes three messages.", "points": 0 },
+          { "id": "b", "label": "\"Great prospect. Before I say yes or no, can I take 24 hours to map this against our Q3 plan and come back with a real answer?\"", "correct": true, "explain": "**This is the right answer in the room.** You acknowledged the opportunity, did not commit, and bought time to think. CEO nods — they don't actually want a yes-person, they want a thoughtful answer. Devika sends you a single sparkles emoji.", "points": 3 },
+          { "id": "c", "label": "\"No, our quarter is locked. We can revisit in Q4.\"", "correct": false, "explain": "Correct intuition, brutally wrong delivery. The CEO loses face in front of the team and now thinks you're rigid. There's a difference between *saying no* and *saying it as your first sentence with no diagnosis*. Half-credit for the spine.", "points": 1 },
+          { "id": "d", "label": "\"That's a Shankar question — Shankar, what do you think?\"", "correct": false, "explain": "You threw the engineering lead under the bus to dodge the call. Shankar will not forget. Trade-off decisions are PM work — that's literally why the role exists. Devika is now drafting a quietly disappointed Slack message.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s2",
+        "prompt": "It's now Wednesday morning. Rhea has 22 hours to write the trade-off memo. What's the **structure**?",
+        "options": [
+          { "id": "a", "label": "A long apologetic note explaining why we can't do it.", "correct": false, "explain": "Apologies are not a framework. The CEO doesn't want feelings, they want a thinking artifact they can take to BigBank. You'll lose the room.", "points": 0 },
+          { "id": "b", "label": "(1) The opportunity (BigBank pilot, $X ARR potential). (2) The cost (5 features, ~22 eng-weeks). (3) Current Q3 plan and what we'd cut to fit. (4) Three options: A) full yes (cut Q3 plan), B) partial yes (SSO + audit log only, ~5 wks), C) full no with a Q4 commitment. (5) Recommendation + why.", "correct": true, "explain": "**Textbook.** Opportunity, cost, current commitment, **3 named options with explicit trade-offs**, your recommendation. The CEO can now make an informed decision instead of reacting. Devika forwards this to the rest of the PM team as 'how to write a trade-off memo.'", "points": 3 },
+          { "id": "c", "label": "A spreadsheet listing every feature, its cost, and a colour-coded RAG status.", "correct": false, "explain": "Spreadsheets are great for capacity planning. They are not great for forcing a CEO to make a decision. You handed over data without a recommendation, and the CEO will pick the most ambitious row.", "points": 1 },
+          { "id": "d", "label": "Just SSO and audit log — they're cheapest, hide the rest.", "correct": false, "explain": "You unilaterally re-scoped the deal without showing the CEO the trade-off. When BigBank asks about EU data residency in week 6, the CEO discovers what you cut from someone else. Career-limiting move.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s3",
+        "prompt": "In the memo's **'Option B (partial yes)'** section, Rhea picks SSO + audit log. **Why those two?**",
+        "options": [
+          { "id": "a", "label": "\"They're the smallest features.\"", "correct": false, "explain": "Cheapness is a tiebreaker, not a reason. The CEO will ask: *\"why these two and not the others?\"* and \"they were cheap\" is not a satisfying answer.", "points": 1 },
+          { "id": "b", "label": "\"SSO + audit log are also asks from existing customers (Mehta, 2 others) — building them serves enterprise readiness more broadly, not just BigBank. Custom branding, usage billing, EU residency are BigBank-specific bets that we shouldn't take until BigBank signs.\"", "correct": true, "explain": "**This is the move.** You separated **horizontal bets** (SSO, audit — useful to many) from **vertical bets** (branding, billing, EU — useful to one prospect). The horizontal bets are worth doing pre-signature; the vertical bets aren't. Devika could not have framed it better.", "points": 3 },
+          { "id": "c", "label": "\"Engineering said they were the easiest.\"", "correct": false, "explain": "Engineering opinion is input, not strategy. Also: 'easy' for whom? An audit log is *easy* until you discover the audit needs to be tamper-proof and now it's a 6-week project.", "points": 0 },
+          { "id": "d", "label": "\"Random — both seemed reasonable.\"", "correct": false, "explain": "If you can't defend the picks, you can't defend the cuts. The PM job is largely the art of being able to explain *why this and not that*.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s4",
+        "prompt": "The CEO reads the memo and replies: *\"Let's go with Option B. Tell BigBank we'll do SSO and audit in Q3, the rest in Q4 if they sign.\"* How does Rhea **lock in** the trade-off so it doesn't quietly drift back to Option A?",
+        "options": [
+          { "id": "a", "label": "\"Great, will inform the team.\" Update the Notion roadmap.", "correct": false, "explain": "Updating Notion isn't a commitment, it's a colour change. In 3 weeks the CEO will forget Option B was the deal and ask why custom branding isn't ready. You haven't built any guard rails.", "points": 0 },
+          { "id": "b", "label": "(1) Reply with explicit confirmation of what was cut from Q3 to make room (the pricing A/B test, deferred to Q4). (2) Send a 4-line summary to the BigBank thread so the deal is anchored. (3) Update the Q3 plan doc with a new line: *\"Rev-1, May 7: added SSO+audit, deferred pricing A/B per CEO call.\"*", "correct": true, "explain": "**Three lines of defence.** The cut is named, the customer expectation is anchored, and the change has a versioned trail. In week 9 when someone asks why the pricing A/B isn't shipping, you have the receipts. Devika is now actively recommending you for full PM promotion.", "points": 3 },
+          { "id": "c", "label": "Add the 2 features to Q3 and quietly hope nobody notices the pricing A/B is still on the plan too.", "correct": false, "explain": "Hope is not a strategy. This is exactly the Sahara Edu pattern from the field notes — features get added, nothing gets cut, and 6 months later the team is on stress leave.", "points": 0 },
+          { "id": "d", "label": "Tell Shankar to figure out how to fit it in.", "correct": false, "explain": "You delegated the trade-off decision to engineering, which is the opposite of the PM job. Also Shankar will absorb it by working the team weekends, and you've just bought a quiet attrition problem.", "points": 0 }
+          ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You handled the CEO ambush, wrote a memo your CEO can actually decide from, and locked the trade-off so it survives the next 12 weeks. **Devika tells you privately: 'You just did the hardest thing in the job. Most PMs never learn it.'** Q3 stays on track.",
+      "good": "You bought time and wrote a reasonable memo, but stumbled on either the option-design or the lock-in. Re-read the section on **horizontal vs vertical bets** and **versioning your roadmap changes**. Both will save you in Q4.",
+      "learn": "You either said yes to everything or said no without a plan. Re-read the lesson, especially **the polite-no template** and the Sahara Edu field notes. The roadmap that says yes to everything is the roadmap that ships nothing well."
+    }
+  }
+}

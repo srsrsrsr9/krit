@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Tailwind Upgrade That Killed 71 Tests in 90 Seconds",
+    "source": "Frontend lead at Patrika Stack, a Bengaluru-based content-CMS startup (Series A, ~30 engineers)",
+    "date": "January 2025",
+    "story": "Patrika's Playwright suite was 184 specs. Roughly 60% used CSS selectors lifted straight from the component code: `await page.click('.btn.btn-primary.rounded-lg.px-4.py-2')`. It worked. CI was green. Everyone was happy.\n\nOn January 9, 2025, the design system team upgraded Tailwind from v3.3 to v3.4. The upgrade renamed exactly **one** utility class chain — the default button preset reorganized its modifiers, so `.btn-primary` became `.btn-primary.shadow-sm`, and `rounded-lg` became `rounded-md` per the new design tokens.\n\nThe next CI run had **71 red specs**. Every locator that depended on the old Tailwind class chain broke. None of them were testing styling — they were testing *behavior* — but the selectors had been written against implementation details that the upgrade quietly changed.\n\nIt took two engineers a full day (≈14 hours combined) to fix the locators by hand. The fix was rewriting them all to use Playwright's role-based and label-based locators:\n\n```ts\n// Before (brittle)\nawait page.click('.btn.btn-primary.rounded-lg.px-4.py-2');\n\n// After (durable)\nawait page.getByRole('button', { name: 'Publish article' }).click();\n```\n\nOver the next 6 months Patrika upgraded Tailwind twice more (3.4 → 3.5 → 4.0-beta). The new locators survived both upgrades with **zero changes**. The team estimates they saved ~28 engineering-hours and prevented two skipped releases.",
+    "takeaway": "CSS selectors test what your code looks like. Role-based locators test what your users *do*. Tests should fail when behavior changes, not when stylesheets do."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rewriting the Most Important Test at Tarakash",
+    "setup": "Week 3. Sneha is rewriting Tarakash's most critical Playwright spec: the **'submit-and-approve expense'** flow. It's the path that touches money, runs on every PR, and currently fails ~9% of the time with cryptic errors.\n\nThe current spec is 84 lines of CSS selectors, hardcoded waits, and one `page.waitForTimeout(3000)` that someone added in 2023 with the comment `// flaky, fix later`.\n\nSneha is going to rewrite it stage-by-stage in front of two junior QA engineers. Each decision is a teaching moment.",
+    "coach": { "name": "QA-Director Kavya", "role": "Has personally deleted more `waitForTimeout` calls than she can count" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "First action: clicking the **'New Expense' button** in the top nav. The current code is `await page.click('header > div.nav > button.btn-primary:nth-child(3)')`. Sneha rewrites it as?",
+        "options": [
+          { "id": "a", "label": "`await page.getByRole('button', { name: 'New expense' }).click();`", "correct": true, "explain": "**Clean.** Role + accessible name. Survives any CSS refactor, any nav reorder, any framework migration. It also doubles as an accessibility check — if the button has no accessible name, this fails *for the right reason*.", "points": 3 },
+          { "id": "b", "label": "`await page.click('[data-testid=\"new-expense-btn\"]');` after adding the testid to the component.", "correct": true, "explain": "**Acceptable, with caveats.** `data-testid` is durable but it's a footnote selector — it tests an annotation, not a behavior. Use it only when the role-based locator genuinely doesn't disambiguate. Here, the role-based one is better.", "points": 2 },
+          { "id": "c", "label": "`await page.click('button:has-text(\"New expense\")');`", "correct": false, "explain": "Half-right. It's better than the CSS chain, but if there are multiple 'New expense' buttons on the page (e.g. in a modal that opens later) you'll get strict-mode violations or wrong clicks. `getByRole` with a name is more precise.", "points": 1 },
+          { "id": "d", "label": "Keep the original — if it's working today, why change it?", "correct": false, "explain": "It *isn't* working today — the spec is in the 9% flake bucket, and `nth-child(3)` is a time bomb that detonates the next time someone reorders the nav. The whole point of the rescue is to stop shipping fragility.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "After clicking, a modal slides in. Current code: `await page.waitForTimeout(800);` then fills the form. What does Sneha replace it with?",
+        "options": [
+          { "id": "a", "label": "`await expect(page.getByRole('dialog', { name: 'New expense' })).toBeVisible();` then proceed.", "correct": true, "explain": "**This is the way.** Web-first assertions wait *for the actual condition* up to the configured timeout (5s default). No magic numbers. If the modal opens in 80ms, you wait 80ms. If it's slow that day, you wait however long it takes. No more flake from animation timing.", "points": 3 },
+          { "id": "b", "label": "`await page.waitForTimeout(2000);` to be safe.", "correct": false, "explain": "Kavya's eye twitches. Doubling the sleep doesn't fix flake — it just hides it longer. If your test sleeps, your test is wrong. Every `waitForTimeout` is either too short (still flaky) or too long (slow CI).", "points": 0 },
+          { "id": "c", "label": "`await page.locator('.modal').waitFor({ state: 'visible' });`", "correct": false, "explain": "Closer, but you've gone back to a CSS selector for the modal *and* you're using the older `waitFor` API. Web-first `expect(...).toBeVisible()` retries the assertion automatically and produces a much better error message on failure.", "points": 1 },
+          { "id": "d", "label": "`await page.waitForLoadState('networkidle');`", "correct": false, "explain": "`networkidle` is the wrong tool — it waits for *all* network activity to stop, which a modern app with polling/analytics never does. The Playwright docs explicitly warn against this for SPAs. You'll either wait 30s or time out.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Form is filled. Sneha clicks **Submit** and needs to verify a success toast appears, then disappears. Current code waits 3 seconds then asserts. New version?",
+        "options": [
+          { "id": "a", "label": "`await expect(page.getByRole('alert')).toContainText('Expense submitted');` then `await expect(page.getByRole('alert')).toBeHidden();`", "correct": true, "explain": "**Two assertions, both retrying, no sleeps.** First waits up to 5s for the toast to *appear* with the right text; second waits up to 5s for it to *disappear*. Reads exactly like the user's experience and fails with crisp error messages.", "points": 3 },
+          { "id": "b", "label": "`await page.waitForSelector('.toast-success'); await page.waitForTimeout(3000); await expect(page.locator('.toast-success')).toBeHidden();`", "correct": false, "explain": "You snuck a `waitForTimeout` back in. If the toast disappears in 2s on a fast CI runner, you wasted 1s. If it takes 3.5s on a slow one, you fail. Web-first assertions handle both.", "points": 0 },
+          { "id": "c", "label": "Just check the URL changed: `await expect(page).toHaveURL(/\\/expenses\\/[0-9]+$/);`", "correct": true, "explain": "**Different angle, also good.** A successful submit redirects to the new expense page — asserting the URL pattern is a strong, fast, behavior-based signal. Best paired with the toast assertion, but valid on its own.", "points": 2 },
+          { "id": "d", "label": "`await page.evaluate(() => document.querySelector('.toast-success').textContent);` and string-match the result.", "correct": false, "explain": "You bypassed Playwright's auto-wait, dropped into raw DOM, and set yourself up for a `null` reference if the toast hasn't rendered yet. This is the kind of code that adds two more `waitForTimeout` calls within a sprint.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Last decision. The spec needs to verify the expense appears in the list, but the list is paginated and the new expense is on **page 2**. What does Sneha do?",
+        "options": [
+          { "id": "a", "label": "Navigate to the list, click 'Next page', then `await expect(page.getByRole('row', { name: /Lunch with client.*₹2,400/ })).toBeVisible();`", "correct": false, "explain": "Brittle: depends on pagination order which may change with sort options. Also makes the test slower. There's a better signal available — keep going.", "points": 1 },
+          { "id": "b", "label": "Filter the list by the expense title using the search box, then assert the row is visible.", "correct": true, "explain": "**Realistic and resilient.** This is what a user does to find a specific item. The search filter is a stable interaction and doesn't depend on pagination order or default sort.", "points": 3 },
+          { "id": "c", "label": "Hit the API directly: `const res = await request.get('/api/expenses?title=Lunch'); expect(res.json().data).toHaveLength(1);`", "correct": true, "explain": "**Best of both worlds.** Playwright's API request fixture lets you verify the data without driving the UI through pagination. Fast, deterministic, and tests the right boundary. Pair with one UI assertion that the new expense is *findable* in the UI.", "points": 3 },
+          { "id": "d", "label": "Skip the verification — if Submit returned 200, it's in the list.", "correct": false, "explain": "Assuming the API call succeeded means the row is in the UI is exactly the kind of leap that produces 'it worked in CI but not in prod' bugs. The whole point of e2e is to verify the UI shows what the API saved.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "The rewritten spec is 31 lines, runs in 4.2 seconds, and has not flaked in 200 consecutive runs. Kavya tells the juniors: *'This is what a Playwright test should read like — a sentence about user behavior, not a sentence about the DOM.'*",
+      "good": "You replaced most of the CSS selectors and killed most of the sleeps, but one `waitForTimeout` slipped through or you reached for `data-testid` when `getByRole` would have worked. Re-read the lesson on **locator priority** — role first, label second, testid only as a last resort.",
+      "learn": "The rewrite still uses CSS chains or hardcoded waits. The spec will break on the next Tailwind upgrade and flake on the next slow CI runner. Re-read the lesson — especially **why web-first assertions exist** and **the locator priority order**."
+    }
+  }
+}

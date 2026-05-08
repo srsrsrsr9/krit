@@ -1,0 +1,273 @@
+{
+  "slug": "ai-as-teaching-assistant",
+  "title": "AI as a Teaching Assistant, Not a Replacement",
+  "subtitle": "The boring 80%, the human 20%, and the line you have to draw",
+  "estimatedMinutes": 13,
+  "skills": ["ai-teaching-mental-model"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-teachers/ai-as-teaching-assistant.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the boring 80% problem" },
+        { "startSec": 80, "label": "Mental model: AI is a fluent intern" },
+        { "startSec": 220, "label": "Move 1 — Scope the task" },
+        { "startSec": 410, "label": "Move 2 — AI grades the rough, you grade the meaning" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-teachers/ai-as-teaching-assistant.html",
+      "notesByline": "Notes by Aanya, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Teaching is two jobs that share a body. The first job is the boring 80%: photocopying, drafting feedback stems, summarising chapters, formatting question papers, writing the same parent email for the fifteenth time. The second job is the human 20%: looking at a tired Class 10 student before a board exam and deciding to spend a minute, not a lecture.\n\nAI is excellent at the first job. AI is *terrible* at the second job. Most of the trouble in this entire field comes from people not drawing the line. By the end of this lesson, the line will feel obvious. The rest of the course is just learning to walk it."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two columns. Left column labelled 'Boring 80%' contains a stack of worksheets, a calendar, and a printer. Right column labelled 'Human 20%' contains a single hand reaching toward a small student silhouette.",
+      "caption": "Two jobs in one body. AI handles the left stack; you protect the right column.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(40 40)'><rect x='0' y='0' width='240' height='200' rx='12' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='15' font-weight='bold' fill='#92400E'>Boring 80%</text><g transform='translate(20 50)'><rect x='0' y='0' width='80' height='100' rx='3' fill='#FFFFFF' stroke='#92400E' stroke-width='1.5'/><line x1='8' y1='18' x2='72' y2='18' stroke='#92400E' stroke-width='1'/><line x1='8' y1='32' x2='72' y2='32' stroke='#92400E' stroke-width='1'/><line x1='8' y1='46' x2='72' y2='46' stroke='#92400E' stroke-width='1'/><line x1='8' y1='60' x2='72' y2='60' stroke='#92400E' stroke-width='1'/><line x1='8' y1='74' x2='72' y2='74' stroke='#92400E' stroke-width='1'/><rect x='6' y='-6' width='80' height='100' rx='3' fill='#FFFFFF' stroke='#92400E' stroke-width='1.5'/><rect x='12' y='-12' width='80' height='100' rx='3' fill='#FFFFFF' stroke='#92400E' stroke-width='1.5'/></g><g transform='translate(130 60)'><rect x='0' y='0' width='90' height='80' rx='6' fill='#FBBF24' stroke='#92400E' stroke-width='2'/><rect x='8' y='10' width='74' height='14' fill='#FFFFFF'/><rect x='8' y='28' width='74' height='4' fill='#92400E'/><rect x='8' y='36' width='50' height='4' fill='#92400E'/><rect x='8' y='44' width='60' height='4' fill='#92400E'/><rect x='8' y='52' width='40' height='4' fill='#92400E'/><text x='45' y='72' font-family='monospace' font-size='10' fill='#92400E' text-anchor='middle'>WORKSHEET</text></g><text x='120' y='178' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E' font-style='italic'>worksheets, summaries, drafts</text></g><g transform='translate(320 40)'><rect x='0' y='0' width='240' height='200' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='sans-serif' font-size='15' font-weight='bold' fill='#065F46'>Human 20%</text><g transform='translate(50 70)'><circle cx='30' cy='30' r='22' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='22' cy='28' r='2' fill='#1F2937'/><circle cx='38' cy='28' r='2' fill='#1F2937'/><path d='M22 38 Q30 33 38 38' stroke='#1F2937' stroke-width='1.5' fill='none'/><path d='M85 50 Q70 38 50 40' stroke='#065F46' stroke-width='2.5' fill='none'/><circle cx='90' cy='52' r='4' fill='#10B981'/></g><text x='120' y='178' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-style='italic'>reading the room, knowing the kid</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: AI is a fluent intern who has never met your students",
+      "md": "Picture a smart, fast, exhausting intern. Speaks in full paragraphs. Knows the textbook. Has never sat in your second-period Class 8 and watched Aarav fall asleep three times because his father lost his job last week.\n\nThe intern is *useful* for everything that doesn't require having met Aarav. The intern is *dangerous* the moment you ask it to make a call that depends on having met Aarav. The whole skill of using AI in teaching is knowing which side of that line you're on."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-teachers/anim/ai-as-teaching-assistant-the-line.html",
+      "height": 420,
+      "caption": "Drag tasks across the line. Watch the AI intern handle the left side and freeze on the right.",
+      "fallbackImage": "/courses/ai-for-teachers/anim/ai-as-teaching-assistant-the-line-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Apna analogy — *student teacher* wala",
+          "md": "Bhai, scene yeh hai. Naya student teacher aaya hai school mein. B.Ed final year. English hi-fi. Bachchon ke naam ek nahi yaad.\n\nWorksheet bana de? Bilkul, kar dega — neat, time pe.\n\nAarav ke papa ki naukri chali gayi, uss baccha se baat kar — *yeh* tu khud kar. Student teacher ko mat bhej. Wahi galti AI ke saath bhi mat kar."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no Hinglish",
+          "md": "A new student teacher arrives. Polished, eager, knows the syllabus, doesn't yet know which child has which weight on his shoulders. You'd let them draft a worksheet; you wouldn't send them to handle a parent grief call. Treat AI exactly the same way."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — Scope the task"
+    },
+    {
+      "type": "markdown",
+      "md": "Before you open Claude or ChatGPT, ask one question: *which 80%?*\n\nNot \"how do I use AI for teaching\". Too big. Not \"can AI plan my whole week\". Wrong scoping. The right scope is one task at a time, named, with a finite output.\n\n**Bad scope:** \"Help me prepare for next week.\"\n**Good scope:** \"Draft 8 short-answer questions on Class 9 ICSE Civics chapter 3, with a 2-mark and 4-mark mix, for a Friday quiz.\"\n\nThe smaller the scope, the better the AI does. The smaller the scope, the easier *you* can verify the output. Both move in the same direction. This is one of the few free wins in the whole field."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A funnel diagram. Top: 'how do I use AI for teaching' (very wide). Middle: 'plan my week' (narrower). Bottom tip: 'draft 8 short-answer Civics questions' (a sharp point).",
+      "caption": "The narrower the task at the bottom, the better the output that comes out of it.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#EFF6FF'/><polygon points='80,40 480,40 380,200 180,200' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='280' y='70' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#1E3A8A' font-style='italic'>\"how do I use AI for teaching\"</text><line x1='180' y1='100' x2='380' y2='100' stroke='#1E40AF' stroke-width='1' stroke-dasharray='3 3'/><text x='280' y='120' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#1E3A8A'>\"plan my week\"</text><line x1='220' y1='150' x2='340' y2='150' stroke='#1E40AF' stroke-width='1' stroke-dasharray='3 3'/><text x='280' y='170' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#1E3A8A' font-weight='bold'>\"8 short-answer Civics Qs,</text><text x='280' y='186' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#1E3A8A' font-weight='bold'>Class 9 ICSE, ch. 3\"</text><polygon points='280,210 270,230 290,230' fill='#10B981'/><text x='280' y='250' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>this one returns a usable answer</text></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: from a vague Sunday-night thought to a real prompt",
+      "steps": [
+        {
+          "label": "Step 1 — The Sunday thought",
+          "body": "\"Ugh, I have to teach the Periodic Table on Tuesday.\" Not yet a prompt. It's a feeling."
+        },
+        {
+          "label": "Step 2 — Identify the audience",
+          "body": "Class 9 CBSE, mixed-ability section, 38 students. Last year's class found atomic mass confusing. That's audience-specific signal AI doesn't know."
+        },
+        {
+          "label": "Step 3 — Identify the outcome",
+          "body": "By the end of the period, students should be able to read a periodic-table cell and tell you the element's atomic number, mass, and group. That's three concrete verbs, not a vibe."
+        },
+        {
+          "label": "Step 4 — Identify the time and constraint",
+          "body": "40-minute period, no lab access, board + chalk + textbook only. AI doesn't know the lab is locked on Tuesdays."
+        },
+        {
+          "label": "Step 5 — Write the prompt",
+          "body": "\"Draft a 40-minute lesson plan for Class 9 CBSE Science (mixed-ability, 38 students, no lab) so that by the end students can read a periodic-table cell and identify atomic number, atomic mass, and group. Open with a 3-minute hook. Include one quick check-for-understanding at minute 25.\""
+        },
+        {
+          "label": "Step 6 — Read what came back",
+          "body": "First draft is 70% useful. You'll cut the cheesy hook, replace the example, keep the structure. 12 minutes saved on a task that used to take 35."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "You're prepping a Class 7 English class on figurative language for tomorrow. Which prompt is best-scoped for a first try?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "\"Help me with figurative language.\"", "correct": false, "explain": "No grade, no time, no outcome, no class context. AI will give you a Wikipedia-flavoured general answer." },
+        { "id": "b", "label": "\"Draft a 35-minute Class 7 English lesson on simile and metaphor with one 5-minute group activity, ending with 4 quick-check MCQs. Indian-context examples preferred.\"", "correct": true, "explain": "Scope, time, outcome, format, locale. AI now has enough to produce something class-ready." },
+        { "id": "c", "label": "\"Make my class more engaging.\"", "correct": false, "explain": "An adjective is not a brief. \"Engaging\" is your job; structure and timing are the AI's." },
+        { "id": "d", "label": "\"Just give me everything you know about metaphors.\"", "correct": false, "explain": "Information dump request. You'll get a wall of text that takes longer to read than to write the lesson yourself." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Sunday raat, 9:42 PM",
+          "md": "Tu Sunday ko 9:42 PM pe ChatGPT khol ke likhta hai: \"plan my week.\" Phir 11:30 PM tak prompts iterate kar raha hai, paani peeke, jhunjhlaake, finally Word document ban gaya — *aur Monday ko subah dekha to wahi pranayama-shanti-OM jaisa generic plan hai.*\n\nGalati AI ki nahi. Tune brief hi nahi diya. Bhej diya \"plan my week\" — Anand Mahindra bhi itni vague request pe team se kuch nahi nikaal sakta."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Sunday night, 9:42 PM",
+          "md": "You open ChatGPT at 9:42 PM, type \"plan my week,\" and at 11:30 PM you have a generic-sounding document that could belong to anyone teaching anything. The AI didn't fail. Your brief did. \"Plan my week\" is not a brief; it's a sigh."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — AI grades the rough, you grade the meaning"
+    },
+    {
+      "type": "markdown",
+      "md": "There is one move that, if you only learn one move from this entire course, will keep you out of trouble: **AI grades the rough, you grade the meaning.**\n\nAI is good at structure. Is the paragraph well-formed? Is the grammar tight? Is the spelling right? Is the rubric checklist met? Yes, yes, yes. AI does these in seconds.\n\nAI is bad at meaning. Did the child *understand*? Is this argument actually true? Has the student answered the *question* or just the prompt-shaped hole around it? AI cannot tell you this reliably. It can guess; it will guess fluently; it will sometimes be confidently wrong, and \"confidently wrong\" is the worst possible failure mode in grading.\n\nUse AI for the rough check (structure). Use yourself for the meaning check. Never reverse the order."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two grading lanes. Left lane labelled 'AI lane: structure' has a checklist with all green ticks for grammar, format, length. Right lane labelled 'Your lane: meaning' has one hand-written checkmark next to 'is the argument true?'",
+      "caption": "Two lanes, two graders. The left lane is fast; the right lane decides the marks.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='240' height='200' rx='12' fill='#EDE9FE' stroke='#6D28D9' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#5B21B6'>AI lane: structure</text><g transform='translate(20 50)' font-family='sans-serif' font-size='12' fill='#1F2937'><text x='28' y='14'>grammar</text><circle cx='14' cy='10' r='8' fill='#10B981'/><path d='M9 10 L13 14 L19 6' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='44'>spelling</text><circle cx='14' cy='40' r='8' fill='#10B981'/><path d='M9 40 L13 44 L19 36' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='74'>paragraph length</text><circle cx='14' cy='70' r='8' fill='#10B981'/><path d='M9 70 L13 74 L19 66' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='104'>format / heading</text><circle cx='14' cy='100' r='8' fill='#10B981'/><path d='M9 100 L13 104 L19 96' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='134'>rubric checklist</text><circle cx='14' cy='130' r='8' fill='#10B981'/><path d='M9 130 L13 134 L19 126' stroke='#FFFFFF' stroke-width='2' fill='none'/></g></g><g transform='translate(290 30)'><rect width='240' height='200' rx='12' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#9F1239'>Your lane: meaning</text><g transform='translate(20 60)' font-family='sans-serif' font-size='12' fill='#1F2937'><text x='28' y='14'>did the child understand?</text><text x='28' y='44'>is the argument true?</text><text x='28' y='74'>did they answer the question?</text><text x='28' y='104'>does it sound like *them*?</text><g transform='translate(0 0)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 30)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 60)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 90)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g></g><text x='120' y='185' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>only you can tick these</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Principal Priya",
+        "role": "Your principal, 22 years on the floor, low patience for jargon",
+        "avatarSrc": "/coaches/principal-priya.png"
+      },
+      "intro": [
+        "Priya pulls a chair next to yours in the staff room.",
+        "\"Five quick scenarios. Tell me — boring 80% (AI handles it) or human 20% (you handle it)? I just want to know if you can tell the difference.\""
+      ],
+      "buckets": [
+        { "id": "boring", "label": "Boring 80% — let AI", "tone": "safe" },
+        { "id": "human", "label": "Human 20% — your job", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "Ananya's grandmother passed away last week. You need to write her a short note acknowledging her return to class.",
+          "correctBucketId": "human",
+          "explain": "Human 20%. AI can produce technically polite words. The child needs to feel that *you* noticed; outsourced sympathy reads exactly as outsourced."
+        },
+        {
+          "id": "s2",
+          "situation": "Drafting 12 multiple-choice questions on the structure of a plant cell for tomorrow's Class 8 quiz.",
+          "correctBucketId": "boring",
+          "explain": "Boring 80%. AI does this fast and cleanly. You read them, drop the bad ones, fix the keys. 5-minute task instead of a 25-minute one."
+        },
+        {
+          "id": "s3",
+          "situation": "Aarav slept through your class three days running. You suspect something at home but you don't know what.",
+          "correctBucketId": "human",
+          "explain": "Human 20%. AI cannot have the conversation that finds out. It can draft a parent email *after* the conversation; it can't replace the conversation."
+        },
+        {
+          "id": "s4",
+          "situation": "Reformatting last year's Class 11 Physics paper into the new CBSE blueprint format.",
+          "correctBucketId": "boring",
+          "explain": "Boring 80%. Pure structure shuffling. AI handles it well; you spot-check the section weights."
+        },
+        {
+          "id": "s5",
+          "situation": "Writing the nuanced descriptive comment on Riya's report card that has to acknowledge real progress and a real ongoing weakness without being either falsely cheery or harsh.",
+          "correctBucketId": "human",
+          "explain": "Human 20%. AI will give you a fine *first* draft to start from — but the calibration of tone, the specific incident you reference, that's yours. The parent reading it can tell."
+        },
+        {
+          "id": "s6",
+          "situation": "Generating a one-page summary of the NCERT chapter on Mughal architecture for an absent student.",
+          "correctBucketId": "boring",
+          "explain": "Boring 80%. AI summarises textbook content well; you skim once for accuracy and add one sentence pointing to the key paragraph she should still read herself."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: letting AI grade essays unsupervised",
+      "md": "It is so tempting. 30 essays, AI scores them all in 4 minutes, you post the marks. Don't.\n\nAI is a fluent reader of *form*. It cannot reliably tell whether the argument is true, whether the example actually supports the claim, whether the conclusion follows. It will mark a polished, wrong essay higher than a rough, brilliant one.\n\nUse AI to give you a *reading order* (start with the ones it scored highest and lowest, calibrate your eye, then sample the middle). Never as the final mark. Marks of record are the human 20%."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these steps the way a disciplined teacher uses AI for end-of-unit essays.",
+      "items": [
+        { "id": "s1", "label": "Decide the rubric yourself", "detail": "What you're actually grading for, before AI sees the work." },
+        { "id": "s2", "label": "Have AI score essays against the rubric", "detail": "Triage only — produces a reading order, not marks." },
+        { "id": "s3", "label": "Read the top-and-bottom-scored essays first", "detail": "Calibrate your eye against the AI's structure read." },
+        { "id": "s4", "label": "Sample 5 from the middle band", "detail": "This is where AI structure ≠ meaning shows up." },
+        { "id": "s5", "label": "Mark every essay yourself with AI score visible but ignored when you disagree", "detail": "AI is the second opinion; you are the grader of record." },
+        { "id": "s6", "label": "Post the marks with feedback you wrote", "detail": "Voice is yours; structure can be AI-assisted; meaning is yours." }
+      ],
+      "hint": "Rubric first, AI as triage, your read decides."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Pick one task on your plate this week. Write *your* version of a brief for it — audience, time, outcome, constraint, format. Five lines, no more.",
+      "lang": "markdown",
+      "starter": "Audience: \nTime: \nOutcome (what students should be able to do at the end): \nConstraint (anything AI doesn't know): \nFormat (what should the AI hand back): \n",
+      "expected": "Audience: Class 9 CBSE Science, mixed-ability, 38 students, period 4 (just after lunch — they're sleepy)\nTime: 35 minutes (5 minutes of attendance + transition first)\nOutcome: students should be able to identify exothermic vs endothermic reactions and give one example of each\nConstraint: no lab access, no projector this period, board + chalk only\nFormat: a 35-minute lesson plan with a timed schedule, plus 4 exit-ticket questions\n"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Pick the situations where the boring/human line is being held *correctly*.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "You used AI to draft 8 quiz questions, picked 5, edited 2, wrote one yourself.", "correct": true, "explain": "Textbook good use. AI is doing the drafting; you're doing the curation. Both lanes intact." },
+        { "id": "b", "label": "You used AI to write the eulogy at a school memorial assembly, with light edits.", "correct": false, "explain": "Wrong lane. A memorial is the human 20%. The students will know — they always know." },
+        { "id": "c", "label": "You used AI to summarise the NCERT chapter for an absent student, then added a personal sentence at the end.", "correct": true, "explain": "Boring 80% with a human touch on top. Cheap, kind, defensible." },
+        { "id": "d", "label": "You used AI to grade descriptive answers and posted marks without reading the essays.", "correct": false, "explain": "Reverses the model. AI grades structure, you grade meaning. Posting AI marks unread is the failure mode this whole lesson is about." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "VIVA scene, real story",
+          "md": "Class 12 Physics, viva tha. Bachche ne ChatGPT se *script* yaad ki — ek baar examiner ne side question maara: \"is se pehle kya step kiya tha?\" Bachcha frozen. Memory expired. ChatGPT reload nahi kar sakta tha viva room mein.\n\nMatlab dekh — *bachche* ki galti kam thi; *teacher* ki galti badi thi, ki viva ka structure aisa hi tha jo sirf rote answer test karta hai. Honest assessment design hota to AI ka shortcut kaam hi nahi karta."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The viva that wasn't",
+          "md": "A Class 12 student memorises a ChatGPT-written viva script. The examiner asks one off-script follow-up. The student freezes. The fault is not entirely the student's; the viva format was a recall test wearing a viva costume. The honest design lives in the next lessons."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Teaching is two jobs: the boring 80% (structure work AI does well) and the human 20% (judgment work AI does badly). Drawing the line is the whole skill.",
+        "AI is a fluent intern who has never met your students. Trust it accordingly.",
+        "Scope every task before opening the AI; the smaller the brief, the better the output.",
+        "AI grades the rough, you grade the meaning. Never reverse the order on marks of record.",
+        "Letting AI grade unread is the classic trap. Use it for reading order, not for the marks themselves."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one task you did this week that you spent more than 30 minutes on. Was it boring 80% or human 20%? If it was boring 80%, why didn't you delegate it?"
+    }
+  ]
+}

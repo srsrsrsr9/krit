@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Live Stock Price That Wasn't",
+    "source": "Anonymous board observer at NimbusPay, a Mumbai-based series-A payments startup",
+    "date": "February 2026",
+    "story": "On February 11, 2026, NimbusPay's CTO walked into a board meeting with a slide titled *\"Claude Can Do Anything.\"* He had been demoing Opus 4.7 with the 1M-context window for three weeks and had genuinely convinced himself this was true. The board, two of whom run public-market funds, were the wrong audience for unfounded enthusiasm.\n\nThe demo: he opened Claude.ai, typed *\"What is the current NSE price of HDFC Bank?\"*, and waited for the magic. Claude, with no web tool enabled, helpfully produced a confident answer: **₹1,712.40 as of today**. The board member from the public-market fund pulled up his Bloomberg terminal. Actual price, that minute: **₹1,684.55**.\n\nSilence. Then the slow, patient question: *\"Was that a guess?\"* The CTO checked. No web search tool. No MCP connector. Just a model hallucinating a plausible number from training data that was 14 months old.\n\nThe board didn't kill the AI program. They did demand a written **capability map** — what Claude can do alone vs. with tools vs. not at all — within two weeks. The CTO spent a weekend writing it. He now opens every demo with the line *\"Here's what it can't do.\"*",
+    "takeaway": "Claude without tools is a brilliant intern with no internet, no calculator, and a confident voice. Map the capability surface before you map the demo."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Week 1 — The CTO's AI Feature Wishlist",
+    "setup": "It's **week 1 of Q1 2026**. You are **Karthik, dev at Velora**, a Bengaluru fintech with ~80 engineers. The CTO just forwarded you a Slack message: *\"Board wants an AI feature shipped by end of Q1. Here are five ideas they brainstormed. Pick what we ship and what we politely refuse — by Friday.\"*\n\nThe list: **(1)** real-time market-news summarizer, **(2)** internal-policy Q&A bot, **(3)** AI customer-service agent that auto-issues refunds, **(4)** dev-productivity copilot for the engineering team, **(5)** auto-generated quarterly investor letter.\n\nYou have one Friday afternoon, one rollout budget, and a board that just learned the word *hallucination*.",
+    "coach": { "name": "VP-of-AI Vidya", "role": "Joined Velora last quarter from a unicorn that shipped 11 AI features and killed 9" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Vidya pulls up a chair. *\"Before you pick, what's the **one filter** you apply to every idea?\"*",
+        "options": [
+          { "id": "a", "label": "\"Can Claude do it without tools, today, in one shot?\"", "correct": true, "explain": "**Right filter.** This separates the *demoable* from the *operationally risky*. If it needs live data, multi-step tool use, or zero-error output, you're not shipping in Q1 — you're shipping a liability.", "points": 3 },
+          { "id": "b", "label": "\"Which one will impress the board the most?\"", "correct": false, "explain": "Vidya winces. Board-impressing AI is how you end up demoing live stock prices that are 14 months stale. Optimize for *reliable*, not *impressive*.", "points": 0 },
+          { "id": "c", "label": "\"Which one has the biggest revenue lift?\"", "correct": false, "explain": "Revenue is a tiebreaker, not a filter. The auto-refund agent has the biggest revenue impact and the biggest blast radius — picking by revenue first lands you in regulatory review.", "points": 1 },
+          { "id": "d", "label": "\"Which one already has a Claude-shaped solution in the docs?\"", "correct": true, "explain": "**Solid.** Anthropic's published patterns (projects, MCP, subagents) are a strong signal of what's *production-ready* vs. what's *research-grade*. Match the idea to a known surface.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Apply the filter. **Which two ship in Q1?**",
+        "options": [
+          { "id": "a", "label": "Internal-policy Q&A bot + dev-productivity copilot.", "correct": true, "explain": "**Yes.** Both are bounded, internal, and forgiving. Policy Q&A becomes a Claude Project with the policy PDFs attached. Copilot becomes Claude Code with a `CLAUDE.md` kernel. If they hallucinate, the blast radius is one engineer rolling their eyes — not a refund issued in error.", "points": 3 },
+          { "id": "b", "label": "Real-time market-news summarizer + auto-refund agent.", "correct": false, "explain": "Both fail the filter on day one. Market summarizer needs live data Claude doesn't have. Auto-refund touches money and customers — exactly where hallucination becomes a regulatory event. Hard pass.", "points": 0 },
+          { "id": "c", "label": "Auto-generated investor letter + market-news summarizer.", "correct": false, "explain": "An AI-drafted investor letter sounds clever until the first sentence contains a fabricated figure and an LP forwards it to SEBI. Investor comms is the *last* thing you automate, not the first.", "points": 0 },
+          { "id": "d", "label": "Dev-productivity copilot + AI customer-service agent (read-only, no refunds).", "correct": true, "explain": "**Defensible.** You stripped the dangerous verb (*auto-issues refunds*) and kept the safe one (*answers questions, escalates*). This is the right way to descope: keep the surface, remove the irreversible action.", "points": 3 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "The CTO replies: *\"Cool, but the board specifically asked for the auto-refund agent. Push back or comply?\"*",
+        "options": [
+          { "id": "a", "label": "Comply. The board signs the cheques.", "correct": false, "explain": "The board also fires the CTO when an AI agent issues ₹40 lakh in incorrect refunds in one weekend. Compliance without challenge is how senior engineers earn the title 'former senior engineer.'", "points": 0 },
+          { "id": "b", "label": "Push back with a written one-pager: capability gap, blast radius, and a phased alternative (AI drafts refund, human approves).", "correct": true, "explain": "**This is the move.** You didn't say no — you said *not yet, and here's the version that ships safely*. Human-in-the-loop on the irreversible step is the standard pattern. Vidya is already redlining the doc.", "points": 3 },
+          { "id": "c", "label": "Run a 50-customer pilot first, see what breaks.", "correct": true, "explain": "**Also good.** A bounded pilot with manual reconciliation gives you real failure data instead of a theoretical argument. Just make sure 'see what breaks' has a tripwire — auto-pause at 3 errors, not 300.", "points": 2 },
+          { "id": "d", "label": "Build it but quietly route every refund through a human approval queue without telling the board.", "correct": false, "explain": "Now you have a hidden human bottleneck the board thinks is automated. When latency spikes, the CTO has to explain why the 'AI agent' is actually three people in a Notion table. Trust loss is permanent.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s4",
+        "prompt": "Final week-1 deliverable: a **one-page capability map** for the company. What's on it?",
+        "options": [
+          { "id": "a", "label": "Three columns: *Claude alone* / *Claude + tools (MCP, web)* / *Don't use Claude*. With one Velora example per cell.", "correct": true, "explain": "**Exactly the artifact.** This is the document the CTO can hand to any PM, any engineer, any board member, and they know what's possible *today*. Vidya pins it in #engineering.", "points": 3 },
+          { "id": "b", "label": "A long list of 'best practices' copied from Anthropic's docs.", "correct": false, "explain": "Best-practices docs are read by no one. A one-page decision aid with Velora-specific examples is read by everyone. Generic content has no half-life.", "points": 1 },
+          { "id": "c", "label": "Just a Slack message saying 'use Claude for X, not Y'.", "correct": false, "explain": "The Slack message disappears in 48 hours and nobody onboarded after that ever sees it. Decisions need durable artifacts, not ephemeral ones.", "points": 0 },
+          { "id": "d", "label": "The three columns *plus* a 'Reviewed: 2026-05-07' date and an owner so it gets refreshed quarterly.", "correct": true, "explain": "**Top tier.** Capability maps go stale fast — Sonnet 4.6 to Opus 4.7 was a real boundary shift. Dating the doc and assigning an owner is the difference between a living artifact and a museum piece.", "points": 3 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Week 1 done right. You filtered with capability, not vibes. Picked two safe-to-ship ideas, descoped the dangerous one to human-in-the-loop, and left behind a one-page artifact that survives your laptop dying. **Vidya forwards your map to the CTO unedited.**",
+      "good": "You got the big calls right but made one or two scope-creep mistakes. Re-read the lesson on *what Claude can't do without tools* — that filter is the entire job in week 1.",
+      "learn": "You shipped what the board asked for, not what was safe to ship. Re-read the lesson — especially the section on **capability gaps** and **blast-radius scoping**. Velora gets one shot at first impressions; make week 1 boring on purpose."
+    }
+  }
+}

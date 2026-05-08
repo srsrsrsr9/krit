@@ -1,0 +1,88 @@
+{
+  "slug": "talking-to-the-board",
+  "title": "Talking to Boards and Executives About AI",
+  "subtitle": "Honest timelines, named killcriteria, no 18-month vapor",
+  "estimatedMinutes": 14,
+  "skills": ["leader-ai-comms"],
+  "blocks": [
+    { "type": "lessonMeta", "audioUrl": "/audio/ai-for-leaders/talking-to-the-board.mp3", "audioDurationSec": 660, "audioChapters": [
+      { "startSec": 0, "label": "Opening — the board doesn't want vapor" },
+      { "startSec": 80, "label": "Mental model: the assumption ledger" },
+      { "startSec": 220, "label": "Move 1 — Cost-benefit framing" },
+      { "startSec": 410, "label": "Move 2 — The rollback narrative" },
+      { "startSec": 560, "label": "Try it + reflect" }
+    ], "notesPdfUrl": "/notes/ai-for-leaders/talking-to-the-board.html", "notesByline": "Notes by Vikrant, MBA-2024 batch" },
+    { "type": "markdown", "md": "Most VPs lose the board on AI by promising too much. The board doesn't punish honest tradeoffs; it punishes vapor that misses by 18 months. By the end of this lesson you'll know the three sentences a board wants to hear, and the two they never want to hear again." },
+    { "type": "svgFigure", "alt": "A speech bubble labeled 'AI will transform our entire business' floating above a flat metric line that hasn't moved in 18 months.", "caption": "What happens when promises outpace pre-committed measurable outcomes.", "maxWidth": 560, "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(40 30)'><rect width='480' height='60' rx='30' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='240' y='38' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#7C2D12' font-weight='bold'>\"AI will transform our entire business in 6 months\"</text><text x='240' y='56' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7C2D12' font-style='italic'>— what every board has heard 14 times</text></g><g transform='translate(60 130)'><line x1='0' y1='0' x2='440' y2='0' stroke='#9A3412' stroke-width='2'/><line x1='0' y1='0' x2='0' y2='60' stroke='#9A3412' stroke-width='2'/><text x='-5' y='5' text-anchor='end' font-family='sans-serif' font-size='9' fill='#9A3412'>↑metric</text><polyline points='0,30 80,29 160,32 240,30 320,31 400,29 440,30' stroke='#7F1D1D' stroke-width='3' fill='none'/><text x='220' y='50' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-style='italic'>flat for 18 months · CEO replaced</text></g></svg>" },
+    { "type": "callout", "tone": "tip", "title": "Mental model: the assumption ledger", "md": "A board ask is a forecast. A forecast without an assumption ledger is a wish. Your job is to write down: *what specifically must be true for this to work, by when will we know, what's the rollback if it doesn't.*\n\nBoards don't punish honest assumption ledgers; they punish surprises." },
+    { "type": "embedAnimation", "src": "/courses/ai-for-leaders/anim/talking-to-the-board.html", "height": 420, "caption": "Two boardroom slides: the vapor version vs. the dated-commitment version, watched 18 months later." },
+    { "type": "culturalAside", "defaultLocale": "hi-IN", "variants": {
+      "hi-IN": { "tone": "warn", "title": "AI-first PowerPoint ka khel", "md": "Founder ne board mein bola *\"hum AI-first hain.\"* Slide pe 4 ChatGPT screenshots. Investor ne pucha *\"specifically kya badla?\"* — silence. **AI-first matlab kuch nahi hota agar metric pe nahi dikha.** Vapor ka brand color violet hai." },
+      "en": { "tone": "warn", "title": "Buzzwords, briefly", "md": "Boards have heard 'AI-first' enough times that the phrase now triggers skepticism, not enthusiasm. Replace it with 'we will know by Date Y whether bet X moved metric Z.' Different reaction." }
+    } },
+    { "type": "heading", "level": 2, "text": "Move 1 — Cost-benefit framing" },
+    { "type": "markdown", "md": "Every AI bet has four numbers worth declaring up-front:\n\n1. **Investment** — actual rupees and people across 90 days.\n2. **Expected outcome** — a specific metric delta, with a date.\n3. **Confidence** — your own probability estimate (40%? 70%?).\n4. **Cost of being wrong** — what you lose if the bet fails.\n\nA board can debate any of these. They cannot debate vibes." },
+    { "type": "svgFigure", "alt": "A 4-row table: Investment ₹2.4cr, Expected outcome -12% CAC by Q3, Confidence 55%, Cost of being wrong ₹2.4cr + 1 quarter.", "caption": "The board memo on a postcard. Anything missing here is a missing decision.", "maxWidth": 560, "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 220' role='img'><rect width='560' height='220' rx='14' fill='#EFF6FF'/><g transform='translate(40 30)' font-family='sans-serif' font-size='12'><rect width='480' height='160' rx='8' fill='#FFFFFF' stroke='#1E3A8A' stroke-width='2'/><g><line x1='0' y1='40' x2='480' y2='40' stroke='#1E3A8A'/><text x='14' y='26' fill='#1E3A8A' font-weight='bold'>Investment</text><text x='180' y='26' fill='#1F2937'>₹2.4 cr · 6 engineers · 1 PM · 90 days</text></g><g><line x1='0' y1='80' x2='480' y2='80' stroke='#1E3A8A'/><text x='14' y='66' fill='#1E3A8A' font-weight='bold'>Expected outcome</text><text x='180' y='66' fill='#1F2937'>−12% CAC by Q3 close</text></g><g><line x1='0' y1='120' x2='480' y2='120' stroke='#1E3A8A'/><text x='14' y='106' fill='#1E3A8A' font-weight='bold'>Confidence</text><text x='180' y='106' fill='#1F2937'>55% · medium</text></g><g><text x='14' y='146' fill='#1E3A8A' font-weight='bold'>Cost of being wrong</text><text x='180' y='146' fill='#1F2937'>₹2.4 cr + one quarter of opportunity cost</text></g></g></svg>" },
+    { "type": "animatedTimeline", "title": "Translation moment: 'we want to use AI to reduce CAC'", "steps": [
+      { "label": "1. Frame the bet", "body": "Specific outcome with a date. Not 'reduce CAC'; 'reduce paid CAC by ≥10% by Sep 30, with no LTV regression'." },
+      { "label": "2. Investment line", "body": "Engineers, PM, money, 90-day window. Concrete." },
+      { "label": "3. Confidence note", "body": "Your honest probability. 'We think 50-60%; here's why.'" },
+      { "label": "4. Kill criterion", "body": "By when, and on what number. 'If at day 45 CAC hasn't moved ≥3%, we kill this and reallocate.'" },
+      { "label": "5. The rollback", "body": "What happens if it fails. Capital and people freed up; what do they do next." }
+    ] },
+    { "type": "quiz", "prompt": "What's the most important sentence in a board AI memo?", "multi": false, "choices": [
+      { "id": "a", "label": "By Date Y, we will know whether metric Z moved by ≥X%; if not, we kill it.", "correct": true, "explain": "Correct. A board can govern a dated kill criterion. They cannot govern hope." },
+      { "id": "b", "label": "AI is going to revolutionize everything we do.", "correct": false, "explain": "This is what every board has heard for 24 months. They want specifics now." },
+      { "id": "c", "label": "Our competitors are all using AI.", "correct": false, "explain": "FOMO is not a strategy. Boards know this." },
+      { "id": "d", "label": "We've allocated ₹4 crore to AI initiatives.", "correct": false, "explain": "Numbers without outcomes are budget asks, not strategy." }
+    ] },
+    { "type": "culturalAside", "defaultLocale": "hi-IN", "variants": {
+      "hi-IN": { "tone": "info", "title": "Vichaar samay — the assumption ledger", "md": "Indian boards mein 'AI strategy' ka literal translation hai *\"hum sab kuch karenge, kab pata nahi.\"* Translate it to: *\"yeh number, yeh date, yeh kill criterion.\"* Ek saans mein bol sako toh better." },
+      "en": { "tone": "info", "title": "The one-breath test", "md": "If your AI commitment doesn't fit in a one-breath sentence — 'X by Y, killing if Z' — you don't have a commitment. You have an intention." }
+    } },
+    { "type": "heading", "level": 2, "text": "Move 2 — The rollback narrative" },
+    { "type": "markdown", "md": "Boards trust executives who plan for failure. The rollback narrative — what happens if this bet fails, who absorbs the cost, what gets reallocated — is the single most underrated trust-building move with a board.\n\nMost VPs hide the rollback because they think it signals weakness. It doesn't. *Hiding* it signals weakness. *Pre-committing* to it signals competence." },
+    { "type": "svgFigure", "alt": "A diagram with two paths from day 0: 'success path' and 'rollback path'. Both paths have specific actions named.", "caption": "Pre-commit both paths. The board reviews both. Failure is not a surprise; it's a contingency.", "maxWidth": 560, "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#ECFDF5'/><g transform='translate(40 30)'><circle cx='30' cy='90' r='14' fill='#1E40AF'/><text x='30' y='94' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#fff' font-weight='bold'>D0</text><line x1='44' y1='90' x2='200' y2='40' stroke='#10B981' stroke-width='2.5'/><line x1='44' y1='90' x2='200' y2='140' stroke='#F59E0B' stroke-width='2.5' stroke-dasharray='4 3'/><g transform='translate(210 25)'><rect width='260' height='40' rx='6' fill='#A7F3D0' stroke='#065F46'/><text x='130' y='17' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-weight='bold'>Success path · D90 · CAC −12%</text><text x='130' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>scale to phase 2 · ₹6cr Q4 budget</text></g><g transform='translate(210 125)'><rect width='260' height='40' rx='6' fill='#FEF3C7' stroke='#92400E'/><text x='130' y='17' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7C2D12' font-weight='bold'>Rollback path · D45 · CAC unchanged</text><text x='130' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7C2D12'>kill · 2 engineers to bet B · post-mortem</text></g><text x='240' y='200' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46' font-weight='bold'>Pre-committed both paths · the board sleeps</text></g></svg>" },
+    { "type": "chatScenario", "coach": { "name": "Board-Member Bharat", "role": "Independent director, 14 board seats over 20 years" }, "intro": [
+      "Right. Five real boardroom asks. ⚖️",
+      "Tell me whether each VP is being **honest**, **vague**, or **selling**.",
+      "I've sat through 800+ AI memos. Pick carefully."
+    ], "buckets": [
+      { "id": "honest", "label": "Honest", "tone": "safe" },
+      { "id": "vague", "label": "Vague", "tone": "neutral" },
+      { "id": "selling", "label": "Selling (red flag)", "tone": "danger" }
+    ], "scenarios": [
+      { "id": "s1", "situation": "VP says: 'AI will transform our customer support entirely. We expect significant improvements.'", "correctBucketId": "vague", "explain": "Vague. No metric, no date, no kill criterion. Board cannot govern this." },
+      { "id": "s2", "situation": "VP says: 'By Sep 30 we will reduce ticket-handling cost by ≥18%, measured against this quarter's baseline. Confidence 55%. If at day 45 we don't see ≥6% movement, we stop and reallocate the 2 engineers.'", "correctBucketId": "honest", "explain": "Honest. Three numbers, a date, a kill criterion, a probability. This is a memo a board can govern." },
+      { "id": "s3", "situation": "VP says: 'We're investing ₹4 crore in AI to maintain competitive parity. The market expects this of us.'", "correctBucketId": "selling", "explain": "Selling — using FOMO and 'market expectation' as a substitute for outcome. Board will see through this. Red flag." },
+      { "id": "s4", "situation": "VP says: 'We've identified 3 AI bets. Each has its own outcome, kill date, and rollback. Combined investment is ₹3.6 crore. Worst case, we're out 1 quarter and 6 engineers.'", "correctBucketId": "honest", "explain": "Honest. Portfolio framing with explicit downside. Board likes this." },
+      { "id": "s5", "situation": "VP says: 'AI is the future. We need to act now or we'll be left behind.'", "correctBucketId": "selling", "explain": "Pure FOMO sales pitch. Board has heard this 47 times. Always flag." }
+    ] },
+    { "type": "callout", "tone": "warn", "title": "The classic trap: hiding the rollback", "md": "Most VPs think hiding the failure case makes the pitch stronger. It doesn't.\n\n**Pre-committing the rollback is the single highest-trust move available with a board.** It tells them: *I've thought about how this fails. I'm not going to surprise you in 6 months.*\n\nThe pitches that lose boards are the ones where the executive shows up at month 5 with a panicked memo asking for more time. The pitches that win are the ones where the kill criterion was on slide 3." },
+    { "type": "sortableSteps", "prompt": "Order the four lines of a board AI memo from highest to lowest priority:", "items": [
+      { "id": "a", "label": "The kill criterion (date + metric)", "detail": "First. Without this, the rest is fiction." },
+      { "id": "b", "label": "The expected outcome (specific number, specific date)", "detail": "Second. The 'win condition'." },
+      { "id": "c", "label": "The investment (rupees + people + window)", "detail": "Third. The cost." },
+      { "id": "d", "label": "The narrative (why this bet vs alternatives)", "detail": "Fourth. Useful color, not decision-relevant." }
+    ] },
+    { "type": "tryIt", "instruction": "Write the one-breath sentence for an AI bet you've considered. Format: 'By [date], we will know whether [metric] moved by [Δ]; if not, we [kill action].' Be specific about ALL four placeholders.", "expected": "By Sep 30 2026, we will know whether paid CAC moved by ≥10%; if not, we kill the bet and reallocate the 4 engineers to our retention work — and we'll do a public post-mortem within 14 days of the kill." },
+    { "type": "quiz", "prompt": "Pick the TWO statements about board AI communication that are TRUE:", "multi": true, "choices": [
+      { "id": "a", "label": "Pre-committing a rollback signals competence, not weakness", "correct": true, "explain": "Correct. Boards trust executives who plan for failure." },
+      { "id": "b", "label": "A confidence note (e.g. '55% likely') is more useful than a single optimistic forecast", "correct": true, "explain": "Correct. Honest probability lets the board calibrate." },
+      { "id": "c", "label": "The bigger the AI promise, the more the board will fund", "correct": false, "explain": "False. Sophisticated boards now distrust large AI promises after 24 months of overpromising." },
+      { "id": "d", "label": "If you don't know your kill criterion, list it as 'TBD'", "correct": false, "explain": "False. 'TBD' on a kill criterion = no kill criterion. Decide before pitching." }
+    ] },
+    { "type": "culturalAside", "defaultLocale": "hi-IN", "variants": {
+      "hi-IN": { "tone": "success", "title": "Mahaul ka management — Indian board edition", "md": "Indian boards mein technical questions kam aate hain; *\"why this, why now, what if it fails?\"* zyada aate hain. Tu agar pehle se yeh teen sawal handle kar le, baaki natural follow-through hai." },
+      "en": { "tone": "success", "title": "What Indian boards actually ask", "md": "Most Indian board AI questions are not technical — they're 'why this, why now, what if it fails.' Pre-answer all three, in that order, in your memo." }
+    } },
+    { "type": "keyTakeaways", "points": [
+      "Board AI memos need four lines: investment, expected outcome, confidence, kill criterion",
+      "The rollback narrative is the highest-trust move you can make with a board",
+      "'AI-first' / 'transformation' / 'parity' are board allergens — replace with dated commitments",
+      "Pre-commit your kill criterion on slide 3, not when the metric flatlines at month 5",
+      "One-breath sentence test: 'X by Y, killing if Z'"
+    ] },
+    { "type": "reflect", "prompt": "Write the kill criterion for one AI bet on your current roadmap. If you can't, you don't have a roadmap — you have a wishlist." }
+  ]
+}

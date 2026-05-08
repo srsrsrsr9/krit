@@ -1,0 +1,223 @@
+{
+  "slug": "content-pipeline",
+  "title": "AI-Powered Content Pipeline",
+  "subtitle": "Brief, draft, review, ship — and where AI fits in each",
+  "estimatedMinutes": 14,
+  "skills": ["marketing-content"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/digital-marketing-with-ai/content-pipeline.mp3",
+      "audioDurationSec": 715,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the slop problem" },
+        { "startSec": 80, "label": "Mental model: brief → draft → review → ship" },
+        { "startSec": 220, "label": "Move 1 — The brand-voice anchor" },
+        { "startSec": 410, "label": "Move 2 — The 3-pass review" },
+        { "startSec": 560, "label": "Trap, try-it, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/digital-marketing-with-ai/content-pipeline.html",
+      "notesByline": "Notes by Sneha, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most teams adopt AI for content the same way: turn it on, ship 10x volume, watch traffic die six months later, blame Google. The pattern has a name now — *AI-generated SEO slop* — and the search engines have been training on it for two years. They are very good at spotting it.\n\nThe answer is not to abandon AI. It's to stop treating AI as a content factory and start treating it as one stage in a four-stage pipeline. The pipeline is the protection. Without it, you ship slop. With it, you ship 4x volume at the same quality, which is the actual win."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A four-stage horizontal pipeline: 'Brief' (purple, human icon), 'Draft' (blue, AI icon), 'Review' (amber, mixed icon), 'Ship' (green, human icon). Arrows between each. Below, a label 'AI heaviest in Draft, human heaviest at the bookends'.",
+      "caption": "The pipeline. AI does the middle. Humans hold the brief and the ship.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' font-size='12'><g transform='translate(30 70)'><rect width='120' height='90' rx='12' fill='#E9D5FF' stroke='#5B21B6' stroke-width='2'/><text x='60' y='30' text-anchor='middle' font-weight='bold' fill='#5B21B6' font-size='14'>1. Brief</text><text x='60' y='52' text-anchor='middle' fill='#5B21B6'>Human</text><text x='60' y='72' text-anchor='middle' fill='#7C3AED' font-size='10'>voice + intent</text></g><g transform='translate(170 70)'><rect width='120' height='90' rx='12' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='60' y='30' text-anchor='middle' font-weight='bold' fill='#1E40AF' font-size='14'>2. Draft</text><text x='60' y='52' text-anchor='middle' fill='#1E40AF'>AI 80%</text><text x='60' y='72' text-anchor='middle' fill='#3730A3' font-size='10'>volume here</text></g><g transform='translate(310 70)'><rect width='120' height='90' rx='12' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='60' y='30' text-anchor='middle' font-weight='bold' fill='#92400E' font-size='14'>3. Review</text><text x='60' y='52' text-anchor='middle' fill='#92400E'>Human + AI</text><text x='60' y='72' text-anchor='middle' fill='#92400E' font-size='10'>3 passes</text></g><g transform='translate(450 70)'><rect width='120' height='90' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='60' y='30' text-anchor='middle' font-weight='bold' fill='#065F46' font-size='14'>4. Ship</text><text x='60' y='52' text-anchor='middle' fill='#065F46'>Human</text><text x='60' y='72' text-anchor='middle' fill='#065F46' font-size='10'>final call</text></g><path d='M150 115 L170 115' stroke='#5B21B6' stroke-width='2' marker-end='url(#a3)'/><path d='M290 115 L310 115' stroke='#1E40AF' stroke-width='2' marker-end='url(#a3)'/><path d='M430 115 L450 115' stroke='#92400E' stroke-width='2' marker-end='url(#a3)'/></g><text x='300' y='200' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#5B21B6' font-style='italic'>AI heaviest in Draft. Human heaviest at the bookends.</text><defs><marker id='a3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#5B21B6'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: brief → draft → review → ship",
+      "md": "Every piece of content should pass through four stages, in order, no skipping.\n\n1. **Brief** — A human writes what we are saying, to whom, in whose voice, and why now. *This is the unskippable step.* If the brief is weak, every downstream stage is downstream of weak.\n2. **Draft** — AI does the heavy lifting here. This is the 80%.\n3. **Review** — The 3-pass review (we'll get to it). This is what stops slop from shipping.\n4. **Ship** — A human owns the final yes. Not a Slack thread, not a 'looks fine'. A name."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/digital-marketing-with-ai/anim/content-pipeline-flow.html",
+      "height": 420,
+      "caption": "Watch a brief move through the pipeline — and watch what happens when each stage is skipped."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Agency ne bola '100 articles in a week'",
+          "md": "Pune ki ek edtech ne agency hire ki. Pitch tha: \"AI use karke 100 SEO articles in a week, ranking guaranteed.\" Founder bola, \"deal.\"\n\nWeek 1 — 100 articles live. Founder Slack pe bragging.\nWeek 8 — 100 articles still live. Traffic same.\nWeek 12 — Google ne update mara. Site-wide ranking 47% gir gayi. Helpful Content Update ka classic case.\n\nFounder ne agency ko gaali di. Lekin sach yeh hai — agency ne wahi delivered jo promise tha. Volume. Brief koi nahi tha. Voice koi nahi thi. Review koi nahi thi. Sirf draft tha, multiplied by 100. Slop, by design."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "The 100-articles-a-week trap",
+          "md": "A Pune edtech bought an agency package promising '100 SEO articles per week, ranking guaranteed in 90 days, fully AI'. Three months in, a search algorithm update dropped site rankings 47%. The agency had delivered exactly what was promised. Volume without brief, voice, or review is a slop machine. The metric the agency optimised for was the wrong metric."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The brand-voice anchor"
+    },
+    {
+      "type": "markdown",
+      "md": "AI defaults to a tone called *generic LinkedIn earnest*. You can spot it in three sentences: short paragraphs, lots of em-dashes, em-dashes used as commas, vague affirmations, and a closing call-to-action that says 'embrace the journey'. Two of your competitors are shipping it right now. Your customers cannot tell their content apart from yours when you let AI run unanchored.\n\nThe fix is not 'add a style guide PDF to the prompt'. The fix is the **brand-voice anchor**: a 200-300 word document with three things — *do say*, *don't say*, and *three short sample paragraphs in the voice we actually have*. You hand it to AI on every prompt. You hand it to every reviewer. The anchor is what stops drift.\n\nA real anchor for a Mumbai D2C beauty brand we worked with last quarter:\n\n- *Do say:* 'six-week routine', 'because skin barriers don't read marketing', 'this is for people who tried five things already'.\n- *Don't say:* 'unlock your glow', 'embrace your inner beauty', 'transform your journey'.\n- Three sample paragraphs from their best-performing 2025 emails attached.\n\nResult: AI drafts went from 'rejectable on voice' to 'shippable with light copy-edit' in a week."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A target with three concentric rings labelled 'voice', 'tone', 'register'. An arrow lands in the bullseye when the brand-voice anchor is attached; without it, the arrow lands in the outer ring.",
+      "caption": "With the anchor, AI hits the brand voice. Without it, it hits 'generic LinkedIn earnest'.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#ECFDF5'/><g transform='translate(160 50)'><circle cx='100' cy='100' r='95' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><circle cx='100' cy='100' r='65' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='100' cy='100' r='35' fill='#F59E0B' stroke='#92400E' stroke-width='2'/><circle cx='100' cy='100' r='10' fill='#7F1D1D'/><text x='100' y='30' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>register</text><text x='100' y='55' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>tone</text><text x='100' y='80' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-weight='bold'>voice</text><line x1='40' y1='40' x2='95' y2='98' stroke='#10B981' stroke-width='4'/><polygon points='95,98 90,82 80,90' fill='#10B981'/><text x='5' y='30' font-family='sans-serif' font-size='10' fill='#065F46' font-weight='bold'>with anchor</text><line x1='280' y1='240' x2='150' y2='180' stroke='#EF4444' stroke-width='4' stroke-dasharray='4 3'/><polygon points='150,180 158,194 168,184' fill='#EF4444'/><text x='285' y='245' font-family='sans-serif' font-size='10' fill='#7F1D1D' font-weight='bold'>without anchor</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation: 'Make it sound like our brand' → an AI-runnable instruction",
+      "steps": [
+        { "label": "Step 1 — Find your three voice anchors", "body": "Open the three highest-performing pieces of content from the last 12 months. Highlight the lines a customer would quote. Those are your voice anchors. Real sentences, not vibes." },
+        { "label": "Step 2 — Write a Do/Don't list", "body": "From those highlights, extract patterns. 'Do say: specific timeframes, ratio numbers, named customer types.' 'Don't say: aspirational verbs without a noun behind them, journey metaphors, glow.'" },
+        { "label": "Step 3 — Attach 3 full sample paragraphs", "body": "Tell AI: 'Write in the voice of these three paragraphs.' Paste them. AI is a pattern-matcher; it pattern-matches what you give it." },
+        { "label": "Step 4 — Lock it in the system prompt", "body": "Don't paste the anchor into every chat. Wire it into your tooling — Notion AI, Claude project, whatever you use. The anchor should be persistent infrastructure, not a per-task copy-paste." },
+        { "label": "Step 5 — Audit drift monthly", "body": "Take 5 random pieces shipped this month. Compare to anchor. Score each on a 1-5 voice match. If average drops below 4, refresh the samples." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your AI is producing drafts that sound 'fine but generic'. Which of these is most likely to fix it in a week?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Attach 3 high-performing real paragraphs from your archives as voice samples in the system prompt.", "correct": true, "explain": "Right. Pattern-match in beats abstraction every time. Real paragraphs > adjectives." },
+        { "id": "b", "label": "Add 'be witty and engaging' to the prompt.", "correct": false, "explain": "Adjectives like 'witty' and 'engaging' are exactly what AI was trained on as filler. They make output worse, not better." },
+        { "id": "c", "label": "Switch to a different AI model.", "correct": false, "explain": "Tool swap won't fix a brief problem. The same generic output appears across all major models when un-anchored." },
+        { "id": "d", "label": "Increase output volume to 'find the gems'.", "correct": false, "explain": "Volume amplifies the problem; you ship more generic content faster." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Naani's recipe vs Swiggy recipe",
+          "md": "Naani ki dal makhani ka recipe likhwao. \"Beta, pehle kasoori methi haath se mal ke daalo, warna kadwa lagega. Tomato pakka pakao, varna khatta. Cream end mein, varna phat jayegi.\"\n\nSwiggy ke menu pe likha hai: \"Authentic, creamy, rich, indulgent.\"\n\nDono dal makhani hai. Ek mein **specifics** hai. Doosre mein **adjectives** hai. AI default Swiggy-mode mein likhta hai. Tu use Naani-mode mein dhakelta hai sample paragraphs deke."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Specifics over adjectives",
+          "md": "Your grandmother's recipe says 'crush the kasoori methi between your palms or it tastes bitter'. The food-app menu says 'authentic, creamy, rich, indulgent'. Both describe the same dish. One has specifics; the other has adjectives. AI defaults to adjective-mode; samples push it to specifics-mode."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 3-pass review"
+    },
+    {
+      "type": "markdown",
+      "md": "Once a draft exists, three passes — in order, by name. Each pass has one job. None of them is 'general edit'.\n\n1. **Voice pass** — Does this sound like our brand or like generic ChatGPT? You read it out loud; if your CMO would not say this sentence, it gets a strike.\n2. **Fact pass** — Is every claim, statistic, and product detail correct? AI confidently invents stats. The 2024 average ad-spend numbers it 'cites' are often hallucinated. Verify.\n3. **Slop pass** — Does this earn its length? Are there filler paragraphs whose removal nobody would notice? Cut them. The shortest version that still works wins.\n\nIn that order, because catching a voice problem after fact-checking is wasted fact-checking. And catching slop before voice means you've cut the wrong things."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Three numbered review passes in vertical sequence: Voice (purple, microphone icon, 'sounds like us?'), Fact (blue, magnifying glass icon, 'checks out?'), Slop (red, scissors icon, 'earns its length?'). Each rejects a percentage of drafts; arrows show what gets through.",
+      "caption": "The 3-pass review. Order matters; you can't undo what an earlier pass would catch.",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='12'><g transform='translate(80 30)'><rect width='400' height='70' rx='10' fill='#E9D5FF' stroke='#5B21B6' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#7C3AED'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>1</text><text x='80' y='30' fill='#5B21B6' font-weight='bold' font-size='14'>Voice pass</text><text x='80' y='50' fill='#5B21B6'>does this sound like us, or like ChatGPT?</text><text x='80' y='66' fill='#7C3AED' font-size='10' font-style='italic'>kills ~30% of drafts</text></g><g transform='translate(80 120)'><rect width='400' height='70' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#1E40AF'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>2</text><text x='80' y='30' fill='#1E40AF' font-weight='bold' font-size='14'>Fact pass</text><text x='80' y='50' fill='#1E40AF'>are claims and numbers verifiable?</text><text x='80' y='66' fill='#3730A3' font-size='10' font-style='italic'>kills ~15% — usually hallucinated stats</text></g><g transform='translate(80 210)'><rect width='400' height='70' rx='10' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#7F1D1D'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>3</text><text x='80' y='30' fill='#7F1D1D' font-weight='bold' font-size='14'>Slop pass</text><text x='80' y='50' fill='#7F1D1D'>does each paragraph earn its length?</text><text x='80' y='66' fill='#7F1D1D' font-size='10' font-style='italic'>cuts ~25% of length on average</text></g><path d='M280 100 L280 120' stroke='#5B21B6' stroke-width='2' marker-end='url(#a4)'/><path d='M280 190 L280 210' stroke='#1E40AF' stroke-width='2' marker-end='url(#a4)'/></g><defs><marker id='a4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Growth-Lead Gauri",
+        "role": "D2C veteran, has rejected 1,400 drafts in the last 18 months and kept score"
+      },
+      "intro": [
+        "Back. We do reviews differently here. I'll show you 6 lines from real AI drafts.",
+        "Tell me which pass would catch each: **Voice**, **Fact**, or **Slop** (filler that earns nothing).",
+        "If a line has multiple problems, pick the *first* pass that catches it. Order matters."
+      ],
+      "buckets": [
+        { "id": "voice", "label": "Voice pass", "tone": "neutral" },
+        { "id": "fact", "label": "Fact pass", "tone": "danger" },
+        { "id": "slop", "label": "Slop pass", "tone": "neutral" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "'Embrace your skincare journey with our scientifically-engineered formulations designed for the modern Indian woman.'", "correctBucketId": "voice", "explain": "Pure generic-LinkedIn-earnest. 'Embrace', 'journey', 'scientifically-engineered', 'modern Indian woman' — every phrase is interchangeable with three competitors'. Voice pass kills it." },
+        { "id": "s2", "situation": "'A 2024 Nielsen study found that 73% of Indian D2C buyers prefer AI-personalised emails.' (No such study exists.)", "correctBucketId": "fact", "explain": "Hallucinated statistic. Sounds plausible; isn't real. Fact pass catches it before it ships and embarrasses you in court." },
+        { "id": "s3", "situation": "'In today's fast-paced digital landscape, brands must navigate an evolving consumer ecosystem.'", "correctBucketId": "slop", "explain": "Voice pass *could* kill it; it's also a filler sentence whose removal nobody would notice. The slop pass is the cleaner kill." },
+        { "id": "s4", "situation": "'Our new serum reduces fine lines in 7 days, backed by a 200-person clinical trial.' (Trial was 40 people, results were 14 days, not 7.)", "correctBucketId": "fact", "explain": "Half-true. Worse than fully invented; sounds defensible until someone checks. Fact pass." },
+        { "id": "s5", "situation": "'In conclusion, content marketing is more important than ever in 2026.'", "correctBucketId": "slop", "explain": "The 'in conclusion' tell. Adds zero. Cut and the piece is stronger." },
+        { "id": "s6", "situation": "'Hey gorgeous! Ready to glow up your weekend? Our drop is HERE!' — for a brand whose voice is dry and clinical.", "correctBucketId": "voice", "explain": "Mismatch with the brand-voice anchor. Voice pass." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: AI-generated SEO slop",
+      "md": "The slop pattern: high volume + no voice anchor + no fact pass + 'rank-first, value-second'. Search engines have been trained on this exact signature for two years; they spot it within weeks of indexing.\n\nThe symptom is delayed: traffic looks fine for 4-8 weeks, then drops 20-50% after the next core update. The damage is sticky — recovering site-wide trust takes 3-6 months of *removing* low-quality pages and shipping fewer, better ones.\n\nThe fix is upstream. Don't ship slop in the first place. The 3-pass review is not optional bureaucracy; it's the cheapest insurance you have."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Drag these into the right order — your AI content pipeline for a single piece, end to end.",
+      "items": [
+        { "id": "1", "label": "Write the human brief: who, what, voice, why now", "detail": "30 minutes. Unskippable. The brief is the spine." },
+        { "id": "2", "label": "Attach brand-voice anchor (3 sample paragraphs + Do/Don't)", "detail": "Wired into your AI tool, not pasted ad-hoc." },
+        { "id": "3", "label": "AI generates draft", "detail": "The fast part. 5-10 minutes." },
+        { "id": "4", "label": "Voice pass (does this sound like us?)", "detail": "Read aloud; CMO test." },
+        { "id": "5", "label": "Fact pass (verify every claim and number)", "detail": "Open the source; if there's no source, cut the claim." },
+        { "id": "6", "label": "Slop pass (cut what doesn't earn its length)", "detail": "Aim to cut 20-30% on average." },
+        { "id": "7", "label": "Named human ships it", "detail": "Not 'looks fine'. A name on the publish button." }
+      ],
+      "hint": "Brief → anchor → draft → 3 passes (voice, fact, slop, in that order) → named ship."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Below is a real AI-drafted opening paragraph for a D2C wellness brand:\n\n'In today's rapidly evolving wellness landscape, modern Indian consumers are increasingly seeking personalised, holistic solutions that align with their unique lifestyle journeys. Our new ashwagandha-based formulation has been scientifically engineered to deliver transformative results, harnessing the power of ancient Ayurvedic wisdom backed by cutting-edge research.'\n\nApply the 3-pass review. For each pass, write what you'd flag. Then write the rewritten version that survives all three.",
+      "expected": "Voice pass: every phrase is generic. 'Today's rapidly evolving', 'modern Indian consumers', 'personalised holistic solutions', 'transformative results', 'cutting-edge research' — all interchangeable filler. Strike.\n\nFact pass: 'scientifically engineered' has no specific study cited. 'Cutting-edge research' has no source. Both unverifiable. Strike.\n\nSlop pass: of 60 words, maybe 8 carry information (ashwagandha, Ayurvedic, formulation). 52 words of vapor. Strike.\n\nRewrite (a survivable version, in a dry voice with specifics):\n'We made a new ashwagandha capsule. Single-ingredient, 600mg, third-party tested for heavy metals (certificate on the page). It targets one thing: cortisol-driven sleep loss. If your problem is 'wired but tired at 11pm', it's worth six weeks. If not, save your money.'"
+    },
+    {
+      "type": "quiz",
+      "prompt": "You inherit a content backlog of 200 AI-drafted blog posts that haven't shipped. Time and budget allow you to ship only 60. Which culling rule survives the 3-pass logic?",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Cut the 80 with the weakest voice match to your anchor first.", "correct": true, "explain": "Right. Voice failures are the most expensive long-term — they erode brand recognition. Cut these first." },
+        { "id": "b", "label": "Cut the 30 with unverifiable claims; reposition as opinion pieces only if the opinion has earned its place.", "correct": true, "explain": "Right. Fact-pass failures are legal risk and credibility risk. Cull aggressively." },
+        { "id": "c", "label": "Ship the longest 60; length signals depth.", "correct": false, "explain": "Length is uncorrelated with quality and is the slop pattern in disguise. Don't reward word count." },
+        { "id": "d", "label": "Ship all 200 — let the audience decide.", "correct": false, "explain": "The audience decides via traffic loss after the next algorithm update. Volume-cide is the loud version of this mistake." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Mummy ka 'isme namak kam hai' test",
+          "md": "Mummy taste karti hai. \"Beta, kuch missing hai.\" Tu adjective add karta hai — \"flavorful, rich, savory\". Mummy: \"Namak daal.\"\n\nVoice pass yahi hai. Tujhe content padh ke ek chhota sa missing-piece dikhna chahiye. Adjective daalna easy hai. Specifics daalna mehnat hai. Mummy hamesha specifics maangti hai."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "The 'something's missing' test",
+          "md": "Your mom tastes the dish, says 'something's missing'. You can either add adjectives ('rich, savoury, flavourful') or salt. The voice pass works the same way. Filler is the adjectives. Specificity is the salt."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "AI is a draft engine, not a content factory — the pipeline is the protection.",
+        "Without a brand-voice anchor, AI defaults to 'generic LinkedIn earnest' and your content becomes interchangeable with competitors'.",
+        "The 3-pass review (voice, fact, slop — in that order) is the cheapest insurance against the SEO-slop trap.",
+        "Volume without voice + fact + slop discipline does not raise your brand; it lowers your search trust.",
+        "Three real high-performing paragraphs beat any number of style-guide adjectives when training AI on your voice."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Take the last AI-generated piece you shipped. Run it through the 3-pass review now, with no team to please. How many strikes does it accumulate? What does that tell you about your current pipeline?"
+    }
+  ]
+}

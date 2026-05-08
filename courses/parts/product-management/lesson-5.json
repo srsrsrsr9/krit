@@ -1,0 +1,270 @@
+{
+  "slug": "shipping-and-followup",
+  "title": "Shipping, Measuring, and What Comes After",
+  "subtitle": "Ship-day is the start of the work, not the finish line",
+  "estimatedMinutes": 14,
+  "skills": ["pm-launch-and-measure"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/product-management/shipping-and-followup.mp3",
+      "audioDurationSec": 660,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the launch-blog illusion" },
+        { "startSec": 80, "label": "Mental model: ship-day is day 0, not day 30" },
+        { "startSec": 220, "label": "Move 1 — The pre-mortem" },
+        { "startSec": 410, "label": "Move 2 — The 7-day post-launch loop" },
+        { "startSec": 560, "label": "Try it + reflect" }
+      ],
+      "notesPdfUrl": "/notes/product-management/shipping-and-followup.html",
+      "notesByline": "Notes by Tanvi, batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Most teams treat the launch blog as the finish line. The team writes a Slack post, the founder tweets a thread, and everyone moves on. Three weeks later, when someone asks 'how is the new feature doing?' the answer is a vague 'well, I think.' Sometimes it's worse — silence.\n\nThis is the most expensive habit in early-stage product. You shipped the feature. The next 30 days tell you whether the feature should be promoted, fixed, or quietly killed. If you don't run that loop, every feature you ship is a coin flip you weren't allowed to look at.\n\nBy the end of this lesson you will know how to anticipate launch failures *before* they happen, and how to read post-launch data with enough rigor to actually decide what to do next."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A horizontal timeline. Ship-day at the left labelled 'Day 0'. To the right, days 1, 3, 7, 14, 30 each have a different metric attached: errors, activation, day-1 retention, week-1 retention, day-30 retention. Below the timeline, a 'most teams stop here' label sits at day 1.",
+      "caption": "Most teams' attention drops to zero by day 3. The signal you need lives in days 7-30.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' fill='#1F2937'><line x1='40' y1='110' x2='540' y2='110' stroke='#92400E' stroke-width='2'/><g transform='translate(60 110)'><circle r='10' fill='#F59E0B'/><text x='0' y='-22' text-anchor='middle' font-size='10' font-weight='bold' fill='#7C2D12'>Day 0</text><text x='0' y='35' text-anchor='middle' font-size='10' fill='#7C2D12'>SHIP</text><text x='0' y='50' text-anchor='middle' font-size='9' fill='#7C2D12'>(launch blog, tweets)</text></g><g transform='translate(140 110)'><circle r='8' fill='#10B981'/><text x='0' y='-22' text-anchor='middle' font-size='10' fill='#065F46'>Day 1</text><text x='0' y='35' text-anchor='middle' font-size='9' fill='#065F46'>error rate</text><text x='0' y='48' text-anchor='middle' font-size='9' fill='#065F46'>support tickets</text></g><g transform='translate(230 110)'><circle r='8' fill='#10B981'/><text x='0' y='-22' text-anchor='middle' font-size='10' fill='#065F46'>Day 3</text><text x='0' y='35' text-anchor='middle' font-size='9' fill='#065F46'>activation</text><text x='0' y='48' text-anchor='middle' font-size='9' fill='#065F46'>find rate</text></g><g transform='translate(320 110)'><circle r='10' fill='#0EA5E9'/><text x='0' y='-22' text-anchor='middle' font-size='10' fill='#0369A1'>Day 7</text><text x='0' y='35' text-anchor='middle' font-size='9' fill='#0369A1'>week-1 retention</text><text x='0' y='48' text-anchor='middle' font-size='9' fill='#0369A1'>support theme</text></g><g transform='translate(420 110)'><circle r='8' fill='#0EA5E9'/><text x='0' y='-22' text-anchor='middle' font-size='10' fill='#0369A1'>Day 14</text><text x='0' y='35' text-anchor='middle' font-size='9' fill='#0369A1'>repeat usage</text></g><g transform='translate(520 110)'><circle r='10' fill='#8B5CF6'/><text x='0' y='-22' text-anchor='middle' font-size='10' fill='#5B21B6'>Day 30</text><text x='0' y='35' text-anchor='middle' font-size='9' fill='#5B21B6'>retention</text><text x='0' y='48' text-anchor='middle' font-size='9' fill='#5B21B6'>vs control</text></g><rect x='30' y='180' width='160' height='30' rx='6' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='110' y='200' text-anchor='middle' font-size='10' fill='#7F1D1D' font-style='italic'>most teams stop attention here</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: ship-day is day 0, not day 30",
+      "md": "Reframe a launch as the **start** of the data-collection phase, not the end of the work phase. The build phase ends on ship-day; the learning phase begins.\n\nUntil you've watched 30 days of post-launch behavior, the feature has not actually shipped — only the code has. The product question — *did this work?* — is open. Open questions deserve attention. Closed-by-default-after-ship-day is how teams ship 47 features in a year and don't know which ones helped.\n\nIf you are honest with yourself, you will probably kill 20 percent of the features you ship within 90 days. That is not failure — that is the system working. The failure mode is not killing them, leaving them in the product, and accruing 18 months of support cost on a feature that's actively hurting retention."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/product-management/anim/shipping-post-launch-loop.html",
+      "height": 420,
+      "caption": "Watch a feature ship on day 0, hit a soft activation curve by day 7, and produce the kill signal at day 21 — a story most teams never see because they stopped looking.",
+      "fallbackImage": "/courses/product-management/anim/shipping-post-launch-loop-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Launch-day fanfare ka satya",
+          "md": "Bhai, scene yeh hai. Launch-day pe LinkedIn pe 4 posts. Founder ne thread chalaya. PM ne *'we're so excited'* likha. Designer ne case study post kiya. Engineering manager ne quote-tweet kiya.\n\n21 din baad: feature ka usage 3 percent. Slack pe koi mention nahi. PM ko poocha — *'kaisa chal raha hai?'* — *'haan, traction aa raha hai dheere dheere.'* Yeh translation hai *'mujhe pata nahi'* ka.\n\n**Launch fanfare se traction predict nahi hota. Day-30 cohort retention se hota hai.**"
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Why LinkedIn launch theatre is the worst leading indicator",
+          "md": "On launch day, four people post about it on LinkedIn. The founder threads. Engineering quote-tweets. By week three, the feature has 3 percent adoption and nobody mentions it.\n\nLaunch fanfare predicts nothing about traction. The only signals that matter are activation rate (day 1-7), retention of users who tried the feature vs those who didn't (day 14-30), and support ticket themes (day 0-30). Everything else is theatre."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The pre-mortem"
+    },
+    {
+      "type": "markdown",
+      "md": "A **pre-mortem** is a 30-minute team exercise, run 1-2 weeks before launch, where you imagine the launch has failed catastrophically and you list every reason why. The frame is past-tense: *'It is now 30 days post-launch. The feature has flopped. Why?'*\n\nThis works because forcing a past-tense failure frame breaks the optimism that surrounds late-stage projects. Teams who say 'what could go wrong?' produce 4-5 risks. Teams who say 'imagine it has already gone wrong; tell me the story' produce 15-20 risks, ranked by likelihood. The same brains, two different prompts, very different output.\n\nA Bengaluru SaaS shipping a billing redesign ran a pre-mortem on a Tuesday in March 2026. The team produced 17 failure modes; 4 were mitigated immediately, 6 led to a 1-week launch delay (worth it), 7 were accepted as risks-to-watch. After launch, 5 of the 17 actually happened — but all 5 were on the list, monitored, and addressed within 48 hours. Compare to their previous launch, where they did no pre-mortem and spent 3 weeks fighting a fire that they could have caught in the room.\n\nThe move is simple: run the meeting. The cost is 30 minutes. The skip is the most common form of false economy in product."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Three columns labelled 'failure modes', 'mitigate now', 'accept and monitor'. Column 1 lists 8 failure scenarios. Column 2 has 3 of them with action items. Column 3 has 5 of them with monitoring metrics.",
+      "caption": "The pre-mortem output: not a checklist of fears, a triage of risks with assigned actions.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(20 30)'><rect width='170' height='220' rx='8' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='2'/><text x='85' y='22' text-anchor='middle' font-weight='bold' fill='#7F1D1D' font-size='12'>Failure modes</text><text x='85' y='38' text-anchor='middle' font-size='9' font-style='italic' fill='#7F1D1D'>('imagine it flopped...')</text><text x='10' y='62' font-size='10' fill='#7F1D1D'>* Confusing onboarding</text><text x='10' y='80' font-size='10' fill='#7F1D1D'>* Slow on large datasets</text><text x='10' y='98' font-size='10' fill='#7F1D1D'>* SSO clash w/ existing</text><text x='10' y='116' font-size='10' fill='#7F1D1D'>* No mobile fallback</text><text x='10' y='134' font-size='10' fill='#7F1D1D'>* Sales overpromise</text><text x='10' y='152' font-size='10' fill='#7F1D1D'>* CSV breaks Excel</text><text x='10' y='170' font-size='10' fill='#7F1D1D'>* Email alerts spammy</text><text x='10' y='188' font-size='10' fill='#7F1D1D'>* Audit log gaps</text></g><g transform='translate(205 30)'><rect width='170' height='220' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='85' y='22' text-anchor='middle' font-weight='bold' fill='#064E3B' font-size='12'>Mitigate now</text><text x='85' y='38' text-anchor='middle' font-size='9' font-style='italic' fill='#065F46'>(fix before launch)</text><text x='10' y='62' font-size='10' fill='#065F46'>* Onboarding tour</text><text x='10' y='78' font-size='10' fill='#065F46'>(2 days, owner: Maya)</text><text x='10' y='102' font-size='10' fill='#065F46'>* CSV format quoting</text><text x='10' y='118' font-size='10' fill='#065F46'>(1 day, owner: Aryan)</text><text x='10' y='142' font-size='10' fill='#065F46'>* Sales briefing doc</text><text x='10' y='158' font-size='10' fill='#065F46'>(0.5 day, owner: PM)</text><text x='85' y='200' text-anchor='middle' font-size='10' fill='#065F46' font-style='italic'>3 fixes, 3.5 days</text></g><g transform='translate(390 30)'><rect width='170' height='220' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='85' y='22' text-anchor='middle' font-weight='bold' fill='#1E3A8A' font-size='12'>Accept + monitor</text><text x='85' y='38' text-anchor='middle' font-size='9' font-style='italic' fill='#1E3A8A'>(watch, react if real)</text><text x='10' y='62' font-size='10' fill='#1E3A8A'>* Slow on big data</text><text x='10' y='78' font-size='10' fill='#1E3A8A'>watch p95 latency</text><text x='10' y='102' font-size='10' fill='#1E3A8A'>* SSO edge cases</text><text x='10' y='118' font-size='10' fill='#1E3A8A'>watch error rate</text><text x='10' y='142' font-size='10' fill='#1E3A8A'>* Mobile fallback</text><text x='10' y='158' font-size='10' fill='#1E3A8A'>watch device split</text><text x='10' y='182' font-size='10' fill='#1E3A8A'>* Audit log gaps</text><text x='10' y='198' font-size='10' fill='#1E3A8A'>watch CS tickets</text></g></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translating a pre-mortem into a launch-readiness plan — 5 steps",
+      "steps": [
+        {
+          "label": "Step 1 — Schedule the meeting 1-2 weeks pre-launch",
+          "body": "Late enough that the feature is real, early enough that you can act on findings. 30 minutes, all 4-6 people involved (PM, eng, design, CS, QA, maybe sales)."
+        },
+        {
+          "label": "Step 2 — Set the past-tense frame",
+          "body": "'It is 30 days after launch. The feature has flopped. Tell me the story of why.' Insist on past-tense. People will slip; gently correct them."
+        },
+        {
+          "label": "Step 3 — Brainstorm silently for 5 minutes",
+          "body": "Silent first, talking second. Otherwise the loudest voice anchors the room. Each person writes their failure modes on stickies or in a doc, no discussion."
+        },
+        {
+          "label": "Step 4 — Group, prioritize, classify",
+          "body": "Group similar items. For each, the team votes: high / medium / low likelihood, and high / medium / low impact. Top quadrant (high likelihood, high impact) goes to 'mitigate now'. Most others go to 'accept + monitor'."
+        },
+        {
+          "label": "Step 5 — Convert mitigations to owners and dates; convert monitors to dashboard items",
+          "body": "Every 'mitigate' item gets a name and a date before the meeting ends. Every 'monitor' item gets a metric name and a target threshold for action. Walk out with a plan, not a list of fears."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Why does the past-tense framing ('imagine it has already failed') produce more risks than the future-tense framing ('what could go wrong')?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "It triggers loss-aversion in the team.", "correct": false, "explain": "Indirectly true, but not the structural reason." },
+        { "id": "b", "label": "Past-tense forces explanation; the brain has to construct a causal story, which surfaces specific mechanisms.", "correct": true, "explain": "'It failed because…' demands a why. 'What could go wrong' is open and the optimistic brain answers 'probably not much'." },
+        { "id": "c", "label": "It's funnier, so people engage more.", "correct": false, "explain": "Pre-mortems are not noticeably more fun." },
+        { "id": "d", "label": "It removes the project lead's bias.", "correct": false, "explain": "It reduces optimism bias broadly, but not specifically the project lead's." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Pre-mortem Vs. PM ka jugaad",
+          "md": "Bhai, scene yeh hai. PM ne pre-mortem skip kiya. *'Yaar, time nahi hai, sab smart log hain, sambhal lenge.'*\n\nLaunch ke 9 din baad: support ticket flood. CSV Excel mein khul nahi raha kyunki SKU codes date ban gaye. Customer Slack pe complaints. PM ne 2 din me hot-fix shipped kiya. Founder ne 1:1 mein bola: *'yaar, yeh humein launch se 1 hafta pehle kyu nahi pata laga?'*\n\n30 minute meeting ne 5 din ka rework save kiya hota. **Pre-mortem ka cost shaadi ke buffet ke barabar hai. Skip ka cost shaadi cancel ke barabar hai.**"
+        },
+        "en": {
+          "tone": "info",
+          "title": "The cost of skipping a pre-mortem",
+          "md": "Skipping a pre-mortem feels efficient. 30 minutes saved, on a team that is already busy. The implicit logic: 'we're smart, we'll catch the issues as they come.'\n\nThe issues come, on day 9, as a Slack flood from customers. The fix takes 2 days. The trust takes 4 weeks to recover. A 30-minute meeting would have caught 12 of the 14 issues that turned up. Pre-mortems are the highest-ROI meeting in product. Schedule them."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — The 7-day post-launch loop"
+    },
+    {
+      "type": "markdown",
+      "md": "After launch, run a tight loop for the first 7 days, then a slower loop through day 30. The 7-day window is where you catch fires; the 30-day window is where you decide whether to double down, fix, or kill.\n\n**Day 0-1**: error rate, support ticket volume. Anything red, hot-fix immediately. Goal: zero customer-facing fires by end of day 1.\n\n**Day 2-7**: activation rate (% of eligible users who tried the feature) and find rate (% who got to it). If activation is below 30 percent in a B2B context, the feature is hard to find. That's a positioning problem, not a product one — fix the in-app prompt before fixing the feature.\n\n**Day 7-14**: week-1 retention of users who tried the feature vs those who didn't. If users who tried it have **lower** retention than users who didn't, you have a feature that's actively hurting; investigate before you spend on adoption.\n\n**Day 14-30**: day-30 retention, support ticket themes (not just count — patterns), and the answer to the original outcome question. Did the metric you committed to in the PRD move?\n\nWrite the answer down on day 30. Three sentences. Share it with the team. This is the **post-launch debrief** — and the PMs who do this consistently get promoted within 18 months. The PMs who don't keep shipping coin flips."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A 4-row table. Row 1: Day 0-1, watch error rate + support tickets, action 'hot-fix'. Row 2: Day 2-7, watch activation + find rate, action 'fix prompt'. Row 3: Day 7-14, watch retention delta, action 'investigate or promote'. Row 4: Day 14-30, watch outcome metric, action 'double down / fix / kill'.",
+      "caption": "Four windows, four signals, four decisions. Most teams skip rows 3 and 4 entirely.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' fill='#1F2937'><rect x='30' y='30' width='90' height='40' rx='6' fill='#FEE2E2' stroke='#7F1D1D'/><text x='75' y='48' text-anchor='middle' font-size='10' font-weight='bold' fill='#7F1D1D'>Day 0-1</text><text x='75' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D'>fires</text><rect x='130' y='30' width='220' height='40' rx='6' fill='white' stroke='#7F1D1D'/><text x='240' y='48' text-anchor='middle' font-size='10' fill='#7F1D1D'>error rate, support volume</text><text x='240' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D' font-style='italic'>red? hot-fix today</text><rect x='360' y='30' width='190' height='40' rx='6' fill='white' stroke='#7F1D1D'/><text x='455' y='48' text-anchor='middle' font-size='10' fill='#7F1D1D'>action: stabilize</text><text x='455' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D' font-style='italic'>zero fires by EoD1</text><rect x='30' y='80' width='90' height='40' rx='6' fill='#FEF3C7' stroke='#92400E'/><text x='75' y='98' text-anchor='middle' font-size='10' font-weight='bold' fill='#7C2D12'>Day 2-7</text><text x='75' y='112' text-anchor='middle' font-size='9' fill='#7C2D12'>activation</text><rect x='130' y='80' width='220' height='40' rx='6' fill='white' stroke='#92400E'/><text x='240' y='98' text-anchor='middle' font-size='10' fill='#7C2D12'>activation rate, find rate</text><text x='240' y='112' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>under 30%? prompt is broken</text><rect x='360' y='80' width='190' height='40' rx='6' fill='white' stroke='#92400E'/><text x='455' y='98' text-anchor='middle' font-size='10' fill='#7C2D12'>action: fix discovery</text><text x='455' y='112' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>not the feature</text><rect x='30' y='130' width='90' height='40' rx='6' fill='#DCFCE7' stroke='#065F46'/><text x='75' y='148' text-anchor='middle' font-size='10' font-weight='bold' fill='#064E3B'>Day 7-14</text><text x='75' y='162' text-anchor='middle' font-size='9' fill='#064E3B'>value</text><rect x='130' y='130' width='220' height='40' rx='6' fill='white' stroke='#065F46'/><text x='240' y='148' text-anchor='middle' font-size='10' fill='#064E3B'>retention delta vs non-users</text><text x='240' y='162' text-anchor='middle' font-size='9' fill='#064E3B' font-style='italic'>negative? investigate first</text><rect x='360' y='130' width='190' height='40' rx='6' fill='white' stroke='#065F46'/><text x='455' y='148' text-anchor='middle' font-size='10' fill='#064E3B'>action: investigate or push</text><text x='455' y='162' text-anchor='middle' font-size='9' fill='#064E3B' font-style='italic'>don't promote a leak</text><rect x='30' y='180' width='90' height='40' rx='6' fill='#DBEAFE' stroke='#1E40AF'/><text x='75' y='198' text-anchor='middle' font-size='10' font-weight='bold' fill='#1E3A8A'>Day 14-30</text><text x='75' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A'>verdict</text><rect x='130' y='180' width='220' height='40' rx='6' fill='white' stroke='#1E40AF'/><text x='240' y='198' text-anchor='middle' font-size='10' fill='#1E3A8A'>outcome metric, themes in tickets</text><text x='240' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>did the PRD outcome move?</text><rect x='360' y='180' width='190' height='40' rx='6' fill='white' stroke='#1E40AF'/><text x='455' y='198' text-anchor='middle' font-size='10' fill='#1E3A8A'>action: double down / fix / kill</text><text x='455' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>and write 3 sentences</text><text x='290' y='258' text-anchor='middle' font-size='11' font-style='italic' fill='#1E3A8A'>Most teams skip rows 3 and 4. That's the entire problem.</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "VP-Product Vivek",
+        "role": "Your hands-on VP, ex-Flipkart, allergic to roadmap theatre",
+        "avatarSrc": "/avatars/vivek.svg"
+      },
+      "intro": [
+        "Post-launch reads. I'll give you 6 mid-launch data points. You tell me — **promote** (the feature is working, push adoption), **fix** (real signal of a real problem, fix before promoting), or **kill** (cut losses, write the postmortem).",
+        "There is no universal threshold; there is what the data is telling you, and what your judgment says about cost-of-doing-nothing.",
+        "Don't kill on day 3. Don't promote on day 30 without checking retention. Both are common mistakes."
+      ],
+      "buckets": [
+        { "id": "promote", "label": "Promote (push adoption)", "tone": "safe" },
+        { "id": "fix", "label": "Fix (don't promote yet)", "tone": "neutral" },
+        { "id": "kill", "label": "Kill (cut losses)", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "Day 14: activation 62%, day-7 retention of users who tried it is 8 percentage points HIGHER than non-users, support tickets show 3 minor UX nits.",
+          "correctBucketId": "promote",
+          "explain": "Strong activation, positive retention delta, only minor issues. Push adoption — in-app prompt, sales enablement, blog post."
+        },
+        {
+          "id": "s2",
+          "situation": "Day 7: activation 18%, find rate 22% (people aren't getting to the feature), retention can't be measured yet.",
+          "correctBucketId": "fix",
+          "explain": "Activation is low because find rate is low — a positioning problem. Fix the in-app prompt or onboarding before judging the feature itself."
+        },
+        {
+          "id": "s3",
+          "situation": "Day 21: activation 55%, day-14 retention of users who tried it is 11 percentage points LOWER than non-users.",
+          "correctBucketId": "fix",
+          "explain": "Negative retention delta is a stop signal — but at 21 days, you usually investigate before killing. Find out which subgroup is leaving and why; might be a fixable subset."
+        },
+        {
+          "id": "s4",
+          "situation": "Day 30: outcome metric (time-to-first-invoice) hasn't moved at all. Activation is healthy at 48%. Users are using the feature but the outcome it was supposed to drive is unchanged.",
+          "correctBucketId": "kill",
+          "explain": "The feature works but doesn't drive the outcome you committed to. That's the cleanest kill signal — engagement without value. Write the postmortem and reclaim the engineering capacity."
+        },
+        {
+          "id": "s5",
+          "situation": "Day 5: zero customer-facing errors, activation 35%, but 14 support tickets all asking 'how do I undo this?' — there's no undo button.",
+          "correctBucketId": "fix",
+          "explain": "Theme in support tickets is a clear product gap. Fix the undo before promoting the feature; otherwise every new user generates a support ticket."
+        },
+        {
+          "id": "s6",
+          "situation": "Day 30: outcome metric moved 4% (against a 12% target). Retention delta is +2 percentage points. Mixed.",
+          "correctBucketId": "fix",
+          "explain": "Partial signal in the right direction but short of target. Investigate which user segments saw the most lift, double down on those, decide on the rest. Don't kill prematurely; don't promote before tightening."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: vanity metrics on launch day",
+      "md": "On launch day, the easiest numbers to share are the largest ones. Page views on the launch blog. Tweet impressions. Total sign-ups in the launch window. PR mentions.\n\nThese are **vanity metrics** — they go up with marketing effort, not with product success. They are uncorrelated with whether the feature did its job.\n\nThe trap has a name: **the launch-blog illusion**. The escape: agree, before launch, on the 3-4 metrics you'll judge the feature by *at day 30*. Write them in the PRD. Ignore everything else on launch day. The team that fixates on launch-day vanity ships features no user uses, then fixates on the next launch."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're 7 days post-launch and the data is mixed. Order your moves to decide what to do next.",
+      "items": [
+        { "id": "p1", "label": "Pull the 4 metrics agreed in the PRD: activation, find rate, retention delta, outcome metric", "detail": "Stick to what you committed to. Don't shop for metrics that confirm a story." },
+        { "id": "p2", "label": "Look at activation and find rate first — these tell you if the feature is even discoverable", "detail": "If find rate is low, nothing else can be evaluated. Fix discovery before judging the feature." },
+        { "id": "p3", "label": "Read the support ticket themes from the last 7 days", "detail": "Themes (not counts) tell you what's specifically broken. 12 tickets about one thing is signal; 12 random tickets is noise." },
+        { "id": "p4", "label": "Check retention delta vs the control cohort", "detail": "Are users who tried the feature better-retained, neutral, or worse? Worse is a stop signal." },
+        { "id": "p5", "label": "Decide: promote / fix / kill, and write 3 sentences explaining why", "detail": "The 3-sentence verdict forces clarity. If you can't write it, you don't have a decision yet." }
+      ],
+      "hint": "First look at discovery, then at value. Don't judge the feature until you know users found it."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "You shipped a 'bulk-edit' feature 14 days ago. Activation is 41% (target was 35%). Day-7 retention of users who tried it is 6pp HIGHER than non-users. Outcome metric (time spent on inventory updates) is down 22% (target was 15%). Write the 3-sentence post-launch verdict you would share with the team.",
+      "lang": "markdown",
+      "starter": "## Bulk-edit: 14-day verdict\n\n",
+      "expected": "## Bulk-edit: 14-day verdict\n\nThe feature is working: activation cleared the 35% target by 6 points, day-7 retention is 6pp better for users who tried it, and time-on-inventory-updates is down 22% (well past our 15% goal). Strongest evidence so far is the retention delta, which suggests bulk-edit is becoming a sticky habit rather than a one-time novelty. Recommend we promote in-app, brief sales by Friday, and do a 30-day re-check before adding the deferred filter scope from the original PRD."
+    },
+    {
+      "type": "quiz",
+      "prompt": "On day 7 post-launch, which signals are most worth your attention? Select all that apply.",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Activation rate of users who reached the new feature", "correct": true, "explain": "Tells you whether the feature is even discoverable and tried." },
+        { "id": "b", "label": "Total page views on the launch blog post", "correct": false, "explain": "Vanity. Tells you about marketing, not product." },
+        { "id": "c", "label": "Day-7 retention of users who tried the feature vs those who didn't", "correct": true, "explain": "The clearest early signal that the feature added real value, not novelty." },
+        { "id": "d", "label": "Number of internal Slack messages about the launch", "correct": false, "explain": "Internal noise. Useful for politics, not for product decisions." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Tier-2 cities mein DAU/MAU",
+          "md": "Bhai, ek Mumbai fintech ki kahani. Tier-2 cities mein launch hua. Founder bola — *'we have 2.4 lakh signups in 6 weeks!'* Investor khush.\n\nPM ne dheere se data dekha. DAU/MAU = 0.08. **8 percent.** Matlab har 100 signed-up user mein se 8 actually app khol rahe the kabhi-kabhi. Founder ne kaha — *'leaky bucket nahi hai, growth hai.'* PM ne kaha — *'Sir, leaky bucket hai. Hum upar paani daal rahe hain, neeche se beh raha hai.'*\n\n**DAU/MAU 0.18 se neeche B2B mein, aur 0.2 se neeche consumer mein, growth nahi engagement problem hai.** Vanity number bada hota hai, real number chhota."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "When DAU/MAU exposes the leak",
+          "md": "Founders love to celebrate signups. 240,000 in 6 weeks sounds great in an investor update. The PM, who looked at DAU/MAU = 0.08, knows something different: out of every 100 signups, 92 are dormant.\n\nDAU/MAU below 0.18 in B2B and below 0.2 in consumer is an engagement crisis dressed up as a growth story. Pouring users into a leaky bucket is the most expensive habit in early-stage product. Fix the leak before you celebrate the volume."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Ship-day is day 0, not day 30. The product question — did this work — opens at launch and stays open for at least 30 days.",
+        "Run a pre-mortem 1-2 weeks before launch: past-tense framing ('imagine it has already failed') produces 3-4x more risks than future-tense brainstorming.",
+        "Run the 7-day post-launch loop: day 0-1 fires, day 2-7 activation, day 7-14 retention delta, day 14-30 outcome verdict. Skip rows 3 and 4 and you're shipping coin flips.",
+        "If users who tried the feature have lower retention than users who didn't, the feature is actively hurting; investigate before you spend on adoption.",
+        "On day 30, write a 3-sentence verdict and share it. The PMs who do this consistently get promoted within 18 months; the PMs who don't keep shipping features into the void."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick a feature you (or your team) shipped in the last 90 days. Can you state, in three sentences, whether it worked? If yes — what evidence did you use? If no — what data would you need, and what would it cost to start collecting it now?"
+    }
+  ]
+}

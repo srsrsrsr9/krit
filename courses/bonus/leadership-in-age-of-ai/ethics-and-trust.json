@@ -1,0 +1,53 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: The Audit Log That Outed the Cover-Up",
+    "source": "Anonymised internal review at a 1,200-person Indian services firm",
+    "date": "April 2025 (incident); reviewed October 2025",
+    "story": "In April 2025, a senior leader at a 1,200-person Indian services firm — a Vice President with eleven years at the company — made a decision the team would later call *\"the small lie that cost us four quarters.\"*\n\nA junior analyst had used the firm's internal AI tool to draft a client recommendation. The tool, fine-tuned on internal data, had hallucinated a regulatory citation. The draft went into a deliverable. A junior on the client's side caught it before it became a public problem. Near-miss. No external damage.\n\nThe VP's first instinct was to handle it quietly. He told the analyst to revise the deliverable, asked the client lead to *\"smooth it over,\"* and made no internal report. He believed — reasonably, in a previous era — that visibility would damage the team's standing.\n\nWhat the VP did not realise: **the AI tool's audit log was visible to a six-person internal-controls team**, including the junior's prompt, the hallucinated citation, the revision history, and the timestamps. Within two weeks, four people on the team had figured out what happened. Within four weeks, the rest of the team had. Nobody escalated, but the trust map of the team rearranged itself in silence.\n\nIn the next anonymous engagement survey, the team's score on *\"my leader handles mistakes openly\"* dropped from 4.3 to 2.7 out of 5. Two senior associates left. **It took four full quarters of consistent, public post-mortem behaviour from the VP — and one written apology to the team — to bring the score back above 4.0.**",
+    "takeaway": "AI tools come with audit logs. The logs are visible to more people than you think. The cost of the cover-up is now always higher than the cost of the truth."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: The Customer Near-Miss",
+    "setup": "**Week 26.** Final week of the six-month transformation. Yesterday afternoon, Rajiv's team had a near-miss: an AI-drafted client deliverable contained a fabricated case-study reference. A junior on Rajiv's side caught it three hours before it shipped. The client never saw the bad version. No revenue at risk. No regulatory exposure.\n\nIt is now 8:14am the next morning. Rajiv has a 9:30am team stand-up. The audit log of the incident is visible to the internal-controls team and to two senior partners. Rajiv pings you.\n\n*\"Coach. Last call of the six months. Do I post-mortem this publicly or quietly fix it and move on?\"*",
+    "coach": { "name": "Chief-People-Officer Charumati", "role": "CPO, has watched more cover-ups outed than confessed" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Charumati's video clicks on. *\"Rajiv, you have eighty minutes. What's the call?\"*",
+        "options": [
+          { "id": "a", "label": "Quiet fix. The client never saw it, no harm done, no need to alarm the team or the partners.", "correct": false, "explain": "You just walked into the field-note VP's mistake. The audit log already tells the story to six controls people and two partners. Your team will learn from *them*, not from you, and that's where trust dies.", "points": 0 },
+          { "id": "b", "label": "Public post-mortem at 9:30am stand-up. Specific facts, specific lessons, no blame on the analyst. Email the partners *before* stand-up.", "correct": true, "explain": "**Correct.** Charumati: *\"You're getting ahead of the audit log. The team learns the story from you, the partners hear it from you first, and the analyst gets visible coverage from their leader.\"*", "points": 3 },
+          { "id": "c", "label": "Tell the analyst to publicly post-mortem it themselves at stand-up.", "correct": false, "explain": "You outsourced the hard part. The analyst delivers the bad news, the team sees the leader stayed quiet, and the trust signal points the wrong way. Junior people post-mortem their own work; leaders post-mortem the *system that allowed it*.", "points": 1 },
+          { "id": "d", "label": "Schedule a written post-mortem in next week's all-hands — gives time to prepare a clean narrative.", "correct": false, "explain": "Seven days is enough time for the audit-log story to spread through six conversations. By the time you post-mortem, you're confirming what people already think. Speed matters more than polish.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Rajiv agrees on the public post-mortem. *\"What goes in it?\"* What do you tell him?",
+        "options": [
+          { "id": "a", "label": "*\"What happened, what almost happened, what we changed in the process, and one thing I (Rajiv) personally got wrong about how we set this up.\"*", "correct": true, "explain": "**Yes.** The fourth element — *what the leader got wrong* — is the load-bearing piece. It tells the team that admitting error is safe at every level. Charumati: *\"Without that fourth element, this is a memo, not a post-mortem.\"*", "points": 3 },
+          { "id": "b", "label": "*\"Just the facts and the process change. Don't make it personal.\"*", "correct": false, "explain": "*\"Don't make it personal\"* is what people say when they don't want to admit anything. The team is watching whether you take any of the weight. If you don't, the analyst will, and you've thrown them under a bus dressed in process language.", "points": 0 },
+          { "id": "c", "label": "*\"Name and credit the junior who caught it. Then the facts. Then the system fix.\"*", "correct": true, "explain": "**Excellent.** Naming the catcher publicly does three things: rewards vigilance, shifts the narrative from blame to detection, and signals that catching errors is high-status. Pair this with the *what-I-got-wrong* point and you have a model post-mortem.", "points": 3 },
+          { "id": "d", "label": "*\"Detailed root-cause analysis, including who clicked what and when.\"*", "correct": false, "explain": "Detailed individual-action attribution turns a post-mortem into a public review. The team will read it as a warning, not a lesson, and people will hide their next near-miss instead of flagging it.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Stand-up is in twenty minutes. The senior partner pings: *\"Rajiv, do we really need to broadcast this? The client doesn't even know.\"* Last call of the course.",
+        "options": [
+          { "id": "a", "label": "*\"You're right, partner. Let's keep it internal-leadership only and brief the team on the process change without naming the incident.\"*", "correct": false, "explain": "You folded at the goal line. The audit log is already visible to controls and to *another partner*. The team will piece it together, and now you're also visibly siding with the cover-up. Worst possible ending.", "points": 0 },
+          { "id": "b", "label": "*\"Six people on the controls team and two partners can already see the audit log. The story will be told this week with or without us. Better that it's told by us, with the lessons we want emphasised.\"*", "correct": true, "explain": "**This is the answer.** You explained the *real* threat model — modern audit infrastructure makes cover-ups expensive — without lecturing the partner. Charumati: *\"Now you sound like a Chief Transformation Officer, not a director.\"*", "points": 3 },
+          { "id": "c", "label": "*\"I hear you, but I've already decided. Standing up at 9:30.\"*", "correct": false, "explain": "Right call, wrong delivery. *\"I've already decided\"* tells the partner you don't see them as a thinking participant. You'll get the post-mortem out and lose a useful ally for Quarter 2.", "points": 1 },
+          { "id": "d", "label": "*\"Let me write it up first and send it to you for review. We can decide the audience after.\"*", "correct": false, "explain": "Once it goes for review, the post-mortem becomes a comms artifact. Stand-up will pass without it. By next stand-up, the audit-log conversation has done its quiet damage. Velocity is the point.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You ran toward the truth, named the catcher, owned a piece of the system error, and held the partner without burning him. **Charumati closes her laptop and says: *\"Six months ago you needed me. Now you don't. Go.\"** End of transformation. Beginning of leadership.",
+      "good": "You avoided the cover-up but flinched once. Re-read the lesson on **public post-mortems** — every quiet fix in the era of audit logs is a slow trust drain.",
+      "learn": "You took the field-note VP's path and traded a small lie for four quarters of damage. Re-read the lesson — modern AI tooling makes cover-ups not just unethical but operationally expensive. Your draw was a drill. The next near-miss won't be."
+    }
+  }
+}

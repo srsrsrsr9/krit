@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 67-page policy, 4 violations shipped",
+    "source": "Anonymous Head of Risk at a regulated Indian fintech",
+    "date": "April 2025",
+    "story": "We wrote a 67-page AI policy in Q4 2024. Reviewed by legal, signed by every department head, framed in the boardroom.\n\nQ1 2025: an AI feature shipped that violated 4 policies — including 'no PII in third-party model context.' Nobody noticed. The policy was a document, not a gate.\n\nIncident discovered during a Q2 audit. ₹2.4 cr remediation. **3 months of paused product launches** while we built the actual gates we should have built first. The policy wasn't useless — it told us *what* to enforce — but it had no teeth.\n\nWe now have a 6-page policy AND a CI eval gate that blocks deploys when prompt or output trips any of 14 rules. The 6 pages predict behavior; the 67 pages didn't.",
+    "takeaway": "Policy docs without enforcement are theatre. The real governance is the eval gate that blocks deploys."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: governance with teeth",
+    "setup": "Vikrant's chief risk officer wants a 47-page AI policy doc to show the regulator. Vikrant's engineering team hates writing them; nobody reads them; the last one gathered dust. The regulator is coming in 8 weeks.",
+    "coach": { "name": "CFO-Veteran Vinita", "role": "30-year CFO who has seen 12 'governance' efforts work and 47 fail" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Does Vikrant need the 47-page doc?",
+        "options": [
+          { "id": "a", "label": "Yes — write it long; regulators love thoroughness.", "correct": false, "explain": "Long doc = nobody reads it = nobody enforces it. Regulators have learned this too.", "points": 0 },
+          { "id": "b", "label": "Write a short doc (6-10 pages) AND a CI eval gate that enforces the rules. The doc is the 'why', the gate is the 'how'.", "correct": true, "explain": "Right balance. Short, readable doc + automated enforcement. The doc tells the regulator what's enforced; the gate proves it.", "points": 3 },
+          { "id": "c", "label": "Skip the doc; only build the gate.", "correct": false, "explain": "Regulator wants to see the rules. Skip it and you can't show them anything for the rules-as-code.", "points": 0 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Engineering pushes back: 'we don't have time to build eval gates for 14 rules in 8 weeks.' What's the move?",
+        "options": [
+          { "id": "a", "label": "Pick the top 4 rules by impact. Ship gates for those by week 8. Rest of the rules in the next quarter with a documented timeline.", "correct": true, "explain": "Right. Don't try to gate everything; gate the highest-stakes rules first and document the staged plan.", "points": 3 },
+          { "id": "b", "label": "Push for all 14 gates; accept the slip.", "correct": false, "explain": "Calendar miss; regulator unhappy. Worse than the staged plan.", "points": 0 },
+          { "id": "c", "label": "Drop the gates entirely; just write the doc.", "correct": false, "explain": "Back to theatre. The whole point is enforcement.", "points": 0 },
+          { "id": "d", "label": "Outsource the gates to a vendor.", "correct": false, "explain": "Vendor lock-in for governance is its own risk. Build the critical gates in-house, even if v1 is rough.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Regulator visit. They ask: 'how do you prevent PII leakage to third-party models?' Vikrant's answer?",
+        "options": [
+          { "id": "a", "label": "'Page 14 of our policy,' he says, opening the binder.", "correct": false, "explain": "Standard answer; regulator already heard it 47 times today. Won't differentiate Vikrant's company.", "points": 0 },
+          { "id": "b", "label": "'Here's the rule, and here's the CI gate that blocks any deploy where the prompt contains PII patterns. Last 90 days: 14 deploys blocked, 0 false negatives in our audit sample.'", "correct": true, "explain": "S-tier answer. Rule + enforcement + evidence. Regulator stops asking; competitor up next.", "points": 3 },
+          { "id": "c", "label": "'We trust our engineers to follow the policy.'", "correct": false, "explain": "Worst answer. Regulator hears 'no actual control'. Audit findings inevitable.", "points": 0 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "Vikrant walks the regulator through gate-evidence, not policy-text. Audit closes clean. The 6-page doc + 14 gates becomes a sales asset for enterprise customers.",
+      "good": "Solid. Top-4 gates ship; rest planned. Regulator acceptable. Worth completing the next 10 in Q3.",
+      "learn": "Re-read the 'doc is theatre' section. Without enforcement, every page of policy is just words."
+    }
+  }
+}

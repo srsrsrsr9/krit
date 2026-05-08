@@ -1,0 +1,51 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 7 RAG implementations, 7 security audits",
+    "source": "Anonymous CISO at a 600-person Indian SaaS",
+    "date": "September 2025",
+    "story": "Decentralization went too far. Seven product teams each shipped their own RAG implementation between Jan and June 2025. Seven different vector DBs. Seven different chunking strategies. Three different prompt-injection mitigations (one team had none).\n\nMy team had 7 attack surfaces to audit. We caught a P0 in team #4's setup — a customer's PII was being logged in plaintext to a vendor we hadn't approved. **₹47 lakh remediation. 6 weeks of rework. Trust with our enterprise clients took a quarter to repair.**\n\nWe centralized after that incident. Built a shared RAG platform with one approved vector DB, one chunking library, one prompt sanitizer. Took 4 months to migrate all 7 teams. Team velocity dropped 14% during migration. Worth every percent — we now sleep at night.",
+    "takeaway": "Decentralize first; centralize the moment 3+ teams duplicate the same surface. Earlier is bureaucracy; later is breach."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: AI Cell or AI Factory?",
+    "setup": "Vikrant has 8 product teams, each piloting AI. Two have already shipped to customers. Three are mid-build. Three haven't started. CFO wants efficiency. Engineering wants autonomy. Vikrant has 6 weeks to decide org structure.",
+    "coach": { "name": "Ex-CTO-now-advisor Ananth", "role": "Built, sold, and unwound 4 AI products at scale" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "What's the current state diagnosis?",
+        "options": [
+          { "id": "a", "label": "Decentralized — each team building their own. Right for early experimentation.", "correct": true, "explain": "Right. With 2 in production and 3 mid-build, decentralized was the correct first move. The question now is when to centralize.", "points": 3 },
+          { "id": "b", "label": "Already centralized — they all use the same model API.", "correct": false, "explain": "Same API ≠ same architecture. Each team built their own infra around that API. That's the duplication risk.", "points": 0 },
+          { "id": "c", "label": "Chaos — should have been centralized from day 1.", "correct": false, "explain": "Day-1 centralization usually ships nothing for 6 months. Decentralized first IS the right pattern.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s2",
+        "prompt": "When should Vikrant centralize the AI infra?",
+        "options": [
+          { "id": "a", "label": "When 3+ teams are duplicating the same surface (RAG, prompt eval, model gateway). Now might be right.", "correct": true, "explain": "Right trigger. Duplication ≥ 3 teams = centralize that surface. Let unique team work stay decentralized.", "points": 3 },
+          { "id": "b", "label": "Centralize everything immediately to maximize efficiency.", "correct": false, "explain": "Premature centralization. Unique team work shouldn't be centralized just because some surfaces should be.", "points": 0 },
+          { "id": "c", "label": "Never centralize; teams know best.", "correct": false, "explain": "Becomes the 7-RAG security incident.", "points": 0 },
+          { "id": "d", "label": "Centralize at the next reorg cycle, regardless of state.", "correct": false, "explain": "Calendar-driven centralization is bureaucratic. Trigger-driven (3+ teams duplicating) is right.", "points": 1 }
+        ]
+      },
+      {
+        "id": "s3",
+        "prompt": "Vikrant's design: a small AI Platform team (3 engineers) builds shared RAG + prompt eval + model gateway. Product teams keep their unique work. What's missing?",
+        "options": [
+          { "id": "a", "label": "A governance layer — who decides what graduates from a team into the platform.", "correct": true, "explain": "Right. Without governance, the platform team becomes a shadow PMO. Decision rights matter more than architecture.", "points": 3 },
+          { "id": "b", "label": "Nothing. The 3-engineer platform team is enough.", "correct": false, "explain": "Misses governance. Architecture without decision rights creates bottlenecks.", "points": 1 },
+          { "id": "c", "label": "More engineers. Make platform team 8 strong.", "correct": false, "explain": "Over-staffing the platform team is a common over-correction. 3 is right; governance is what's missing.", "points": 1 }
+        ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "S-tier. Vikrant lands a hybrid org with explicit governance. 6 months later, 3 product teams ship faster on shared infra; the unique work stays decentralized. CISO sleeps.",
+      "good": "Solid. Architecture is right; governance layer needs another iteration.",
+      "learn": "Re-read the trigger section. The 'when' of centralization matters more than the 'whether'."
+    }
+  }
+}

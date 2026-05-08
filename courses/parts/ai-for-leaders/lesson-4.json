@@ -1,0 +1,222 @@
+{
+  "slug": "risk-and-governance",
+  "title": "Governance Without Theatre",
+  "subtitle": "Real eval gates beat policy docs every audit, every quarter",
+  "estimatedMinutes": 13,
+  "skills": ["leader-ai-governance"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-leaders/risk-and-governance.mp3",
+      "audioDurationSec": 650,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — the policy doc that blocked nothing" },
+        { "startSec": 80, "label": "Mental model: real eval gates beat policy docs" },
+        { "startSec": 220, "label": "Move 1 — the kill switch" },
+        { "startSec": 410, "label": "Move 2 — what to write down" },
+        { "startSec": 560, "label": "Trap, takeaways, reflect" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-leaders/risk-and-governance.html",
+      "notesByline": "Notes by Vikrant, MBA-2024 batch"
+    },
+    {
+      "type": "markdown",
+      "md": "Your Compliance head walks in with a 47-page AI ethics policy. Legal has signed off. The CEO wants you to circulate it. Six months later, an AI feature ships with a 4% hallucination rate on financial answers, no one is named to disable it, and the customer who lost ₹38,000 is talking to a journalist. You ask Compliance which line of the policy was supposed to prevent this. They cannot point to one.\n\nThis is governance theatre. The policy was a document, not a control. By the end of this lesson, you will know the difference between a real eval gate and a policy doc, what a kill switch actually looks like in production, and the single page of artefacts you must write down before any AI feature touches money, identity, or health."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A diagram comparing two release pipelines. Top: 'Policy review' arrow leading to 'Council meeting' to 'Slide deck approval' to 'Ship'. Bottom: 'Eval threshold' to 'Red-team report' to 'Kill switch wired' to 'Logging on' to 'Ship'. Top is labelled THEATRE. Bottom is labelled REAL.",
+      "caption": "Two release pipelines. The top one cannot block anything in practice. The bottom one cannot let through anything that matters.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='10' fill='#1F2937'><text x='40' y='35' fill='#9D174D' font-weight='bold'>Theatre pipeline:</text><g><rect x='40' y='50' width='110' height='40' rx='6' fill='#FCE7F3' stroke='#9D174D' stroke-width='1.5'/><text x='95' y='75' text-anchor='middle' fill='#9D174D'>Policy review</text></g><line x1='150' y1='70' x2='170' y2='70' stroke='#9D174D' stroke-width='1.5' marker-end='url(#a4)'/><g><rect x='170' y='50' width='110' height='40' rx='6' fill='#FCE7F3' stroke='#9D174D' stroke-width='1.5'/><text x='225' y='75' text-anchor='middle' fill='#9D174D'>Council meeting</text></g><line x1='280' y1='70' x2='300' y2='70' stroke='#9D174D' stroke-width='1.5' marker-end='url(#a4)'/><g><rect x='300' y='50' width='130' height='40' rx='6' fill='#FCE7F3' stroke='#9D174D' stroke-width='1.5'/><text x='365' y='75' text-anchor='middle' fill='#9D174D'>Slide deck approval</text></g><line x1='430' y1='70' x2='450' y2='70' stroke='#9D174D' stroke-width='1.5' marker-end='url(#a4)'/><g><rect x='450' y='50' width='80' height='40' rx='6' fill='#FECACA' stroke='#7F1D1D' stroke-width='1.5'/><text x='490' y='75' text-anchor='middle' fill='#7F1D1D'>Ship</text></g><text x='540' y='75' fill='#7F1D1D' font-style='italic'>blocks 0</text><text x='40' y='180' fill='#065F46' font-weight='bold'>Real pipeline:</text><g><rect x='40' y='195' width='100' height='40' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='1.5'/><text x='90' y='220' text-anchor='middle' fill='#065F46'>Eval threshold</text></g><line x1='140' y1='215' x2='160' y2='215' stroke='#065F46' stroke-width='1.5' marker-end='url(#a5)'/><g><rect x='160' y='195' width='110' height='40' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='1.5'/><text x='215' y='220' text-anchor='middle' fill='#065F46'>Red-team report</text></g><line x1='270' y1='215' x2='290' y2='215' stroke='#065F46' stroke-width='1.5' marker-end='url(#a5)'/><g><rect x='290' y='195' width='100' height='40' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='1.5'/><text x='340' y='220' text-anchor='middle' fill='#065F46'>Kill switch</text></g><line x1='390' y1='215' x2='410' y2='215' stroke='#065F46' stroke-width='1.5' marker-end='url(#a5)'/><g><rect x='410' y='195' width='80' height='40' rx='6' fill='#DCFCE7' stroke='#065F46' stroke-width='1.5'/><text x='450' y='220' text-anchor='middle' fill='#065F46'>Logging on</text></g><line x1='490' y1='215' x2='510' y2='215' stroke='#065F46' stroke-width='1.5' marker-end='url(#a5)'/><g><rect x='510' y='195' width='60' height='40' rx='6' fill='#A7F3D0' stroke='#064E3B' stroke-width='1.5'/><text x='540' y='220' text-anchor='middle' fill='#064E3B' font-weight='bold'>Ship</text></g><text x='40' y='260' fill='#065F46' font-style='italic'>Each gate is testable, falsifiable, signed.</text></g><defs><marker id='a4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#9D174D'/></marker><marker id='a5' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: real eval gates beat policy docs, every time",
+      "md": "A **policy doc** describes what the company aspires to. It contains nouns: 'fairness', 'accountability', 'transparency.' It can be 47 pages long and approved by Legal. It blocks nothing.\n\nAn **eval gate** is a number with a threshold and a name. 'Failure rate on the financial-advice eval set v3 must be below 1.5% before any user is exposed.' It is two sentences long. It blocks releases.\n\nThe difference is testability. A policy doc cannot fail; an eval gate can. **Anything that cannot fail cannot govern.** That is the entire idea, and it took the field five years to admit it.\n\nThe leader's job is not to make the policy doc better. The leader's job is to convert every line of the policy doc into either an eval gate, a logging requirement, a kill switch, or a named-owner artefact. If a line cannot be converted, delete it. The 47-page doc collapses to one page. That is governance."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-leaders/anim/risk-and-governance-eval-gate.html",
+      "height": 420,
+      "caption": "An eval gate in motion. Watch a release attempt fail at the 1.5% threshold, three times, before the team finds the bug."
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Compliance officer ka 47 page report",
+          "md": "Bhai, ek bank ka compliance officer Pradeep tha. 47-page AI policy doc — har Tuesday review meeting — har Friday newsletter. Six months baad ek incident ho gaya — chatbot ne customer ko galat tax advice de di. Loss ₹4.2 lakh.\n\nPradeep ne policy ka section 14.3 dikhaya — \"AI must align with regulatory guidance.\" Customer bola — \"toh kya hua, paisa kahan hai?\" Pradeep ne kaha — \"hum compliant the.\"\n\nProblem yeh hai — Pradeep technically sahi tha. Policy mein likha tha — \"must align.\" Lekin policy ne kabhi check nahi kiya. Eval gate hota toh chatbot launch hi nahi hota. **Compliant honaa aur safe honaa do alag cheezein hain.**"
+        },
+        "en": {
+          "tone": "warn",
+          "title": "Compliant is not the same as safe",
+          "md": "A bank's chatbot gave a customer wrong tax advice. The compliance officer pointed to section 14.3 of the AI policy: 'AI must align with regulatory guidance.' Technically he was right; the policy did say so. But the policy did not check. An eval gate would have failed the launch. Compliant and safe are different controls; the field has begun to admit they were conflating them."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 1 — The kill switch"
+    },
+    {
+      "type": "markdown",
+      "md": "A kill switch is the smallest, cheapest, highest-leverage piece of AI governance you can build. The complete spec fits in three lines:\n\n1. **Who can pull it.** A named role, on a 24/7 rota. Not 'the AI team.' One human at a time.\n2. **In how many minutes.** A maximum time from decision to feature-disabled. The industry default is 15 minutes; tougher surfaces (money, health) should be 5.\n3. **What the user sees instead.** A defined fallback path. Plain old form. Human agent. Cached previous answer. Anything but a generic error.\n\nThat's it. If you cannot answer all three for every AI feature in production, you do not have a kill switch; you have an aspiration.\n\nA crisp number from a 2026 Mumbai banking incident: a chatbot quoting wrong interest rates was disabled in 8 minutes by an on-call SRE because the kill switch was wired and the rota was clear. The next-door bank with the same vendor and no kill switch took 9 hours and lost ₹2.7 crore in misquotes."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A red kill switch button on a panel with three labels: 'Owner: Priya / Anika / Rohan (rotating on-call)', 'Time-to-disable: 8 min target, 15 min hard limit', 'Fallback: human agent + 'estimated wait 4 min' message'.",
+      "caption": "The three lines that turn 'we have a kill switch' into 'we actually do.'",
+      "maxWidth": 560,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#EFF6FF'/><g><rect x='180' y='40' width='200' height='180' rx='12' fill='#1F2937' stroke='#0F172A' stroke-width='2'/><circle cx='280' cy='100' r='32' fill='#EF4444' stroke='#7F1D1D' stroke-width='3'/><text x='280' y='106' text-anchor='middle' font-family='monospace' font-size='14' fill='#FFFFFF' font-weight='bold'>STOP</text><rect x='200' y='150' width='160' height='14' rx='3' fill='#FCD34D'/><rect x='200' y='170' width='160' height='14' rx='3' fill='#FCD34D'/><rect x='200' y='190' width='160' height='14' rx='3' fill='#FCD34D'/><text x='280' y='160' text-anchor='middle' font-family='monospace' font-size='9' fill='#1F2937'>OWNER</text><text x='280' y='180' text-anchor='middle' font-family='monospace' font-size='9' fill='#1F2937'>TTD ≤ 15 min</text><text x='280' y='200' text-anchor='middle' font-family='monospace' font-size='9' fill='#1F2937'>FALLBACK PATH</text></g><g font-family='sans-serif' font-size='11' fill='#1F2937'><text x='40' y='95' fill='#1E3A8A' font-weight='bold'>1. Who:</text><text x='40' y='110' fill='#1E3A8A'>Priya / Anika / Rohan</text><text x='40' y='125' fill='#1E3A8A' font-style='italic'>(rotating on-call)</text><text x='400' y='95' fill='#1E3A8A' font-weight='bold'>2. How fast:</text><text x='400' y='110' fill='#1E3A8A'>8 min target</text><text x='400' y='125' fill='#1E3A8A'>15 min hard limit</text><text x='40' y='180' fill='#1E3A8A' font-weight='bold'>3. Fallback:</text><text x='40' y='195' fill='#1E3A8A'>human agent +</text><text x='40' y='210' fill='#1E3A8A'>'wait 4 min' msg</text></g></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Translation moment — 'we should be able to turn it off' becomes a kill switch spec",
+      "steps": [
+        { "label": "Step 1 — The English question", "body": "CEO in a postmortem: 'We should be able to turn it off.' Everyone nods. Nothing changes." },
+        { "label": "Step 2 — Pick the named on-call", "body": "Translate to: 'Priya, Anika, Rohan rotate weekly. PagerDuty escalation. Backup: head of platform.' If you cannot name three humans, you have a one-person dependency." },
+        { "label": "Step 3 — Pick the time-to-disable", "body": "'15 minutes from page to feature-flag-off.' This forces engineering to wire a feature flag to a single button — not a deploy, not a config push, a flag." },
+        { "label": "Step 4 — Pick the fallback", "body": "'Form-based claim entry; estimated processing time 24 hrs; show banner explaining the AI flow is paused.' If the fallback is 'show error', users will assume the company is broken." },
+        { "label": "Step 5 — Run a fire drill", "body": "Quarterly. The on-call pulls the switch on a low-traffic feature, you measure time-to-disable. If you have never run a drill, you do not have a kill switch; you have a screenshot of one." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your kill-switch design says: 'The AI team can disable any feature within 30 minutes by reaching out to the on-call platform engineer.' What is wrong with it?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "It uses 'the AI team' (not a named human), 30 minutes is too long for production AI, and 'reaching out' is not a defined channel.", "correct": true, "explain": "Correct. Three failure modes in one sentence. A real spec names a person, has a target under 15 minutes, and uses a single defined trigger (a button or a CLI command, not a Slack message)." },
+        { "id": "b", "label": "It does not name the regulator who would be informed.", "correct": false, "explain": "Tangential. Regulator notification is a separate workflow; it follows the kill action, it does not gate it." },
+        { "id": "c", "label": "30 minutes is fine for most surfaces.", "correct": false, "explain": "False. 30 minutes is unsafe for any user-facing AI on money, identity, or health. It is acceptable only for internal-tooling features." },
+        { "id": "d", "label": "Nothing; it is reasonable.", "correct": false, "explain": "It is exactly the kind of language that sounds reasonable in a deck and falls apart in production." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Bijli ka switch vs Bijli ka MCB",
+          "md": "Tera ghar mein **bedroom ka switch** hai — fan band karta hai. **MCB** main panel pe hai — pure ghar ki bijli kaat sakta hai. Tu kabhi MCB ke baare mein nahi sochta jab tak kuch jaldi ka emergency nahi ho.\n\nAI mein, feature-flag is the bedroom switch. Kill switch is the MCB. **MCB ke bina, jab fire lagta hai, tu ek ek room jaake fan band karta phirega.** 9 ghante mein incident handle hota hai. MCB hota toh 8 minute mein. Yeh choice hai — pehle hi MCB lagao, ya post-mortem mein cry karo."
+        },
+        "en": {
+          "tone": "info",
+          "title": "Feature flag vs main breaker",
+          "md": "A feature flag is the bedroom light switch. A kill switch is the main breaker. You don't think about the main breaker until something is on fire, at which point you really, really wish you knew where it was. The same logic applies to AI in production."
+        }
+      }
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Move 2 — What to write down"
+    },
+    {
+      "type": "markdown",
+      "md": "There are exactly four artefacts that must be written down before any AI feature touches money, identity, or health. Anything more is bureaucracy; anything less is theatre.\n\n1. **The eval card.** Eval set name, version, threshold, last red-team date, last failure-rate measurement. One page.\n2. **The kill switch spec.** Owner rota, time-to-disable, fallback path. Three lines.\n3. **The logging schema.** What is logged on every AI inference: cost, latency, failure flag, user category, prompt category. Schema, not prose.\n4. **The named owner.** One human, with email, with a manager named for escalation. Not 'team.' Not 'rotates monthly.' One human at a time, named, dated.\n\nThese four artefacts together fit on roughly four pages. They are version-controlled. They are signed by the CTO and the CISO. They survive an audit because they describe what was done, not what was planned. The 47-page policy doc, if your company writes one, is now an appendix; it does not gate releases.\n\nA crisp number from a 2026 IRDAI inspection of a Pune health-tech: producing the four artefacts on three production AI features took 14 minutes; producing the equivalent narrative from the 47-page policy took 11 days and was still incomplete. Auditors notice."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Four cards labelled: Eval Card / Kill Switch Spec / Logging Schema / Named Owner. Each card has a checkbox and a CTO signature line.",
+      "caption": "The four artefacts. Four cards, four signatures, four pages of audit defence.",
+      "maxWidth": 580,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(40 40)'><rect width='110' height='130' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#065F46'>Eval Card</text><text x='10' y='50' fill='#065F46'>set: fintech-v3</text><text x='10' y='65' fill='#065F46'>thresh: 1.5%</text><text x='10' y='80' fill='#065F46'>red-team:</text><text x='10' y='93' fill='#065F46'>18 Mar 2026</text><line x1='10' y1='110' x2='100' y2='110' stroke='#065F46' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#065F46' font-style='italic'>CTO sign</text></g><g transform='translate(180 40)'><rect width='110' height='130' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#1E3A8A'>Kill Switch</text><text x='10' y='50' fill='#1E3A8A'>owner: Priya</text><text x='10' y='65' fill='#1E3A8A'>TTD: 8 min</text><text x='10' y='80' fill='#1E3A8A'>fallback:</text><text x='10' y='93' fill='#1E3A8A'>human agent</text><line x1='10' y1='110' x2='100' y2='110' stroke='#1E40AF' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>CTO sign</text></g><g transform='translate(320 40)'><rect width='110' height='130' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Logging</text><text x='10' y='50' fill='#7C2D12'>cost ✓</text><text x='10' y='65' fill='#7C2D12'>latency ✓</text><text x='10' y='80' fill='#7C2D12'>fail flag ✓</text><text x='10' y='93' fill='#7C2D12'>prompt cat ✓</text><line x1='10' y1='110' x2='100' y2='110' stroke='#92400E' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>CISO sign</text></g><g transform='translate(460 40)'><rect width='90' height='130' rx='8' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='45' y='25' text-anchor='middle' font-weight='bold' fill='#9D174D'>Owner</text><text x='10' y='50' fill='#9D174D'>Anika R.</text><text x='10' y='65' fill='#9D174D'>head ML</text><text x='10' y='80' fill='#9D174D'>esc: CTO</text><text x='10' y='93' fill='#9D174D'>14 May 26</text><line x1='10' y1='110' x2='80' y2='110' stroke='#9D174D' stroke-width='1'/><text x='45' y='125' text-anchor='middle' font-size='9' fill='#9D174D' font-style='italic'>self sign</text></g><text x='290' y='220' text-anchor='middle' font-size='13' fill='#1F2937' font-style='italic' font-weight='bold'>Four cards. Four pages. Four signatures.</text><text x='290' y='245' text-anchor='middle' font-size='11' fill='#374151'>Auditors believe these. They do not believe a 47-page policy.</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "Board-Member Bharat",
+        "role": "Independent director, has personally reviewed two regulator audits where governance theatre cost the company a public reprimand"
+      },
+      "intro": [
+        "Aap aaye. Aaj ka topic — yeh artefact **real governance** hai, ya **theatre** hai, ya **somewhere in between**?",
+        "Yaad rakhiye — regulator log nahi padhte, regulator activity dekhte hain. Lawyer nahi check karta jab tak court mein nahi jaate. Customer ek bar bhi nahi padhta.",
+        "Toh chaliye — aapka governance kya hai, dekhte hain."
+      ],
+      "buckets": [
+        { "id": "real", "label": "Real governance", "tone": "safe" },
+        { "id": "partial", "label": "Partial — fix the gap", "tone": "neutral" },
+        { "id": "theatre", "label": "Theatre", "tone": "danger" }
+      ],
+      "scenarios": [
+        { "id": "s1", "situation": "An 'AI Council' that meets weekly, reviews slide decks of upcoming AI features, and signs them off. No eval threshold, no kill switch spec, no logging schema. The council has approved 14 features in six months.", "correctBucketId": "theatre", "explain": "Theatre. Council approval without eval, kill switch, or logging is a rubber stamp wearing a suit. The 14 approvals look impressive; they are 14 pieces of evidence the council does not block anything." },
+        { "id": "s2", "situation": "A signed eval card showing failure rate 1.2% on the v3 eval set, last red-teamed 8 weeks ago. Owner named, kill switch wired, logging on. No documented fallback path for the kill switch; assumption is 'the user retries.'", "correctBucketId": "partial", "explain": "Partial. The first three artefacts are real. The fallback path is the gap — 'the user retries' is not a fallback, it is a failure mode. Add a defined fallback (form, human, cached answer) in 14 days; the rest holds." },
+        { "id": "s3", "situation": "An AI feature ships with: eval threshold (1.5%), red-team report (signed 6 weeks ago), named owner (Anika R), kill switch (Priya rotates, 12-min TTD, human-agent fallback), logging schema (cost / latency / fail / category, signed by CISO).", "correctBucketId": "real", "explain": "Real governance. All four artefacts present, dated, signed, in version control. This is what auditors believe and what postmortems can reconstruct. Repeat the pattern; do not let it decay." },
+        { "id": "s4", "situation": "A 47-page AI Ethics Policy approved by Legal in March 2026. Section 14.3 says 'AI must align with regulatory guidance.' No eval set referenced; no kill switch concept; no logging requirement. Policy is reviewed annually.", "correctBucketId": "theatre", "explain": "Theatre, in dense form. The policy contains nouns instead of thresholds; the annual review is a calendar event, not a control. Convert each line to an eval, log, kill, or owner artefact, or delete it. The 47 pages will collapse to 4." },
+        { "id": "s5", "situation": "Eval card present and signed; kill switch wired; logging on. Named owner is 'the AI team.' Manager named for escalation: 'reports to engineering leadership.'", "correctBucketId": "partial", "explain": "Partial. The named-owner artefact is the gap — 'the AI team' is not a named human, and 'engineering leadership' is not an escalation path. Replace both with names within 7 days; the rest holds." },
+        { "id": "s6", "situation": "Eval card with threshold 1.5%; the eval set has 14 prompts, all written by the AI team itself, no red-team contribution. No external attestation.", "correctBucketId": "theatre", "explain": "Theatre wearing eval-card clothing. A 14-prompt eval set written by the team being evaluated is a self-report, not a gate. Real eval is a 500+ prompt set with explicit red-team contributions and external attestation, dated within the last quarter." }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: policy doc, no enforcement",
+      "md": "The most common, most expensive failure mode in 2024-26 AI governance: a polished policy document that is approved, circulated, never converted to enforceable artefacts, and never updated until the next incident.\n\nThe trap is comfortable. The doc looks like governance. Compliance feels covered. Legal has signed off. The CEO has a paragraph for the board deck. None of these activities, taken together, prevent a single bad release.\n\nThe fix is mechanical: every line of the policy must convert to an eval gate, a logging requirement, a kill switch, or a named-owner artefact. **If a line cannot be converted, delete the line.** The 47-page policy collapses to one page. That collapse is the work."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "You're shipping an AI feature into production tomorrow. Order the gates, in priority order — what blocks ship first.",
+      "items": [
+        { "id": "1", "label": "Eval failure rate below the published threshold on the agreed test set.", "detail": "First gate. If the model fails its own eval, nothing else matters." },
+        { "id": "2", "label": "Red-team report from someone outside the team building the feature, dated within 90 days.", "detail": "External attestation. Internal red-team is fine for non-sensitive surfaces; money / identity / health surfaces require an outside party." },
+        { "id": "3", "label": "Kill switch wired, on-call rota named, fallback path defined.", "detail": "If you cannot turn it off, you cannot turn it on. The kill switch precedes the launch button." },
+        { "id": "4", "label": "Logging schema deployed and dashboard live before any user is exposed.", "detail": "First user must be loggable. Diagnosis after the fact is impossible without it." },
+        { "id": "5", "label": "Named owner with a manager-level escalation path.", "detail": "One human, named, with a name above them. 'Team' does not own anything." },
+        { "id": "6", "label": "All four cards (eval / kill / logging / owner) signed by CTO + CISO.", "detail": "Signatures on the cards, in version control. The signature is the audit trail." }
+      ],
+      "hint": "Eval first. Logging before users see it. Signatures last but in writing."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Pick one AI feature in your company that is in production today (or is about to ship). Try to produce all four artefacts: eval card, kill switch spec, logging schema, named owner. Be honest — if any artefact does not exist, write 'NOT WRITTEN DOWN' for that one and note what you would need to produce it. The exercise is the diagnostic; the answer reveals where the program is theatre.",
+      "expected": "Strong example:\n\n'Feature: claims pre-fill (live since 12 March 2026).\n• Eval card: claims-eval-v2, threshold 92% accuracy, last measured 96.4%, last red-team 14 April 2026 (external — 3rd-party security firm). SIGNED.\n• Kill switch: Rohan / Aisha / Sandeep rotate weekly. TTD target 8 min, hard 15 min. Fallback: form-based claim, banner. SIGNED.\n• Logging: cost, latency, success-flag, claim-category, user-tier. Dashboard live. CISO signed.\n• Owner: Anika R. (head ML), escalation to CTO Vinod. Dated 12 May 2026.'\n\nWeak example:\n\n'Feature: chatbot. We have a policy doc. NOT WRITTEN DOWN: eval threshold, kill switch, logging, owner.' (This is exactly the diagnostic you wanted. The chatbot is a regulator-incident waiting to happen; produce the four artefacts in the next sprint.)"
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of the following are real governance artefacts that an auditor would accept? (Pick all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "An eval card showing failure rate 1.2% on a 1,200-prompt test set, last red-teamed 6 weeks ago by an external firm.", "correct": true, "explain": "Yes. Specific test set, specific number, dated external attestation. This is what auditors are trained to recognise." },
+        { "id": "b", "label": "A 47-page AI Ethics Policy approved by Legal.", "correct": false, "explain": "Theatre. Policies have not been accepted as governance artefacts since the 2024 wave of regulator guidance shifted toward testable controls." },
+        { "id": "c", "label": "A logging schema with cost, latency, success-flag, and prompt-category fields, signed by the CISO and live in production.", "correct": true, "explain": "Yes. Logging that is deployed and signed is the artefact regulators look for; it is what reconstructs an incident in 24 hours instead of 14 weeks." },
+        { "id": "d", "label": "A weekly AI Council meeting with attendance recorded.", "correct": false, "explain": "Theatre, even with attendance recorded. Meetings without testable controls are calendar entries, not governance." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Building permit vs structural safety check",
+          "md": "Bhai, Mumbai mein building bana rahe ho. Aapke paas **building permit** hai — paper hai, signed hai, BMC ne approve kiya hai. Building gir gayi.\n\nInsurance company ne pucha — \"structural safety check kaha hai?\" Tu bola — \"permit hai na.\" Insurance ne kaha — \"permit aur safety check do alag cheezein hain. Permit BMC ke liye hai. Safety check building ke liye hai.\"\n\nWahi hai AI mein — **policy doc BMC ke liye hai, eval gate building ke liye hai.** Dono chahiye. Lekin policy doc akela, building girne par, kuch nahi karta."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Building permit vs structural inspection",
+          "md": "A building permit proves the city approved the design. A structural inspection proves the building is safe. Both are required; only one of them keeps the building standing. AI policy documents are the permit; eval gates are the inspection. Conflating them is how buildings fall down."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "Real eval gates beat policy docs because they are testable; anything that cannot fail cannot govern.",
+        "A kill switch is three lines: who, in how many minutes, with what fallback. If you cannot answer all three, you do not have one.",
+        "The four artefacts that gate every sensitive AI feature: eval card, kill switch spec, logging schema, named owner. Four pages, four signatures.",
+        "If a line of policy cannot convert to an eval / log / kill / owner artefact, delete it. The doc collapses; the program improves.",
+        "Auditors do not measure policy by weight; they measure it by the last enforced action."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Walk to your most senior AI feature in production. Try to produce its four artefacts in 14 minutes, from memory or from version control. If you cannot, the gap you found is the highest-priority governance work in the company this week."
+    }
+  ]
+}

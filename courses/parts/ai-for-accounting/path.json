@@ -1,0 +1,346 @@
+{
+  "path": {
+    "slug": "ai-for-accounting",
+    "title": "AI for Accounting",
+    "subtitle": "Use AI for the boring 80% — keep the judgment 20% yourself",
+    "summary": "Most CAs are either terrified of AI or embarrassingly trusting of it. Both responses are wrong. This path teaches you exactly which 80 percent of accounting work AI handles well, which 20 percent it cannot touch without burning you, and how to build a defensible workflow that scales your firm without putting your COP number at risk. By the end you can scope an AI engagement for a real client, run a reconciliation pipeline with confidence scores, and explain to a partner why the LLM does not, and will not, sign Form 3CD.",
+    "kind": "PATH",
+    "level": "WORKING",
+    "estimatedMinutes": 70
+  },
+  "skills": [
+    {
+      "slug": "accounting-ai-mental-model",
+      "name": "Accounting AI Mental Model",
+      "category": "finance",
+      "description": "See where AI's pattern-matching strength meets ledger work, and where it stops",
+      "decayDays": null
+    },
+    {
+      "slug": "accounting-ai-prompting",
+      "name": "Prompting for Financial Work",
+      "category": "finance",
+      "description": "Write prompts that produce verifiable, structured, citation-backed financial output",
+      "decayDays": null
+    },
+    {
+      "slug": "accounting-ai-reconciliation",
+      "name": "AI-Assisted Reconciliation",
+      "category": "finance",
+      "description": "Run bank, ledger, and party reconciliations with confidence-scored AI matches and human review tiers",
+      "decayDays": null
+    },
+    {
+      "slug": "accounting-ai-tax-india",
+      "name": "AI for Indian Tax Workflows",
+      "category": "finance",
+      "description": "Apply RAG and verification discipline to GST, TDS, and Income Tax workflows without crossing compliance lines",
+      "decayDays": null
+    },
+    {
+      "slug": "accounting-ai-audit-discipline",
+      "name": "Audit-Grade AI Discipline",
+      "category": "finance",
+      "description": "Maintain audit trails, eval logs, and four-eye review around every AI-assisted output",
+      "decayDays": null
+    },
+    {
+      "slug": "accounting-ai-judgment",
+      "name": "AI-vs-CA Judgment",
+      "category": "finance",
+      "description": "Decide what to delegate to AI, what to verify, and what only a chartered accountant may sign",
+      "decayDays": null
+    }
+  ],
+  "skillPrerequisites": [
+    { "skill": "accounting-ai-prompting", "requires": "accounting-ai-mental-model" },
+    { "skill": "accounting-ai-reconciliation", "requires": "accounting-ai-prompting" },
+    { "skill": "accounting-ai-tax-india", "requires": "accounting-ai-reconciliation" },
+    { "skill": "accounting-ai-audit-discipline", "requires": "accounting-ai-tax-india" },
+    { "skill": "accounting-ai-judgment", "requires": "accounting-ai-audit-discipline" }
+  ],
+  "assessment": {
+    "title": "AI for Accounting Assessment",
+    "description": "Tests judgment under realistic Indian accounting scenarios: when to use AI, when to verify, when to refuse. Mix of single and multi-select questions covering reconciliation, GST, TDS, audit trail discipline, and the line a CA cannot let AI cross.",
+    "passThreshold": 70,
+    "timeLimitSec": null,
+    "attemptsAllowed": 3,
+    "skills": ["accounting-ai-judgment"],
+    "questions": [
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your articled assistant feeds 4,200 vendor invoices to ChatGPT and asks it to extract the GSTIN, taxable value, and IGST amount as a CSV. The output looks clean. Before you trust a single row of it, what is the **first** check you run?",
+        "points": 1,
+        "explanation": "LLMs hallucinate numbers silently. The cheapest, fastest sanity check is to verify totals against the source. A 0.3 percent mismatch on 4,200 invoices is twelve wrong rows; a 5 percent mismatch is 210.",
+        "skillSlug": "accounting-ai-prompting",
+        "choices": [
+          { "id": "a", "label": "Sum the taxable value column from the CSV and reconcile with the source-document total", "correct": true, "explanation": "Right. Numbers are not text; if the totals do not match, no other check matters. This is the cheapest, highest-signal check you can run." },
+          { "id": "b", "label": "Spot-check 10 random invoices for GSTIN format", "correct": false, "explanation": "Useful, but secondary. A correctly formatted GSTIN with the wrong taxable value is still wrong; you catch that only with totals." },
+          { "id": "c", "label": "Re-run the same prompt and see if the answer is identical", "correct": false, "explanation": "LLMs are non-deterministic at temperature > 0; identical answers prove nothing about correctness, only about the seed." },
+          { "id": "d", "label": "Trust it — the output looks well-formatted", "correct": false, "explanation": "Formatted output is the easiest thing for an LLM to produce. Correct numbers are the hardest. Never confuse the two." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these tasks belong on the AI side of the 80/20 split for an Indian CA practice? **Select all that apply.**",
+        "points": 2,
+        "explanation": "AI shines at extraction, classification, and pattern-matching at scale. It must not own the signature on a statutory filing or judgment about whether a transaction qualifies for ITC under disputed jurisprudence.",
+        "skillSlug": "accounting-ai-mental-model",
+        "choices": [
+          { "id": "a", "label": "Drafting a first-pass classification of 6,000 expense entries into ledger heads", "correct": true, "explanation": "Classic pattern-matching at scale; AI is excellent here, with a CA reviewing the long-tail and edge cases." },
+          { "id": "b", "label": "Signing the audit report under Section 143 of the Companies Act", "correct": false, "explanation": "A statutory signature is a CA's personal liability. AI cannot sign. Ever." },
+          { "id": "c", "label": "Extracting GSTINs and invoice numbers from 800 PDF purchase bills", "correct": true, "explanation": "OCR plus extraction is exactly where AI wins; verify totals, then proceed." },
+          { "id": "d", "label": "Deciding whether a litigation provision should be disclosed in financial statements", "correct": false, "explanation": "Disclosure judgment depends on materiality, management representations, and professional skepticism — none of which AI can carry." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "An SME client in Surat asks: \"Can you use AI to reconcile our GSTR-2A with the purchase register for FY 2025-26?\" What is the right scoping answer?",
+        "points": 1,
+        "explanation": "The right answer scopes AI to extraction and matching, keeps the CA on judgment, and names the deliverable. Anything that promises 'AI will reconcile' without a human review tier is reckless.",
+        "skillSlug": "accounting-ai-reconciliation",
+        "choices": [
+          { "id": "a", "label": "Yes — AI will produce confidence-scored matches; matches above 95 percent we accept after sampling, between 70 and 95 we review row-by-row, below 70 we treat as unmatched and investigate", "correct": true, "explanation": "Right. Tiered review by confidence is the only defensible workflow. The deliverable is matches plus exception list, not a finished reconciliation." },
+          { "id": "b", "label": "Yes — we'll feed both files to ChatGPT and send you the output by Friday", "correct": false, "explanation": "No version control, no confidence tiers, no audit trail. This is how firms get into trouble." },
+          { "id": "c", "label": "No — AI cannot do reconciliations", "correct": false, "explanation": "Wrong in the other direction. Reconciliation is exactly the kind of fuzzy matching where AI shines, given guardrails." },
+          { "id": "d", "label": "Yes — but only if the client signs an indemnity", "correct": false, "explanation": "Indemnity does not transfer professional responsibility for a statutory function. The defence is process, not paperwork." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You ask Claude: 'What is the TDS rate for a payment to a non-resident for technical services in May 2026?' It answers '10 percent under Section 195.' What is wrong with using that answer in client work?",
+        "points": 1,
+        "explanation": "Section 195 rates depend on the nature of payment, treaty position, PAN availability, surcharge, and cess. A single number with no citation is a hallucination risk regardless of whether the number happens to be right.",
+        "skillSlug": "accounting-ai-tax-india",
+        "choices": [
+          { "id": "a", "label": "It is a single number with no citation to the actual section, treaty, or notification — and the answer depends on facts the model did not ask for", "correct": true, "explanation": "Exactly. The right move is RAG against the actual Income Tax Act and treaty text, with the model citing the source you can verify." },
+          { "id": "b", "label": "Nothing — Section 195 rates are well-known, the model is reliable here", "correct": false, "explanation": "Section 195 rates depend on PAN, treaty, nature of services, surcharge, and cess. The number 10 may be wrong before you finish reading this." },
+          { "id": "c", "label": "Claude is not a tax tool; you should only use ChatGPT", "correct": false, "explanation": "Tool brand is irrelevant. The discipline — citation, verification, never-ship — is what matters." },
+          { "id": "d", "label": "The model used 'percent' instead of '%'", "correct": false, "explanation": "Cosmetic." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Your firm is building an internal AI tool to draft income tax computations. Which of the following are non-negotiable design requirements? **Select all that apply.**",
+        "points": 2,
+        "explanation": "Audit trail, eval log, and human signoff are the floor. Cost optimisation matters but never at the expense of these.",
+        "skillSlug": "accounting-ai-audit-discipline",
+        "choices": [
+          { "id": "a", "label": "Every prompt + response is logged with timestamp, model version, and the documents in context", "correct": true, "explanation": "If you cannot reproduce the AI's reasoning later, you cannot defend it. This is the audit trail." },
+          { "id": "b", "label": "A CA must approve every computation before it leaves the firm", "correct": true, "explanation": "Four-eye review is the floor for anything that goes to a client or the department." },
+          { "id": "c", "label": "The tool must be the cheapest model available", "correct": false, "explanation": "Cost matters but is not a non-negotiable. Quality and verifiability come first." },
+          { "id": "d", "label": "Output must be in Excel format", "correct": false, "explanation": "Format is a preference, not a discipline." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A junior tells you: 'I asked ChatGPT to find the section number for the GST rate on solar panels and it said Notification 24/2023. I checked the CBIC site — that notification is about cement.' What is the named pattern at work?",
+        "points": 1,
+        "explanation": "This is a hallucination — the model produced a plausible-sounding but fabricated citation. The pattern has a name precisely because it is so common: never trust a citation you have not opened.",
+        "skillSlug": "accounting-ai-prompting",
+        "choices": [
+          { "id": "a", "label": "Hallucination — a fabricated but plausible citation; the named rule is 'never trust a citation you have not opened'", "correct": true, "explanation": "Yes. The fix is RAG, not faith. If the model can cite a real document and quote from it, you can verify; otherwise, treat every section number as a guess." },
+          { "id": "b", "label": "Outdated training data", "correct": false, "explanation": "It might also be outdated, but the deeper issue is fabrication: the model invented a connection that does not exist. Outdated would be a real notification with a wrong rate." },
+          { "id": "c", "label": "User error in prompting", "correct": false, "explanation": "The prompt was reasonable. The model's behaviour is the issue." },
+          { "id": "d", "label": "GPU temperature drift", "correct": false, "explanation": "Not a thing." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What does the 'classify-then-verify' move look like for a 14,000-line bank statement?",
+        "points": 1,
+        "explanation": "AI proposes a category for each line; the CA's review is concentrated on flagged-low-confidence and high-rupee lines. The verify step is mandatory, not optional.",
+        "skillSlug": "accounting-ai-reconciliation",
+        "choices": [
+          { "id": "a", "label": "AI assigns a ledger head and confidence score to each line; you sample high-confidence rows and review every low-confidence and every high-amount row", "correct": true, "explanation": "Right. You concentrate human attention where it changes the answer." },
+          { "id": "b", "label": "AI assigns a ledger head; you accept the output and move on", "correct": false, "explanation": "This is exactly the failure mode the move is designed to prevent." },
+          { "id": "c", "label": "You categorise everything by hand and use AI to check your work", "correct": false, "explanation": "Backwards. You wasted the AI's strength on the part it was supposed to handle." },
+          { "id": "d", "label": "You ask AI to design a categorisation scheme, then ignore the data", "correct": false, "explanation": "Now you have neither the categorisation nor the data." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Your client's GSTR-2A and purchase register show a 6.4 percent mismatch on ITC for the quarter. Which of the following are reasonable AI-assisted next steps? **Select all that apply.**",
+        "points": 2,
+        "explanation": "AI helps you triage the mismatch faster but cannot decide whether to claim disputed ITC. That decision is a CA's call.",
+        "skillSlug": "accounting-ai-tax-india",
+        "choices": [
+          { "id": "a", "label": "Use AI to bucket mismatches by reason — missing in 2A, value mismatch, GSTIN mismatch, period mismatch", "correct": true, "explanation": "Bucketing is pure pattern-matching at scale. AI is excellent." },
+          { "id": "b", "label": "Use AI to draft follow-up emails to vendors whose invoices are missing in 2A", "correct": true, "explanation": "First-pass communication drafts are a great AI use case; CA reviews, then sends." },
+          { "id": "c", "label": "Let AI decide which disputed ITC entries to claim", "correct": false, "explanation": "ITC eligibility under Section 16 is a judgment call with audit risk. CA only." },
+          { "id": "d", "label": "Submit the GSTR-3B based on AI's reconciliation without further review", "correct": false, "explanation": "Filing is the never-ship line. Do not cross it." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A partner at your firm asks: 'Can we use AI to generate Form 3CD for a client with ₹47 crore turnover?' What is the right answer?",
+        "points": 1,
+        "explanation": "Form 3CD is signed by the auditor under Section 44AB. AI may draft sections, populate tables, even cross-check disclosures, but the signature, opinion, and responsibility are the auditor's. The 'never-ship rule' applies.",
+        "skillSlug": "accounting-ai-audit-discipline",
+        "choices": [
+          { "id": "a", "label": "AI can draft, populate, and cross-check, but the auditor signs the final form after a complete review — AI never produces the version that is filed", "correct": true, "explanation": "Right. This is the never-ship rule. AI never produces the version that goes to the department." },
+          { "id": "b", "label": "Yes — AI generates the form and the partner signs", "correct": false, "explanation": "Signing without doing the work is professional misconduct under the Chartered Accountants Act." },
+          { "id": "c", "label": "No — AI cannot help with tax audit work at all", "correct": false, "explanation": "Wrong in the other direction. AI accelerates the boring 80 percent; the auditor does the 20 percent." },
+          { "id": "d", "label": "Only if the client signs a waiver", "correct": false, "explanation": "A client waiver does not affect the auditor's statutory responsibility." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is an 'eval log' in the context of an AI-assisted accounting workflow?",
+        "points": 1,
+        "explanation": "An eval log records, for each AI run, what was given, what came back, who reviewed it, what changed, and the model version. This is the audit trail equivalent for AI work.",
+        "skillSlug": "accounting-ai-audit-discipline",
+        "choices": [
+          { "id": "a", "label": "A timestamped record of prompt, context documents, model version, response, reviewer name, and any corrections — preserved for the audit period", "correct": true, "explanation": "Yes. If you cannot answer 'who, when, with what, and what changed' for any AI output, you do not have an audit trail." },
+          { "id": "b", "label": "ChatGPT's chat history", "correct": false, "explanation": "Chat history is not retained reliably and cannot be audited. It is not a substitute." },
+          { "id": "c", "label": "A monthly bill from the AI vendor", "correct": false, "explanation": "Cost is not the same as an audit trail." },
+          { "id": "d", "label": "Notes the CA writes after the engagement", "correct": false, "explanation": "Useful, but not enough. The eval log records the AI's actual inputs and outputs, not your summary." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your client sent the purchase register as a 47-tab Excel with merged cells, hand-written notes in column F, and three rows of 'TOTAL' in different fonts. You want AI to parse it. What is the **first** thing you do?",
+        "points": 1,
+        "explanation": "The 'looks like a poem' problem. AI is great at messy data, but you give it the cleanest input you can produce. Standardise the structure first, then prompt.",
+        "skillSlug": "accounting-ai-prompting",
+        "choices": [
+          { "id": "a", "label": "Flatten and standardise the data into one rectangular sheet with consistent headers before feeding to AI", "correct": true, "explanation": "Right. Garbage in, garbage out applies double for LLMs. Five minutes of manual cleanup saves an hour of wrong output." },
+          { "id": "b", "label": "Feed the file to ChatGPT and hope", "correct": false, "explanation": "This is how the 'AI ne bola looks like a poem' meme happens." },
+          { "id": "c", "label": "Refuse the engagement", "correct": false, "explanation": "The data is messy, not impossible. Do the work." },
+          { "id": "d", "label": "Charge a higher fee and feed the file as-is", "correct": false, "explanation": "Higher fees for worse work is not the model." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "Which of these are appropriate uses of RAG (retrieval-augmented generation) for an Indian tax practice? **Select all that apply.**",
+        "points": 2,
+        "explanation": "RAG works wherever you have a stable, knowable corpus the model should cite from rather than invent. Stable jurisprudence and bare acts qualify; client-specific judgment does not.",
+        "skillSlug": "accounting-ai-tax-india",
+        "choices": [
+          { "id": "a", "label": "Indexing the GST Act, CGST Rules, and CBIC notifications so the model cites them when answering classification questions", "correct": true, "explanation": "Classic RAG use case. The model cites a real document; you can verify." },
+          { "id": "b", "label": "Indexing your firm's past advisory notes so juniors can find precedents", "correct": true, "explanation": "Internal knowledge base via RAG is a high-value use; tag confidence and require partner review for any opinion that flows to a client." },
+          { "id": "c", "label": "Asking the model to 'use its training data' for the latest TDS rates without giving it the source", "correct": false, "explanation": "Training data is stale and untraceable. This is the no-RAG anti-pattern." },
+          { "id": "d", "label": "Letting the model decide whether a client's transaction is a 'royalty' under a tax treaty", "correct": false, "explanation": "Treaty interpretation is a CA judgment call. RAG can surface the treaty text; the conclusion is yours." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Your AI-assisted reconciliation produced 1,847 matches, 142 of which the model marked 'low confidence' (below 70 percent). The partner wants the report by EOD. What do you do?",
+        "points": 1,
+        "explanation": "Low-confidence matches are exactly where you spend the human hour. Skipping them defeats the entire purpose of confidence scoring.",
+        "skillSlug": "accounting-ai-reconciliation",
+        "choices": [
+          { "id": "a", "label": "Manually review every low-confidence match and the top 20 by rupee value, even if it pushes the deadline by an hour", "correct": true, "explanation": "Right. The whole point of confidence scoring is to concentrate human attention where it matters. Skipping the low-confidence reviews is the failure mode." },
+          { "id": "b", "label": "Accept all 1,847 matches and ship", "correct": false, "explanation": "You ignored the model's own warning. This is worse than not using AI at all." },
+          { "id": "c", "label": "Re-run the AI with a different prompt until everything is high-confidence", "correct": false, "explanation": "Pressure-cooking the model into false confidence does not change the underlying ambiguity." },
+          { "id": "d", "label": "Hand the file back to the client and ask them to do it", "correct": false, "explanation": "Probably not the deliverable they paid for." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "Define the 'never-ship rule' in your own words.",
+        "points": 1,
+        "explanation": "The never-ship rule says: AI never produces the final artefact that is filed, signed, or ships to the client. A CA always reviews and signs.",
+        "skillSlug": "accounting-ai-audit-discipline",
+        "choices": [
+          { "id": "a", "label": "AI may draft, format, and cross-check, but the version that is filed, signed, or sent to a client must be the result of a CA's review and signoff", "correct": true, "explanation": "Yes. The boundary is at the artefact, not the workflow." },
+          { "id": "b", "label": "Never use AI for any part of accounting", "correct": false, "explanation": "Too restrictive; you give up the 80 percent." },
+          { "id": "c", "label": "Never tell the client you used AI", "correct": false, "explanation": "Wrong on ethics and on practice." },
+          { "id": "d", "label": "Always use AI; never review", "correct": false, "explanation": "The exact opposite." }
+        ]
+      },
+      {
+        "kind": "MCQ_MULTI",
+        "stem": "An auditor at your firm is using AI to summarise a 340-page lease agreement to identify key obligations under Ind AS 116. Which of the following are **good practice**? **Select all that apply.**",
+        "points": 2,
+        "explanation": "Source citation, sampling against the original, and CA judgment on classification are the discipline. Trusting summaries blindly is the failure mode.",
+        "skillSlug": "accounting-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "Asking the model to cite the page and clause for every obligation it lists", "correct": true, "explanation": "Yes. If you cannot trace the summary back to the document, the summary is unverifiable." },
+          { "id": "b", "label": "Sampling 10 random clauses and verifying the model summarised them correctly", "correct": true, "explanation": "Sampling is the audit-grade check on the AI's accuracy." },
+          { "id": "c", "label": "Letting the model decide whether the lease is 'short-term' under Ind AS 116", "correct": false, "explanation": "Classification under Ind AS is a judgment call; auditor only." },
+          { "id": "d", "label": "Skipping the original document entirely because the summary is good enough", "correct": false, "explanation": "This is exactly what the discipline is designed to prevent." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "A peer at another firm tells you they 'fully automated' GSTR-3B filing using AI for 200 SME clients. Your reaction?",
+        "points": 1,
+        "explanation": "Fully automated filing crosses the never-ship rule. There is no defensible workflow that removes the CA from the signing of a statutory return.",
+        "skillSlug": "accounting-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "Concern — fully automated statutory filing without per-client CA signoff is a compliance and professional risk waiting to surface", "correct": true, "explanation": "Right. The cost saving is real until the first wrong filing triggers a notice; then the firm and the client both pay." },
+          { "id": "b", "label": "Admiration — that is the future of practice", "correct": false, "explanation": "It may be the future of marketing copy. It is not the future of liability." },
+          { "id": "c", "label": "Indifference — every firm chooses its risk appetite", "correct": false, "explanation": "Statutory filings are not a personal preference. The risk lands on real people." },
+          { "id": "d", "label": "You ask them to share their prompt", "correct": false, "explanation": "The problem is not the prompt; it is the absence of a CA review tier." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "You are pitching an AI-assisted bookkeeping retainer to a Bangalore restaurant chain with 14 outlets and roughly 9,000 transactions per month. Which sentence belongs in the proposal?",
+        "points": 1,
+        "explanation": "The honest pitch describes the tiering, the human review tier, and the limits. Anything that promises 'AI-only' or 'fully automated' is overselling.",
+        "skillSlug": "accounting-ai-judgment",
+        "choices": [
+          { "id": "a", "label": "AI categorises transactions and produces a confidence score; our team reviews every low-confidence entry and every transaction above ₹50,000; you receive the books with an AI-assist disclosure and CA signoff", "correct": true, "explanation": "Honest, defensible, sellable. Names the tiering and the signoff." },
+          { "id": "b", "label": "AI does your books — no human involvement, half the price", "correct": false, "explanation": "Half the price, twice the risk; the first time a category is wrong on a tax-relevant entry, the savings vanish." },
+          { "id": "c", "label": "We use AI but won't tell you because it is our secret sauce", "correct": false, "explanation": "Disclosure is the floor of professional ethics in 2026." },
+          { "id": "d", "label": "We do not use AI; everything is hand-keyed by articled assistants", "correct": false, "explanation": "Probably true at higher cost and lower quality. The honest pitch acknowledges AI." }
+        ]
+      },
+      {
+        "kind": "MCQ_SINGLE",
+        "stem": "What is the right way to handle an AI-generated GST notification or section number that you cannot find on the CBIC site?",
+        "points": 1,
+        "explanation": "If you cannot verify a citation against the source, you assume it is hallucinated. Do not file or advise based on it.",
+        "skillSlug": "accounting-ai-tax-india",
+        "choices": [
+          { "id": "a", "label": "Treat it as a hallucination and discard it; never file or advise based on a citation you cannot independently verify", "correct": true, "explanation": "Yes. Verifiability is the floor; if a citation does not exist on the official site, it does not exist." },
+          { "id": "b", "label": "Use it anyway; the model is usually right", "correct": false, "explanation": "Usually-right is not a defence in front of an Assessing Officer." },
+          { "id": "c", "label": "Ask three other LLMs and go with the majority", "correct": false, "explanation": "Three models can hallucinate the same plausible answer; consensus is not verification." },
+          { "id": "d", "label": "Email the client the citation as-is and let them figure it out", "correct": false, "explanation": "You signed the engagement letter, not them." }
+        ]
+      }
+    ]
+  },
+  "project": {
+    "slug": "ai-for-accounting-capstone",
+    "title": "Capstone: Scope an AI-Assisted GST Reconciliation Engagement for 47 SME Clients",
+    "prompt": "## The brief\n\nYou are a CA at a Pune firm. The senior partner forwards you an email from your largest enterprise client, an SME consortium that wants to consolidate their compliance work. The ask:\n\n> *\"We have 47 SME clients across our group. Each does roughly ₹2 to ₹15 crore in turnover. We've heard you can use AI to do the GST reconciliation. Quote for a monthly retainer covering GSTR-2A vs purchase register reconciliation, ITC claim recommendations, and GSTR-3B filing. Start next quarter. We want to cut our compliance cost by 40 percent.\"*\n\nThe partner adds, in the forward: *\"Don't say no, but don't get us in trouble either. Send me a one-page scope by Monday.\"*\n\n## What to deliver\n\nWrite a one-page scope (400 to 600 words) that covers:\n\n1. **What AI does** — which parts of the workflow you delegate to AI, with named moves (classify-then-verify, confidence tiers, RAG against the GST Act, etc.). Be specific about the confidence thresholds.\n2. **What stays human** — which parts a CA must do, and why (statutory signoff, ITC eligibility judgment, exception handling). Name the never-ship rule.\n3. **Compliance guardrails** — eval log requirements, four-eye review, AI-assist disclosure to clients, audit trail retention, what happens when GSTR-2A is updated mid-month.\n4. **Pricing and SLA** — defend the 40 percent cost reduction or push back honestly. Tell the partner what they get, what they don't, and what fails.\n5. **The clarifying question you'd send the client first** — because the brief is under-specified (47 clients of what kind? Do they share an ERP? What's the current monthly cost?).\n\n## What we're really testing\n\nWe care about how you scope under uncertainty, defend your AI choices, and where you draw the never-ship line. There is no single correct answer; there is a class of defensible answers and a class of indefensible ones.\n\n## Constraints\n\n- Indian regulatory context: CGST Act 2017, Section 16 ITC, Rule 36(4), GSTR-2A vs 2B, GSTR-3B.\n- Don't promise what you cannot deliver. The partner can see through it; the client will too.\n- Use specific numbers (confidence thresholds, rupee values, mismatch percentages, hours per client per month).\n",
+    "rubric": [
+      {
+        "criterion": "Defensibility",
+        "levels": [
+          { "label": "Every AI delegation has a named guardrail (confidence tier, RAG citation, eval log, four-eye review). The never-ship rule is explicit. Indefensible practices (auto-filing, AI-only ITC decisions) are explicitly refused.", "points": 4 },
+          { "label": "Most AI delegations have guardrails; the never-ship rule is mentioned but not defended; one questionable practice slips in.", "points": 3 },
+          { "label": "Mentions AI handles 'most of the work' but does not name the moves; review tiers are vague.", "points": 2 },
+          { "label": "Promises automation without limits; no review tiers; no never-ship rule.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Sensitivity to assumptions",
+        "levels": [
+          { "label": "Names at least 3 assumptions about the client (ERP standardisation, transaction volume, GSTR-2A timing, ITC dispute appetite) and how the scope changes if each is wrong. Includes the clarifying question.", "points": 4 },
+          { "label": "Names 1 to 2 assumptions and includes the clarifying question.", "points": 3 },
+          { "label": "Acknowledges uncertainty in the brief but does not enumerate assumptions.", "points": 2 },
+          { "label": "Treats the brief as fully specified; no clarifying question.", "points": 0 }
+        ]
+      },
+      {
+        "criterion": "Communication",
+        "levels": [
+          { "label": "One page, second-person, specific numbers (confidence thresholds, hours, rupee thresholds, % mismatch). Defends the price honestly. The partner can forward this to the client without rewriting.", "points": 4 },
+          { "label": "Mostly clear; one or two soft places where the partner would need to rewrite a sentence.", "points": 3 },
+          { "label": "Conceptually right but verbose or hedged; no specific numbers.", "points": 2 },
+          { "label": "Marketing-speak. Could have been written by anyone about anything.", "points": 0 }
+        ]
+      }
+    ]
+  },
+  "credential": {
+    "slug": "ai-for-accounting",
+    "title": "AI for Accounting",
+    "description": "Holds the judgment to scope, run, and defend an AI-assisted accounting engagement under Indian compliance — knowing exactly what to delegate to AI and what only a CA may sign.",
+    "issuerName": "Krit Academy"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "fieldNotes": {
+    "type": "fieldNotes",
+    "title": "Field Notes: 30 Interviews, 4% Adoption",
+    "source": "PM-2 at Khazana, a Mumbai-based personal finance app (Series B, ~3M MAU)",
+    "date": "October 2024",
+    "story": "Between **August 12 and September 9, 2024**, a PM at Khazana named Tanvi ran **31 user interviews** to validate a new 'goal-based investing' module. She had a clean script, a Calendly link, ₹500 Amazon vouchers per session, and a 38-slide synthesis deck.\n\nThe deck concluded — with charts — that **84% of interviewed users wanted goal-based investing**. The CEO loved it. Engineering scoped 11 weeks. The team shipped on **December 14, 2024**.\n\nBy **January 31, 2025**, **4.1%** of weekly actives had created a single goal. By March, that number was 3.6%, declining.\n\nA growth analyst, bored on a Friday, re-watched five of Tanvi's recorded interviews. The pattern was brutal. Every interview opened with: *\"We're thinking about building a goal-based investing feature where you can set targets like 'down payment in 5 years' — would you find that useful?\"*\n\nOf course they said yes. People at the receiving end of a free voucher and a polite question about a feature that *sounds* sensible say yes. The interviews had measured **Tanvi's enthusiasm**, not user demand. The actual top behavioural pattern in Khazana's data — users abandoning SIP setup at the bank-mandate step — was never asked about, because Tanvi had walked in with the answer.\n\n11 engineer-weeks. ₹15,500 in vouchers. One PM who learned the hardest lesson at the highest possible price.",
+    "takeaway": "If your interview question contains the answer you want, you didn't run an interview. You ran a confirmation ritual."
+  },
+  "bossBattle": {
+    "type": "bossBattle",
+    "title": "Boss Battle: Rhea's Interview Script",
+    "setup": "It's **week 3** at Tarakash. Rhea has survived the Mehta escalation and earned a real assignment: figure out why **trial-to-paid conversion** has slipped from 18% to 11% over the last quarter.\n\nShe's lined up **6 user interviews** with people who started a trial in the last 30 days — 3 who converted, 3 who didn't. First call is in **45 minutes**. She drafts a script and slides it into Devika's DMs for a sanity check.\n\nThe script opens with: *\"We've noticed our onboarding might be a bit confusing — would a guided tour help you get to value faster?\"*\n\nDevika reads it. Devika does not respond for 90 seconds. Then: *\"Call me before that interview.\"*",
+    "coach": { "name": "Director-PM Devika", "role": "Director of Product, Tarakash · once watched a PM ask 30 leading questions in a single 25-minute call and counted them on a napkin" },
+    "stages": [
+      {
+        "id": "s1",
+        "prompt": "Devika asks Rhea: *\"What is wrong with the question 'would a guided tour help you?'\"* What do you have Rhea answer?",
+        "options": [
+          { "id": "a", "label": "\"Nothing — it's a yes/no question, easy to answer, gets a clear signal.\"", "correct": false, "explain": "Devika exhales slowly. A yes/no question about a feature you describe will get **yes**, every time, from polite Indian users on a free trial. You're measuring agreeableness, not demand.", "points": 0 },
+          { "id": "b", "label": "\"It's a leading question — it suggests both the problem (confusing) and the solution (guided tour). I'm priming the answer.\"", "correct": true, "explain": "**Yes.** You named both the diagnosis and the solution before the user said a word. They will now spend 25 minutes politely confirming your hypothesis. Devika's blood pressure drops 4 points.", "points": 3 },
+          { "id": "c", "label": "\"It's a closed question — I should make it open-ended. 'Would a guided tour, a tutorial video, or a checklist help you?'\"", "correct": false, "explain": "You added options but they're all **your** options. The user is still picking from a menu you wrote. Open-ended doesn't mean 'multiple choice in a sentence.'", "points": 1 },
+          { "id": "d", "label": "\"The wording is too casual — should be more formal for a B2B context.\"", "correct": false, "explain": "Tone is the least of your problems. The script is leading, hypothetical, and solution-shaped. Formality won't save it. Devika is not interested in vocabulary right now.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s2",
+        "prompt": "Devika says: *\"Rewrite the opener. You have 30 seconds.\"* Which version makes the cut?",
+        "options": [
+          { "id": "a", "label": "\"Walk me through the first time you logged in to Tarakash. What were you trying to do, and what happened?\"", "correct": true, "explain": "**Clean.** Past behaviour, specific moment, no solution implied. The user will tell you what they actually did, not what they wish they'd done. This is how you find out the export button is hidden behind two clicks no one finds.", "points": 3 },
+          { "id": "b", "label": "\"On a scale of 1-10, how would you rate our onboarding?\"", "correct": false, "explain": "You'll get a 7. Everyone gives a 7. Numerical ratings of vague things tell you almost nothing about what to change. \"Why a 7 and not a 9\" is slightly better but still in your imagination.", "points": 0 },
+          { "id": "c", "label": "\"What features do you wish Tarakash had?\"", "correct": false, "explain": "Henry Ford's faster horse, but in B2B SaaS form. Users are great at describing **problems** they hit, terrible at designing **features** to fix them. You're outsourcing the PM job to the user.", "points": 0 },
+          { "id": "d", "label": "\"Tell me about the last time you tried to do [job-to-be-done] in Tarakash. Where did you get stuck?\"", "correct": true, "explain": "**Even better — anchored to a specific job.** Past tense, specific event, asks about friction without naming the friction. This is what good interview craft looks like. Devika makes a small approving noise.", "points": 3 }
+          ]
+      },
+      {
+        "id": "s3",
+        "prompt": "First interview, 12 minutes in. The user (a CFO at a 40-person logistics firm) says: *\"Honestly, we just couldn't figure out the integrations. We tried for 20 minutes and gave up.\"* Rhea's brain immediately wants to pitch the API docs upgrade she's been thinking about. **What does she do instead?**",
+        "options": [
+          { "id": "a", "label": "\"That's a great point — we're actually planning a major API docs upgrade. Would that have helped?\"", "correct": false, "explain": "You jumped from listening to selling in one sentence. The user will now politely confirm your upcoming feature and you've learned **nothing new** about their actual workflow. Stay in the question for one more minute. Always.", "points": 0 },
+          { "id": "b", "label": "\"Tell me more about that. What were you trying to integrate, and where exactly did you get stuck?\"", "correct": true, "explain": "**Five-and-Why's first cousin.** You stayed in curiosity, asked for the specific tool and the specific failure point. The user explains they wanted to push invoices to Tally, the docs said 'use our webhook' with no example, and they had no idea what a webhook was. Now you know the real problem isn't docs — it's a self-serve template gap.", "points": 3 },
+          { "id": "c", "label": "\"Got it. Anyway, moving on — next question.\"", "correct": false, "explain": "You walked past a goldmine because your script said it was time for the next question. Rigid scripts in user interviews are a way of avoiding what users are actually telling you. Half-credit only because you didn't lead.", "points": 1 },
+          { "id": "d", "label": "\"How many minutes was that, roughly? Were you on chrome or firefox? Mac or windows?\"", "correct": false, "explain": "Logging environment trivia while the user is mid-confession of a real pain. You optimised for what's easy to capture, not for what matters. Devika weeps softly.", "points": 0 }
+          ]
+      },
+      {
+        "id": "s4",
+        "prompt": "After all 6 interviews, Rhea has a giant Notion doc of quotes. She has to brief Devika in the morning. **How does she synthesise?**",
+        "options": [
+          { "id": "a", "label": "Count the most-mentioned features and present a top-5 list in a deck.", "correct": false, "explain": "Vote-counting six interviews gives you popularity, not insight. Two of those features were probably mentioned because **you asked about them**. Tally Tanvi from the Khazana field notes — that way lies a 4% adoption feature.", "points": 0 },
+          { "id": "b", "label": "Group the friction moments by the **job the user was trying to do**, then look for the 2-3 jobs where multiple users got stuck at the same step.", "correct": true, "explain": "**This is the work.** Job → friction step → frequency. The Tally-via-webhook problem showed up in 3 of 6 interviews. That's a pattern, not a vote. Devika will let you propose a fix on this one.", "points": 3 },
+          { "id": "c", "label": "Pick the most articulate quote and use it as a 'voice of customer' slide.", "correct": false, "explain": "One quote is an anecdote. The most articulate user is rarely the most representative one. PM theatre, not PM craft.", "points": 0 },
+          { "id": "d", "label": "Send the raw Notion doc to Devika and let her draw conclusions.", "correct": false, "explain": "Synthesis is **your** job. Outsourcing the analysis to your boss after running the interviews defeats the purpose of running them yourself.", "points": 0 }
+          ]
+      }
+    ],
+    "outcomes": {
+      "perfect": "You ran a real interview, not a confirmation ritual. You found a fixable bottleneck (Tally template) hiding behind a vague complaint (bad onboarding). Devika books you for a quarterly user-research review. **You're now 18 days in and already useful.**",
+      "good": "You avoided the worst leading-question traps but flinched on either the follow-up or the synthesis. Re-read the section on **5-Why's** and **job-anchored questions** — the next round of interviews is in 10 days.",
+      "learn": "You ran interviews the way Tanvi at Khazana did — with the answer pre-loaded. Re-read the lesson, especially **the difference between asking about behaviour (what did you do) and opinions (what do you think)**. Then watch one of your own recordings with the sound on. It will hurt. Do it anyway."
+    }
+  }
+}

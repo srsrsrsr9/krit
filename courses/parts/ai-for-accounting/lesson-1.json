@@ -1,0 +1,264 @@
+{
+  "slug": "ai-meets-ledger",
+  "title": "Where AI Meets the Ledger",
+  "subtitle": "Patterns at scale meet patterns at scale; the math is finally on your side",
+  "estimatedMinutes": 13,
+  "skills": ["accounting-ai-mental-model"],
+  "blocks": [
+    {
+      "type": "lessonMeta",
+      "audioUrl": "/audio/ai-for-accounting/ai-meets-ledger.mp3",
+      "audioDurationSec": 720,
+      "audioChapters": [
+        { "startSec": 0, "label": "Opening — what AI actually is, for a CA" },
+        { "startSec": 80, "label": "Mental model: ledgers are patterns at scale" },
+        { "startSec": 220, "label": "Move 1 — Classify-then-verify" },
+        { "startSec": 410, "label": "Move 2 — The 80/20 split between AI and CA" },
+        { "startSec": 560, "label": "The trap, reflect, takeaways" }
+      ],
+      "notesPdfUrl": "/notes/ai-for-accounting/ai-meets-ledger.html",
+      "notesByline": "Notes by Anand, articleship batch of 2024"
+    },
+    {
+      "type": "markdown",
+      "md": "Two camps of CAs exist right now. Camp One thinks AI will replace them by 2027. Camp Two thinks AI is a glorified autocomplete that gets tax sections wrong. Both camps are wrong, and in opposite ways that cancel out into nothing useful.\n\nHere is the thing nobody puts on a LinkedIn post: AI is not coming for your work; it is coming for the boring 80 percent of your work. The other 20 percent — the judgment, the signature, the conversation with the Assessing Officer — is exactly the part you went through three groups of CA finals to be allowed to do. By the end of this lesson you will have a mental map of which is which, and a vocabulary for explaining it to your partner."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A balance sheet on the left labelled 'patterns at scale' and a neural network on the right labelled 'patterns at scale', joined by an equals sign in the middle.",
+      "caption": "The match is structural. AI is a pattern engine; a ledger is patterns. The two were always going to meet.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 260' role='img'><rect width='600' height='260' rx='14' fill='#FFF7ED'/><g transform='translate(40 50)'><rect width='180' height='160' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#92400E' font-weight='bold'>LEDGER</text><line x1='15' y1='40' x2='165' y2='40' stroke='#92400E' stroke-width='1'/><g font-family='monospace' font-size='11' fill='#1F2937'><text x='20' y='58'>Sales 12,40,000</text><text x='20' y='76'>Purchases 7,80,000</text><text x='20' y='94'>GST out 1,82,000</text><text x='20' y='112'>GST in 1,12,000</text><text x='20' y='130'>TDS 24,000</text><text x='20' y='148'>...</text></g><text x='90' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E' font-style='italic'>patterns at scale</text></g><text x='300' y='150' text-anchor='middle' font-family='sans-serif' font-size='40' fill='#0EA5E9' font-weight='bold'>=</text><g transform='translate(380 50)'><rect width='180' height='160' rx='10' fill='#EFF6FF' stroke='#1E3A8A' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#1E3A8A' font-weight='bold'>NEURAL NET</text><g stroke='#3B82F6' stroke-width='1.5' fill='#DBEAFE'><circle cx='40' cy='70' r='8'/><circle cx='40' cy='100' r='8'/><circle cx='40' cy='130' r='8'/><circle cx='90' cy='80' r='8'/><circle cx='90' cy='110' r='8'/><circle cx='90' cy='140' r='8'/><circle cx='140' cy='95' r='8'/><circle cx='140' cy='125' r='8'/></g><g stroke='#1E3A8A' stroke-width='1' opacity='0.5'><line x1='48' y1='70' x2='82' y2='80'/><line x1='48' y1='70' x2='82' y2='110'/><line x1='48' y1='100' x2='82' y2='80'/><line x1='48' y1='100' x2='82' y2='110'/><line x1='48' y1='100' x2='82' y2='140'/><line x1='48' y1='130' x2='82' y2='110'/><line x1='48' y1='130' x2='82' y2='140'/><line x1='98' y1='80' x2='132' y2='95'/><line x1='98' y1='110' x2='132' y2='95'/><line x1='98' y1='110' x2='132' y2='125'/><line x1='98' y1='140' x2='132' y2='125'/></g><text x='90' y='180' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1E3A8A' font-style='italic'>patterns at scale</text></g></svg>"
+    },
+    {
+      "type": "callout",
+      "tone": "tip",
+      "title": "Mental model: a ledger is patterns at scale; AI is a machine for patterns at scale",
+      "md": "Think of every accounting workflow as a pile of repeating patterns: the 12 invoices that look like the 12 from last month; the 47 vendor bills that all share a GSTIN format; the 4,200 bank lines that fall into 22 categories. **A ledger is patterns at scale. AI is a machine for patterns at scale.** The match is structural, not magical.\n\nOnce you see this, you stop treating AI as a black box and start treating it like a very fast, very confident articled assistant — one that has read every accounting textbook ever written and absolutely none of your client's GSTIN."
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/ai-for-accounting/anim/ai-meets-ledger-pattern-engine.html",
+      "height": 420,
+      "caption": "Watch 4,200 invoice lines flow through the pattern engine; the model groups, scores, flags. The 4,000 it nails fly by; the 200 it isn't sure about glow yellow and queue up for you.",
+      "fallbackImage": "/courses/ai-for-accounting/anim/ai-meets-ledger-pattern-engine-poster.png"
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "tip",
+          "title": "Office mein scene yeh hai",
+          "md": "Bhai, articled assistant ko bola — \"yeh 4,200 entries categorise kar de Monday tak.\" Monday ko bola — \"sir, mujhe mummy se baat karni hai.\"\n\nAI assistant ko bola — wahi 4,200 entries 14 second mein. Lekin bola: \"yaar, 200 mein confident nahi hoon.\" Yeh confession hi value hai. Tera articled assistant *kabhi* nahi bolega \"sir, mujhe doubt hai entry 1,847 pe.\" Wo silently galat enter karega aur tax audit ke time pakdi jaayegi."
+        },
+        "en": {
+          "tone": "tip",
+          "title": "Same point, no Hindi",
+          "md": "Hand 4,200 entries to a junior on Friday and you'll get them on Wednesday with a 6 percent error rate, undocumented. Hand them to a model and you'll get them in fourteen seconds with a 6 percent flagged-low-confidence rate, fully documented. The honesty itself is the value."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 1 — Classify-then-verify" },
+    {
+      "type": "markdown",
+      "md": "Here is the first named move you will use for the rest of your career.\n\n**Classify-then-verify.** AI does the first pass — categorising, extracting, matching, with a confidence score on each row. The CA does the second pass — sampling the high-confidence rows, reviewing every low-confidence row, and signing off on the whole.\n\nIt is a two-stage workflow. AI's stage is wide and fast; yours is narrow and deep. Done well, you compress what used to be eight hours of articled-assistant work into ninety minutes of senior-level review.\n\nDone badly — meaning you skip the verify step — you ship 4,200 confident-looking categorisations of which 200 are wrong, and you find out at tax audit time. There is no third option."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "Two-lane diagram. Left lane labelled 'AI: classify' takes 4,200 entries and outputs them coloured green (high), yellow (medium), red (low). Right lane labelled 'CA: verify' shows a magnifying glass over the yellow and red entries.",
+      "caption": "The two stages are intentionally lopsided. AI handles the wide pass; you handle the deep pass on the parts that need a human.",
+      "maxWidth": 600,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#ECFDF5'/><g transform='translate(40 40)'><rect width='240' height='200' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>1. AI: classify</text><text x='120' y='48' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>4,200 entries in</text><g transform='translate(20 70)'><rect x='0' y='0' width='200' height='14' rx='3' fill='#10B981'/><text x='100' y='11' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF'>3,840 high (90%)</text><rect x='0' y='20' width='200' height='14' rx='3' fill='#FCD34D'/><text x='100' y='31' text-anchor='middle' font-family='monospace' font-size='10' fill='#7C2D12'>320 medium (70-90%)</text><rect x='0' y='40' width='200' height='14' rx='3' fill='#F87171'/><text x='100' y='51' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF'>40 low (&lt;70%)</text></g><text x='120' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>14 seconds, fully logged</text></g><path d='M290 140 L320 140' stroke='#065F46' stroke-width='2' marker-end='url(#a)'/><g transform='translate(330 40)'><rect width='240' height='200' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='120' y='28' text-anchor='middle' font-family='monospace' font-size='12' fill='#92400E' font-weight='bold'>2. CA: verify</text><g transform='translate(20 60)'><circle cx='30' cy='30' r='22' fill='none' stroke='#92400E' stroke-width='3'/><line x1='48' y1='48' x2='66' y2='66' stroke='#92400E' stroke-width='4' stroke-linecap='round'/></g><g font-family='monospace' font-size='10' fill='#7C2D12'><text x='110' y='80'>* sample 50 high</text><text x='110' y='98'>* review every medium</text><text x='110' y='116'>* investigate every low</text><text x='110' y='134'>* review top 20 by ₹</text></g><text x='120' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>~90 minutes, signed off</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+    },
+    {
+      "type": "animatedTimeline",
+      "title": "Classify-then-verify on a real engagement: 4,200 vendor invoices to be tagged with HSN code",
+      "steps": [
+        {
+          "label": "Step 1 — Standardise input",
+          "body": "You get 4,200 invoices in 11 different formats. Five minutes of cleanup: one CSV with vendor name, GSTIN, item description, taxable value, GST amount. Don't skip this. Garbage in, confidently wrong out."
+        },
+        {
+          "label": "Step 2 — AI proposes HSN with confidence",
+          "body": "The model returns: HSN code, 4-digit and 8-digit, plus a confidence score 0 to 100. 3,840 score above 90; 320 between 70 and 90; 40 below 70. Total runtime: 14 seconds for ₹0.42 of API spend."
+        },
+        {
+          "label": "Step 3 — CA samples the easy stuff",
+          "body": "Pick 50 random rows from the 3,840 high-confidence pile. Verify by hand. If your sample error rate is under 1 percent, accept the pile. If it is higher, you have a systemic problem and you re-prompt."
+        },
+        {
+          "label": "Step 4 — CA reviews the medium pile",
+          "body": "All 320 medium-confidence rows get a human eye, two seconds each, ten minutes total. You override roughly 40, accept the rest."
+        },
+        {
+          "label": "Step 5 — CA investigates the low pile",
+          "body": "All 40 low-confidence rows get a real conversation with the file. These are typically genuine ambiguities — composite supplies, mixed packaging, exempt items mis-billed. This is exactly the work a CA is paid for."
+        },
+        {
+          "label": "Step 6 — Eval log",
+          "body": "Every prompt, every response, every override is logged with timestamps and reviewer name. If a notice arrives in 2028, you can reproduce the entire workflow."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "In classify-then-verify, what is the worst thing you can do?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Skip the verify step on the high-confidence rows entirely", "correct": true, "explain": "Right. The whole discipline collapses if you skip verification. You don't have to verify every row — that's the point — but you must sample." },
+        { "id": "b", "label": "Sample only 50 of the high-confidence rows instead of all 3,840", "correct": false, "explain": "Sampling is the design, not a shortcut. 50 is a reasonable sample for a 1 percent error tolerance." },
+        { "id": "c", "label": "Use AI at all for HSN classification", "correct": false, "explain": "HSN classification at scale is exactly what AI is good at. The judgment call is on the ambiguous 40, not the obvious 3,840." },
+        { "id": "d", "label": "Log the prompt and response", "correct": false, "explain": "That is the eval log; it is the right thing to do, not the worst." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "info",
+          "title": "Articled assistant vs AI — honest comparison",
+          "md": "Articled assistant: speed slow, accuracy 94%, asks no questions, will quietly mis-tag and disappear.\n\nAI: speed insane, accuracy 96%, flags its own doubts, will tell you exactly which 200 entries it isn't sure about.\n\nMatlab — AI ka biggest superpower hai *honesty*. Articled assistant ka biggest weakness hai *over-confidence*. Yeh ulta lagta hai but yahi sach hai."
+        },
+        "en": {
+          "tone": "info",
+          "title": "The honesty asymmetry",
+          "md": "AI's superpower is not speed; it is calibrated honesty. A junior won't tell you which entries they guessed. A model will."
+        }
+      }
+    },
+    { "type": "heading", "level": 2, "text": "Move 2 — The 80/20 split between AI and CA" },
+    {
+      "type": "markdown",
+      "md": "Now the bigger picture. Across the full surface of accounting work, roughly 80 percent of the hours are pattern-matching work — extraction, classification, reconciliation, drafting, summarising. Roughly 20 percent is judgment work — choosing accounting policies, signing statutory filings, interpreting a contentious clause, having the conversation with a sceptical client.\n\nAI eats the first 80 percent. You keep the second 20 percent. The question is not whether to use AI; the question is whether you have correctly drawn the line, in writing, for every engagement.\n\nThis is the **80/20 split**. The 80 belongs to AI under your supervision. The 20 belongs to you under your signature. There is no overlap and there is no third category."
+    },
+    {
+      "type": "svgFigure",
+      "alt": "A pie chart split 80/20. The 80 percent slice is labelled 'AI delegates' with examples (extraction, classification, reconciliation, drafting). The 20 percent slice is labelled 'CA only' with examples (signature, judgment, opinion, disclosure).",
+      "caption": "The split is not vague. Every engagement should be able to colour-code each task into one of these two slices.",
+      "maxWidth": 540,
+      "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 320' role='img'><rect width='540' height='320' rx='14' fill='#FAF5FF'/><g transform='translate(140 50)'><circle cx='100' cy='100' r='100' fill='#FFF'/><path d='M100 100 L100 0 A100 100 0 1 1 21.13 158.78 Z' fill='#10B981' stroke='#065F46' stroke-width='2'/><path d='M100 100 L21.13 158.78 A100 100 0 0 1 100 0 Z' fill='#F43F5E' stroke='#9F1239' stroke-width='2'/><text x='130' y='80' fill='#FFF' font-family='sans-serif' font-size='28' font-weight='bold' text-anchor='middle'>80</text><text x='130' y='105' fill='#FFF' font-family='monospace' font-size='10' text-anchor='middle'>AI</text><text x='55' y='150' fill='#FFF' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>20</text><text x='55' y='168' fill='#FFF' font-family='monospace' font-size='9' text-anchor='middle'>CA only</text></g><g transform='translate(20 250)' font-family='monospace' font-size='10' fill='#065F46'><rect x='0' y='0' width='14' height='14' fill='#10B981'/><text x='22' y='12'>extract / classify / reconcile / draft / summarise</text></g><g transform='translate(20 275)' font-family='monospace' font-size='10' fill='#9F1239'><rect x='0' y='0' width='14' height='14' fill='#F43F5E'/><text x='22' y='12'>signature / judgment / opinion / disclosure</text></g></svg>"
+    },
+    {
+      "type": "chatScenario",
+      "coach": {
+        "name": "CA-Veteran Vidya",
+        "role": "Partner, mid-tier Pune firm, 22 years in practice"
+      },
+      "intro": [
+        "Hi. I'm Vidya. I run audit and tax at a 14-partner firm in Pune. I've been doing this since before WhatsApp existed, which means I've watched three so-called paradigm shifts come and go.",
+        "AI is the fourth. It is also the first one that actually changes how we work. Let me give you six tasks and you tell me which slice they belong to."
+      ],
+      "buckets": [
+        { "id": "ai", "label": "AI does it (you supervise)", "tone": "safe" },
+        { "id": "ca", "label": "CA only (AI never touches it)", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "s1",
+          "situation": "Extracting GSTINs and invoice numbers from 800 PDF purchase bills.",
+          "correctBucketId": "ai",
+          "explain": "Pure extraction at scale; AI's home turf. Verify totals and a 50-row sample, then proceed."
+        },
+        {
+          "id": "s2",
+          "situation": "Signing the audit report under Section 143 of the Companies Act.",
+          "correctBucketId": "ca",
+          "explain": "A statutory signature is a CA's personal liability under the Chartered Accountants Act. AI cannot sign. Ever."
+        },
+        {
+          "id": "s3",
+          "situation": "Drafting a 4-paragraph response to an Income Tax notice based on the assessee's books.",
+          "correctBucketId": "ai",
+          "explain": "Drafting is fine for AI. The CA reviews, edits, and signs. The artefact that goes to the department is the CA's."
+        },
+        {
+          "id": "s4",
+          "situation": "Deciding whether a litigation provision should be disclosed in financial statements under Ind AS 37.",
+          "correctBucketId": "ca",
+          "explain": "Disclosure judgment requires materiality, management representations, and professional skepticism. AI cannot carry any of those."
+        },
+        {
+          "id": "s5",
+          "situation": "Categorising 9,000 monthly bank transactions for a 14-outlet restaurant chain into ledger heads.",
+          "correctBucketId": "ai",
+          "explain": "Classify-then-verify. AI does the wide pass; CA reviews low-confidence and high-rupee entries."
+        },
+        {
+          "id": "s6",
+          "situation": "Choosing between two competing accounting policies for revenue recognition on a long-term project.",
+          "correctBucketId": "ca",
+          "explain": "Policy choice is judgment under the relevant standard plus client context. AI may surface options; the choice is the CA's."
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "tone": "warn",
+      "title": "The classic trap: the third-category fantasy",
+      "md": "Every CA, on first contact with AI, tries to invent a third category — \"AI does it but a human spot-checks\" or \"AI signs and the CA reviews afterwards.\" There is no third category. **Either AI does it under your supervision, or you do it. The signature is yours either way.** Anything that blurs this line is how firms get into trouble."
+    },
+    {
+      "type": "sortableSteps",
+      "prompt": "Order these activities to set up an AI-assisted workflow for a new client engagement, from first to last.",
+      "items": [
+        { "id": "scope", "label": "Define the 80/20 split for this specific engagement, in writing", "detail": "Which tasks AI handles, which the CA handles, with named confidence thresholds." },
+        { "id": "data", "label": "Standardise input data into a single rectangular format", "detail": "One CSV per data type, consistent headers, no merged cells." },
+        { "id": "prompt", "label": "Build and version-control the prompt with required output schema", "detail": "JSON output with every required field; reject responses that don't match." },
+        { "id": "run", "label": "Run AI on the data with confidence scoring", "detail": "Get back categorised output plus per-row confidence." },
+        { "id": "verify", "label": "Apply the verify tier — sample high-confidence, review medium, investigate low", "detail": "This is the irreducible human step." },
+        { "id": "log", "label": "Save the eval log: prompt, response, reviewer, overrides, model version", "detail": "Audit trail must be reproducible for the retention period." }
+      ],
+      "hint": "Most beginners want to start with the prompt. Resist. The first decision is what AI is allowed to touch."
+    },
+    {
+      "type": "tryIt",
+      "instruction": "Take this engagement and write the 80/20 split as a 6-line list. The brief: a Surat textile exporter wants you to handle their monthly compliance — vendor invoice booking (~600/month), bank reconciliation, GST return preparation, TDS computation and challan, and the year-end balance sheet. Mark each as AI-led or CA-only and write one sentence on why.",
+      "lang": "markdown",
+      "starter": "## 80/20 split — Surat textile client\n\n1. Vendor invoice booking — \n2. Bank reconciliation — \n3. GST return preparation — \n4. TDS computation — \n5. TDS challan filing — \n6. Year-end balance sheet — \n",
+      "expected": "## 80/20 split — Surat textile client\n\n1. Vendor invoice booking — **AI-led**, classify-then-verify with confidence scoring; CA samples high-confidence, reviews low-confidence and any entry above ₹2 lakh.\n2. Bank reconciliation — **AI-led**, fuzzy matching with confidence; CA reviews unmatched and any forex transaction.\n3. GST return preparation — **AI-led drafting, CA-only signoff**; AI populates GSTR-1 and GSTR-3B drafts from books, CA reviews and files.\n4. TDS computation — **AI-led** with rate lookup via RAG against the Income Tax Act; CA verifies threshold applicability and treaty position for any non-resident payment.\n5. TDS challan filing — **CA-only**; statutory filing, never automated, never AI-shipped.\n6. Year-end balance sheet — **CA-only on classification and disclosure judgment**; AI may produce first-pass schedules and tie-outs, CA chooses policy and signs."
+    },
+    {
+      "type": "quiz",
+      "prompt": "Which of these are signs that you have **correctly** drawn the 80/20 line for an engagement? (Select all that apply.)",
+      "multi": true,
+      "choices": [
+        { "id": "a", "label": "Each task is explicitly tagged AI-led or CA-only in the engagement letter", "correct": true, "explain": "Right. If it is not in writing, the line will move under pressure." },
+        { "id": "b", "label": "The CA can name the confidence threshold for every AI-led task", "correct": true, "explain": "Right. 'High confidence' is a useless label; '95% or above accepted, below sampled' is a workflow." },
+        { "id": "c", "label": "There is a third category called 'AI signs but CA reviews after'", "correct": false, "explain": "There is no such category. The signature is the CA's; AI never signs anything." },
+        { "id": "d", "label": "The engagement promises to be 'fully AI-automated'", "correct": false, "explain": "If your engagement promises full automation, you have not drawn the line; you have erased it." }
+      ]
+    },
+    {
+      "type": "culturalAside",
+      "defaultLocale": "hi-IN",
+      "variants": {
+        "hi-IN": {
+          "tone": "warn",
+          "title": "Tea-break disclaimer",
+          "md": "Office mein partner ne pucha — \"AI hai toh kya articled assistants ki zaroorat hi nahi rahi?\"\n\nGalat sawaal. Articled assistants ki zaroorat ab *judgment* ke liye hai, photocopy ke liye nahi. Jis articled assistant ko sirf data entry aati hai, uska future short hai. Jo low-confidence row pe ruk ke poochta hai \"sir, yeh composite supply hai ya mixed?\" — uska future bahut lambha hai."
+        },
+        "en": {
+          "tone": "warn",
+          "title": "What changes for juniors",
+          "md": "Articled assistants are not obsolete; the data-entry job is. The judgment job — investigating the 40 low-confidence rows AI flagged — is now their actual training ground. The good ones welcome it."
+        }
+      }
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "A ledger is patterns at scale; AI is a machine for patterns at scale; the match is structural, not magical.",
+        "Classify-then-verify: AI does the wide first pass with confidence scores; the CA does the deep second pass on flagged rows and high-rupee entries.",
+        "Roughly 80 percent of accounting hours are pattern-matching work AI eats; roughly 20 percent are judgment hours only a CA may sign.",
+        "There is no third category. Either AI does it under your supervision, or you do it; the signature is yours either way.",
+        "AI's biggest superpower is calibrated honesty — it tells you which rows it is unsure about. A junior never will."
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one engagement you currently handle. Write the 80/20 split for it as a 6 to 10 line list, marking each task AI-led or CA-only with a one-sentence reason. Where did you find yourself wanting to invent a third category, and what did that pressure tell you?"
+    }
+  ]
+}

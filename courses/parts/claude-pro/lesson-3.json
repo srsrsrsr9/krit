@@ -1,0 +1,224 @@
+{
+  "lesson": {
+    "slug": "claude-for-cowork",
+    "title": "Claude as a Coworker — Slack, Email, Meetings",
+    "subtitle": "A draft engine, not the sender",
+    "estimatedMinutes": 13,
+    "skills": ["claude-cowork-discipline"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/claude-pro/claude-for-cowork.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "Why cowork is different" },
+          { "startSec": 80, "label": "Mental model: draft engine" },
+          { "startSec": 220, "label": "Move 1: no-send-without-review" },
+          { "startSec": 410, "label": "Move 2: bullet-to-paragraph expander" },
+          { "startSec": 560, "label": "Meetings and async loops" }
+        ],
+        "notesPdfUrl": "/notes/claude-pro/claude-for-cowork.html",
+        "notesByline": "Notes by Karthik, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Cowork is the use case where Claude looks easy and is actually the most dangerous. Unlike code, where a broken build screams at you, a Claude-drafted Slack message that subtly misrepresents what your CFO said only fails 48 hours later when the CFO sees it in a thread. The error is silent and reputational. The whole game in this lesson is to use Claude aggressively for **drafts** while building unbreakable discipline around **review and send**. The teams that get this right ship 30 percent more communication with the same headcount; the teams that get it wrong end up with a 'we don't trust AI' policy that throws out the baby."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'><rect width='640' height='280' fill='#FAF5FF'/><circle cx='110' cy='140' r='50' fill='#8B5CF6'/><text x='110' y='135' text-anchor='middle' font-family='sans-serif' font-size='13' fill='white' font-weight='700'>You</text><text x='110' y='155' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>3 bullets</text><polygon points='170,140 230,120 230,160' fill='#1F2937'/><circle cx='320' cy='140' r='60' fill='#0EA5E9'/><text x='320' y='135' text-anchor='middle' font-family='sans-serif' font-size='13' fill='white' font-weight='700'>Claude</text><text x='320' y='155' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>drafts in 8s</text><polygon points='390,140 450,120 450,160' fill='#1F2937'/><circle cx='540' cy='140' r='50' fill='#10B981'/><text x='540' y='130' text-anchor='middle' font-family='sans-serif' font-size='12' fill='white' font-weight='700'>You</text><text x='540' y='148' text-anchor='middle' font-family='sans-serif' font-size='9' fill='white'>review + send</text><text x='320' y='240' text-anchor='middle' font-family='sans-serif' font-size='13' font-style='italic' fill='#5B21B6'>Claude drafts. You always send.</text></svg>",
+        "alt": "Pipeline: you give 3 bullets, Claude drafts, you review and send",
+        "caption": "Three roles, two of them yours. Never four roles where Claude also sends."
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: Claude is a draft engine, not the sender",
+        "md": "Imagine an unpaid intern who can ghostwrite anything in 8 seconds. They cannot read tone in your team. They do not know that Anjali takes 'circle back' as a soft no. They do not know your CEO hates exclamation marks. They will produce a clean, generic, reasonable draft. Your job, every single time, is to read it, reshape it, sign it, and **send it from your own keyboard**. Claude is the printer. You are the journalist."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/claude-pro/anim/claude-for-cowork-draft-loop.html",
+        "height": 420,
+        "caption": "Visual: the bullet to draft to send loop, with the review gate that catches the AI-isms."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Slack pe AI prefix",
+            "tone": "warn",
+            "md": "Scene: junior PM, Bengaluru fintech, CEO ko Slack DM. Pehli line: *'As an AI language model, I would like to thank you for the opportunity'*. CEO ne screenshot liya, leadership group mein bheja, *'kya yaar, intern ne bhi nahi padha'*. PM ki naukri toh thi, lekin teen mahine tak woh DM koi bhi karta toh log laughing emoji laga dete. Lesson? **Last paragraph mat skip karo, pehla paragraph bhi mat skip karo**. Padho. Fir bhejo."
+          },
+          "en": {
+            "title": "The AI prefix that survived",
+            "tone": "warn",
+            "md": "A junior PM at a fintech sent a DM to the CEO that opened with 'As an AI language model, I would like to thank you for the opportunity'. The CEO screenshotted it. The PM kept their job; their reputation took six months to come back. The fix is one read-through. Five seconds."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1: The No-Send-Without-Review Rule"
+      },
+      {
+        "type": "markdown",
+        "md": "Make it a rule, not a vibe. **No message generated by Claude leaves your account without a full read-through and at least one substantive edit**. Two parts; both are non-negotiable.\n\nFull read-through catches the obvious AI tells: the *'as an AI language model'* opener, the seven-bullet symmetry, the em-dash addiction, the *'in conclusion'* paragraph nobody asked for. Substantive edit forces you to claim the message — change a sentence, cut a paragraph, add a name, reorder a point. Without an edit you are publishing under your name something you did not really write. The reader smells it. The trust cost compounds.\n\nFor recurring formats — weekly updates, standup posts, status reports — build a personal Project on Claude.ai with three to five of your own previous good examples pinned. Now Claude's drafts arrive pre-shaped to your voice, and the review burden drops to seconds."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 240'><rect width='640' height='240' fill='#ECFDF5'/><rect x='40' y='50' width='160' height='140' rx='8' fill='white' stroke='#10B981' stroke-width='2'/><text x='120' y='80' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#065F46'>1. Draft</text><text x='120' y='110' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>Claude in</text><text x='120' y='128' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46'>8 seconds</text><text x='120' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>cheap</text><polygon points='210,120 240,100 240,140' fill='#1F2937'/><rect x='250' y='50' width='160' height='140' rx='8' fill='white' stroke='#F59E0B' stroke-width='2'/><text x='330' y='80' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#92400E'>2. Review</text><text x='330' y='110' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E'>You read every</text><text x='330' y='128' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#92400E'>line</text><text x='330' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-style='italic'>non-negotiable</text><polygon points='420,120 450,100 450,140' fill='#1F2937'/><rect x='460' y='50' width='160' height='140' rx='8' fill='white' stroke='#F43F5E' stroke-width='2'/><text x='540' y='80' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#9F1239'>3. Edit + Send</text><text x='540' y='110' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#9F1239'>at least one</text><text x='540' y='128' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#9F1239'>substantive change</text><text x='540' y='160' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>your name on it</text></svg>",
+        "alt": "Three boxes: draft, review, edit and send",
+        "caption": "Three steps, no shortcuts. The edit step is what separates pros from interns."
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "Translation: 'reply to this customer angry email' to a real workflow",
+        "steps": [
+          { "label": "Read the email", "body": "You read it first. Note the actual ask, the tone, what you can and cannot promise." },
+          { "label": "Bullet your reply", "body": "Three to five bullets in your own words. The bullets are what only you know." },
+          { "label": "Ask Claude to expand", "body": "Paste the original, your bullets, and your house style. Ask for one draft, not three." },
+          { "label": "Read every line", "body": "Look for: invented commitments, wrong tone for the relationship, AI-isms, exclamation marks." },
+          { "label": "Cut at least 30 percent", "body": "First drafts are always 30 percent too long. Cut decisively." },
+          { "label": "Send from your client", "body": "Copy into Outlook or Front. Do not let Claude or any agent send. Your name, your send." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "A client emails you a sharp complaint. Which is the cleanest Claude workflow?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Forward the email to Claude with one line: 'reply diplomatically'", "correct": false, "explain": "Claude does not know your relationship, what you can promise, or what concessions are off-limits. Generic reply, real risk." },
+          { "id": "b", "label": "Bullet your intended reply yourself; ask Claude to expand into the right tone with the original attached", "correct": true, "explain": "You hold the judgement; Claude does the prose. This is the SHOW pattern from Lesson 1 applied to cowork." },
+          { "id": "c", "label": "Ask Claude to write three different replies and pick one", "correct": false, "explain": "Three drafts means three times the review burden, often with the same underlying assumptions wrong in all three." },
+          { "id": "d", "label": "Have Claude reply directly through your email integration", "correct": false, "explain": "Autonomous send is the no-send-without-review rule violated. The fact that it's possible doesn't mean you should." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "Standup ka famous joke",
+            "tone": "info",
+            "md": "Bhai, standup pe agar tum daily *'continued working on yesterday's tasks, made significant progress, blockers minimal'* likhoge — sab samajh jaayenge ki Claude likh raha hai. Kyu? Kyunki insaan kabhi *'significant progress'* nahi bolta. Insaan bolta hai *'aaj 3 PRs review kiye, ek mein bug mila line 47, bhej raha hu Sneha ko'*. **Specificity is the proof of work**. Generic prose is the smell."
+          },
+          "en": {
+            "title": "The smell of generic prose",
+            "tone": "info",
+            "md": "If your standup posts say 'made significant progress on yesterday's tasks, blockers minimal' five days in a row, the team can smell Claude. Real updates have specifics: file numbers, names, line counts, blockers by name. Generic prose is the AI tell; specificity is the proof of work."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2: The Bullet-to-Paragraph Expander"
+      },
+      {
+        "type": "markdown",
+        "md": "Ninety percent of professional writing is *'I have the points; I need them in flowing prose for an audience'*. Status updates, board notes, performance reviews, postmortems, RFP responses, even most LinkedIn posts. The leverage move is to **write the bullets yourself in 90 seconds**, then hand them to Claude with three pieces of context: who is reading, what tone fits, and what house-style examples to match.\n\nThis is the bullet-to-paragraph expander. It works because the bullets carry your judgement (what to include, what to leave out, what to emphasise) and Claude carries the prose (transitions, flow, tone calibration). The opposite mistake is asking Claude for a *first-pass status update* with no bullets. Then Claude invents what to say, you discover it half-wrong, and you spend more time editing than you would have spent writing it from scratch.\n\nFor a Slack post: 3 bullets in. For a board update: 8 bullets in. For a postmortem: a structured bullet list with timeline, root cause, fix. For a customer email: bullets plus the original message. The expander is the highest-frequency Claude use in your week; make it muscle memory."
+      },
+      {
+        "type": "svgFigure",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 280'><rect width='640' height='280' fill='#EFF6FF'/><rect x='40' y='40' width='220' height='200' rx='8' fill='white' stroke='#0EA5E9' stroke-width='2'/><text x='150' y='65' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#075985'>YOUR INPUT</text><text x='60' y='95' font-family='monospace' font-size='10' fill='#075985'>BULLETS</text><text x='60' y='113' font-family='monospace' font-size='9' fill='#075985'>- shipped /onboarding v2</text><text x='60' y='128' font-family='monospace' font-size='9' fill='#075985'>- conv up 14% in 2 days</text><text x='60' y='143' font-family='monospace' font-size='9' fill='#075985'>- 1 P1 in payments queue</text><text x='60' y='170' font-family='monospace' font-size='10' fill='#075985'>CONTEXT</text><text x='60' y='188' font-family='monospace' font-size='9' fill='#075985'>audience: leadership</text><text x='60' y='203' font-family='monospace' font-size='9' fill='#075985'>tone: tight, no fluff</text><text x='60' y='218' font-family='monospace' font-size='9' fill='#075985'>style: see pinned ex</text><polygon points='270,140 320,120 320,160' fill='#1F2937'/><rect x='340' y='40' width='280' height='200' rx='8' fill='white' stroke='#10B981' stroke-width='2'/><text x='480' y='65' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='#065F46'>CLAUDE OUTPUT</text><text x='350' y='95' font-family='sans-serif' font-size='10' fill='#065F46'>This week we shipped onboarding v2;</text><text x='350' y='112' font-family='sans-serif' font-size='10' fill='#065F46'>conversion is up 14% in 48 hours.</text><text x='350' y='129' font-family='sans-serif' font-size='10' fill='#065F46'>One P1 sits in the payments queue;</text><text x='350' y='146' font-family='sans-serif' font-size='10' fill='#065F46'>investigation is on Sneha's plate.</text><text x='350' y='180' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>You: read, cut 30%, send.</text></svg>",
+        "alt": "Bullets and context on left, generated prose on right",
+        "caption": "You hold the judgement (what to say). Claude holds the prose (how to say it)."
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "AI-Tutor Anjali",
+          "role": "Ex-Goldman ops, runs Claude across her cousin's family business",
+          "avatarSrc": "/coaches/ai-tutor-anjali.png"
+        },
+        "intro": [
+          "Most of these scenarios show up in your first month using Claude at work. Sort each into the right bucket.",
+          "Be honest. Some of these are tempting because they save time but cost trust."
+        ],
+        "buckets": [
+          { "id": "good", "label": "GOOD use of Claude", "tone": "safe" },
+          { "id": "fixable", "label": "FIXABLE — workflow needs a rule", "tone": "neutral" },
+          { "id": "stop", "label": "STOP — don't do this", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "You bullet your weekly update, paste it in your personal Project, get a draft in your voice, edit two sentences, send.", "correctBucketId": "good", "explain": "Textbook bullet-to-paragraph expander with style anchored to past examples." },
+          { "id": "s2", "situation": "You ask Claude to write a 'difficult feedback' message to a teammate without telling Claude any context about the relationship.", "correctBucketId": "fixable", "explain": "Could be good if you provide context: the history, what you've already said, what specifically went wrong. Without that, generic and unsafe." },
+          { "id": "s3", "situation": "You set up a Slack bot that auto-replies to customer messages with Claude-generated text.", "correctBucketId": "stop", "explain": "Autonomous send violates the no-send-without-review rule. Even one wrong reply on a real complaint is a reputation event." },
+          { "id": "s4", "situation": "Recording a meeting, Claude transcribes, you ask Claude to summarise actions, you edit and post in Slack.", "correctBucketId": "good", "explain": "Summary plus your edit is a clean loop. Just make sure participants know you are recording (legal in India with consent)." },
+          { "id": "s5", "situation": "Your CEO sends you a one-line ask. You forward it to Claude with 'reply for me'. Claude invents commitments you can't keep.", "correctBucketId": "fixable", "explain": "Bullet first, expand second. The fix is process, not avoiding Claude." },
+          { "id": "s6", "situation": "You ghostwrite a LinkedIn post entirely with Claude, edit nothing, post under your name.", "correctBucketId": "stop", "explain": "Reputation play. Readers can tell. The personal-brand cost is bigger than the time saved." }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: the asymmetry of small wins and big losses",
+        "md": "Cowork is a domain where 95 percent of Claude-drafted messages are fine and 5 percent are catastrophic — wrong tone to a board member, fabricated commitment to a customer, leaked confidential context, AI-prefix in a CEO DM. Treating each message individually leads to *'it's been fine so far'* complacency. The right framing: **the cost of one bad message is asymmetric**. One wrong message to a regulator can cost ₹2 crore. One wrong message to a candidate can lose them. One wrong message to your CEO can make you the punchline for a quarter. The review gate exists for the 5 percent."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the right loop for using Claude on a difficult work email",
+        "items": [
+          { "id": "read", "label": "Read the original email yourself, fully", "detail": "You can't supervise what you haven't read." },
+          { "id": "decide", "label": "Decide your actual answer in your head (yes / no / partial)", "detail": "The answer is yours, not Claude's." },
+          { "id": "bullet", "label": "Write 3-5 bullets of what you want to say", "detail": "These bullets carry your judgement." },
+          { "id": "expand", "label": "Ask Claude to expand into prose with the right tone", "detail": "Provide the original + bullets + tone + style examples." },
+          { "id": "edit", "label": "Read every line, cut 30 percent, claim it with edits", "detail": "At least one substantive edit, every time." },
+          { "id": "send", "label": "Send from your own client, your name", "detail": "Never autonomous." }
+        ],
+        "hint": "Decide before you draft. Bullet before you expand. Edit before you send."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Take a real work message you owe right now (Slack, email, whatever). Write 3-5 bullets in your own words. Then write what context you would give Claude (audience, tone, 1 example).",
+        "lang": "markdown",
+        "starter": "MESSAGE OWED:\n\nBULLETS:\n- \n- \n- \n\nCONTEXT FOR CLAUDE:\n- Audience:\n- Tone:\n- Example to match:",
+        "expected": "MESSAGE OWED: Reply to vendor on delayed Q2 invoice\n\nBULLETS:\n- We acknowledge the delay; finance team flagged a mismatch on PO 2078\n- Need a corrected invoice with line-item breakdown by 12 May\n- Once received, payment will release within 5 business days\n- Open to a 30-min call if quicker\n\nCONTEXT FOR CLAUDE:\n- Audience: vendor's CFO, ongoing relationship, escalating\n- Tone: firm but not adversarial; we want them as a vendor next year\n- Example to match: my Apr 14 email to the same person — no exclamation marks, short paragraphs, name three specifics"
+      },
+      {
+        "type": "quiz",
+        "prompt": "Pick the two changes that make a Claude-drafted message hardest to detect as AI.",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "Adding two specific numbers, names or dates", "correct": true, "explain": "Generic prose is the AI tell. Specifics signal real knowledge." },
+          { "id": "b", "label": "Cutting 30 percent of the length", "correct": true, "explain": "First drafts run long because Claude is verbose. Tight prose reads as human." },
+          { "id": "c", "label": "Adding three exclamation marks for energy", "correct": false, "explain": "Energy through punctuation is amateur. Real voice doesn't need them." },
+          { "id": "d", "label": "Asking Claude to add 'as a human' to the opening", "correct": false, "explain": "Worse than the AI prefix. The fix is to actually edit, not to lie." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "title": "WhatsApp groups ka rule",
+            "tone": "info",
+            "md": "Bhai, family WhatsApp group mein hum sab apna voice rakhte hain — chacha ka *'bhai sahab'*, didi ka *'OMG'*, mummy ka *'beta khaana khaya?'*. Imagine kal mummy ne ekdam *'I trust this finds you well'* likh diya. Pure family ke phone ek saath bajenge: *'Mummy ka phone hack ho gaya?'*. Tumhare kaam ke saathi bhi same hain. Tumhare voice ko jaante hain. Generic Claude prose tumhara phone hack hone jaisa lagta hai."
+          },
+          "en": {
+            "title": "Voice as identity",
+            "tone": "info",
+            "md": "Your colleagues know your voice the way your family knows yours. If your standup post suddenly opens 'I trust this finds you well', everyone notices. Voice isn't decoration; it's identification. Generic Claude prose reads like your account got hacked."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Claude is a draft engine, not the sender. The send is always you, from your keyboard.",
+          "No-send-without-review: full read-through plus at least one substantive edit, every time.",
+          "The bullet-to-paragraph expander is the highest-frequency cowork move; you hold judgement, Claude holds prose.",
+          "Pin 3-5 of your own past examples in a Project so Claude drafts arrive in your voice.",
+          "The cost of one bad message is asymmetric; the review gate exists for the 5 percent that matter."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Look at three messages you sent in the last week. How many had Claude in the loop? For those that did, where in your workflow could you have caught an AI-tell earlier? Build the gate now, not after the embarrassing message."
+      }
+    ]
+  }
+}

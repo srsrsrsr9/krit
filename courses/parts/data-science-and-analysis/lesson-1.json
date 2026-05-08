@@ -1,0 +1,227 @@
+{
+  "lesson": {
+    "slug": "data-mental-model",
+    "title": "What Data Science Actually Is",
+    "subtitle": "Question first, dataset second; nothing else moves until that order is right",
+    "estimatedMinutes": 13,
+    "skills": ["data-mental-model"],
+    "blocks": [
+      {
+        "type": "lessonMeta",
+        "audioUrl": "/audio/data-science-and-analysis/data-mental-model.mp3",
+        "audioDurationSec": 720,
+        "audioChapters": [
+          { "startSec": 0, "label": "What data science actually is" },
+          { "startSec": 80, "label": "Mental model: question to hypothesis to test" },
+          { "startSec": 220, "label": "Move 1: the noise-vs-signal lens" },
+          { "startSec": 410, "label": "Move 2: always state the question" },
+          { "startSec": 560, "label": "The trap: p-hacking and confirmation bias" }
+        ],
+        "notesPdfUrl": "/notes/data-science-and-analysis/data-mental-model.html",
+        "notesByline": "Notes by Aditi, batch of 2024"
+      },
+      {
+        "type": "markdown",
+        "md": "Most analyst careers begin the same way: a manager forwards an Excel file with the subject line *\"can you take a quick look at this?\"* and three minutes of context. You open the file, scroll, sigh, and start a pivot table. By Wednesday you have produced 11 charts and answered no question.\n\nThe job you think you have is *finding insights in data*. The job you actually have is *converting a vague human question into a testable one, and then producing the smallest useful piece of evidence*. The data is the easy part. The translation is the hard part. Everything in this course follows from getting that order right."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A diagram with three boxes labelled QUESTION, HYPOTHESIS, TEST, with arrows flowing left to right, and a discarded box on the side labelled 'just looking around'",
+        "caption": "The right loop: question, hypothesis, test. The wrong loop: open the file and start clicking.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='13' fill='#1F2937'><g transform='translate(30 80)'><rect width='130' height='80' rx='12' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold'>QUESTION</text><text x='65' y='52' text-anchor='middle' font-size='11'>vague, human</text><text x='65' y='68' text-anchor='middle' font-size='11' fill='#92400E'>'why is churn up'</text></g><g transform='translate(195 80)'><rect width='130' height='80' rx='12' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold'>HYPOTHESIS</text><text x='65' y='52' text-anchor='middle' font-size='11'>testable, numeric</text><text x='65' y='68' text-anchor='middle' font-size='11' fill='#1E40AF'>'pricing tier B churns more'</text></g><g transform='translate(360 80)'><rect width='130' height='80' rx='12' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-weight='bold'>TEST</text><text x='65' y='52' text-anchor='middle' font-size='11'>specific, falsifiable</text><text x='65' y='68' text-anchor='middle' font-size='11' fill='#065F46'>compare cohorts</text></g></g><path d='M160 120 L195 120' stroke='#1F2937' stroke-width='2.5' marker-end='url(#a1)'/><path d='M325 120 L360 120' stroke='#1F2937' stroke-width='2.5' marker-end='url(#a1)'/><g transform='translate(360 195)' opacity='0.6'><rect width='180' height='32' rx='8' fill='#E5E7EB' stroke='#6B7280' stroke-dasharray='4 3'/><text x='90' y='21' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#6B7280' font-style='italic'>'just looking around' goes here</text></g><defs><marker id='a1' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+      },
+      {
+        "type": "callout",
+        "tone": "tip",
+        "title": "Mental model: question becomes hypothesis becomes test",
+        "md": "Hold this picture. Every piece of analysis is a chain of three things in this order: a vague human **question**, a testable **hypothesis** that converts the question into something the data can answer, and a **test** that produces yes / no / cannot tell. The chain only runs forwards.\n\nIf you start with the data, you skip steps 1 and 2 and produce charts that decorate a question nobody asked. If you start with a hypothesis but no question, you answer the wrong thing precisely. The discipline is: never touch the file until you can write the question on a sticky note."
+      },
+      {
+        "type": "embedAnimation",
+        "src": "/courses/data-science-and-analysis/anim/data-mental-model-translation.html",
+        "height": 420,
+        "caption": "The translation moment in motion. Watch a one-line stakeholder ask convert into three candidate hypotheses, and only one survives the data check."
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "tip",
+            "title": "Manager-meeting wala scene",
+            "md": "Bhai, scene yeh hai. Manager ne aake pucha *\"is this significant?\"*. Tu ne dashboard kholke bola *\"p = 0.04 hai sir\"*. Manager ne head hilaaya, *\"good, ship it\"* bolke nikal gaya. \n\nDono mein se kisi ko nahi pata kya ship hua. Tu ne effect size nahi bataya. Usne business threshold nahi pucha. Lekin meeting khatam, dashboard banane wala bhi happy, decision lene wala bhi happy. **Yeh data science nahi hai. Yeh data theatre hai.**"
+          },
+          "en": {
+            "tone": "tip",
+            "title": "The standup that decides nothing",
+            "md": "Manager asks 'is this significant?'. You say 'p = 0.04'. Manager says 'good, ship it'. Neither of you knows what was just shipped, what effect size matters, or whether the change is worth the engineering cost. The meeting felt productive; nothing was actually decided. This pattern repeats four times a week in most analytics teams."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 1 — The noise-vs-signal lens"
+      },
+      {
+        "type": "markdown",
+        "md": "Every dataset is a stack of two things mashed together: **signal** (the underlying truth) and **noise** (random variation, measurement error, edge cases, holiday weeks, that one bug in event tracking last Tuesday). Your job is to separate them. Most analysts skip this step and report the noise as if it were the signal.\n\nA Mumbai fintech I work with had a 14% week-over-week revenue jump in March. Champagne emoji in Slack. Turned out the previous week had a feature flag bug that nulled out 30% of the events. The signal was *flat revenue*; the 14% was *measurement noise from a previously corrupt week*. They almost wrote a board update on it. The noise-vs-signal lens is asking, before any other question, *what could make this number look the way it does that has nothing to do with what I think it means?*"
+      },
+      {
+        "type": "svgFigure",
+        "alt": "A line chart showing a noisy series with a smooth signal underneath, with the gap between them shaded",
+        "caption": "Same data, two stories. The signal is the boring trend; the noise is the part you would have called insight if you were in a hurry.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#EFF6FF'/><g><line x1='40' y1='200' x2='540' y2='200' stroke='#1F2937' stroke-width='1.5'/><line x1='40' y1='40' x2='40' y2='200' stroke='#1F2937' stroke-width='1.5'/></g><polyline points='40,170 80,160 120,150 160,140 200,135 240,130 280,125 320,120 360,118 400,115 440,112 480,110 520,108' fill='none' stroke='#10B981' stroke-width='3' stroke-dasharray='6 3'/><polyline points='40,180 80,140 120,170 160,110 200,165 240,120 280,150 320,90 360,140 400,100 440,130 480,80 520,120' fill='none' stroke='#F43F5E' stroke-width='2.5'/><g font-family='sans-serif' font-size='12'><circle cx='460' cy='60' r='5' fill='#F43F5E'/><text x='472' y='64' fill='#9F1239'>noise (what you see)</text><circle cx='460' cy='82' r='5' fill='#10B981'/><text x='472' y='86' fill='#065F46'>signal (what is real)</text></g><text x='290' y='225' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#1F2937' font-style='italic'>Same data. Pick the wrong line and you ship the wrong story.</text></svg>"
+      },
+      {
+        "type": "animatedTimeline",
+        "title": "The translation: 'why is churn up?' becomes a test in 6 steps",
+        "steps": [
+          { "label": "Step 1 — Hear the question", "body": "CMO says 'why is churn up'. Resist the urge to open the dashboard. The question, as stated, has at least three definitions of 'churn' and no time window." },
+          { "label": "Step 2 — Restate it", "body": "Write it down: 'Did the monthly churn rate (paid_users that did not renew within 30 days of contract end) increase from Q2 to Q3 by more than 1 percentage point?'" },
+          { "label": "Step 3 — Confirm with the asker", "body": "Send it to the CMO. Get her to say yes or correct the definition. This is the part most analysts skip and most analysts regret." },
+          { "label": "Step 4 — Form a hypothesis", "body": "From the question, generate 2-3 testable hypotheses. e.g. 'Tier B users churned more in Q3 than Q2'. Each one is a comparison the data can run." },
+          { "label": "Step 5 — Pick the test", "body": "For a comparison of two cohorts on a binary outcome, a chi-square or two-proportion z-test, with sample size and CI reported. Not a vibes-based eyeball." },
+          { "label": "Step 6 — Run it, with the noise check first", "body": "Before reporting, ask: 'what could make this number look this way and not be churn?' Holiday week, data outage, definition change, billing migration. If any of those, the answer is 'data quality first, churn second'." }
+        ]
+      },
+      {
+        "type": "quiz",
+        "prompt": "Your dashboard shows weekly active users dropped 12% last week. What is the most disciplined first move?",
+        "multi": false,
+        "choices": [
+          { "id": "a", "label": "Ask 'what could make this number look this way that has nothing to do with usage?' — check for tracking outages, definition changes, holiday weeks, deploys", "correct": true, "explain": "Correct. The noise-vs-signal lens. Big jumps are often artifacts; you investigate the artifact first or you ship a wrong story." },
+          { "id": "b", "label": "Email the CEO that engagement is dropping", "correct": false, "explain": "Premature alarm. You do not yet know if the number reflects user behaviour or a data bug. The escalation costs more than the 30 minutes of investigation." },
+          { "id": "c", "label": "Build a churn model", "correct": false, "explain": "Modeling on possibly-corrupt data. You will fit a model to a tracking outage and explain it confidently." },
+          { "id": "d", "label": "Add more metrics to the dashboard", "correct": false, "explain": "Same dirty source, more charts. Does not address the question." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "warn",
+            "title": "Confirmation bias ka EMI",
+            "md": "Bhai, ek baar tujhe lagta hai *\"Tier B users zyaada churn karte hain\"*, tu data mein utar jaata hai aur surprise — Tier B users zyaada churn karte dikhte hain. Tu 200 hypotheses mein se sirf woh dekhta hai jo confirm karte hain. Yeh **confirmation bias** ka EMI hai: har month dimaag ko thoda aur convince karta hai, aur kabhi pre-pay nahi karna padta.\n\nBachne ka tarika: hypothesis pehle likh, data baad mein khol. Sticky note pe, ya Slack DM mein khud ko, kuch bhi. Likha hua hypothesis revise karna padta hai. Soche hue hypothesis aaram se shift ho jaate hain."
+          },
+          "en": {
+            "tone": "warn",
+            "title": "Confirmation bias on monthly EMI",
+            "md": "Once you suspect 'Tier B users churn more', you will see exactly that pattern in the data. Confirmation bias is on a monthly EMI plan: every analysis pays a small instalment, and you never have to face the principal. The fix is to write the hypothesis down before opening the data. Written hypotheses get revised; remembered ones quietly drift to fit the chart."
+          }
+        }
+      },
+      {
+        "type": "heading",
+        "level": 2,
+        "text": "Move 2 — The always-state-the-question rule"
+      },
+      {
+        "type": "markdown",
+        "md": "If you cannot write the question on one line, you cannot answer it. The rule is brutal and non-negotiable: before you open the file, write the question down. Numerically. With the time window. With the metric definition. With the comparison.\n\n*\"How is the product doing?\"* is not a question. *\"Did 30-day retention for paid users on the Pro plan in Q3 2026 increase or decrease relative to Q2 2026, by more than 1pp?\"* is a question. The first one will absorb 4 hours of work and produce nothing useful. The second one is answerable by Tuesday lunch. They sound similar; they are not."
+      },
+      {
+        "type": "svgFigure",
+        "alt": "Two notebooks side by side. Left: 'how is the product doing?' with a question mark. Right: a structured 4-line question with metric, window, cohort, threshold",
+        "caption": "Two questions, same intent. Only one of them gets answered.",
+        "maxWidth": 580,
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 240' role='img'><rect width='580' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='240' height='180' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#9D174D' font-weight='bold'>Vague question</text><text x='20' y='80' font-family='sans-serif' font-size='13' fill='#1F2937'>How is the product</text><text x='20' y='102' font-family='sans-serif' font-size='13' fill='#1F2937'>doing?</text><text x='20' y='150' font-family='sans-serif' font-size='40' fill='#9D174D' font-weight='bold'>?</text><text x='120' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9D174D' font-style='italic'>4 hours, 11 charts, no answer</text></g><g transform='translate(310 30)'><rect width='240' height='180' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#065F46' font-weight='bold'>Stated question</text><text x='20' y='62' font-family='monospace' font-size='10' fill='#1F2937'>metric: 30d retention</text><text x='20' y='84' font-family='monospace' font-size='10' fill='#1F2937'>cohort: paid Pro users</text><text x='20' y='106' font-family='monospace' font-size='10' fill='#1F2937'>window: Q2 vs Q3 2026</text><text x='20' y='128' font-family='monospace' font-size='10' fill='#1F2937'>threshold: ±1pp</text><text x='20' y='150' font-family='monospace' font-size='10' fill='#1F2937'>comparator: chi-square</text><text x='120' y='195' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>answerable by Tuesday</text></g></svg>"
+      },
+      {
+        "type": "chatScenario",
+        "coach": {
+          "name": "Senior-DS Saanya",
+          "role": "Tech lead at a Bengaluru SaaS, 9 years of cleaning other people's data"
+        },
+        "intro": [
+          "Hey. I'm Saanya. I run the data team at a B2B SaaS, and I have spent more time decoding stakeholder questions than running models. 👋",
+          "I'm going to throw five real-shaped stakeholder questions at you. Tell me which bucket each one belongs in.",
+          "**Stated** = ready to answer. **Needs translation** = restate before touching data. **Push back** = the question is malformed; do not answer until it changes."
+        ],
+        "buckets": [
+          { "id": "stated", "label": "Stated", "tone": "safe" },
+          { "id": "translate", "label": "Needs translation", "tone": "neutral" },
+          { "id": "pushback", "label": "Push back", "tone": "danger" }
+        ],
+        "scenarios": [
+          { "id": "s1", "situation": "CMO Slack: 'churn went up — figure out why by Thursday'", "correctBucketId": "translate", "explain": "Vague but answerable. Translate first: which churn definition, which cohort, which time window, what's the threshold for 'went up'. Confirm with the CMO before opening the file." },
+          { "id": "s2", "situation": "PM ticket: 'Did the new pricing tier (Pro+) retain at the same 30-day rate as Pro in the first 6 weeks after launch (Sep 1 – Oct 13, 2026)? Threshold: ≥ -2pp.'", "correctBucketId": "stated", "explain": "Numeric, time-windowed, threshold stated, cohorts defined. This is what a stated question looks like. Skip translation, run the comparison." },
+          { "id": "s3", "situation": "CFO: 'Are we doing better than last year?'", "correctBucketId": "translate", "explain": "Better at what? Revenue, retention, NPS, headcount efficiency? Translate before answering. Send 3 candidate definitions, ask which one she means." },
+          { "id": "s4", "situation": "VP Sales: 'Prove that our top-tier customers are also our happiest.'", "correctBucketId": "pushback", "explain": "'Prove' is the giveaway. The question pre-supposes the answer and asks you to confirm it. That is a confirmation-bias trap masquerading as analysis. Push back: 'I can test whether tier and satisfaction are correlated; I cannot promise to prove a direction.'" },
+          { "id": "s5", "situation": "Engineering manager: 'Is the new caching layer making the app feel faster?'", "correctBucketId": "translate", "explain": "Translate to a measurable: median page-load latency, 95th percentile, time-to-interactive. Then a before/after comparison. 'Feel' is not measurable; latency is." },
+          { "id": "s6", "situation": "CEO: 'Tell me a story about the data.'", "correctBucketId": "pushback", "explain": "Not a question; an open-ended request that absorbs unbounded time. Push back: 'I can give you the top 3 movements this quarter with one chart each. Which framing fits — what's working, what's broken, or what's changing?'" }
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "title": "The classic trap: p-hacking and confirmation bias",
+        "md": "The two most common ways an analysis lies to the analyst:\n\n1. **p-hacking**: running enough tests until one of them reports p < 0.05, then writing up that one as 'the' result. Run 20 tests at α=0.05 and roughly one will look significant by chance. This is statistical fraud, even when accidental.\n2. **Confirmation bias**: forming a belief, then noticing only the data that supports it. The fix is to write the hypothesis *before* you look, and be loud about which evidence would have changed your mind.\n\nBoth traps share the same root: you let the data search for the conclusion instead of the conclusion specifying the test. The discipline of writing the question down first is the cheapest defence against both."
+      },
+      {
+        "type": "sortableSteps",
+        "prompt": "Order the steps of a disciplined analysis loop, from first to last.",
+        "items": [
+          { "id": "q", "label": "Hear the vague question", "detail": "Stakeholder Slack, ticket, hallway ask." },
+          { "id": "r", "label": "Restate as a numeric, testable hypothesis", "detail": "Metric, window, cohort, threshold." },
+          { "id": "c", "label": "Confirm with the asker before touching data", "detail": "Send the restatement; get a yes." },
+          { "id": "n", "label": "Apply the noise-vs-signal lens", "detail": "Ask: what could explain this number that is NOT what I think?" },
+          { "id": "t", "label": "Run the test on a clean sample", "detail": "Pick the appropriate test; report effect size and CI, not just p." },
+          { "id": "w", "label": "Write the BLUF answer with assumption ledger", "detail": "Headline, one chart, ledger appendix." }
+        ],
+        "hint": "Each step's output is the next step's input. The classic mistake is to skip 'confirm with the asker' and jump from 'restate' straight to 'run the test'."
+      },
+      {
+        "type": "tryIt",
+        "instruction": "Take this real-shaped stakeholder ask and convert it into a stated question in the format `metric / cohort / window / threshold / comparator`.\n\n*\"Hey, I think our SMB customers in Hyderabad are using the product less than they used to. Can you check?\"*",
+        "lang": "markdown",
+        "starter": "metric: \ncohort: \nwindow: \nthreshold: \ncomparator: ",
+        "expected": "metric: weekly active sessions per account (or product-defined 'usage')\ncohort: SMB-tier accounts based in Hyderabad (city = Hyderabad in account.city)\nwindow: last 8 weeks vs the 8 weeks before that (or Q3 2026 vs Q2 2026)\nthreshold: ≥10% drop in median weekly active sessions per account to count as 'using less'\ncomparator: Wilcoxon signed-rank or two-sample t-test on per-account session counts, reported with 95% CI and effect size"
+      },
+      {
+        "type": "quiz",
+        "prompt": "A teammate runs 14 different segment tests, finds one with p = 0.03, and writes it up as the headline finding. Which problems are present?",
+        "multi": true,
+        "choices": [
+          { "id": "a", "label": "p-hacking — reporting only the significant test from a search of many", "correct": true, "explain": "Correct. With 14 tests at α=0.05, you expect about one to look significant by chance even if no real effect exists. Reporting only that one without correction is the textbook trap." },
+          { "id": "b", "label": "Confirmation bias — the search likely stopped at the first result that looked good", "correct": true, "explain": "Correct. The search-and-stop pattern. The 14 tests are not equal; you stopped searching when you found what you wanted to find." },
+          { "id": "c", "label": "Sample size too small", "correct": false, "explain": "Maybe also a problem, but not the central issue here. The headline failure is the search pattern, not the n." },
+          { "id": "d", "label": "Wrong choice of model", "correct": false, "explain": "Not the issue — the problem is procedural, not modeling-class." }
+        ]
+      },
+      {
+        "type": "culturalAside",
+        "defaultLocale": "hi-IN",
+        "variants": {
+          "hi-IN": {
+            "tone": "info",
+            "title": "Mummy ka cross-examination",
+            "md": "Bhai, mummy se data science seekh. Tu boltaa hai *\"market jaake aata hoon\"*. Mummy: *\"kis market? kab tak? kya laana hai? kitna budget? Sharma ji ke saath ya akele?\"*\n\nVoh tujhe stated question banane sikha rahi hai. Tu ne *vague mission* boli, mummy ne *metric, window, cohort, threshold, comparator* maanga. Stakeholder bhi yahi karna chahiye, lekin agar voh nahi karta, **tu kar.**"
+          },
+          "en": {
+            "tone": "info",
+            "title": "Your mother is the senior analyst",
+            "md": "Tell your mother 'I'm going to the market'. She'll ask: which market, how long, what for, with what budget, alone or with someone. That is a stakeholder forcing you to convert a vague mission into a stated question. Stakeholders should do this; usually they don't. So you do."
+          }
+        }
+      },
+      {
+        "type": "keyTakeaways",
+        "points": [
+          "Data science is the discipline of converting a vague human question into a testable one, not the discipline of running tests on data you happen to have.",
+          "If you cannot write the question on one line — metric, cohort, window, threshold, comparator — you cannot answer it.",
+          "Every dataset is signal plus noise; before you report a number, ask what could make it look this way that has nothing to do with what you think it means.",
+          "Write the hypothesis down before you open the data; spoken hypotheses drift to fit the chart, written ones get revised honestly.",
+          "p-hacking and confirmation bias share one root — letting data search for the conclusion — and one cheap fix: pre-register the test and report what would change your mind."
+        ]
+      },
+      {
+        "type": "reflect",
+        "prompt": "Pick the last analysis you produced (Slack message, dashboard, deck slide). Write the one-line question it answered, in the format metric / cohort / window / threshold / comparator. If you cannot, that is the lesson."
+      }
+    ]
+  }
+}
