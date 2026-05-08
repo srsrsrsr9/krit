@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { recordEvent } from "@/lib/lrs";
 import { LessonBlocks } from "@/lib/content/blocks";
 import { BlockRenderer } from "@/components/lesson/block-renderer";
+import { LessonPlayer } from "@/components/lesson/lesson-player";
 import { CompleteLessonButton } from "@/components/lesson/complete-button";
 import { TutorSidebar } from "@/components/tutor/tutor-sidebar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +14,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import { formatMinutes } from "@/lib/utils";
+
+// Pilot: courses listed here render with the new section-by-section player
+// instead of the legacy single-page layout. Promote a course by adding its
+// path slug here once the layout has been validated for that content.
+const PLAYER_PILOT_SLUGS = new Set(["leadership-in-age-of-ai"]);
 
 export default async function LessonPage({
   params,
@@ -101,6 +107,76 @@ export default async function LessonPage({
     })
     .join("\n\n");
 
+  const usePlayer = PLAYER_PILOT_SLUGS.has(path.slug);
+
+  const navCard = (
+    <Card>
+      <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          {prevHref && (
+            <Link href={prevHref}>
+              <Button variant="outline" size="sm" className="gap-1">
+                <ArrowLeft className="h-3.5 w-3.5" /> Previous
+              </Button>
+            </Link>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <CompleteLessonButton
+            lessonId={lesson.id}
+            pathSlug={path.slug}
+            nextHref={nextHref}
+            alreadyComplete={Boolean(existingProgress?.completedAt)}
+          />
+          {nextHref && (
+            <Link href={nextHref}>
+              <Button variant="ghost" size="sm" className="gap-1">
+                Skip <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  if (usePlayer) {
+    return (
+      <article className="mx-auto max-w-4xl space-y-6">
+        <Link href={`/learn/${pathSlug}`} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-3.5 w-3.5" /> {path.title}
+        </Link>
+
+        <header className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {lesson.skills.map((ls) => (
+              <Badge key={ls.skill.id} variant="secondary">
+                {ls.skill.name}
+              </Badge>
+            ))}
+          </div>
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-balance">{lesson.title}</h1>
+          {lesson.subtitle && <p className="text-lg text-muted-foreground">{lesson.subtitle}</p>}
+          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <Clock className="h-3.5 w-3.5" />
+            {formatMinutes(lesson.estimatedMinutes)} · Lesson {itemIndex + 1} of {path.items.length}
+          </div>
+        </header>
+
+        <LessonPlayer
+          blocks={blocks}
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          lessonSummary={summary}
+          pathTitle={path.title}
+          skillHints={lesson.skills.map((s) => s.skill.name)}
+          savedReflections={savedReflections}
+          footer={navCard}
+        />
+      </article>
+    );
+  }
+
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
       <article className="max-w-3xl space-y-6">
@@ -126,34 +202,7 @@ export default async function LessonPage({
 
         <BlockRenderer blocks={blocks} lessonId={lesson.id} savedReflections={savedReflections} />
 
-        <Card>
-          <CardContent className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2">
-              {prevHref && (
-                <Link href={prevHref}>
-                  <Button variant="outline" size="sm" className="gap-1">
-                    <ArrowLeft className="h-3.5 w-3.5" /> Previous
-                  </Button>
-                </Link>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
-              <CompleteLessonButton
-                lessonId={lesson.id}
-                pathSlug={path.slug}
-                nextHref={nextHref}
-                alreadyComplete={Boolean(existingProgress?.completedAt)}
-              />
-              {nextHref && (
-                <Link href={nextHref}>
-                  <Button variant="ghost" size="sm" className="gap-1">
-                    Skip <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </Link>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        {navCard}
       </article>
 
       <aside className="lg:sticky lg:top-20 lg:self-start">

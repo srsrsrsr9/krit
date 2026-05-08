@@ -132,9 +132,10 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/leadership-in-age-of-ai/anim/ai-and-the-job-task-decompose.html",
+          "src": "/courses/leadership-in-age-of-ai/anim/ai-and-the-job.html",
           "height": 420,
-          "caption": "Watch a job decompose into tasks, each task gets a label, then the role re-stacks. Same role, different mix."
+          "caption": "Watch a job decompose into tasks, each task gets a label, then the role re-stacks. Same role, different mix.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/ai-and-the-job.mp3"
         },
         {
           "type": "culturalAside",
@@ -328,45 +329,14 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/trap-ai-and-the-job.html",
           "height": 420,
-          "caption": "Watch the trap happen live — and the fix at the end."
+          "caption": "Watch the trap happen live — and the fix at the end.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/trap-ai-and-the-job.mp3"
         },
         {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: 'automate everything, replace people'",
           "md": "Every quarter, some leader you respect will say a version of *\"AI does X, so we don't need people for X anymore.\"* Watch for the slip from task to job. AI does *the writing task*; it does not do *the writer's job*. AI handles *first-pass review*; it does not do *the engineer's job*.\n\nThis trap costs more than money. It is how you lose the senior people who quietly run your operation, because they hear the announcement and start interviewing the next morning. By the time you realise you cut the wrong layer, the people who knew where the bodies were buried are at your competitor."
-        },
-        {
-          "type": "sortableSteps",
-          "prompt": "Order the 5 steps for an honest task-vs-job audit on a single role",
-          "items": [
-            {
-              "id": "list",
-              "label": "List 20 frequent tasks",
-              "detail": "What does this person actually do in a typical week, in concrete 30-minute units?"
-            },
-            {
-              "id": "tag",
-              "label": "Tag each task: Human / With-AI / AI-only",
-              "detail": "Be honest. 'Strategic thinking' is not a task. Decompose until it is concrete."
-            },
-            {
-              "id": "compose",
-              "label": "Group tasks into accountability + calibration + arbitration buckets",
-              "detail": "Which tasks support the three human-only pillars? These cluster around 30% of the role."
-            },
-            {
-              "id": "pick",
-              "label": "Pick the ONE With-AI task to redesign first",
-              "detail": "Weekly cadence, clear quality signal, owner who'll demo it. One workflow, not three."
-            },
-            {
-              "id": "redesign",
-              "label": "Redesign the ritual around the new artifact",
-              "detail": "Who produces, who reviews, what the new failure mode is, how to catch it."
-            }
-          ],
-          "hint": "List, then tag, then group, then pick, then redesign. Most leaders skip 'group' and the answer falls apart."
         },
         {
           "type": "tryIt",
@@ -621,9 +591,10 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/leadership-in-age-of-ai/anim/team-design-with-ai-handoff.html",
+          "src": "/courses/leadership-in-age-of-ai/anim/team-design-with-ai.html",
           "height": 420,
-          "caption": "Watch a workflow shift from Pattern A to Pattern C. The trust handoff moves; the failure mode moves with it."
+          "caption": "Watch a workflow shift from Pattern A to Pattern C. The trust handoff moves; the failure mode moves with it.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/team-design-with-ai.mp3"
         },
         {
           "type": "culturalAside",
@@ -750,7 +721,8 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/trap-team-design-with-ai.html",
           "height": 420,
-          "caption": "Watch the trap happen live — and the fix at the end."
+          "caption": "Watch the trap happen live — and the fix at the end.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/trap-team-design-with-ai.mp3"
         },
         {
           "type": "callout",
@@ -1043,9 +1015,10 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/leadership-in-age-of-ai/anim/talent-and-hiring-judgment-vs-execution.html",
+          "src": "/courses/leadership-in-age-of-ai/anim/talent-and-hiring.html",
           "height": 420,
-          "caption": "Two candidates, same task. One executes faster. The other catches the model's hallucinated citation. Watch which one ships."
+          "caption": "Two candidates, same task. One executes faster. The other catches the model's hallucinated citation. Watch which one ships.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/talent-and-hiring.mp3"
         },
         {
           "type": "culturalAside",
@@ -1239,45 +1212,14 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/trap-talent-and-hiring.html",
           "height": 420,
-          "caption": "Watch the trap happen live — and the fix at the end."
+          "caption": "Watch the trap happen live — and the fix at the end.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/trap-talent-and-hiring.mp3"
         },
         {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: hire for AI fluency, not for the actual job",
           "md": "The most common 2026 hiring mistake: a candidate's resume looks like an AI tool buffet, the recruiter is impressed, and the interview drifts into 'how do you use Cursor/Claude/Copilot' territory. Two rounds later, you've hired someone who can talk about AI but cannot actually do product strategy, financial analysis, or whatever the role is supposed to do.\n\nAI fluency is necessary but not sufficient. The role is *senior product manager* or *senior data analyst* or *senior content lead*. Filter on the job's actual outcomes first; treat AI as a means, not the end. If you can't tell a candidate's AI fluency story apart from someone who watched 4 YouTube videos, that's the problem to solve. The four behavioral questions above are the cheapest fix."
-        },
-        {
-          "type": "sortableSteps",
-          "prompt": "Order the 5 steps of redesigning your interview loop for the AI era",
-          "items": [
-            {
-              "id": "audit",
-              "label": "Audit your last 5 hires for the role",
-              "detail": "Which were strong? Which weren't? What signal would have predicted? Without this, you'll redesign in the dark."
-            },
-            {
-              "id": "judgment",
-              "label": "List the 5 judgment moments senior people in the role made last quarter",
-              "detail": "Specific decisions where supervisor judgment mattered. These become your behavioral questions."
-            },
-            {
-              "id": "questions",
-              "label": "Convert each judgment moment to a 'tell me about a time' question",
-              "detail": "Past episodes only. Hypotheticals reward articulate fluency, which AI gives every candidate."
-            },
-            {
-              "id": "rubric",
-              "label": "Define the 3-level rubric per question and calibrate the panel",
-              "detail": "Strong / weak / red flag. Calibrate against 3 known past candidates so the bar doesn't drift."
-            },
-            {
-              "id": "kill",
-              "label": "Kill the questions that AI made meaningless",
-              "detail": "Whiteboard SQL, generic case prompts, 'how would you' framings — these now reward who-prepped-with-Claude. Cut them."
-            }
-          ],
-          "hint": "Audit, then list moments, then write questions, then rubric, then kill the obsolete ones."
         },
         {
           "type": "tryIt",
@@ -1532,9 +1474,10 @@
         },
         {
           "type": "embedAnimation",
-          "src": "/courses/leadership-in-age-of-ai/anim/learning-and-development-half-life.html",
+          "src": "/courses/leadership-in-age-of-ai/anim/learning-and-development.html",
           "height": 420,
-          "caption": "AI tooling knowledge decays in 6 weeks. Watch what annual training looks like against this clock vs sprint cadence."
+          "caption": "AI tooling knowledge decays in 6 weeks. Watch what annual training looks like against this clock vs sprint cadence.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/learning-and-development.mp3"
         },
         {
           "type": "culturalAside",
@@ -1661,7 +1604,8 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/trap-learning-and-development.html",
           "height": 420,
-          "caption": "Watch the trap happen live — and the fix at the end."
+          "caption": "Watch the trap happen live — and the fix at the end.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/trap-learning-and-development.mp3"
         },
         {
           "type": "callout",
@@ -1956,7 +1900,8 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/ethics-and-trust.html",
           "height": 420,
-          "caption": "Watch trust compound over time when behavior matches values — and crash when it doesn't."
+          "caption": "Watch trust compound over time when behavior matches values — and crash when it doesn't.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/ethics-and-trust.mp3"
         },
         {
           "type": "culturalAside",
@@ -2149,39 +2094,14 @@
           "type": "embedAnimation",
           "src": "/courses/leadership-in-age-of-ai/anim/trap-ethics-and-trust.html",
           "height": 420,
-          "caption": "Watch the trap happen live — and the fix at the end."
+          "caption": "Watch the trap happen live — and the fix at the end.",
+          "audioSrc": "/audio/leadership-in-age-of-ai/anim/trap-ethics-and-trust.mp3"
         },
         {
           "type": "callout",
           "tone": "warn",
           "title": "The classic trap: ambiguous decision rights",
           "md": "Most 'ethics issues' at work are decision-rights issues in disguise.\n\nA director makes a call that should have been a VP's; six months later it surfaces and the VP is angry. *\"Why didn't you tell me?\"* — the director didn't know they had to. The fix is not 'be more careful'; the fix is *write the ladder down before the next incident*.\n\nA written ladder, reviewed annually, is one of the highest-trust documents an org can produce. Most don't have one. That's the gap."
-        },
-        {
-          "type": "sortableSteps",
-          "prompt": "Order these culture-building behaviors from highest to lowest long-run trust impact:",
-          "items": [
-            {
-              "id": "a",
-              "label": "Public post-mortem of a real incident, with structural changes named",
-              "detail": "Highest. Costly to the leader; rare; signals integrity decisively."
-            },
-            {
-              "id": "b",
-              "label": "Written explicit ladder of decision rights, reviewed annually",
-              "detail": "High. Removes ambiguity; prevents most 'ethics' fights before they start."
-            },
-            {
-              "id": "c",
-              "label": "Quarterly all-hands speech on values",
-              "detail": "Low. Mostly forgotten by the corridor."
-            },
-            {
-              "id": "d",
-              "label": "Framed values poster on the wall",
-              "detail": "Lowest. Decorative."
-            }
-          ]
         },
         {
           "type": "tryIt",
