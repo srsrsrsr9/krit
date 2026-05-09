@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { Course } from "@/lib/content/course";
+import type { Course, CourseLesson } from "@/lib/content/course";
 import type { ContentBlock } from "@/lib/content/blocks";
 
 /**
@@ -83,6 +83,68 @@ export function CourseFieldGuide({ course }: { course: Course }) {
       <footer className="mt-16 border-t-2 border-slate-900 pt-6 font-mono text-[10px] tracking-[0.18em] text-slate-500 print:break-before-page">
         <div className="mb-1">A KRIT FIELD GUIDE · KRIT.IO</div>
         <div>{course.title} · Generated for offline review</div>
+      </footer>
+    </article>
+  );
+}
+
+// ── Single-lesson field guide ────────────────────────────────────────────────
+
+/**
+ * Print-optimised view of ONE lesson, with a slim course-context header.
+ * Used by /showcase/course/[slug]/notes/[lessonSlug].
+ */
+export function LessonFieldGuide({
+  course,
+  lesson,
+  index,
+  totalLessons,
+}: {
+  course: Course;
+  lesson: CourseLesson;
+  index: number;        // 1-based lesson number
+  totalLessons: number;
+}) {
+  return (
+    <article className="mx-auto max-w-3xl rounded-md bg-white px-8 py-12 text-slate-900 shadow-sm print:max-w-none print:rounded-none print:px-0 print:py-0 print:shadow-none">
+      {/* Slim header — not a full cover, since we're inside a course */}
+      <header className="mb-10">
+        <KritWordmark />
+        <div className="mt-8 mb-2 font-mono text-[10px] tracking-[0.22em] text-amber-700">
+          A KRIT FIELD GUIDE · {course.title.toUpperCase()}
+        </div>
+        <div className="mb-2 font-mono text-[10px] tracking-[0.22em] text-slate-500">
+          LESSON {String(index).padStart(2, "0")} OF {String(totalLessons).padStart(2, "0")} · {lesson.estimatedMinutes} MIN
+        </div>
+        <h1 className="font-display text-4xl font-black leading-tight tracking-tight">
+          {lesson.title}
+        </h1>
+        {lesson.subtitle && (
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-600">
+            {lesson.subtitle}
+          </p>
+        )}
+        {lesson.skillHints.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {lesson.skillHints.map((s) => (
+              <span key={s} className="rounded-full border border-slate-300 px-2.5 py-0.5 font-mono text-[10px] tracking-[0.14em] text-slate-600">
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="my-6 h-[2px] w-16 bg-amber-500" />
+      </header>
+
+      <div className="prose prose-slate max-w-none">
+        {lesson.blocks.map((block, bi) => (
+          <PrintBlock key={bi} block={block} />
+        ))}
+      </div>
+
+      <footer className="mt-12 border-t-2 border-slate-900 pt-6 font-mono text-[10px] tracking-[0.18em] text-slate-500">
+        <div className="mb-1">A KRIT FIELD GUIDE · KRIT.IO</div>
+        <div>{course.title} · Lesson {index} · Generated for offline review</div>
       </footer>
     </article>
   );

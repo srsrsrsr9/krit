@@ -30,6 +30,7 @@ export default async function CourseLessonPage({
       closeHref={courseHref}
       nextHref={nextHref}
       nextLabel={nextLabel}
+      notesHref={`${courseHref}/notes/${lesson.slug}`}
     />
   );
 }

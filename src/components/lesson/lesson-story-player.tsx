@@ -62,6 +62,8 @@ export interface LessonStoryPlayerProps {
   nextHref?: string;
   /** Label on the win-screen Finish button (e.g. "Next: Trust Stack →"). */
   nextLabel?: string;
+  /** Optional per-lesson notes URL. Surfaced on the win screen as a quiet link. */
+  notesHref?: string;
 }
 
 export function LessonStoryPlayer({
@@ -72,6 +74,7 @@ export function LessonStoryPlayer({
   closeHref = "/home",
   nextHref,
   nextLabel,
+  notesHref,
 }: LessonStoryPlayerProps) {
   const cards: Card[] = useMemo(
     () => blocks.filter((b) => b.type !== "lessonMeta"),
@@ -227,7 +230,7 @@ export function LessonStoryPlayer({
                 </CardChrome>
               )}
               {isWin && (
-                <WinCard xp={xp} streak={streak} totalCards={total} />
+                <WinCard xp={xp} streak={streak} totalCards={total} notesHref={notesHref} />
               )}
             </motion.div>
           </AnimatePresence>
@@ -413,10 +416,12 @@ function WinCard({
   xp,
   streak,
   totalCards,
+  notesHref,
 }: {
   xp: number;
   streak: number;
   totalCards: number;
+  notesHref?: string;
 }) {
   return (
     <div className="flex h-full flex-col justify-center">
@@ -477,16 +482,25 @@ function WinCard({
         <Stat label="FRAMES" value={pad2(totalCards)} />
       </motion.div>
 
-      <motion.button
-        type="button"
-        onClick={() => window.location.reload()}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.6 }}
         transition={{ delay: 0.9 }}
-        className="mt-8 self-start font-mono text-[10px] tracking-[0.2em] text-slate-400 hover:text-amber-400"
+        className="mt-8 flex items-center gap-5 self-start font-mono text-[10px] tracking-[0.2em] text-slate-400"
       >
-        REPLAY
-      </motion.button>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="hover:text-amber-400"
+        >
+          REPLAY
+        </button>
+        {notesHref && (
+          <a href={notesHref} className="hover:text-amber-400">
+            DOWNLOAD NOTES ↓
+          </a>
+        )}
+      </motion.div>
     </div>
   );
 }

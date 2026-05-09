@@ -80,10 +80,10 @@ export default async function CourseLandingPage({
         </div>
         <ol className="space-y-2">
           {course.lessons.map((lesson, i) => (
-            <li key={lesson.slug}>
+            <li key={lesson.slug} className="group/lesson relative">
               <Link
                 href={`/showcase/course/${course.slug}/${lesson.slug}`}
-                className="group flex items-center gap-4 rounded-lg border border-slate-800 bg-slate-900/40 px-4 py-3.5 transition-all hover:border-amber-400/50 hover:bg-slate-900/70"
+                className="group flex items-center gap-4 rounded-lg border border-slate-800 bg-slate-900/40 px-4 py-3.5 pr-12 transition-all hover:border-amber-400/50 hover:bg-slate-900/70"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-400/10 font-mono text-sm font-bold text-amber-400 ring-2 ring-amber-400/20">
                   {String(i + 1).padStart(2, "0")}
@@ -105,6 +105,16 @@ export default async function CourseLandingPage({
                   </div>
                 </div>
                 <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition-transform group-hover:translate-x-1 group-hover:text-amber-400" />
+              </Link>
+
+              {/* Per-lesson notes — opt-in, sits as a small icon top-right of the row */}
+              <Link
+                href={`/showcase/course/${course.slug}/notes/${lesson.slug}`}
+                aria-label={`Notes for ${lesson.title}`}
+                title="Lesson notes (PDF)"
+                className="absolute right-3 top-3 flex h-7 items-center justify-center rounded-md border border-slate-700 bg-slate-900 px-2 font-mono text-[9px] font-bold tracking-[0.18em] text-slate-400 opacity-0 transition-all group-hover/lesson:opacity-100 hover:border-amber-400/60 hover:text-amber-400"
+              >
+                NOTES
               </Link>
             </li>
           ))}
