@@ -119,6 +119,15 @@ export default async function CourseLandingPage({
         BEGIN COURSE
         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
       </Link>
+
+      {/* Field Guide download — sits below the start CTA, lower-key */}
+      <Link
+        href={`/showcase/course/${course.slug}/notes`}
+        className="mt-3 flex items-center justify-between border border-slate-700 bg-slate-900/40 px-5 py-3 font-mono text-[11px] font-bold tracking-[0.18em] text-slate-300 transition-colors hover:border-amber-400/50 hover:text-amber-400"
+      >
+        <span>FIELD GUIDE · PDF</span>
+        <span className="text-slate-500">↓</span>
+      </Link>
     </main>
   );
 }

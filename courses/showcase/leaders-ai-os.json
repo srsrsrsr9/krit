@@ -329,6 +329,17 @@
           ]
         },
         {
+          "type": "panelComic",
+          "title": "The override that broke the threshold.",
+          "panels": [
+            { "scene": "cfo-math", "narration": "Q1 · THE CFO PUSHES ON THE NUMBER.", "dialog": [{ "speaker": "cfo", "text": "Tighten the threshold. We can't justify the override volume to the board." }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "ONE OVERRIDE. ONE LOG ENTRY. ONE NAME.", "dialog": [{ "speaker": "sam", "text": "Score 0.62 → hired → **top 20%** in Q2 review." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "cfo-math", "narration": "Q3 · THE CFO RUNS THE NEW MATH.", "dialog": [{ "speaker": "cfo", "text": "Threshold dropped to 0.58. False positives flat. False negatives down." }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "Q4 · THE BOARD ASKS WHY THE MODEL HAS 'GOTTEN LAZY.'", "dialog": [{ "speaker": "kavya", "text": "It hasn't. It's gotten **honest** about what we always knew." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "THRESHOLD WITHOUT AUDIT IS RUBBER-STAMPING. AUDIT WITHOUT THRESHOLD IS THEATRE." }
+          ]
+        },
+        {
           "type": "reflect",
           "prompt": "Name one decision your team makes that an AI **could** make today — but which you would never let it ship without a human signature. Why? Be specific about the failure mode you're protecting against."
         },
@@ -476,6 +487,17 @@
             { "id": "b", "label": "Each IC writes a one-line 'what surprised me this week' note in standup. Patterns get re-trained into team practice every quarter.", "correct": true, "explain": "Forces retrieval, surfaces tacit knowledge, builds the team's collective capability — and tells you exactly what to invest in next." },
             { "id": "c", "label": "We trust everyone to learn at their own pace.", "correct": false, "explain": "Without structure, AI assist produces atrophy. Trust without scaffolding is the trap." },
             { "id": "d", "label": "Every IC gets 20% time for 'learning'. They pick what.", "correct": false, "explain": "Better than nothing — but with no ritual or artefact, most of that time evaporates." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "Sam's six months.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "WEEK 1 WITH AI ASSIST. THROUGHPUT UP 2×.", "dialog": [{ "speaker": "sam", "text": "This is great. I have hours back." }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "MONTH 6. SAM HASN'T BEEN CONFUSED IN EIGHT WEEKS.", "dialog": [{ "speaker": "sam", "text": "I'm not sure what I learned this quarter." }], "sfxAfter": "SILENCE." },
+            { "scene": "cfo-math", "narration": "SAME ROOM. THE MANAGER LOOKS AT THE DASHBOARD.", "dialog": [{ "speaker": "cfo", "text": "Velocity up **30%**. Whatever you're doing — keep it up." }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "ACROSS TOWN. KAVYA ASKS THE QUESTION HER DASHBOARD DOESN'T.", "dialog": [{ "speaker": "kavya", "text": "What did you actually learn this quarter, Sam?" }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "ending", "narration": "SAME THROUGHPUT. DIFFERENT DEPTH. THE DASHBOARDS NEVER TELL YOU WHICH." }
           ]
         },
         {
@@ -648,6 +670,17 @@
             { "id": "b", "label": "Required: track record of (1) killing a project that wasn't worth doing, (2) defending a metric under board pressure, (3) using AI tools to multiply a team — not replace a junior.", "correct": true, "explain": "Each line filters for an AI-resistant or AI-leverage skill. The funnel narrows on judgement and steering, not throughput." },
             { "id": "c", "label": "Required: AI-native, ships fast, comfortable with autonomy.", "correct": false, "explain": "Vague. 'Ships fast' in 2026 means they used a model — that's not a skill, it's a tool." },
             { "id": "d", "label": "Required: domain expert with deep technical chops.", "correct": false, "explain": "Misses the AI dimension entirely. You'll hire someone who can't leverage the tools your team uses." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "The JD that worked.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "LAST YEAR'S JD. 3,400 APPLICANTS. HIRE-TO-SUCCESS: 35%.", "dialog": [{ "speaker": "sam", "text": "'Required: 5+ yrs SQL, 100+ specs.'" }], "sfxAfter": "TICK . . ." },
+            { "scene": "cfo-math", "narration": "ONE WEEKEND. REWRITE THE JD.", "dialog": [{ "speaker": "cfo", "text": "Out: '5+ yrs SQL.' In: '*killed a wrong PRD*.'" }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "handshake", "narration": "SAME APPLICANT POOL. NEW FILTER.", "dialog": [{ "speaker": "kavya", "text": "We rejected 60 'strong on paper.' We hired 8 you'd never have seen." }], "sfxAfter": "CRACK!" },
+            { "scene": "boardroom-kavya", "narration": "SIX MONTHS LATER. KAVYA AT THE Q-REVIEW.", "dialog": [{ "speaker": "kavya", "text": "Hire-to-success: **71%**. Same headcount. Same budget. Different filter." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "IF YOUR JD DESCRIBES WORK AI DOES, YOUR FUNNEL FILTERS FOR THE WRONG PEOPLE." }
           ]
         },
         {
@@ -849,6 +882,17 @@
             { "id": "b", "label": "Optimise for **decision speed per person**, not throughput per team. AI handles connective tissue; humans steer. Spans stay thin; depth grows.", "correct": true, "explain": "Captures the actual lever: per-person decision authority + AI doing hand-off work. The shape compounds." },
             { "id": "c", "label": "Two pods of N people, each fully AI-augmented.", "correct": false, "explain": "Pod-isation without re-thinking spans is window dressing. Same hand-offs, fancier label." },
             { "id": "d", "label": "Hire AI-natives only. They'll figure out the rest.", "correct": false, "explain": "AI-fluency isn't a substitute for org design. You'll get fast individuals trapped in slow structure." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "The twelve-person team that wasn't.",
+          "panels": [
+            { "scene": "handshake", "narration": "Q1 · SAME BUDGET. TWO POSTURES.", "dialog": [{ "speaker": "rina", "text": "Scale it. Hire 8 more." }], "sfxAfter": "TICK . . ." },
+            { "scene": "boardroom-rina", "narration": "Q3 · RINA'S 16-PERSON TEAM.", "dialog": [{ "speaker": "rina", "text": "Half of them are blocked half the time." }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "SAME Q3 · KAVYA'S 8-PERSON TEAM.", "dialog": [{ "speaker": "kavya", "text": "Each report decides 60% of what crosses their desk." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "ic-desk", "narration": "AN IC AT KAVYA'S, TWO SEATS OVER.", "dialog": [{ "speaker": "sam", "text": "I'm trusted to ship without three approvals. **That's** why I stayed." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "AI MULTIPLIES CAPABILITY PER PERSON — NOT THE RIGHT NUMBER OF PEOPLE." }
           ]
         },
         {

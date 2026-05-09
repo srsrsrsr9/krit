@@ -359,7 +359,8 @@ Each lesson's \`blocks\` array contains objects of these types. **Type literal m
 - **Open with a moment, not a definition.** First card = a callout with a specific scenario.
 - **Every lesson ends with reflect + keyTakeaways.** 3–5 takeaways, ≤ 160 chars each, action-oriented.
 - **At least 1 hard interactive per lesson:** quiz / timedChallenge / branchScenario / bossBattle / cardSwipe / dragClassify / skillProof.
-- **At least 1 reveal per lesson:** revealCard or comicStrip — moves the story.
+- **At least 1 reveal per lesson:** revealCard or comicStrip — quick character beat.
+- **At least 1 panelComic per lesson:** the longitudinal narrative beat. 4–5 panels, scenes from the enum, narration in CAPS, dialog terse, SFX between panels. Place near the end of the lesson, before reflect + keyTakeaways.
 - **DO NOT use \`embedAnimation\`.** Animations are added separately.
 - **DO NOT include any markdown wrapper around the JSON. No \`\`\`json. No prose.**
 
