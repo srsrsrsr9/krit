@@ -20,6 +20,8 @@
     "db:import-course": "tsx prisma/seed/import-course.ts",
     "course:new": "tsx prisma/seed/showcase-course-new.ts",
     "course:import": "tsx prisma/seed/showcase-course-import.ts",
+    "course:archive": "tsx prisma/seed/showcase-course-archive.ts archive",
+    "course:restore": "tsx prisma/seed/showcase-course-archive.ts restore",
     "course:notes": "tsx scripts/generate-notes.ts",
     "course:audio": "bash scripts/render-tts-all.sh",
     "course:bonus": "node scripts/splice-bonus.mjs",
