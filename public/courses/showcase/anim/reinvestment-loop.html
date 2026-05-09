@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reinvestment Compounds</title>
+<style>
+  :root {
+    --bg: #fbf6ec;
+    --paper: #fffaf0;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --rule: #e5dfd0;
+    --rule-2: #d6cdb9;
+    --good: #10b981;
+    --grey: #9ca3af;
+    --saffron: #f59e0b;
+    --red: #ef4444;
+    --rust: #b45309;
+    --sky: #0ea5e9;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Inter", sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 240px;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+  .frame {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 720 / 405;
+  }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+
+  .caption {
+    position: absolute; left: 0; right: 0; bottom: -28px;
+    text-align: center; font-size: 14px; font-style: italic; color: var(--muted); height: 18px;
+  }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: cap1 28s var(--ease) infinite; }
+  .cap-2 { animation: cap2 28s var(--ease) infinite; }
+  .cap-3 { animation: cap3 28s var(--ease) infinite; }
+  .cap-4 { animation: cap4 28s var(--ease) infinite; }
+  @keyframes cap1 { 0%,2% {opacity:0} 5%,20% {opacity:1} 23%,100% {opacity:0} }
+  @keyframes cap2 { 0%,23% {opacity:0} 26%,42% {opacity:1} 45%,100% {opacity:0} }
+  @keyframes cap3 { 0%,45% {opacity:0} 48%,72% {opacity:1} 75%,100% {opacity:0} }
+  @keyframes cap4 { 0%,75% {opacity:0} 78%,95% {opacity:1} 97%,100% {opacity:0} }
+
+  .ctrls {
+    position: absolute; right: 12px; bottom: 12px;
+    display: flex; gap: 8px; z-index: 5; align-items: center;
+  }
+  .ctrl {
+    height: 36px; padding: 0 12px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: 18px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.12em;
+    line-height: 1; font-family: ui-monospace,monospace;
+    text-transform: uppercase;
+    transition: transform 160ms;
+  }
+  .ctrl:hover { transform: translateY(-1px); }
+  .ctrl.icon { width: 36px; padding: 0; justify-content: center; }
+  .ctrl.audio.locked {
+    background: var(--saffron); color: var(--ink);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,158,11,0.6); }
+    50%      { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(245,158,11,0); }
+  }
+
+  /* ─── Animation timeline (28s loop) ──────────────────────────────
+     0-1.5s   panels appear, both leaders fresh
+     1.5-4s   Q1: Rina banks, Kavya plants
+     4-8s     Q2: leaf sprouts on Kavya's plant
+     8-13s    Q3: bag rusts, Rina's IC drifts away, tree grows
+     13-18s   Q4: tree fruits, Rina's bag empty, IC departs
+     18-22s   Comparison bracket + numbers tick
+     22-25s   Final caption holds
+     25-28s   Fade for loop reset
+     ───────────────────────────────────────────────────────────── */
+
+  /* ── Capability lines (drawn forward) ── */
+  .line-rina   { stroke-dasharray: 290; stroke-dashoffset: 290; animation: drawLineFlat 28s var(--ease) infinite; }
+  .line-kavya  { stroke-dasharray: 290; stroke-dashoffset: 290; animation: drawLineRise 28s var(--ease) infinite; }
+  @keyframes drawLineFlat {
+    0%, 5%   { stroke-dashoffset: 290; }
+    14%      { stroke-dashoffset: 218; } /* through Q1 */
+    28%      { stroke-dashoffset: 145; } /* Q2 */
+    46%      { stroke-dashoffset: 73;  } /* Q3 */
+    64%      { stroke-dashoffset: 0;   } /* Q4 */
+    93%      { stroke-dashoffset: 0;   }
+    100%     { stroke-dashoffset: 290; }
+  }
+  @keyframes drawLineRise {
+    0%, 5%   { stroke-dashoffset: 290; }
+    14%      { stroke-dashoffset: 218; }
+    28%      { stroke-dashoffset: 145; }
+    46%      { stroke-dashoffset: 73;  }
+    64%      { stroke-dashoffset: 0;   }
+    93%      { stroke-dashoffset: 0;   }
+    100%     { stroke-dashoffset: 290; }
+  }
+
+  /* ── Quarter ticks pulse as we hit them ── */
+  .tick { transform-box: fill-box; transform-origin: center; opacity: 0.4; animation: tickHit 28s linear infinite; }
+  .tick.q1 { animation-delay: 0s; }
+  .tick.q2 { animation-delay: 0s; }
+  .tick.q3 { animation-delay: 0s; }
+  .tick.q4 { animation-delay: 0s; }
+  /* simple pulse: fade in opacity at quarter timestamps */
+  .tick.q1 { animation: tickQ1 28s linear infinite; }
+  .tick.q2 { animation: tickQ2 28s linear infinite; }
+  .tick.q3 { animation: tickQ3 28s linear infinite; }
+  .tick.q4 { animation: tickQ4 28s linear infinite; }
+  @keyframes tickQ1 { 0%,5% {opacity:0.4} 6%,8% {opacity:1; transform:scale(1.4)} 10%,93% {opacity:0.7; transform:scale(1)} 100% {opacity:0.4} }
+  @keyframes tickQ2 { 0%,16% {opacity:0.4} 17%,19% {opacity:1; transform:scale(1.4)} 21%,93% {opacity:0.7; transform:scale(1)} 100% {opacity:0.4} }
+  @keyframes tickQ3 { 0%,30% {opacity:0.4} 31%,33% {opacity:1; transform:scale(1.4)} 35%,93% {opacity:0.7; transform:scale(1)} 100% {opacity:0.4} }
+  @keyframes tickQ4 { 0%,46% {opacity:0.4} 47%,49% {opacity:1; transform:scale(1.4)} 51%,93% {opacity:0.7; transform:scale(1)} 100% {opacity:0.4} }
+
+  /* ── Bag of money (Rina) — life cycle ── */
+  .bag { transform-box: fill-box; transform-origin: bottom center; animation: bagLife 28s var(--ease) infinite; }
+  @keyframes bagLife {
+    0%, 5%    { transform: scale(1); fill: #d6a25a; }
+    8%        { transform: scale(1.08); fill: #d6a25a; }            /* squeeze proudly */
+    18%       { transform: scale(1); fill: #d6a25a; }
+    33%       { transform: scale(0.96); fill: #b89055; }            /* dulled */
+    50%       { transform: scale(0.85); fill: #8b6f3c; }            /* rusted, smaller */
+    72%       { transform: scale(0.7); fill: #6b5a36; }             /* almost gone */
+    93%       { transform: scale(0.7); fill: #6b5a36; }
+    100%      { transform: scale(1); fill: #d6a25a; }
+  }
+  .bag-coin { transform-box: fill-box; transform-origin: center; opacity: 0; animation: coinDrop 28s var(--ease) infinite; }
+  .bag-coin.b { animation-delay: 0.3s; }
+  .bag-coin.c { animation-delay: 0.6s; }
+  @keyframes coinDrop {
+    0%, 30%   { opacity: 0; transform: translate(0, 0) rotate(0); }
+    35%       { opacity: 1; transform: translate(0, 0) rotate(0); }
+    55%       { opacity: 1; transform: translate(8px, 30px) rotate(180deg); }
+    70%, 100% { opacity: 0; transform: translate(8px, 30px) rotate(180deg); }
+  }
+  .rina-mouth-smile  { animation: rinaSmile  28s linear infinite; }
+  .rina-mouth-flat   { animation: rinaFlat   28s linear infinite; }
+  .rina-mouth-frown  { animation: rinaFrown  28s linear infinite; }
+  @keyframes rinaSmile { 0%,30% {opacity:1} 32%,100% {opacity:0} }
+  @keyframes rinaFlat  { 0%,30% {opacity:0} 33%,55% {opacity:1} 57%,100% {opacity:0} }
+  @keyframes rinaFrown { 0%,55% {opacity:0} 60%,93% {opacity:1} 100% {opacity:0} }
+
+  /* ── IC drifting away from Rina (Sarah leaves) ── */
+  .ic-drift { transform-box: fill-box; transform-origin: center; opacity: 0; animation: drift 28s var(--ease) infinite; }
+  @keyframes drift {
+    0%, 35%    { opacity: 0; transform: translate(0, 0); }
+    40%        { opacity: 1; transform: translate(0, 0); }
+    65%        { opacity: 1; transform: translate(-110px, 8px); }
+    72%        { opacity: 0; transform: translate(-130px, 12px); }
+    100%       { opacity: 0; }
+  }
+
+  /* ── Seedling → tree (Kavya) ── */
+  .seedling { transform-box: fill-box; transform-origin: bottom center; animation: seedDip 28s var(--ease) infinite; }
+  @keyframes seedDip {
+    0%, 5%   { transform: scale(0.4); opacity: 0; }
+    10%      { transform: scale(0.6); opacity: 1; }    /* freshly planted */
+    16%      { transform: scale(0.6); opacity: 1; }
+    100%     { transform: scale(0.6); opacity: 1; }
+  }
+  .leaf-1 { transform-box: fill-box; transform-origin: bottom center; animation: leaf1 28s var(--ease) infinite; }
+  .leaf-2 { transform-box: fill-box; transform-origin: bottom center; animation: leaf2 28s var(--ease) infinite; }
+  .leaf-3 { transform-box: fill-box; transform-origin: bottom center; animation: leaf3 28s var(--ease) infinite; }
+  @keyframes leaf1 { 0%, 16% {transform:scale(0); opacity:0} 22%, 100% {transform:scale(1); opacity:1} }
+  @keyframes leaf2 { 0%, 30% {transform:scale(0); opacity:0} 36%, 100% {transform:scale(1); opacity:1} }
+  @keyframes leaf3 { 0%, 38% {transform:scale(0); opacity:0} 44%, 100% {transform:scale(1); opacity:1} }
+  .branch-1 { animation: branch1 28s var(--ease) infinite; transform-box: fill-box; transform-origin: 0% 100%; }
+  .branch-2 { animation: branch2 28s var(--ease) infinite; transform-box: fill-box; transform-origin: 0% 100%; }
+  @keyframes branch1 { 0%, 35% {transform:scale(0)} 42%, 100% {transform:scale(1)} }
+  @keyframes branch2 { 0%, 42% {transform:scale(0)} 48%, 100% {transform:scale(1)} }
+
+  /* trunk grows */
+  .trunk { stroke-dasharray: 60; stroke-dashoffset: 60; animation: trunkDraw 28s var(--ease) infinite; }
+  @keyframes trunkDraw {
+    0%, 10%   { stroke-dashoffset: 60; }
+    24%       { stroke-dashoffset: 30; }
+    44%       { stroke-dashoffset: 0; }
+    100%      { stroke-dashoffset: 0; }
+  }
+
+  /* fruit drops */
+  .fruit { transform-box: fill-box; transform-origin: center; opacity: 0; animation: fruitDrop 28s var(--ease) infinite; }
+  .fruit.b { animation-delay: 0.4s; }
+  .fruit.c { animation-delay: 0.8s; }
+  @keyframes fruitDrop {
+    0%, 46%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
+    50%       { opacity: 1; transform: translate(0, 0) scale(1); }
+    62%       { opacity: 1; transform: translate(0, 4px) scale(1.1); }
+    93%       { opacity: 1; transform: translate(0, 4px) scale(1); }
+    100%      { opacity: 0; }
+  }
+  .kavya-mouth-flat   { animation: kavyaFlat 28s linear infinite; }
+  .kavya-mouth-smile  { animation: kavyaSmile 28s linear infinite; }
+  .kavya-mouth-glow   { animation: kavyaGlow 28s linear infinite; }
+  @keyframes kavyaFlat  { 0%,16% {opacity:1} 18%,100% {opacity:0} }
+  @keyframes kavyaSmile { 0%,18% {opacity:0} 22%,50% {opacity:1} 53%,100% {opacity:0} }
+  @keyframes kavyaGlow  { 0%,53% {opacity:0} 58%,93% {opacity:1} 100% {opacity:0} }
+
+  /* ── Final bracket + tally ── */
+  .gap-bracket { stroke-dasharray: 80; stroke-dashoffset: 80; opacity: 0; animation: bracketDraw 28s var(--ease) infinite; }
+  @keyframes bracketDraw {
+    0%, 65%   { opacity: 0; stroke-dashoffset: 80; }
+    72%       { opacity: 1; stroke-dashoffset: 0; }
+    93%       { opacity: 1; }
+    100%      { opacity: 0; }
+  }
+  .gap-label { opacity: 0; animation: gapLabel 28s var(--ease) infinite; }
+  @keyframes gapLabel { 0%,72% {opacity:0} 78%,93% {opacity:1} 100% {opacity:0} }
+
+  .tally-rina { opacity: 0; animation: tallyR 28s var(--ease) infinite; }
+  .tally-kavya { opacity: 0; animation: tallyK 28s var(--ease) infinite; }
+  @keyframes tallyR { 0%,55% {opacity:0} 60%,93% {opacity:1} 100% {opacity:0} }
+  @keyframes tallyK { 0%,55% {opacity:0} 60%,93% {opacity:1} 100% {opacity:0} }
+
+  /* ── Q1 receipts that fade ── */
+  .receipt-saved { opacity: 0; animation: receipt 28s var(--ease) infinite; }
+  @keyframes receipt {
+    0%, 8%   { opacity: 0; transform: translateY(4px); }
+    12%      { opacity: 1; transform: translateY(0); }
+    24%      { opacity: 1; }
+    32%      { opacity: 0.3; }
+    93%      { opacity: 0.3; }
+    100%     { opacity: 0; }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; }
+    .line-rina, .line-kavya { stroke-dashoffset: 0 !important; }
+    .trunk { stroke-dashoffset: 0 !important; }
+    .leaf-1, .leaf-2, .leaf-3, .branch-1, .branch-2,
+    .fruit, .seedling, .tally-rina, .tally-kavya,
+    .gap-bracket, .gap-label, .kavya-mouth-glow, .rina-mouth-frown { opacity: 1 !important; transform: scale(1) !important; }
+    .bag { transform: scale(0.7) !important; fill: #6b5a36 !important; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: Two team leaders over four quarters; the leader who reinvests 10% of saved time outpaces the one who banks the savings, but only by quarter four">
+
+      <!-- divider -->
+      <line x1="360" y1="60" x2="360" y2="345" stroke="#e5dfd0" stroke-width="1" stroke-dasharray="3 3"/>
+
+      <!-- ─── HEADERS ─── -->
+      <g transform="translate(180, 38)">
+        <text text-anchor="middle" font-family="ui-monospace,monospace" font-size="16" letter-spacing="0.22em" fill="#9ca3af">TEAM A · BANK THE SAVINGS</text>
+      </g>
+      <g transform="translate(540, 38)">
+        <text text-anchor="middle" font-family="ui-monospace,monospace" font-size="16" letter-spacing="0.22em" fill="#9ca3af">TEAM B · REINVEST 10%</text>
+      </g>
+
+      <!-- ─── QUARTER TICKS (across both panels) ─── -->
+      <!-- Y at 240, x ticks at 80,170,260,330 (left), 410,500,590,660 (right) -->
+      <g font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">
+        <g transform="translate(80, 250)"><circle class="tick q1" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q1</text></g>
+        <g transform="translate(170, 250)"><circle class="tick q2" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q2</text></g>
+        <g transform="translate(260, 250)"><circle class="tick q3" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q3</text></g>
+        <g transform="translate(330, 250)"><circle class="tick q4" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q4</text></g>
+        <g transform="translate(410, 250)"><circle class="tick q1" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q1</text></g>
+        <g transform="translate(500, 250)"><circle class="tick q2" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q2</text></g>
+        <g transform="translate(590, 250)"><circle class="tick q3" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q3</text></g>
+        <g transform="translate(660, 250)"><circle class="tick q4" r="3" fill="#9ca3af"/><text y="14" text-anchor="middle">Q4</text></g>
+      </g>
+
+      <!-- Capability axes (faint horizontal rules) -->
+      <line x1="50" y1="240" x2="340" y2="240" stroke="#e5dfd0" stroke-width="1"/>
+      <line x1="380" y1="240" x2="670" y2="240" stroke="#e5dfd0" stroke-width="1"/>
+      <text x="50" y="105" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">CAPABILITY ↑</text>
+      <text x="380" y="105" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">CAPABILITY ↑</text>
+
+      <!-- ─── TEAM A LINE — flat across all quarters (slightly down at Q3 from drift) ─── -->
+      <path class="line-rina" d="M 50 240 L 80 240 L 170 240 L 260 244 L 330 246" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- ─── TEAM B LINE — small dip Q1, then climb ─── -->
+      <path class="line-kavya" d="M 380 240 L 410 246 L 500 230 L 590 200 L 660 160" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- ─── RINA + bag ─── -->
+      <g transform="translate(110, 175)">
+        <!-- Rina body -->
+        <rect x="-18" y="-12" width="36" height="32" rx="6" fill="#0ea5e9"/>
+        <!-- arms hugging bag -->
+        <rect x="-26" y="-4" width="8" height="20" rx="3" fill="#0ea5e9"/>
+        <rect x="18" y="-4" width="8" height="20" rx="3" fill="#0ea5e9"/>
+        <!-- head -->
+        <circle cx="0" cy="-28" r="14" fill="#fcd9b6"/>
+        <!-- hair (bun) -->
+        <path d="M-12 -36 Q -6 -44 0 -42 Q 6 -44 12 -36 L 12 -30 L -12 -30 Z" fill="#1f2937"/>
+        <circle cx="0" cy="-44" r="4" fill="#1f2937"/>
+        <!-- eyes -->
+        <circle cx="-5" cy="-28" r="1.4" fill="#1f2937"/>
+        <circle cx="5" cy="-28" r="1.4" fill="#1f2937"/>
+        <!-- mouth states -->
+        <path class="rina-mouth-smile" d="M-4 -22 Q 0 -19 4 -22" stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <line  class="rina-mouth-flat"  x1="-4" y1="-22" x2="4" y2="-22" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round"/>
+        <path  class="rina-mouth-frown" d="M-4 -19 Q 0 -23 4 -19" stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <!-- label -->
+        <text x="0" y="42" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">RINA</text>
+      </g>
+
+      <!-- Bag of money (held by Rina) -->
+      <g transform="translate(150, 195)">
+        <path class="bag" d="M-12 0 Q -16 -10 -10 -16 L 10 -16 Q 16 -10 12 0 L 14 14 Q 14 22 6 22 L -6 22 Q -14 22 -14 14 Z" fill="#d6a25a" stroke="#7c5a2c" stroke-width="1.4"/>
+        <text x="0" y="6" text-anchor="middle" font-family="ui-monospace,monospace" font-size="17" font-weight="700" fill="#fffaf0">$</text>
+        <!-- coins falling out (later in cycle) -->
+        <circle class="bag-coin"   cx="-6" cy="20" r="3" fill="#d6a25a" stroke="#7c5a2c" stroke-width="1"/>
+        <circle class="bag-coin b" cx="0"  cy="22" r="3" fill="#d6a25a" stroke="#7c5a2c" stroke-width="1"/>
+        <circle class="bag-coin c" cx="6"  cy="20" r="3" fill="#d6a25a" stroke="#7c5a2c" stroke-width="1"/>
+      </g>
+
+      <!-- Receipt that flashes "+savings" then fades -->
+      <g class="receipt-saved" transform="translate(218, 188)">
+        <rect x="-30" y="-9" width="60" height="18" rx="2" fill="#fffaf0" stroke="#10b981" stroke-width="1"/>
+        <text x="0" y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700" fill="#10b981">+ $ SAVED</text>
+        <text x="0" y="14" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="#9ca3af">(once)</text>
+      </g>
+
+      <!-- IC drifting away from Rina -->
+      <g class="ic-drift" transform="translate(155, 175)">
+        <!-- mini-IC -->
+        <rect x="-7" y="-6" width="14" height="14" rx="2" fill="#7c3aed"/>
+        <circle cx="0" cy="-12" r="6" fill="#fcd9b6"/>
+        <path d="M-4 -16 Q 0 -20 4 -16 L 4 -10 L -4 -10 Z" fill="#1f2937"/>
+        <!-- tiny suitcase -->
+        <rect x="6" y="0" width="8" height="6" rx="1" fill="#5b3f1f"/>
+        <line x1="8" y1="0" x2="12" y2="0" stroke="#5b3f1f" stroke-width="1.4"/>
+        <!-- label -->
+        <text x="0" y="20" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" letter-spacing="0.16em" fill="#9ca3af">SARAH</text>
+      </g>
+
+      <!-- ─── KAVYA + plant ─── -->
+      <g transform="translate(450, 175)">
+        <rect x="-18" y="-12" width="36" height="32" rx="6" fill="#10b981"/>
+        <rect x="-26" y="-4" width="8" height="20" rx="3" fill="#10b981"/>
+        <rect x="18" y="-4" width="8" height="20" rx="3" fill="#10b981"/>
+        <circle cx="0" cy="-28" r="14" fill="#fcd9b6"/>
+        <!-- hair: short with parting -->
+        <path d="M-12 -36 Q -6 -44 0 -42 Q 6 -44 12 -36 L 12 -28 L -12 -28 Z" fill="#0f3a2e"/>
+        <circle cx="-5" cy="-28" r="1.4" fill="#1f2937"/>
+        <circle cx="5" cy="-28" r="1.4" fill="#1f2937"/>
+        <line  class="kavya-mouth-flat"  x1="-4" y1="-22" x2="4" y2="-22" stroke="#1f2937" stroke-width="1.4" stroke-linecap="round"/>
+        <path  class="kavya-mouth-smile" d="M-4 -22 Q 0 -19 4 -22" stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path  class="kavya-mouth-glow"  d="M-5 -22 Q 0 -16 5 -22" stroke="#1f2937" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <!-- gardener's apron pocket detail -->
+        <rect x="-10" y="0" width="20" height="6" fill="#fffaf0" opacity="0.4"/>
+        <text x="0" y="42" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">KAVYA</text>
+      </g>
+
+      <!-- Pot + plant in front of Kavya -->
+      <g transform="translate(490, 218)">
+        <!-- pot -->
+        <path d="M-18 0 L 18 0 L 14 14 L -14 14 Z" fill="#a16207"/>
+        <ellipse cx="0" cy="0" rx="18" ry="3" fill="#92400e"/>
+        <ellipse cx="0" cy="0" rx="14" ry="2" fill="#3f1d10"/>
+        <!-- seedling base -->
+        <g class="seedling">
+          <line x1="0" y1="0" x2="0" y2="-14" stroke="#15803d" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="-6" cy="-10" rx="6" ry="3.5" fill="#10b981" transform="rotate(-30 -6 -10)"/>
+          <ellipse cx="6" cy="-12" rx="6" ry="3.5" fill="#10b981" transform="rotate(30 6 -12)"/>
+        </g>
+        <!-- trunk that grows -->
+        <line class="trunk" x1="0" y1="-5" x2="0" y2="-65" stroke="#15803d" stroke-width="3" stroke-linecap="round"/>
+        <!-- leaves added over time -->
+        <ellipse class="leaf-1" cx="-12" cy="-32" rx="10" ry="5" fill="#10b981" transform="rotate(-25 -12 -32)"/>
+        <ellipse class="leaf-2" cx="13" cy="-46" rx="11" ry="5.5" fill="#10b981" transform="rotate(28 13 -46)"/>
+        <ellipse class="leaf-3" cx="-15" cy="-58" rx="12" ry="6" fill="#10b981" transform="rotate(-22 -15 -58)"/>
+        <!-- branches -->
+        <line class="branch-1" x1="0" y1="-32" x2="-14" y2="-40" stroke="#15803d" stroke-width="2" stroke-linecap="round"/>
+        <line class="branch-2" x1="0" y1="-48" x2="14" y2="-54" stroke="#15803d" stroke-width="2" stroke-linecap="round"/>
+        <!-- fruits drop (artefacts shipped) -->
+        <g class="fruit" transform="translate(-12, -58)">
+          <circle r="5.5" fill="#ef4444"/>
+          <text y="2" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" font-weight="700" fill="#fffaf0">×1</text>
+        </g>
+        <g class="fruit b" transform="translate(8, -68)">
+          <circle r="5.5" fill="#ef4444"/>
+          <text y="2" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" font-weight="700" fill="#fffaf0">×2</text>
+        </g>
+        <g class="fruit c" transform="translate(-2, -80)">
+          <circle r="5.5" fill="#ef4444"/>
+          <text y="2" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" font-weight="700" fill="#fffaf0">×3</text>
+        </g>
+      </g>
+
+      <!-- ─── Final tally cards ─── -->
+      <g class="tally-rina" transform="translate(180, 322)">
+        <rect x="-70" y="-16" width="140" height="32" rx="4" fill="#fffaf0" stroke="#e5dfd0" stroke-width="1"/>
+        <text y="-2" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" letter-spacing="0.2em" fill="#9ca3af">RESULT · TEAM A</text>
+        <text y="11" text-anchor="middle" font-family="ui-monospace,monospace" font-size="17" font-weight="700" fill="#1f2937">0 artefacts · 1 attrition</text>
+      </g>
+      <g class="tally-kavya" transform="translate(540, 322)">
+        <rect x="-70" y="-16" width="140" height="32" rx="4" fill="#fffaf0" stroke="#10b981" stroke-width="1"/>
+        <text y="-2" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" letter-spacing="0.2em" fill="#10b981">RESULT · TEAM B</text>
+        <text y="11" text-anchor="middle" font-family="ui-monospace,monospace" font-size="17" font-weight="700" fill="#1f2937">3 artefacts · burnout ↓</text>
+      </g>
+
+      <!-- Comparison bracket spanning Q4 of both panels -->
+      <path class="gap-bracket" d="M 330 246 L 410 246 M 660 160 L 660 246 M 330 246 L 660 246" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+      <g class="gap-label" transform="translate(495, 230)">
+        <rect x="-32" y="-10" width="64" height="18" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+        <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700" fill="#92400e">THE GAP</text>
+      </g>
+    </svg>
+
+    <div class="caption">
+      <div class="cap cap-1">Same starting line. Two different leadership moves.</div>
+      <div class="cap cap-2">Rina banks. Kavya plants. Both look fine in Q1.</div>
+      <div class="cap cap-3">By Q3 the bag is rusting. Sarah quietly leaves.</div>
+      <div class="cap cap-4">By Q4, only one of them has something to show.</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(() => {
+  let ctx = null, masterGain = null, musicGain = null;
+  let unlocked = false, muted = true, bgNodes = [], scheduled = [];
+
+  function ensureCtx() {
+    if (ctx) return ctx;
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return null;
+    ctx = new C();
+    masterGain = ctx.createGain(); masterGain.gain.value = 0.0;
+    masterGain.connect(ctx.destination);
+    musicGain = ctx.createGain(); musicGain.gain.value = 0.16;
+    musicGain.connect(masterGain);
+    return ctx;
+  }
+  function startBg() {
+    if (!ctx || bgNodes.length) return;
+    // soft pad — rises slightly through the loop via filter sweep
+    const filt = ctx.createBiquadFilter();
+    filt.type = "lowpass"; filt.frequency.value = 600; filt.Q.value = 0.7;
+    filt.connect(musicGain);
+    const sweep = ctx.createOscillator();
+    const sweepGain = ctx.createGain();
+    sweep.type = "sine"; sweep.frequency.value = 1 / 28; // one cycle per loop
+    sweepGain.gain.value = 500;
+    sweep.connect(sweepGain); sweepGain.connect(filt.frequency);
+    sweep.start();
+    bgNodes.push(sweep, sweepGain, filt);
+    // root C2/C3 + fifth (G2) — warm
+    [65.41, 98.00, 130.81].forEach((f, i) => {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = i === 2 ? "triangle" : "sine"; o.frequency.value = f;
+      g.gain.value = i === 2 ? 0.05 : 0.14;
+      o.connect(g); g.connect(filt); o.start();
+      bgNodes.push(o, g);
+    });
+  }
+  function tone(freq, dur, type, gain, when = 0, glide = null) {
+    if (!ctx) return;
+    const t0 = ctx.currentTime + when;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t0);
+    if (glide) o.frequency.exponentialRampToValueAtTime(glide, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(masterGain);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  function noise(dur, gain, hp = 1500, when = 0) {
+    if (!ctx) return;
+    const t0 = ctx.currentTime + when;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "highpass"; filt.frequency.value = hp;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(filt); filt.connect(g); g.connect(masterGain);
+    src.start(t0); src.stop(t0 + dur + 0.05);
+  }
+
+  // 28s SFX cycle synced to keyframes
+  function scheduleCycle() {
+    if (!ctx) return;
+    // Q1 actions ~1.6s
+    // Rina cha-ching (bright two-tone)
+    tone(880, 0.10, "triangle", 0.20, 1.6);
+    tone(1320, 0.18, "triangle", 0.18, 1.7);
+    // Kavya seed-plop (low pop)
+    tone(140, 0.18, "sine", 0.20, 1.9, 80);
+    // Q2 first leaf chime ~5.0s — C5
+    tone(523.25, 0.5, "triangle", 0.16, 5.0);
+    // Q3 rusty creak ~9.0s
+    tone(220, 0.6, "sawtooth", 0.10, 9.0, 120);
+    noise(0.3, 0.04, 600, 9.2);
+    // leaves rustle ~10s
+    noise(0.5, 0.025, 4000, 10.0);
+    // Sarah leaves footsteps ~10.5-12s
+    [10.5, 11.1, 11.7].forEach((t) => tone(180, 0.06, "triangle", 0.10, t));
+    // tree branch growth ~12s — soft chime
+    tone(659.25, 0.5, "triangle", 0.13, 12.0); // E5
+    // Q4 fruit drops ~14-15s — three-note arpeggio
+    tone(659.25, 0.4, "triangle", 0.18, 13.6); // E5
+    tone(783.99, 0.4, "triangle", 0.18, 14.1); // G5
+    tone(1046.50, 0.6, "triangle", 0.20, 14.6);// C6
+    // bracket appears ~20s — soft thud
+    tone(220, 0.18, "sine", 0.16, 20.2);
+    tone(330, 0.32, "sine", 0.14, 20.4);
+    // final triumphant chord ~21s — C major
+    [261.63, 329.63, 392.00, 523.25].forEach((f, i) => tone(f, 1.6, "triangle", 0.10, 21.0 + i * 0.04));
+  }
+
+  function startSfxLoop() {
+    scheduleCycle();
+    const id = setInterval(scheduleCycle, 28000);
+    scheduled.push(id);
+  }
+
+  function unlock() {
+    ensureCtx(); if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+    if (!unlocked) { unlocked = true; startBg(); startSfxLoop(); }
+  }
+  function setMuted(m) {
+    muted = m;
+    if (!ctx || !masterGain) return;
+    masterGain.gain.cancelScheduledValues(ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(m ? 0.0 : 0.85, ctx.currentTime + 0.18);
+  }
+
+  function restartVisuals() {
+    document.querySelectorAll(".scene *, .caption *").forEach((c) => {
+      const cs = getComputedStyle(c);
+      if (cs.animationName !== "none") {
+        c.style.animation = "none";
+        // eslint-disable-next-line no-unused-expressions
+        c.offsetHeight;
+        c.style.animation = "";
+      }
+    });
+  }
+
+  window.addEventListener("message", (e) => {
+    if (e?.data?.type === "krit:start") {
+      unlock();
+      setMuted(false);
+      restartVisuals();
+    }
+    if (e?.data?.type === "krit:restart") {
+      restartVisuals();
+    }
+  });
+})();
+</script>
+</body>
+</html>

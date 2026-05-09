@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import { useGameSound } from "@/hooks/use-game-sound";
 import remarkGfm from "remark-gfm";
+import { motion } from "motion/react";
 import { CheckCircle2, XCircle, Lightbulb, Info, AlertTriangle, PartyPopper, PlayCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ContentBlock } from "@/lib/content/blocks";
@@ -23,6 +24,9 @@ import { FieldNotesBlock } from "./blocks/field-notes-block";
 import { HotspotRevealBlock } from "./blocks/hotspot-reveal-block";
 import { RevealCardBlock } from "./blocks/reveal-card-block";
 import { TimedChallengeBlock } from "./blocks/timed-challenge-block";
+import { DragClassifyBlock } from "./blocks/drag-classify-block";
+import { ComicStripBlock } from "./blocks/comic-strip-block";
+import { PanelComicBlock } from "./blocks/panel-comic-block";
 
 // Heavy new blocks — lazy-loaded to keep initial bundle slim.
 const BranchScenarioBlock = dynamic(
@@ -160,7 +164,13 @@ function BlockOne({
     case "revealCard":
       return <RevealCardBlock front={block.front} back={block.back} hint={block.hint} />;
     case "skillProof":
-      return <SkillProofBlock skill={block.skill} instruction={block.instruction} starter={block.starter} evalPattern={block.evalPattern} referenceAnswer={block.referenceAnswer} badgeLabel={block.badgeLabel} lang={block.lang} />;
+      return <SkillProofBlock skill={block.skill} instruction={block.instruction} choices={block.choices} starter={block.starter} evalPattern={block.evalPattern} referenceAnswer={block.referenceAnswer} badgeLabel={block.badgeLabel} lang={block.lang} />;
+    case "dragClassify":
+      return <DragClassifyBlock prompt={block.prompt} bins={block.bins} items={block.items} />;
+    case "comicStrip":
+      return <ComicStripBlock title={block.title} frames={block.frames} />;
+    case "panelComic":
+      return <PanelComicBlock title={block.title} panels={block.panels} />;
   }
 }
 
@@ -347,21 +357,78 @@ function Reflect({ prompt, lessonId, initial }: { prompt: string; lessonId?: str
 }
 
 function KeyTakeaways({ points }: { points: string[] }) {
+  function shareToWhatsApp() {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    const lines = points.map((p) => "• " + p).join("\n");
+    const text = `The 30-Minute Trap — a Krit lesson:\n\n${lines}\n\nFull lesson: ${url}`;
+    const encoded = encodeURIComponent(text);
+    // Native share if available (iOS / Android share sheets), else WhatsApp deeplink.
+    if (typeof navigator !== "undefined" && navigator.share) {
+      void navigator.share({ title: "The 30-Minute Trap", text }).catch(() => {
+        window.open(`https://wa.me/?text=${encoded}`, "_blank", "noopener,noreferrer");
+      });
+    } else {
+      window.open(`https://wa.me/?text=${encoded}`, "_blank", "noopener,noreferrer");
+    }
+  }
+
   return (
-    <div className="not-prose rounded-lg border border-primary/30 bg-primary/5 p-5">
-      <div className="mb-3 flex items-center gap-2 text-sm font-semibold">
-        <Lightbulb className="h-4 w-4 text-primary" />
-        Key takeaways
+    <div className="not-prose rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-5 shadow-sm">
+      <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-700">
+        <Lightbulb className="h-4 w-4" />
+        Take these home
       </div>
-      <ul className="space-y-2 text-sm">
+      <ul className="space-y-2.5 text-sm">
         {points.map((p, i) => (
-          <li key={i} className="flex gap-2">
-            <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-            <span>{p}</span>
-          </li>
+          <TakeawayLine key={i} text={p} index={i} />
         ))}
       </ul>
+
+      <button
+        type="button"
+        onClick={shareToWhatsApp}
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-transform hover:scale-[1.01] active:scale-[0.99]"
+      >
+        <WhatsAppIcon />
+        Share to WhatsApp
+      </button>
+      <p className="mt-2 text-center text-[10px] uppercase tracking-[0.18em] text-amber-700/60">
+        Send these takeaways to a teammate
+      </p>
     </div>
+  );
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-1.6-.8-2.7-1.4-3.8-3.2-.3-.5.3-.5.8-1.5.1-.2 0-.3 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4s-1 1-1 2.4 1.1 2.8 1.2 3c.1.2 2.1 3.2 5.2 4.5 1.9.8 2.6.9 3.6.7.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.4-.1-.2-.3-.2-.6-.4Zm-5.4 7.4c-1.7 0-3.4-.5-4.9-1.3l-3.5.9.9-3.4c-.9-1.5-1.4-3.3-1.4-5 0-5.4 4.4-9.8 9.8-9.8 2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.7 9.8Zm0-21.4c-6.4 0-11.6 5.2-11.6 11.6 0 2 .5 4 1.5 5.7l-1.6 5.9 6-1.6c1.7.9 3.6 1.4 5.6 1.4 6.4 0 11.6-5.2 11.6-11.6S18.5.4 12.1.4Z" />
+    </svg>
+  );
+}
+
+function TakeawayLine({ text, index }: { text: string; index: number }) {
+  // Each takeaway gets a tiny cartoon mark, varied by index for visual rhythm.
+  const marks = ["🌱", "⚡", "🛡", "🔁"];
+  const mark = marks[index % marks.length]!;
+  return (
+    <motion.li
+      initial={{ opacity: 0, x: -8 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.08 + index * 0.18, duration: 0.45, ease: [0.22, 0.61, 0.36, 1] }}
+      className="flex items-start gap-3 rounded-lg bg-white/60 px-3 py-2.5"
+    >
+      <motion.span
+        initial={{ rotate: -10, scale: 0.6 }}
+        animate={{ rotate: 0, scale: 1 }}
+        transition={{ delay: 0.18 + index * 0.18, duration: 0.4, type: "spring" }}
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-200 text-base"
+        aria-hidden
+      >
+        {mark}
+      </motion.span>
+      <span className="leading-snug">{text}</span>
+    </motion.li>
   );
 }
 

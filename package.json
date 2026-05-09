@@ -4,7 +4,7 @@
   "private": true,
   "description": "Krit — skill-first LMS for corporate and retail learners",
   "scripts": {
-    "dev": "next dev",
+    "dev": "(sleep 5 && touch src/app/globals.css >/dev/null 2>&1) & next dev",
     "build": "prisma generate && next build",
     "postinstall": "prisma generate",
     "start": "next start",

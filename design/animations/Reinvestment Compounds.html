@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reinvestment compounds</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     PALETTE & PAGE
+     ------------------------------------------------------------
+     Per spec: warm bg #FFF7ED, ink #1F2937, slate #6B7280,
+     saffron #F59E0B, emerald #10B981, red #F43F5E.
+     Typography: DM Sans for prose, DM Mono for KPIs.
+     ============================================================ */
+  :root {
+    --bg:       #FFF7ED;
+    --ink:      #1F2937;
+    --ink-2:    #4B5563;
+    --slate:    #6B7280;
+    --rule:     #E7DFD2;
+    --rule-2:   #D6CDB9;
+    --saffron:  #F59E0B;
+    --emerald:  #10B981;
+    --red:      #F43F5E;
+    --ease:     cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.5rem, 3vw, 2rem);
+  }
+
+  .frame {
+    width: 100%;
+    max-width: 720px;
+  }
+  .anim {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 720 / 405;
+    background: var(--bg);
+  }
+
+  /* Ambient page caption (helps contextualise the loop, separate from
+     the in-frame stage-5 caption). */
+  .caption-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--slate);
+    letter-spacing: 0.02em;
+  }
+  .caption-line .lhs { font-family: 'DM Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.12em; font-size: 10.5px; }
+  .caption-line .rhs { font-style: italic; font-family: 'Source Serif 4', Georgia, serif; }
+
+  /* ============================================================
+     TIMELINE  (14s loop)
+     ------------------------------------------------------------
+     Stage beats expressed as percent of 14s:
+       0s   = 0%       title beat begins
+       1.5s = 10.714%  Q1 begins, KPIs flip from 0 → live
+       4s   = 28.571%  Q2 reached
+       5.5s = 39.286%  shipped 1 → 2 on Team B
+       7s   = 50%      Q3 reached
+       8s   = 57.143%  green label appears on Team B
+       9s   = 64.286%  red label appears on Team A
+       10s  = 71.429%  Q4 reached
+       12s  = 85.714%  bracket + caption settled
+       13s  = 92.857%  hold ends, fade-out begins
+       14s  = 100%     loop reset
+     ============================================================ */
+
+  /* Master fade hides the loop snap so each element can reset
+     cleanly between iterations. */
+  @keyframes masterFade {
+    0%    { opacity: 0; }
+    3.5%  { opacity: 1; }
+    92%   { opacity: 1; }
+    100%  { opacity: 0; }
+  }
+  .stage {
+    opacity: 0;
+    animation: masterFade 14s linear infinite;
+  }
+
+  /* ---- Title beat (0 → 1.5s) ---- */
+  @keyframes titleIn {
+    0%    { opacity: 0; transform: translateY(-3px); }
+    7%    { opacity: 1; transform: translateY(0); }
+    92%   { opacity: 1; }
+    100%  { opacity: 0; }
+  }
+  .title-text {
+    opacity: 0;
+    animation: titleIn 14s var(--ease) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .title-text.b { animation-delay: 0.18s; }
+
+  /* ---- Generic "appear at T, hold, fade" patterns ---- */
+  /* used by KPI labels that are persistent from the start */
+  @keyframes always {
+    0%    { opacity: 0; }
+    3.5%  { opacity: 1; }
+    92%   { opacity: 1; }
+    100%  { opacity: 0; }
+  }
+  .always-on { opacity: 0; animation: always 14s var(--ease) infinite; }
+
+  /* fade in starting at 1.5s, hold to end */
+  @keyframes inAt-1500 {
+    0%, 10.71%   { opacity: 0; }
+    14%          { opacity: 1; }
+    92%          { opacity: 1; }
+    100%         { opacity: 0; }
+  }
+  .in-1500 { opacity: 0; animation: inAt-1500 14s var(--ease) infinite; }
+
+  /* fade IN at 1.5s, fade OUT at 4s — used for "0 hrs/wk" placeholders */
+  @keyframes onlyEarly {
+    0%    { opacity: 1; }
+    10.71%{ opacity: 1; }
+    14%   { opacity: 0; }
+    100%  { opacity: 0; }
+  }
+  .only-early { opacity: 1; animation: onlyEarly 14s var(--ease) infinite; }
+
+  /* saffron note: appears at 1.5s, fades to grey label at 4s */
+  @keyframes saffronWindow {
+    0%, 10.71%   { opacity: 0; }
+    14%          { opacity: 1; }
+    28.57%       { opacity: 1; }
+    32%          { opacity: 0; }
+    100%         { opacity: 0; }
+  }
+  .saffron-note { opacity: 0; animation: saffronWindow 14s var(--ease) infinite; }
+
+  @keyframes greyAfter {
+    0%, 28.57%   { opacity: 0; }
+    32%          { opacity: 1; }
+    92%          { opacity: 1; }
+    100%         { opacity: 0; }
+  }
+  .grey-after { opacity: 0; animation: greyAfter 14s var(--ease) infinite; }
+
+  /* shipped counter Team B */
+  /* "0" visible from start until 4s */
+  @keyframes shipped0 {
+    0%, 28.57% { opacity: 1; }
+    32%        { opacity: 0; }
+    100%       { opacity: 0; }
+  }
+  .shipped-0 { opacity: 1; animation: shipped0 14s var(--ease) infinite; }
+
+  /* "1" visible 4s → 5.5s */
+  @keyframes shipped1 {
+    0%, 28.57%   { opacity: 0; }
+    32%          { opacity: 1; }
+    39.28%       { opacity: 1; }
+    42.5%        { opacity: 0; }
+    100%         { opacity: 0; }
+  }
+  .shipped-1 { opacity: 0; animation: shipped1 14s var(--ease) infinite; }
+
+  /* "2" visible 5.5s → 10s */
+  @keyframes shipped2 {
+    0%, 39.28%   { opacity: 0; }
+    42.5%        { opacity: 1; }
+    71.43%       { opacity: 1; }
+    74%          { opacity: 0; }
+    100%         { opacity: 0; }
+  }
+  .shipped-2 { opacity: 0; animation: shipped2 14s var(--ease) infinite; }
+
+  /* "4 · burnout: down" visible 10s onward */
+  @keyframes shipped4 {
+    0%, 71.43%   { opacity: 0; }
+    74%          { opacity: 1; }
+    92%          { opacity: 1; }
+    100%         { opacity: 0; }
+  }
+  .shipped-4 { opacity: 0; animation: shipped4 14s var(--ease) infinite; }
+
+  /* ---- Line drawing via clipPath rect width ---- */
+  /* Both lines draw from Q1 (1.5s) to Q4 (10s). Non-uniform keyframes
+     keep the leading edge aligned to the quarter ticks. */
+  @keyframes drawLine {
+    0%, 10.71%   { width: 0; }      /* before Q1 */
+    28.57%       { width: 90px; }   /* at Q2 */
+    50%          { width: 180px; }  /* at Q3 */
+    71.43%       { width: 270px; }  /* at Q4 */
+    92%          { width: 270px; }  /* hold during stage 5 */
+    100%         { width: 0; }      /* reset, hidden by master fade */
+  }
+  .clip-grow { animation: drawLine 14s linear infinite; }
+
+  /* ---- Departing team members on Team A (drift out 4 → 7s) ---- */
+  @keyframes drift {
+    0%, 28.57%   { opacity: 0; transform: translate(0,0); }
+    30%          { opacity: 1; transform: translate(0,0); }
+    50%          { opacity: 0; transform: translate(70px, -8px); }
+    100%         { opacity: 0; transform: translate(70px, -8px); }
+  }
+  .drift {
+    opacity: 0;
+    animation: drift 14s var(--ease) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .drift.d2 { animation-delay: 0.5s; }
+  .drift.d3 { animation-delay: 1.0s; }
+
+  /* ---- Q2 green tick on Team B (Sarah's refactor) ---- */
+  @keyframes tickIn {
+    0%, 28.57%   { opacity: 0; transform: scale(0.5); }
+    32%          { opacity: 1; transform: scale(1.05); }
+    35%          { opacity: 1; transform: scale(1); }
+    92%          { opacity: 1; transform: scale(1); }
+    100%         { opacity: 0; transform: scale(1); }
+  }
+  .tick-pop {
+    opacity: 0;
+    animation: tickIn 14s var(--ease) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* ---- Red label on Team A (Sarah left, ~9s) ---- */
+  @keyframes redIn {
+    0%, 64.28%   { opacity: 0; transform: translateY(-3px); }
+    68%          { opacity: 1; transform: translateY(0); }
+    92%          { opacity: 1; transform: translateY(0); }
+    100%         { opacity: 0; }
+  }
+  .red-label {
+    opacity: 0;
+    animation: redIn 14s var(--ease) infinite;
+  }
+
+  /* ---- Green label on Team B (~8s) ---- */
+  @keyframes greenIn {
+    0%, 57.14%   { opacity: 0; transform: translateY(-3px); }
+    61%          { opacity: 1; transform: translateY(0); }
+    92%          { opacity: 1; transform: translateY(0); }
+    100%         { opacity: 0; }
+  }
+  .green-label {
+    opacity: 0;
+    animation: greenIn 14s var(--ease) infinite;
+  }
+
+  /* ---- Bracket + caption (stage 5, 10s →) ---- */
+  @keyframes bracketIn {
+    0%, 71.43%   { opacity: 0; }
+    76%          { opacity: 1; }
+    92%          { opacity: 1; }
+    100%         { opacity: 0; }
+  }
+  .bracket-el { opacity: 0; animation: bracketIn 14s var(--ease) infinite; }
+
+  /* dotted projection line draws from Team A's Q4 toward bracket */
+  @keyframes projDraw {
+    0%, 71.43%   { stroke-dashoffset: 360; opacity: 0; }
+    76%          { stroke-dashoffset: 0;   opacity: 0.55; }
+    92%          { stroke-dashoffset: 0;   opacity: 0.55; }
+    100%         { opacity: 0; }
+  }
+  .proj-line {
+    stroke-dasharray: 360;
+    stroke-dashoffset: 360;
+    opacity: 0;
+    animation: projDraw 14s var(--ease) infinite;
+  }
+
+  @keyframes captionIn {
+    0%, 76%      { opacity: 0; transform: translateY(2px); }
+    80%          { opacity: 1; transform: translateY(0); }
+    92%          { opacity: 1; transform: translateY(0); }
+    100%         { opacity: 0; }
+  }
+  .stage5-caption {
+    opacity: 0;
+    animation: captionIn 14s var(--ease) infinite;
+  }
+
+  /* ============================================================
+     REDUCED MOTION — collapse to stage 5 immediately.
+     We freeze every animation at ~12s (85.7%) using a large
+     negative delay + paused state.
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .stage,
+    .stage * {
+      animation-play-state: paused !important;
+      animation-delay: -12s !important;
+    }
+  }
+
+  /* small helpers */
+  .mono { font-family: 'DM Mono', ui-monospace, monospace; }
+  .axis { fill: var(--slate); font-size: 9px; letter-spacing: 0.06em; }
+  .axis-y { fill: var(--slate); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .panel-title { font-size: 12px; font-weight: 600; fill: var(--ink); letter-spacing: 0.005em; }
+  .kpi-label { font-family: 'DM Mono', ui-monospace, monospace; font-size: 8.5px; fill: var(--slate); letter-spacing: 0.14em; text-transform: uppercase; }
+  .kpi-value { font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; fill: var(--ink); letter-spacing: 0.01em; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <svg class="anim"
+         viewBox="0 0 720 405"
+         xmlns="http://www.w3.org/2000/svg"
+         role="img"
+         aria-label="Animation: two teams over four quarters; the team that reinvests 10% of saved time outpaces the team that banked the savings, but only by quarter four">
+
+      <defs>
+        <!-- Saffron → emerald gradient along Team B's path -->
+        <linearGradient id="lineB-grad" x1="430" y1="215" x2="700" y2="110" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#F59E0B"/>
+          <stop offset="55%"  stop-color="#84BC59"/>
+          <stop offset="100%" stop-color="#10B981"/>
+        </linearGradient>
+
+        <!-- Clip rects whose width grows with the timeline -->
+        <clipPath id="clipA">
+          <rect class="clip-grow" x="70"  y="0" width="0" height="405"/>
+        </clipPath>
+        <clipPath id="clipB">
+          <rect class="clip-grow" x="430" y="0" width="0" height="405"/>
+        </clipPath>
+      </defs>
+
+      <g class="stage">
+
+        <!-- ===================================================
+             BACKGROUND DIVIDER (faint vertical between panels)
+             =================================================== -->
+        <line x1="360" y1="14" x2="360" y2="364"
+              stroke="var(--rule-2)" stroke-width="1"
+              stroke-dasharray="2 4"/>
+
+        <!-- ===================================================
+             PANEL A — "Team A — Bank the savings"
+             =================================================== -->
+        <!-- Title -->
+        <g class="title-text a">
+          <text x="20" y="28" class="panel-title">Team A</text>
+          <text x="58" y="28" class="panel-title" fill="var(--slate)" font-weight="400">— Bank the savings</text>
+        </g>
+
+        <!-- KPI labels (always visible from masterFade-in) -->
+        <g class="always-on">
+          <text x="20"  y="50" class="kpi-label">saved</text>
+          <text x="170" y="50" class="kpi-label">shipped</text>
+        </g>
+
+        <!-- KPI values for Team A -->
+        <!-- "0 hrs/wk" until 1.5s -->
+        <text x="20" y="66" class="kpi-value only-early">0 hrs/wk</text>
+        <!-- "8 hrs/wk · banked" from 1.5s -->
+        <text x="20" y="66" class="kpi-value in-1500">
+          8 hrs/wk
+          <tspan fill="var(--slate)"> · banked</tspan>
+        </text>
+
+        <!-- Shipped: stays 0 throughout for Team A -->
+        <text x="170" y="66" class="kpi-value always-on">0</text>
+
+        <!-- Saffron note then grey successor -->
+        <text x="20" y="83" class="mono saffron-note"
+              font-size="9.5" fill="var(--saffron)" font-weight="500"
+              letter-spacing="0.02em">
+          + 1 quarter of cost savings
+        </text>
+        <text x="20" y="83" class="mono grey-after"
+              font-size="9.5" fill="var(--slate)"
+              letter-spacing="0.02em">
+          savings line doesn’t repeat
+        </text>
+
+        <!-- Y-axis label, rotated -->
+        <text x="-215" y="14" transform="rotate(-90)"
+              class="axis-y" text-anchor="end">capability</text>
+
+        <!-- Plot frame (subtle) -->
+        <line x1="70"  y1="100" x2="70"  y2="315" stroke="var(--rule)" stroke-width="1"/>
+        <line x1="70"  y1="315" x2="340" y2="315" stroke="var(--rule)" stroke-width="1"/>
+
+        <!-- Quarter ticks + labels -->
+        <g class="axis" text-anchor="middle">
+          <line x1="70"  y1="312" x2="70"  y2="318" stroke="var(--rule-2)"/>
+          <line x1="160" y1="312" x2="160" y2="318" stroke="var(--rule-2)"/>
+          <line x1="250" y1="312" x2="250" y2="318" stroke="var(--rule-2)"/>
+          <line x1="340" y1="312" x2="340" y2="318" stroke="var(--rule-2)"/>
+          <text x="70"  y="332">Q1</text>
+          <text x="160" y="332">Q2</text>
+          <text x="250" y="332">Q3</text>
+          <text x="340" y="332">Q4</text>
+        </g>
+
+        <!-- Reference dotted "starting capability" line -->
+        <line x1="70" y1="215" x2="340" y2="215"
+              stroke="var(--rule-2)" stroke-width="1"
+              stroke-dasharray="1.5 3.5" opacity="0.7"/>
+
+        <!-- Departing team members (drift out 4–7s) -->
+        <g class="drift" transform="translate(252,148)">
+          <circle cx="0" cy="0" r="3" fill="var(--slate)"/>
+          <path d="M -3.2,4 Q 0,3 3.2,4 L 3.2,11 L -3.2,11 Z" fill="var(--slate)"/>
+        </g>
+        <g class="drift d2" transform="translate(275,148)">
+          <circle cx="0" cy="0" r="3" fill="var(--slate)"/>
+          <path d="M -3.2,4 Q 0,3 3.2,4 L 3.2,11 L -3.2,11 Z" fill="var(--slate)"/>
+        </g>
+        <g class="drift d3" transform="translate(298,148)">
+          <circle cx="0" cy="0" r="3" fill="var(--slate)"/>
+          <path d="M -3.2,4 Q 0,3 3.2,4 L 3.2,11 L -3.2,11 Z" fill="var(--slate)"/>
+        </g>
+
+        <!-- TEAM A line (flat, slight dip at Q4) -->
+        <g clip-path="url(#clipA)">
+          <path d="M 70,215 L 250,215 L 340,222"
+                fill="none"
+                stroke="var(--slate)"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </g>
+
+        <!-- Red label appears stage 4 -->
+        <g class="red-label" transform="translate(82, 268)">
+          <rect x="0" y="0" width="248" height="34" rx="6"
+                fill="#FFF1F2" stroke="var(--red)" stroke-width="1" opacity="0.95"/>
+          <text x="12" y="14" font-size="9" font-weight="600"
+                fill="var(--red)" letter-spacing="0.1em"
+                font-family="'DM Mono', ui-monospace, monospace">SARAH ↗</text>
+          <text x="12" y="27" font-size="10.5" fill="var(--ink)">
+            left for a team that invests in her growth
+          </text>
+        </g>
+
+        <!-- ===================================================
+             PANEL B — "Team B — Reinvest 10%"
+             =================================================== -->
+        <g class="title-text b">
+          <text x="380" y="28" class="panel-title">Team B</text>
+          <text x="418" y="28" class="panel-title" fill="var(--slate)" font-weight="400">— Reinvest 10%</text>
+        </g>
+
+        <!-- KPI labels -->
+        <g class="always-on">
+          <text x="380" y="50" class="kpi-label">saved</text>
+          <text x="560" y="50" class="kpi-label">shipped</text>
+        </g>
+
+        <!-- KPI values for Team B -->
+        <text x="380" y="66" class="kpi-value only-early">0 hrs/wk</text>
+        <text x="380" y="66" class="kpi-value in-1500">
+          8 hrs/wk
+          <tspan fill="var(--slate)"> · 10% reinvested</tspan>
+        </text>
+
+        <!-- Shipped artefacts counter (4 states crossfade) -->
+        <text x="560" y="66" class="kpi-value shipped-0">0</text>
+        <text x="560" y="66" class="kpi-value shipped-1">1</text>
+        <text x="560" y="66" class="kpi-value shipped-2">2</text>
+        <text x="560" y="66" class="kpi-value shipped-4">
+          4
+          <tspan fill="var(--slate)"> · burnout: down</tspan>
+        </text>
+
+        <!-- Y-axis label, rotated -->
+        <text x="-215" y="374" transform="rotate(-90)"
+              class="axis-y" text-anchor="end">capability</text>
+
+        <!-- Plot frame -->
+        <line x1="430" y1="100" x2="430" y2="315" stroke="var(--rule)" stroke-width="1"/>
+        <line x1="430" y1="315" x2="700" y2="315" stroke="var(--rule)" stroke-width="1"/>
+
+        <!-- Quarter ticks -->
+        <g class="axis" text-anchor="middle">
+          <line x1="430" y1="312" x2="430" y2="318" stroke="var(--rule-2)"/>
+          <line x1="520" y1="312" x2="520" y2="318" stroke="var(--rule-2)"/>
+          <line x1="610" y1="312" x2="610" y2="318" stroke="var(--rule-2)"/>
+          <line x1="700" y1="312" x2="700" y2="318" stroke="var(--rule-2)"/>
+          <text x="430" y="332">Q1</text>
+          <text x="520" y="332">Q2</text>
+          <text x="610" y="332">Q3</text>
+          <text x="700" y="332">Q4</text>
+        </g>
+
+        <!-- Reference dotted starting line -->
+        <line x1="430" y1="215" x2="700" y2="215"
+              stroke="var(--rule-2)" stroke-width="1"
+              stroke-dasharray="1.5 3.5" opacity="0.7"/>
+
+        <!-- TEAM B curve (dip then climb), gradient stroke -->
+        <g clip-path="url(#clipB)">
+          <path d="M 430,215
+                   C 446,221 458,228 472,228
+                   C 490,228 506,222 520,215
+                   C 552,205 575,182 610,165
+                   C 642,150 672,128 700,110"
+                fill="none"
+                stroke="url(#lineB-grad)"
+                stroke-width="2.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </g>
+
+        <!-- Q2 green tick + "Sarah's refactor" label -->
+        <g class="tick-pop" transform="translate(520, 198)">
+          <circle cx="0" cy="0" r="7" fill="white" stroke="var(--emerald)" stroke-width="1.5"/>
+          <path d="M -3,0 L -0.6,2.3 L 3,-2"
+                fill="none" stroke="var(--emerald)" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <g class="tick-pop" transform="translate(520, 180)">
+          <text x="0" y="0" font-size="9.5" fill="var(--ink)"
+                text-anchor="middle" font-weight="500">Sarah’s refactor</text>
+        </g>
+
+        <!-- Green label appears around 8s -->
+        <g class="green-label" transform="translate(454, 116)">
+          <rect x="0" y="0" width="232" height="34" rx="6"
+                fill="#ECFDF5" stroke="var(--emerald)" stroke-width="1" opacity="0.95"/>
+          <text x="12" y="14" font-size="9" font-weight="600"
+                fill="var(--emerald)" letter-spacing="0.1em"
+                font-family="'DM Mono', ui-monospace, monospace">POLICY ✓</text>
+          <text x="12" y="27" font-size="10.5" fill="var(--ink)">
+            this is now how we operate
+          </text>
+        </g>
+
+        <!-- ===================================================
+             STAGE 5 — bracket + caption
+             =================================================== -->
+
+        <!-- Dotted projection of Team A's Q4 level across panel B -->
+        <line class="proj-line"
+              x1="340" y1="222" x2="700" y2="222"
+              stroke="var(--slate)"
+              stroke-width="1"
+              stroke-dasharray="2 4"/>
+
+        <!-- Vertical bracket on right edge -->
+        <g class="bracket-el">
+          <line x1="708" y1="110" x2="708" y2="222"
+                stroke="var(--ink)" stroke-width="1.4"/>
+          <line x1="703" y1="110" x2="713" y2="110"
+                stroke="var(--ink)" stroke-width="1.4"/>
+          <line x1="703" y1="222" x2="713" y2="222"
+                stroke="var(--ink)" stroke-width="1.4"/>
+          <!-- "the gap" tag, leader line goes to the bracket centre -->
+          <line x1="640" y1="166" x2="703" y2="166"
+                stroke="var(--ink)" stroke-width="1"/>
+          <text x="636" y="170" font-size="10.5"
+                fill="var(--ink)" font-weight="500"
+                text-anchor="end" font-family="'Source Serif 4', Georgia, serif"
+                font-style="italic">the gap</text>
+        </g>
+
+        <!-- Stage 5 caption, muted italic -->
+        <g class="stage5-caption">
+          <text x="360" y="385"
+                text-anchor="middle"
+                font-family="'Source Serif 4', Georgia, serif"
+                font-style="italic"
+                font-size="13"
+                fill="var(--ink-2)">
+            the gap shows up only if you wait.
+          </text>
+        </g>
+
+      </g>
+    </svg>
+
+    <div class="caption-line">
+      <span class="lhs">Reinvestment compounds — 4Q loop</span>
+      <span class="rhs">bank → flat. reinvest → late lift.</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -335,11 +335,73 @@ export const RevealCardBlock = z.object({
   hint: z.string().optional(),
 });
 
-/** MASTERY — "Prove it" challenge with rule-based eval and badge unlock. */
+/** STORYTELLING — Phantom-style panel comic with scenes, narration boxes,
+ *  speech bubbles with tails, and SFX between panels. */
+export const PanelComicBlock = z.object({
+  type: z.literal("panelComic"),
+  title: z.string().optional(),
+  panels: z.array(z.object({
+    scene: z.enum([
+      "handshake", "boardroom-rina", "cfo-math",
+      "boardroom-kavya", "ic-desk", "ending",
+    ]),
+    /** Narration box, top of the panel — like Phantom's yellow caption. */
+    narration: z.string().optional(),
+    /** Speech bubbles overlaid on the scene. Up to 2 per panel. */
+    dialog: z.array(z.object({
+      speaker: z.enum(["sam", "cfo", "rina", "kavya"]).optional(),
+      text: z.string(),
+    })).max(2).optional(),
+    /** Sound-effect text rendered between this panel and the next. */
+    sfxAfter: z.string().optional(),
+  })).min(1).max(8),
+});
+
+/** STORYTELLING — Tap-to-reveal comic-strip frames with cartoon characters. */
+export const ComicStripBlock = z.object({
+  type: z.literal("comicStrip"),
+  title: z.string().optional(),
+  frames: z.array(z.object({
+    character: z.enum(["sam", "cfo", "rina", "kavya", "trap", "seedling", "narrator"]),
+    expression: z.enum(["neutral", "happy", "confused", "tired", "smug", "excited", "wilted", "frown"]).default("neutral"),
+    bubble: z.string(),
+    caption: z.string().optional(),
+  })).min(1).max(6),
+});
+
+/** ACHIEVEMENT — Drag scenarios into named bins; cartoon mascots react. */
+export const DragClassifyBlock = z.object({
+  type: z.literal("dragClassify"),
+  prompt: z.string(),
+  bins: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+    tone: z.enum(["safe", "danger", "neutral"]).default("neutral"),
+    /** Optional flavor text shown when an item lands here. */
+    flavor: z.string().optional(),
+  })).min(2).max(4),
+  items: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+    correctBinId: z.string(),
+    comment: z.string().optional(),
+  })).min(2).max(10),
+});
+
+/** MASTERY — "Prove it" challenge. Two modes: multi-choice (choices set) or
+ * free-text (evalPattern set). Choices is the default learner-friendly path. */
 export const SkillProofBlock = z.object({
   type: z.literal("skillProof"),
   skill: z.string(),
   instruction: z.string(),
+  /** When present, render as multi-choice (recommended). One must be correct. */
+  choices: z.array(z.object({
+    id: z.string(),
+    label: z.string(),
+    correct: z.boolean(),
+    explain: z.string().optional(),
+  })).min(2).max(5).optional(),
+  /** Free-text mode (legacy / when nuance must be expressed). */
   starter: z.string().optional(),
   evalPattern: z.string().optional(),
   referenceAnswer: z.string().optional(),
@@ -375,6 +437,9 @@ export const ContentBlock = z.discriminatedUnion("type", [
   BranchScenarioBlock,
   RevealCardBlock,
   SkillProofBlock,
+  DragClassifyBlock,
+  ComicStripBlock,
+  PanelComicBlock,
 ]);
 
 export type ContentBlock = z.infer<typeof ContentBlock>;

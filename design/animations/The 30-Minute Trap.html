@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The 30-Minute Trap</title>
+<style>
+  :root {
+    --bg: #FFF7ED;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --rule: #E7DFD2;
+    --good: #10B981;
+    --grey: #9CA3AF;
+    --saffron: #F59E0B;
+    --red: #F43F5E;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #ECE6DA;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    display: grid; place-items: center;
+  }
+  .wrap {
+    width: min(720px, 100vw);
+    aspect-ratio: 720 / 405;
+    position: relative;
+  }
+  .stage {
+    position: absolute; inset: 0;
+    background: var(--bg);
+    overflow: hidden;
+    color: var(--ink);
+  }
+  .art {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  /* ---- type ---- */
+  text {
+    font-family: ui-monospace, SFMono-Regular, Menlo, "Roboto Mono", monospace;
+    fill: var(--muted);
+    font-feature-settings: "tnum" 1;
+  }
+  .team-lbl {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .axis-rule {
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+  .task-lbl {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    fill: var(--muted);
+  }
+  .saffron-lbl {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    fill: var(--saffron);
+    opacity: 0;
+    animation: saffronFade 13s var(--ease) infinite;
+  }
+  .saffron-tick {
+    stroke: var(--saffron);
+    stroke-width: 1;
+    fill: none;
+    opacity: 0;
+    animation: saffronFade 13s var(--ease) infinite;
+  }
+  .throughput-lbl, .capability-lbl {
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    fill: var(--red);
+    opacity: 0;
+  }
+  .throughput-lbl { animation: redFadeTop 13s var(--ease) infinite; }
+  .capability-lbl { animation: redFadeBot 13s var(--ease) infinite; }
+
+  /* ---- blocks ---- */
+  .block {
+    width: 70px;
+    height: 40px;
+    rx: 2px;
+    fill: var(--good);
+    animation: blockCycle 13s var(--ease) infinite;
+  }
+  .reveal-mask {
+    fill: var(--bg);
+    animation: revealMask 13s var(--ease) infinite;
+  }
+
+  /* ---- icons (busywork stream) ---- */
+  .icon {
+    color: var(--grey);
+    opacity: 0;
+    transform: translateX(-34px);
+    animation: iconStream 13s var(--ease) infinite;
+    animation-delay: calc(var(--i, 0) * 0.045s);
+  }
+
+  /* ---- captions ---- */
+  .caption-row {
+    position: absolute;
+    bottom: 32px; left: 0; right: 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    height: 18px;
+    pointer-events: none;
+  }
+  .caption {
+    font-style: italic;
+    position: absolute; left: 0; right: 0; top: 0;
+    opacity: 0;
+  }
+  .cap1 { animation: cap1 13s var(--ease) infinite; }
+  .cap2 { animation: cap2 13s var(--ease) infinite; }
+  .cap3 { animation: cap3 13s var(--ease) infinite; }
+
+  /* ---- reset ---- */
+  .reset {
+    position: absolute;
+    right: 12px; bottom: 12px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: grid; place-items: center;
+    line-height: 1;
+    font-family: inherit;
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+  .reset:hover { color: var(--ink); border-color: color-mix(in oklab, var(--ink) 35%, transparent); }
+  .reset:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  /* ---- keyframes ---- */
+  @keyframes blockCycle {
+    /* stage 1: full width green (under mask) */
+    0%   { width: 70px; fill: var(--good); }
+    19%  { width: 70px; fill: var(--good); }
+    /* stage 2: shrink ~40% horizontally */
+    38.5%{ width: 42px; fill: var(--good); }
+    /* stage 3a: hold while icons stream */
+    53%  { width: 42px; fill: var(--good); }
+    /* stage 3b: regrow, interior turns grey */
+    61.5%{ width: 70px; fill: var(--grey); }
+    /* stage 4 + hold */
+    100% { width: 70px; fill: var(--grey); }
+  }
+  @keyframes revealMask {
+    0%   { transform: translateX(0); }
+    2%   { transform: translateX(0); }
+    19%  { transform: translateX(720px); }
+    100% { transform: translateX(720px); }
+  }
+  @keyframes saffronFade {
+    0%, 19%   { opacity: 0; }
+    23%, 60%  { opacity: 1; }
+    66%, 100% { opacity: 0; }
+  }
+  @keyframes redFadeTop {
+    0%, 61.5% { opacity: 0; }
+    66%, 100% { opacity: 1; }
+  }
+  @keyframes redFadeBot {
+    0%, 63%   { opacity: 0; }
+    68%, 100% { opacity: 1; }
+  }
+  @keyframes cap1 {
+    0%, 19% { opacity: 0; }
+    23%     { opacity: 1; }
+    35%     { opacity: 1; }
+    40%     { opacity: 0; }
+    100%    { opacity: 0; }
+  }
+  @keyframes cap2 {
+    0%, 38% { opacity: 0; }
+    42%     { opacity: 1; }
+    58%     { opacity: 1; }
+    63%     { opacity: 0; }
+    100%    { opacity: 0; }
+  }
+  @keyframes cap3 {
+    0%, 61%   { opacity: 0; }
+    66%, 100% { opacity: 1; }
+  }
+  @keyframes iconStream {
+    0%, 38.5%   { opacity: 0; transform: translateX(-34px); }
+    44%         { opacity: 1; transform: translateX(0); }
+    58%         { opacity: 1; transform: translateX(0); }
+    61.5%, 100% { opacity: 0; transform: translateX(0); }
+  }
+
+  /* ---- responsive: keep proportions, scale via SVG ---- */
+  @media (max-width: 360px) {
+    .team-lbl { font-size: 10px; }
+  }
+
+  /* ---- accessibility ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .block        { animation: none; width: 70px; fill: var(--grey); }
+    .reveal-mask  { animation: none; transform: translateX(720px); }
+    .saffron-lbl, .saffron-tick { animation: none; opacity: 0; }
+    .throughput-lbl, .capability-lbl { animation: none; opacity: 1; }
+    .cap1, .cap2 { animation: none; opacity: 0; }
+    .cap3        { animation: none; opacity: 1; }
+    .icon        { animation: none; opacity: 0; transform: translateX(0); }
+  }
+
+  /* paused class restarts everything */
+  .paused .block,
+  .paused .reveal-mask,
+  .paused .saffron-lbl,
+  .paused .saffron-tick,
+  .paused .throughput-lbl,
+  .paused .capability-lbl,
+  .paused .cap1,
+  .paused .cap2,
+  .paused .cap3,
+  .paused .icon { animation: none !important; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="stage" role="img" aria-label="Animation: AI saves time, then busywork reabsorbs it; throughput rises but capability stays flat">
+      <svg class="art" viewBox="0 0 720 405" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <!-- busywork (stream A) -->
+          <symbol id="ic-mail" viewBox="0 0 14 10" overflow="visible">
+            <rect x="0.5" y="0.5" width="13" height="9" rx="0.8" fill="none" stroke="currentColor" stroke-width="1"/>
+            <path d="M0.7 1.4 L7 6 L13.3 1.4" fill="none" stroke="currentColor" stroke-width="1"/>
+          </symbol>
+          <symbol id="ic-chat" viewBox="0 0 14 10" overflow="visible">
+            <path d="M1 1 H13 V7.5 H5.5 L3.2 9.6 L3.2 7.5 H1 Z" fill="currentColor"/>
+          </symbol>
+          <symbol id="ic-cal" viewBox="0 0 14 10" overflow="visible">
+            <rect x="0.5" y="2" width="13" height="7.5" rx="0.8" fill="none" stroke="currentColor" stroke-width="1"/>
+            <line x1="0.5" y1="4.4" x2="13.5" y2="4.4" stroke="currentColor" stroke-width="1"/>
+            <line x1="3.5" y1="0.5" x2="3.5" y2="2.4" stroke="currentColor" stroke-width="1"/>
+            <line x1="10.5" y1="0.5" x2="10.5" y2="2.4" stroke="currentColor" stroke-width="1"/>
+          </symbol>
+          <!-- task duplicates (stream B) -->
+          <symbol id="ic-check" viewBox="0 0 14 10" overflow="visible">
+            <rect x="0.5" y="0.5" width="13" height="9" rx="0.8" fill="none" stroke="currentColor" stroke-width="1"/>
+            <path d="M3.4 5.2 L5.6 7.2 L10.5 2.8" stroke="currentColor" fill="none" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </symbol>
+          <symbol id="ic-ticket" viewBox="0 0 14 10" overflow="visible">
+            <path d="M0.5 0.5 H13.5 V9.5 H0.5 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+            <path d="M0.5 4 a1.2 1.2 0 0 1 0 2" fill="var(--bg)" stroke="currentColor" stroke-width="1"/>
+            <path d="M13.5 4 a1.2 1.2 0 0 0 0 2" fill="var(--bg)" stroke="currentColor" stroke-width="1"/>
+            <line x1="7" y1="2" x2="7" y2="3.2" stroke="currentColor" stroke-width="1"/>
+            <line x1="7" y1="6.8" x2="7" y2="8" stroke="currentColor" stroke-width="1"/>
+          </symbol>
+          <symbol id="ic-doc" viewBox="0 0 12 10" overflow="visible">
+            <path d="M1 0.5 H8 L11 3 V9.5 H1 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+            <path d="M8 0.5 V3 H11" fill="none" stroke="currentColor" stroke-width="1"/>
+            <line x1="3" y1="5.5" x2="9" y2="5.5" stroke="currentColor" stroke-width="1"/>
+            <line x1="3" y1="7.5" x2="7.5" y2="7.5" stroke="currentColor" stroke-width="1"/>
+          </symbol>
+        </defs>
+
+        <!-- header -->
+        <text class="team-lbl" x="360" y="46" text-anchor="middle">TEAM &#183; 8 HRS / WEEK</text>
+        <line class="axis-rule" x1="59" y1="60" x2="661" y2="60"/>
+
+        <!-- stage-4 red labels -->
+        <text class="throughput-lbl" x="360" y="100" text-anchor="middle">THROUGHPUT +30%</text>
+
+        <!-- stage-2 saffron callout above block 1 -->
+        <text class="saffron-lbl" x="59" y="140">AI saved ~30 min</text>
+        <path class="saffron-tick" d="M104 146 L104 174"/>
+
+        <!-- task labels -->
+        <g>
+          <text class="task-lbl" x="94"  y="172" text-anchor="middle">review</text>
+          <text class="task-lbl" x="170" y="172" text-anchor="middle">ticket</text>
+          <text class="task-lbl" x="246" y="172" text-anchor="middle">doc</text>
+          <text class="task-lbl" x="322" y="172" text-anchor="middle">review</text>
+          <text class="task-lbl" x="398" y="172" text-anchor="middle">meeting</text>
+          <text class="task-lbl" x="474" y="172" text-anchor="middle">ticket</text>
+          <text class="task-lbl" x="550" y="172" text-anchor="middle">review</text>
+          <text class="task-lbl" x="626" y="172" text-anchor="middle">doc</text>
+        </g>
+
+        <!-- icon streams (rendered before blocks so blocks paint over them) -->
+        <g class="streams">
+          <!-- block 1 (review) -->
+          <g transform="translate(108 188)"><g class="icon" style="--i:0"><use href="#ic-mail"  width="14" height="10"/></g></g>
+          <g transform="translate(108 207)"><g class="icon" style="--i:1"><use href="#ic-check" width="14" height="10"/></g></g>
+          <!-- block 2 (ticket) -->
+          <g transform="translate(184 188)"><g class="icon" style="--i:2"><use href="#ic-chat"  width="14" height="10"/></g></g>
+          <g transform="translate(184 207)"><g class="icon" style="--i:3"><use href="#ic-ticket" width="14" height="10"/></g></g>
+          <!-- block 3 (doc) -->
+          <g transform="translate(260 188)"><g class="icon" style="--i:4"><use href="#ic-cal"   width="14" height="10"/></g></g>
+          <g transform="translate(261 207)"><g class="icon" style="--i:5"><use href="#ic-doc"   width="12" height="10"/></g></g>
+          <!-- block 4 (review) -->
+          <g transform="translate(336 188)"><g class="icon" style="--i:6"><use href="#ic-mail"  width="14" height="10"/></g></g>
+          <g transform="translate(336 207)"><g class="icon" style="--i:7"><use href="#ic-check" width="14" height="10"/></g></g>
+          <!-- block 5 (meeting) -->
+          <g transform="translate(412 188)"><g class="icon" style="--i:8"><use href="#ic-chat"  width="14" height="10"/></g></g>
+          <g transform="translate(412 207)"><g class="icon" style="--i:9"><use href="#ic-cal"   width="14" height="10"/></g></g>
+          <!-- block 6 (ticket) -->
+          <g transform="translate(488 188)"><g class="icon" style="--i:10"><use href="#ic-cal"   width="14" height="10"/></g></g>
+          <g transform="translate(488 207)"><g class="icon" style="--i:11"><use href="#ic-ticket" width="14" height="10"/></g></g>
+          <!-- block 7 (review) -->
+          <g transform="translate(564 188)"><g class="icon" style="--i:12"><use href="#ic-mail"  width="14" height="10"/></g></g>
+          <g transform="translate(564 207)"><g class="icon" style="--i:13"><use href="#ic-check" width="14" height="10"/></g></g>
+          <!-- block 8 (doc) -->
+          <g transform="translate(640 188)"><g class="icon" style="--i:14"><use href="#ic-chat"  width="14" height="10"/></g></g>
+          <g transform="translate(641 207)"><g class="icon" style="--i:15"><use href="#ic-doc"   width="12" height="10"/></g></g>
+        </g>
+
+        <!-- blocks -->
+        <g class="blocks">
+          <rect class="block" x="59"  y="180"/>
+          <rect class="block" x="135" y="180"/>
+          <rect class="block" x="211" y="180"/>
+          <rect class="block" x="287" y="180"/>
+          <rect class="block" x="363" y="180"/>
+          <rect class="block" x="439" y="180"/>
+          <rect class="block" x="515" y="180"/>
+          <rect class="block" x="591" y="180"/>
+        </g>
+
+        <!-- reveal mask (paints bg over blocks initially, then slides off right) -->
+        <rect class="reveal-mask" x="0" y="172" width="722" height="56"/>
+
+        <!-- baseline rule under blocks -->
+        <line class="axis-rule" x1="59" y1="232" x2="661" y2="232"/>
+
+        <!-- stage-4 capability label -->
+        <text class="capability-lbl" x="360" y="262" text-anchor="middle">CAPABILITY: FLAT</text>
+      </svg>
+
+      <div class="caption-row">
+        <span class="caption cap1">The team got time back.</span>
+        <span class="caption cap2">The minutes get reabsorbed.</span>
+        <span class="caption cap3">the trap</span>
+      </div>
+
+      <button class="reset" type="button" aria-label="Restart animation" title="Restart">&#x21bb;</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var stage = document.querySelector('.stage');
+      var btn = document.querySelector('.reset');
+      btn.addEventListener('click', function () {
+        stage.classList.add('paused');
+        // force reflow so removing the class restarts animations from 0%
+        void stage.offsetWidth;
+        stage.classList.remove('paused');
+      });
+    })();
+  </script>
+</body>
+</html>

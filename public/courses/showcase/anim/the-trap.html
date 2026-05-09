@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The 30-Minute Trap</title>
+<style>
+  :root {
+    --bg: #fbf6ec;
+    --paper: #fffaf0;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --rule: #e5dfd0;
+    --good: #10b981;
+    --grey: #9ca3af;
+    --saffron: #f59e0b;
+    --red: #ef4444;
+    --cfo: #8b5cf6;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Inter", sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 240px;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+  }
+  .frame {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 720 / 405;
+  }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+
+  /* ---- caption row (synced with stages) ---- */
+  .caption {
+    position: absolute;
+    left: 0; right: 0; bottom: -28px;
+    text-align: center;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--muted);
+    height: 18px;
+  }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: cap1 22s var(--ease) infinite; }
+  .cap-2 { animation: cap2 22s var(--ease) infinite; }
+  .cap-3 { animation: cap3 22s var(--ease) infinite; }
+  .cap-4 { animation: cap4 22s var(--ease) infinite; }
+
+  @keyframes cap1 { 0%,4% {opacity:0} 6%,16% {opacity:1} 18%,100% {opacity:0} }
+  @keyframes cap2 { 0%,18% {opacity:0} 21%,32% {opacity:1} 34%,100% {opacity:0} }
+  @keyframes cap3 { 0%,34% {opacity:0} 37%,55% {opacity:1} 58%,100% {opacity:0} }
+  @keyframes cap4 { 0%,58% {opacity:0} 62%,90% {opacity:1} 94%,100% {opacity:0} }
+
+  /* ---- audio toggle ---- */
+  .ctrls {
+    position: absolute; right: 12px; bottom: 12px;
+    display: flex; gap: 8px; z-index: 5; align-items: center;
+  }
+  .ctrl {
+    height: 36px; padding: 0 12px;
+    background: var(--ink); color: var(--bg);
+    border: none; border-radius: 18px;
+    cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.12em;
+    line-height: 1; font-family: ui-monospace,monospace;
+    text-transform: uppercase;
+    transition: transform 160ms, opacity 160ms;
+  }
+  .ctrl:hover { transform: translateY(-1px); }
+  .ctrl.icon { width: 36px; padding: 0; justify-content: center; }
+  .ctrl.audio.locked {
+    background: var(--saffron); color: var(--ink);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,158,11,0.6); }
+    50%      { transform: scale(1.04); box-shadow: 0 0 0 8px rgba(245,158,11,0); }
+  }
+
+  /* ============================================================
+     ANIMATION KEYFRAMES — 22s loop
+     0s    setup
+     1.0s  AI sparkle
+     2.5s  workload shrinks, +30 orbs detach
+     4.0s  orbs float up toward garden
+     5.5s  trap eyes pop
+     6.5s  trap opens, suction begins
+     7.5s  orbs sucked down
+     9.0s  trap regurgitates as shallow tasks
+     10.0s shallow tasks pile up on Sam
+     12.5s workload bar back full but grey
+     14.0s big text "THROUGHPUT +30%"
+     15.5s "CAPABILITY: ───"
+     17.0s "this is the trap" fade
+     20.5s fade out, loop
+     ============================================================ */
+
+  /* AI sparkles around Sam */
+  .ai-sparkle {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    animation: sparkle 22s var(--ease) infinite;
+  }
+  .ai-sparkle.b { animation-delay: 0.2s; }
+  .ai-sparkle.c { animation-delay: 0.4s; }
+  @keyframes sparkle {
+    0%, 4.5%   { opacity: 0; transform: scale(0.6); }
+    6%, 11%    { opacity: 1; transform: scale(1); }
+    13%        { opacity: 0; transform: scale(0.4); }
+    100%       { opacity: 0; }
+  }
+
+  /* Workload bar shrink (saved 30%) */
+  .work-shrink { animation: workShrink 22s var(--ease) infinite; transform-origin: left center; transform-box: fill-box; }
+  @keyframes workShrink {
+    0%, 11%   { transform: scaleX(1); fill: var(--good); }
+    14%, 56%  { transform: scaleX(0.625); fill: var(--good); }
+    60%       { transform: scaleX(1); fill: var(--grey); }
+    100%      { transform: scaleX(1); fill: var(--grey); }
+  }
+  .work-fill-grey {
+    opacity: 0;
+    animation: workGrey 22s var(--ease) infinite;
+  }
+  @keyframes workGrey {
+    0%, 56%   { opacity: 0; }
+    60%, 100% { opacity: 1; }
+  }
+
+  /* +30 min orbs detaching, floating up */
+  .orb {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: orb 22s var(--ease) infinite;
+  }
+  .orb.b { animation-delay: 0.25s; }
+  .orb.c { animation-delay: 0.5s; }
+  @keyframes orb {
+    0%, 11%    { opacity: 0; transform: translate(0, 0) scale(0.6); }
+    14%, 18%   { opacity: 1; transform: translate(0, 0) scale(1); }
+    25%        { opacity: 1; transform: translate(150px, -80px) scale(1); }
+    32%        { opacity: 1; transform: translate(280px, -110px) scale(1); }
+    36%        { opacity: 1; transform: translate(280px, -100px) scale(1.1); }   /* bounce near garden */
+    40%        { opacity: 1; transform: translate(280px, 30px) scale(1); }       /* trap pulls down */
+    44%        { opacity: 0; transform: translate(280px, 130px) scale(0.5); }    /* into trap */
+    100%       { opacity: 0; }
+  }
+
+  /* Garden seedling — eager then sad */
+  .seed-leaf { transform-box: fill-box; transform-origin: center bottom; animation: leafLife 22s var(--ease) infinite; }
+  @keyframes leafLife {
+    0%, 18%   { transform: scale(1, 1); fill: var(--good); }
+    25%       { transform: scale(1.15, 1.15); fill: var(--good); } /* eager */
+    36%       { transform: scale(1.2, 1.2) rotate(0deg); fill: var(--good); }
+    44%       { transform: scale(0.9, 0.7); fill: var(--good); }   /* dejected */
+    65%       { transform: scale(0.7, 0.5); fill: var(--grey); }   /* wilt */
+    100%      { transform: scale(0.7, 0.5); fill: var(--grey); }
+  }
+
+  /* The Trap — eyes pop, mouth opens */
+  .trap-group {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: trapEntry 22s var(--ease) infinite;
+  }
+  @keyframes trapEntry {
+    0%, 23%   { opacity: 0; transform: translate(0, 30px) scale(0.7); }
+    27%       { opacity: 1; transform: translate(0, 0) scale(1); }
+    100%      { opacity: 1; transform: translate(0, 0) scale(1); }
+  }
+  .trap-mouth {
+    transform-box: fill-box;
+    transform-origin: center top;
+    animation: trapMouth 22s var(--ease) infinite;
+  }
+  @keyframes trapMouth {
+    0%, 27%   { transform: scaleY(0.4); }
+    32%, 44%  { transform: scaleY(1); }     /* gaping */
+    50%       { transform: scaleY(0.55); }
+    100%      { transform: scaleY(0.55); }
+  }
+  .trap-eye {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: trapBlink 22s linear infinite;
+  }
+  @keyframes trapBlink {
+    0%, 30% { transform: scaleY(1); }
+    32%     { transform: scaleY(0.1); }
+    34%, 65%{ transform: scaleY(1); }
+    67%     { transform: scaleY(0.1); }
+    69%, 100% { transform: scaleY(1); }
+  }
+
+  /* Cash bait wiggling */
+  .bait { transform-box: fill-box; transform-origin: center; animation: baitWiggle 1.5s ease-in-out infinite; }
+  @keyframes baitWiggle {
+    0%, 100% { transform: rotate(-6deg) translateY(0); }
+    50%      { transform: rotate(6deg) translateY(-2px); }
+  }
+
+  /* Shallow task icons spawning on Sam's desk */
+  .shallow {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: shallowAppear 22s var(--ease) infinite;
+  }
+  .shallow.b { animation-delay: 0.15s; }
+  .shallow.c { animation-delay: 0.3s; }
+  .shallow.d { animation-delay: 0.45s; }
+  @keyframes shallowAppear {
+    0%, 41%   { opacity: 0; transform: scale(0); }
+    45%       { opacity: 1; transform: scale(1.2); }
+    47%, 80%  { opacity: 1; transform: scale(1); }
+    84%, 100% { opacity: 0; }
+  }
+
+  /* CFO entrance — appears mid-trap and stays */
+  .cfo-group { opacity: 0; animation: cfoIn 22s var(--ease) infinite; }
+  @keyframes cfoIn {
+    0%, 44%  { opacity: 0; }
+    47%, 88% { opacity: 1; }
+    92%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+  .cfo-thumb { transform-box: fill-box; transform-origin: center; animation: cfoThumb 1.4s ease-in-out infinite; }
+  @keyframes cfoThumb {
+    0%, 100% { transform: rotate(-3deg); }
+    50%      { transform: rotate(3deg); }
+  }
+
+  /* Sam's expression states */
+  .sam-mouth-happy   { animation: samHappy   22s linear infinite; }
+  .sam-mouth-confused{ animation: samConf    22s linear infinite; }
+  .sam-mouth-empty   { animation: samEmpty   22s linear infinite; }
+  @keyframes samHappy { 0%,40% {opacity:1} 41%,100% {opacity:0} }
+  @keyframes samConf  { 0%,40% {opacity:0} 42%,55% {opacity:1} 57%,100% {opacity:0} }
+  @keyframes samEmpty { 0%,55% {opacity:0} 60%,100% {opacity:1} }
+
+  /* Speech bubble */
+  .bubble {
+    transform-box: fill-box;
+    transform-origin: bottom left;
+    opacity: 0;
+    animation: bubble 22s var(--ease) infinite;
+  }
+  @keyframes bubble {
+    0%, 41%   { opacity: 0; transform: scale(0.6); }
+    44%, 52%  { opacity: 1; transform: scale(1); }
+    55%, 100% { opacity: 0; }
+  }
+
+  /* Final reveal text */
+  .reveal-throughput { opacity: 0; animation: revT 22s var(--ease) infinite; }
+  .reveal-capability { opacity: 0; animation: revC 22s var(--ease) infinite; }
+  .reveal-tagline    { opacity: 0; animation: revTag 22s var(--ease) infinite; }
+  @keyframes revT   { 0%, 62% { opacity: 0; transform: translateX(-6px) } 65%, 92% { opacity: 1; transform: translateX(0) } 95%,100% { opacity: 0 } }
+  @keyframes revC   { 0%, 67% { opacity: 0 } 70%, 92% { opacity: 1 } 95%,100% { opacity: 0 } }
+  @keyframes revTag { 0%, 73% { opacity: 0 } 78%, 92% { opacity: 1 } 95%,100% { opacity: 0 } }
+
+  /* Reduced motion: collapse to end state */
+  @media (prefers-reduced-motion: reduce) {
+    .ai-sparkle, .work-shrink, .work-fill-grey, .orb, .seed-leaf,
+    .trap-group, .trap-mouth, .trap-eye, .bait, .shallow, .cfo-group,
+    .cfo-thumb, .sam-mouth-happy, .sam-mouth-confused, .sam-mouth-empty,
+    .bubble, .reveal-throughput, .reveal-capability, .reveal-tagline,
+    .cap-1, .cap-2, .cap-3, .cap-4 {
+      animation: none !important;
+    }
+    .work-shrink { transform: scaleX(1); fill: var(--grey); }
+    .seed-leaf { transform: scale(0.7, 0.5); fill: var(--grey); }
+    .reveal-throughput, .reveal-capability, .reveal-tagline,
+    .cap-4, .sam-mouth-empty, .cfo-group { opacity: 1; }
+    .work-fill-grey { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: Sam saves time with AI; the Trap pulls those minutes back into shallow work; throughput rises but capability stays flat">
+
+      <!-- timestamp + label -->
+      <text x="36" y="40" font-family="ui-monospace,monospace" font-size="17" letter-spacing="0.2em" fill="#9ca3af">TUESDAY · 4:12 PM</text>
+      <text x="36" y="60" font-family="ui-monospace,monospace" font-size="17" letter-spacing="0.2em" fill="#9ca3af">SAM · ENGINEER</text>
+
+      <!-- workload bar above Sam -->
+      <g transform="translate(36, 85)">
+        <text x="0" y="-6" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">WORKLOAD · 8 HRS</text>
+        <rect x="0" y="0" width="240" height="14" rx="3" fill="#e5dfd0"/>
+        <rect class="work-shrink" x="0" y="0" width="240" height="14" rx="3" fill="#10b981"/>
+        <rect class="work-fill-grey" x="150" y="0" width="90" height="14" rx="3" fill="#9ca3af"/>
+      </g>
+
+      <!-- Sam (cartoon engineer) -->
+      <g transform="translate(110, 220)">
+        <!-- desk -->
+        <rect x="-60" y="60" width="160" height="6" rx="2" fill="#cbb796"/>
+        <!-- laptop -->
+        <rect x="-30" y="42" width="56" height="4" fill="#4b5563"/>
+        <rect x="-26" y="20" width="48" height="22" rx="2" fill="#1f2937"/>
+        <rect x="-22" y="24" width="40" height="14" fill="#10b981" opacity="0.3"/>
+        <!-- body -->
+        <rect x="-22" y="-10" width="44" height="34" rx="6" fill="#3b82f6"/>
+        <!-- arms -->
+        <rect x="-26" y="-2" width="8" height="22" rx="3" fill="#3b82f6"/>
+        <rect x="18" y="-2" width="8" height="22" rx="3" fill="#3b82f6"/>
+        <!-- head -->
+        <circle cx="0" cy="-30" r="18" fill="#fcd9b6"/>
+        <!-- hair -->
+        <path d="M-16 -38 Q -10 -50 0 -48 Q 10 -50 16 -38 Q 16 -32 12 -32 L -12 -32 Q -16 -32 -16 -38 Z" fill="#1f2937"/>
+        <!-- glasses -->
+        <circle cx="-7" cy="-30" r="4" fill="none" stroke="#1f2937" stroke-width="1.4"/>
+        <circle cx="7" cy="-30" r="4" fill="none" stroke="#1f2937" stroke-width="1.4"/>
+        <line x1="-3" y1="-30" x2="3" y2="-30" stroke="#1f2937" stroke-width="1.2"/>
+        <!-- headphones band -->
+        <path d="M-18 -42 Q 0 -56 18 -42" fill="none" stroke="#1f2937" stroke-width="2"/>
+        <ellipse cx="-18" cy="-32" rx="3" ry="5" fill="#1f2937"/>
+        <ellipse cx="18" cy="-32" rx="3" ry="5" fill="#1f2937"/>
+        <!-- mouth states -->
+        <path class="sam-mouth-happy"    d="M-5 -22 Q 0 -18 5 -22" stroke="#1f2937" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <path class="sam-mouth-confused" d="M-5 -22 L 5 -22" stroke="#1f2937" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <path class="sam-mouth-empty"    d="M-4 -20 Q 0 -22 4 -20" stroke="#1f2937" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+
+        <!-- AI sparkles -->
+        <g class="ai-sparkle" transform="translate(-36, -40)">
+          <path d="M0 -6 L1.5 -1.5 L6 0 L1.5 1.5 L0 6 L-1.5 1.5 L-6 0 L-1.5 -1.5 Z" fill="#f59e0b"/>
+        </g>
+        <g class="ai-sparkle b" transform="translate(40, -30)">
+          <path d="M0 -5 L1 -1 L5 0 L1 1 L0 5 L-1 1 L-5 0 L-1 -1 Z" fill="#f59e0b"/>
+        </g>
+        <g class="ai-sparkle c" transform="translate(-30, 20)">
+          <path d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z" fill="#f59e0b"/>
+        </g>
+      </g>
+
+      <!-- Speech bubble (mid-realisation: "...wait.") -->
+      <g class="bubble" transform="translate(150, 165)">
+        <path d="M0 0 H 92 Q 100 0 100 8 V 24 Q 100 32 92 32 H 22 L 14 40 L 18 32 H 8 Q 0 32 0 24 Z" fill="#fffaf0" stroke="#1f2937" stroke-width="1.3"/>
+        <text x="50" y="22" text-anchor="middle" font-size="17" fill="#1f2937" font-style="italic">…wait.</text>
+      </g>
+
+      <!-- 30-min orbs (start near workload bar, float to garden, get yanked into trap) -->
+      <g class="orb" transform="translate(180, 92)">
+        <circle r="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" fill="#92400e">+30</text>
+      </g>
+      <g class="orb b" transform="translate(180, 92)">
+        <circle r="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" fill="#92400e">+30</text>
+      </g>
+      <g class="orb c" transform="translate(180, 92)">
+        <circle r="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+        <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" fill="#92400e">+30</text>
+      </g>
+
+      <!-- Capability garden (top right) -->
+      <g transform="translate(560, 120)">
+        <text x="0" y="-22" font-family="ui-monospace,monospace" font-size="16" letter-spacing="0.18em" fill="#9ca3af">CAPABILITY</text>
+        <!-- pot -->
+        <path d="M-20 14 L 20 14 L 16 32 L -16 32 Z" fill="#cbb796"/>
+        <ellipse cx="0" cy="14" rx="20" ry="4" fill="#a89472"/>
+        <!-- soil -->
+        <ellipse cx="0" cy="14" rx="16" ry="3" fill="#5b3f1f"/>
+        <!-- seedling -->
+        <line x1="0" y1="14" x2="0" y2="-2" stroke="#15803d" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse class="seed-leaf" cx="-8" cy="0" rx="9" ry="5" fill="#10b981" transform="rotate(-30 -8 0)"/>
+        <ellipse class="seed-leaf" cx="8" cy="-4" rx="9" ry="5" fill="#10b981" transform="rotate(30 8 -4)"/>
+      </g>
+
+      <!-- The Trap (bottom right) -->
+      <g class="trap-group" transform="translate(560, 305)">
+        <!-- bait $$ -->
+        <g class="bait" transform="translate(-44, -28)">
+          <rect x="-10" y="-7" width="20" height="14" rx="2" fill="#10b981"/>
+          <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="16" font-weight="700" fill="#fffaf0">$</text>
+        </g>
+        <g class="bait" transform="translate(40, -22)">
+          <rect x="-10" y="-7" width="20" height="14" rx="2" fill="#10b981"/>
+          <text y="3" text-anchor="middle" font-family="ui-monospace,monospace" font-size="16" font-weight="700" fill="#fffaf0">$</text>
+        </g>
+
+        <!-- mouth (outer rim) -->
+        <ellipse cx="0" cy="0" rx="56" ry="12" fill="#1f2937"/>
+        <!-- mouth open -->
+        <ellipse class="trap-mouth" cx="0" cy="0" rx="50" ry="40" fill="#0b0d10"/>
+        <!-- teeth zigzag -->
+        <path class="trap-mouth" d="M-46 -2 L -38 6 L -30 -2 L -22 6 L -14 -2 L -6 6 L 2 -2 L 10 6 L 18 -2 L 26 6 L 34 -2 L 42 6" fill="none" stroke="#fffaf0" stroke-width="1.5"/>
+
+        <!-- eyes (above the rim) -->
+        <g transform="translate(-22, -28)">
+          <circle r="9" fill="#fffaf0" stroke="#1f2937" stroke-width="1.2"/>
+          <circle class="trap-eye" r="4" fill="#1f2937" cx="2" cy="0"/>
+        </g>
+        <g transform="translate(22, -28)">
+          <circle r="9" fill="#fffaf0" stroke="#1f2937" stroke-width="1.2"/>
+          <circle class="trap-eye" r="4" fill="#1f2937" cx="2" cy="0"/>
+        </g>
+
+        <!-- tiny CFO tie -->
+        <path d="M-2 12 L 2 12 L 5 18 L 0 30 L -5 18 Z" fill="#8b5cf6"/>
+
+        <!-- label -->
+        <text x="0" y="56" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.18em" fill="#9ca3af">THE TRAP</text>
+      </g>
+
+      <!-- Shallow tasks piling up on Sam's desk -->
+      <g class="shallow" transform="translate(180, 270)">
+        <rect x="-22" y="-10" width="60" height="14" rx="2" fill="#9ca3af"/>
+        <text x="8" y="0" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" fill="#fffaf0">+12 REVIEWS</text>
+      </g>
+      <g class="shallow b" transform="translate(220, 250)">
+        <rect x="-22" y="-10" width="60" height="14" rx="2" fill="#9ca3af"/>
+        <text x="8" y="0" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" fill="#fffaf0">+30% TICKETS</text>
+      </g>
+      <g class="shallow c" transform="translate(160, 244)">
+        <rect x="-22" y="-10" width="56" height="14" rx="2" fill="#9ca3af"/>
+        <text x="6" y="0" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" fill="#fffaf0">+8 REPORTS</text>
+      </g>
+      <g class="shallow d" transform="translate(210, 220)">
+        <rect x="-22" y="-10" width="60" height="14" rx="2" fill="#9ca3af"/>
+        <text x="8" y="0" text-anchor="middle" font-family="ui-monospace,monospace" font-size="14" fill="#fffaf0">"QUICK Q?"</text>
+      </g>
+
+      <!-- CFO (off-camera right, holding clipboard, gives a thumbs up) -->
+      <g class="cfo-group" transform="translate(680, 240)">
+        <!-- body -->
+        <rect x="-22" y="-10" width="44" height="50" rx="6" fill="#8b5cf6"/>
+        <!-- head -->
+        <circle cx="0" cy="-30" r="16" fill="#fcd9b6"/>
+        <!-- hair -->
+        <path d="M-14 -38 Q -8 -46 0 -44 Q 8 -46 14 -38 L 14 -32 L -14 -32 Z" fill="#374151"/>
+        <!-- glasses -->
+        <rect x="-10" y="-32" width="8" height="6" rx="1.5" fill="none" stroke="#1f2937" stroke-width="1.2"/>
+        <rect x="2" y="-32" width="8" height="6" rx="1.5" fill="none" stroke="#1f2937" stroke-width="1.2"/>
+        <!-- smug smile -->
+        <path d="M-5 -22 Q 0 -18 5 -22" stroke="#1f2937" stroke-width="1.4" fill="none"/>
+        <!-- clipboard -->
+        <rect x="-30" y="0" width="22" height="28" fill="#fffaf0" stroke="#1f2937" stroke-width="1"/>
+        <line x1="-26" y1="6" x2="-12" y2="6" stroke="#9ca3af" stroke-width="1"/>
+        <line x1="-26" y1="12" x2="-12" y2="12" stroke="#9ca3af" stroke-width="1"/>
+        <line x1="-26" y1="18" x2="-12" y2="18" stroke="#10b981" stroke-width="2"/>
+        <!-- thumbs up -->
+        <g class="cfo-thumb" transform="translate(28, 8)">
+          <rect x="-4" y="-3" width="14" height="10" rx="2" fill="#fcd9b6"/>
+          <rect x="-4" y="-12" width="6" height="10" rx="2" fill="#fcd9b6"/>
+        </g>
+        <text x="0" y="58" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" letter-spacing="0.16em" fill="#9ca3af">CFO</text>
+      </g>
+
+      <!-- Final reveal text -->
+      <g class="reveal-throughput" transform="translate(360, 350)">
+        <text text-anchor="middle" font-family="ui-monospace,monospace" font-size="18" letter-spacing="0.22em" font-weight="700" fill="#10b981">THROUGHPUT  +30%</text>
+      </g>
+      <g class="reveal-capability" transform="translate(360, 376)">
+        <text text-anchor="middle" font-family="ui-monospace,monospace" font-size="18" letter-spacing="0.22em" font-weight="700" fill="#ef4444">CAPABILITY  ─────</text>
+      </g>
+      <g class="reveal-tagline" transform="translate(360, 396)">
+        <text text-anchor="middle" font-family="serif" font-size="14" font-style="italic" fill="#6b7280">this is the trap.</text>
+      </g>
+    </svg>
+
+    <!-- Captions outside the SVG so they don't get clipped -->
+    <div class="caption">
+      <div class="cap cap-1">Sam saves three hours with AI. The team's first taste of leverage.</div>
+      <div class="cap cap-2">Those minutes try to reach the capability garden…</div>
+      <div class="cap cap-3">…until something else has plans for them.</div>
+      <div class="cap cap-4">Throughput up. Capability flat. Sam, mildly haunted.</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(() => {
+  // ── Audio engine: synthesised in-browser, no files ─────────────────────
+  let ctx = null;
+  let masterGain = null;
+  let musicGain = null;
+  let unlocked = false;
+  let muted = true;
+  let bgNodes = [];
+  let scheduled = [];
+
+  function ensureCtx() {
+    if (ctx) return ctx;
+    const C = window.AudioContext || window.webkitAudioContext;
+    if (!C) return null;
+    ctx = new C();
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 0.0; // start muted
+    masterGain.connect(ctx.destination);
+    musicGain = ctx.createGain();
+    musicGain.gain.value = 0.18;
+    musicGain.connect(masterGain);
+    return ctx;
+  }
+
+  function startBg() {
+    if (!ctx || bgNodes.length) return;
+    // warm pad: two slightly detuned sines + slow LFO on filter
+    const filt = ctx.createBiquadFilter();
+    filt.type = "lowpass";
+    filt.frequency.value = 800;
+    filt.Q.value = 0.6;
+    filt.connect(musicGain);
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type = "sine";
+    lfo.frequency.value = 0.18;
+    lfoGain.gain.value = 240;
+    lfo.connect(lfoGain);
+    lfoGain.connect(filt.frequency);
+    lfo.start();
+    bgNodes.push(lfo, lfoGain, filt);
+
+    [110, 110.4, 220].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = i === 2 ? "triangle" : "sine";
+      o.frequency.value = f;
+      g.gain.value = i === 2 ? 0.06 : 0.16;
+      o.connect(g); g.connect(filt);
+      o.start();
+      bgNodes.push(o, g);
+    });
+  }
+
+  function stopBg() {
+    bgNodes.forEach((n) => { try { n.stop?.(); n.disconnect?.(); } catch (e) { /* */ } });
+    bgNodes = [];
+  }
+
+  // Tone helper
+  function tone(freq, dur, type, gain, when = 0, glide = null) {
+    if (!ctx) return;
+    const t0 = ctx.currentTime + when;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t0);
+    if (glide) o.frequency.exponentialRampToValueAtTime(glide, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(masterGain);
+    o.start(t0); o.stop(t0 + dur + 0.05);
+  }
+  function noise(dur, gain, hp = 1500, when = 0) {
+    if (!ctx) return;
+    const t0 = ctx.currentTime + when;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "highpass";
+    filt.frequency.value = hp;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(filt); filt.connect(g); g.connect(masterGain);
+    src.start(t0); src.stop(t0 + dur + 0.05);
+  }
+
+  // Schedule one full 22s pass of SFX synced with the keyframes.
+  function scheduleCycle() {
+    if (!ctx) return;
+    // AI sparkle chime — 1.0s, rising tones
+    [880, 1100, 1320].forEach((f, i) => tone(f, 0.18, "triangle", 0.16, 1.0 + i * 0.07));
+    // workload shrink confirmation — soft "pop" ~2.6s
+    tone(660, 0.12, "sine", 0.14, 2.6);
+    // 3 orbs floating up — gentle ascending phrase ~4-5.5s
+    [523, 659, 784].forEach((f, i) => tone(f, 0.4, "triangle", 0.13, 4.0 + i * 0.45));
+    // trap eye pop ~5.5s — comedic "boing"
+    tone(220, 0.16, "sawtooth", 0.18, 5.5, 320);
+    tone(320, 0.10, "sawtooth", 0.16, 5.65, 220);
+    // suction whoosh ~6.5-8s
+    tone(800, 1.2, "sawtooth", 0.18, 6.5, 110);
+    noise(0.6, 0.05, 1800, 7.0);
+    // shallow ding storm ~9-11s
+    [9.0, 9.25, 9.55, 9.8, 10.1, 10.4].forEach((t, i) => tone(1500 + (i % 2) * 200, 0.06, "square", 0.10, t));
+    // somber cymbal ~13s
+    noise(0.9, 0.08, 800, 12.8);
+    // final reveal sting ~14-15s
+    tone(196, 0.6, "triangle", 0.18, 14.2);
+    tone(294, 0.8, "triangle", 0.16, 14.6);
+    // tagline low note ~17s
+    tone(73.42, 1.6, "sine", 0.12, 17.0);
+  }
+
+  function startSfxLoop() {
+    // schedule current cycle and re-arm every 22s
+    scheduleCycle();
+    const id = setInterval(scheduleCycle, 22000);
+    scheduled.push(id);
+  }
+  function stopSfxLoop() {
+    scheduled.forEach((id) => clearInterval(id));
+    scheduled = [];
+  }
+
+  function unlock() {
+    ensureCtx();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+    if (!unlocked) {
+      unlocked = true;
+      startBg();
+      startSfxLoop();
+    }
+  }
+  function setMuted(m) {
+    muted = m;
+    if (!ctx || !masterGain) return;
+    masterGain.gain.cancelScheduledValues(ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(m ? 0.0 : 0.85, ctx.currentTime + 0.18);
+  }
+
+  function restartVisuals() {
+    document.querySelectorAll(".scene *, .caption *").forEach((c) => {
+      const cs = getComputedStyle(c);
+      if (cs.animationName !== "none") {
+        c.style.animation = "none";
+        // eslint-disable-next-line no-unused-expressions
+        c.offsetHeight;
+        c.style.animation = "";
+      }
+    });
+  }
+
+  // Parent overlay click → unlock audio + restart visuals in sync.
+  window.addEventListener("message", (e) => {
+    if (e?.data?.type === "krit:start") {
+      unlock();
+      setMuted(false);
+      restartVisuals();
+    }
+    if (e?.data?.type === "krit:restart") {
+      restartVisuals();
+    }
+  });
+})();
+</script>
+</body>
+</html>

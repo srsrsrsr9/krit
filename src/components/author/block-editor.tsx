@@ -41,6 +41,9 @@ const BLOCK_LABEL: Record<BlockType, string> = {
   branchScenario: "Branching scenario",
   revealCard: "Reveal card",
   skillProof: "Skill proof",
+  dragClassify: "Drag classify",
+  comicStrip: "Comic strip",
+  panelComic: "Panel comic",
 };
 
 function newBlock(type: BlockType): ContentBlock {
@@ -75,6 +78,9 @@ function newBlock(type: BlockType): ContentBlock {
     case "branchScenario": return { type: "branchScenario", title: "A fork in the road", startNodeId: "n1", nodes: [{ id: "n1", body: "You face a decision.", choices: [{ id: "c1", label: "Go left", nextNodeId: "n2" }, { id: "c2", label: "Go right", outcome: "You reached the end." }] }, { id: "n2", body: "You went left.", choices: [{ id: "c3", label: "Continue", outcome: "Journey complete." }] }] };
     case "revealCard": return { type: "revealCard", front: "Provocative claim here.", back: "The nuanced truth that reframes it.", hint: "Tap to reveal" };
     case "skillProof": return { type: "skillProof", skill: "Skill name", instruction: "Demonstrate this skill by doing X.", starter: "", badgeLabel: "Skill unlocked" };
+    case "dragClassify": return { type: "dragClassify", prompt: "Sort these into the right bins.", bins: [{ id: "a", label: "Bin A", tone: "safe" }, { id: "b", label: "Bin B", tone: "danger" }], items: [{ id: "i1", label: "Example 1", correctBinId: "a" }, { id: "i2", label: "Example 2", correctBinId: "b" }] };
+    case "comicStrip": return { type: "comicStrip", title: "A small comic.", frames: [{ character: "sam", expression: "happy", bubble: "Setup line." }, { character: "trap", expression: "smug", bubble: "Punchline." }] };
+    case "panelComic": return { type: "panelComic", title: "A panel comic.", panels: [{ scene: "handshake", narration: "TWELVE MONTHS AGO.", dialog: [{ speaker: "rina", text: "We'll bank the savings." }] }, { scene: "ending", narration: "ONE YEAR LATER.", dialog: [{ speaker: "kavya", text: "We reinvested. The team is sharper." }] }] };
   }
 }
 

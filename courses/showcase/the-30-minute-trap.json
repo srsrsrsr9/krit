@@ -1,0 +1,301 @@
+{
+  "title": "The 30-Minute Trap",
+  "subtitle": "Where do the minutes AI gives you actually go?",
+  "estimatedMinutes": 11,
+  "skillHints": ["Leadership", "AI fluency", "Operating systems"],
+  "blocks": [
+    {
+      "type": "callout",
+      "tone": "info",
+      "title": "Tuesday, 4:12 PM. Your engineering manager Slacks: 'AI just saved us about an hour per code review.'",
+      "md": "What you reply in the next two minutes shapes whether — six months from now — your team is *sharper*, or just *busier*.\n\nThis lesson is about the leadership move 90% of leaders skip when AI gives their team time back."
+    },
+    {
+      "type": "revealCard",
+      "front": "Speed is the win.",
+      "back": "Speed makes you a faster version of who you already were. The win — the only thing here that compounds — is what you do with the *space* AI gave you. And only you can authorise that space.",
+      "hint": "Tap to flip"
+    },
+    {
+      "type": "comicStrip",
+      "title": "Six weeks later, on the same floor:",
+      "frames": [
+        { "character": "cfo", "expression": "smug", "bubble": "Throughput is up **30%**. Dashboard is glowing. Whatever you're doing — keep it up.", "caption": "Monday all-hands." },
+        { "character": "sam", "expression": "tired", "bubble": "More tickets. Same kind of tickets. Just… more of them.", "caption": "Sam, on Slack, to nobody in particular." },
+        { "character": "rina", "expression": "frown", "bubble": "Sarah's been weirdly quiet. She used to ask the hard questions.", "caption": "Rina, in a 1:1 she didn't want to have." },
+        { "character": "trap", "expression": "smug", "bubble": "*Throughput up. Capability flat. Working as designed.*", "caption": "And somewhere unseen — humming." },
+        { "character": "narrator", "expression": "neutral", "bubble": "**This is the 30-Minute Trap.**\n\nTime compressed, then quietly reabsorbed into the same shallow work. The CFO loves the dashboard. The IC updates her LinkedIn." }
+      ]
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/showcase/anim/the-trap.html",
+      "height": 360,
+      "caption": "8 hours of saved time, watched in motion."
+    },
+    {
+      "type": "dragClassify",
+      "prompt": "You just saw the pattern. Now spot it in the wild — drag each one to where it belongs.",
+      "bins": [
+        { "id": "trap", "label": "The 30-Minute Trap", "tone": "danger", "flavor": "Same shallow work, more of it." },
+        { "id": "reinvest", "label": "Reinvestment", "tone": "safe", "flavor": "Time blocked, capability compounds." }
+      ],
+      "items": [
+        { "id": "i1", "label": "After AI cut review time, the team got 30% more reviews assigned.", "correctBinId": "trap", "comment": "Volume rises, capability stays flat." },
+        { "id": "i2", "label": "Each IC blocks 2 hrs/wk for one self-chosen stretch.", "correctBinId": "reinvest", "comment": "Structure the time, free the goal." },
+        { "id": "i3", "label": "Saved hours quietly returned to next quarter's budget.", "correctBinId": "trap", "comment": "One-time gain. The savings line never repeats." },
+        { "id": "i4", "label": "Senior IC mentors a junior on AI workflow design every Friday.", "correctBinId": "reinvest", "comment": "One person's saved time becomes the team's multiplier." },
+        { "id": "i5", "label": "New dashboard tracking ticket throughput goes up on the wall.", "correctBinId": "trap", "comment": "If you reward volume, you'll get volume." },
+        { "id": "i6", "label": "Manager asks weekly: 'what's the human-only work here?'", "correctBinId": "reinvest", "comment": "Naming the AI-can't-touch work protects it." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "prompt": "Your team saved 8 hours/week thanks to AI. What's the highest-leverage reinvestment?",
+      "multi": false,
+      "choices": [
+        { "id": "a", "label": "Cut headcount and book the savings", "correct": false, "explain": "You banked a one-time gain and lost the compounding option. The CFO smiles for one quarter; the team thins out for ten." },
+        { "id": "b", "label": "Hand the team more of the same work", "correct": false, "explain": "This is the trap in pure form. Same shallow work, more of it. Your top IC is updating her CV by week six." },
+        { "id": "c", "label": "Carve out 1 hr/week each for cross-team learning", "correct": true, "explain": "You reinvested time into capability. Tiny upfront cost; compounding payoff. The hours are non-negotiable; the goal is self-chosen." },
+        { "id": "d", "label": "Wait and see what the team does with it", "correct": false, "explain": "Drift wins. Default behaviour is shallow work, not deep work. You'll get more Slack and slightly longer lunches." }
+      ]
+    },
+    {
+      "type": "branchScenario",
+      "title": "You're a VP whose team just compressed 8 hrs/week with AI",
+      "startNodeId": "n1",
+      "nodes": [
+        {
+          "id": "n1",
+          "body": "Sarah (your strongest IC) seems restless. Raj (your best PM) is still burning out. The CEO didn't ask about the savings.\n\nWhat do you do?",
+          "choices": [
+            { "id": "a", "label": "Quietly return the savings to the budget", "outcome": "You won the quarter, lost the year. Six months in, Sarah leaves for a place where her time is invested in her growth. Raj is still burning out — AI didn't touch the political work draining him. The savings line never repeats." },
+            { "id": "b", "label": "Tell the team to use the time however they want", "nextNodeId": "n2" },
+            { "id": "c", "label": "Run a structured reinvestment experiment for one quarter", "nextNodeId": "n3" }
+          ]
+        },
+        {
+          "id": "n2",
+          "body": "A month in, the team is using the time for: more Slack, slightly longer lunches, three extra Jira tickets nobody asked for.\n\nWhat's your move?",
+          "choices": [
+            { "id": "d", "label": "Pull it back and assign more work", "outcome": "Trust drops. You confirmed you didn't trust them. Output goes up 5%. Engagement drops 15%. Two top performers leave within the year." },
+            { "id": "e", "label": "Notice the gap and structure it now", "outcome": "Better — but you've already paid a tax in lost momentum and credibility. Next time, lead with structure. People don't drift toward depth; they drift toward defaults." }
+          ]
+        },
+        {
+          "id": "n3",
+          "body": "Quarter one: each person blocks 2 hrs/week on a self-chosen stretch. Sarah goes deep on systems design. Raj learns to delegate to AI itself.\n\n10 weeks in: Sarah ships a refactor that pays back the entire experiment in saved on-call. Raj's burnout is half what it was.\n\nWhat does the next quarter look like?",
+          "choices": [
+            { "id": "f", "label": "Make it standard. Reinvest 10% of saved time, every quarter.", "outcome": "Right move. You built a reinvestment loop into the team's operating system. The first dollar saved compounds into the tenth dollar earned. Sarah's still here in a year. So is the savings story for the board." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fieldNotes",
+      "title": "The fintech that almost banked the savings",
+      "source": "Anonymous COO at a Bengaluru series-C fintech",
+      "date": "March 2026",
+      "story": "When their support team's AI rollout cut handle time by 40%, the CFO immediately modelled a 12-person reduction in the next budget. The COO pushed back: 'Give me one quarter to try something else.'\n\nShe took the saved hours and pointed them at a single problem: agents had no way to escalate edge cases without losing context. Three months later, the agents themselves had built a tagged knowledge base. NPS went up 11 points. Churn dropped 2%. The 12 jobs stayed; the unit economics improved more than the proposed cut would have.\n\nThe CFO was right that there were savings. The COO was right that the *first* gain wasn't the biggest one.",
+      "takeaway": "The first dollar AI saves you is rarely the most valuable thing it gives you. The reinvestment compounds; the cost-cut is one-time."
+    },
+    {
+      "type": "comicStrip",
+      "title": "Inside that fintech, three months later:",
+      "frames": [
+        { "character": "cfo", "expression": "smug", "bubble": "Last quarter you said cuts. This quarter: 12 jobs intact. So… mistake?", "caption": "The CFO, eyebrow raised." },
+        { "character": "rina", "expression": "neutral", "bubble": "NPS up **11 points**. Churn down **2%**. Plus a tagged knowledge base your auditors will thank us for.", "caption": "The COO, calmly." },
+        { "character": "kavya", "expression": "excited", "bubble": "Also — *we still have a team.*", "caption": "An IC who remembered what was almost done." }
+      ]
+    },
+    {
+      "type": "timedChallenge",
+      "prompt": "Spot the trap: which of these is a 30-Minute Trap pattern in disguise?",
+      "timeLimitSec": 25,
+      "fastSec": 8,
+      "fullPoints": 5,
+      "partialPoints": 2,
+      "choices": [
+        { "id": "a", "label": "After AI cut report-writing time, the team got assigned 30% more report requests", "correct": true, "explain": "Classic trap: same shallow work, more of it. Throughput up, capability flat." },
+        { "id": "b", "label": "The team uses AI to draft, but a senior engineer always reviews", "correct": false, "explain": "That's healthy human-in-the-loop, not the trap." },
+        { "id": "c", "label": "The team blocks Friday afternoons for skill stretch", "correct": false, "explain": "That's reinvestment in action." },
+        { "id": "d", "label": "The leader asks 'what's the human-only work here?' weekly", "correct": false, "explain": "That's the *opposite* of the trap." }
+      ]
+    },
+    {
+      "type": "chatScenario",
+      "coach": { "name": "Atlas", "role": "Coaching you through Sarah's 1:1" },
+      "intro": [
+        "Sarah's your strongest IC. AI cut her review time in half. She walks into your 1:1 saying: *'I have time now. What should I do with it?'*",
+        "Pick the response that builds the reinvestment policy without making it feel like homework."
+      ],
+      "buckets": [
+        { "id": "structure", "label": "Structure the time", "tone": "safe" },
+        { "id": "free", "label": "Let her freelance", "tone": "neutral" },
+        { "id": "load", "label": "Load her up", "tone": "danger" }
+      ],
+      "scenarios": [
+        {
+          "id": "sc1",
+          "situation": "Sarah: 'I'm thinking I'll just take on more reviews. The team has the backlog.'",
+          "correctBucketId": "structure",
+          "explain": "More reviews is the trap. Re-direct: 'Block 2 hrs/wk. Pick one stretch — your call what.' You structure the time; she owns the goal. Both of you signed something, and neither of you feels micromanaged."
+        },
+        {
+          "id": "sc2",
+          "situation": "Sarah: 'Can I just experiment for a few weeks and see what sticks?'",
+          "correctBucketId": "free",
+          "explain": "She's already self-directing. Don't impose structure where it isn't needed. Just check in at week 4 with one specific question: 'What's the artefact you'll have to show for it?'"
+        },
+        {
+          "id": "sc3",
+          "situation": "Sarah: 'Honestly, I'm not sure I want to do anything different. I'm fine.'",
+          "correctBucketId": "structure",
+          "explain": "'Fine' is the seedling of disengagement. Block the 2 hrs anyway; let her pick a small stretch. Two months in, she'll either thank you or you'll have an honest conversation you should have had three months earlier."
+        }
+      ]
+    },
+    {
+      "type": "bossBattle",
+      "title": "Defend the Policy",
+      "setup": "Three months in. Three things happen this week that test whether your reinvestment policy survives reality. Each one is a real conversation you'll have. Pick the move that protects the policy under pressure.",
+      "coach": { "name": "Atlas", "role": "Your AI tutor" },
+      "stages": [
+        {
+          "id": "s1",
+          "prompt": "Your CEO sees the budget line in the quarterly review and asks, in front of the leadership team: 'Why are we paying for AI if your team's headcount didn't drop?' What's your reply?",
+          "options": [
+            { "id": "a", "label": "Show the original headcount we *would have hired* but didn't", "correct": true, "explain": "Frame the savings as avoided cost, not realised cost. Add the capability gain as the upside the cost-cut frame misses entirely.", "points": 3 },
+            { "id": "b", "label": "Defend the team — they're working hard", "correct": false, "explain": "True but irrelevant. The CEO is asking about ROI, not effort. You've conceded the frame.", "points": 0 },
+            { "id": "c", "label": "Promise to cut next quarter", "correct": false, "explain": "You just sold the policy for short-term peace. The team will read it.", "points": 0 }
+          ]
+        },
+        {
+          "id": "s2",
+          "prompt": "An IC says the reinvestment hours feel forced — 'when I'm forced to be creative, I'm not.' What's your move?",
+          "options": [
+            { "id": "a", "label": "Drop the policy — you don't want resentment", "correct": false, "explain": "Letting one voice kill a structural change is how teams default back. Six months from now you won't remember why you killed it.", "points": 0 },
+            { "id": "b", "label": "Make the goal of the hours self-chosen, but the time itself non-negotiable", "correct": true, "explain": "Structure the time, free the goal. Most resistance is to feeling micromanaged, not to growth itself.", "points": 3 },
+            { "id": "c", "label": "Privately tell them to skip the hours", "correct": false, "explain": "Now you have one rule for some, another for others. Trust evaporates the moment someone notices.", "points": 0 }
+          ]
+        },
+        {
+          "id": "s3",
+          "prompt": "End of quarter. Skills grew but velocity is flat. Board wants the velocity story. What do you tell them?",
+          "options": [
+            { "id": "a", "label": "Pivot the policy to focus on velocity next quarter", "correct": false, "explain": "You just bought a quarterly metric over a multi-year capability play. The board will respect it less, not more.", "points": 0 },
+            { "id": "b", "label": "Show one shipped artefact from the reinvestment hours and tie it to a future risk averted", "correct": true, "explain": "Concrete output + forward-looking story = the board can hold both. They came in for velocity; they leave with something better.", "points": 3 },
+            { "id": "c", "label": "Apologise and ask for one more quarter", "correct": false, "explain": "Defensive posture. Doesn't tell the board what they're getting for the patience.", "points": 0 }
+          ]
+        }
+      ],
+      "outcomes": {
+        "perfect": "You ran the table. The policy survives the political stress test — that's the actual hard part. Now do it for two more quarters and it stops being a policy and starts being how your team operates.",
+        "good": "Solid. You held the policy through real pressure. Replay the one you missed — that conversation is the move that breaks the pattern when this happens for real.",
+        "learn": "Worth a re-read. The mechanics aren't the hard part — defending the policy under stress is. Each of these conversations actually happens. Pre-write your answers."
+      }
+    },
+    {
+      "type": "embedAnimation",
+      "src": "/courses/showcase/anim/reinvestment-loop.html",
+      "height": 360,
+      "caption": "Two teams. Same starting point. Four quarters in."
+    },
+    {
+      "type": "skillProof",
+      "skill": "Reinvestment policy",
+      "instruction": "Pick the policy framing that survives the velocity-and-cost frame on a real Monday morning.",
+      "badgeLabel": "Policy Designer",
+      "choices": [
+        {
+          "id": "a",
+          "label": "100% of saved time goes to capability work, mandated.",
+          "correct": false,
+          "explain": "Too rigid. 'Mandatory growth time' produces resentment, not growth — people pad timesheets to comply."
+        },
+        {
+          "id": "b",
+          "label": "10% of saved time, blocked weekly. Goal is self-chosen. One shipped artefact per IC at quarter-end.",
+          "correct": true,
+          "explain": "Structure the time, free the goal, define the proof. The board can hold all three. Survives the cost-cut question because it has a forward-looking artefact."
+        },
+        {
+          "id": "c",
+          "label": "Each team decides what to do with their saved time.",
+          "correct": false,
+          "explain": "Drift wins. Without structure, default behaviour is shallow work. You'll be back to the trap in two months."
+        },
+        {
+          "id": "d",
+          "label": "Hold the saved time as buffer for the next big push.",
+          "correct": false,
+          "explain": "Buffers get spent. The time evaporates the moment a deadline appears."
+        }
+      ]
+    },
+    {
+      "type": "reflect",
+      "prompt": "Pick one specific 30 minutes this week — a calendar slot, with a name attached. What will you reinvest it into?\n\nBlock it on your calendar before you swipe forward. The policy starts here."
+    },
+    {
+      "type": "panelComic",
+      "title": "Twelve months later.",
+      "panels": [
+        {
+          "scene": "handshake",
+          "narration": "Q1 · SAME STARTING LINE.",
+          "dialog": [
+            { "speaker": "rina", "text": "Bank the savings." }
+          ],
+          "sfxAfter": "TICK . . ."
+        },
+        {
+          "scene": "boardroom-rina",
+          "narration": "FOUR QUARTERS LATER. RINA'S BOARD.",
+          "dialog": [
+            { "speaker": "rina", "text": "We saved an FTE. Sarah resigned in Q3." }
+          ],
+          "sfxAfter": "CRACK!"
+        },
+        {
+          "scene": "cfo-math",
+          "narration": "SAME ROOM. THE CFO FINISHES THE MATH.",
+          "dialog": [
+            { "speaker": "cfo", "text": "Net? **Roughly zero.**" }
+          ],
+          "sfxAfter": "THUD."
+        },
+        {
+          "scene": "boardroom-kavya",
+          "narration": "ACROSS TOWN. KAVYA'S BOARD. SAME Q4.",
+          "dialog": [
+            { "speaker": "kavya", "text": "Four artefacts. Burnout halved. Nobody left." }
+          ],
+          "sfxAfter": "WHOOSH ✦"
+        },
+        {
+          "scene": "ic-desk",
+          "narration": "TWO SEATS OVER. AN IC, UNPROMPTED.",
+          "dialog": [
+            { "speaker": "sam", "text": "My growth was actually *on the calendar*." }
+          ],
+          "sfxAfter": "BOOM."
+        },
+        {
+          "scene": "ending",
+          "narration": "Q1 DASHBOARDS LOOKED IDENTICAL. Q4 ONES NEVER DO."
+        }
+      ]
+    },
+    {
+      "type": "keyTakeaways",
+      "points": [
+        "AI compresses time. Default behaviour reabsorbs it into shallow work — that's the trap.",
+        "Reinvestment is structural, not motivational. Block the time first; let the goal be self-chosen.",
+        "Defend the policy against the velocity-and-cost frame. Capability compounds; cost cuts don't.",
+        "The first dollar AI saves you is rarely the most valuable thing it gives you.",
+        "If your team's strongest IC is bored or your best PM is still burning out, AI didn't fix it — it just sped up the wrong work."
+      ]
+    }
+  ]
+}

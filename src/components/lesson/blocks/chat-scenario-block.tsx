@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -38,6 +38,22 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
   const [picks, setPicks] = useState<Record<string, string>>({});
   const reduced = useReducedMotion();
   const playSound = useGameSound();
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Walk up the DOM tree and scroll the closest scrollable ancestor to top.
+  // Used when scenarios advance — otherwise the player's stage scroll stays
+  // pinned to where the chips were, hiding the new scenario's setup.
+  function scrollAncestorToTop() {
+    let p: HTMLElement | null = rootRef.current?.parentElement ?? null;
+    while (p) {
+      const oy = getComputedStyle(p).overflowY;
+      if (oy === "auto" || oy === "scroll") {
+        p.scrollTop = 0;
+        return;
+      }
+      p = p.parentElement;
+    }
+  }
   const total = scenarios.length;
   const current = scenarios[step];
   const picked = current ? picks[current.id] : undefined;
@@ -52,16 +68,20 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
   }
   function next() {
     setStep((s) => s + 1);
+    // Reset stage scroll so the new scenario's setup is visible from the top,
+    // not pinned to where the chips were on the previous one.
+    requestAnimationFrame(scrollAncestorToTop);
   }
   function reset() {
     setStep(0);
     setPicks({});
+    requestAnimationFrame(scrollAncestorToTop);
   }
 
   const score = scenarios.filter((s) => picks[s.id] === s.correctBucketId).length;
 
   return (
-    <div className="not-prose overflow-hidden rounded-2xl border-2 border-primary/30 bg-card shadow-md">
+    <div ref={rootRef} className="not-prose overflow-hidden rounded-2xl border-2 border-primary/30 bg-card shadow-md">
       <header className="flex items-center gap-3 border-b border-border bg-gradient-to-br from-primary/15 to-primary/5 px-5 py-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary ring-2 ring-primary/40">
           {coach.avatarSrc ? (
@@ -149,7 +169,12 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
                 <button
                   key={b.id}
                   type="button"
-                  onClick={() => pick(b.id)}
+                  onClick={(e) => {
+                    pick(b.id);
+                    // Blur so the browser doesn't scroll the just-clicked
+                    // button back into view, jumping the card to the bottom.
+                    e.currentTarget.blur();
+                  }}
                   className={cn(
                     "rounded-full border-2 px-4 py-1.5 text-sm font-medium transition-all",
                     bucketTone[b.tone],
@@ -163,7 +188,12 @@ export function ChatScenarioBlock({ coach, intro, buckets, scenarios }: ChatScen
           </div>
         )}
         {!done && submitted && (
-          <Button size="sm" type="button" onClick={next} className="gap-1">
+          <Button
+            size="sm"
+            type="button"
+            onClick={(e) => { next(); e.currentTarget.blur(); }}
+            className="gap-1"
+          >
             {step + 1 === total ? "See result" : "Next scenario"} <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         )}

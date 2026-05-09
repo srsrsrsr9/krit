@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Maximize2, Play, RefreshCw, Volume2, VolumeX } from "lucide-react";
+import { Play, RefreshCw, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export interface EmbedAnimationBlockProps {
@@ -39,9 +39,11 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
     if (audioSrc && audioRef.current) {
       audioRef.current.currentTime = 0;
       audioRef.current.muted = muted;
-      // play() returns a promise; ignoring rejection is fine — play overlay is a one-shot UX.
       void audioRef.current.play().catch(() => undefined);
     }
+    // Tell self-contained iframe animations (Web Audio inside) that the user
+    // gesture happened — they can unlock their AudioContext + restart visuals.
+    iframeRef.current?.contentWindow?.postMessage({ type: "krit:start" }, "*");
   }
 
   function toggleMute() {
@@ -125,16 +127,6 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
             aria-label="Restart animation"
           >
             <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button
-            type="button"
-            size="icon"
-            variant="secondary"
-            className="h-8 w-8"
-            onClick={() => window.open(src, "_blank")}
-            aria-label="Open in full window"
-          >
-            <Maximize2 className="h-4 w-4" />
           </Button>
         </div>
       </div>

@@ -1,5 +1,15 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Pin the workspace root to THIS project. Without this, Next.js sees the
+  // orphan ~/package-lock.json and treats $HOME as the workspace root, which
+  // breaks the dev-mode file tracer and intermittently starves Tailwind's
+  // first CSS emission (CSS chunk written empty on cold start).
+  outputFileTracingRoot: __dirname,
   reactStrictMode: true,
   typedRoutes: false,
   images: {

@@ -71,6 +71,31 @@ export default async function HomePage() {
         </p>
       </section>
 
+      {/* Story Mode showcase banner — single-tap entry to the new mobile lesson player */}
+      <Link
+        href="/showcase/the-30-minute-trap"
+        className="group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 via-fuchsia-600 to-rose-500 p-[1px] shadow-xl"
+      >
+        <div className="relative rounded-[calc(1.5rem-1px)] bg-gradient-to-br from-violet-600 via-fuchsia-600 to-rose-500 px-5 py-5 sm:px-7 sm:py-6">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-12 -left-12 h-44 w-44 rounded-full bg-black/20 blur-2xl" />
+          <div className="relative flex items-center justify-between gap-4 text-white">
+            <div className="min-w-0 flex-1">
+              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest backdrop-blur">
+                <Flame className="h-3 w-3" /> New · Story Mode
+              </div>
+              <h2 className="font-display text-xl font-black tracking-tight sm:text-2xl">The 30-Minute Trap</h2>
+              <p className="mt-1 text-sm text-white/90">
+                A 9-minute, swipe-through lesson on what to do with the time AI just gave your team.
+              </p>
+            </div>
+            <div className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/15 ring-2 ring-white/30 backdrop-blur transition-transform group-hover:scale-110 sm:flex">
+              <ArrowRight className="h-6 w-6" />
+            </div>
+          </div>
+        </div>
+      </Link>
+
       <section className="grid gap-4 sm:grid-cols-4">
         <Stat icon={Flame} label="Evidence this week" value={String(last7dEvidence)} />
         <Stat icon={Target} label="Skills in progress" value={String(skillStates.length)} />
