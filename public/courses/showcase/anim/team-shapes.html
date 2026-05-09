@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team Shapes</title>
+<style>
+  :root { --bg:#fbf6ec; --paper:#fffaf0; --ink:#1f2937; --muted:#6b7280; --rule:#e5dfd0; --good:#10b981; --bad:#ef4444; --saffron:#f59e0b; --steel:#0ea5e9; --ease:cubic-bezier(0.22,0.61,0.36,1); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: ui-sans-serif, system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+  .stage { position: relative; width: 100%; height: 100vh; min-height: 240px; display: grid; place-items: center; padding: 16px; }
+  .frame { position: relative; width: 100%; max-width: 720px; aspect-ratio: 720/405; }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+  .caption { position: absolute; left: 0; right: 0; bottom: -28px; text-align: center; font-size: 14px; font-style: italic; color: var(--muted); height: 18px; }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: c1 22s var(--ease) infinite; }
+  .cap-2 { animation: c2 22s var(--ease) infinite; }
+  .cap-3 { animation: c3 22s var(--ease) infinite; }
+  @keyframes c1 { 0%,3% {opacity:0} 6%,32% {opacity:1} 35%,100% {opacity:0} }
+  @keyframes c2 { 0%,35% {opacity:0} 38%,64% {opacity:1} 67%,100% {opacity:0} }
+  @keyframes c3 { 0%,67% {opacity:0} 70%,95% {opacity:1} 97%,100% {opacity:0} }
+
+  /* Old shape — visible first half, fades out */
+  .shape-old { animation: oldFade 22s var(--ease) infinite; }
+  @keyframes oldFade { 0%,32% {opacity:1} 38%,100% {opacity:0} }
+  /* Hand-off arrows — chaotic on old shape */
+  .handoff { stroke-dasharray: 4 3; animation: hoFlow 1.4s linear infinite, oldFade 22s var(--ease) infinite; stroke-dashoffset: 0; }
+  @keyframes hoFlow { 0% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -7; } }
+
+  /* New shape — fades in with rings */
+  .shape-new { opacity: 0; animation: newFade 22s var(--ease) infinite; }
+  @keyframes newFade { 0%,40% {opacity:0} 46%,93% {opacity:1} 100% {opacity:0} }
+  /* Decision authority rings expanding */
+  .ring { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ringPulse 22s var(--ease) infinite; }
+  .ring.b { animation-delay: 0.15s; } .ring.c { animation-delay: 0.30s; } .ring.d { animation-delay: 0.45s; }
+  .ring.e { animation-delay: 0.60s; } .ring.f { animation-delay: 0.75s; } .ring.g { animation-delay: 0.90s; }
+  .ring.h { animation-delay: 1.05s; }
+  @keyframes ringPulse {
+    0%,55% {opacity:0; transform:scale(0.6)}
+    62% {opacity:1; transform:scale(1.2)}
+    72%,93% {opacity:1; transform:scale(1)}
+    100% {opacity:0}
+  }
+
+  /* AI absorbs middle — center pulse */
+  .ai-orb { transform-box: fill-box; transform-origin: center; opacity: 0; animation: aiPulse 22s var(--ease) infinite; }
+  @keyframes aiPulse {
+    0%,32% {opacity:0; transform:scale(0)}
+    40% {opacity:1; transform:scale(1.3)}
+    50%,93% {opacity:1; transform:scale(1)}
+    100% {opacity:0}
+  }
+
+  /* Tally cards */
+  .tally { animation: tallyShow 22s var(--ease) infinite; }
+  @keyframes tallyShow { 0%,72% {opacity:0} 76%,93% {opacity:1} 100% {opacity:0} }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; opacity:1 } }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: A pre-AI team of 16 with chaotic hand-offs morphs into a post-AI team of 8 with thinner spans, deeper authority, and AI handling connective work">
+
+      <text x="360" y="32" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.22em" fill="var(--muted)">SAME OUTPUT · TWO SHAPES</text>
+
+      <!-- OLD shape: 1 manager + 16 reports, lots of handoffs -->
+      <g class="shape-old" transform="translate(360, 90)">
+        <text x="0" y="-14" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" letter-spacing="0.18em" fill="var(--bad)">PRE-AI · 16 REPORTS</text>
+        <!-- Manager -->
+        <circle cx="0" cy="0" r="14" fill="var(--bad)" stroke="var(--ink)" stroke-width="1.5" />
+        <text x="0" y="3" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="ui-mono,monospace">M</text>
+        <!-- 16 reports in two rows of 8 -->
+        <g>
+          <line x1="0" y1="14" x2="-210" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-150" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-90" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-30" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="30" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="90" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="150" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="210" y2="60" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+        </g>
+        <g>
+          <line x1="0" y1="14" x2="-210" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-150" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-90" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="-30" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="30" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="90" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="150" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+          <line x1="0" y1="14" x2="210" y2="120" class="handoff" stroke="var(--bad)" stroke-width="1" fill="none" />
+        </g>
+        <!-- Report dots -->
+        <g fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2">
+          <circle cx="-210" cy="60" r="9" /><circle cx="-150" cy="60" r="9" /><circle cx="-90" cy="60" r="9" /><circle cx="-30" cy="60" r="9" />
+          <circle cx="30" cy="60" r="9" /><circle cx="90" cy="60" r="9" /><circle cx="150" cy="60" r="9" /><circle cx="210" cy="60" r="9" />
+          <circle cx="-210" cy="120" r="9" /><circle cx="-150" cy="120" r="9" /><circle cx="-90" cy="120" r="9" /><circle cx="-30" cy="120" r="9" />
+          <circle cx="30" cy="120" r="9" /><circle cx="90" cy="120" r="9" /><circle cx="150" cy="120" r="9" /><circle cx="210" cy="120" r="9" />
+        </g>
+      </g>
+
+      <!-- NEW shape: 1 manager + 8 reports, AI in middle, decision rings -->
+      <g class="shape-new" transform="translate(360, 90)">
+        <text x="0" y="-14" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" letter-spacing="0.18em" fill="var(--good)">POST-AI · 8 REPORTS</text>
+        <!-- Manager -->
+        <circle cx="0" cy="0" r="14" fill="var(--good)" stroke="var(--ink)" stroke-width="1.5" />
+        <text x="0" y="3" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="ui-mono,monospace">M</text>
+        <!-- AI orb in middle (between manager and reports) -->
+        <g class="ai-orb" transform="translate(0, 50)">
+          <circle r="13" fill="var(--saffron)" stroke="var(--ink)" stroke-width="1.5" />
+          <text y="3" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="ui-monospace,monospace">AI</text>
+        </g>
+        <!-- 8 reports in one row, with decision rings -->
+        <g>
+          <line x1="0" y1="14" x2="-180" y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="-128" y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="-76"  y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="-24"  y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="24"   y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="76"   y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="128"  y2="100" stroke="var(--good)" stroke-width="1.5" />
+          <line x1="0" y1="14" x2="180"  y2="100" stroke="var(--good)" stroke-width="1.5" />
+        </g>
+        <!-- Reports with rings -->
+        <g class="ring"   transform="translate(-180, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring b" transform="translate(-128, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring c" transform="translate(-76, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring d" transform="translate(-24, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring e" transform="translate(24, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring f" transform="translate(76, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring g" transform="translate(128, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+        <g class="ring h" transform="translate(180, 100)"><circle r="20" fill="none" stroke="var(--good)" stroke-width="1.5" stroke-dasharray="2 2" /><circle r="11" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.2" /></g>
+      </g>
+
+      <!-- Tally cards bottom -->
+      <g class="tally" transform="translate(180, 340)">
+        <rect x="-100" y="-22" width="200" height="44" fill="white" stroke="var(--bad)" stroke-width="2" rx="2" />
+        <text x="0" y="-6" text-anchor="middle" font-size="11" letter-spacing="0.18em" font-family="ui-monospace,monospace" fill="var(--muted)">PRE-AI · 16 REPORTS</text>
+        <text x="0" y="14" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" fill="var(--bad)">slow decisions, hand-offs</text>
+      </g>
+      <g class="tally" transform="translate(540, 340)">
+        <rect x="-100" y="-22" width="200" height="44" fill="white" stroke="var(--good)" stroke-width="2" rx="2" />
+        <text x="0" y="-6" text-anchor="middle" font-size="11" letter-spacing="0.18em" font-family="ui-monospace,monospace" fill="var(--muted)">POST-AI · 8 REPORTS</text>
+        <text x="0" y="14" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" fill="var(--good)">deeper authority, faster</text>
+      </g>
+    </svg>
+    <div class="caption">
+      <div class="cap cap-1">Pre-AI: 16 reports, hand-offs everywhere, manager is a status broker.</div>
+      <div class="cap cap-2">AI absorbs the connective tissue. The team thins; depth grows.</div>
+      <div class="cap cap-3">8 reports. Wider authority each. Same output. Faster decisions.</div>
+    </div>
+  </div>
+</main>
+<script>
+(() => {
+  let ctx=null,master=null,bg=[],loops=[],unlocked=false,muted=true;
+  function ensureCtx(){if(ctx)return ctx;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);return ctx;}
+  function tone(f,d,t,g,o=0,gl=null){if(!ctx)return;const t0=ctx.currentTime+o;const osc=ctx.createOscillator(),gn=ctx.createGain();osc.type=t;osc.frequency.setValueAtTime(f,t0);if(gl)osc.frequency.exponentialRampToValueAtTime(gl,t0+d);gn.gain.setValueAtTime(0.0001,t0);gn.gain.exponentialRampToValueAtTime(g,t0+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,t0+d);osc.connect(gn);gn.connect(master);osc.start(t0);osc.stop(t0+d+0.05);}
+  function bgStart(){if(!ctx||bg.length)return;const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=600;f.connect(master);[98,147].forEach(fr=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=fr;g.gain.value=0.10;o.connect(g);g.connect(f);o.start();bg.push(o,g);});bg.push(f);}
+  function cycle(){if(!ctx)return;
+    // chaotic flow noise
+    [1.0,1.5,2.0,2.5,3.0,3.5,4.0].forEach((t,i)=>tone(800+(i%3)*40,0.06,"square",0.07,t));
+    // morph swoosh
+    tone(220,0.6,"sawtooth",0.16,7.5,1100);
+    // AI pulse appear — ascending
+    [9.5,10.0,10.5].forEach((t,i)=>tone([523,659,784][i],0.4,"triangle",0.14,t));
+    // ring pulses
+    [13.0,13.2,13.4,13.6,13.8,14.0,14.2,14.4].forEach((t,i)=>tone(880+i*50,0.04,"sine",0.08,t));
+    // final chord
+    [261,329,392,523].forEach((f,i)=>tone(f,1.0,"triangle",0.10,16.5+i*0.04));
+  }
+  function unlock(){ensureCtx();if(!ctx)return;if(ctx.state==="suspended")ctx.resume();if(!unlocked){unlocked=true;bgStart();cycle();loops.push(setInterval(cycle,22000));}}
+  function setMuted(m){muted=m;if(!master)return;master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(m?0:0.7,ctx.currentTime+0.18);}
+  function restart(){document.querySelectorAll(".scene *, .caption *").forEach(c=>{const cs=getComputedStyle(c);if(cs.animationName!=="none"){c.style.animation="none";c.offsetHeight;c.style.animation="";}});}
+  window.addEventListener("message",e=>{if(e?.data?.type==="krit:start"){unlock();setMuted(false);restart();}if(e?.data?.type==="krit:restart"){restart();}});
+})();
+</script>
+</body>
+</html>

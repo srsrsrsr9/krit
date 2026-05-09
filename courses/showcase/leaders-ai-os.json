@@ -1,0 +1,871 @@
+{
+  "slug": "leaders-ai-os",
+  "title": "The Leader's AI Operating System",
+  "subtitle": "Five operational decisions every AI-augmented leader keeps making — and the postures that work.",
+  "audience": "VPs and Directors leading AI-augmented teams",
+  "estimatedMinutes": 55,
+  "cast": [
+    { "id": "kavya", "name": "Kavya", "role": "VP at the team that reinvested", "summary": "Plants seedlings; thinks in quarters." },
+    { "id": "rina",  "name": "Rina",  "role": "VP at the team that banked",      "summary": "Banks the savings; learns the cost late." },
+    { "id": "sam",   "name": "Sam",   "role": "Senior IC, eyewitness",            "summary": "Engineer with headphones; says the things others won't." },
+    { "id": "cfo",   "name": "CFO",   "role": "The dashboard voice",              "summary": "Loves a clean number. Misses the compound." },
+    { "id": "atlas", "name": "Atlas", "role": "Your AI tutor",                    "summary": "Coaches you through the move." }
+  ],
+  "lessons": [
+    {
+      "slug": "the-30-minute-trap",
+      "title": "The 30-Minute Trap",
+      "subtitle": "Where do the minutes AI gives you actually go?",
+      "estimatedMinutes": 11,
+      "skillHints": ["Reinvestment", "Operating cadence"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "Tuesday, 4:12 PM. Your engineering manager Slacks: 'AI just saved us about an hour per code review.'",
+          "md": "What you reply in the next two minutes shapes whether — six months from now — your team is *sharper*, or just *busier*."
+        },
+        {
+          "type": "revealCard",
+          "front": "Speed is the win.",
+          "back": "Speed makes you a faster version of who you already were. The real win — the only thing here that compounds — is what you do with the *space* AI gave you.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Six weeks later, on the same floor:",
+          "frames": [
+            { "character": "cfo", "expression": "smug", "bubble": "Throughput is up **30%**. Whatever you're doing — keep it up.", "caption": "Monday all-hands." },
+            { "character": "sam", "expression": "tired", "bubble": "More tickets. Same kind of tickets. Just more of them.", "caption": "Sam, on Slack." },
+            { "character": "rina", "expression": "frown", "bubble": "Sarah's been weirdly quiet. She used to ask the hard questions.", "caption": "Rina, in a 1:1 she didn't want to have." },
+            { "character": "trap", "expression": "smug", "bubble": "*Throughput up. Capability flat. Working as designed.*", "caption": "And somewhere unseen — humming." },
+            { "character": "narrator", "expression": "neutral", "bubble": "**This is the 30-Minute Trap.** Time compressed, then quietly reabsorbed into the same shallow work." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/the-trap.html",
+          "height": 360,
+          "caption": "8 hours of saved time, watched in motion."
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Trap or reinvestment? Drag each one.",
+          "bins": [
+            { "id": "trap", "label": "30-Minute Trap", "tone": "danger" },
+            { "id": "reinvest", "label": "Reinvestment", "tone": "safe" }
+          ],
+          "items": [
+            { "id": "i1", "label": "After AI cut review time, the team got 30% more reviews assigned.", "correctBinId": "trap", "comment": "Volume up, capability flat." },
+            { "id": "i2", "label": "Each IC blocks 2 hrs/wk for one self-chosen stretch.", "correctBinId": "reinvest", "comment": "Structure the time, free the goal." },
+            { "id": "i3", "label": "Saved hours quietly returned to next quarter's budget.", "correctBinId": "trap", "comment": "One-time gain. The savings line never repeats." },
+            { "id": "i4", "label": "Senior IC mentors a junior on AI workflow design every Friday.", "correctBinId": "reinvest", "comment": "One person's saved time becomes the team's multiplier." },
+            { "id": "i5", "label": "New dashboard tracking ticket throughput goes up on the wall.", "correctBinId": "trap", "comment": "If you reward volume, you'll get volume." },
+            { "id": "i6", "label": "Manager asks weekly: 'what's the human-only work here?'", "correctBinId": "reinvest", "comment": "Naming the AI-can't-touch work protects it." }
+          ]
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "What share of saved time should be reinvested into self-chosen capability work each quarter?",
+          "min": 0,
+          "max": 50,
+          "step": 5,
+          "startValue": 10,
+          "leftLabel": "Bank it all",
+          "rightLabel": "Reinvest half",
+          "unit": "%",
+          "bands": [
+            { "lo": 0,  "hi": 4,  "title": "All cost-cut, no capability.", "body": "You took the one-time gain and gave the team nothing. Sarah is updating her LinkedIn.", "tone": "bad" },
+            { "lo": 5,  "hi": 19, "title": "The compounding zone.", "body": "Tight enough to defend on a P&L, generous enough to compound. Most teams that survive Q4 land here.", "tone": "good" },
+            { "lo": 20, "hi": 35, "title": "Bold, but defendable.", "body": "Higher than most boards will swallow without an artefact roadmap. If you can ship one big thing per quarter, this works.", "tone": "okay" },
+            { "lo": 36, "hi": 50, "title": "Hard to defend.", "body": "Velocity will drop visibly before capability shows up. You'll need a sponsor who believes in 4-quarter horizons.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "You're a VP whose team just compressed 8 hrs/week with AI",
+          "startNodeId": "n1",
+          "nodes": [
+            {
+              "id": "n1",
+              "body": "Sarah (your strongest IC) seems restless. Raj (your best PM) is still burning out.\n\nWhat do you do?",
+              "choices": [
+                { "id": "a", "label": "Quietly return the savings to the budget", "outcome": "You won the quarter, lost the year. Sarah leaves in 6 months." },
+                { "id": "b", "label": "Tell the team to use the time however they want", "nextNodeId": "n2" },
+                { "id": "c", "label": "Run a structured reinvestment experiment for one quarter", "nextNodeId": "n3" }
+              ]
+            },
+            {
+              "id": "n2",
+              "body": "A month in, the team is using the time for: more Slack, slightly longer lunches, three extra Jira tickets nobody asked for.",
+              "choices": [
+                { "id": "d", "label": "Pull it back and assign more work", "outcome": "Trust drops. You confirmed you didn't trust them." },
+                { "id": "e", "label": "Notice the gap and structure it now", "outcome": "Better — but you've already paid a tax in lost momentum." }
+              ]
+            },
+            {
+              "id": "n3",
+              "body": "Quarter one: each person blocks 2 hrs/week on a self-chosen stretch.\n\n10 weeks in: Sarah ships a refactor that pays back the entire experiment. Raj's burnout is half what it was.",
+              "choices": [
+                { "id": "f", "label": "Make it standard. Reinvest 10% of saved time, every quarter.", "outcome": "Right move. The first dollar saved compounds into the tenth dollar earned." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The fintech that almost banked the savings",
+          "source": "Anonymous COO at a Bengaluru series-C fintech",
+          "date": "March 2026",
+          "story": "Their support AI cut handle time by 40%. The CFO modelled a 12-person reduction. The COO pushed back: 'Give me one quarter to try something else.'\n\nShe pointed the saved hours at one problem: agents had no way to escalate edge cases without losing context. Three months later, agents had built a tagged knowledge base. NPS up 11. Churn down 2%. The 12 jobs stayed.",
+          "takeaway": "The first dollar AI saves you is rarely the most valuable thing it gives you. Reinvestment compounds; cost-cuts are one-time."
+        },
+        {
+          "type": "timedChallenge",
+          "prompt": "Spot the trap pattern.",
+          "timeLimitSec": 25,
+          "fastSec": 8,
+          "fullPoints": 5,
+          "partialPoints": 2,
+          "choices": [
+            { "id": "a", "label": "After AI cut report-writing time, the team got 30% more report requests.", "correct": true, "explain": "Same shallow work, more of it. Throughput up, capability flat." },
+            { "id": "b", "label": "The team uses AI to draft, but a senior engineer always reviews.", "correct": false, "explain": "Healthy human-in-the-loop." },
+            { "id": "c", "label": "The team blocks Friday afternoons for skill stretch.", "correct": false, "explain": "Reinvestment in action." },
+            { "id": "d", "label": "The leader asks 'what's the human-only work here?' weekly.", "correct": false, "explain": "Opposite of the trap." }
+          ]
+        },
+        {
+          "type": "chatScenario",
+          "coach": { "name": "Atlas", "role": "Coaching you through Sarah's 1:1" },
+          "intro": [
+            "Sarah's your strongest IC. AI cut her review time in half. She walks in: *'I have time now. What should I do with it?'*"
+          ],
+          "buckets": [
+            { "id": "structure", "label": "Structure the time", "tone": "safe" },
+            { "id": "free", "label": "Let her freelance", "tone": "neutral" },
+            { "id": "load", "label": "Load her up", "tone": "danger" }
+          ],
+          "scenarios": [
+            { "id": "sc1", "situation": "Sarah: 'I'm thinking I'll just take on more reviews.'", "correctBucketId": "structure", "explain": "More reviews is the trap. Re-direct: 'Block 2 hrs/wk. Pick one stretch — your call what.'" },
+            { "id": "sc2", "situation": "Sarah: 'Can I just experiment for a few weeks?'", "correctBucketId": "free", "explain": "She's already self-directing. Just check in at week 4." },
+            { "id": "sc3", "situation": "Sarah: 'Honestly, I'm fine. I don't want to do anything different.'", "correctBucketId": "structure", "explain": "'Fine' is the seedling of disengagement. Block the 2 hrs anyway; let her pick a small stretch." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/reinvestment-loop.html",
+          "height": 360,
+          "caption": "Two teams. Same start. Four quarters in."
+        },
+        {
+          "type": "skillProof",
+          "skill": "Reinvestment policy",
+          "instruction": "Pick the policy framing that survives the velocity-and-cost frame on a real Monday morning.",
+          "badgeLabel": "Policy Designer",
+          "choices": [
+            { "id": "a", "label": "100% of saved time goes to capability work, mandated.", "correct": false, "explain": "Too rigid. People resist 'mandatory growth time.'" },
+            { "id": "b", "label": "10% of saved time, blocked weekly. Goal is self-chosen. One shipped artefact per IC at quarter-end.", "correct": true, "explain": "Structure the time, free the goal, define the proof. Survives the cost-cut question because it has a forward-looking artefact." },
+            { "id": "c", "label": "Each team decides what to do with their saved time.", "correct": false, "explain": "Drift wins. Without structure, default behaviour is shallow work." },
+            { "id": "d", "label": "Hold the saved time as buffer for the next big push.", "correct": false, "explain": "Buffers get spent. The time evaporates." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "Twelve months later.",
+          "panels": [
+            { "scene": "handshake", "narration": "Q1 · SAME STARTING LINE.", "dialog": [{ "speaker": "rina", "text": "Bank the savings." }], "sfxAfter": "TICK . . ." },
+            { "scene": "boardroom-rina", "narration": "FOUR QUARTERS LATER. RINA'S BOARD.", "dialog": [{ "speaker": "rina", "text": "We saved an FTE. Sarah resigned in Q3." }], "sfxAfter": "CRACK!" },
+            { "scene": "cfo-math", "narration": "SAME ROOM. THE CFO FINISHES THE MATH.", "dialog": [{ "speaker": "cfo", "text": "Net? **Roughly zero.**" }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "ACROSS TOWN. KAVYA'S BOARD. SAME Q4.", "dialog": [{ "speaker": "kavya", "text": "Four artefacts. Burnout halved. Nobody left." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "ic-desk", "narration": "TWO SEATS OVER. AN IC, UNPROMPTED.", "dialog": [{ "speaker": "sam", "text": "My growth was actually *on the calendar*." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "Q1 DASHBOARDS LOOKED IDENTICAL. Q4 ONES NEVER DO." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one specific 30 minutes this week — a calendar slot, with a name attached. What will you reinvest it into? Block it on your calendar before you swipe forward."
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "AI compresses time. Default behaviour reabsorbs it into shallow work — that's the trap.",
+            "Reinvestment is structural, not motivational. Block the time first; let the goal be self-chosen.",
+            "Defend the policy against the velocity-and-cost frame. Capability compounds; cost cuts don't.",
+            "The first dollar AI saves you is rarely the most valuable thing it gives you.",
+            "If your strongest IC is bored or your best PM is burning out, AI didn't fix it — it just sped up the wrong work."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "the-trust-stack",
+      "title": "The Trust Stack",
+      "subtitle": "AI just rejected a candidate at 0.62. You have four hours.",
+      "estimatedMinutes": 10,
+      "skillHints": ["AI judgement", "Decision policy"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Wednesday, 11:08 AM. Your AI hiring screen rejected a candidate. Score: 0.62.",
+          "md": "Threshold is 0.65. The hiring manager wants to override. The CFO wants to ship. You have **four hours** to decide whether the model is right or not.\n\nThis lesson is about what to do *before* that moment, not in it."
+        },
+        {
+          "type": "revealCard",
+          "front": "Trust the model is binary.",
+          "back": "Trust isn't on/off. It's a **stack of small dials** — one per decision type — and each one has its own stake, its own reversibility, its own audit trail.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "The 0.62 Decision.",
+          "frames": [
+            { "character": "narrator", "expression": "neutral", "bubble": "11:08 AM. The model spat out a number. The number is just below the threshold.", "caption": "Wednesday, mid-morning." },
+            { "character": "cfo", "expression": "smug", "bubble": "Below threshold. Reject. We agreed on 0.65 last quarter.", "caption": "The CFO, three minutes in." },
+            { "character": "sam", "expression": "confused", "bubble": "We did. Did we agree on what 0.62 *means*, though?", "caption": "Sam, the engineer who built the model." },
+            { "character": "kavya", "expression": "neutral", "bubble": "The threshold is the policy. The override is the *audit*. Both exist for a reason.", "caption": "Kavya, who has done this before." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/the-override-loop.html",
+          "height": 360,
+          "caption": "AI rejects. Humans override. The model retrains."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "Where do you set the **auto-accept** threshold for AI hiring picks at your team's stage?",
+          "min": 50,
+          "max": 95,
+          "step": 1,
+          "startValue": 75,
+          "leftLabel": "0.50 = coin flip",
+          "rightLabel": "0.95 = barely use",
+          "unit": "/100",
+          "bands": [
+            { "lo": 50, "hi": 64, "title": "You are the model.", "body": "At <0.65 the model is barely better than random. Setting auto-accept this low is like saying 'flip a coin, then defend the coin.'", "tone": "bad" },
+            { "lo": 65, "hi": 79, "title": "Productive zone, with audit.", "body": "Most enterprise hiring AI lives here. Pair with a sampling override (audit ~5% of accepts and ~10% of rejects).", "tone": "good" },
+            { "lo": 80, "hi": 89, "title": "Cautious — and wasteful.", "body": "You'll throw out a lot of strong candidates. Make sure your funnel is wide enough to absorb the loss.", "tone": "okay" },
+            { "lo": 90, "hi": 95, "title": "You're not really using the model.", "body": "At 0.90+, the model is mostly just rubber-stamping decisions you'd make anyway. Why pay for it?", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "You override the 0.62. The candidate is hired.",
+          "startNodeId": "t1",
+          "nodes": [
+            {
+              "id": "t1",
+              "body": "Six months in, the candidate is in the **top 20%** of new hires by performance review. The hiring manager sends you a smug Slack with the receipts.\n\nWhat do you do with it?",
+              "choices": [
+                { "id": "a", "label": "Lower the threshold to 0.60. The model was wrong.", "outcome": "Hasty. One signal isn't a policy change. You also just told the model to be more permissive — without retraining." },
+                { "id": "b", "label": "Add this case to the override audit log. Re-evaluate the threshold quarterly.", "nextNodeId": "t2" },
+                { "id": "c", "label": "Tell the team you knew it. Move on.", "outcome": "You wasted the data. Next time you override, the muscle is no stronger." }
+              ]
+            },
+            {
+              "id": "t2",
+              "body": "Quarter end. Audit log has 14 overrides. **9 of them outperformed.** The other 5 are mediocre.\n\nWhat does the model team need to hear?",
+              "choices": [
+                { "id": "d", "label": "Retrain. Our overrides are signal, not noise.", "outcome": "Right move. The override log is the most valuable training data you have." },
+                { "id": "e", "label": "Nothing. Overrides happen.", "outcome": "You let the gap widen. Next quarter you'll override 22 times. The quarter after, the model will be functionally retired." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Which of these decisions is OK to fully delegate to AI today? Drag each one.",
+          "bins": [
+            { "id": "delegate", "label": "Delegate to AI", "tone": "safe" },
+            { "id": "human", "label": "Human signs the call", "tone": "danger" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Auto-screen JDs against minimum experience requirements.", "correctBinId": "delegate", "comment": "Low stakes, easily reversible, well-defined criteria." },
+            { "id": "i2", "label": "Decide which candidate to extend an offer to.", "correctBinId": "human", "comment": "High stakes, ambiguous criteria, hard to reverse." },
+            { "id": "i3", "label": "Score sales calls for coaching priority.", "correctBinId": "delegate", "comment": "AI is the assistant; the coach makes the call." },
+            { "id": "i4", "label": "Suspend a customer's account on a fraud signal.", "correctBinId": "human", "comment": "Low cost to wrong-signal; high cost to wrong-action. Always loop a human." },
+            { "id": "i5", "label": "Auto-route an internal IT ticket to the right team.", "correctBinId": "delegate", "comment": "Reversible, and the team will catch the miss anyway." },
+            { "id": "i6", "label": "Decide whether to put a junior on a performance plan.", "correctBinId": "human", "comment": "Career-defining. The audit trail must lead to a person, not a model." }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The logistics company that wrote down its overrides",
+          "source": "Senior PM at a Mumbai-Pune logistics platform",
+          "date": "October 2025",
+          "story": "Their dispatch AI was rejecting drivers with non-standard vehicle profiles. Operators kept overriding it on the night shift to keep up with demand.\n\nFor six months nobody logged it. Then a new dispatch lead made it policy: every override goes into a one-line note. Three months later, they retrained on the override log. Driver acceptance went up 18% with no drop in delivery quality.\n\nThe model wasn't 'broken'. It was missing the **last yard** of context. The override log was the cheapest, fastest way to teach it.",
+          "takeaway": "Treat human overrides as your most expensive labelled training data — because that's what they are."
+        },
+        {
+          "type": "chatScenario",
+          "coach": { "name": "Atlas", "role": "Coaching you through telling the rejected candidate's manager" },
+          "intro": [
+            "The hiring manager is in your DMs: *'Why did the AI reject this person? They look great on paper.'* You have to respond in 90 seconds before you walk into a meeting.",
+            "Pick the response that defends the policy without throwing the model under the bus."
+          ],
+          "buckets": [
+            { "id": "process", "label": "Frame the process", "tone": "safe" },
+            { "id": "blame",   "label": "Blame the model",  "tone": "danger" },
+            { "id": "punt",    "label": "Punt for now",     "tone": "neutral" }
+          ],
+          "scenarios": [
+            { "id": "sc1", "situation": "Manager: 'The AI is broken. Override it.'", "correctBucketId": "process", "explain": "Don't deny the model's miss; affirm the override path. 'I trust your read. Submit the override with a one-line reason — that note retrains the model.'" },
+            { "id": "sc2", "situation": "Manager: 'I don't have time to override every rejection.'", "correctBucketId": "punt", "explain": "Sample, don't audit-everything. 'You don't have to. Set a 1-in-10 audit and we'll catch systematic misses without burning your week.'" },
+            { "id": "sc3", "situation": "Manager: 'The AI is biased against bootcamp grads.'", "correctBucketId": "process", "explain": "This is a pattern claim, not a one-off. 'If that's the pattern, file an audit case with three examples and we'll re-train. One overridden hire isn't enough signal.'" }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "AI trust policy",
+          "instruction": "Pick the policy framing your VP would defend at a board review.",
+          "badgeLabel": "Trust Architect",
+          "choices": [
+            { "id": "a", "label": "Auto-accept everything above threshold. Auto-reject everything below. Trust the model.", "correct": false, "explain": "You're not using the model — you're outsourcing accountability to it. The first override discloses the gap." },
+            { "id": "b", "label": "Auto-accept above 0.75. Below 0.75, human signs. Override log is the model's training input. Reviewed quarterly.", "correct": true, "explain": "Threshold + audit + retraining loop. The model gets sharper because of the humans, not in spite of them." },
+            { "id": "c", "label": "Use the model as a tiebreaker. Humans decide everything else.", "correct": false, "explain": "You're not getting the speed gain — and you're inviting confirmation bias. Worst of both worlds." },
+            { "id": "d", "label": "Use it for a quarter, see how it goes, and adjust.", "correct": false, "explain": "Without explicit metrics + review cadence you'll drift. The first hard decision will retire the model permanently." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Name one decision your team makes that an AI **could** make today — but which you would never let it ship without a human signature. Why? Be specific about the failure mode you're protecting against."
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "Trust isn't binary. Build a stack of dials — one per decision type — calibrated to stake and reversibility.",
+            "Threshold without audit is rubber-stamping. Audit without threshold is theatre. You need both.",
+            "Human overrides are the most valuable training data you'll ever buy. Log them like you log incidents.",
+            "Frame the override path *before* the override moment. In the moment, you're negotiating; before, you're designing.",
+            "If a decision is career-defining or hard to reverse, a person signs. No exceptions, no thresholds."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "learning-with-ai",
+      "title": "Learning With AI",
+      "subtitle": "Your IC just rubber-stamped 200 AI-generated PRs. They learned: zero.",
+      "estimatedMinutes": 10,
+      "skillHints": ["Capability building", "Mentorship"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Friday afternoon. Sam closes his laptop after approving his 200th AI-generated PR this week.",
+          "md": "Velocity dashboard says: green. Sam's actual learning this week: **zero new system insights, no new patterns, no harder questions answered.** Just faster taps on the merge button.\n\nNobody noticed. That's the problem."
+        },
+        {
+          "type": "revealCard",
+          "front": "AI does the easy work; humans grow.",
+          "back": "AI does the easy work; humans **atrophy** — unless growth is structurally designed in. The friction that used to teach is now removed.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Sam's six months.",
+          "frames": [
+            { "character": "sam", "expression": "happy", "bubble": "Week 1 with AI assist. I shipped twice as much. This is great.", "caption": "Sam, optimistic." },
+            { "character": "sam", "expression": "neutral", "bubble": "Week 12. I'm not sure what I learned this quarter, but my throughput is up.", "caption": "Sam, three months in." },
+            { "character": "sam", "expression": "tired", "bubble": "Week 24. The hard tickets used to teach me. AI does them now. I haven't been confused in a long time.", "caption": "Sam, after a quiet quarter." },
+            { "character": "kavya", "expression": "neutral", "bubble": "What did you actually learn this quarter, Sam?", "caption": "Kavya, asking the only useful question." }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Real learning or fake learning? Drag each one.",
+          "bins": [
+            { "id": "real", "label": "Real learning", "tone": "safe" },
+            { "id": "fake", "label": "Fake learning", "tone": "danger" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Reading 50 AI-suggested explanations without trying to predict the answer first.", "correctBinId": "fake", "comment": "Recognition without retrieval. You'll forget by Tuesday." },
+            { "id": "i2", "label": "Closing the AI tab and rewriting the explanation from memory.", "correctBinId": "real", "comment": "Retrieval is what builds memory traces." },
+            { "id": "i3", "label": "Asking the AI to roast your design doc before sharing it.", "correctBinId": "real", "comment": "Active feedback against your draft. You learn by defending or revising." },
+            { "id": "i4", "label": "Copy-pasting AI output into the PR without reading it.", "correctBinId": "fake", "comment": "Throughput up; capability flat. Classic." },
+            { "id": "i5", "label": "Pairing weekly with a senior on the type of work AI can't yet do.", "correctBinId": "real", "comment": "Time invested where the friction still exists." },
+            { "id": "i6", "label": "Watching AI do something hard, nodding, and moving on.", "correctBinId": "fake", "comment": "Watching is not doing. Watching repeatedly creates the illusion of competence." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/atrophy-curve.html",
+          "height": 360,
+          "caption": "Same throughput. Different depth."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "How much of your team's review work should AI do **without a human in the loop**?",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "startValue": 30,
+          "leftLabel": "0% — every PR a senior reads",
+          "rightLabel": "100% — humans only on rare cases",
+          "unit": "%",
+          "bands": [
+            { "lo": 0,  "hi": 19, "title": "You're not getting the leverage.", "body": "Below 20%, AI is a typing assistant. Your seniors will burn out reading the same patterns the model already knows.", "tone": "bad" },
+            { "lo": 20, "hi": 49, "title": "Sweet spot for capability building.", "body": "Enough AI leverage to reclaim hours; enough human review that juniors still see the *reasoning*, not just the output.", "tone": "good" },
+            { "lo": 50, "hi": 79, "title": "Speed up. Capability down.", "body": "Most of the team has stopped seeing the hard cases. After two quarters, juniors stop being able to do the work AI does.", "tone": "okay" },
+            { "lo": 80, "hi": 100, "title": "Auto-pilot.", "body": "You're not running a team — you're running a queue. The first hard incident exposes the gap, and there's nobody who knows the system.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "quiz",
+          "prompt": "Which weekly review pattern actually builds capability?",
+          "multi": false,
+          "choices": [
+            { "id": "a", "label": "Senior reviews every PR after AI rubber-stamps it.", "correct": false, "explain": "Senior burns out. Juniors don't learn — they just see the merge button get pressed faster." },
+            { "id": "b", "label": "Junior writes a one-line 'what AI got wrong this week' note before standup.", "correct": true, "explain": "Forces retrieval, surfaces patterns, makes the AI's blind spots part of the team's vocabulary." },
+            { "id": "c", "label": "Everyone uses AI freely. We trust the team.", "correct": false, "explain": "Trust without structure produces drift. By Q2 nobody can explain why the system is what it is." },
+            { "id": "d", "label": "Juniors don't get AI access until they've shipped 20 PRs by hand.", "correct": false, "explain": "Punitive and unfair — and AI is the tool of the next decade. You're slowing them down by withholding it." }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Designing a learning policy under AI assist.",
+          "startNodeId": "l1",
+          "nodes": [
+            {
+              "id": "l1",
+              "body": "Your team has been using AI for code review for 6 months. Velocity is up 35%. Junior incident response time is up 60% (worse). The senior eng lead just resigned, citing 'I don't recognise the codebase anymore.'\n\nWhat's your first move?",
+              "choices": [
+                { "id": "a", "label": "Roll back AI access until juniors catch up.", "outcome": "You broke trust *and* you didn't fix the gap. The juniors who were going to leave anyway leave faster. Don't roll back tools — change the practice." },
+                { "id": "b", "label": "Add weekly 'AI roast' sessions: pick one PR AI got wrong, dissect it as a team.", "nextNodeId": "l2" },
+                { "id": "c", "label": "Pair every junior with a senior 1:1 for an hour a week — no AI in the room.", "nextNodeId": "l2" }
+              ]
+            },
+            {
+              "id": "l2",
+              "body": "Six weeks in, juniors are visibly more confident on incidents. They can explain *why* a pattern works.\n\nWhat now?",
+              "choices": [
+                { "id": "d", "label": "Make the practice permanent. Add a 'capability indicator' to the dashboard.", "outcome": "Right move. You named the thing, measured it, and made it harder to drop when the next velocity push comes." },
+                { "id": "e", "label": "Quietly drop it. The juniors got the boost; we don't need it long-term.", "outcome": "You'll be back here in 9 months. Capability decays without a structural anchor." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "chatScenario",
+          "coach": { "name": "Atlas", "role": "In a 1:1 with Sam, 6 months into AI-assisted review" },
+          "intro": [
+            "Sam asks: *'I have a lot of free time now. What should I learn next?'* You're his manager. You have one minute to set him up.",
+            "Pick the response that builds capability without sounding like homework."
+          ],
+          "buckets": [
+            { "id": "stretch",  "label": "Point at a stretch", "tone": "safe" },
+            { "id": "free",     "label": "Tell him to figure it out", "tone": "neutral" },
+            { "id": "more",     "label": "Give him more reviews", "tone": "danger" }
+          ],
+          "scenarios": [
+            { "id": "sc1", "situation": "Sam: 'Should I just take on more reviews?'", "correctBucketId": "stretch", "explain": "More reviews is the trap. Re-direct: 'AI can do reviews. Pick the work AI can't do — system design, mentoring a junior, on-call leadership.'" },
+            { "id": "sc2", "situation": "Sam: 'I have an idea for a refactor that's been bugging me for a year.'", "correctBucketId": "free", "explain": "He brought the stretch already. Get out of his way. Just say 'block 4 hrs/wk and tell me what you learn at month-end.'" },
+            { "id": "sc3", "situation": "Sam: 'Honestly I just want to keep my head down for a bit.'", "correctBucketId": "stretch", "explain": "'Head down' is the seedling of disengagement. Don't push hard, but plant a tiny stretch: 'Pick one junior. Pair on one ticket per week. That's it.'" }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Learning policy under AI",
+          "instruction": "Pick the policy that produces capability — without producing busywork.",
+          "badgeLabel": "Capability Coach",
+          "choices": [
+            { "id": "a", "label": "All juniors must complete a 30-minute AI-free coding test every Friday.", "correct": false, "explain": "Punitive, anxiety-inducing, and produces compliance without insight." },
+            { "id": "b", "label": "Each IC writes a one-line 'what surprised me this week' note in standup. Patterns get re-trained into team practice every quarter.", "correct": true, "explain": "Forces retrieval, surfaces tacit knowledge, builds the team's collective capability — and tells you exactly what to invest in next." },
+            { "id": "c", "label": "We trust everyone to learn at their own pace.", "correct": false, "explain": "Without structure, AI assist produces atrophy. Trust without scaffolding is the trap." },
+            { "id": "d", "label": "Every IC gets 20% time for 'learning'. They pick what.", "correct": false, "explain": "Better than nothing — but with no ritual or artefact, most of that time evaporates." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Name one specific skill someone on your team had **two years ago** that they don't have today, even though their throughput is higher. What would it take to bring it back?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "AI removes the friction that used to teach. Capability decays unless growth is designed in.",
+            "Recognition isn't learning. Retrieval is. Build rituals that force the team to predict before AI tells them.",
+            "The AI's blind spots are the team's most valuable curriculum. Log them, dissect them weekly.",
+            "Pair seniors with juniors on the work AI can't yet do — the human-only moves where stakes are real.",
+            "If your dashboard only measures velocity, you're optimising for the trap. Add a capability indicator, defend it."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "hiring-in-the-ai-era",
+      "title": "Hiring in the AI Era",
+      "subtitle": "Your JD asks for SQL. AI writes SQL. So what are you actually hiring for?",
+      "estimatedMinutes": 10,
+      "skillHints": ["Hiring", "Role design"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Monday morning. You re-read your team's open senior PM JD. It still says: 'Required: SQL, basic data analysis, ability to write specs.'",
+          "md": "AI writes specs. AI writes SQL. AI does basic data analysis on coffee.\n\nIf you're filtering on those, you're filtering for **what AI already does**. The question your JD is supposed to answer is the question you forgot to ask: *what can't AI do that you need?*"
+        },
+        {
+          "type": "revealCard",
+          "front": "Hire for AI-resistant skills.",
+          "back": "Hire for **AI-leverage** skills. People who use AI to multiply themselves are the new senior. Resistance is the wrong frame — the question is who can *steer* the augmented work, not who can do it without help.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "The JD that filtered out the right person.",
+          "frames": [
+            { "character": "narrator", "expression": "neutral", "bubble": "Your hiring funnel processed **3,400 candidates** for one senior PM role in 2026.", "caption": "The funnel." },
+            { "character": "cfo", "expression": "smug", "bubble": "AI screened them down to 40 in an hour. Massive efficiency gain.", "caption": "The CFO, delighted." },
+            { "character": "kavya", "expression": "neutral", "bubble": "How many of the 3,360 we rejected would have been the *best* hire if a human had read them?", "caption": "Kavya, asking the unhelpful question." },
+            { "character": "sam", "expression": "tired", "bubble": "I don't know. We optimised for the *resume*, not the work.", "caption": "Sam, who built the screen." }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Sort each role attribute by how AI changes it.",
+          "bins": [
+            { "id": "replaces",  "label": "AI replaces", "tone": "danger" },
+            { "id": "leverages", "label": "AI leverages", "tone": "safe" },
+            { "id": "breaks",    "label": "AI breaks (worth more now)", "tone": "neutral" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Writes SQL queries to pull a basic metric.", "correctBinId": "replaces", "comment": "Stop filtering on this. AI does it." },
+            { "id": "i2", "label": "Decides *which* metric to pull, given an ambiguous business question.", "correctBinId": "leverages", "comment": "AI helps draft options; the call is judgement." },
+            { "id": "i3", "label": "Reads a stakeholder's politics and reframes a recommendation.", "correctBinId": "breaks", "comment": "AI is bad at this. Worth more now." },
+            { "id": "i4", "label": "Drafts the first version of a PRD.", "correctBinId": "replaces", "comment": "AI does it. Hire for the rewrite, not the draft." },
+            { "id": "i5", "label": "Decides which PRD doesn't need to exist at all.", "correctBinId": "leverages", "comment": "Steering work toward leverage — the human-only move." },
+            { "id": "i6", "label": "Negotiates scope with a senior engineer who is right.", "correctBinId": "breaks", "comment": "Trust capital, taste, and emotional intelligence are all AI-resistant." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/jd-funnel.html",
+          "height": 360,
+          "caption": "Same applicant pool. Different filters. Different finalists."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "How much weight on **AI-fluency** vs. **deep domain expertise** in your next senior hire?",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "startValue": 50,
+          "leftLabel": "All domain depth",
+          "rightLabel": "All AI fluency",
+          "unit": "% AI",
+          "bands": [
+            { "lo": 0,  "hi": 19, "title": "Hiring for 2019.", "body": "You're paying senior rates for someone who'll be out-shipped by a junior with AI access in six months.", "tone": "bad" },
+            { "lo": 20, "hi": 59, "title": "Domain-anchored, AI-aware.", "body": "Right balance for most senior roles in 2026. Domain depth is still the harder thing to teach; AI fluency you can train in.", "tone": "good" },
+            { "lo": 60, "hi": 79, "title": "Risky bet.", "body": "AI-native generalists with weak domain anchoring make confident-sounding wrong calls. Worth it if you have strong senior reviewers around them.", "tone": "okay" },
+            { "lo": 80, "hi": 100, "title": "AI-native, domain-light.", "body": "You're hiring a prompt engineer pretending to be a senior. They'll ship fast and miss the things that matter.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "You're hiring a senior PM in 2026.",
+          "startNodeId": "h1",
+          "nodes": [
+            {
+              "id": "h1",
+              "body": "AI surfaced two finalists.\n\n**A:** 12 yrs in fintech, can't show fluency with AI tools, sharp on customer interviews.\n**B:** 4 yrs in adtech, lives in Cursor and Linear-AI, weak track record under pressure.\n\nYour gut?",
+              "choices": [
+                { "id": "a", "label": "Hire A. Domain depth, customer empathy. AI fluency we can teach in a quarter.", "outcome": "Solid. Domain capital is the harder thing to manufacture. Pair them with an AI-native junior and you've got the strongest combo." },
+                { "id": "b", "label": "Hire B. The future is AI-native and the rest of the team will pull them up.", "outcome": "Risky. Without a deep senior around them, B's confident wrong calls will compound. Three quarters in you'll wish you hired A." },
+                { "id": "c", "label": "Pass on both, re-open the search.", "nextNodeId": "h2" }
+              ]
+            },
+            {
+              "id": "h2",
+              "body": "You re-open. The next finalist is **C: 8 yrs in a different industry, evidence of AI fluency, two strong references on judgement under ambiguity.**",
+              "choices": [
+                { "id": "d", "label": "Hire C.", "outcome": "Right call. The combination you actually need is judgement + AI-fluency + transferable depth. Industry is teachable." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The startup that re-wrote every JD in a weekend",
+          "source": "Head of People at a 60-person SaaS, Hyderabad",
+          "date": "January 2026",
+          "story": "Their hiring funnel was producing strong-looking candidates who flamed out in month 3. The pattern: the JDs filtered for *resume* skills (SQL, frameworks, certifications) — almost all of which AI now does.\n\nIn one weekend, they rewrote every JD. Out: 'must have written 100 PRDs.' In: 'must have *killed* a PRD that wasn't worth writing.' Out: 'SQL.' In: 'can defend a metric choice in a 5-minute board ping.'\n\nApplications dropped 40%. Hire-to-success rate went from 35% to 71%.",
+          "takeaway": "If your JD describes work AI now does, your funnel is selecting for the wrong people. Re-write what you're filtering on, not how fast you filter."
+        },
+        {
+          "type": "cardSwipe",
+          "prompt": "5 candidates landed in your inbox in the last hour. Hire or pass — quick.",
+          "leftLabel": "Pass",
+          "rightLabel": "Hire",
+          "cards": [
+            {
+              "id": "c1",
+              "title": "Priya · 14 yrs in supply chain",
+              "body": "No AI fluency to speak of. Two strong references on judgement under ambiguity. Killed two big-budget initiatives last year because they weren't worth doing.",
+              "correctSide": "right",
+              "explain": "Domain capital + judgement is the harder thing to manufacture. AI fluency is a one-quarter ramp. Hire."
+            },
+            {
+              "id": "c2",
+              "title": "Akhil · 3 yrs in adtech",
+              "body": "Lives in Cursor and Linear-AI. Ships fast. References are warm but vague — 'great with the AI tools, hard to tell on the harder calls.'",
+              "correctSide": "left",
+              "explain": "AI-native generalists with weak domain anchoring make confident-sounding wrong calls. Without a senior reviewer, you'll feel the cost in Q2."
+            },
+            {
+              "id": "c3",
+              "title": "Nisha · 8 yrs across 3 industries",
+              "body": "Took a sabbatical to build internal AI tooling at her last company. Two references emphasise her ability to tell a stakeholder no. JD didn't ask for AI fluency — she has it anyway.",
+              "correctSide": "right",
+              "explain": "The combination you actually want: judgement + AI fluency + transferable depth. Industry is teachable; this profile isn't."
+            },
+            {
+              "id": "c4",
+              "title": "Vikram · 12 yrs, expert SQL, 200+ specs shipped",
+              "body": "Beautiful resume on every dimension AI now handles. References describe him as 'reliable, prolific, hard worker.' Nobody describes him as making hard calls.",
+              "correctSide": "left",
+              "explain": "Hiring for what AI replaces. Reliable + prolific used to be a senior moat; in 2026 it's the baseline AI clears."
+            },
+            {
+              "id": "c5",
+              "title": "Sara · 5 yrs PM, recently led an AI rollout",
+              "body": "Tells you in the interview that her rollout failed in Q2 — she was too aggressive on automation, lost trust with the team, took two quarters to rebuild it. She can name exactly what she'd do differently.",
+              "correctSide": "right",
+              "explain": "Failure she can articulate beats success she can't. The recovery story is the senior signal — and she has the AI scars to know where the line is."
+            }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "AI-era hiring policy",
+          "instruction": "Pick the JD framing that filters for AI-leverage skills.",
+          "badgeLabel": "Funnel Architect",
+          "choices": [
+            { "id": "a", "label": "Required: 8+ years experience, expert SQL, written 100+ specs.", "correct": false, "explain": "Every line is something AI does or replaces. You'll filter out the right people." },
+            { "id": "b", "label": "Required: track record of (1) killing a project that wasn't worth doing, (2) defending a metric under board pressure, (3) using AI tools to multiply a team — not replace a junior.", "correct": true, "explain": "Each line filters for an AI-resistant or AI-leverage skill. The funnel narrows on judgement and steering, not throughput." },
+            { "id": "c", "label": "Required: AI-native, ships fast, comfortable with autonomy.", "correct": false, "explain": "Vague. 'Ships fast' in 2026 means they used a model — that's not a skill, it's a tool." },
+            { "id": "d", "label": "Required: domain expert with deep technical chops.", "correct": false, "explain": "Misses the AI dimension entirely. You'll hire someone who can't leverage the tools your team uses." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one open or recent role on your team. Rewrite **one** of its JD requirements in your head right now. What's the AI-leverage version of what you originally wrote?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "If your JD describes work AI does, your funnel filters for the wrong people. Re-write what you filter on.",
+            "Hire for AI-leverage skills: judgement, steering, killing the wrong work, taste under ambiguity.",
+            "Domain depth is still the harder thing to teach. Don't trade it away for AI-fluency you can train in.",
+            "Resume filters reward what AI replaces. Behavioural filters (told a stakeholder no, killed a PRD) reward what it doesn't.",
+            "Funnel velocity is a vanity metric. Hire-to-success rate at 12 months is the only number that matters."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "team-design-with-ai",
+      "title": "Team Design With AI",
+      "subtitle": "Your team of 8 just out-shipped the org's team of 20. The CFO wants to clone it.",
+      "estimatedMinutes": 11,
+      "skillHints": ["Org design", "Span of control"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Q1 review. Your 8-person team out-shipped a 20-person team in the same org.",
+          "md": "The CFO is delighted. Your CEO wants the playbook. Your director wants you to **scale the team to 16 to accelerate further**.\n\nThis is the moment most leaders quietly accept the wrong answer. The question isn't *how do we add more people?* It's *what shape did this team have to be for AI to multiply it?*"
+        },
+        {
+          "type": "revealCard",
+          "front": "AI = more headcount.",
+          "back": "AI = **thinner spans, deeper depth, fewer hand-offs.** The team that wins is the team where each person's call carries further — not the one with more people doing the same work in parallel.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Two team shapes.",
+          "frames": [
+            { "character": "rina", "expression": "frown", "bubble": "I have 20 reports. Half of them are blocked half the time.", "caption": "Rina, two quarters in." },
+            { "character": "cfo", "expression": "smug", "bubble": "Add a manager layer. Two pods of 10. Done.", "caption": "The CFO, classically." },
+            { "character": "kavya", "expression": "excited", "bubble": "I have 8 reports. Each one decides about 60% of what crosses their desk. AI does the boilerplate.", "caption": "Kavya, same quarter." },
+            { "character": "sam", "expression": "happy", "bubble": "I'm trusted to ship without three approvals. That's why I stayed.", "caption": "Sam, on Kavya's team." }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Three buckets. Drag each kind of work where it belongs.",
+          "bins": [
+            { "id": "ai",      "label": "AI does it",          "tone": "safe" },
+            { "id": "human",   "label": "Human protects it",   "tone": "danger" },
+            { "id": "either",  "label": "Either, human faster", "tone": "neutral" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Drafting boilerplate sections of a 30-page contract.", "correctBinId": "ai", "comment": "Cheap, accurate, fast. Don't pay a human to type." },
+            { "id": "i2", "label": "Negotiating the carve-out clauses with the counter-party.", "correctBinId": "human", "comment": "Trust + politics + reading the room. AI is bad at all three." },
+            { "id": "i3", "label": "Picking the headline for next week's launch.", "correctBinId": "either", "comment": "AI gives 30 options in 4 seconds. The taste call is human, but you'll be faster than starting from scratch." },
+            { "id": "i4", "label": "Deciding to delay the launch because the team is burnt out.", "correctBinId": "human", "comment": "This is signal AI doesn't see. Protect it for the human." },
+            { "id": "i5", "label": "Categorising 5,000 customer feedback notes by theme.", "correctBinId": "ai", "comment": "Repetitive, well-defined; AI's strongest play." },
+            { "id": "i6", "label": "Choosing which two of those themes to actually act on.", "correctBinId": "human", "comment": "Steering work. The 'so what' is human territory." }
+          ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/courses/showcase/anim/team-shapes.html",
+          "height": 360,
+          "caption": "Same output. Two shapes. AI eats the connective tissue."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "What's the **right span of control** for a senior eng manager whose team uses AI for 40% of the work?",
+          "min": 3,
+          "max": 16,
+          "step": 1,
+          "startValue": 8,
+          "leftLabel": "3 reports — too thin",
+          "rightLabel": "16 — pre-AI default",
+          "unit": "reports",
+          "bands": [
+            { "lo": 3,  "hi": 4,  "title": "Wasteful in 2026.", "body": "AI absorbed the routine work that used to fill a manager's week. At 3-4 reports you're underutilising a senior leader.", "tone": "bad" },
+            { "lo": 5,  "hi": 8,  "title": "Sweet spot.", "body": "Tight enough that the manager actually knows each person's stretch. Thin enough that AI handles the connective tissue. Most strong AI-augmented teams land here.", "tone": "good" },
+            { "lo": 9,  "hi": 12, "title": "Doable with discipline.", "body": "Works only if 1:1s are sacred and AI handles status. Slip on either and you're back to surface-management.", "tone": "okay" },
+            { "lo": 13, "hi": 16, "title": "Pre-AI org chart.", "body": "You're optimising for headcount, not capability. The manager will be a status broker, not a coach.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Your director wants you to scale 8 → 16. What's your move?",
+          "startNodeId": "o1",
+          "nodes": [
+            {
+              "id": "o1",
+              "body": "You can hire 8 more or restructure. The director is paying.\n\nWhat do you propose?",
+              "choices": [
+                { "id": "a", "label": "Hire 8 more. The team is winning, scale it.", "outcome": "Velocity drops in Q3. The team's edge was decision speed, not headcount. Now there are 16 people waiting for the same person to sign things." },
+                { "id": "b", "label": "Hire 4 senior ICs at 1.5x the budget per head, leave the manager span at 8.", "nextNodeId": "o2" },
+                { "id": "c", "label": "Don't hire. Push the saved budget into AI infra and capability time.", "nextNodeId": "o3" }
+              ]
+            },
+            {
+              "id": "o2",
+              "body": "Six months in: throughput is up 30% from where it was at 8. The new seniors absorbed work that used to need 3 hand-offs.\n\nWhat does the next quarter look like?",
+              "choices": [
+                { "id": "d", "label": "Hire 4 more if the same pattern holds.", "outcome": "Right call. You scale by depth, not breadth — and only if depth keeps producing." }
+              ]
+            },
+            {
+              "id": "o3",
+              "body": "Quarter end: throughput is flat. Capability is up. The team shipped the platform piece that was supposed to take a 12-person team a year.\n\nThe director is unhappy.",
+              "choices": [
+                { "id": "e", "label": "Show the platform piece. Re-frame the conversation around what the team can now do.", "outcome": "Solid. You bought a year of leverage. Defend it with the artefact, not the headcount line." },
+                { "id": "f", "label": "Cave. Hire 4 more.", "outcome": "You sold the leverage for short-term peace. Within two quarters the team's edge is gone." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "timedChallenge",
+          "prompt": "Quick reflex: which of these is a manager who's about to break under their span?",
+          "timeLimitSec": 25,
+          "fastSec": 8,
+          "fullPoints": 5,
+          "partialPoints": 2,
+          "choices": [
+            { "id": "a", "label": "12 reports, weekly 1:1s, two skip-levels in calendar fights every week.", "correct": true, "explain": "1:1 cadence is the canary. When skip-levels start hunting for time, the manager has lost the thread." },
+            { "id": "b", "label": "8 reports, every IC has a clear stretch, manager runs one weekly retro.", "correct": false, "explain": "Healthy AI-era team shape." },
+            { "id": "c", "label": "10 reports, AI handles status updates, manager spends 30% of time on coaching.", "correct": false, "explain": "Doable with discipline. The 30% coaching number is what makes it work." },
+            { "id": "d", "label": "5 reports, all senior, manager spends most of their time on org-wide initiatives.", "correct": false, "explain": "Right shape — senior team, manager has bandwidth for cross-team leverage." }
+          ]
+        },
+        {
+          "type": "chatScenario",
+          "coach": { "name": "Atlas", "role": "Helping you say no to a 'just hire more' ask" },
+          "intro": [
+            "Your director wants you to hire 8 more onto a team of 8. You believe the right move is to hire 4 seniors instead — or zero.",
+            "Pick the response that defends the smaller, deeper team without sounding precious about it."
+          ],
+          "buckets": [
+            { "id": "frame",  "label": "Re-frame the question", "tone": "safe" },
+            { "id": "defy",   "label": "Just say no",            "tone": "danger" },
+            { "id": "punt",   "label": "Defer with a study",     "tone": "neutral" }
+          ],
+          "scenarios": [
+            { "id": "sc1", "situation": "Director: 'The team is winning. Why aren't we doubling it?'", "correctBucketId": "frame", "explain": "Don't fight the budget; redirect it. 'The team's edge is decision speed, not throughput. Doubling it doubles hand-offs. Same budget, 4 senior ICs — I'll show 50% more leverage in two quarters.'" },
+            { "id": "sc2", "situation": "Director: 'I have the headcount budget. Use it or lose it.'", "correctBucketId": "frame", "explain": "Reframe headcount as capability. 'Same dollars, half the heads, twice the seniority. The leverage is real and the budget gets used.'" },
+            { "id": "sc3", "situation": "Director: 'You're being precious. Just hire.'", "correctBucketId": "punt", "explain": "Don't dig in — buy time and bring data. 'Give me one quarter to test the 4-senior model. If leverage doesn't show up, we hire 8 in Q2.' You bought a quarter to prove the shape." }
+          ]
+        },
+        {
+          "type": "bossBattle",
+          "title": "Defend the Shape",
+          "setup": "Three conversations this week. Each one tests whether your AI-era team shape survives someone else's frame.",
+          "coach": { "name": "Atlas", "role": "Your AI tutor" },
+          "stages": [
+            {
+              "id": "s1",
+              "prompt": "Your CEO at the all-hands: 'Why is your team smaller than the others?'",
+              "options": [
+                { "id": "a", "label": "Show the artefacts. Same output as a team of 16, half the hand-offs.", "correct": true, "explain": "Lead with the work, not the philosophy. Artefacts win the room.", "points": 3 },
+                { "id": "b", "label": "Talk about AI-era org design principles.", "correct": false, "explain": "True but dry. The CEO will tune out and your team will still look small.", "points": 0 },
+                { "id": "c", "label": "Defer: 'It's working, give me a quarter to prove it.'", "correct": false, "explain": "Buys time but signals you're not sure. Lead with confidence and the artefact.", "points": 1 }
+              ]
+            },
+            {
+              "id": "s2",
+              "prompt": "An IC: 'I'm getting too much surface area. Hire more.'",
+              "options": [
+                { "id": "a", "label": "Hire 2 more. The IC is right.", "correct": false, "explain": "You'll add hand-offs. The IC's complaint is real but the diagnosis is wrong — the work isn't bigger, the *coordination* is.", "points": 0 },
+                { "id": "b", "label": "Audit where the IC's time goes. Cut anything AI can absorb. If still too much, *then* hire.", "correct": true, "explain": "First make the team's day denser, then scale. Most 'too much surface area' is unscaled AI use.", "points": 3 },
+                { "id": "c", "label": "Tell the IC to push back on the surface area.", "correct": false, "explain": "Punts the problem to the IC and signals you don't have their back.", "points": 0 }
+              ]
+            },
+            {
+              "id": "s3",
+              "prompt": "End of quarter. Capability is up; visible velocity is flat. CFO: 'What did I pay for?'",
+              "options": [
+                { "id": "a", "label": "One shipped artefact + a forward-looking piece (a future risk averted).", "correct": true, "explain": "Hold both at once: present-tense win + future-tense leverage. Boards can hold both. Pure-velocity stories cannot.", "points": 3 },
+                { "id": "b", "label": "Velocity numbers from the last quarter.", "correct": false, "explain": "Velocity was flat — this admits the wrong frame.", "points": 0 },
+                { "id": "c", "label": "Apologise and ask for one more quarter.", "correct": false, "explain": "Defensive. Doesn't tell the CFO what they got for the patience.", "points": 0 }
+              ]
+            }
+          ],
+          "outcomes": {
+            "perfect": "Three for three. The shape survives the political stress test, which was the actual hard part. Now run it for two more quarters and it stops being 'your team's experiment' and starts being how the org is shaped.",
+            "good": "Solid. The shape held under real pressure. Replay the one you missed — that's the conversation that breaks the pattern when this happens for real.",
+            "learn": "Worth a re-read. The mechanics of AI-era team design aren't the hard part — defending the shape against headcount-as-success thinking is. Pre-write your answers."
+          }
+        },
+        {
+          "type": "skillProof",
+          "skill": "AI-era org design",
+          "instruction": "Pick the principle you'd defend at a board offsite.",
+          "badgeLabel": "Org Architect",
+          "choices": [
+            { "id": "a", "label": "More AI = more headcount. Scale the wins.", "correct": false, "explain": "This is the trap dressed up. AI multiplies capability per person, not the right number of people." },
+            { "id": "b", "label": "Optimise for **decision speed per person**, not throughput per team. AI handles connective tissue; humans steer. Spans stay thin; depth grows.", "correct": true, "explain": "Captures the actual lever: per-person decision authority + AI doing hand-off work. The shape compounds." },
+            { "id": "c", "label": "Two pods of N people, each fully AI-augmented.", "correct": false, "explain": "Pod-isation without re-thinking spans is window dressing. Same hand-offs, fancier label." },
+            { "id": "d", "label": "Hire AI-natives only. They'll figure out the rest.", "correct": false, "explain": "AI-fluency isn't a substitute for org design. You'll get fast individuals trapped in slow structure." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "If you were building your team **today**, from zero, with the AI tools you have right now — how many people would you hire? At what seniority? What would the manager span be? Be specific. Then ask: what's stopping you from getting there from where you are?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "AI multiplies capability per person, not the right number of people. Don't scale the wins by adding heads.",
+            "Optimise for decision speed per person. Each IC's call should carry further; each manager's span should be thinner.",
+            "AI absorbs the connective tissue (status, drafts, hand-offs). Humans steer. That's the new operating model.",
+            "Defend the smaller team with artefacts and forward-looking leverage — not philosophy. Boards reward concrete + future-tense.",
+            "The shape compounds. Run it for two quarters and it stops being your experiment; it becomes the org standard."
+          ]
+        }
+      ]
+    }
+  ]
+}

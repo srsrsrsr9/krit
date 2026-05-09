@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The JD Funnel</title>
+<style>
+  :root { --bg:#fbf6ec; --paper:#fffaf0; --ink:#1f2937; --muted:#6b7280; --rule:#e5dfd0; --good:#10b981; --bad:#ef4444; --saffron:#f59e0b; --steel:#0ea5e9; --ease:cubic-bezier(0.22,0.61,0.36,1); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: ui-sans-serif, system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+  .stage { position: relative; width: 100%; height: 100vh; min-height: 240px; display: grid; place-items: center; padding: 16px; }
+  .frame { position: relative; width: 100%; max-width: 720px; aspect-ratio: 720/405; }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+  .caption { position: absolute; left: 0; right: 0; bottom: -28px; text-align: center; font-size: 14px; font-style: italic; color: var(--muted); height: 18px; }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: c1 22s var(--ease) infinite; }
+  .cap-2 { animation: c2 22s var(--ease) infinite; }
+  .cap-3 { animation: c3 22s var(--ease) infinite; }
+  @keyframes c1 { 0%,3% {opacity:0} 6%,32% {opacity:1} 35%,100% {opacity:0} }
+  @keyframes c2 { 0%,35% {opacity:0} 38%,64% {opacity:1} 67%,100% {opacity:0} }
+  @keyframes c3 { 0%,67% {opacity:0} 70%,95% {opacity:1} 97%,100% {opacity:0} }
+
+  /* Resumes streaming through funnel */
+  .res-a { transform-box: fill-box; opacity: 0; animation: dropA 22s linear infinite; }
+  .res-a.r2 { animation-delay: 0.4s; }
+  .res-a.r3 { animation-delay: 0.8s; }
+  .res-a.r4 { animation-delay: 1.2s; }
+  @keyframes dropA {
+    0%, 6% { opacity:0; transform: translateY(0); }
+    9%     { opacity:1; transform: translateY(0); }
+    18%    { opacity:1; transform: translateY(60px); }
+    22%    { opacity:0; transform: translateY(80px); }
+    100%   { opacity:0; }
+  }
+  .res-b { transform-box: fill-box; opacity: 0; animation: dropB 22s linear infinite; }
+  .res-b.r2 { animation-delay: 0.4s; }
+  .res-b.r3 { animation-delay: 0.8s; }
+  .res-b.r4 { animation-delay: 1.2s; }
+  @keyframes dropB {
+    0%, 38% { opacity:0; transform: translateY(0); }
+    41%     { opacity:1; transform: translateY(0); }
+    50%     { opacity:1; transform: translateY(60px); }
+    54%     { opacity:0; transform: translateY(80px); }
+    100%    { opacity:0; }
+  }
+
+  /* Filter labels */
+  .filter-pre { animation: showPre 22s var(--ease) infinite; }
+  .filter-post { animation: showPost 22s var(--ease) infinite; }
+  @keyframes showPre { 0%,4% {opacity:0} 8%,32% {opacity:1} 35%,100% {opacity:0} }
+  @keyframes showPost { 0%,36% {opacity:0} 40%,64% {opacity:1} 67%,100% {opacity:0} }
+
+  /* The "right hire" highlighted resume */
+  .right-hire-pre { animation: rightPre 22s var(--ease) infinite; transform-box: fill-box; transform-origin: center; }
+  .right-hire-post { animation: rightPost 22s var(--ease) infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes rightPre {
+    0%,15% {opacity:0; transform:translateY(0) scale(1)}
+    18% {opacity:1; transform:translateY(0) scale(1.1); fill:var(--bad)}
+    24% {opacity:1; transform:translateY(40px) scale(1); fill:var(--bad)}
+    27% {opacity:0.4; transform:translateY(60px) scale(1)}
+    32%,100% {opacity:0}
+  }
+  @keyframes rightPost {
+    0%,46% {opacity:0; transform:translateY(0) scale(1)}
+    49% {opacity:1; transform:translateY(0) scale(1.1); fill:var(--good)}
+    56% {opacity:1; transform:translateY(60px) scale(1); fill:var(--good)}
+    62% {opacity:1; transform:translateY(80px) scale(1.2); fill:var(--good)}
+    67%,100% {opacity:0}
+  }
+
+  /* Final tally */
+  .tally-pre { animation: tallyPre 22s var(--ease) infinite; }
+  .tally-post { animation: tallyPost 22s var(--ease) infinite; }
+  @keyframes tallyPre { 0%,67% {opacity:0} 72%,93% {opacity:1} 100% {opacity:0} }
+  @keyframes tallyPost { 0%,67% {opacity:0} 72%,93% {opacity:1} 100% {opacity:0} }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; opacity:1 } }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: Two hiring funnels — pre-AI filters and post-AI filters select different candidates from the same applicant pool">
+
+      <text x="360" y="32" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.22em" fill="var(--muted)">SAME 3,400 RESUMES · TWO FUNNELS</text>
+
+      <!-- LEFT: pre-AI funnel -->
+      <g transform="translate(60, 60)">
+        <text x="120" y="14" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.18em" fontWeight="700" fill="var(--bad)" font-weight="700">PRE-AI FILTER</text>
+        <!-- Funnel shape -->
+        <path d="M 0 30 L 240 30 L 180 170 L 60 170 Z" fill="#fee2e2" stroke="var(--bad)" stroke-width="2" />
+        <text x="120" y="58" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" fill="var(--bad)" class="filter-pre">"5+ yrs SQL"</text>
+        <text x="120" y="80" text-anchor="middle" font-size="13" font-family="ui-monospace,monospace" fill="var(--bad)" class="filter-pre">"100+ specs written"</text>
+
+        <!-- Resumes streaming -->
+        <g transform="translate(120, 30)">
+          <g class="res-a"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-a r2"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-a r3"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-a r4"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <!-- The "right" hire — gets stopped/dimmed pre-AI -->
+          <g class="right-hire-pre"><rect x="-13" y="0" width="26" height="22" fill="#fef3c7" stroke="var(--saffron)" stroke-width="2" /></g>
+        </g>
+
+        <!-- Tally -->
+        <g class="tally-pre" transform="translate(120, 200)">
+          <rect x="-50" y="0" width="100" height="36" fill="white" stroke="var(--bad)" stroke-width="2" rx="2" />
+          <text x="0" y="14" text-anchor="middle" font-size="11" letter-spacing="0.18em" font-family="ui-monospace,monospace" fill="var(--muted)">RESULT</text>
+          <text x="0" y="30" text-anchor="middle" font-size="14" font-weight="700" font-family="ui-monospace,monospace" fill="var(--bad)">35% success</text>
+        </g>
+      </g>
+
+      <!-- RIGHT: post-AI funnel -->
+      <g transform="translate(420, 60)">
+        <text x="120" y="14" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.18em" fontWeight="700" fill="var(--good)" font-weight="700">POST-AI FILTER</text>
+        <path d="M 0 30 L 240 30 L 180 170 L 60 170 Z" fill="#dcfce7" stroke="var(--good)" stroke-width="2" />
+        <text x="120" y="58" text-anchor="middle" font-size="13" font-weight="700" font-family="ui-monospace,monospace" fill="var(--good)" class="filter-post">"Killed a wrong PRD"</text>
+        <text x="120" y="80" text-anchor="middle" font-size="13" font-family="ui-monospace,monospace" fill="var(--good)" class="filter-post">"Defends a metric call"</text>
+
+        <g transform="translate(120, 30)">
+          <g class="res-b"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-b r2"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-b r3"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <g class="res-b r4"><rect x="-12" y="0" width="24" height="20" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.4" /></g>
+          <!-- The "right" hire — passes through and lands in success -->
+          <g class="right-hire-post"><rect x="-13" y="0" width="26" height="22" fill="#fef3c7" stroke="var(--saffron)" stroke-width="2" /></g>
+        </g>
+
+        <g class="tally-post" transform="translate(120, 200)">
+          <rect x="-50" y="0" width="100" height="36" fill="white" stroke="var(--good)" stroke-width="2" rx="2" />
+          <text x="0" y="14" text-anchor="middle" font-size="11" letter-spacing="0.18em" font-family="ui-monospace,monospace" fill="var(--muted)">RESULT</text>
+          <text x="0" y="30" text-anchor="middle" font-size="14" font-weight="700" font-family="ui-monospace,monospace" fill="var(--good)">71% success</text>
+        </g>
+      </g>
+
+      <!-- Center divider -->
+      <line x1="360" y1="50" x2="360" y2="320" stroke="var(--rule)" stroke-dasharray="4 3" />
+    </svg>
+    <div class="caption">
+      <div class="cap cap-1">Same 3,400 candidates. Pre-AI filter selects on what AI now does.</div>
+      <div class="cap cap-2">Post-AI filter selects on what AI <em>can't</em> do — judgement, taste, spine.</div>
+      <div class="cap cap-3">Different finalists. Different outcomes. Same applicant pool.</div>
+    </div>
+  </div>
+</main>
+<script>
+(() => {
+  let ctx=null,master=null,bg=[],loops=[],unlocked=false,muted=true;
+  function ensureCtx(){if(ctx)return ctx;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);return ctx;}
+  function tone(f,d,t,g,o=0,gl=null){if(!ctx)return;const t0=ctx.currentTime+o;const osc=ctx.createOscillator(),gn=ctx.createGain();osc.type=t;osc.frequency.setValueAtTime(f,t0);if(gl)osc.frequency.exponentialRampToValueAtTime(gl,t0+d);gn.gain.setValueAtTime(0.0001,t0);gn.gain.exponentialRampToValueAtTime(g,t0+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,t0+d);osc.connect(gn);gn.connect(master);osc.start(t0);osc.stop(t0+d+0.05);}
+  function bgStart(){if(!ctx||bg.length)return;const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=700;f.connect(master);[110,165].forEach(fr=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=fr;g.gain.value=0.10;o.connect(g);g.connect(f);o.start();bg.push(o,g);});bg.push(f);}
+  function cycle(){if(!ctx)return;
+    [1.5,2.0,2.5,3.0].forEach(t=>tone(880,0.05,"sine",0.10,t));
+    tone(220,0.5,"sawtooth",0.18,4.0,140);
+    [9.0,9.4,9.8,10.2].forEach(t=>tone(1100,0.05,"sine",0.10,t));
+    tone(523,0.5,"triangle",0.16,12.0);
+    tone(659,0.5,"triangle",0.16,12.5);
+    tone(784,0.6,"triangle",0.18,13.0);
+    tone(330,0.6,"sine",0.14,17.0);
+    tone(523,0.8,"triangle",0.16,17.5);
+  }
+  function unlock(){ensureCtx();if(!ctx)return;if(ctx.state==="suspended")ctx.resume();if(!unlocked){unlocked=true;bgStart();cycle();loops.push(setInterval(cycle,22000));}}
+  function setMuted(m){muted=m;if(!master)return;master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(m?0:0.7,ctx.currentTime+0.18);}
+  function restart(){document.querySelectorAll(".scene *, .caption *").forEach(c=>{const cs=getComputedStyle(c);if(cs.animationName!=="none"){c.style.animation="none";c.offsetHeight;c.style.animation="";}});}
+  window.addEventListener("message",e=>{if(e?.data?.type==="krit:start"){unlock();setMuted(false);restart();}if(e?.data?.type==="krit:restart"){restart();}});
+})();
+</script>
+</body>
+</html>

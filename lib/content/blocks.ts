@@ -369,6 +369,42 @@ export const ComicStripBlock = z.object({
   })).min(1).max(6),
 });
 
+/** SURPRISE — Tinder-style swipe through cards; reveal verdict after each. */
+export const CardSwipeBlock = z.object({
+  type: z.literal("cardSwipe"),
+  prompt: z.string(),
+  leftLabel: z.string(),
+  rightLabel: z.string(),
+  cards: z.array(z.object({
+    id: z.string(),
+    title: z.string(),
+    body: z.string(),
+    correctSide: z.enum(["left", "right"]),
+    explain: z.string(),
+  })).min(2).max(8),
+});
+
+/** TENSION — Drag a value on a continuum; banded feedback after lock-in. */
+export const ScaleSliderBlock = z.object({
+  type: z.literal("scaleSlider"),
+  prompt: z.string(),
+  min: z.number().default(0),
+  max: z.number().default(100),
+  step: z.number().min(0.1).default(5),
+  startValue: z.number().default(50),
+  leftLabel: z.string(),
+  rightLabel: z.string(),
+  unit: z.string().optional(),
+  /** Feedback bands — first match wins (low → high). */
+  bands: z.array(z.object({
+    lo: z.number(),
+    hi: z.number(),
+    title: z.string(),
+    body: z.string(),
+    tone: z.enum(["bad", "okay", "good"]).default("okay"),
+  })).min(2).max(6),
+});
+
 /** ACHIEVEMENT — Drag scenarios into named bins; cartoon mascots react. */
 export const DragClassifyBlock = z.object({
   type: z.literal("dragClassify"),
@@ -440,6 +476,8 @@ export const ContentBlock = z.discriminatedUnion("type", [
   DragClassifyBlock,
   ComicStripBlock,
   PanelComicBlock,
+  ScaleSliderBlock,
+  CardSwipeBlock,
 ]);
 
 export type ContentBlock = z.infer<typeof ContentBlock>;

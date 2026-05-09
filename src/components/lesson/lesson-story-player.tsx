@@ -31,12 +31,14 @@ const CARD_KICKER: Record<string, string> = {
   dragClassify: "SORT IT",
   comicStrip: "COMIC",
   panelComic: "COMIC STRIP",
+  scaleSlider: "DIAL IN",
+  cardSwipe: "SWIPE DECK",
 };
 
 const INTERACTIVE_TYPES = new Set([
   "quiz", "timedChallenge", "branchScenario", "skillProof",
   "bossBattle", "revealCard", "reflect", "chatScenario", "dragClassify",
-  "comicStrip", "panelComic",
+  "comicStrip", "panelComic", "scaleSlider", "cardSwipe",
 ]);
 const POINTS_PER_INTERACTIVE = 10;
 
@@ -56,6 +58,10 @@ export interface LessonStoryPlayerProps {
   lessonSubtitle?: string;
   pathTitle?: string;
   closeHref?: string;
+  /** Where the win-screen Finish button takes the learner. Defaults to closeHref. */
+  nextHref?: string;
+  /** Label on the win-screen Finish button (e.g. "Next: Trust Stack →"). */
+  nextLabel?: string;
 }
 
 export function LessonStoryPlayer({
@@ -64,6 +70,8 @@ export function LessonStoryPlayer({
   lessonSubtitle,
   pathTitle,
   closeHref = "/home",
+  nextHref,
+  nextLabel,
 }: LessonStoryPlayerProps) {
   const cards: Card[] = useMemo(
     () => blocks.filter((b) => b.type !== "lessonMeta"),
@@ -219,7 +227,7 @@ export function LessonStoryPlayer({
                 </CardChrome>
               )}
               {isWin && (
-                <WinCard xp={xp} streak={streak} totalCards={total} closeHref={closeHref} />
+                <WinCard xp={xp} streak={streak} totalCards={total} />
               )}
             </motion.div>
           </AnimatePresence>
@@ -261,10 +269,10 @@ export function LessonStoryPlayer({
 
             {isWin ? (
               <a
-                href={closeHref}
+                href={nextHref ?? closeHref}
                 className="group relative flex h-11 items-center justify-between bg-amber-400 px-5 font-mono text-[11px] font-bold tracking-[0.2em] text-slate-950 transition-transform hover:translate-x-0.5"
               >
-                FINISH
+                {nextLabel ?? "FINISH"}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </a>
             ) : (
@@ -405,12 +413,10 @@ function WinCard({
   xp,
   streak,
   totalCards,
-  closeHref,
 }: {
   xp: number;
   streak: number;
   totalCards: number;
-  closeHref: string;
 }) {
   return (
     <div className="flex h-full flex-col justify-center">
@@ -457,7 +463,7 @@ function WinCard({
         transition={{ delay: 0.4, duration: 0.4 }}
         className="mt-6 max-w-md text-base leading-relaxed text-slate-300"
       >
-        The reinvestment loop is yours now. Go install it on your team — the policy survives the moment somebody questions it.
+        Lesson cleared. Tap continue to keep moving — or come back later, the streak holds.
       </motion.p>
 
       <motion.div

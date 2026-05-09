@@ -27,6 +27,8 @@ import { TimedChallengeBlock } from "./blocks/timed-challenge-block";
 import { DragClassifyBlock } from "./blocks/drag-classify-block";
 import { ComicStripBlock } from "./blocks/comic-strip-block";
 import { PanelComicBlock } from "./blocks/panel-comic-block";
+import { ScaleSliderBlock } from "./blocks/scale-slider-block";
+import { CardSwipeBlock } from "./blocks/card-swipe-block";
 
 // Heavy new blocks — lazy-loaded to keep initial bundle slim.
 const BranchScenarioBlock = dynamic(
@@ -171,6 +173,29 @@ function BlockOne({
       return <ComicStripBlock title={block.title} frames={block.frames} />;
     case "panelComic":
       return <PanelComicBlock title={block.title} panels={block.panels} />;
+    case "scaleSlider":
+      return (
+        <ScaleSliderBlock
+          prompt={block.prompt}
+          min={block.min}
+          max={block.max}
+          step={block.step}
+          startValue={block.startValue}
+          leftLabel={block.leftLabel}
+          rightLabel={block.rightLabel}
+          unit={block.unit}
+          bands={block.bands}
+        />
+      );
+    case "cardSwipe":
+      return (
+        <CardSwipeBlock
+          prompt={block.prompt}
+          leftLabel={block.leftLabel}
+          rightLabel={block.rightLabel}
+          cards={block.cards}
+        />
+      );
   }
 }
 

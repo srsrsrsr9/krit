@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Override Loop</title>
+<style>
+  :root {
+    --bg: #fbf6ec;
+    --paper: #fffaf0;
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --rule: #e5dfd0;
+    --good: #10b981;
+    --bad: #ef4444;
+    --saffron: #f59e0b;
+    --steel: #0ea5e9;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: ui-sans-serif, system-ui, -apple-system, "Inter", sans-serif; color: var(--ink); overflow: hidden; }
+  .stage { position: relative; width: 100%; height: 100vh; min-height: 240px; display: grid; place-items: center; padding: 16px; }
+  .frame { position: relative; width: 100%; max-width: 720px; aspect-ratio: 720 / 405; }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+  .caption { position: absolute; left: 0; right: 0; bottom: -28px; text-align: center; font-size: 14px; font-style: italic; color: var(--muted); height: 18px; }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: c1 24s var(--ease) infinite; }
+  .cap-2 { animation: c2 24s var(--ease) infinite; }
+  .cap-3 { animation: c3 24s var(--ease) infinite; }
+  .cap-4 { animation: c4 24s var(--ease) infinite; }
+  @keyframes c1 { 0%,3% {opacity:0} 6%,22% {opacity:1} 25%,100% {opacity:0} }
+  @keyframes c2 { 0%,25% {opacity:0} 28%,46% {opacity:1} 49%,100% {opacity:0} }
+  @keyframes c3 { 0%,49% {opacity:0} 52%,72% {opacity:1} 75%,100% {opacity:0} }
+  @keyframes c4 { 0%,75% {opacity:0} 78%,95% {opacity:1} 97%,100% {opacity:0} }
+
+  /* Resumes streaming through screen */
+  .resume { transform-box: fill-box; transform-origin: center; opacity: 0; animation: stream 24s linear infinite; }
+  .resume.r2 { animation-delay: 1.0s; }
+  .resume.r3 { animation-delay: 2.0s; }
+  .resume.r4 { animation-delay: 3.0s; }
+  @keyframes stream {
+    0%, 1%   { opacity: 0; transform: translateX(0); }
+    3%       { opacity: 1; transform: translateX(0); }
+    18%      { opacity: 1; transform: translateX(220px); }
+    20%      { opacity: 0; transform: translateX(240px); }
+    100%     { opacity: 0; }
+  }
+  /* "X" rejection mark on resumes */
+  .rej { animation: rejPulse 24s linear infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes rejPulse { 0%,7% {opacity:0} 10%,18% {opacity:1; transform:scale(1.1)} 22%,100% {opacity:0; transform:scale(1)} }
+
+  /* Override hand reaching in */
+  .hand { transform-box: fill-box; opacity: 0; animation: handIn 24s var(--ease) infinite; }
+  @keyframes handIn {
+    0%, 24%  { opacity: 0; transform: translate(80px, 30px) rotate(20deg); }
+    27%      { opacity: 1; transform: translate(0, 0) rotate(0); }
+    35%      { opacity: 1; transform: translate(0, 0) rotate(0); }
+    40%, 100% { opacity: 0; transform: translate(80px, 30px) rotate(20deg); }
+  }
+  /* Green tick replacing red X */
+  .tick { transform-box: fill-box; transform-origin: center; opacity: 0; animation: tickIn 24s var(--ease) infinite; }
+  @keyframes tickIn { 0%,33% {opacity:0; transform:scale(0)} 37% {opacity:1; transform:scale(1.4)} 41%,72% {opacity:1; transform:scale(1)} 75%,100% {opacity:0} }
+
+  /* Notebook entries piling up */
+  .entry { transform-box: fill-box; opacity: 0; animation: entryAppear 24s var(--ease) infinite; }
+  .entry.e2 { animation-delay: 0.6s; }
+  .entry.e3 { animation-delay: 1.2s; }
+  .entry.e4 { animation-delay: 1.8s; }
+  @keyframes entryAppear {
+    0%, 40%   { opacity: 0; transform: translateY(8px); }
+    45%       { opacity: 1; transform: translateY(0); }
+    72%       { opacity: 1; }
+    78%, 100% { opacity: 0; }
+  }
+
+  /* Threshold slider that drops */
+  .slider-knob { animation: sliderDrop 24s var(--ease) infinite; transform-box: fill-box; }
+  @keyframes sliderDrop {
+    0%, 50%   { transform: translateX(0); }
+    65%       { transform: translateX(-44px); }
+    72%, 100% { transform: translateX(-44px); }
+  }
+  .slider-old { animation: oldFade 24s var(--ease) infinite; }
+  @keyframes oldFade { 0%,55% {opacity:1} 65%,100% {opacity:0.3} }
+
+  /* Reduced retraining wave (more candidates pass) */
+  .pass-wave { transform-box: fill-box; opacity: 0; animation: passWave 24s var(--ease) infinite; }
+  .pass-wave.p2 { animation-delay: 0.4s; }
+  .pass-wave.p3 { animation-delay: 0.8s; }
+  @keyframes passWave {
+    0%, 75%   { opacity: 0; transform: translateX(0); }
+    80%       { opacity: 1; transform: translateX(0); fill: var(--good); }
+    92%       { opacity: 1; transform: translateX(220px); }
+    96%, 100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: AI rejects candidates; humans override; the override log retrains the model and shifts the threshold downward">
+
+      <!-- AI screen on the right -->
+      <g transform="translate(380, 90)">
+        <rect x="0" y="0" width="220" height="160" fill="#fffaf0" stroke="var(--ink)" stroke-width="2" rx="4" />
+        <text x="110" y="20" text-anchor="middle" font-size="13" font-family="ui-monospace,monospace" letter-spacing="0.2em" fill="var(--steel)">AI · SCREEN</text>
+        <line x1="20" y1="32" x2="200" y2="32" stroke="var(--rule)" />
+        <text x="20" y="50" font-size="14" font-family="ui-monospace,monospace" fill="var(--ink)">THRESHOLD</text>
+        <!-- Slider track -->
+        <rect x="20" y="64" width="180" height="6" rx="3" fill="var(--rule)" />
+        <text class="slider-old" x="160" y="84" font-size="13" font-family="ui-monospace,monospace" fill="var(--bad)">0.65</text>
+        <circle class="slider-knob" cx="160" cy="67" r="8" fill="var(--ink)" />
+        <text x="20" y="115" font-size="14" font-family="ui-monospace,monospace" fill="var(--muted)">VERDICT</text>
+        <text x="20" y="140" font-size="22" font-weight="700" font-family="ui-monospace,monospace" fill="var(--bad)">REJECT</text>
+      </g>
+
+      <!-- Resumes streaming in from left -->
+      <g transform="translate(80, 130)">
+        <g class="resume">
+          <rect x="0" y="0" width="48" height="60" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.6" />
+          <line x1="6" y1="10" x2="42" y2="10" stroke="var(--muted)" />
+          <line x1="6" y1="20" x2="36" y2="20" stroke="var(--muted)" />
+          <line x1="6" y1="30" x2="40" y2="30" stroke="var(--muted)" />
+          <text class="rej" x="24" y="38" text-anchor="middle" font-size="36" font-weight="700" fill="var(--bad)">×</text>
+        </g>
+        <g class="resume r2">
+          <rect x="0" y="0" width="48" height="60" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.6" />
+          <line x1="6" y1="10" x2="42" y2="10" stroke="var(--muted)" />
+          <line x1="6" y1="20" x2="36" y2="20" stroke="var(--muted)" />
+          <line x1="6" y1="30" x2="40" y2="30" stroke="var(--muted)" />
+          <text class="rej" x="24" y="38" text-anchor="middle" font-size="36" font-weight="700" fill="var(--bad)">×</text>
+        </g>
+        <g class="resume r3">
+          <rect x="0" y="0" width="48" height="60" fill="#fffaf0" stroke="var(--ink)" stroke-width="1.6" />
+          <line x1="6" y1="10" x2="42" y2="10" stroke="var(--muted)" />
+          <line x1="6" y1="20" x2="36" y2="20" stroke="var(--muted)" />
+          <line x1="6" y1="30" x2="40" y2="30" stroke="var(--muted)" />
+          <!-- This one gets overridden -->
+          <text class="rej" x="24" y="38" text-anchor="middle" font-size="36" font-weight="700" fill="var(--bad)">×</text>
+          <text class="tick" x="24" y="38" text-anchor="middle" font-size="36" font-weight="700" fill="var(--good)">✓</text>
+        </g>
+
+        <!-- Pass wave after retraining -->
+        <g class="pass-wave"><rect x="0" y="0" width="48" height="60" fill="#dcfce7" stroke="var(--good)" stroke-width="1.6" /></g>
+        <g class="pass-wave p2"><rect x="0" y="0" width="48" height="60" fill="#dcfce7" stroke="var(--good)" stroke-width="1.6" /></g>
+        <g class="pass-wave p3"><rect x="0" y="0" width="48" height="60" fill="#dcfce7" stroke="var(--good)" stroke-width="1.6" /></g>
+      </g>
+
+      <!-- Hand from below for override -->
+      <g class="hand" transform="translate(220, 220)">
+        <!-- arm -->
+        <rect x="-6" y="0" width="12" height="60" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.4" />
+        <!-- shirt cuff -->
+        <rect x="-9" y="56" width="18" height="6" fill="#0ea5e9" />
+        <!-- hand outline -->
+        <ellipse cx="0" cy="-4" rx="11" ry="9" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.4" />
+        <!-- pen -->
+        <line x1="-2" y1="-12" x2="-12" y2="-26" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" />
+      </g>
+
+      <!-- Override log notebook bottom-left -->
+      <g transform="translate(40, 290)">
+        <rect x="0" y="0" width="200" height="100" fill="#fef3c7" stroke="var(--ink)" stroke-width="2" rx="2" />
+        <text x="100" y="20" text-anchor="middle" font-size="13" font-family="ui-monospace,monospace" letter-spacing="0.18em" fill="var(--ink)">OVERRIDE LOG</text>
+        <line x1="12" y1="28" x2="188" y2="28" stroke="var(--ink)" stroke-width="0.7" />
+        <g class="entry"><text x="14" y="46" font-size="12" font-family="ui-monospace,monospace" fill="var(--ink)">0.62 → ✓ → top 20%</text></g>
+        <g class="entry e2"><text x="14" y="62" font-size="12" font-family="ui-monospace,monospace" fill="var(--ink)">0.60 → ✓ → strong</text></g>
+        <g class="entry e3"><text x="14" y="78" font-size="12" font-family="ui-monospace,monospace" fill="var(--ink)">0.59 → ✓ → strong</text></g>
+        <g class="entry e4"><text x="14" y="94" font-size="12" font-family="ui-monospace,monospace" fill="var(--ink)">0.61 → ✓ → top 30%</text></g>
+      </g>
+
+      <!-- Right side: arrow indicating retraining loop -->
+      <g transform="translate(280, 320)">
+        <path d="M 0 0 Q 100 -40 200 0" fill="none" stroke="var(--saffron)" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round" />
+        <polygon points="195,-3 205,0 195,5" fill="var(--saffron)" />
+        <text x="100" y="-44" text-anchor="middle" font-size="12" font-family="ui-monospace,monospace" letter-spacing="0.16em" fill="var(--saffron)">RETRAIN</text>
+      </g>
+    </svg>
+    <div class="caption">
+      <div class="cap cap-1">The model rejects below threshold. Most teams stop here.</div>
+      <div class="cap cap-2">A human overrides — and writes one line about why.</div>
+      <div class="cap cap-3">The log accumulates. Each line is labelled training data.</div>
+      <div class="cap cap-4">Threshold drops; the model now passes the right people.</div>
+    </div>
+  </div>
+</main>
+<script>
+(() => {
+  let ctx=null,master=null,bg=[],loops=[],unlocked=false,muted=true;
+  function ensureCtx(){if(ctx)return ctx;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);return ctx;}
+  function tone(f,d,t,g,o=0,gl=null){if(!ctx)return;const t0=ctx.currentTime+o;const osc=ctx.createOscillator(),gn=ctx.createGain();osc.type=t;osc.frequency.setValueAtTime(f,t0);if(gl)osc.frequency.exponentialRampToValueAtTime(gl,t0+d);gn.gain.setValueAtTime(0.0001,t0);gn.gain.exponentialRampToValueAtTime(g,t0+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,t0+d);osc.connect(gn);gn.connect(master);osc.start(t0);osc.stop(t0+d+0.05);}
+  function noise(d,g,hp=1500,o=0){if(!ctx)return;const t0=ctx.currentTime+o;const buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*d),ctx.sampleRate);const a=buf.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=ctx.createBufferSource();s.buffer=buf;const f=ctx.createBiquadFilter();f.type="highpass";f.frequency.value=hp;const gn=ctx.createGain();gn.gain.setValueAtTime(0.0001,t0);gn.gain.exponentialRampToValueAtTime(g,t0+0.005);gn.gain.exponentialRampToValueAtTime(0.0001,t0+d);s.connect(f);f.connect(gn);gn.connect(master);s.start(t0);s.stop(t0+d+0.05);}
+  function bgStart(){if(!ctx||bg.length)return;const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=600;f.connect(master);[110,165].forEach((fr)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=fr;g.gain.value=0.10;o.connect(g);g.connect(f);o.start();bg.push(o,g);});bg.push(f);}
+  function cycle(){if(!ctx)return;
+    // resume stream — quiet ticks
+    [0.6,1.6,2.6,3.6].forEach(t=>tone(900,0.04,"sine",0.10,t));
+    // rejections — soft buzz
+    [3.5,5.5].forEach(t=>{noise(0.05,0.06,2000,t);tone(160,0.10,"sawtooth",0.10,t);});
+    // override hand — pluck
+    tone(440,0.18,"triangle",0.20,7.0);
+    tone(660,0.30,"triangle",0.16,7.15);
+    // log entries — typewriter
+    [10.0,10.6,11.2,11.8].forEach(t=>tone(1400,0.03,"square",0.12,t));
+    // retrain swoosh
+    noise(0.4,0.10,500,15.5);
+    tone(220,0.4,"sawtooth",0.10,15.5,1100);
+    // pass wave — bright chime
+    [18.5,19.0,19.5].forEach((t,i)=>tone([523,659,784][i],0.4,"triangle",0.16,t));
+  }
+  function unlock(){ensureCtx();if(!ctx)return;if(ctx.state==="suspended")ctx.resume();if(!unlocked){unlocked=true;bgStart();cycle();const id=setInterval(cycle,24000);loops.push(id);}}
+  function setMuted(m){muted=m;if(!master)return;master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(m?0:0.7,ctx.currentTime+0.18);}
+  function restart(){document.querySelectorAll(".scene *, .caption *").forEach(c=>{const cs=getComputedStyle(c);if(cs.animationName!=="none"){c.style.animation="none";c.offsetHeight;c.style.animation="";}});}
+  window.addEventListener("message",e=>{if(e?.data?.type==="krit:start"){unlock();setMuted(false);restart();}if(e?.data?.type==="krit:restart"){restart();}});
+})();
+</script>
+</body>
+</html>

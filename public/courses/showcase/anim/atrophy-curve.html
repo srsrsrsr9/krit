@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Atrophy Curve</title>
+<style>
+  :root { --bg:#fbf6ec; --paper:#fffaf0; --ink:#1f2937; --muted:#6b7280; --rule:#e5dfd0; --good:#10b981; --bad:#ef4444; --saffron:#f59e0b; --ease:cubic-bezier(0.22,0.61,0.36,1); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); font-family: ui-sans-serif, system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+  .stage { position: relative; width: 100%; height: 100vh; min-height: 240px; display: grid; place-items: center; padding: 16px; }
+  .frame { position: relative; width: 100%; max-width: 720px; aspect-ratio: 720/405; }
+  .scene { width: 100%; height: 100%; display: block; background: var(--paper); border-radius: 8px; }
+  .caption { position: absolute; left: 0; right: 0; bottom: -28px; text-align: center; font-size: 14px; font-style: italic; color: var(--muted); height: 18px; }
+  .cap { position: absolute; inset: 0; opacity: 0; }
+  .cap-1 { animation: c1 22s var(--ease) infinite; }
+  .cap-2 { animation: c2 22s var(--ease) infinite; }
+  .cap-3 { animation: c3 22s var(--ease) infinite; }
+  @keyframes c1 { 0%,3% {opacity:0} 6%,30% {opacity:1} 33%,100% {opacity:0} }
+  @keyframes c2 { 0%,33% {opacity:0} 36%,64% {opacity:1} 67%,100% {opacity:0} }
+  @keyframes c3 { 0%,67% {opacity:0} 70%,95% {opacity:1} 97%,100% {opacity:0} }
+
+  /* Lines drawing forward */
+  .line-throughput { stroke-dasharray: 360; stroke-dashoffset: 360; animation: drawLine 22s var(--ease) infinite; }
+  .line-depth-flat { stroke-dasharray: 360; stroke-dashoffset: 360; animation: drawLine 22s var(--ease) infinite; }
+  .line-depth-rise { stroke-dasharray: 360; stroke-dashoffset: 360; animation: drawLine 22s var(--ease) infinite; }
+  @keyframes drawLine {
+    0%, 4%   { stroke-dashoffset: 360; }
+    25%      { stroke-dashoffset: 240; }
+    50%      { stroke-dashoffset: 120; }
+    75%      { stroke-dashoffset: 0; }
+    93%      { stroke-dashoffset: 0; }
+    100%     { stroke-dashoffset: 360; }
+  }
+
+  /* Sam-A wilting at end */
+  .sam-a-mouth-flat { animation: aFlat 22s linear infinite; }
+  .sam-a-mouth-frown { animation: aFrown 22s linear infinite; }
+  @keyframes aFlat { 0%,55% {opacity:1} 60%,100% {opacity:0} }
+  @keyframes aFrown { 0%,55% {opacity:0} 60%,93% {opacity:1} 100% {opacity:0} }
+
+  /* Sam-B engaged through */
+  .sam-b-mouth-smile { animation: bSmile 22s linear infinite; }
+  .sam-b-mouth-grin  { animation: bGrin 22s linear infinite; }
+  @keyframes bSmile { 0%,40% {opacity:1} 45%,100% {opacity:0} }
+  @keyframes bGrin  { 0%,40% {opacity:0} 50%,93% {opacity:1} 100% {opacity:0} }
+
+  /* LinkedIn icon for Sam-A at the end */
+  .linkedin { transform-box: fill-box; transform-origin: center; opacity: 0; animation: liShow 22s var(--ease) infinite; }
+  @keyframes liShow { 0%,75% {opacity:0; transform:scale(0)} 80% {opacity:1; transform:scale(1.2)} 85%,93% {opacity:1; transform:scale(1)} 100% {opacity:0} }
+  /* Mentor badge for Sam-B */
+  .badge { transform-box: fill-box; transform-origin: center; opacity: 0; animation: bShow 22s var(--ease) infinite; }
+  @keyframes bShow { 0%,75% {opacity:0; transform:scale(0)} 80% {opacity:1; transform:scale(1.2)} 85%,93% {opacity:1; transform:scale(1)} 100% {opacity:0} }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .line-throughput,.line-depth-flat,.line-depth-rise{stroke-dashoffset:0!important} }
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="frame">
+    <svg class="scene" viewBox="0 0 720 405" role="img"
+         aria-label="Animation: Two engineers, same AI-boosted throughput, but their depth diverges over twelve months">
+
+      <!-- Title strip -->
+      <text x="360" y="32" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.22em" fill="var(--muted)">12 MONTHS · SAME THROUGHPUT</text>
+
+      <!-- Chart axes -->
+      <g transform="translate(60, 60)">
+        <!-- Y axis label -->
+        <text x="-4" y="0" text-anchor="end" font-size="14" font-family="ui-monospace,monospace" fill="var(--muted)">↑</text>
+        <text x="-4" y="170" text-anchor="end" font-size="13" font-family="ui-monospace,monospace" letter-spacing="0.14em" fill="var(--muted)">DEPTH</text>
+        <!-- Baseline -->
+        <line x1="0" y1="180" x2="600" y2="180" stroke="var(--rule)" />
+        <!-- X ticks -->
+        <g font-family="ui-monospace,monospace" font-size="13" fill="var(--muted)">
+          <text x="0"   y="200" text-anchor="middle">M0</text>
+          <text x="200" y="200" text-anchor="middle">M4</text>
+          <text x="400" y="200" text-anchor="middle">M8</text>
+          <text x="600" y="200" text-anchor="middle">M12</text>
+        </g>
+
+        <!-- Throughput line — both teams, same -->
+        <path class="line-throughput" d="M 0 140 Q 100 90 200 80 Q 350 70 500 70 Q 580 70 600 70" fill="none" stroke="var(--saffron)" stroke-width="2" stroke-linecap="round" />
+        <text x="610" y="74" font-size="13" font-family="ui-monospace,monospace" fill="var(--saffron)">Throughput</text>
+
+        <!-- Depth — Sam-A flatlines then drops -->
+        <path class="line-depth-flat" d="M 0 140 Q 100 130 200 130 Q 350 134 500 145 Q 580 160 600 165" fill="none" stroke="var(--bad)" stroke-width="2.5" stroke-linecap="round" />
+        <text x="610" y="170" font-size="13" font-family="ui-monospace,monospace" fill="var(--bad)">Sam-A</text>
+
+        <!-- Depth — Sam-B keeps rising -->
+        <path class="line-depth-rise" d="M 0 140 Q 100 130 200 110 Q 350 80 500 50 Q 580 30 600 25" fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linecap="round" />
+        <text x="610" y="30" font-size="13" font-family="ui-monospace,monospace" fill="var(--good)">Sam-B</text>
+      </g>
+
+      <!-- Sam-A (with LinkedIn at end) -->
+      <g transform="translate(160, 320)">
+        <circle r="22" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.5" />
+        <path d="M-16 -10 Q -8 -22 0 -20 Q 8 -22 16 -10 L 16 -4 L -16 -4 Z" fill="var(--ink)" />
+        <circle cx="-7" cy="0" r="3.6" fill="white" stroke="var(--ink)" stroke-width="1.2" />
+        <circle cx="7"  cy="0" r="3.6" fill="white" stroke="var(--ink)" stroke-width="1.2" />
+        <line x1="-3" y1="0" x2="3" y2="0" stroke="var(--ink)" stroke-width="1" />
+        <circle cx="-7" cy="0" r="1" fill="var(--ink)" />
+        <circle cx="7"  cy="0" r="1" fill="var(--ink)" />
+        <line class="sam-a-mouth-flat" x1="-5" y1="10" x2="5" y2="10" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" />
+        <path class="sam-a-mouth-frown" d="M-5 12 Q 0 8 5 12" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round" />
+        <text x="0" y="40" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.18em" fill="var(--muted)">SAM-A</text>
+        <!-- LinkedIn icon next to Sam-A -->
+        <g class="linkedin" transform="translate(34, -8)">
+          <rect x="-12" y="-12" width="24" height="24" rx="3" fill="#0a66c2" />
+          <text y="3" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="ui-sans-serif">in</text>
+        </g>
+      </g>
+
+      <!-- Sam-B (with mentor badge at end) -->
+      <g transform="translate(560, 320)">
+        <circle r="22" fill="#fcd9b6" stroke="var(--ink)" stroke-width="1.5" />
+        <path d="M-16 -10 Q -8 -22 0 -20 Q 8 -22 16 -10 L 16 -4 L -16 -4 Z" fill="var(--ink)" />
+        <circle cx="-7" cy="0" r="3.6" fill="white" stroke="var(--ink)" stroke-width="1.2" />
+        <circle cx="7"  cy="0" r="3.6" fill="white" stroke="var(--ink)" stroke-width="1.2" />
+        <line x1="-3" y1="0" x2="3" y2="0" stroke="var(--ink)" stroke-width="1" />
+        <circle cx="-7" cy="0" r="1" fill="var(--ink)" />
+        <circle cx="7"  cy="0" r="1" fill="var(--ink)" />
+        <path class="sam-b-mouth-smile" d="M-5 9 Q 0 13 5 9" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round" />
+        <path class="sam-b-mouth-grin"  d="M-7 8 Q 0 16 7 8" stroke="var(--ink)" stroke-width="1.8" fill="none" stroke-linecap="round" />
+        <text x="0" y="40" text-anchor="middle" font-size="14" font-family="ui-monospace,monospace" letter-spacing="0.18em" fill="var(--muted)">SAM-B</text>
+        <!-- Mentor badge -->
+        <g class="badge" transform="translate(34, -8)">
+          <circle r="13" fill="var(--good)" stroke="var(--ink)" stroke-width="1.5" />
+          <text y="3" text-anchor="middle" font-size="11" font-weight="700" fill="white" font-family="ui-sans-serif">M</text>
+        </g>
+      </g>
+    </svg>
+    <div class="caption">
+      <div class="cap cap-1">Same AI assist. Same throughput climbing on both teams.</div>
+      <div class="cap cap-2">Sam-A's depth flatlines. The friction that taught him is gone.</div>
+      <div class="cap cap-3">Sam-B's curve keeps rising — because growth was on the calendar.</div>
+    </div>
+  </div>
+</main>
+<script>
+(() => {
+  let ctx=null,master=null,bg=[],loops=[],unlocked=false,muted=true;
+  function ensureCtx(){if(ctx)return ctx;const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;ctx=new C();master=ctx.createGain();master.gain.value=0;master.connect(ctx.destination);return ctx;}
+  function tone(f,d,t,g,o=0,gl=null){if(!ctx)return;const t0=ctx.currentTime+o;const osc=ctx.createOscillator(),gn=ctx.createGain();osc.type=t;osc.frequency.setValueAtTime(f,t0);if(gl)osc.frequency.exponentialRampToValueAtTime(gl,t0+d);gn.gain.setValueAtTime(0.0001,t0);gn.gain.exponentialRampToValueAtTime(g,t0+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,t0+d);osc.connect(gn);gn.connect(master);osc.start(t0);osc.stop(t0+d+0.05);}
+  function bgStart(){if(!ctx||bg.length)return;const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=700;f.connect(master);[98,147].forEach(fr=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=fr;g.gain.value=0.10;o.connect(g);g.connect(f);o.start();bg.push(o,g);});bg.push(f);}
+  function cycle(){if(!ctx)return;
+    // throughput rises — chord
+    [0.5,1.5,2.5].forEach((t,i)=>tone([262,330,392][i],0.5,"triangle",0.13,t));
+    // Sam-A drop — descending sad note
+    tone(330,0.6,"sine",0.16,11.0,196);
+    // Sam-B rises — ascending bright
+    [13.0,13.5,14.0].forEach((t,i)=>tone([392,494,659][i],0.4,"triangle",0.14,t));
+    // End chimes
+    tone(880,0.3,"triangle",0.18,18.5);
+  }
+  function unlock(){ensureCtx();if(!ctx)return;if(ctx.state==="suspended")ctx.resume();if(!unlocked){unlocked=true;bgStart();cycle();loops.push(setInterval(cycle,22000));}}
+  function setMuted(m){muted=m;if(!master)return;master.gain.cancelScheduledValues(ctx.currentTime);master.gain.linearRampToValueAtTime(m?0:0.7,ctx.currentTime+0.18);}
+  function restart(){document.querySelectorAll(".scene *, .caption *").forEach(c=>{const cs=getComputedStyle(c);if(cs.animationName!=="none"){c.style.animation="none";c.offsetHeight;c.style.animation="";}});}
+  window.addEventListener("message",e=>{if(e?.data?.type==="krit:start"){unlock();setMuted(false);restart();}if(e?.data?.type==="krit:restart"){restart();}});
+})();
+</script>
+</body>
+</html>
