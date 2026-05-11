@@ -1,0 +1,1327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embeddings · A Krit Deep Dive</title>
+<style>
+  :root {
+    --bg: #fbf6ec;
+    --paper: #fffaf0;
+    --ink: #0f172a;
+    --ink-soft: #334155;
+    --muted: #64748b;
+    --rule: #e7dfd0;
+    --rule-soft: #f1ead8;
+    --saffron: #f59e0b;
+    --saffron-soft: #fef3c7;
+    --emerald: #10b981;
+    --emerald-soft: #d1fae5;
+    --rose: #ef4444;
+    --rose-soft: #fee2e2;
+    --sky: #0284c7;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251, 246, 236, 0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .wordmark {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--ink); font-weight: 700;
+  }
+  .wordmark-k {
+    width: 22px; height: 22px;
+    background: var(--saffron);
+    color: var(--ink);
+    border-radius: 4px;
+    display: grid; place-items: center;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px; font-weight: 900;
+  }
+  .progress-pill {
+    background: var(--saffron-soft);
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+  /* Layout */
+  main { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+  @media (min-width: 900px) { main { padding: 48px 32px 120px; } }
+
+  /* Type */
+  .kicker {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--saffron);
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .kicker::before {
+    content: ""; width: 8px; height: 8px; background: var(--saffron);
+  }
+  h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 0.95;
+    margin: 0 0 16px;
+  }
+  h2 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+    margin: 56px 0 18px;
+  }
+  h3 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 21px;
+    font-weight: 700;
+    margin: 32px 0 12px;
+  }
+  p { margin: 0 0 18px; }
+  .lede { font-size: 19px; color: var(--ink-soft); line-height: 1.55; max-width: 600px; }
+  .meta {
+    margin-top: 18px;
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    font-family: ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.16em; color: var(--muted);
+    text-transform: uppercase;
+  }
+  .meta .dot { width: 3px; height: 3px; background: var(--muted); }
+
+  /* Card surface for interactive blocks */
+  .card {
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 28px 0;
+    box-shadow: 0 1px 0 var(--rule-soft);
+  }
+  .card.layer-1 { border-left: 4px solid var(--sky); }
+  .card.layer-2 { border-left: 4px solid var(--saffron); }
+  .card.layer-3 { border-left: 4px solid var(--emerald); }
+  .card-kicker {
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .card-kicker .layer-tag {
+    background: var(--ink); color: var(--paper);
+    padding: 2px 7px; border-radius: 3px;
+    font-weight: 700; letter-spacing: 0.16em;
+  }
+  .card-kicker.l1 .layer-tag { background: var(--sky); }
+  .card-kicker.l2 .layer-tag { background: var(--saffron); color: var(--ink); }
+  .card-kicker.l3 .layer-tag { background: var(--emerald); }
+  .card h3 { margin: 0 0 12px; font-size: 19px; }
+
+  /* Code blocks */
+  pre {
+    background: #0b1220;
+    color: #e2e8f0;
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+    position: relative;
+  }
+  pre .anno { color: #94a3b8; font-style: italic; }
+  pre code { color: inherit; font-size: inherit; font-family: inherit; }
+  code:not(pre code) {
+    font-family: ui-monospace, monospace;
+    font-size: 0.88em;
+    background: var(--saffron-soft);
+    color: #78350f;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .copy-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: #1e293b; color: #cbd5e1;
+    border: 1px solid #334155;
+    padding: 4px 9px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .copy-btn:hover { color: var(--saffron); border-color: var(--saffron); }
+  .copy-btn.copied { color: var(--emerald); border-color: var(--emerald); }
+
+  /* Inputs and controls */
+  input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 14px;
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-radius: 5px;
+    color: var(--ink);
+  }
+  textarea { font-family: 'Source Serif 4', serif; font-size: 15px; line-height: 1.55; resize: vertical; min-height: 80px; }
+  input:focus, textarea:focus { outline: none; border-color: var(--saffron); }
+
+  .btn {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .btn:hover { background: #1e293b; }
+  .btn.saffron { background: var(--saffron); color: var(--ink); }
+  .btn.saffron:hover { background: #d97706; color: var(--paper); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Confidence rating widget */
+  .conf-row { display: flex; flex-direction: column; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--rule-soft); }
+  .conf-row:last-child { border-bottom: none; }
+  .conf-statement { font-size: 15px; }
+  .conf-buttons { display: flex; gap: 6px; }
+  .conf-btn {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--rule);
+    background: white;
+    color: var(--ink);
+    font-family: ui-monospace, monospace;
+    font-size: 14px; font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 120ms var(--ease);
+  }
+  .conf-btn:hover { border-color: var(--saffron); }
+  .conf-btn.selected { background: var(--saffron); border-color: var(--saffron); color: var(--ink); }
+  .conf-label { font-family: ui-monospace, monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+
+  /* Predict-then-reveal */
+  .predict-stage { margin-top: 14px; }
+  .predict-prompt { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+  .predict-input-row { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+  .predict-input-row input { max-width: 140px; }
+  .reveal-box {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--saffron-soft);
+    border: 1.5px dashed var(--saffron);
+    border-radius: 5px;
+    font-size: 15px;
+  }
+  .reveal-box .actual {
+    font-family: ui-monospace, monospace;
+    font-size: 22px; font-weight: 800;
+    color: #78350f;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .reveal-box .vs {
+    font-size: 13px; color: var(--ink-soft); margin-bottom: 8px;
+  }
+  .reveal-box .feedback {
+    font-size: 14px; line-height: 1.5; color: var(--ink);
+  }
+
+  /* Worked example stages */
+  .stages { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .stage {
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px 16px;
+    background: white;
+  }
+  .stage.locked { opacity: 0.4; }
+  .stage-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .stage-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: grid; place-items: center;
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 800;
+  }
+  .stage.done .stage-num { background: var(--emerald); }
+  .stage-num.empty { background: var(--rule); color: var(--muted); }
+
+  /* Hands-on */
+  .step { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--rule-soft); }
+  .step:first-of-type { border-top: none; padding-top: 0; }
+  .step-circle {
+    width: 26px; height: 26px;
+    flex-shrink: 0; margin-top: 2px;
+    border: 2px solid var(--emerald);
+    background: white; color: var(--emerald);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    cursor: pointer;
+    font-family: ui-monospace, monospace;
+    font-size: 12px; font-weight: 800;
+  }
+  .step.done .step-circle {
+    background: var(--emerald);
+    color: white;
+  }
+  .step-body { flex: 1; min-width: 0; }
+  .expect {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--emerald-soft);
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: italic;
+    color: #064e3b;
+  }
+  .expect .expect-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--emerald);
+    font-style: normal;
+    margin-right: 6px;
+  }
+  .observe-q {
+    margin-top: 12px; padding: 12px;
+    background: #f8fafc;
+    border-left: 3px solid var(--sky);
+    border-radius: 4px;
+  }
+  .observe-q-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sky);
+    margin-bottom: 6px;
+  }
+
+  /* Quiz / spaced review */
+  .quiz-row { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+  .quiz-q { font-weight: 600; }
+  .quiz-choices { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .quiz-choice {
+    text-align: left;
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 120ms var(--ease);
+  }
+  .quiz-choice:hover { border-color: var(--saffron); }
+  .quiz-choice.selected.correct { background: var(--emerald-soft); border-color: var(--emerald); }
+  .quiz-choice.selected.incorrect { background: var(--rose-soft); border-color: var(--rose); }
+  .quiz-choice.show-correct { border-color: var(--emerald); }
+  .quiz-explain {
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: var(--rule-soft);
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Calibration table */
+  .calib-row {
+    display: grid; grid-template-columns: 1fr 60px 60px 80px;
+    gap: 8px; padding: 10px 0; align-items: center;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 14px;
+  }
+  .calib-row.head {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); font-weight: 700;
+  }
+  .calib-num {
+    font-family: ui-monospace, monospace;
+    text-align: center; font-weight: 700;
+  }
+  .calib-num.up { color: var(--emerald); }
+  .calib-num.down { color: var(--rose); }
+
+  /* Progress panel */
+  .progress-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    margin-top: 14px;
+  }
+  @media (min-width: 600px) { .progress-grid { grid-template-columns: repeat(4, 1fr); } }
+  .stat {
+    padding: 12px;
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-radius: 5px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 26px; font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: ui-monospace, monospace;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .retention-note {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--emerald-soft);
+    border-radius: 5px;
+    font-size: 14px;
+    color: #064e3b;
+  }
+
+  /* Pull quote / inline-figure */
+  .pull {
+    margin: 24px 0;
+    padding: 18px 22px;
+    background: var(--rule-soft);
+    border-radius: 6px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 20px; line-height: 1.4;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .pull em { font-weight: 700; font-style: normal; }
+  .figure {
+    margin: 24px 0;
+    padding: 18px;
+    background: white;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+  }
+  .figure-caption {
+    font-size: 13px; color: var(--muted); margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* Locked sections */
+  .locked-cover {
+    margin: 28px 0;
+    padding: 24px;
+    background: white;
+    border: 2px dashed var(--rule);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .locked-cover .lock-icon {
+    font-size: 26px; margin-bottom: 8px;
+  }
+
+  /* Footer */
+  footer {
+    max-width: 720px; margin: 0 auto;
+    padding: 40px 20px 60px;
+    border-top: 2px solid var(--ink);
+    margin-top: 60px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  footer a { color: var(--ink); text-decoration: none; }
+  footer a:hover { color: var(--saffron); }
+
+  /* Utility */
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .small { font-size: 13px; color: var(--ink-soft); }
+  .right { text-align: right; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wordmark">
+    <span class="wordmark-k">K</span>
+    <span>Krit · Deep Dive</span>
+  </div>
+  <div class="progress-pill" id="topProgress">0 / 14 complete</div>
+</div>
+
+<main>
+
+  <!-- ───────────────── HERO ───────────────── -->
+  <section id="hero">
+    <div class="kicker">Foundation · 30–45 min · Hands-on</div>
+    <h1>Embeddings</h1>
+    <p class="lede">
+      The single primitive that powers semantic search, classification, RAG, and almost every modern AI feature you'll ship. By the end of this page, you'll be able to write 10 lines of Python that does what an Elasticsearch synonym dictionary used to need three engineers to maintain.
+    </p>
+    <div class="meta">
+      <span>30–45 MIN</span>
+      <span class="dot"></span>
+      <span>14 CHECKPOINTS</span>
+      <span class="dot"></span>
+      <span>PYTHON 3.10+</span>
+      <span class="dot"></span>
+      <span>4 PREDICT MOMENTS</span>
+    </div>
+  </section>
+
+  <!-- ───────────────── PRE-TEST ───────────────── -->
+  <section id="pretest">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Calibration</span><span>Pre-flight check</span></div>
+      <h3>Before we start — how confident are you on each?</h3>
+      <p class="small">Rate each 1 (no clue) to 5 (could teach it). We'll surface the same statements at the end and show what shifted.</p>
+      <div id="preConfBox"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────── HOOK ───────────────── -->
+  <h2>The wall keyword search hit</h2>
+  <p>
+    Tuesday, 11:40 AM. Your PM Slacks: <em>"Search returns nothing for 'kid-friendly restaurant'. Fix it."</em>
+  </p>
+  <p>
+    You check the query. Postgres <code>LIKE '%kid-friendly%'</code>. Users mean <em>family-friendly</em>, <em>no-alcohol</em>, <em>good for kids</em>. None of those phrases sit verbatim in your data, so the query returns the empty set. Adding synonyms helps until a content team in another city is maintaining 3,400 entries and Diwali traffic still drops 8% because someone forgot to add <em>phirni</em>.
+  </p>
+  <p>
+    This is the wall keyword search hits. Crossing it — turning text into numbers in a way that lets <em>meaning</em> be compared — is the move that <em>everything</em> we now call "AI" is built on. That move is the embedding.
+  </p>
+
+  <div class="pull">
+    The interesting word in <em>"high-dimensional pattern matching"</em> isn't <em>pattern</em>. It's <em>high-dimensional</em>. The dimensions <em>are</em> the model.
+  </div>
+
+  <!-- ───────────────── INTUITION ───────────────── -->
+  <h2>Words as numbers — the intuition</h2>
+  <p>
+    Pick any word. Imagine plotting it on a graph. With one axis — say, "size" — you can place <em>elephant</em> far from <em>mouse</em>. With two axes — "size" and "tameness" — you can separate <em>elephant</em>, <em>mouse</em>, and <em>lion</em>. With three axes you start being able to disambiguate <em>bank (river)</em> from <em>bank (money)</em>: add an axis for "is about money?".
+  </p>
+  <p>
+    Now imagine <strong>384 axes</strong>. Or <strong>1,536</strong>. Each one a learned semantic dimension you didn't have to name — the model figured out which axes carry useful signal during training.
+  </p>
+  <p>
+    That's an embedding. A vector of (e.g.) 384 floats, one per axis, where similar meanings produce nearby vectors. The unit of comparison is <strong>cosine similarity</strong>: a number from −1 (opposite) through 0 (unrelated) to 1 (identical).
+  </p>
+
+  <div class="figure">
+    <strong>Cheat sheet</strong>
+    <ul style="margin: 10px 0 0 0; padding-left: 22px; font-size: 15px;">
+      <li><code>1.00</code> — same vector (the word with itself, or its exact duplicate)</li>
+      <li><code>0.75–0.95</code> — strong semantic relationship ("king" vs "queen")</li>
+      <li><code>0.50–0.75</code> — related but distinct ("king" vs "throne")</li>
+      <li><code>0.20–0.50</code> — vaguely related ("king" vs "country")</li>
+      <li><code>0.00–0.20</code> — unrelated ("king" vs "pencil")</li>
+    </ul>
+    <div class="figure-caption">Rough ranges for sentence-transformer embeddings on English. Different models give slightly different absolute values; what matters is the relative ordering.</div>
+  </div>
+
+  <!-- ───────────────── PREDICT #1 ───────────────── -->
+  <section id="predict-1">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Predict-then-reveal</span><span>Forced production</span></div>
+      <h3>Make a guess: cosine similarity of "king" and "queen"?</h3>
+      <p class="small">Don't peek. Type your prediction, commit, then reveal the actual value. Even a 5-second mental commit roughly doubles retention.</p>
+      <div class="predict-stage">
+        <div class="predict-input-row">
+          <input type="number" id="p1Input" step="0.01" min="0" max="1" placeholder="0.00 – 1.00">
+          <button class="btn" data-predict="p1">Commit</button>
+        </div>
+        <div class="reveal-box hidden" id="p1Reveal">
+          <span class="actual">0.73</span>
+          <div class="vs">Your guess: <strong id="p1Your"></strong> · Off by <strong id="p1Diff"></strong></div>
+          <div class="feedback" id="p1Fb"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── HOW BUILT ───────────────── -->
+  <h2>How embeddings actually get built (the 90-second version)</h2>
+  <p>
+    The original trick — Word2Vec, 2013 — was deceptively simple. Take a sentence. Predict each word from its neighbours. The model has a 300-dimensional hidden layer; force it to learn good representations to win the prediction game.
+  </p>
+  <p>
+    The breakthrough was that the <em>side effect</em> of the prediction task was a meaning space. After training, words that play similar roles in sentences ended up with similar vectors. <strong>"king" – "man" + "woman" ≈ "queen"</strong> wasn't a feature anyone designed. It fell out of forcing the model to predict context.
+  </p>
+  <p>
+    Modern embeddings use the same idea with three upgrades: (1) the model is a transformer encoder (so context matters — <em>bank</em> in a river sentence vs a finance sentence get different vectors), (2) the prediction task is richer (masked language modelling, contrastive learning), (3) the output is per-sentence, not per-word.
+  </p>
+  <p class="small">
+    For 90% of production use, you don't need to know any of this. You pick a model (<code>bge-small-en-v1.5</code>, <code>all-MiniLM-L6-v2</code>), call <code>.encode()</code>, and the floats come out. The intuition above matters for <em>debugging</em>: when embeddings give weird results, it's usually because the model was trained on data unlike yours, not because the math is wrong.
+  </p>
+
+  <!-- ───────────────── PREDICT #2 ───────────────── -->
+  <section id="predict-2">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Predict-then-reveal</span><span>The "bank" test</span></div>
+      <h3>Predict: which is closer in modern (contextual) embeddings?</h3>
+      <p>
+        <strong>A:</strong> <em>"I deposited money at the bank"</em> ↔ <em>"the river bank was muddy"</em><br>
+        <strong>B:</strong> <em>"I deposited money at the bank"</em> ↔ <em>"the credit union processed my deposit"</em>
+      </p>
+      <div class="predict-stage">
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-q="p2" data-correct="false" data-explain="">A — the same word 'bank' makes them closer.</button>
+          <button class="quiz-choice" data-q="p2" data-correct="true" data-explain="Contextual embeddings (BERT-era and after) read the whole sentence — 'bank' in a finance sentence lands near 'credit union' even though the surface words differ. Word2Vec era models would have gotten this wrong; that's why we don't use them in production anymore.">B — the meaning aligns, even though the word doesn't.</button>
+        </div>
+        <div class="quiz-explain hidden" id="p2Explain"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── WORKED EXAMPLE ───────────────── -->
+  <section id="worked">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Worked → Faded → Solo</span><span>Practice gradient</span></div>
+      <h3>The three-stage practice rep</h3>
+      <p class="small">Watch how it's done. Then fill in the blank. Then do a new variation on your own. (This is the scaffolding most courses skip — it's the single biggest gap between "I read it" and "I can do it.")</p>
+
+      <div class="stages">
+        <!-- Stage 1 — worked -->
+        <div class="stage" id="w1">
+          <div class="stage-head"><span class="stage-num">1</span><span>Worked example · watch</span></div>
+          <p>Goal: compute cosine similarity between two strings. Annotations show what each line does.</p>
+          <pre><code><span class="anno"># import the model + a util module that does cosine for us</span>
+from sentence_transformers import SentenceTransformer, util
+
+<span class="anno"># MiniLM is small (80MB), fast on CPU, perfectly fine for English</span>
+m = SentenceTransformer('all-MiniLM-L6-v2')
+
+<span class="anno"># .encode returns a tensor — one vector per input string</span>
+v = m.encode(['kid-friendly restaurant', 'family dining'])
+
+<span class="anno"># util.cos_sim gives a tensor; .item() pulls the scalar</span>
+sim = util.cos_sim(v[0], v[1]).item()
+
+print(f"{sim:.3f}")
+<span class="anno"># 0.652  (close — they're not synonyms but they're related)</span></code></pre>
+          <button class="btn mt-12" data-stage-done="w1">Got it · next stage</button>
+        </div>
+
+        <!-- Stage 2 — faded -->
+        <div class="stage locked" id="w2">
+          <div class="stage-head"><span class="stage-num empty">2</span><span>Faded · fill the blank</span></div>
+          <p>Same problem, one line removed. What goes in the blank?</p>
+          <pre><code>from sentence_transformers import SentenceTransformer, util
+m = SentenceTransformer('all-MiniLM-L6-v2')
+v = m.encode(['kid-friendly restaurant', 'beer garden, no kids'])
+
+sim = ___________(v[0], v[1]).item()    <span class="anno"># ← fill the blank</span>
+print(f"{sim:.3f}")</code></pre>
+          <div class="predict-input-row">
+            <input type="text" id="w2Input" placeholder="util.cos_sim">
+            <button class="btn" data-stage-check="w2">Check</button>
+          </div>
+          <div class="quiz-explain hidden" id="w2Fb"></div>
+        </div>
+
+        <!-- Stage 3 — solo -->
+        <div class="stage locked" id="w3">
+          <div class="stage-head"><span class="stage-num empty">3</span><span>Solo · new task</span></div>
+          <p>Now a new task. Write a short snippet that finds which of <code>['cafe', 'bar', 'pub', 'tea house']</code> is closest in meaning to <code>'coffee shop'</code>. Run it locally and report your answer:</p>
+          <textarea id="w3Answer" placeholder="Which one came out closest? (e.g. 'cafe — 0.78')"></textarea>
+          <div class="predict-input-row" style="margin-top: 10px;">
+            <button class="btn" data-stage-check="w3">Submit observation</button>
+          </div>
+          <div class="quiz-explain hidden" id="w3Fb"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── HANDS-ON ───────────────── -->
+  <section id="handson">
+    <div class="card layer-1">
+      <div class="card-kicker l1"><span class="layer-tag">Layer 1 · Hands-on</span><span>Run-it-locally, with forced observation</span></div>
+      <h3>Embeddings in your terminal · 8 lines</h3>
+      <p class="small">Three steps. After each step, an "observe" question you can <em>only</em> answer if you actually ran the code. Forced observation is what turns "tutorial reader" into "person who can write this from scratch tomorrow".</p>
+
+      <div class="step" data-step="h1">
+        <div class="step-circle">1</div>
+        <div class="step-body">
+          <p>Install the library. First install pulls ~80MB and takes ~2 minutes.</p>
+          <pre><code>pip install sentence-transformers</code><button class="copy-btn">Copy</button></pre>
+        </div>
+      </div>
+
+      <div class="step" data-step="h2">
+        <div class="step-circle">2</div>
+        <div class="step-body">
+          <p>Save as <code>embed.py</code>:</p>
+          <pre><code>from sentence_transformers import SentenceTransformer, util
+
+m = SentenceTransformer('all-MiniLM-L6-v2')
+query = 'kid-friendly restaurant'
+items = [
+    'family dining in Bangalore',
+    'fine dining for couples',
+    'beer garden, no kids',
+    'a quiet coffee shop',
+]
+
+q = m.encode(query)
+e = m.encode(items)
+for i, item in enumerate(items):
+    print(f"{util.cos_sim(q, e[i]).item():.3f}  {item}")</code><button class="copy-btn">Copy</button></pre>
+        </div>
+      </div>
+
+      <div class="step" data-step="h3">
+        <div class="step-circle">3</div>
+        <div class="step-body">
+          <p>Run it.</p>
+          <pre><code>python embed.py</code><button class="copy-btn">Copy</button></pre>
+          <div class="expect">
+            <span class="expect-label">Expect</span>
+            Four lines. Each starts with a similarity score and ends with the item. "family dining" should be highest, "beer garden, no kids" lowest.
+          </div>
+
+          <div class="observe-q">
+            <div class="observe-q-label">Observe · question 1 of 3</div>
+            <p style="margin: 0 0 8px;">What score did "family dining in Bangalore" get?</p>
+            <input type="number" step="0.01" id="obs1" placeholder="e.g. 0.61">
+          </div>
+
+          <div class="observe-q">
+            <div class="observe-q-label">Observe · question 2 of 3</div>
+            <p style="margin: 0 0 8px;">Which item came out <em>lowest</em>?</p>
+            <input type="text" id="obs2" placeholder="paste the line, or just the phrase">
+          </div>
+
+          <div class="observe-q">
+            <div class="observe-q-label">Observe · question 3 of 3</div>
+            <p style="margin: 0 0 8px;">"A quiet coffee shop" — higher or lower than "fine dining for couples"? Why do you think?</p>
+            <textarea id="obs3" placeholder="one sentence"></textarea>
+          </div>
+
+          <button class="btn saffron mt-16" data-handson-submit>Submit observations</button>
+          <div class="quiz-explain hidden" id="obsFb"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── APPLICATIONS ───────────────── -->
+  <h2>What this one primitive unlocks</h2>
+  <p>You've now built (in your head and in your terminal) the single thing modern AI is mostly made of. Here's what it's used for in production, with one-line "why this works":</p>
+
+  <h3>Semantic search</h3>
+  <p>Encode every document; encode the query; return the top-K by cosine. <em>Why it works:</em> the embedding captures meaning, not surface form. Synonyms, paraphrases, related concepts all rank well without manual synonym lists.</p>
+
+  <h3>Classification</h3>
+  <p>Encode each labelled example. At inference, encode the new item, find the K nearest labelled examples, vote. <em>Why it works:</em> embeddings cluster by meaning, so K-NN finds genuine semantic neighbours. Often beats fine-tuned classifiers on small datasets.</p>
+
+  <h3>RAG (Retrieval-Augmented Generation)</h3>
+  <p>The R is embeddings. You chunk your docs, embed each chunk, and at query time retrieve the top-K relevant chunks to stuff into an LLM prompt. <em>Why it works:</em> grounds the LLM in your specific data without finetuning. The LLM never had to memorise your docs; it just reads them at query time.</p>
+
+  <h3>Clustering / deduplication</h3>
+  <p>Embed everything, run K-means or HDBSCAN. Items with high cosine similarity merge. <em>Why it works:</em> the embedding space is a real metric space — distances are meaningful, so traditional unsupervised methods just work.</p>
+
+  <h3>Recommendations</h3>
+  <p>Embed users by what they engaged with; embed items; return nearest items. <em>Why it works:</em> behavioural and content signals project into the same space, so the comparison is principled.</p>
+
+  <!-- ───────────────── PITFALLS ───────────────── -->
+  <h2>Three pitfalls (the things people get wrong)</h2>
+
+  <h3>1. Picking the wrong model for your domain</h3>
+  <p>
+    Models like <code>all-MiniLM-L6-v2</code> are trained on general English. If your data is heavily Indian context (Hinglish reviews, Indian regulatory docs), use <code>bge-small-en-v1.5</code> or test multilingual models like <code>paraphrase-multilingual-MiniLM-L12-v2</code>. <strong>The cheapest experiment: encode 20 representative items, eyeball the similarity matrix.</strong> If pairs you'd expect to match score below 0.4, the model is wrong for your data.
+  </p>
+
+  <h3>2. Confusing cosine, dot product, and Euclidean</h3>
+  <p>
+    Cosine measures the <em>angle</em> between vectors (direction only — magnitudes ignored). Dot product factors in magnitude (so longer vectors score higher). Euclidean measures the straight-line distance. <strong>For most sentence-transformer models, the vectors come pre-normalised, so cosine and dot product give the same answer.</strong> When in doubt, use cosine.
+  </p>
+
+  <h3>3. Forgetting that embeddings drift</h3>
+  <p>
+    If you upgrade your embedding model, every cached vector in your DB becomes stale. They were computed by a different model. You either re-embed everything (one-time cost) or you live with two parallel index versions. <strong>Architect for this from day one</strong> — store the model name alongside each vector in your DB.
+  </p>
+
+  <!-- ───────────────── SPACED REVIEW ───────────────── -->
+  <section id="spaced">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Spaced retrieval</span><span>5 rapid-fire from earlier</span></div>
+      <h3>Quick recall · prove you're carrying this forward</h3>
+      <p class="small">These mix questions from earlier in the page. If a concept slips here, it's slipping out of your head — scroll back to that section before continuing.</p>
+      <div id="reviewBox"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────── CAPSTONE (gated) ───────────────── -->
+  <section id="capstone">
+    <div class="locked-cover" id="capLock">
+      <div class="lock-icon">🔒</div>
+      <p><strong>Capstone unlocks when you've completed all 3 worked-example stages and all 3 hands-on steps.</strong></p>
+      <p class="small">Why: the capstone is independent practice. It only earns its weight if you've genuinely walked through the scaffolded reps first.</p>
+    </div>
+
+    <div class="card layer-3 hidden" id="capCard">
+      <div class="card-kicker l3"><span class="layer-tag">Layer 3 · Capstone</span><span>Build it · the actual test</span></div>
+      <h3>The 5-headline clustering challenge</h3>
+      <p>You have 5 news headlines. Cluster them into 2 groups <em>using only embeddings + cosine similarity</em> — no ML library beyond <code>sentence-transformers</code>.</p>
+      <pre><code>headlines = [
+    "RBI raises repo rate by 25 basis points",
+    "Bangalore traffic jam stretches 14 km on ORR",
+    "Inflation eases to 4.8% in October data",
+    "Whitefield to Electronic City commute hits 3 hours",
+    "Bond yields jump after monetary policy announcement",
+]</code><button class="copy-btn">Copy</button></pre>
+      <p>Write code that:</p>
+      <ol>
+        <li>Embeds the headlines</li>
+        <li>Computes a 5×5 similarity matrix</li>
+        <li>Prints which headlines belong together (by inspection of the matrix is fine — no fancy clustering library needed)</li>
+      </ol>
+      <p>Paste your output:</p>
+      <textarea id="capOut" placeholder="e.g.&#10;Group 1: [0, 2, 4] — monetary policy / inflation&#10;Group 2: [1, 3] — Bangalore traffic"></textarea>
+      <button class="btn saffron mt-12" data-capstone-submit>Submit capstone</button>
+      <div class="quiz-explain hidden" id="capFb"></div>
+    </div>
+  </section>
+
+  <!-- ───────────────── POST-TEST + CALIBRATION ───────────────── -->
+  <section id="posttest">
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Calibration</span><span>Post-flight check</span></div>
+      <h3>Same statements. Rate again.</h3>
+      <p class="small">No peeking at your pre-test ratings. We'll show them side by side once you've submitted.</p>
+      <div id="postConfBox"></div>
+      <div id="calibrationView" class="hidden">
+        <h3>Calibration · before vs after</h3>
+        <div id="calibTable"></div>
+        <p class="small mt-16">
+          The point isn't to be more confident — it's to be <em>calibrated</em>. If your confidence went up where you also got things right, you've actually learned. If your confidence went up but your predictions were wrong, you're miscalibrated and you should treat that as a red flag. Use it to know what to revisit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────── NEXT STEPS ───────────────── -->
+  <h2>Where to read more</h2>
+  <p>Embeddings are 90 minutes; <em>understanding</em> them well enough to debug a production system is a few weekends. These are the references that earn the weight:</p>
+  <ul>
+    <li><strong>Jay Alammar · <em>The Illustrated Word2Vec</em></strong> — best intuition-first explanation; if anything above felt hand-wavy, read this. <span class="small">(jalammar.github.io)</span></li>
+    <li><strong>Lilian Weng · <em>Generalized Visual Language Models</em></strong> — for how modern multimodal embeddings work. <span class="small">(lilianweng.github.io)</span></li>
+    <li><strong>sentence-transformers docs</strong> — the model catalogue is itself the most useful thing on the internet for picking an embedding model. <span class="small">(sbert.net)</span></li>
+    <li><strong>Anthropic · <em>Embeddings</em> docs</strong> — practical patterns for using embeddings in production with Claude. <span class="small">(docs.anthropic.com)</span></li>
+    <li><strong>The MTEB leaderboard</strong> — when you're picking a model, this is the up-to-date benchmark. <span class="small">(huggingface.co/spaces/mteb/leaderboard)</span></li>
+  </ul>
+
+  <!-- ───────────────── PROGRESS PANEL ───────────────── -->
+  <section id="progressPanel">
+    <div class="card layer-3">
+      <div class="card-kicker l3"><span class="layer-tag">Layer 3 · Persistence</span><span>Your progress, persisted</span></div>
+      <h3>Where you stand</h3>
+      <div class="progress-grid">
+        <div class="stat"><div class="stat-num" id="statCheckpoints">0</div><div class="stat-label">Checkpoints<br>completed</div></div>
+        <div class="stat"><div class="stat-num" id="statPredictions">0</div><div class="stat-label">Predictions<br>made</div></div>
+        <div class="stat"><div class="stat-num" id="statHandsOn">0/3</div><div class="stat-label">Hands-on<br>observations</div></div>
+        <div class="stat"><div class="stat-num" id="statConfShift">—</div><div class="stat-label">Avg confidence<br>shift</div></div>
+      </div>
+      <div class="retention-note">
+        <strong>Retention check scheduled.</strong> <span id="retentionDate">Come back in 3 days</span> for a 90-second mixed-question recall test from this page. We'll show you which concepts slipped and where to revisit. Your state is saved in this browser — close this tab freely.
+      </div>
+      <div class="mt-16">
+        <button class="btn" id="resetBtn">Reset this page's progress</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  A Krit Deep Dive · Embeddings · v0.1 (prototype) · <a href="/showcase/course/ai-for-developers">Back to AI for Developers</a>
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   STATE — single localStorage key. JSON object.
+   ──────────────────────────────────────────────────────────── */
+const STORAGE_KEY = 'krit.proto.embeddings.v1';
+const state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return {
+    preConf: {},        // {0: 3, 1: 2, ...}
+    postConf: {},
+    predictions: {},    // {p1: {guess: 0.85, actual: 0.73, correct: 'partial'}, ...}
+    stagesDone: {},     // {w1: true, w2: true, ...}
+    handsOnSteps: {},   // {h1: true, h2: true, h3: true}
+    handsOnAnswers: {}, // {obs1: '0.6', obs2: 'beer garden', obs3: '...'}
+    review: {},         // {r1: 'correct'|'wrong'}
+    capstone: null,     // {text: '...', submittedAt: timestamp}
+    startedAt: Date.now(),
+  };
+}
+
+function save() {
+  state.lastSavedAt = Date.now();
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  updateProgressPanel();
+}
+
+/* ─────────────────────────────────────────────────────────────
+   CONFIDENCE STATEMENTS — used in pre + post
+   ──────────────────────────────────────────────────────────── */
+const STATEMENTS = [
+  "I can explain why keyword search fails for 'kid-friendly restaurant' — and what an embedding does about it.",
+  "I know what cosine similarity is, what its range looks like, and roughly what 0.7 means.",
+  "I can write 10 lines of Python that does semantic search over 100 items, end to end.",
+  "I know how to pick an embedding model for a non-English / domain-specific corpus.",
+];
+
+function renderConf(boxId, target) {
+  const box = document.getElementById(boxId);
+  box.innerHTML = '';
+  STATEMENTS.forEach((stmt, i) => {
+    const row = document.createElement('div');
+    row.className = 'conf-row';
+    const current = target === 'pre' ? state.preConf[i] : state.postConf[i];
+    row.innerHTML = `
+      <div class="conf-statement">${i + 1}. ${stmt}</div>
+      <div class="conf-buttons" data-stmt="${i}" data-target="${target}">
+        ${[1,2,3,4,5].map(n => `<button class="conf-btn ${current === n ? 'selected' : ''}" data-val="${n}">${n}</button>`).join('')}
+      </div>
+      <div class="conf-label">1 = no clue · 5 = could teach it</div>
+    `;
+    box.appendChild(row);
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('conf-btn')) {
+    const wrap = e.target.parentElement;
+    const stmt = +wrap.dataset.stmt;
+    const target = wrap.dataset.target;
+    const val = +e.target.dataset.val;
+    if (target === 'pre') state.preConf[stmt] = val;
+    else state.postConf[stmt] = val;
+    wrap.querySelectorAll('.conf-btn').forEach(b => b.classList.toggle('selected', +b.dataset.val === val));
+    save();
+    if (target === 'post' && Object.keys(state.postConf).length === STATEMENTS.length) {
+      showCalibration();
+    }
+  }
+});
+
+renderConf('preConfBox', 'pre');
+renderConf('postConfBox', 'post');
+
+/* ─────────────────────────────────────────────────────────────
+   PREDICT-THEN-REVEAL
+   ──────────────────────────────────────────────────────────── */
+const PREDICTS = {
+  p1: {
+    actual: 0.73,
+    feedback: (guess, diff) => {
+      if (diff < 0.1) return "Calibrated. You've internalised what a 0.7-ish score means — 'related but not synonymous'. The model captures gender + role; that's why 'king' vs 'queen' isn't 0.95.";
+      if (diff < 0.25) return "Reasonable ballpark. The intuition is right, the calibration just needs more reps. Try predicting a few more pairs before reading on — the muscle is in the prediction, not the reading.";
+      return guess > PREDICTS.p1.actual + 0.25
+        ? "You went higher than reality. 'King' and 'queen' share role but differ in gender — the embedding captures both. A solid synonym pair would score 0.85+."
+        : "You went lower than reality. Modern embeddings put related-but-not-identical pairs in 0.7-0.85 — they capture role similarity, not just exact match.";
+    },
+  },
+};
+
+document.querySelectorAll('[data-predict]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const key = btn.dataset.predict;
+    const input = document.getElementById(key + 'Input');
+    const guess = parseFloat(input.value);
+    if (isNaN(guess) || guess < 0 || guess > 1) {
+      input.style.borderColor = 'var(--rose)';
+      return;
+    }
+    const cfg = PREDICTS[key];
+    const diff = Math.abs(guess - cfg.actual);
+    state.predictions[key] = { guess, actual: cfg.actual, diff };
+    save();
+    document.getElementById(key + 'Reveal').classList.remove('hidden');
+    document.getElementById(key + 'Your').textContent = guess.toFixed(2);
+    document.getElementById(key + 'Diff').textContent = diff.toFixed(2);
+    document.getElementById(key + 'Fb').textContent = cfg.feedback(guess, diff);
+    input.disabled = true;
+    btn.disabled = true;
+  });
+});
+
+/* ─────────────────────────────────────────────────────────────
+   QUIZ-STYLE PREDICT (p2)
+   ──────────────────────────────────────────────────────────── */
+document.querySelectorAll('.quiz-choice[data-q]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = btn.dataset.q;
+    const correct = btn.dataset.correct === 'true';
+    const peers = document.querySelectorAll(`.quiz-choice[data-q="${q}"]`);
+    peers.forEach(p => { p.disabled = true; if (p.dataset.correct === 'true') p.classList.add('show-correct'); });
+    btn.classList.add('selected', correct ? 'correct' : 'incorrect');
+    state.predictions[q] = { correct };
+    save();
+    const correctBtn = Array.from(peers).find(p => p.dataset.correct === 'true');
+    const explainBox = document.getElementById(q + 'Explain');
+    explainBox.textContent = correctBtn.dataset.explain;
+    explainBox.classList.remove('hidden');
+  });
+});
+
+/* ─────────────────────────────────────────────────────────────
+   WORKED EXAMPLE — gated stages
+   ──────────────────────────────────────────────────────────── */
+function unlockStage(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('locked');
+  const numEl = el.querySelector('.stage-num');
+  numEl.classList.remove('empty');
+  numEl.textContent = id.slice(1);
+}
+function markStageDone(id) {
+  state.stagesDone[id] = true;
+  save();
+  const el = document.getElementById(id);
+  el.classList.add('done');
+  if (id === 'w1') unlockStage('w2');
+  if (id === 'w2') unlockStage('w3');
+  if (id === 'w3') checkCapstoneUnlock();
+}
+// init from state
+if (state.stagesDone.w1) { markStageDone('w1'); }
+if (state.stagesDone.w2) { markStageDone('w2'); }
+if (state.stagesDone.w3) { markStageDone('w3'); }
+
+document.querySelectorAll('[data-stage-done]').forEach(btn => {
+  btn.addEventListener('click', () => markStageDone(btn.dataset.stageDone));
+});
+document.querySelector('[data-stage-check="w2"]').addEventListener('click', () => {
+  const input = document.getElementById('w2Input');
+  const v = input.value.trim().toLowerCase().replace(/\s+/g, '');
+  const ok = /(?:util\.)?cos_sim/.test(v) || v === 'cossim';
+  const fb = document.getElementById('w2Fb');
+  fb.classList.remove('hidden');
+  if (ok) {
+    fb.style.background = 'var(--emerald-soft)';
+    fb.textContent = "Right. util.cos_sim — handles the math + the tensor-to-tensor case. (You could also use scipy or numpy by hand, but the helper is what the rest of the code expects.)";
+    markStageDone('w2');
+  } else {
+    fb.style.background = 'var(--rose-soft)';
+    fb.textContent = "Not quite. The hint is the import line — util.something. Try again.";
+  }
+});
+document.querySelector('[data-stage-check="w3"]').addEventListener('click', () => {
+  const answer = document.getElementById('w3Answer').value.trim();
+  const fb = document.getElementById('w3Fb');
+  fb.classList.remove('hidden');
+  if (answer.length < 10) {
+    fb.style.background = 'var(--rose-soft)';
+    fb.textContent = "Add a real observation — what came out closest, roughly what score. The point is that you ran it.";
+    return;
+  }
+  fb.style.background = 'var(--emerald-soft)';
+  const mentionsCafe = /cafe/i.test(answer);
+  fb.textContent = mentionsCafe
+    ? "That tracks — 'cafe' is the closest English synonym for 'coffee shop'. 'Tea house' usually comes second. If 'pub' or 'bar' came up close, your model is over-indexing on 'place that serves drinks' — interesting failure mode worth remembering."
+    : "Captured. Compare your output to what most students see — 'cafe' usually wins, then 'tea house'. If yours diverged a lot, your model picked up on a different signal (sometimes 'pub' scores high because they're all 'casual social venues').";
+  state.handsOnAnswers.w3 = answer;
+  markStageDone('w3');
+});
+
+/* ─────────────────────────────────────────────────────────────
+   HANDS-ON — step circles + observation submit
+   ──────────────────────────────────────────────────────────── */
+document.querySelectorAll('.step[data-step]').forEach(step => {
+  const circle = step.querySelector('.step-circle');
+  const id = step.dataset.step;
+  if (state.handsOnSteps[id]) step.classList.add('done');
+  circle.addEventListener('click', () => {
+    state.handsOnSteps[id] = !state.handsOnSteps[id];
+    step.classList.toggle('done', state.handsOnSteps[id]);
+    save();
+    checkCapstoneUnlock();
+  });
+});
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const pre = btn.parentElement;
+    const code = pre.querySelector('code').innerText;
+    try {
+      await navigator.clipboard.writeText(code);
+      btn.classList.add('copied');
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1400);
+    } catch {}
+  });
+});
+
+document.querySelector('[data-handson-submit]').addEventListener('click', () => {
+  const a1 = parseFloat(document.getElementById('obs1').value);
+  const a2 = document.getElementById('obs2').value.trim().toLowerCase();
+  const a3 = document.getElementById('obs3').value.trim();
+  const fb = document.getElementById('obsFb');
+  fb.classList.remove('hidden');
+  const problems = [];
+  if (isNaN(a1) || a1 < 0.3 || a1 > 0.9) problems.push("Q1: 'family dining' should land in 0.5–0.8 range. Did you actually run it?");
+  if (!/beer|kids/.test(a2)) problems.push("Q2: 'beer garden, no kids' should be the lowest — opposite signal to 'kid-friendly'.");
+  if (a3.length < 12) problems.push("Q3: write at least a sentence — observation needs the why, not just the what.");
+  state.handsOnAnswers = { obs1: a1, obs2: a2, obs3: a3 };
+  if (problems.length === 0) {
+    fb.style.background = 'var(--emerald-soft)';
+    fb.innerHTML = `<strong>Caught the signal.</strong> "A quiet coffee shop" usually scores in the middle — it's not kid-related but it has the family-friendly vibe. Notice how the model picks up on <em>tone</em>, not just keywords. That's the difference from synonym matching.`;
+    // mark all hands-on done
+    ['h1','h2','h3'].forEach(id => { state.handsOnSteps[id] = true; });
+    document.querySelectorAll('.step[data-step]').forEach(s => s.classList.add('done'));
+  } else {
+    fb.style.background = 'var(--rose-soft)';
+    fb.innerHTML = '<strong>Not yet:</strong> <ul style="margin:6px 0 0 18px;padding:0;">' + problems.map(p => `<li>${p}</li>`).join('') + '</ul>';
+  }
+  save();
+  checkCapstoneUnlock();
+});
+
+/* ─────────────────────────────────────────────────────────────
+   SPACED REVIEW
+   ──────────────────────────────────────────────────────────── */
+const REVIEW_QS = [
+  {
+    q: "What's the practical range of cosine similarity for sentence embeddings?",
+    choices: [
+      { t: "-1 to 1 (but in practice 0 to 1 for short positive text)", correct: true },
+      { t: "0 to 100", correct: false },
+      { t: "Always positive integers", correct: false },
+    ],
+    explain: "Theoretically −1 to 1; for sentence-transformer outputs on natural language, values are almost always 0–1 because embeddings live in a constrained part of the space.",
+  },
+  {
+    q: "Which model do you reach for first for English semantic search at 100 queries/sec on CPU?",
+    choices: [
+      { t: "GPT-4 embeddings", correct: false },
+      { t: "all-MiniLM-L6-v2 (or bge-small-en-v1.5)", correct: true },
+      { t: "Word2Vec (the original)", correct: false },
+    ],
+    explain: "Small, fast, free, runs on CPU at >100 QPS, ~80MB. Reach for big models only when small ones demonstrably fail.",
+  },
+  {
+    q: "When does keyword search beat embedding search?",
+    choices: [
+      { t: "Always — keyword is faster", correct: false },
+      { t: "When the query is an exact identifier (order ID, SKU, PAN)", correct: true },
+      { t: "Never anymore", correct: false },
+    ],
+    explain: "Embeddings smear meaning; for exact-match lookups that's loss. Keep both tiers, use each for what it's good at.",
+  },
+  {
+    q: "You upgrade your embedding model. What breaks?",
+    choices: [
+      { t: "Nothing — they're interchangeable", correct: false },
+      { t: "Every cached vector is now stale; you need to re-embed or version", correct: true },
+      { t: "Your cosine similarity threshold needs to be raised", correct: false },
+    ],
+    explain: "Embeddings from different models live in different spaces. Store the model name alongside the vectors so you can detect drift.",
+  },
+  {
+    q: "What's the cheapest first experiment to test if an embedding model fits your domain?",
+    choices: [
+      { t: "Train a classifier and measure F1", correct: false },
+      { t: "Encode 20 representative items and eyeball the similarity matrix", correct: true },
+      { t: "Run MTEB benchmarks", correct: false },
+    ],
+    explain: "Twenty items + a similarity matrix takes 5 minutes and tells you whether the model 'gets' your data. If pairs you'd expect to match score below 0.4, pick a different model.",
+  },
+];
+
+function renderReview() {
+  const box = document.getElementById('reviewBox');
+  box.innerHTML = '';
+  REVIEW_QS.forEach((q, i) => {
+    const row = document.createElement('div');
+    row.className = 'quiz-row';
+    row.innerHTML = `
+      <div class="quiz-q">${i + 1}. ${q.q}</div>
+      <div class="quiz-choices">
+        ${q.choices.map((c, j) => `<button class="quiz-choice" data-rq="${i}" data-rj="${j}" data-correct="${c.correct}">${c.t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain hidden" id="rExp${i}"></div>
+    `;
+    box.appendChild(row);
+  });
+
+  box.querySelectorAll('.quiz-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = +btn.dataset.rq;
+      const correct = btn.dataset.correct === 'true';
+      const peers = box.querySelectorAll(`.quiz-choice[data-rq="${i}"]`);
+      peers.forEach(p => { p.disabled = true; if (p.dataset.correct === 'true') p.classList.add('show-correct'); });
+      btn.classList.add('selected', correct ? 'correct' : 'incorrect');
+      state.review[i] = correct ? 'correct' : 'wrong';
+      save();
+      const exp = document.getElementById('rExp' + i);
+      exp.textContent = REVIEW_QS[i].explain;
+      exp.classList.remove('hidden');
+    });
+  });
+}
+renderReview();
+
+/* ─────────────────────────────────────────────────────────────
+   CAPSTONE
+   ──────────────────────────────────────────────────────────── */
+function checkCapstoneUnlock() {
+  const allStages = state.stagesDone.w1 && state.stagesDone.w2 && state.stagesDone.w3;
+  const allHands = state.handsOnSteps.h1 && state.handsOnSteps.h2 && state.handsOnSteps.h3;
+  if (allStages && allHands) {
+    document.getElementById('capLock').classList.add('hidden');
+    document.getElementById('capCard').classList.remove('hidden');
+  }
+}
+checkCapstoneUnlock();
+
+document.querySelector('[data-capstone-submit]').addEventListener('click', () => {
+  const out = document.getElementById('capOut').value.trim();
+  const fb = document.getElementById('capFb');
+  fb.classList.remove('hidden');
+  if (out.length < 30) {
+    fb.style.background = 'var(--rose-soft)';
+    fb.textContent = "Need actual output. Paste what your script printed.";
+    return;
+  }
+  // Heuristic: looks for 2 groups, mentions inflation/repo/rate AND traffic/bangalore
+  const hasGroups = /group|cluster|set/i.test(out) || /\[.*\]/.test(out);
+  const hasMonetary = /(inflation|repo|rate|bond|rbi|monetary)/i.test(out);
+  const hasTraffic = /(traffic|bangalore|whitefield|orr|commute)/i.test(out);
+  if (hasGroups && hasMonetary && hasTraffic) {
+    fb.style.background = 'var(--emerald-soft)';
+    fb.innerHTML = "<strong>Capstone done.</strong> Two clean clusters: monetary policy (RBI rate, inflation, bond yields) and Bangalore traffic. You just built semantic clustering with no ML library beyond <code>sentence-transformers</code>. That's the bar.";
+    state.capstone = { text: out, submittedAt: Date.now() };
+    save();
+  } else if (hasGroups) {
+    fb.style.background = 'var(--saffron-soft)';
+    fb.textContent = "You produced groups, but I can't tell if they match the topics. Add a 1-line description of what each group is about — that's the real proof you understood, not just that the code ran.";
+  } else {
+    fb.style.background = 'var(--rose-soft)';
+    fb.textContent = "Output doesn't show clusters. Add the grouping explicitly — e.g. 'Group 1: indices [0, 2, 4] — monetary policy'.";
+  }
+});
+
+/* ─────────────────────────────────────────────────────────────
+   CALIBRATION (post-test → side-by-side)
+   ──────────────────────────────────────────────────────────── */
+function showCalibration() {
+  const view = document.getElementById('calibrationView');
+  view.classList.remove('hidden');
+  const tbl = document.getElementById('calibTable');
+  tbl.innerHTML = `
+    <div class="calib-row head"><span>Statement</span><span>Before</span><span>After</span><span>Δ</span></div>
+    ${STATEMENTS.map((s, i) => {
+      const before = state.preConf[i] ?? '—';
+      const after = state.postConf[i] ?? '—';
+      const delta = (typeof before === 'number' && typeof after === 'number') ? (after - before) : null;
+      const cls = delta === null ? '' : delta > 0 ? 'up' : delta < 0 ? 'down' : '';
+      const sign = delta === null ? '—' : delta > 0 ? '+' + delta : '' + delta;
+      return `<div class="calib-row"><span>${i+1}. ${s.slice(0, 60)}${s.length > 60 ? '…' : ''}</span><span class="calib-num">${before}</span><span class="calib-num">${after}</span><span class="calib-num ${cls}">${sign}</span></div>`;
+    }).join('')}
+  `;
+}
+if (Object.keys(state.postConf).length === STATEMENTS.length) showCalibration();
+
+/* ─────────────────────────────────────────────────────────────
+   PROGRESS PANEL
+   ──────────────────────────────────────────────────────────── */
+function countTrue(obj) { return Object.values(obj || {}).filter(Boolean).length; }
+function updateProgressPanel() {
+  const stages = countTrue(state.stagesDone);
+  const hands = countTrue(state.handsOnSteps);
+  const predictions = Object.keys(state.predictions).length;
+  const review = Object.keys(state.review).length;
+  const conf = Object.keys(state.postConf).length;
+  const cap = state.capstone ? 1 : 0;
+  const total = stages + hands + predictions + review + conf + cap;
+  const maxTotal = 3 + 3 + 2 + 5 + 4 + 1;  // sum of expected counts
+  document.getElementById('topProgress').textContent = `${Math.min(total, maxTotal)} / ${maxTotal} complete`;
+
+  document.getElementById('statCheckpoints').textContent = stages + hands + (state.capstone ? 1 : 0);
+  document.getElementById('statPredictions').textContent = predictions;
+  document.getElementById('statHandsOn').textContent = `${hands}/3`;
+
+  // Confidence shift
+  const preVals = Object.values(state.preConf);
+  const postVals = Object.values(state.postConf);
+  if (preVals.length === STATEMENTS.length && postVals.length === STATEMENTS.length) {
+    const preAvg = preVals.reduce((a, b) => a + b, 0) / preVals.length;
+    const postAvg = postVals.reduce((a, b) => a + b, 0) / postVals.length;
+    const shift = postAvg - preAvg;
+    document.getElementById('statConfShift').textContent = (shift >= 0 ? '+' : '') + shift.toFixed(1);
+  }
+
+  // Retention date
+  const started = state.startedAt || Date.now();
+  const due = new Date(started + 3 * 24 * 60 * 60 * 1000);
+  document.getElementById('retentionDate').textContent =
+    `Come back on ${due.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}`;
+}
+updateProgressPanel();
+
+/* ─────────────────────────────────────────────────────────────
+   RESET
+   ──────────────────────────────────────────────────────────── */
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('Reset all progress on this page? This clears localStorage for this prototype.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+});
+</script>
+
+</body>
+</html>
