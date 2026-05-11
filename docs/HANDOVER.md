@@ -1,155 +1,126 @@
-# Handover — Krit, project-docs-v6
+# Handover — Krit project-docs-v6
 
-_Written 2026-05-08 by the previous Claude Code session. Read this after CLAUDE.md and STACK.md._
+_Written 2026-05-11 at the end of the "learning prototype" pivot session. **Read this first when picking up the project.**_
 
-## What you're picking up
+## You are here
 
-Krit is a skill-first LMS for India. Repo state today:
+- **Branches:**
+  - `main` — full Story Mode codebase, two courses, authoring CLI, Field Guide PDF
+  - `learning-prototype` — adds `public/prototype/embeddings.html` (the depth prototype). Off-main on purpose.
+- **Latest on `main`:** `c86132a` — feat(course): AI for Developers + new handsOn block
+- **Latest on `learning-prototype`:** `1a0dc33` — prototype: embeddings deep-dive with all 3 learning layers
+- **Dev server:** port **3001** (not 3000 — mednext occupies 3000)
+- **Tailwind cold-start race:** already fixed via `outputFileTracingRoot` in `next.config.mjs` + a safety-net `touch src/app/globals.css` in the dev script. If CSS ever goes missing again, the fix is to `touch src/app/globals.css`.
 
-- 15 courses, 75 lessons, ~150 animations, 75 student-style HTML notes, 75 bossBattle + fieldNotes pairs
-- Block types defined as a Zod discriminated union in `lib/content/blocks.ts` — heading, markdown, callout, code, image, video, quiz, tryIt, reflect, keyTakeaways, animatedTimeline, sortableSteps, joinExplorer, sqlPlayground, remotion, svgFigure, culturalAside, embedAnimation, chatScenario, lessonMeta, bossBattle, fieldNotes
-- Auth is `iron-session` cookie (PROVISIONAL — swap to Clerk/SSO before production)
-- Authoring UI is read-only; courses today are JSON → `npx tsx prisma/seed/import-course.ts <file>`
+## What the session did (brief)
 
-## Open question for the user
+1. Built the full **Story Mode** showcase: mobile-first swipe player, comics, animations, drag-classify, scale-slider, card-swipe, hands-on blocks. 17 block types. On `main`.
+2. Built two end-to-end courses (`leaders-ai-os`, `ai-for-developers`) with full authoring CLI: `course:new` → LLM prompt → `course:import` (strict, idempotent, with skill catalog auto-creation). Plus Field Guide PDF + per-lesson notes + soft-delete commands.
+3. **Pivot moment:** the user observed that swipe-through Story Mode is engagement-format, not learning-format. Their words: *"people can't really learn from something like this."* This is the most important framing in the project.
+4. Created `learning-prototype` branch. Built a single static HTML file (`public/prototype/embeddings.html`) demonstrating three "learning layers" on the topic of embeddings: forced production (predict-then-reveal × 4, hands-on with forced observation), scaffolded practice (worked → faded → solo), and persistence (localStorage state, calibration table, retention scheduling).
+5. Brainstormed depth additions. User proposed 5 ideas (external reads, YouTube clips, GitHub snippets, code walkthroughs, Manim diagrams). I pushed back on Manim and the "inspire" framing of GitHub; proposed grouping 1–3 + the YouTube-able part of 5 into a single `ExternalDive` primitive; argued code walkthrough is the highest-leverage missing primitive.
 
-**Does the new `LessonPlayer` layout earn rollout?** The user piloted the section-by-section player + AI drawer for `leadership-in-age-of-ai` only. They will tell you whether to expand or refine. Don't assume rollout. The gate is one set in `src/app/(learner)/learn/[pathSlug]/[lessonSlug]/page.tsx`:
+## The strategic position the user is converging on
 
-```ts
-const PLAYER_PILOT_SLUGS = new Set(["leadership-in-age-of-ai"]);
-```
+> **Krit's value isn't generating content. It's the structured journey *through* great existing content, with practice mechanics built in at every transition.**
 
-To roll out: add slugs to the set. To roll back: remove from the set; legacy layout takes over with no other changes.
+Concretely: Story Mode is the engagement + retention wrapper around content that lives elsewhere (Lilian Weng, Karpathy, Jay Alammar, Distill, fast.ai, sentence-transformers docs). The depth layer (the prototype) shows what reading-with-practice looks like. **The deep content itself comes from curation, not authoring.**
 
-## Pilot — what's different about leadership-in-age-of-ai
+If you find yourself proposing to author more lessons or courses from scratch — pause and reread that.
 
-1. **Section-by-section player** (`src/components/lesson/lesson-player.tsx`). Splits a lesson into sections by `heading` blocks, with dedicated sections for fieldNotes / bossBattle / "Wrap up" (keyTakeaways + reflect). Progress dots, prev/next nav, lessonMeta sticky at top.
-2. **AI tutor as a drawer**. Big "Ask Atlas" pillar on desktop (right side), FAB on mobile. Click opens a slide-in drawer wrapping the existing `TutorSidebar`. Esc + backdrop close it.
-3. **Animation narration audio**. 10 mp3s under `public/audio/leadership-in-age-of-ai/anim/` — voiced via macOS `say -v Aman` (en_IN). Wired through new `audioSrc` field on `embedAnimation` blocks. Each animation has a play-overlay that doubles as the gesture that unlocks audio (browsers block autoplay-with-sound).
-4. **Reduced interaction repetition**. Removed 3 of 5 `sortableSteps` (from L1, L3, L5) — those lessons already had a `chatScenario` and the ranking content was artificial. L2 and L4 keep theirs because the ordering is genuinely sequential.
+## The immediate open question — **wait for the user's answer**
 
-## Bug fixes that apply to all 15 courses
+Before any more code on the prototype: the user is deciding between two `codeWalkthrough` styles:
 
-These shipped before the pilot work and aren't pilot-gated:
+- **Karpathy style** — full file visible, scroll- or tap-driven highlight moves through the code, annotations alongside. Closer to reading real code in context.
+- **Distill style** — code chunks revealed progressively, prose between them. Closer to a guided narrative.
 
-- **Auto-scroll on lesson load** (`src/components/tutor/tutor-sidebar.tsx`). `bottomRef.current.scrollIntoView()` was bubbling out of the sticky sidebar to the document scroller. Fix: scroll only the chat-list container's `scrollTop`. Don't reintroduce `scrollIntoView` on a sticky child.
-- **Animation iframe scrollbars** (`src/components/lesson/blocks/embed-animation-block.tsx`). Added `scrolling="no"` + `style={{overflow:"hidden"}}` and injected `html,body{overflow:hidden}` into all 149 animation HTML files via `/tmp/strip-anim-scroll.mjs` (recreate from history if needed).
-- **39 broken animation paths**. JSON refs across 12 courses didn't match files on disk. Auto-renamed by longest-prefix match (34 cases), manual map (5 cases). The on-disk convention is `<lesson-slug>.html` and `trap-<lesson-slug>.html` — agents sometimes invent suffixes; reconcile to the slug.
+Different UX, different learning outcomes. **Do not start building until they answer.** This decision gates the rest of the depth additions.
 
-## Traps you will hit
+## Priority order for future depth builds (agreed at end of session)
 
-### Krit's dev server is on port 3001, not 3000
+1. **`codeWalkthrough`** — highest leverage, missing primitive, technical content needs it most. ~1–1.5 days.
+2. **`ExternalDive`** primitive — one block, four kinds (article / video / repo / paper / talk). The `returnQuestion` field is the load-bearing part (turns "click a link" into "actually engage"). ~half a day.
+3. **Hover/tap definitions for jargon** — 30 min. Wrapped `<dfn>` with one-line popups. Prevents reading attrition.
+4. **Interactive SVG figures** — one per concept (e.g. drag two vectors, watch the cosine score change). ~1–2 days each, scales linearly.
+5. **Skip Manim** until something specific genuinely demands it; use curated 3Blue1Brown videos via `ExternalDive` instead.
 
-Port 3000 is `mednext`, an unrelated project elsewhere on this Mac. If a static-asset URL 404s and the file exists on disk, **check the port first**:
+Additional ideas I floated that the user hasn't reacted to yet:
+- **Authentic conversation excerpts** (HN / Twitter / Slack debates). Low cost, real practitioner voices.
+- **Steel-manning the disagreement** — for each strong claim, the strongest counter-argument. Content discipline, no code.
 
-```bash
-lsof -P -p $(pgrep -f 'next-server.*v15' | head -1) | grep LISTEN
-```
+## How the user wants me to work going forward (explicit ask)
 
-### Subagent stalls on big single Writes
+Late in the session, the user said: *"Start pushing me back on ideas in future."* My commitments:
 
-Subagents stall (~600s watchdog) when asked to produce one large file in one Write call. Brief them to write **5–6 small files in separate Write calls**. The pattern is encoded in `docs/MASTER_COURSE_PROMPT.md`. When agents fail mid-batch from rate limits, finish the missing files in the main thread rather than waiting — limits reset around 1pm IST and 12:50am IST (Asia/Calcutta).
-
-### Course assembly pipeline
-
-```
-courses/parts/<slug>/{path,lesson-1..5}.json    # subagent output (can include {"lesson": {...}} envelope — auto-unwrapped)
-        │
-        ▼  scripts/assemble-course.mjs
-courses/<slug>.json                              # canonical course content
-        │
-        ▼  scripts/splice-bonus.mjs              # injects fieldNotes + bossBattle from courses/bonus/<slug>/<lesson-slug>.json
-        ▼  scripts/splice-trap-animations.mjs    # injects embedAnimation before warn callouts where trap-<lesson>.html exists
-        │
-        ▼  npx tsx prisma/seed/import-course.ts courses/<slug>.json
-DB
-        │
-        ▼  npm run course:notes <slug>           # regenerates handwriting-style notes
-        ▼  npm run course:audio <slug>           # full-lesson TTS (existing)
-```
-
-Per-animation narration is a separate inline recipe (not yet a script): write scripts in `docs/courses/<slug>/anim-narration/scripts.json` keyed by animation file stem, then `say -v Aman -r 145 -o $key.aiff "$text" && ffmpeg -y -i $key.aiff -ar 22050 -ac 1 $key.wav && lame --preset 64 -m m $key.wav $key.mp3`. Output to `public/audio/<slug>/anim/<key>.mp3`. Set `audioSrc` on the matching `embedAnimation` blocks. Re-import.
-
-### Audio is gitignored
-
-`public/audio/` is in `.gitignore` (~300MB across all courses if rendered). Mp3s don't deploy. Production needs a CDN strategy — not yet decided. For now mp3s exist locally only.
-
-### chatScenario buckets max at 4
-
-If an agent writes 5+ buckets the import fails Zod validation. Merge two buckets manually (e.g., the leadership pilot merged Director + Manager). Update any scenarios referencing the merged bucket id.
-
-### `migrate dev` is dev-only
-
-Kernel rule. Production migrations use `migrate deploy`.
-
-## Pending work the user has hinted at
-
-| Item | Status | Where to start |
-|---|---|---|
-| Player rollout decision | **awaiting user verdict** | wait for direction; don't expand `PLAYER_PILOT_SLUGS` unprompted |
-| Narration for other 14 courses | not started | 140 more clips if rolled out; reuse the recipe above |
-| Better narration voice (ElevenLabs Niraj / Google Cloud `en-IN-Chirp3-HD-Charon`) | discussed, deferred | user accepted `say -v Aman` as placeholder |
-| Audio hosting for prod | undecided | will block staging deploy if not figured out |
-| Authoring UI | data model supports it; UI doesn't | `docs/COURSE_AUTHORING_KIT.md` for context |
-| Prod DB + GitHub init + staging deploy | deferred | from CLAUDE.md "Current Focus" |
-| Auth swap to Clerk/SSO | provisional today | flagged in STACK.md |
-
-## Key files
-
-```
-lib/content/blocks.ts                                        # Zod schema (discriminated union)
-src/components/lesson/block-renderer.tsx                     # main switch
-src/components/lesson/lesson-player.tsx                      # NEW — pilot section-by-section player
-src/components/lesson/blocks/*.tsx                           # one renderer per block type
-src/components/lesson/blocks/embed-animation-block.tsx       # iframe + play overlay + audioSrc
-src/components/tutor/tutor-sidebar.tsx                       # AI tutor (used inline AND as drawer content)
-src/app/(learner)/learn/[pathSlug]/[lessonSlug]/page.tsx     # lesson page; PLAYER_PILOT_SLUGS gate
-
-scripts/assemble-course.mjs                                  # parts → main JSON
-scripts/splice-bonus.mjs                                     # bonus content splicer
-scripts/splice-trap-animations.mjs                           # trap-anim splicer
-prisma/seed/import-course.ts                                 # Zod-validates and imports
-
-docs/MASTER_COURSE_PROMPT.md                                 # the paste-into-LLM prompt
-docs/ANIMATION_STYLE.md                                      # animation visual + technical contract
-docs/COURSE_AUTHORING_KIT.md                                 # authoring overview
-docs/courses/<slug>/anim-narration/scripts.json              # per-animation narration scripts (leadership only so far)
-
-courses/<slug>.json                                          # canonical content
-courses/parts/<slug>/                                        # intermediate files (kept for re-runs)
-courses/bonus/<slug>/<lesson-slug>.json                      # fieldNotes + bossBattle
-public/courses/<slug>/anim/*.html                            # animations (main + trap-)
-public/audio/<slug>/anim/*.mp3                               # narration mp3s (gitignored)
-public/notes/<slug>/*.html                                   # student-style notes
-```
+- **First question on any feature:** *"what's the smallest version we can validate, and who's the first learner?"*
+- **When asked for polish, ask if the core is proven.** Polish before validation is a tax.
+- **When asked to extend the schema, ask if existing primitives are exhausted.** Schema bloat is invisible until a new author has to choose between 17+ block types and freezes.
+- **Name the bet** before executing. If the user wants me to build something I think is the wrong move, do it — but say *"I think this is polish over substance"* first.
+- Their words: *"You'll still get the work done. You'll also get a second opinion, unsolicited, before the work starts."*
 
 ## Things to NOT do
 
-- Don't autoplay narration without a click. Play overlay is the unlock gesture.
-- Don't add `scrollIntoView` calls inside sticky elements — they bubble to the page scroller.
-- Don't run `prisma migrate dev` against any non-dev database.
-- Don't commit `public/audio/` or huge binaries — both gitignored on purpose.
-- Don't ask a single subagent to Write a 60KB+ file in one call. Split into 5–6 small Writes.
-- Don't curl `localhost:3000` for Krit testing. It's the other project. Krit is **3001**.
-- Don't expand `PLAYER_PILOT_SLUGS` until the user explicitly OKs rollout.
-- Don't replace `<lesson-slug>.html` filename convention without updating `splice-trap-animations.mjs` accordingly.
+- **Don't merge `learning-prototype` into `main`** until the user explicitly says so. The branch is a staging ground.
+- **Don't add new block types to the production schema** without explicit ask + validation. We already have 17.
+- **Don't generate more course content.** The existing two courses are validation output, not product. They don't have target learners.
+- **Don't build new custom animations.** The four existing HTMLs are diminishing returns.
+- **Don't propose new features unprompted.** Push back, ask what's being validated, then build.
+- **Don't author content from scratch** for topics where great content already exists. Curate + frame instead.
+- **Don't edit `courses/showcase/the-30-minute-trap.json`** — it's the standalone-lesson route. Course-level lessons live in `leaders-ai-os.json`.
 
-## Last 5 commits (for context loading)
+## What's actually load-bearing (ranked by real value, not effort)
+
+1. **`public/prototype/embeddings.html`** (`learning-prototype` branch) — defines what learning looks like in this codebase. Most important file right now.
+2. **Block schema + Story Mode UX** (`main`) — strong as a *wrapper* around real content; weak as primary learning surface.
+3. **Authoring CLI + strict importer + skill catalog** (`main`) — `prisma/seed/showcase-course-{new,import,archive}.ts`, `skill-catalog.ts`. Durable infrastructure.
+4. **Field Guide PDF + lesson notes** (`main`) — `src/components/lesson/course-field-guide.tsx`, `/showcase/course/[slug]/notes` routes.
+5. The two courses — well-crafted but no target learner; treat as proofs-of-format.
+6. The custom animations + panel comics — beautiful, lower value than the hours spent.
+
+## File map
 
 ```
-5b25465 feat(player): section-by-section LessonPlayer (pilot — leadership)
-56950d4 feat(animations): play-overlay + optional narration audio
-ecdf466 fix(lesson): auto-scroll, iframe scrollbars, 39 broken animation paths
-7e55db1 feat(tooling): assemble-course + splice-trap-animations scripts
-8cd1466 feat(assets): animations + notes for 10 new courses + 50 trap animations
+public/prototype/embeddings.html         ← THE PROTOTYPE (learning-prototype branch only)
+
+courses/showcase/leaders-ai-os.json      ← 5-lesson leadership course
+courses/showcase/ai-for-developers.json  ← 6-lesson dev course
+courses/showcase/the-30-minute-trap.json ← standalone lesson (don't edit)
+
+lib/content/blocks.ts                    ← block-type Zod schema (17 types)
+lib/content/course.ts                    ← Course Zod schema
+lib/showcase-course-loader.ts            ← file → Zod → object
+
+src/components/lesson/blocks/            ← one component per block type
+src/components/lesson/lesson-story-player.tsx
+src/components/lesson/course-field-guide.tsx ← print-friendly long-form
+
+src/app/showcase/                        ← /showcase/[slug] (standalone lesson)
+src/app/showcase/course/                 ← /showcase/course/[slug]/...
+public/prototype/                        ← static HTML prototypes (no React)
+
+prisma/seed/showcase-course-new.ts       ← interactive scaffolder
+prisma/seed/showcase-course-import.ts    ← strict importer (Prisma)
+prisma/seed/showcase-course-archive.ts   ← soft-delete
+prisma/seed/skill-catalog.ts             ← curated skill slugs (30)
+
+docs/COURSE_AUTHORING_GUIDE.md           ← colleague-facing how-to
+docs/HANDOVER.md                         ← this file
 ```
 
-## Resume checklist
+## Practical notes
 
-1. Read CLAUDE.md (kernel) + STACK.md (deps).
-2. Read this file.
-3. `git log --oneline -10` to see what landed since.
-4. `lsof -P -p $(pgrep -f 'next-server.*v15' | head -1) | grep LISTEN` — confirm Krit's port.
-5. Open `/learn/leadership-in-age-of-ai/ai-and-the-job` in the browser to see the player layout.
-6. Open any other course's lesson (e.g., `/learn/sql-foundations/<slug>`) to see legacy layout.
-7. Ask the user what's next — there's no auto-advance from the pilot.
+- **Single-workspace assumption.** The importer expects exactly one workspace in the DB.
+- **The leadership cast** (Sam, Rina, Kavya, CFO, Atlas) is repurposed across both courses. Character art is generic enough that it works.
+- **Panel comic scenes** are leadership-themed (`boardroom-rina`, `cfo-math`, `ic-desk`, `handshake`, `ending`). New scenes (`code-review`, `production-incident`, `interview-room`) are a deferred change; the user knows this.
+- **`embedAnimation` HTML files** live under `public/courses/showcase/anim/`. The importer hard-fails if any referenced file doesn't exist.
+- **Audio in animations** uses Web Audio synthesis (no mp3 files). Unlocked via `krit:start` postMessage from the parent overlay tap.
+
+## What to do when you start
+
+1. Read this file.
+2. `git status` and `git log --oneline -10`. Confirm what branch you're on.
+3. **If on `main`** — ask the user before switching to `learning-prototype`. They might want to discuss something on `main`.
+4. **If on `learning-prototype`** — the prototype is at `public/prototype/embeddings.html`. View at `localhost:3001/prototype/embeddings.html`.
+5. **Check whether the user has answered the Karpathy-vs-Distill question.** If yes, build code walkthrough. If no, **ask and wait** — don't preempt.
+6. **Push back on at least one thing per session.** Name bets before executing.
