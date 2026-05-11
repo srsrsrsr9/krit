@@ -257,6 +257,18 @@ Each lesson's \`blocks\` array contains objects of these types. **Type literal m
     { id: string, title: string, body: string, correctSide: "left"|"right", explain: string }
   ]}
 
+// Run-it-locally exercise (best for technical courses — Python, CLI, code)
+{ type: "handsOn", title: string,
+  setup?: string,                                // markdown: install / prereqs
+  steps: [{
+    instruction: string,                         // markdown
+    command?: string,                            // shell or code, copyable
+    lang?: string,                               // "bash" | "python" | etc.
+    expect?: string,                             // 1-line expected output
+  }],
+  verify?: string,                               // markdown: how to know it worked
+}
+
 { type: "branchScenario", title?: string, startNodeId: string, nodes: [
     { id: string, body: string, choices: [
         { id: string, label: string, nextNodeId?: string, outcome?: string }

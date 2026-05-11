@@ -46,6 +46,7 @@ const BLOCK_LABEL: Record<BlockType, string> = {
   panelComic: "Panel comic",
   scaleSlider: "Scale slider",
   cardSwipe: "Card swipe",
+  handsOn: "Hands-on",
 };
 
 function newBlock(type: BlockType): ContentBlock {
@@ -85,6 +86,7 @@ function newBlock(type: BlockType): ContentBlock {
     case "panelComic": return { type: "panelComic", title: "A panel comic.", panels: [{ scene: "handshake", narration: "TWELVE MONTHS AGO.", dialog: [{ speaker: "rina", text: "We'll bank the savings." }] }, { scene: "ending", narration: "ONE YEAR LATER.", dialog: [{ speaker: "kavya", text: "We reinvested. The team is sharper." }] }] };
     case "scaleSlider": return { type: "scaleSlider", prompt: "Where do you set the dial?", min: 0, max: 100, step: 5, startValue: 50, leftLabel: "Low", rightLabel: "High", bands: [{ lo: 0, hi: 30, title: "Too low", body: "You're under-using the lever.", tone: "bad" }, { lo: 31, hi: 70, title: "Productive zone", body: "Calibrated to risk + leverage.", tone: "good" }, { lo: 71, hi: 100, title: "Too high", body: "You're over-relying.", tone: "bad" }] };
     case "cardSwipe": return { type: "cardSwipe", prompt: "Decide each card: hire or pass?", leftLabel: "Pass", rightLabel: "Hire", cards: [{ id: "c1", title: "Candidate A", body: "8 yrs domain, no AI fluency.", correctSide: "right", explain: "Domain capital is hard to manufacture; AI fluency is teachable." }, { id: "c2", title: "Candidate B", body: "AI-native, 1 yr domain, weak references.", correctSide: "left", explain: "Confident-sounding wrong calls compound." }] };
+    case "handsOn": return { type: "handsOn", title: "Try it locally", setup: "Have Python 3.10+ and `pip` ready.", steps: [{ instruction: "Install the library", command: "pip install some-package", lang: "bash" }, { instruction: "Run the example", command: "python example.py", lang: "bash", expect: "Prints a sentence and a vector of 384 numbers." }], verify: "If you see the vector printed, you're in." };
   }
 }
 

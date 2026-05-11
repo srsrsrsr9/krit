@@ -24,7 +24,7 @@ function inferSfx(text?: string): SoundEvent | null {
 type Scene =
   | "handshake" | "boardroom-rina" | "cfo-math"
   | "boardroom-kavya" | "ic-desk" | "ending";
-type Speaker = "sam" | "cfo" | "rina" | "kavya";
+type Speaker = "sam" | "cfo" | "rina" | "kavya" | "trap" | "narrator";
 
 interface Bubble { speaker?: Speaker; text: string; }
 interface Panel {
@@ -41,6 +41,7 @@ export interface PanelComicBlockProps {
 
 const SPEAKER_NAME: Record<Speaker, string> = {
   sam: "SAM", cfo: "CFO", rina: "RINA", kavya: "KAVYA",
+  trap: "THE TRAP", narrator: "—",
 };
 
 export function PanelComicBlock({ title, panels }: PanelComicBlockProps) {

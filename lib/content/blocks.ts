@@ -349,7 +349,7 @@ export const PanelComicBlock = z.object({
     narration: z.string().optional(),
     /** Speech bubbles overlaid on the scene. Up to 2 per panel. */
     dialog: z.array(z.object({
-      speaker: z.enum(["sam", "cfo", "rina", "kavya"]).optional(),
+      speaker: z.enum(["sam", "cfo", "rina", "kavya", "trap", "narrator"]).optional(),
       text: z.string(),
     })).max(2).optional(),
     /** Sound-effect text rendered between this panel and the next. */
@@ -367,6 +367,23 @@ export const ComicStripBlock = z.object({
     bubble: z.string(),
     caption: z.string().optional(),
   })).min(1).max(6),
+});
+
+/** MASTERY (hands-on) — Run-it-locally exercise: setup → numbered steps with
+ *  commands + expected output → verify. Mobile-friendly, no lab needed. */
+export const HandsOnBlock = z.object({
+  type: z.literal("handsOn"),
+  title: z.string(),
+  /** Markdown — what to install, what assumptions, prerequisites. */
+  setup: z.string().optional(),
+  steps: z.array(z.object({
+    instruction: z.string(),                  // markdown
+    command: z.string().optional(),           // shell or code to copy + run
+    lang: z.string().optional().default("bash"),
+    expect: z.string().optional(),            // expected output or behaviour
+  })).min(1).max(8),
+  /** Markdown — how to know it worked, common gotchas. */
+  verify: z.string().optional(),
 });
 
 /** SURPRISE — Tinder-style swipe through cards; reveal verdict after each. */
@@ -478,6 +495,7 @@ export const ContentBlock = z.discriminatedUnion("type", [
   PanelComicBlock,
   ScaleSliderBlock,
   CardSwipeBlock,
+  HandsOnBlock,
 ]);
 
 export type ContentBlock = z.infer<typeof ContentBlock>;

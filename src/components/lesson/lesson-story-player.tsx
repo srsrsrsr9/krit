@@ -33,12 +33,13 @@ const CARD_KICKER: Record<string, string> = {
   panelComic: "COMIC STRIP",
   scaleSlider: "DIAL IN",
   cardSwipe: "SWIPE DECK",
+  handsOn: "HANDS-ON",
 };
 
 const INTERACTIVE_TYPES = new Set([
   "quiz", "timedChallenge", "branchScenario", "skillProof",
   "bossBattle", "revealCard", "reflect", "chatScenario", "dragClassify",
-  "comicStrip", "panelComic", "scaleSlider", "cardSwipe",
+  "comicStrip", "panelComic", "scaleSlider", "cardSwipe", "handsOn",
 ]);
 const POINTS_PER_INTERACTIVE = 10;
 

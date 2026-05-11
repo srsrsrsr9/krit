@@ -484,6 +484,41 @@ function PrintBlock({ block }: { block: ContentBlock }) {
         </div>
       );
 
+    case "handsOn":
+      return (
+        <Beat label={`Hands-on · ${block.title}`}>
+          {block.setup && (
+            <>
+              <p className="m-0 italic text-slate-600">Before you start:</p>
+              <div className="prose prose-sm max-w-none [&_p]:my-1">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.setup}</ReactMarkdown>
+              </div>
+            </>
+          )}
+          <ol className="m-0 mt-2 list-decimal pl-5">
+            {block.steps.map((s, i) => (
+              <li key={i} className="mb-3">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{s.instruction}</ReactMarkdown>
+                {s.command && (
+                  <pre className="mt-1 overflow-x-auto rounded border border-slate-300 bg-slate-100 p-2 text-[10pt]"><code>{s.command}</code></pre>
+                )}
+                {s.expect && (
+                  <div className="mt-1 text-sm italic text-slate-600">
+                    <strong className="not-italic">Expect:</strong> {s.expect}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+          {block.verify && (
+            <>
+              <p className="m-0 mt-2 italic text-slate-600">How to know it worked:</p>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{block.verify}</ReactMarkdown>
+            </>
+          )}
+        </Beat>
+      );
+
     // Blocks not meaningful in print — render lightweight placeholder.
     case "lessonMeta":
     case "remotion":

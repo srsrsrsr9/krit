@@ -1,0 +1,1089 @@
+{
+  "slug": "ai-for-developers",
+  "title": "AI for Developers",
+  "subtitle": "From embeddings to agents — what every Python dev needs to know in 2026.",
+  "audience": "Developers comfortable with Python who want to build with AI, not just call APIs.",
+  "estimatedMinutes": 70,
+  "cast": [
+    { "id": "sam",   "name": "Sam",   "role": "Senior backend dev, recently inherited the AI roadmap" },
+    { "id": "kavya", "name": "Kavya", "role": "ML engineer, knows the math, allergic to hype" },
+    { "id": "rina",  "name": "Rina",  "role": "Tech lead at a 40-person Bangalore SaaS" },
+    { "id": "cfo",   "name": "Manager (CFO chip)", "role": "The budget voice — likes a clean ROI" },
+    { "id": "atlas", "name": "Atlas", "role": "Your AI tutor" }
+  ],
+  "lessons": [
+    {
+      "slug": "how-we-got-here",
+      "title": "How we got here",
+      "subtitle": "Embeddings, deep learning, and what NLP did before transformers.",
+      "estimatedMinutes": 11,
+      "skillHints": ["embeddings-and-vectors", "ai-fluency"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Tuesday, 11:40 AM. PM Slacks: 'Search returns nothing for kid-friendly restaurant. Fix it.'",
+          "md": "Your Postgres `LIKE` query is doing exact-substring match. Users mean *family-friendly*, *no-alcohol*, *good for kids*. None of those phrases sit verbatim in your data.\n\nThis is the wall keyword search hits. Crossing it is what 'AI' has actually been doing since 2013."
+        },
+        {
+          "type": "revealCard",
+          "front": "AI is statistical pattern matching.",
+          "back": "AI is **high-dimensional** statistical pattern matching. The dimensions ARE the model. The interesting word is *high*: 384, 768, 4096 numbers per token — each one a learned axis of meaning.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Five years of NLP, in four frames.",
+          "frames": [
+            { "character": "narrator", "expression": "neutral", "bubble": "**2014.** Bag-of-words. 'kid-friendly' and 'family-friendly' are *different* tokens with zero overlap." },
+            { "character": "kavya", "expression": "neutral", "bubble": "**2018.** word2vec. Words become 300-dim vectors. 'kid' and 'family' finally land near each other.", "caption": "Word embeddings." },
+            { "character": "kavya", "expression": "happy", "bubble": "**2020.** BERT. Whole sentences get vectors. Context starts mattering.", "caption": "Sentence embeddings." },
+            { "character": "sam", "expression": "excited", "bubble": "**2026.** I `pip install sentence-transformers` and it just works. What changed?", "caption": "Sam, on his first AI feature." }
+          ]
+        },
+        {
+          "type": "markdown",
+          "md": "**The unifying primitive: the embedding.**\n\nTake text → push it through a neural network → out comes a vector of (e.g.) 384 floats. Similar meanings → nearby vectors. Cosine similarity is your friend.\n\nThis is the move keyword search couldn't make. Once you can *compare meanings as numbers*, you have semantic search, classification, clustering, recommendations — most of what people call 'AI' is built on this one trick at different scales."
+        },
+        {
+          "type": "handsOn",
+          "title": "Embeddings in 8 lines of Python",
+          "setup": "You'll need **Python 3.10+** and `pip`. About 200 MB of model download on first run, then it's local.",
+          "steps": [
+            {
+              "instruction": "Install the library (uses PyTorch under the hood — first install takes ~2 min).",
+              "command": "pip install sentence-transformers",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Make a file `embed.py` with this:",
+              "command": "from sentence_transformers import SentenceTransformer, util\n\nm = SentenceTransformer('all-MiniLM-L6-v2')\nquery = 'kid-friendly restaurant'\nitems = ['family dining in Bangalore', 'fine dining for couples', 'beer garden, no kids']\n\nq = m.encode(query)\ne = m.encode(items)\nfor i, item in enumerate(items):\n    print(f'{util.cos_sim(q, e[i]).item():.3f}  {item}')",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python embed.py",
+              "lang": "bash",
+              "expect": "Three lines, each with a cosine score. 'family dining' is highest (~0.65), 'no kids' is lowest. The model has never seen your data and yet it gets the ranking right."
+            }
+          ],
+          "verify": "If 'family dining' scored highest, you just replaced 200 lines of Postgres `LIKE` and synonym dictionaries with 8 lines of Python. Now imagine doing this over your full product catalogue."
+        },
+        {
+          "type": "quiz",
+          "prompt": "When does keyword search beat embedding search?",
+          "multi": false,
+          "choices": [
+            { "id": "a", "label": "When the query is an exact identifier (order ID, SKU, PAN number).", "correct": true, "explain": "Embeddings smear meaning. For exact lookups, you want exact match — anything else is loss." },
+            { "id": "b", "label": "When the dataset is large.", "correct": false, "explain": "Embeddings scale fine with vector DBs and HNSW indexes. Size isn't the reason." },
+            { "id": "c", "label": "When you don't have a GPU.", "correct": false, "explain": "MiniLM and bge-small run on CPU at >100 queries/sec on commodity hardware." },
+            { "id": "d", "label": "When the data is in English.", "correct": false, "explain": "Multilingual embeddings work fine. Locale isn't the reason either." }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Sort each approach by *what it actually is*.",
+          "bins": [
+            { "id": "rule", "label": "Pre-AI heuristic", "tone": "neutral" },
+            { "id": "ml",   "label": "Classical ML",     "tone": "neutral" },
+            { "id": "dl",   "label": "Deep learning",    "tone": "safe" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Regex matching to extract phone numbers.", "correctBinId": "rule", "comment": "No model. No learning. Just patterns." },
+            { "id": "i2", "label": "Logistic regression for spam detection.", "correctBinId": "ml", "comment": "Learned weights over hand-crafted features." },
+            { "id": "i3", "label": "BERT-base classifying ticket categories.", "correctBinId": "dl", "comment": "End-to-end learned representations." },
+            { "id": "i4", "label": "TF-IDF over a search index.", "correctBinId": "ml", "comment": "Term-frequency statistics — classical IR, not neural." },
+            { "id": "i5", "label": "sentence-transformers for semantic search.", "correctBinId": "dl", "comment": "Transformer encoder producing dense vectors." },
+            { "id": "i6", "label": "A list of synonyms maintained by hand.", "correctBinId": "rule", "comment": "Symbolic AI. Surprisingly effective, painful to maintain." }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Bangalore food-tech that retired its Elasticsearch synonym list",
+          "source": "Senior eng at a Series-B food delivery startup",
+          "date": "March 2026",
+          "story": "Their synonym dictionary had grown to **3,400 entries** maintained by a content team in Hyderabad. Every Diwali someone forgot 'phirni' was a kind of kheer, and traffic dropped 8%.\n\nThe migration took two weeks: chunk every restaurant description, encode with `bge-small-en`, store in pgvector. They kept Elasticsearch for the exact-match cases (order ID, partner code) and bolted semantic search beside it.\n\nThe synonym dictionary is now archived in a Git repo nobody touches. Search relevance NDCG went from 0.71 to 0.86.",
+          "takeaway": "Embeddings don't replace exact match — they replace the *fuzzy* tier you've been hand-maintaining. Most teams have that tier and don't realise it has a budget."
+        },
+        {
+          "type": "panelComic",
+          "title": "How Sam learned what an embedding is.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "MONDAY · SAM TRIES KEYWORD SEARCH ONE MORE TIME.", "dialog": [{ "speaker": "sam", "text": "Why does 'kid-friendly' return zero results?" }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "TUESDAY · SAM READS ONE BLOG POST.", "dialog": [{ "speaker": "sam", "text": "Wait. *Words can be numbers?*" }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "cfo-math", "narration": "WEDNESDAY · THE BUDGET MANAGER TILTS HEAD.", "dialog": [{ "speaker": "cfo", "text": "And the model is **free** to download?" }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "FRIDAY · KAVYA AT QUARTERLY REVIEW.", "dialog": [{ "speaker": "kavya", "text": "NDCG up. Synonym list retired. Three hours of dev time." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "EMBEDDINGS DON'T REPLACE EXACT MATCH. THEY REPLACE THE FUZZY TIER YOU'VE BEEN HAND-MAINTAINING." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Embedding intuition",
+          "instruction": "Your team has a 'related articles' feature on a news app. Today it's curated by editors. Pick the right next move.",
+          "badgeLabel": "Embedding-fluent",
+          "choices": [
+            { "id": "a", "label": "Buy GPT-4 to summarise each article and match summaries.", "correct": false, "explain": "Expensive overkill. Embeddings are 100x cheaper for similarity ranking." },
+            { "id": "b", "label": "Encode every article with `bge-small-en`, store vectors in pgvector, return top-5 cosine matches.", "correct": true, "explain": "Local model (no API), Postgres extension you already have, < 200 LOC. Editors stay involved for the front page; everything else is automatic." },
+            { "id": "c", "label": "Build a tag-based system. Tags = controlled vocabulary.", "correct": false, "explain": "Bag-of-words era thinking. You'll spend a year maintaining tags and still miss the half that don't fit." },
+            { "id": "d", "label": "Hire a content team to curate manually.", "correct": false, "explain": "Doesn't scale, doesn't generalise, doesn't survive a hiring freeze." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one feature in your app where users currently complain about search or recommendations. Would replacing the 'fuzzy tier' with embeddings — without touching the exact-match tier — fix it? Be specific about the query that fails today."
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "Embeddings are the unifying primitive of modern AI: text → vector, similar meanings → nearby vectors.",
+            "Cosine similarity over 384-D vectors replaces 90% of what synonym dictionaries and TF-IDF used to do.",
+            "Keyword search isn't dead — it's the right tool for exact identifiers. Use both tiers.",
+            "Most teams already have a 'fuzzy tier' (synonyms, manual tags, rules). That's the right place to introduce embeddings.",
+            "You don't need a GPU to start. `sentence-transformers` on CPU handles real production loads for most teams."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "the-transformer",
+      "title": "The Transformer",
+      "subtitle": "One architecture from 2017 powers every LLM you've heard of. Here's why it stuck.",
+      "estimatedMinutes": 12,
+      "skillHints": ["transformer-fluency", "ai-fluency"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "GPT, Claude, Llama, Gemini, DeepSeek, Mistral — all the same architecture, modified.",
+          "md": "**Attention Is All You Need.** Vaswani et al, 2017. Eight pages. The paper proposed dropping recurrence entirely — every token attends to every other token, in parallel — and the field hasn't gone back since.\n\nYou don't need to read the paper. You do need the intuition. That's this lesson."
+        },
+        {
+          "type": "revealCard",
+          "front": "Attention is complex math.",
+          "back": "Attention is a **soft lookup**. Each token in your sequence asks: 'which other tokens should I pay attention to, and how much?' The model learns the answer during training. That's it.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "A token's first day.",
+          "frames": [
+            { "character": "narrator", "expression": "neutral", "bubble": "You are the word **'bank'** in the sentence: *'I walked to the bank to deposit money.'*" },
+            { "character": "sam", "expression": "confused", "bubble": "Which 'bank'? The river kind? Or the money kind?" },
+            { "character": "kavya", "expression": "happy", "bubble": "Look at the other tokens around you. 'deposit', 'money'. **They** tell you who you are.", "caption": "This is attention." },
+            { "character": "sam", "expression": "happy", "bubble": "So the meaning of a token is just a *weighted blend* of every other token in the sequence?" },
+            { "character": "kavya", "expression": "neutral", "bubble": "Yes. Per layer. Stacked 12 to 96 times. That's the whole thing.", "caption": "And every weight is learned." }
+          ]
+        },
+        {
+          "type": "markdown",
+          "md": "**Why this beat RNNs:**\n\n1. **Parallelism.** RNNs process tokens one at a time (slow). Transformers process all tokens at once (fast on GPU).\n2. **Long-range memory.** RNNs forget. Attention can reach any token in the sequence with one hop.\n3. **Gradient flow.** Training a deep RNN is hard (vanishing gradients). Transformers, with residual connections and layer norm, train smoothly to 1000+ layers."
+        },
+        {
+          "type": "handsOn",
+          "title": "Pull attention weights out of a real model",
+          "setup": "Python 3.10+. About 500 MB of model download (a small BERT). All CPU.",
+          "steps": [
+            {
+              "instruction": "Install Hugging Face transformers.",
+              "command": "pip install transformers torch",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Make `attn.py` — load a tiny model and print one head's attention for a sentence.",
+              "command": "from transformers import AutoTokenizer, AutoModel\nimport torch\n\nname = 'distilbert-base-uncased'\ntok = AutoTokenizer.from_pretrained(name)\nm = AutoModel.from_pretrained(name, output_attentions=True)\n\ntext = 'I walked to the bank to deposit money'\nx = tok(text, return_tensors='pt')\nwith torch.no_grad():\n    out = m(**x)\n\n# attentions: tuple of layers; each [batch, heads, tokens, tokens]\nattn = out.attentions[5][0, 0]  # layer 6, head 1\ntokens = tok.convert_ids_to_tokens(x['input_ids'][0])\n\nbank_idx = tokens.index('bank')\nrow = attn[bank_idx]\nfor i, t in enumerate(tokens):\n    print(f'{row[i].item():.3f}  {t}')",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python attn.py",
+              "lang": "bash",
+              "expect": "A list of tokens with attention weights from 'bank' to each. Notice 'deposit' and 'money' tend to get higher weight than 'walked' or 'to'."
+            }
+          ],
+          "verify": "You just looked inside an LLM's head. Every prediction the model makes is a stack of these weighted blends — 12 layers, 12 heads, no magic."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "How many parameters does your team's first transformer-based feature actually need?",
+          "min": 0,
+          "max": 70,
+          "step": 1,
+          "startValue": 7,
+          "leftLabel": "0.1B (DistilBERT)",
+          "rightLabel": "70B (Llama-3 70B)",
+          "unit": "B params",
+          "bands": [
+            { "lo": 0,  "hi": 1,  "title": "Right call for 90% of features.", "body": "Classification, search, embedding — DistilBERT or MiniLM at 100M params runs on a single CPU and handles real load. Don't reach for GPT for these.", "tone": "good" },
+            { "lo": 2,  "hi": 14, "title": "Solid for summarisation / extraction / RAG.", "body": "Llama-3 8B, Mistral 7B, Qwen 7B. Self-hostable. Open weights. Cost ≈ ₹0.20 per 1M tokens at scale.", "tone": "good" },
+            { "lo": 15, "hi": 35, "title": "Heavy — justify the spend.", "body": "Reasoning, long context, hard generation. You're now in 'we're paying for a frontier model' territory. Make sure the smaller one genuinely doesn't work.", "tone": "okay" },
+            { "lo": 36, "hi": 70, "title": "Edge cases or research.", "body": "Worth it only when smaller models demonstrably fail. Otherwise you're paying for capacity you don't use.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Your team wants to classify support tickets into 6 categories. 100K tickets/day.",
+          "startNodeId": "t1",
+          "nodes": [
+            {
+              "id": "t1",
+              "body": "What do you reach for first?",
+              "choices": [
+                { "id": "a", "label": "GPT-4 with a system prompt listing the categories.", "outcome": "Works on day 1, costs ₹40K/day, takes 800ms per call. Three weeks in, the CFO asks why your AI line is bigger than your salary line." },
+                { "id": "b", "label": "Fine-tune DistilBERT on 5,000 labelled tickets.", "nextNodeId": "t2" },
+                { "id": "c", "label": "Embed tickets + k-NN over labelled examples.", "nextNodeId": "t3" }
+              ]
+            },
+            {
+              "id": "t2",
+              "body": "8 hours of work. CPU inference. ₹50/day in compute. F1 of 0.92.",
+              "choices": [
+                { "id": "d", "label": "Ship it.", "outcome": "Right answer. Sub-100ms latency, 800x cheaper than (a), and you actually understand what's happening when it's wrong." }
+              ]
+            },
+            {
+              "id": "t3",
+              "body": "Zero training. F1 of 0.84. ₹100/day. Reasonable fallback if you don't have labels yet.",
+              "choices": [
+                { "id": "e", "label": "Use this until you have labels, then switch to fine-tuning.", "outcome": "Pragmatic. Get labels by sampling production traffic over two weeks; then graduate to (b)." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "quiz",
+          "prompt": "When is a transformer the *wrong* choice?",
+          "multi": true,
+          "choices": [
+            { "id": "a", "label": "Real-time fraud scoring at < 5 ms latency.", "correct": true, "explain": "Even DistilBERT is ~30 ms on CPU. Logistic regression on engineered features wins here." },
+            { "id": "b", "label": "Time-series forecasting with strong periodicity.", "correct": true, "explain": "Classical methods (ARIMA, Prophet) or modest tree models often beat transformers on tabular/time-series." },
+            { "id": "c", "label": "Sentiment classification on customer reviews.", "correct": false, "explain": "Transformer's bread and butter. DistilBERT crushes this." },
+            { "id": "d", "label": "Anomaly detection on numeric metrics with no text.", "correct": true, "explain": "No language → no need for language models. Isolation Forest is your friend." }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Pune ad-tech that went back to logistic regression",
+          "source": "Staff ML engineer at a Pune programmatic ad startup",
+          "date": "October 2025",
+          "story": "Bidder needed to score ad opportunities in < 3 ms. They tried a tiny transformer (DistilBERT) — got 0.78 AUC at 28 ms. They tried logistic regression on 200 hand-crafted features — got **0.81 AUC at 1.2 ms**.\n\nThe transformer had nothing to attend to: every feature was numeric, no sequence. They kept the transformer for one upstream feature (text from creative copy → sentiment) and used its embedding as one of the 200 inputs.\n\nThe team named the architecture *baghban* — gardener — because the logistic regression was the one doing the actual decision-making.",
+          "takeaway": "Transformers shine on sequences with structure (text, audio, code). For most tabular problems, classical methods still win on speed and they're not even close on cost."
+        },
+        {
+          "type": "panelComic",
+          "title": "When the transformer was the wrong tool.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "MONDAY · SAM ADDS A TRANSFORMER TO THE BIDDER.", "dialog": [{ "speaker": "sam", "text": "It's only 28ms!" }], "sfxAfter": "TICK . . ." },
+            { "scene": "cfo-math", "narration": "WEDNESDAY · THE COMPLIANCE REPORT.", "dialog": [{ "speaker": "cfo", "text": "We missed **300 million** bid opportunities this week. Latency budget was 5 ms." }], "sfxAfter": "CRACK!" },
+            { "scene": "boardroom-kavya", "narration": "FRIDAY · KAVYA AT THE POST-MORTEM.", "dialog": [{ "speaker": "kavya", "text": "Logistic regression. 200 features. **1.2 ms.** AUC up by 0.03." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "ending", "narration": "TRANSFORMERS SHINE ON SEQUENCES. ON TABULAR DATA, CLASSICAL ML STILL WINS." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Architecture selection",
+          "instruction": "Your team is building one of these four features. Pick the one where 'use a transformer' is the *most defensible* default.",
+          "badgeLabel": "Architecture-fluent",
+          "choices": [
+            { "id": "a", "label": "Predict churn from 50 numeric account features.", "correct": false, "explain": "Tabular. Gradient-boosted trees (XGBoost, LightGBM) win." },
+            { "id": "b", "label": "Categorise customer support tickets from free-text complaints.", "correct": true, "explain": "Language sequence, ambiguous, lots of paraphrase. DistilBERT or larger is exactly right." },
+            { "id": "c", "label": "Detect fraudulent transactions in < 5 ms.", "correct": false, "explain": "Latency budget rules out even small transformers. Use feature-engineered classical model." },
+            { "id": "d", "label": "Forecast next quarter's GMV from 3 years of monthly numbers.", "correct": false, "explain": "Time-series with periodicity. Prophet or even SARIMA gets you 90% there." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one feature on your roadmap. Could a non-transformer baseline (logistic regression, gradient-boosted tree, classical similarity) get within 10% of the quality you'd hope for from an LLM? If yes — is there any reason not to ship the baseline first?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "Transformer = soft lookup. Each token attends to every other; weights are learned.",
+            "Parallelism + long-range memory + clean gradient flow = why this architecture stuck.",
+            "Bigger isn't always better. Start with 100M params for classification, 7B for generation.",
+            "Tabular problems and tight latency budgets often want classical ML, not transformers.",
+            "Transformers shine on structured sequences (text, code, audio). Everywhere else, justify the spend."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "llms-in-practice",
+      "title": "LLMs in practice",
+      "subtitle": "Your CTO says 'add an LLM by Friday.' Which one, and what's it going to cost?",
+      "estimatedMinutes": 12,
+      "skillHints": ["model-selection", "prompt-craft"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Friday is in 4 days. Six LLM providers want your business. The CFO wants the cheapest one. You want the right one.",
+          "md": "Pricing varies **100×** between providers. Latency varies **10×**. Context windows vary **50×**. Picking wrong isn't expensive — it's *recurringly* expensive. Get the decision right once."
+        },
+        {
+          "type": "revealCard",
+          "front": "All major LLMs are basically the same.",
+          "back": "Capability-wise, yes. Cost-and-latency-wise, no. **For the same task: Claude Sonnet ≈ ₹0.30, GPT-4o ≈ ₹0.40, Llama-3 70B (self-host) ≈ ₹0.04.** The 10× cost difference will dominate your unit economics.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Three LLMs walk into a bar.",
+          "frames": [
+            { "character": "sam", "expression": "neutral", "bubble": "I just need to *summarise* a customer email. Which one do I use?" },
+            { "character": "kavya", "expression": "smug", "bubble": "How many emails per day?" },
+            { "character": "sam", "expression": "confused", "bubble": "Uh... 50,000." },
+            { "character": "kavya", "expression": "neutral", "bubble": "At Claude Sonnet rates that's **₹4 lakh/month** for one feature. Llama-3 8B self-hosted: **₹40K**. Same quality for summarisation.", "caption": "Pick the model after you do the math." }
+          ]
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Sort each model into its category.",
+          "bins": [
+            { "id": "closed", "label": "Closed (API-only)", "tone": "neutral" },
+            { "id": "open",   "label": "Open weights",     "tone": "safe" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Claude Sonnet 4.6", "correctBinId": "closed", "comment": "Anthropic API only." },
+            { "id": "i2", "label": "Llama-3 70B-Instruct", "correctBinId": "open", "comment": "Meta open weights, self-host or via providers like Together / Fireworks." },
+            { "id": "i3", "label": "GPT-5", "correctBinId": "closed", "comment": "OpenAI API only." },
+            { "id": "i4", "label": "Mistral Large 2", "correctBinId": "closed", "comment": "Mistral, API; small models are open." },
+            { "id": "i5", "label": "Qwen-2.5 72B", "correctBinId": "open", "comment": "Alibaba, open weights, strong India-context support." },
+            { "id": "i6", "label": "Gemini 2.5 Pro", "correctBinId": "closed", "comment": "Google API only." }
+          ]
+        },
+        {
+          "type": "handsOn",
+          "title": "Your first Claude API call (6 lines)",
+          "setup": "Get an API key from console.anthropic.com (free tier covers experimentation). Then `export ANTHROPIC_API_KEY=sk-ant-...`",
+          "steps": [
+            {
+              "instruction": "Install the SDK.",
+              "command": "pip install anthropic",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Create `hello.py`:",
+              "command": "from anthropic import Anthropic\n\nclient = Anthropic()\nmsg = client.messages.create(\n    model='claude-sonnet-4-6',\n    max_tokens=200,\n    messages=[{'role': 'user', 'content': 'Summarise: A user complained that delivery was late but the food was good. Rating: 4 stars.'}],\n)\nprint(msg.content[0].text)",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python hello.py",
+              "lang": "bash",
+              "expect": "A 1-2 sentence summary. Should highlight the mixed sentiment — delivery negative, food positive."
+            }
+          ],
+          "verify": "You just made your first LLM call. The token count of input + output × your model's rate is what you'll pay. Check `msg.usage` to see the numbers."
+        },
+        {
+          "type": "handsOn",
+          "title": "Same call, but get structured output",
+          "setup": "Same file as before. We'll force the model to return JSON we can parse.",
+          "steps": [
+            {
+              "instruction": "Replace the messages call with a system-prompted version.",
+              "command": "msg = client.messages.create(\n    model='claude-sonnet-4-6',\n    max_tokens=300,\n    system='You return ONLY valid JSON. No prose. Schema: {\"summary\": string, \"sentiment\": \"positive\"|\"negative\"|\"mixed\", \"action_required\": boolean}',\n    messages=[{'role': 'user', 'content': 'A user complained that delivery was late but the food was good. Rating: 4 stars.'}],\n)\nimport json\ndata = json.loads(msg.content[0].text)\nprint(data)",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python hello.py",
+              "lang": "bash",
+              "expect": "A Python dict like `{'summary': '...', 'sentiment': 'mixed', 'action_required': True}`. Parses cleanly. Wrap in `try/except json.JSONDecodeError` for production — LLMs occasionally drift."
+            }
+          ],
+          "verify": "Structured output is what turns 'LLM in your stack' into 'LLM as a function'. Every LLM call should return something you can `.json()` parse. Otherwise you're building a chatbot, not a system."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "Your customer support workflow needs how much context (tokens)?",
+          "min": 1,
+          "max": 200,
+          "step": 1,
+          "startValue": 20,
+          "leftLabel": "1K (a tweet)",
+          "rightLabel": "200K (a novel)",
+          "unit": "K tokens",
+          "bands": [
+            { "lo": 1,  "hi": 8,  "title": "Most production calls live here.", "body": "Single user message + system prompt + a few examples. Pick the cheapest competent model.", "tone": "good" },
+            { "lo": 9,  "hi": 40, "title": "Long context with retrieval.", "body": "You're stuffing relevant docs into the prompt (RAG). Mid-size context windows handle this — Claude Sonnet 200K, GPT-4o 128K.", "tone": "good" },
+            { "lo": 41, "hi": 120, "title": "Whole-document analysis.", "body": "Reading a contract or a code repo wholesale. Quality drops past 64K for most models. Test before trusting.", "tone": "okay" },
+            { "lo": 121, "hi": 200, "title": "Edge case — and expensive.", "body": "200K input ≈ ₹6 per call on Claude. Doable for offline analysis, ruinous for per-user features.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Choose the model for an in-app coding assistant.",
+          "startNodeId": "c1",
+          "nodes": [
+            {
+              "id": "c1",
+              "body": "You're shipping an AI 'explain this code' feature in your IDE plugin. 200K users. Average 30 calls/day each.\n\nThat's 6 million calls/day. What's your default model?",
+              "choices": [
+                { "id": "a", "label": "GPT-4o, because everyone uses it.", "outcome": "₹6 lakh per day. ₹1.8 crore per month. The CFO ends your free tier in week 3." },
+                { "id": "b", "label": "Claude Haiku 4.5 (fast, cheap, strong on code).", "nextNodeId": "c2" },
+                { "id": "c", "label": "Self-hosted Llama-3 8B fine-tuned on code.", "nextNodeId": "c3" }
+              ]
+            },
+            {
+              "id": "c2",
+              "body": "₹0.06/call. ₹3.6 lakh/day. Sustainable for premium tier; you'll need a free-tier model.",
+              "choices": [
+                { "id": "d", "label": "Mix: Haiku for paid users, Llama for free.", "outcome": "Pragmatic. Tier the experience by tier the cost. Most production systems end up doing this." }
+              ]
+            },
+            {
+              "id": "c3",
+              "body": "₹0.008/call (compute). ₹48K/day. Slight quality drop on complex code. Plus you now own the infra.",
+              "choices": [
+                { "id": "e", "label": "Worth it for free tier.", "outcome": "Right. Cheap, no rate limits, owns the IP of the fine-tune. Pair with a paid tier on a frontier model." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "quiz",
+          "prompt": "Your LLM is hallucinating dates and prices in summaries. What helps *most*?",
+          "multi": false,
+          "choices": [
+            { "id": "a", "label": "Use a bigger model.", "correct": false, "explain": "Marginal improvement. Hallucinations don't disappear at scale — they get more confident." },
+            { "id": "b", "label": "Add the source document as context and instruct the model to *cite* it.", "correct": true, "explain": "Grounding + citation requirement is the single biggest lever. The model can't hallucinate what it must point at." },
+            { "id": "c", "label": "Use temperature = 0.", "correct": false, "explain": "Reduces variance, doesn't fix grounding. The model is still making things up — just consistently." },
+            { "id": "d", "label": "Add 'do not hallucinate' to the system prompt.", "correct": false, "explain": "Folklore. Doesn't work. Some studies show it slightly *increases* hallucinations by making the model defensive." }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Bangalore fintech that picked the wrong model",
+          "source": "Engineering manager at a Series-C fintech in Whitefield",
+          "date": "January 2026",
+          "story": "PM proposed: 'Use GPT-4o for our KYC document extraction. It's the best.' Engineering said: 'Sure.'\n\nFour weeks in, the bill was **₹14 lakh/month**. They were processing 800K documents/month at ~3K input tokens each. Each call ≈ ₹1.50.\n\nThey switched to a fine-tuned DistilBERT for field extraction (₹0 per call after the fine-tune) and kept Claude Sonnet 4.6 only for the *hard* documents the small model flagged (≈ 5% of volume). Bill dropped to **₹38K/month**. F1 went *up* by 0.04 because the small model didn't confabulate dates.",
+          "takeaway": "GPT-4 / Claude Sonnet are excellent fallback layers for the *hard* cases. Using them for the easy cases is how startups die of unit economics."
+        },
+        {
+          "type": "cardSwipe",
+          "prompt": "Each card is a use case. Should you reach for an LLM here?",
+          "leftLabel": "No LLM",
+          "rightLabel": "LLM",
+          "cards": [
+            { "id": "c1", "title": "Validate a PAN number format.", "body": "Check if a string matches PAN pattern. 100% deterministic.", "correctSide": "left", "explain": "Regex. No model. LLM here would be expensive theatre." },
+            { "id": "c2", "title": "Summarise a 50-message support thread for the next agent.", "body": "Long context, paraphrase, sentiment, action items.", "correctSide": "right", "explain": "Classic LLM territory. Length and ambiguity make rules brittle." },
+            { "id": "c3", "title": "Classify documents into 4 categories with 50K labelled examples.", "body": "Stable categories, big labelled set.", "correctSide": "left", "explain": "Fine-tune DistilBERT. 100× cheaper and faster than an LLM call." },
+            { "id": "c4", "title": "Translate Hindi customer reviews to English.", "body": "Free-text, idiomatic, code-switched.", "correctSide": "right", "explain": "Modern LLMs handle Hindi/Hinglish well. Older NMT systems struggle with code-switching." },
+            { "id": "c5", "title": "Detect if an uploaded image contains text.", "body": "Just yes/no, no understanding needed.", "correctSide": "left", "explain": "Tiny vision model or even OpenCV. Vision LLM is overkill for binary decisions." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "The Friday LLM ship.",
+          "panels": [
+            { "scene": "cfo-math", "narration": "MONDAY · THE CTO PUTS A DEADLINE ON THE WHITEBOARD.", "dialog": [{ "speaker": "cfo", "text": "Ship an LLM feature by Friday." }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "TUESDAY · SAM PICKS THE FANCIEST MODEL.", "dialog": [{ "speaker": "sam", "text": "GPT-4o. Best benchmarks. Done." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "boardroom-kavya", "narration": "WEEK 3 · THE BILL.", "dialog": [{ "speaker": "kavya", "text": "₹14 lakh. **For one feature.**" }], "sfxAfter": "THUD." },
+            { "scene": "ic-desk", "narration": "WEEK 4 · SAM REFACTORS.", "dialog": [{ "speaker": "sam", "text": "Small model for 95%, Claude only for the hard 5%." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "FRONTIER MODELS ARE FALLBACK LAYERS, NOT DEFAULTS." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Model selection",
+          "instruction": "Pick the model-selection rubric your team should actually use.",
+          "badgeLabel": "Model-fluent",
+          "choices": [
+            { "id": "a", "label": "Always use the best benchmarked model. Engineers shouldn't think about cost.", "correct": false, "explain": "How startups die. Benchmarks measure capability ceiling, not your unit economics." },
+            { "id": "b", "label": "Start with the smallest competent model. Escalate to frontier only on flagged-hard cases. Measure cost per call from day one.", "correct": true, "explain": "Tiered routing keeps unit economics sane. The small model handles 80–95%; the big one cleans up." },
+            { "id": "c", "label": "Self-host everything for cost reasons.", "correct": false, "explain": "Now you own a inference platform. Self-host for scale + IP reasons, not as a default." },
+            { "id": "d", "label": "Use Claude for everything because it's good at code.", "correct": false, "explain": "Single-provider lock-in. Diversify and route by use-case." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one LLM feature your team is considering. Estimate the per-call cost on the model you'd pick. Multiply by expected daily volume. Is the answer in the 'comfortable feature' or 'CFO conversation' bucket?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "Costs vary 100×, latency 10×, context 50× across providers. Don't pick on capability alone.",
+            "Structured output (JSON via system prompt) is what turns an LLM into a function you can call.",
+            "Hallucination ≠ randomness. Grounding + citation is the single biggest mitigation.",
+            "Frontier models (Claude, GPT-4) are *fallback layers* for the hard 5%. Small models handle the rest.",
+            "Measure cost per call before you ship. Multiply by expected volume. Surprise CFO conversations are how features get killed."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "finetuning",
+      "title": "Finetuning",
+      "subtitle": "When to teach the model your work — and the three times you really shouldn't.",
+      "estimatedMinutes": 11,
+      "skillHints": ["finetuning-practice", "ai-engineering"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Your prompt is 4,000 tokens. Each call: ₹0.50. You make 10K calls/day. That's ₹5 lakh/month — for ONE feature.",
+          "md": "And the prompt isn't even big by 2026 standards. Half of it is examples you keep including because the model 'forgets' between calls. (It doesn't forget — it never knew.)\n\nThere's a fix. It's called fine-tuning. It's also where most teams waste their first three months."
+        },
+        {
+          "type": "revealCard",
+          "front": "Finetune to make the model smarter.",
+          "back": "Finetune to make the model **cheaper and faster** on the things it already mostly knows. You're compressing your prompt into the weights — not teaching new facts.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "comicStrip",
+          "title": "Three approaches walk up to the same cliff.",
+          "frames": [
+            { "character": "sam", "expression": "neutral", "bubble": "I'll keep iterating on the prompt!", "caption": "The Prompt Engineer." },
+            { "character": "kavya", "expression": "smug", "bubble": "I'll just retrieve relevant context at query time.", "caption": "The RAG-er." },
+            { "character": "rina", "expression": "happy", "bubble": "I'll teach the model with examples and shrink the prompt to nothing.", "caption": "The Finetuner." },
+            { "character": "narrator", "expression": "neutral", "bubble": "**All three are right. They're each right at different times.** Knowing which is the actual skill." }
+          ]
+        },
+        {
+          "type": "markdown",
+          "md": "**When finetuning is the right answer:**\n\n1. The task is **specific** and you call it often (>1000 times/day).\n2. You have **at least 200–500 examples** of input → ideal output.\n3. Smaller, cheaper open model + finetune > bigger closed model + verbose prompt.\n4. **Latency** matters. Smaller model + finetune is 3–10× faster than frontier + long prompt.\n\n**When it's the wrong answer:**\n\n1. You have **fewer than 100 examples**. (Use few-shot prompting instead.)\n2. The task changes weekly. (Fine-tune debt accumulates fast.)\n3. The 'fix' is really **retrieval** — finetuning won't teach the model new facts about your data.\n4. A frontier model already gets it right and you call it < 100×/day. (Spend the time elsewhere.)"
+        },
+        {
+          "type": "handsOn",
+          "title": "LoRA finetune on a small dataset (CPU-friendly)",
+          "setup": "Python 3.10+. About 4 GB of model download. **Runs on CPU** for a 1B model — slow but doable, takes ~30 min. With a small GPU (Colab T4), 5 min.",
+          "steps": [
+            {
+              "instruction": "Install Hugging Face + PEFT (LoRA implementation).",
+              "command": "pip install transformers peft datasets accelerate bitsandbytes",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Make a tiny training file `data.jsonl` with 20 examples of your task. For demo, classify movie reviews as sentiment.",
+              "command": "echo '{\"text\": \"Movie was a masterpiece, loved every minute\", \"label\": \"positive\"}' > data.jsonl\necho '{\"text\": \"Boring and overlong, fell asleep twice\", \"label\": \"negative\"}' >> data.jsonl\n# Add 18 more lines in this format. Variety helps.",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Fine-tune Llama-3.2 1B with LoRA — only ~0.5% of weights are trainable, so it fits in CPU/Colab.",
+              "command": "from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer\nfrom peft import LoraConfig, get_peft_model\nfrom datasets import load_dataset\n\nmodel_id = 'meta-llama/Llama-3.2-1B'\ntok = AutoTokenizer.from_pretrained(model_id)\nmodel = AutoModelForCausalLM.from_pretrained(model_id)\nmodel = get_peft_model(model, LoraConfig(r=8, target_modules=['q_proj', 'v_proj']))\n\nds = load_dataset('json', data_files='data.jsonl')['train']\nds = ds.map(lambda x: tok(f\"{x['text']}\\n{x['label']}\", truncation=True, padding='max_length', max_length=64))\n\ntrainer = Trainer(\n    model=model,\n    args=TrainingArguments(output_dir='./lora-out', num_train_epochs=3, per_device_train_batch_size=2, logging_steps=5),\n    train_dataset=ds,\n)\ntrainer.train()\nmodel.save_pretrained('./lora-out')",
+              "lang": "python",
+              "expect": "Training log printing loss every 5 steps. Loss should drop from ~3.5 to ~1.5 over 3 epochs. Takes ~30 min on CPU, ~5 min on Colab T4."
+            }
+          ],
+          "verify": "Check `./lora-out/`. The LoRA adapter is **only 8 MB** — that's what makes it cheap to maintain and ship. Load it on top of the base model at inference and you have a custom classifier."
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Pick the right tool for each scenario.",
+          "bins": [
+            { "id": "prompt",    "label": "Prompt engineering", "tone": "neutral" },
+            { "id": "rag",       "label": "RAG (retrieval)",    "tone": "neutral" },
+            { "id": "finetune",  "label": "Finetune",           "tone": "safe" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Answer questions about your company's HR policy docs.", "correctBinId": "rag", "comment": "Docs change. Finetuning bakes them in; RAG keeps them queryable." },
+            { "id": "i2", "label": "Always reply in your brand's voice (terse, direct, no exclamation marks).", "correctBinId": "finetune", "comment": "Style is well-served by finetune. Prompt engineering carries the brand voice in *every* call (expensive)." },
+            { "id": "i3", "label": "One-off task: summarise this 50-page contract for me.", "correctBinId": "prompt", "comment": "One call, frontier model, long context. Don't overthink it." },
+            { "id": "i4", "label": "Classify 100K support tickets/day into 8 fixed categories.", "correctBinId": "finetune", "comment": "High volume + stable categories + labels available → text-book finetune." },
+            { "id": "i5", "label": "Help users query your live product database.", "correctBinId": "rag", "comment": "The data changes constantly. Finetune is the wrong primitive." },
+            { "id": "i6", "label": "Generate marketing copy in 4 variations per product launch.", "correctBinId": "prompt", "comment": "Low volume, high variety. Few-shot prompting fits." }
+          ]
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "How many labelled examples do you actually need to finetune?",
+          "min": 10,
+          "max": 10000,
+          "step": 10,
+          "startValue": 500,
+          "leftLabel": "10 (one weekend)",
+          "rightLabel": "10,000 (a quarter)",
+          "unit": "examples",
+          "bands": [
+            { "lo": 10,   "hi": 99,    "title": "Too few — use few-shot prompting instead.", "body": "With < 100 examples, you're better off pasting them all into the system prompt as few-shot. LoRA needs more signal than this.", "tone": "bad" },
+            { "lo": 100,  "hi": 999,   "title": "Sweet spot for LoRA / SFT.", "body": "Most production fine-tunes land here. 200–500 high-quality examples beats 5,000 noisy ones. Spend the time on quality, not quantity.", "tone": "good" },
+            { "lo": 1000, "hi": 4999,  "title": "Substantial — diminishing returns past here.", "body": "Quality plateaus around 1–2K examples for most tasks. Past that you're spending labelling budget for fractional improvements.", "tone": "okay" },
+            { "lo": 5000, "hi": 10000, "title": "Research / SOTA territory.", "body": "Worth it only if you're chasing benchmark numbers, not shipping product. Most shipped features don't need this.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Your CFO sends Slack: 'AI bill is ₹5L/month. Cut it.'",
+          "startNodeId": "f1",
+          "nodes": [
+            {
+              "id": "f1",
+              "body": "You analyse the breakdown. **80% of calls go to one feature: classifying support tickets.** Frontier model, long prompt, ~₹0.50/call, 100K calls/day.\n\nWhat do you do first?",
+              "choices": [
+                { "id": "a", "label": "Negotiate a discount with the provider.", "outcome": "Get 15% off. ₹4.25L/month. CFO still angry." },
+                { "id": "b", "label": "Sample 500 production calls, label them, LoRA-finetune a 7B open model.", "nextNodeId": "f2" },
+                { "id": "c", "label": "Cache common patterns.", "outcome": "Helps ~10%. ₹4.5L/month. Doesn't address the structural cost." }
+              ]
+            },
+            {
+              "id": "f2",
+              "body": "Two weeks of work. Llama-3 8B fine-tuned. F1 = 0.94 (vs 0.96 with frontier).\n\nThe gap is in 'ambiguous' tickets. **5% of volume.**",
+              "choices": [
+                { "id": "d", "label": "Route the easy 95% to fine-tuned Llama, the hard 5% to Claude.", "outcome": "**₹0.04/call for 95K, ₹0.50/call for 5K = ₹6.3K/day = ₹2L/month.** F1 slightly better than baseline (the fine-tune is sharper on the easy cases). The CFO buys you coffee." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Mumbai legal-tech that fine-tuned for legal Hindi",
+          "source": "Founder at a 12-person Mumbai legal-tech startup",
+          "date": "November 2025",
+          "story": "Their product summarises legal documents — mostly in Hindi-English code-switched legal jargon. Frontier models handled it but at **₹3 per call** on long contracts.\n\nThey collected **800 labelled examples** (input doc → ideal summary) and LoRA-fine-tuned Qwen-2.5 14B over a weekend on a single H100 (rented for ₹600). Total fine-tune cost: ₹4,000. Inference cost: ₹0.05/call.\n\nSummary quality, measured by paralegal rubric, was **within 4 points** of GPT-4o. For their use case — fast first-pass — that was more than enough.",
+          "takeaway": "Indian-language tasks are still under-served by frontier models in absolute quality, but the cost/quality ratio of a finetuned mid-size open model is unbeatable. If you're building for India, fine-tuning is often the highest-ROI move you can make."
+        },
+        {
+          "type": "cardSwipe",
+          "prompt": "Each scenario — would you finetune, or just prompt?",
+          "leftLabel": "Just prompt",
+          "rightLabel": "Finetune",
+          "cards": [
+            { "id": "c1", "title": "Classify 100K tickets/day, 4 stable categories, you have 1,500 labels.", "body": "High volume, stable task, enough data.", "correctSide": "right", "explain": "Text-book LoRA. You'll save lakhs/month." },
+            { "id": "c2", "title": "Translate user reviews in 15 Indian languages, sporadic volume.", "body": "Volume is low and unpredictable.", "correctSide": "left", "explain": "Frontier models handle multi-lingual well; volume doesn't justify maintaining 15 fine-tunes." },
+            { "id": "c3", "title": "Generate sales-team emails in 'your CEO's voice'. 50 calls/day.", "body": "Brand voice matters but volume is low.", "correctSide": "left", "explain": "50 calls/day @ ₹0.30 = ₹450/day. Few-shot prompting is the right tool here." },
+            { "id": "c4", "title": "Extract 7 specific fields from invoices. 800K invoices/month.", "body": "Highly structured, repeatable.", "correctSide": "right", "explain": "Fine-tune Llama 1B or even DistilBERT. Will save ₹15-25 lakh/month vs frontier." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Finetune decision",
+          "instruction": "Your team has ₹1L of free fine-tune budget this quarter. Where do you spend it?",
+          "badgeLabel": "Fine-tune-fluent",
+          "choices": [
+            { "id": "a", "label": "Fine-tune the model for the new experimental feature with 30 examples.", "correct": false, "explain": "Too few examples, feature too new. Few-shot prompting is the right step first." },
+            { "id": "b", "label": "Fine-tune the model for the highest-volume, most-stable feature with 1K+ examples available.", "correct": true, "explain": "Maximum ₹-saved per ₹-spent. The boring high-volume feature with stable categories is where fine-tuning prints money." },
+            { "id": "c", "label": "Fine-tune separately for each of 8 marketing copy styles, 20 examples each.", "correct": false, "explain": "Eight separate fine-tunes is eight times the maintenance burden, and 20 examples is too few." },
+            { "id": "d", "label": "Don't fine-tune. Use the budget for prompt engineering experiments.", "correct": false, "explain": "Real opportunity cost. If you have the volume and the labels, fine-tuning is the higher-leverage spend." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "From ₹5L/month to ₹30K.",
+          "panels": [
+            { "scene": "cfo-math", "narration": "Q1 · THE BILL ARRIVES.", "dialog": [{ "speaker": "cfo", "text": "**₹5 lakh.** For one feature." }], "sfxAfter": "THUD." },
+            { "scene": "ic-desk", "narration": "Q2 · SAM SAMPLES 500 CALLS.", "dialog": [{ "speaker": "sam", "text": "I'm labelling these on the train home." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "ic-desk", "narration": "Q2 · TWO WEEKS LATER. THE LORA TRAINS OVERNIGHT.", "dialog": [{ "speaker": "sam", "text": "F1: 0.94. Cost per call: 4 paise." }], "sfxAfter": "TICK . . ." },
+            { "scene": "boardroom-kavya", "narration": "Q3 · KAVYA AT THE COST REVIEW.", "dialog": [{ "speaker": "kavya", "text": "₹30K/month. Better quality. Faster. **And we own the model.**" }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "FINETUNING ISN'T ABOUT MAKING THE MODEL SMARTER. IT'S ABOUT MAKING THE WORK YOU'RE ALREADY DOING CHEAPER." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one current feature in your codebase that calls an LLM. Could you label 500 production examples in a week? If yes — what's stopping you from fine-tuning a smaller open model and routing the easy cases to it?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "Finetune to **compress your prompt into weights**, not to teach the model new facts.",
+            "LoRA is the practical default — trains in hours, ships an 8 MB adapter, no full retraining.",
+            "Sweet spot is 200–500 high-quality labelled examples. Quality > quantity.",
+            "Route easy cases to your fine-tune (small, cheap), fall back to a frontier model for the hard 5%.",
+            "For Indian languages and domain-specific tasks, fine-tuned open models often beat frontier on cost/quality ratio."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "rag",
+      "title": "Retrieval-Augmented Generation",
+      "subtitle": "Your docs. The LLM's reasoning. Stitched together at query time.",
+      "estimatedMinutes": 12,
+      "skillHints": ["rag-architecture", "ai-engineering"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "info",
+          "title": "User asks: 'What's our return policy on saris bought during the Diwali sale?' Claude says: 'I don't know your specific company.'",
+          "md": "Of course it doesn't. Your return policy isn't in Claude's training data. And you don't want to fine-tune every time you update a policy.\n\nRAG — Retrieval-Augmented Generation — is the architecture for *answering questions about data the model has never seen*. It's also the most over-hyped and under-engineered pattern in production AI."
+        },
+        {
+          "type": "revealCard",
+          "front": "Just train the LLM on your docs.",
+          "back": "Just **find** the relevant docs at query time and **paste them** into the prompt. Cheaper. Faster. Stays fresh when your docs update. That's RAG.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "markdown",
+          "md": "**The flow, in three steps:**\n\n1. **Retrieve.** Take the user's question, find the top-K relevant chunks of your documentation. Typically: embed the question, do nearest-neighbour search over pre-embedded chunks.\n2. **Augment.** Stuff those chunks into the prompt, with the question. Often with a system prompt like *'Answer using ONLY the provided context. If the answer isn't there, say so.'*\n3. **Generate.** LLM produces the answer. Optionally, cite which chunks it used.\n\nAll three steps are simple. **All three steps fail in surprising ways.** Most of this lesson is the failure modes."
+        },
+        {
+          "type": "comicStrip",
+          "title": "A document's journey through RAG.",
+          "frames": [
+            { "character": "narrator", "expression": "neutral", "bubble": "**Step 1.** Your 800-page policy doc gets chopped into **chunks** of ~500 tokens each.", "caption": "Chunking is the most underrated decision." },
+            { "character": "kavya", "expression": "neutral", "bubble": "Each chunk gets an embedding. They live in a vector DB now.", "caption": "Pre-computed. Indexed. Searchable." },
+            { "character": "sam", "expression": "happy", "bubble": "User question comes in. We embed it. Find top-5 nearest chunks.", "caption": "Retrieval. Milliseconds." },
+            { "character": "narrator", "expression": "neutral", "bubble": "Question + chunks → prompt → LLM → answer.", "caption": "And ideally, with citations to the chunks." }
+          ]
+        },
+        {
+          "type": "handsOn",
+          "title": "Tiny RAG in 40 lines (CPU, no API)",
+          "setup": "Python 3.10+. Uses `sentence-transformers` for embedding (CPU) and `faiss-cpu` for vector search. Total disk: ~250 MB.",
+          "steps": [
+            {
+              "instruction": "Install dependencies.",
+              "command": "pip install sentence-transformers faiss-cpu anthropic",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Create a small 'document' as `policy.txt`:",
+              "command": "cat > policy.txt <<'EOF'\nReturn Policy:\nClothing items can be returned within 30 days of purchase, provided they are unworn and have tags attached. Sale items have a 7-day return window. During Diwali and other festival sales, return windows reduce to 3 days. Refunds are processed within 5-7 business days to the original payment method. Cash on delivery orders are refunded as store credit.\n\nShipping Policy:\nFree shipping on orders above Rs 1500. Bangalore, Mumbai, Delhi: next-day delivery. Other metros: 2-3 days. Non-metros: 5-7 days. Returns are picked up free of charge.\nEOF",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Make `rag.py`:",
+              "command": "from sentence_transformers import SentenceTransformer\nimport faiss, numpy as np\nfrom anthropic import Anthropic\n\n# 1. Load + chunk\nwith open('policy.txt') as f:\n    text = f.read()\nchunks = [c.strip() for c in text.split('\\n\\n') if c.strip()]\n\n# 2. Embed\nm = SentenceTransformer('all-MiniLM-L6-v2')\nvecs = m.encode(chunks).astype('float32')\n\n# 3. Index (faiss flat = exact search; for >100k chunks use IVF or HNSW)\nidx = faiss.IndexFlatIP(vecs.shape[1])\nfaiss.normalize_L2(vecs)\nidx.add(vecs)\n\n# 4. Query\nq = 'Can I return a saree bought during the Diwali sale?'\nqv = m.encode([q]).astype('float32')\nfaiss.normalize_L2(qv)\nD, I = idx.search(qv, k=2)\ntop = [chunks[i] for i in I[0]]\n\n# 5. Generate\nctx = '\\n\\n---\\n\\n'.join(top)\nclient = Anthropic()\nresp = client.messages.create(\n    model='claude-sonnet-4-6',\n    max_tokens=300,\n    system='Answer using ONLY the provided context. If the answer is not in the context, say \"I cannot find this in the provided policy.\"',\n    messages=[{'role': 'user', 'content': f'CONTEXT:\\n{ctx}\\n\\nQUESTION: {q}'}],\n)\nprint(resp.content[0].text)",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python rag.py",
+              "lang": "bash",
+              "expect": "An answer mentioning the 3-day Diwali return window. The model wouldn't have known this without the retrieved chunk."
+            }
+          ],
+          "verify": "Try a question whose answer ISN'T in `policy.txt` (like 'do you ship internationally?'). The model should say it can't find it — not invent an answer. If it invents, your system prompt isn't strict enough."
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Good chunking vs. bad chunking — sort each strategy.",
+          "bins": [
+            { "id": "good", "label": "Good chunking", "tone": "safe" },
+            { "id": "bad",  "label": "Bad chunking",  "tone": "danger" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Fixed 500-token chunks with 50-token overlap.", "correctBinId": "good", "comment": "Sensible default. Overlap prevents losing context at chunk boundaries." },
+            { "id": "i2", "label": "Whole-document chunks (each doc = one chunk).", "correctBinId": "bad", "comment": "Retrieval becomes 'which doc is most relevant', not 'which paragraph'. You'll stuff too much into the prompt." },
+            { "id": "i3", "label": "Split on semantic boundaries (sections, headings, paragraphs).", "correctBinId": "good", "comment": "When structure exists, use it. Each chunk is a coherent unit." },
+            { "id": "i4", "label": "Split every 50 characters arbitrarily.", "correctBinId": "bad", "comment": "Cuts words and sentences. Retrieval surfaces gibberish." },
+            { "id": "i5", "label": "Sentence-level chunks (one chunk per sentence).", "correctBinId": "bad", "comment": "Too small. Each chunk loses surrounding context — the model gets confetti, not signal." },
+            { "id": "i6", "label": "Hierarchical: small chunks for retrieval, then expand to the surrounding paragraph at generation time.", "correctBinId": "good", "comment": "Best of both worlds. Modern pattern, worth the engineering." }
+          ]
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "What chunk size do you actually want for a documentation RAG?",
+          "min": 50,
+          "max": 4000,
+          "step": 50,
+          "startValue": 500,
+          "leftLabel": "50 tokens (a sentence)",
+          "rightLabel": "4000 tokens (a chapter)",
+          "unit": "tokens",
+          "bands": [
+            { "lo": 50,   "hi": 199,  "title": "Too small.", "body": "Sentence-level chunks lose context. Retrieval surfaces fragments without surrounding meaning. Model can't answer cleanly.", "tone": "bad" },
+            { "lo": 200,  "hi": 800,  "title": "Sweet spot for most docs.", "body": "Paragraph-ish. Retrievable as a unit, big enough to carry context, small enough to stuff 4-8 of them in the prompt. Default to 500.", "tone": "good" },
+            { "lo": 801,  "hi": 1999, "title": "Big chunks — costs more, less precise retrieval.", "body": "Each chunk holds more, but retrieval is fuzzier ('this big chunk is relevant'). Trade-off worth it for code or highly-structured docs.", "tone": "okay" },
+            { "lo": 2000, "hi": 4000, "title": "Whole-doc territory.", "body": "You're basically retrieving documents, not passages. Works only if your docs are small (e.g., FAQ entries). For most product docs: too big.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Users say 'the AI gives wrong answers'. You inspect.",
+          "startNodeId": "r1",
+          "nodes": [
+            {
+              "id": "r1",
+              "body": "You sample 20 wrong answers. The pattern: **18 of them** have the correct chunk retrieved — but the LLM ignored it and answered from training data.\n\nWhat do you fix?",
+              "choices": [
+                { "id": "a", "label": "Better retrieval — try a different embedding model.", "outcome": "Doesn't help. Retrieval is already correct. You're solving the wrong problem." },
+                { "id": "b", "label": "Strengthen the system prompt to force grounding.", "nextNodeId": "r2" },
+                { "id": "c", "label": "Switch to a bigger LLM.", "outcome": "Marginal. Bigger models are slightly better at instruction-following, but the prompt is still ambiguous about grounding." }
+              ]
+            },
+            {
+              "id": "r2",
+              "body": "You change the prompt to: *'Answer using ONLY the provided context. Quote the exact sentence you used. If the context doesn't answer the question, say \"I cannot find this in the policy\" — even if you know the answer otherwise.'*\n\nResults?",
+              "choices": [
+                { "id": "d", "label": "Wrong-answer rate drops from 18/20 to 2/20.", "outcome": "Right. The default 'helpful' setting is the enemy. Force the model to cite, and you remove the hallucination space." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Hyderabad health-tech that fought a privacy battle to ship RAG",
+          "source": "Engineering Lead at a Hyderabad health-tech building patient records search",
+          "date": "December 2025",
+          "story": "They wanted RAG over patient medical records. Compliance team blocked it: 'You can't send PII to a US-based LLM.'\n\nThey **kept the embedding step local** (`bge-large-en-v1.5` on their own GPU cluster) and **redacted** identifying fields (name, phone, Aadhaar) before sending chunks to Claude. The actual diagnosis text + treatment notes were enough for medical Q&A.\n\nLegal signed off in week 6 instead of week 1. NPS for the doctor users: +18 points within a quarter.",
+          "takeaway": "The PII problem is solvable: embed locally, redact before generation, audit the prompt context. Don't let 'we can't send data to OpenAI' kill the RAG project before you've designed the data flow."
+        },
+        {
+          "type": "timedChallenge",
+          "prompt": "Spot the broken retrieval pattern.",
+          "timeLimitSec": 25,
+          "fastSec": 8,
+          "fullPoints": 5,
+          "partialPoints": 2,
+          "choices": [
+            { "id": "a", "label": "Top-K = 10. Each chunk is 800 tokens. You stuff all 10 (8K tokens) into the prompt.", "correct": true, "explain": "Way too much context. Long prompts dilute attention; the model gets lost. Top-K = 3–5 is the sweet spot for most cases." },
+            { "id": "b", "label": "Top-K = 3. Each chunk is 400 tokens. ~1500 tokens of context.", "correct": false, "explain": "Reasonable for most RAG setups." },
+            { "id": "c", "label": "Hybrid retrieval: BM25 + embeddings, then re-rank with a cross-encoder.", "correct": false, "explain": "Industry-standard 2026 RAG. More complex but produces better-grounded answers." },
+            { "id": "d", "label": "Cache the embedding of the user's question for follow-up turns.", "correct": false, "explain": "Sensible optimisation, not a bug." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "RAG architecture",
+          "instruction": "Pick the RAG architecture that ships and survives production.",
+          "badgeLabel": "RAG architect",
+          "choices": [
+            { "id": "a", "label": "Chunk = whole document. Top-K = 10. Stuff into prompt.", "correct": false, "explain": "You'll either blow the context window or pay a fortune. And retrieval is too coarse." },
+            { "id": "b", "label": "500-token chunks with 50-token overlap, embed with `bge-small-en`, hybrid retrieval (BM25 + cosine), top-5, re-rank, strict system prompt with citation requirement.", "correct": true, "explain": "Production-shape RAG: structure that survives 6 months of weird user queries." },
+            { "id": "c", "label": "Embed every individual sentence. Top-K = 100. Let the LLM figure it out.", "correct": false, "explain": "Sentence-level chunks lose context; top-K of 100 is prompt-stuffing nonsense." },
+            { "id": "d", "label": "Skip RAG. Fine-tune on the docs once and update weekly.", "correct": false, "explain": "Wrong primitive. Docs change; weekly retraining is expensive maintenance overhead." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "When the chunks weren't aligned.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "MONDAY · USERS SAY THE AI 'MAKES THINGS UP.'", "dialog": [{ "speaker": "sam", "text": "I retrieve the right chunks though." }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "TUESDAY · SAM READS THE PROMPT.", "dialog": [{ "speaker": "sam", "text": "'Use the context if helpful.' If **helpful**?" }], "sfxAfter": "CRACK!" },
+            { "scene": "cfo-math", "narration": "WEDNESDAY · NEW PROMPT.", "dialog": [{ "speaker": "kavya", "text": "'Answer using ONLY the context. Quote the sentence. Else say you don't know.'" }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "boardroom-kavya", "narration": "FRIDAY · USER ESCALATIONS.", "dialog": [{ "speaker": "kavya", "text": "Hallucination rate **down 89%**. Same retrieval. New rules." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "MOST 'BAD RAG' IS 'POLITELY-WORDED PROMPT'. STRICT BEATS HELPFUL." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Pick one internal doc your team uses (FAQ, policy, runbook). Could it be RAG-able tomorrow with a weekend of work? If yes — what's the first user query you'd test against?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "RAG = retrieve relevant chunks → stuff into prompt → generate. Three simple steps, each with subtle failure modes.",
+            "Chunking is the most underrated decision. Start with 500-token chunks + 50-token overlap.",
+            "Most 'bad RAG' is actually 'permissive prompt'. Force the model to use ONLY the context and cite it.",
+            "Top-K of 3-5 beats Top-K of 20. More context dilutes attention; it doesn't sharpen it.",
+            "PII isn't a blocker — embed locally, redact before generation, log what you send. Design the data flow up front."
+          ]
+        }
+      ]
+    },
+
+    {
+      "slug": "agents",
+      "title": "Agents",
+      "subtitle": "The LLM picks the tool. You pick the boundaries — before the ₹2L bill arrives.",
+      "estimatedMinutes": 12,
+      "skillHints": ["agent-design", "ai-judgement"],
+      "blocks": [
+        {
+          "type": "callout",
+          "tone": "warn",
+          "title": "Tool use turns an LLM into a junior developer. With API keys. With a budget. With *no sense of when to stop*.",
+          "md": "An agent is an LLM that can call functions you've defined: search, query DB, send email, run code. Powerful. Also where most production AI accidents happen.\n\nThis lesson is half 'how to build one' and half 'how to keep it from setting your AWS bill on fire'."
+        },
+        {
+          "type": "revealCard",
+          "front": "An agent is an LLM with tools.",
+          "back": "An agent is an LLM with a **budget** — of tokens, money, and time. Without explicit limits, it spirals. Tool definitions are easy. Tool *boundaries* are the engineering.",
+          "hint": "Tap to flip"
+        },
+        {
+          "type": "markdown",
+          "md": "**The agent loop, in pseudocode:**\n\n```\nwhile not done:\n    think_step = llm.call(history)\n    if think_step.is_tool_call:\n        result = run_tool(think_step.tool_name, think_step.args)\n        history.append(result)\n    else:\n        done = True\n        return think_step.text\n```\n\nLooks innocuous. Three things are dangerous:\n\n1. **The `while` has no upper bound by default.** It can loop forever.\n2. **`run_tool` can do anything you let it.** Email, money, code execution.\n3. **The LLM can hallucinate a tool call.** Wrong arguments, made-up tool names, infinite retries when one fails."
+        },
+        {
+          "type": "comicStrip",
+          "title": "Agent's first day.",
+          "frames": [
+            { "character": "sam", "expression": "happy", "bubble": "Just shipped the agent. It can answer questions and call our APIs!" },
+            { "character": "kavya", "expression": "neutral", "bubble": "What's your max iterations?" },
+            { "character": "sam", "expression": "confused", "bubble": "I... didn't set one." },
+            { "character": "trap", "expression": "smug", "bubble": "*The agent is currently on iteration 847 of the same tool call.*", "caption": "And the AWS dashboard is on fire." },
+            { "character": "kavya", "expression": "tired", "bubble": "Always set a max-iterations. Always.", "caption": "Always." }
+          ]
+        },
+        {
+          "type": "handsOn",
+          "title": "Build a tiny agent with Claude function-calling",
+          "setup": "Python 3.10+. Anthropic API key. We'll build an agent with two tools: a calculator and a weather check.",
+          "steps": [
+            {
+              "instruction": "Install dependencies and set your API key.",
+              "command": "pip install anthropic\nexport ANTHROPIC_API_KEY=sk-ant-...",
+              "lang": "bash"
+            },
+            {
+              "instruction": "Define tools as JSON schemas. The LLM uses these to know what's available.",
+              "command": "tools = [\n    {\n        'name': 'calculate',\n        'description': 'Evaluate a basic math expression like 2+2 or 15*7',\n        'input_schema': {\n            'type': 'object',\n            'properties': {'expression': {'type': 'string'}},\n            'required': ['expression'],\n        },\n    },\n    {\n        'name': 'get_weather',\n        'description': 'Get current temperature for a city',\n        'input_schema': {\n            'type': 'object',\n            'properties': {'city': {'type': 'string'}},\n            'required': ['city'],\n        },\n    },\n]",
+              "lang": "python"
+            },
+            {
+              "instruction": "The agent loop with a hard budget. Save as `agent.py`:",
+              "command": "from anthropic import Anthropic\n\nclient = Anthropic()\nMAX_STEPS = 5  # CRITICAL: never let the agent run unbounded\n\ndef run_tool(name, args):\n    if name == 'calculate':\n        try:    return str(eval(args['expression'], {'__builtins__': {}}, {}))\n        except: return 'ERROR: invalid expression'\n    if name == 'get_weather':\n        # Mock — replace with real API call\n        return f\"{args['city']}: 28°C, partly cloudy\"\n    return f'ERROR: unknown tool {name}'\n\nhistory = [{'role': 'user', 'content': \"What is 15 * 7, and what's the weather in Bangalore?\"}]\n\nfor step in range(MAX_STEPS):\n    msg = client.messages.create(\n        model='claude-sonnet-4-6',\n        max_tokens=400,\n        tools=tools,\n        messages=history,\n    )\n    if msg.stop_reason == 'end_turn':\n        print('AGENT:', msg.content[0].text); break\n    # Tool use path: append assistant message, run tool, append tool result\n    history.append({'role': 'assistant', 'content': msg.content})\n    tool_uses = [b for b in msg.content if b.type == 'tool_use']\n    tool_results = [{'type': 'tool_result', 'tool_use_id': tu.id, 'content': run_tool(tu.name, tu.input)} for tu in tool_uses]\n    history.append({'role': 'user', 'content': tool_results})\nelse:\n    print('HALTED: hit max steps')",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python agent.py",
+              "lang": "bash",
+              "expect": "Two tool calls (one to `calculate`, one to `get_weather`), then a final answer combining both. Should finish in ≤ 3 iterations."
+            }
+          ],
+          "verify": "Look at `MAX_STEPS`. If you remove it, the loop is unbounded. **Never ship an agent without a hard cap on iterations + a token budget tracker.** This is the most common rookie mistake and the most expensive."
+        },
+        {
+          "type": "dragClassify",
+          "prompt": "Which of these tools should an agent be allowed to call autonomously? Drag each one.",
+          "bins": [
+            { "id": "ok",     "label": "Safe to autonomous",   "tone": "safe" },
+            { "id": "review", "label": "Needs human review",   "tone": "danger" }
+          ],
+          "items": [
+            { "id": "i1", "label": "Search the company knowledge base.", "correctBinId": "ok", "comment": "Read-only, low cost, reversible. Default to autonomous." },
+            { "id": "i2", "label": "Send an email to a customer.", "correctBinId": "review", "comment": "Outbound communication is irreversible. Always queue for human review or limit to template responses." },
+            { "id": "i3", "label": "Query the production database (SELECT only).", "correctBinId": "ok", "comment": "Read-only DB queries are safe — assuming proper auth scoping." },
+            { "id": "i4", "label": "Initiate a refund.", "correctBinId": "review", "comment": "Money out the door. Always human-in-the-loop, even if it's just a 2-second confirmation." },
+            { "id": "i5", "label": "Delete a user's data.", "correctBinId": "review", "comment": "Irreversible + compliance implications. Never autonomous." },
+            { "id": "i6", "label": "Look up a user's order history.", "correctBinId": "ok", "comment": "Read-only, scoped to the requesting user. Default to autonomous." }
+          ]
+        },
+        {
+          "type": "handsOn",
+          "title": "Add a token budget tracker",
+          "setup": "Same agent code from the previous hands-on. We'll add cost tracking.",
+          "steps": [
+            {
+              "instruction": "Pricing as constants. (Update these for your provider/model.)",
+              "command": "# Claude Sonnet 4.6 pricing (approx, in INR per token):\nINPUT_RATE  = 0.00025   # ₹ per input token\nOUTPUT_RATE = 0.00125   # ₹ per output token\nBUDGET_INR  = 5.00      # hard stop at ₹5 per agent run",
+              "lang": "python"
+            },
+            {
+              "instruction": "After each `client.messages.create`, accumulate cost and check the budget.",
+              "command": "total_cost = 0.0\n\nfor step in range(MAX_STEPS):\n    msg = client.messages.create(model='claude-sonnet-4-6', max_tokens=400, tools=tools, messages=history)\n    step_cost = msg.usage.input_tokens * INPUT_RATE + msg.usage.output_tokens * OUTPUT_RATE\n    total_cost += step_cost\n    print(f'  step {step}: input={msg.usage.input_tokens} output={msg.usage.output_tokens} cost=₹{step_cost:.3f} total=₹{total_cost:.3f}')\n    if total_cost > BUDGET_INR:\n        print('HALTED: budget exceeded')\n        break\n    # ... rest of loop unchanged",
+              "lang": "python"
+            },
+            {
+              "instruction": "Run it.",
+              "command": "python agent.py",
+              "lang": "bash",
+              "expect": "Each iteration prints its token use and running cost. Total typically ≤ ₹0.05 for a simple multi-tool task."
+            }
+          ],
+          "verify": "Now you have two hard ceilings: max iterations AND max cost. Production agents need at least these two. Most real systems also have: max wall-clock time, max identical-tool-calls, and an interrupt signal from the user."
+        },
+        {
+          "type": "scaleSlider",
+          "prompt": "What's a sane maximum number of tool calls per agent run?",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "startValue": 5,
+          "leftLabel": "1 (single-shot)",
+          "rightLabel": "100 (deep agent)",
+          "unit": "calls",
+          "bands": [
+            { "lo": 1,  "hi": 3,  "title": "Single-purpose tool use.", "body": "Most production agents live here. Customer asks a question, agent does 1-3 tool calls, returns. Predictable, debuggable, cheap.", "tone": "good" },
+            { "lo": 4,  "hi": 12, "title": "Multi-step workflows.", "body": "Agent does a small workflow — research a topic, summarise, write a response. Worth careful budget tracking.", "tone": "good" },
+            { "lo": 13, "hi": 30, "title": "Long-running agents — proceed with caution.", "body": "Now you're in 'autonomous research assistant' territory. Cost adds up fast. Hard cost cap is critical.", "tone": "okay" },
+            { "lo": 31, "hi": 100, "title": "Deep agents — expensive, hard to debug.", "body": "Reserve for genuinely complex tasks (code generation, multi-doc research). Cost can hit ₹10-50 per run. Most teams shouldn't be here.", "tone": "bad" }
+          ]
+        },
+        {
+          "type": "branchScenario",
+          "title": "Your agent hits a loop.",
+          "startNodeId": "a1",
+          "nodes": [
+            {
+              "id": "a1",
+              "body": "An agent in production keeps calling the same `search_orders` tool with slight variations. 47 calls. Same user. 30 seconds elapsed.\n\nWhat's the immediate fix?",
+              "choices": [
+                { "id": "a", "label": "Increase max iterations so it has more chances.", "outcome": "Wrong direction. You're feeding the loop. Cost will explode." },
+                { "id": "b", "label": "Detect repeated identical-or-near-identical tool calls and break.", "nextNodeId": "a2" },
+                { "id": "c", "label": "Switch to a bigger model.", "outcome": "Doesn't fix loop pathology. Bigger model loops more confidently and more expensively." }
+              ]
+            },
+            {
+              "id": "a2",
+              "body": "You add: 'If the same tool was called with the same args in the last 3 steps, halt and respond with what we know.'",
+              "choices": [
+                { "id": "d", "label": "Loop incidents drop from ~3% of runs to ~0.1%.", "outcome": "Right. Loop detection is one of those 50-line features that prevents thousands in cost overruns. Ship it before you ship the agent." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "fieldNotes",
+          "title": "The Bangalore SaaS where the agent racked up ₹2 lakh overnight",
+          "source": "Founder at a 25-person Bangalore SaaS doing customer support automation",
+          "date": "February 2026",
+          "story": "Friday evening, they shipped an agent that could query their internal CRM and draft replies. A misconfigured permission gave it access to a paginated endpoint that returned 'next page' tokens.\n\nThe agent thought it was 'researching the user'. It paginated through **84,000 pages** of orders. Each pagination step was a tool call. Each tool call was a Claude API call. The system loaded every page into context.\n\nMonday morning, the AWS bill showed **₹2.1 lakh** of Claude usage from Friday night to Monday. Nobody had thought to set a cost cap.\n\nThey added: max 20 tool calls, max ₹50/run, alert at ₹500/day across all agents. Total fix: 60 lines. Zero incidents since.",
+          "takeaway": "The cost of NOT setting budgets is approximately one weekend of being asleep while the agent thinks. Set the budget before you ship — never after."
+        },
+        {
+          "type": "timedChallenge",
+          "prompt": "Spot the unsafe agent design.",
+          "timeLimitSec": 25,
+          "fastSec": 8,
+          "fullPoints": 5,
+          "partialPoints": 2,
+          "choices": [
+            { "id": "a", "label": "Agent has access to `delete_account` tool. No human approval step.", "correct": true, "explain": "Irreversible action with no human-in-the-loop. Cardinal sin of agent design." },
+            { "id": "b", "label": "Agent can search the knowledge base autonomously, no review.", "correct": false, "explain": "Read-only, low-risk. Safe to autonomous." },
+            { "id": "c", "label": "Agent has a 10-step iteration cap and ₹5 budget.", "correct": false, "explain": "Good defensive design." },
+            { "id": "d", "label": "Agent's responses go through a content filter before user sees them.", "correct": false, "explain": "Sensible output safety." }
+          ]
+        },
+        {
+          "type": "cardSwipe",
+          "prompt": "Each tool — safe for an agent to call autonomously, or needs human approval?",
+          "leftLabel": "Needs human",
+          "rightLabel": "Safe autonomous",
+          "cards": [
+            { "id": "c1", "title": "Read customer's last 10 support tickets.", "body": "Read-only, scoped to the requesting user.", "correctSide": "right", "explain": "Reversible, no cost, no PII leak risk if scoped." },
+            { "id": "c2", "title": "Issue a refund up to ₹5,000.", "body": "Money out. Bounded by amount.", "correctSide": "left", "explain": "Money movement always needs a confirmation step, even if it's a low cap. The cap protects against catastrophe, not against quiet error." },
+            { "id": "c3", "title": "Update a user's email preferences.", "body": "Writes a row in a table.", "correctSide": "right", "explain": "Easy to reverse, low impact. Safe for autonomous, with an audit log." },
+            { "id": "c4", "title": "Post a public reply on the company's Twitter.", "body": "Outbound, public, irreversible.", "correctSide": "left", "explain": "Public + irreversible = always human. The risk-reward is asymmetric." }
+          ]
+        },
+        {
+          "type": "skillProof",
+          "skill": "Agent boundary policy",
+          "instruction": "Pick the agent-design policy that prevents your team's first ₹2L mistake.",
+          "badgeLabel": "Agent architect",
+          "choices": [
+            { "id": "a", "label": "Trust the LLM. It's smart enough to stop on its own.", "correct": false, "explain": "It isn't. Bigger models loop more confidently. You're the one with the budget — set the limits." },
+            { "id": "b", "label": "Max iterations + max cost + loop detection + write-tool human-in-the-loop + audit log. Set before shipping.", "correct": true, "explain": "The five-line policy that prevents most incidents. Iterations cap and cost cap are the bare minimum; loop detection and HITL for writes are the second tier." },
+            { "id": "c", "label": "Cost cap only. Other limits add complexity.", "correct": false, "explain": "Cost cap alone catches runaway loops *after* they cost something. Iteration cap catches them sooner; loop detection catches them earliest." },
+            { "id": "d", "label": "Ship behind a feature flag, monitor, react to issues.", "correct": false, "explain": "Reactive. The cost of a single incident is what defensive design prevents. Pay the design tax, not the incident tax." }
+          ]
+        },
+        {
+          "type": "panelComic",
+          "title": "The ₹2L Bug.",
+          "panels": [
+            { "scene": "ic-desk", "narration": "FRIDAY EVENING · SAM SHIPS THE AGENT.", "dialog": [{ "speaker": "sam", "text": "It's just three tools. What could go wrong?" }], "sfxAfter": "TICK . . ." },
+            { "scene": "ic-desk", "narration": "SATURDAY 2 AM · THE AGENT PAGINATES.", "dialog": [{ "speaker": "trap", "text": "Page 1 of 84,217... Page 2 of 84,217..." }], "sfxAfter": "WHOOSH ✦" },
+            { "scene": "cfo-math", "narration": "MONDAY MORNING · THE BILL.", "dialog": [{ "speaker": "cfo", "text": "**₹2.1 lakh.** Over the weekend." }], "sfxAfter": "THUD." },
+            { "scene": "boardroom-kavya", "narration": "MONDAY AFTERNOON · KAVYA WRITES 60 LINES.", "dialog": [{ "speaker": "kavya", "text": "Max iter. Max cost. Loop detection. Audit log." }], "sfxAfter": "BOOM." },
+            { "scene": "ending", "narration": "AGENTS WITHOUT BUDGETS ARE INTERNS WITH ROOT ACCESS. SET THE LIMITS BEFORE YOU SET THEM LOOSE." }
+          ]
+        },
+        {
+          "type": "reflect",
+          "prompt": "Sketch the agent your team would build first. Now list every tool it would call. For each tool, write 'AUTONOMOUS' or 'REVIEW'. Be honest — would you trust the agent's first version with all the AUTONOMOUS ones at 3 AM on a Saturday?"
+        },
+        {
+          "type": "keyTakeaways",
+          "points": [
+            "An agent is an LLM with tools — and a *budget*. Tool definitions are easy; budgets are the engineering.",
+            "Always set: max iterations, max cost, loop detection, and human-in-the-loop for any irreversible action.",
+            "Read-only tools (search, query, read user data) are usually safe autonomous. Write tools (send email, refund, delete) need review.",
+            "Most loop pathologies are 'same tool called with near-identical args 3+ times'. Detect and halt.",
+            "The cost of the first incident is what defensive design prevents. Ship the limits, then ship the agent."
+          ]
+        }
+      ]
+    }
+  ]
+}

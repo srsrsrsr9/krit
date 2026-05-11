@@ -60,6 +60,15 @@ export const SKILL_CATALOG: SkillCatalogEntry[] = [
   { slug: "ai-roi",                  name: "AI ROI framing", category: "Finance" },
   { slug: "capex-vs-opex",           name: "CapEx vs OpEx framing", category: "Finance" },
   { slug: "vendor-strategy",         name: "Vendor and platform strategy", category: "Strategy" },
+
+  // ── AI engineering (developer-facing) ────────────────────────
+  { slug: "ai-engineering",          name: "AI engineering practice", category: "AI engineering" },
+  { slug: "model-selection",         name: "Model selection", category: "AI engineering" },
+  { slug: "rag-architecture",        name: "RAG architecture", category: "AI engineering" },
+  { slug: "agent-design",            name: "Agent design and safety", category: "AI engineering" },
+  { slug: "finetuning-practice",     name: "Finetuning practice (LoRA, SFT)", category: "AI engineering" },
+  { slug: "embeddings-and-vectors",  name: "Embeddings and vector search", category: "AI engineering" },
+  { slug: "transformer-fluency",     name: "Transformer architecture fluency", category: "AI engineering" },
 ];
 
 export function getActiveSkills(): SkillCatalogEntry[] {

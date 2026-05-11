@@ -29,6 +29,7 @@ import { ComicStripBlock } from "./blocks/comic-strip-block";
 import { PanelComicBlock } from "./blocks/panel-comic-block";
 import { ScaleSliderBlock } from "./blocks/scale-slider-block";
 import { CardSwipeBlock } from "./blocks/card-swipe-block";
+import { HandsOnBlock } from "./blocks/hands-on-block";
 
 // Heavy new blocks — lazy-loaded to keep initial bundle slim.
 const BranchScenarioBlock = dynamic(
@@ -194,6 +195,15 @@ function BlockOne({
           leftLabel={block.leftLabel}
           rightLabel={block.rightLabel}
           cards={block.cards}
+        />
+      );
+    case "handsOn":
+      return (
+        <HandsOnBlock
+          title={block.title}
+          setup={block.setup}
+          steps={block.steps}
+          verify={block.verify}
         />
       );
   }
