@@ -150,6 +150,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where the prep hours actually go — teacher's 12-hour weekend."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Scope the task"
@@ -243,6 +249,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The five sentences that replace your weekend — each prompt sharpens a sloppy AI plan."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — AI grades the rough, you grade the meaning"
@@ -257,6 +269,12 @@
           "caption": "Two lanes, two graders. The left lane is fast; the right lane decides the marks.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='240' height='200' rx='12' fill='#EDE9FE' stroke='#6D28D9' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#5B21B6'>AI lane: structure</text><g transform='translate(20 50)' font-family='sans-serif' font-size='12' fill='#1F2937'><text x='28' y='14'>grammar</text><circle cx='14' cy='10' r='8' fill='#10B981'/><path d='M9 10 L13 14 L19 6' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='44'>spelling</text><circle cx='14' cy='40' r='8' fill='#10B981'/><path d='M9 40 L13 44 L19 36' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='74'>paragraph length</text><circle cx='14' cy='70' r='8' fill='#10B981'/><path d='M9 70 L13 74 L19 66' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='104'>format / heading</text><circle cx='14' cy='100' r='8' fill='#10B981'/><path d='M9 100 L13 104 L19 96' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='134'>rubric checklist</text><circle cx='14' cy='130' r='8' fill='#10B981'/><path d='M9 130 L13 134 L19 126' stroke='#FFFFFF' stroke-width='2' fill='none'/></g></g><g transform='translate(290 30)'><rect width='240' height='200' rx='12' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='120' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#9F1239'>Your lane: meaning</text><g transform='translate(20 60)' font-family='sans-serif' font-size='12' fill='#1F2937'><text x='28' y='14'>did the child understand?</text><text x='28' y='44'>is the argument true?</text><text x='28' y='74'>did they answer the question?</text><text x='28' y='104'>does it sound like *them*?</text><g transform='translate(0 0)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 30)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 60)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g><g transform='translate(0 90)'><path d='M0 6 Q4 2 8 6 T16 6' stroke='#9F1239' stroke-width='2' fill='none'/></g></g><text x='120' y='185' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#9F1239' font-style='italic'>only you can tick these</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Grade an AI lesson plan — 3 plans, which is usable?"
         },
         {
           "type": "chatScenario",
@@ -584,6 +602,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Build your 5-prompt for tomorrow — fill 5 fields; get a lesson scaffold."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Teaching is two jobs: the boring 80% (structure work AI does well) and the human 20% (judgment work AI does badly). Drawing the line is the whole skill.",
@@ -676,6 +700,12 @@
               "md": "If you ask anyone \"make me food,\" you get whatever they feel like making. If you ask for \"low oil, light dinner, ready by 7,\" you get something you can actually eat. AI prompts work the same way."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Same objective, three reading levels — one paragraph, three versions."
         },
         {
           "type": "heading",
@@ -771,6 +801,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Engagement by level — bell curve — one-size vs differentiated."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 'rewrite for class X' move"
@@ -785,6 +821,12 @@
           "caption": "Your Class 10 plan is the seed. AI grows the variants while keeping your structure intact.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FEF3C7'/><g transform='translate(220 30)'><rect width='120' height='60' rx='8' fill='#FBBF24' stroke='#92400E' stroke-width='2'/><text x='60' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#1F2937'>Class 10 plan</text><text x='60' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937' font-style='italic'>(yours, last year)</text></g><g transform='translate(40 140)'><rect width='160' height='70' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#1E3A8A'>Class 8 variant</text><text x='80' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>simpler examples</text><text x='80' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>shorter paragraphs</text></g><g transform='translate(360 140)'><rect width='160' height='70' rx='8' fill='#EDE9FE' stroke='#5B21B6' stroke-width='2'/><text x='80' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#5B21B6'>Class 11 variant</text><text x='80' y='46' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>extension question</text><text x='80' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>more independent work</text></g><path d='M250 90 Q200 110 140 140' stroke='#1E40AF' stroke-width='2' fill='none' marker-end='url(#a4)'/><path d='M310 90 Q360 110 420 140' stroke='#5B21B6' stroke-width='2' fill='none' marker-end='url(#a5)'/><text x='160' y='118' text-anchor='middle' font-family='monospace' font-size='10' fill='#1E40AF'>AI: rewrite simpler</text><text x='400' y='118' text-anchor='middle' font-family='monospace' font-size='10' fill='#5B21B6'>AI: rewrite harder</text><defs><marker id='a4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1E40AF'/></marker><marker id='a5' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#5B21B6'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Sort students into 3 tiers — based on yesterday's exit ticket."
         },
         {
           "type": "chatScenario",
@@ -1112,6 +1154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Generate the 3-tier worksheet — pick base content; tweak the dial."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Brief AI like a student teacher arriving at 7 AM: audience, outcome, time, format, constraint, context. Five-line brief; 50-word minimum.",
@@ -1204,6 +1252,12 @@
               "md": "There are two kinds of quality check. The checklist kind (\"is the salt right? is it cold?\") and the relational kind (\"why are you tired today?\"). AI does the first one fast and well. The second one was never on its menu."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The feedback that actually changes the next draft — 3 feedback styles, learning lift."
         },
         {
           "type": "heading",
@@ -1299,6 +1353,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Teacher hours saved on feedback — 32 essays × 5 min vs AI-draft + teacher-vet."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Formative vs summative discipline"
@@ -1313,6 +1373,12 @@
           "caption": "AI's role shrinks as the stakes for the student grow. The line is hard, not soft.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 220' role='img'><rect width='580' height='220' rx='14' fill='#FAF5FF'/><line x1='40' y1='180' x2='540' y2='180' stroke='#5B21B6' stroke-width='2'/><line x1='40' y1='180' x2='40' y2='40' stroke='#5B21B6' stroke-width='2'/><text x='290' y='200' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>stakes for student →</text><text x='30' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' transform='rotate(-90 30 110)'>AI involvement</text><g transform='translate(60 60)'><rect width='160' height='100' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='80' y='24' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>Formative</text><text x='80' y='44' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>practice quizzes</text><text x='80' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>draft feedback</text><text x='80' y='72' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>weekly worksheets</text><text x='80' y='90' text-anchor='middle' font-family='monospace' font-size='9' fill='#065F46' font-weight='bold'>AI is fine</text></g><g transform='translate(360 60)'><rect width='160' height='100' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='80' y='24' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#9F1239'>Summative</text><text x='80' y='44' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>term exams</text><text x='80' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>board prelims</text><text x='80' y='72' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>capstone projects</text><text x='80' y='90' text-anchor='middle' font-family='monospace' font-size='9' fill='#9F1239' font-weight='bold'>YOU mark</text></g><path d='M220 80 Q290 50 360 90' stroke='#5B21B6' stroke-width='2' fill='none' stroke-dasharray='4 4'/><text x='290' y='40' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' font-style='italic'>the line is hard, not soft</text></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Rewrite vague feedback — turn \"needs work\" into specific."
         },
         {
           "type": "chatScenario",
@@ -1591,6 +1657,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the AI feedback that's wrong — 3 pieces of AI feedback; flag what's wrong."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Rubrics are AI's superpower; meaning is yours. Use AI for the structural pass, never for the meaning verdict.",
@@ -1683,6 +1755,12 @@
               "md": "Staff rooms across the country are running the same Tom-and-Jerry routine. Buy detector, students upgrade their tools, false positives explode, repeat. The way out isn't a faster Tom; it's a different game. Make process visible. AI doesn't have one."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · MCQs at 3 cognitive levels — same topic, 3 question depths."
         },
         {
           "type": "heading",
@@ -1778,6 +1856,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · When AI MCQ generation fails — the 3 most common defects."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The oral-defence move"
@@ -1792,6 +1876,12 @@
           "caption": "Five minutes. One paragraph. The student either owns the edit history, or doesn't.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 220' role='img'><rect width='580' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(80 40)'><rect width='100' height='130' rx='8' fill='#FBBF24' stroke='#92400E' stroke-width='2'/><circle cx='50' cy='30' r='18' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='44' cy='28' r='2' fill='#1F2937'/><circle cx='56' cy='28' r='2' fill='#1F2937'/><path d='M44 36 Q50 40 56 36' stroke='#1F2937' stroke-width='1.5' fill='none'/><rect x='30' y='52' width='40' height='40' rx='4' fill='#92400E'/><text x='50' y='112' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>teacher</text><text x='50' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>(you)</text></g><g transform='translate(400 40)'><rect width='100' height='130' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><circle cx='50' cy='30' r='18' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='44' cy='28' r='2' fill='#1F2937'/><circle cx='56' cy='28' r='2' fill='#1F2937'/><path d='M44 36 Q50 41 56 36' stroke='#1F2937' stroke-width='1.5' fill='none'/><rect x='30' y='52' width='40' height='40' rx='4' fill='#1E40AF'/><text x='50' y='112' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>student</text><text x='50' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>(any class)</text></g><g transform='translate(200 60)'><rect width='180' height='90' rx='10' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='90' y='28' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>\"Why did you change</text><text x='90' y='44' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>'coup' to 'revolution'</text><text x='90' y='60' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>in your second draft?\"</text><polygon points='40,82 30,90 50,90' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/></g><g transform='translate(200 170)'><circle cx='10' cy='10' r='10' fill='#10B981'/><path d='M5 10 L9 14 L15 6' stroke='#FFFFFF' stroke-width='2' fill='none'/><text x='28' y='14' font-family='sans-serif' font-size='10' fill='#065F46'>5 minutes; 90% of doubts resolved</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the bad MCQ — 4 questions; flag the defective ones."
         },
         {
           "type": "chatScenario",
@@ -2077,6 +2167,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Generate a rubric AI can grade against — build a 4-row, 4-level rubric."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Detection is an arms race you cannot win; honesty design is one-time work that holds.",
@@ -2169,6 +2265,12 @@
               "md": "Have you ever started a diet without weighing yourself first? Three weeks in, you cannot tell if anything changed. Classroom AI is the same: no baseline, no experiment, just a feeling that something happened."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · AI detectors don't work — false positive rate."
         },
         {
           "type": "heading",
@@ -2264,6 +2366,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Designing the AI-resistant assignment — 5 design choices, 5 effects."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Decide on day 14"
@@ -2278,6 +2386,12 @@
           "caption": "The day-14 decision grid. Run the relationship-signal check first; if that dropped, you ignore this grid and stop.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(80 30)'><line x1='0' y1='100' x2='400' y2='100' stroke='#5B21B6' stroke-width='2'/><line x1='200' y1='0' x2='200' y2='200' stroke='#5B21B6' stroke-width='2'/><text x='200' y='-10' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>outcome ↑</text><text x='200' y='220' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6'>outcome ↓</text><text x='-30' y='100' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#5B21B6' transform='rotate(-90 -30 100)'>cost ↓ ←      → cost ↑</text><rect x='8' y='8' width='180' height='80' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='98' y='38' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#065F46'>KEEP, EXPAND</text><text x='98' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>outcome ↑ + cost ↓</text><text x='98' y='74' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46' font-style='italic'>(rare; cherish it)</text><rect x='212' y='8' width='180' height='80' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='302' y='38' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#92400E'>THINK HARDER</text><text x='302' y='58' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>outcome ↑ + cost ↑</text><text x='302' y='74' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E' font-style='italic'>what's the trade?</text><rect x='8' y='112' width='180' height='80' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='98' y='142' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#1E3A8A'>KEEP, REDIRECT</text><text x='98' y='162' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1E3A8A'>outcome flat + cost ↓</text><text x='98' y='178' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1E3A8A' font-style='italic'>spend saved time on kids</text><rect x='212' y='112' width='180' height='80' rx='8' fill='#FEE2E2' stroke='#9F1239' stroke-width='2'/><text x='302' y='142' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='bold' fill='#9F1239'>KILL</text><text x='302' y='162' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239'>outcome ↓ + cost ↑</text><text x='302' y='178' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#9F1239' font-style='italic'>saved time at wrong cost</text></g><text x='280' y='265' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#5B21B6' font-style='italic'>★ override: if relationship dropped, stop regardless of grid</text></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Redesign an assignment to be AI-resistant — pick 3 of 6 design moves."
         },
         {
           "type": "chatScenario",
@@ -2559,6 +2673,12 @@
             "good": "Solid. The principal sees discipline; budget held. Worth a second 14-day cycle to validate.",
             "learn": "Re-read the baseline section. 'Feels like' is the most expensive sentence in classroom AI."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-teachers.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · The talk: when you suspect AI use — pick the conversation opener."
         },
         {
           "type": "keyTakeaways",

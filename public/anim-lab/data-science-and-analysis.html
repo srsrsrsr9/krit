@@ -1,0 +1,281 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Data Science &amp; Analysis</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#14554a;--accent-soft:#cfe3df;--accent-strong:#0e3f37;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">Data Science &amp; Analysis</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option>
+      <option value="L1">L1 · What DS Actually Is</option><option value="L2">L2 · Clean-Data Discipline</option><option value="L3">L3 · Statistical Thinking</option><option value="L4">L4 · Modeling Fundamentals</option><option value="L5">L5 · Communicating Results</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Data science is mostly <em>cleaning data and arguing about charts</em>. What you'll actually do here: spot when the average lies, choose the chart that survives a stakeholder review, and decide whether you need a model at all.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'What DS is', L2:'Clean-data discipline', L3:'Statistical thinking', L4:'Modeling fundamentals', L5:'Communicating results' } };
+const ART = [
+/* L1 — what DS actually is */
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'The two questions data answers (only)',what:'Watch: descriptive vs predictive split.',
+  footer:'Descriptive = "what happened?". Predictive = "what will?". Nearly every "data science" task is one or the other; the rest is plumbing.',
+  scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Two halves, one field</h3>
+  <svg viewBox="0 0 500 200"><circle cx="150" cy="100" r="70" fill="var(--accent)" fill-opacity=".25" stroke="var(--accent)" stroke-width="2"/><circle cx="350" cy="100" r="70" fill="var(--saffron)" fill-opacity=".25" stroke="var(--saffron)" stroke-width="2"/>
+  <text x="150" y="100" text-anchor="middle" font-family="ui-monospace" font-size="13" font-weight="800" fill="var(--accent-strong)">DESCRIPTIVE</text>
+  <text x="150" y="118" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink-soft)">what happened?</text>
+  <text x="350" y="100" text-anchor="middle" font-family="ui-monospace" font-size="13" font-weight="800" fill="#946106">PREDICTIVE</text>
+  <text x="350" y="118" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink-soft)">what will?</text>
+  <text x="250" y="180" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">overlap = "if we'd done X, what would have happened?"</text></svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'Where the day actually goes',what:'Watch: the time-spent stack.',
+  footer:'Cleaning + munging: 60%. Talking to humans: 25%. Modeling: 10%. The other 5% is debugging the chart someone misread.',
+  scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Where the data scientist's day actually goes</h3>
+  <svg viewBox="0 0 500 240">${[['Clean / munge',60,'var(--accent)'],['Meetings',25,'var(--saffron)'],['Model',10,'var(--rose)'],['Debug a chart',5,'var(--muted)']].map(([n,p,c],i)=>`
+  <rect x="60" y="${30+i*50}" width="0" height="30" fill="${c}"><animate attributeName="width" from="0" to="${p*4}" dur="1.2s" begin="${i*0.3}s" fill="freeze"/></rect>
+  <text x="50" y="${50+i*50}" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--ink)">${n}</text>
+  <text x="${70+p*4}" y="${50+i*50}" font-family="ui-monospace" font-size="11" fill="var(--ink-soft)" font-weight="700">${p}%</text>`).join('')}</svg>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Predict: which question is this?',what:'Try: commit before reveal.',
+  footer:'"Why are sales down?" is descriptive (look at history). "Will Q4 hit target?" is predictive. Reframing a question changes which tools you need.',
+  scaffold:2,runtime:'30-60s',mechanic:'predict-reveal',predict:'Is this question descriptive or predictive?',
+  mount(s){const qs=[{q:'Why did churn spike last week?',a:'desc'},{q:'Which user is most likely to upgrade?',a:'pred'},{q:'What product mix made up Q3 revenue?',a:'desc'},{q:'If we cut ad spend by 20%, what happens?',a:'pred'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:16px 0"><button class="btn ghost" data-p="desc">Descriptive</button><button class="btn ghost" data-p="pred">Predictive</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.p===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a==='desc'?'Descriptive':'Predictive'}.</strong> ${q.a==='desc'?'Look at history. SQL + a chart usually suffice.':'Estimate a future. Needs a model or at least an explicit forecast.'} <button class="btn" id="nx" style="margin-left:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Drop tools into the pipeline',what:'Try: drag tools onto pipeline stages.',
+  footer:'SQL collects. Pandas cleans. Matplotlib draws. Each tool earns one stage. Reaching for the modeling library before you have clean data is the most common rookie tell.',
+  scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){s.innerHTML=`<h3>One tool per stage</h3><p class="desc">Drag each tool onto the stage it belongs to.</p>
+  <div class="row" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px" id="L1i02_pool">
+    ${['SQL','pandas','matplotlib','scikit-learn','Jupyter'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+    ${[['collect','Collect','SQL'],['clean','Clean','pandas'],['explore','Explore','Jupyter'],['model','Model','scikit-learn'],['present','Present','matplotlib']].map(([k,n])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop" style="min-height:40px"></div></div>`).join('')}
+  </div>
+  <div class="reveal" id="L1i02_r" style="display:none"></div>`;
+  const truth={SQL:'collect',pandas:'clean','matplotlib':'present','scikit-learn':'model','Jupyter':'explore'};
+  const placed={};
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));
+  s.querySelectorAll('.lane').forEach(l=>{
+    Lab.makeDropZone(l,(target,detail)=>{
+      const tool=target?.dataset?.id;if(!tool)return;
+      placed[tool]=l.dataset.l;
+      const clone=target.cloneNode(true);clone.style.cursor='default';clone.removeAttribute('tabindex');clone.removeAttribute('role');
+      l.querySelector('.drop').appendChild(clone);target.style.opacity='.2';
+      if(Object.keys(placed).length===5){const right=Object.entries(placed).filter(([t,p])=>truth[t]===p).length;const r=s.querySelector('#L1i02_r');r.style.display='block';r.className='reveal '+(right===5?'win':right>=3?'':'bad');r.innerHTML=`<strong>${right}/5 in the right slot.</strong> ${right===5?'Clean. The pipeline order is collect → clean → explore → model → present; reordering breaks the data flow.':'Most common slip: dropping scikit-learn before pandas. You can\\'t model dirty data.'}`;}
+    });
+  });}},
+
+/* L2 — clean data */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'One null can kill a join',what:'Watch: null propagation through a pipeline.',
+  footer:'NULL ≠ NULL. A single missing key joins to nothing, drops silently, and your dashboard shows 80% of reality with no warning.',
+  scaffold:1,runtime:'30-60s',mechanic:'propagation',
+  mount(s){s.innerHTML=`<h3>How one NULL eats your data</h3>
+  <svg viewBox="0 0 500 240">${[1,2,3,4,5].map((id,i)=>`<rect x="20" y="${30+i*38}" width="80" height="30" fill="var(--paper-2)" stroke="var(--rule)"/><text x="60" y="${50+i*38}" text-anchor="middle" font-family="ui-monospace" font-size="11">user ${id}</text>`).join('')}
+  ${[1,2,'NULL',4,5].map((id,i)=>`<rect x="200" y="${30+i*38}" width="80" height="30" fill="${id==='NULL'?'var(--rose-soft)':'var(--paper-2)'}" stroke="${id==='NULL'?'var(--rose)':'var(--rule)'}"/><text x="240" y="${50+i*38}" text-anchor="middle" font-family="ui-monospace" font-size="11">${id==='NULL'?'NULL':'order '+id}</text>`).join('')}
+  ${[1,2,4,5].map((id,i)=>`<line x1="100" y1="${45+(id-1)*38}" x2="200" y2="${45+i*38}" stroke="var(--accent)" stroke-width="1.5"/>`).join('')}
+  <text x="350" y="30" font-family="ui-monospace" font-size="11" fill="var(--rose)" font-weight="700">User 3 dropped silently</text>
+  <text x="350" y="48" font-family="ui-monospace" font-size="10" fill="var(--ink-soft)">Inner join discards them.</text></svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'A type mismatch in disguise',what:'Watch: "₹1,500" string vs 1500 number.',
+  footer:'String "₹1,500" sorts before "₹200" alphabetically. Half the "wrong number" support tickets are type-coercion bugs the chart never declared.',
+  scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The string trap</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div class="panel"><strong>String column (wrong)</strong><pre class="code">"₹1,500"
+"₹200"
+"₹1,200"
+sort → "₹1,200", "₹1,500", "₹200"</pre></div>
+    <div class="panel" style="border-color:var(--accent)"><strong>Numeric column (right)</strong><pre class="code">1500
+200
+1200
+sort → 200, 1200, 1500</pre></div>
+  </div>
+  <p class="panel" style="margin-top:10px"><strong>Cast columns early.</strong> A pipeline that allows mixed types lets one cell ruin every aggregate downstream.</p>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Spot the dirty cells',what:'Try: click anything that needs cleaning.',
+  footer:'Five issues hidden in one row. Real data sets have dozens — a checklist of types, missing flags, and free-text traps gets you 80% of the way.',
+  scaffold:2,runtime:'30-60s',mechanic:'click-hotspot',
+  mount(s){s.innerHTML=`<h3>Find every cleaning issue</h3>
+  <table style="border-collapse:collapse;font-family:ui-monospace;font-size:13px;width:100%"><thead><tr>${['name','email','phone','revenue','signup_date'].map(h=>`<th style="text-align:left;border-bottom:2px solid var(--ink);padding:6px">${h}</th>`).join('')}</tr></thead>
+  <tbody><tr>
+    <td style="padding:6px"><span class="hot" data-i="0" style="cursor:pointer">  Asha  </span></td>
+    <td style="padding:6px"><span class="hot" data-i="1" style="cursor:pointer">ASHA@gmail.com</span></td>
+    <td style="padding:6px"><span class="hot" data-i="2" style="cursor:pointer">+91-99-8765-4321</span></td>
+    <td style="padding:6px"><span class="hot" data-i="3" style="cursor:pointer">₹1,500</span></td>
+    <td style="padding:6px"><span class="hot" data-i="4" style="cursor:pointer">02/03/24</span></td>
+  </tr></tbody></table>
+  <p style="margin-top:10px;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)">Found: <strong id="L2i01_f">0</strong> / 5 issues</p>
+  <div id="L2i01_notes" style="margin-top:8px"></div>`;
+  const issues=['Whitespace padding','Casing inconsistency (lowercase email is canonical)','Non-standard phone format (E.164 is +919987654321)','String not number (₹ + comma)','Ambiguous date (DD/MM or MM/DD?)'];
+  const found=new Set();
+  s.querySelectorAll('.hot').forEach(h=>h.onclick=()=>{SFX.pop();const i=h.dataset.i;if(found.has(i))return;found.add(i);h.style.background='var(--rose-soft)';h.style.color='var(--rose)';s.querySelector('#L2i01_f').textContent=found.size;s.querySelector('#L2i01_notes').insertAdjacentHTML('beforeend',`<div class="panel" style="margin:4px 0;font-size:13px"><strong>${issues[i]}</strong></div>`);});}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Order the cleaning steps',what:'Try: drag pipeline steps into the right order.',
+  footer:'Cast types BEFORE you dedupe. Standardise BEFORE you join. Cleaning out of order rewrites yesterday\'s problems into tomorrow\'s.',
+  scaffold:3,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Drop empty rows','Cast types','Standardise (lowercase, trim)','Dedupe on canonical keys','Validate vs schema'];const shuf=[...correct].sort(()=>Math.random()-.5);
+  s.innerHTML=`<h3>Reorder with ▲▼ until correct</h3><div id="L2i02_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map((t,i)=>`<div class="chip" data-i="${i}" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L2i02_c" style="margin-top:14px">Check order</button>
+  <div class="reveal" id="L2i02_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L2i02_l'));
+  s.querySelector('#L2i02_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Correct order.</strong> Each step assumes the prior one finished — typed columns make standardisation cheap, standardisation makes dedup keys reliable.':'<strong>Re-order.</strong> Drop empties → cast types → standardise → dedupe → validate. Doing dedup before casting types misses string-vs-number duplicates.';SFX.success();};}},
+
+/* L3 — statistical thinking */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'When the average lies',what:'Watch: bimodal distribution morph.',
+  footer:'Two peaks, mean lands in the empty middle. "Average customer" can be a person nobody resembles. Always check the shape, not just the centre.',
+  scaffold:1,runtime:'<30s',mechanic:'distribution-morph',
+  mount(s){s.innerHTML=`<h3>The bimodal trap</h3>
+  <svg viewBox="0 0 500 200">
+    <g><path d="M 30 180 Q 110 30, 230 30 Q 350 30, 470 180" fill="var(--accent)" fill-opacity=".2" stroke="var(--accent)" stroke-width="2"><animate attributeName="d" values="M 30 180 Q 110 30, 230 30 Q 350 30, 470 180; M 30 180 Q 100 30, 130 80 Q 250 180, 370 80 Q 400 30, 470 180" dur="3s" repeatCount="indefinite"/></path></g>
+    <line x1="250" y1="20" x2="250" y2="190" stroke="var(--rose)" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="254" y="35" font-family="ui-monospace" font-size="11" fill="var(--rose)" font-weight="700">mean</text>
+    <text x="250" y="200" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">When the shape goes bimodal, the mean lands in the gap.</text>
+  </svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'Confidence intervals shrink, slowly',what:'Watch: CI tightening as n grows.',
+  footer:'Doubling n halves the standard error by √2 — about 30%. Going from 100 to 10,000 doesn\'t multiply confidence by 100. It multiplies by 10.',
+  scaffold:1,runtime:'30-60s',mechanic:'ci-shrink',
+  mount(s){s.innerHTML=`<h3>The √n rule, watched</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/>${[10,100,1000,10000].map((n,i)=>{const x=60+i*120;const w=80/Math.sqrt(n);return `<rect x="${x-40}" y="80" width="80" height="50" fill="var(--accent-soft)" stroke="var(--accent)"/><rect x="${x-w}" y="80" width="${w*2}" height="50" fill="var(--accent)"/><text x="${x}" y="160" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--ink)">n=${n}</text><text x="${x}" y="74" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--accent-strong)">CI: ±${(50/Math.sqrt(n)).toFixed(1)}%</text>`;}).join('')}</svg>
+  <p class="panel" style="margin-top:10px"><strong>Each 100× more data tightens the CI by 10×.</strong> Diminishing returns hit fast.</p>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Drag an outlier; watch the mean lie',what:'Try: drag the outlier to break the average.',
+  footer:'One row at value 200 pulls the mean by ~12 points on a dataset of 10. The median doesn\'t move. The median is the resistance you want when outliers are present.',
+  scaffold:2,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Move the outlier</h3>
+  <p class="desc">10 values. Drag the saffron point; watch mean (rose) and median (emerald).</p>
+  <svg viewBox="0 0 500 200" id="L3i01_svg"><line x1="40" y1="150" x2="460" y2="150" stroke="var(--ink)"/>
+  ${Array.from({length:9},(_,i)=>{const v=20+i*5;return `<circle cx="${40+v*4}" cy="150" r="6" fill="var(--accent)" stroke="var(--ink)"/>`;}).join('')}
+  <circle cx="280" cy="150" r="10" fill="var(--saffron)" stroke="#946106" stroke-width="2" id="L3i01_out" style="cursor:grab"/>
+  <line id="L3i01_mean" x1="0" y1="20" x2="0" y2="140" stroke="var(--rose)" stroke-width="2"/>
+  <line id="L3i01_med"  x1="0" y1="20" x2="0" y2="140" stroke="var(--emerald)" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="40" y="15" font-family="ui-monospace" font-size="10" fill="var(--rose)" font-weight="700">mean</text>
+  <text x="100" y="15" font-family="ui-monospace" font-size="10" fill="var(--emerald)" font-weight="700">median</text></svg>
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Mean</div><div class="stat-value" id="L3i01_vm">—</div></div><div class="stat"><div class="stat-label">Median</div><div class="stat-value green" id="L3i01_vmed">—</div></div><div class="stat"><div class="stat-label">Gap</div><div class="stat-value amber" id="L3i01_g">—</div></div></div>`;
+  const out=s.querySelector('#L3i01_out');let vals=[20,25,30,35,40,45,50,55,60];
+  const upd=ox=>{const v=Math.round((ox-40)/4);const all=[...vals,v].sort((a,b)=>a-b);const mean=all.reduce((a,b)=>a+b,0)/all.length;const med=all[Math.floor(all.length/2)];
+    s.querySelector('#L3i01_vm').textContent=mean.toFixed(1);s.querySelector('#L3i01_vmed').textContent=med;s.querySelector('#L3i01_g').textContent=Math.abs(mean-med).toFixed(1);
+    s.querySelector('#L3i01_mean').setAttribute('x1',40+mean*4);s.querySelector('#L3i01_mean').setAttribute('x2',40+mean*4);
+    s.querySelector('#L3i01_med').setAttribute('x1',40+med*4);s.querySelector('#L3i01_med').setAttribute('x2',40+med*4);};
+  Lab.makeDraggable(out);
+  out.addEventListener('lab:dragmove',e=>{const rect=s.querySelector('#L3i01_svg').getBoundingClientRect();const x=Math.max(60,Math.min(460,(e.detail.x-rect.left)*500/rect.width));out.setAttribute('cx',x);upd(x);});
+  upd(280);}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'p = 0.04. So what?',what:'Try: pick what p=0.04 means.',
+  footer:'p = "probability of seeing this if there were no effect." Not "probability the effect is real." Confuse them and you\'ve been wrong on every A/B test memo.',
+  scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',predict:'What does p=0.04 mean?',
+  mount(s){s.innerHTML=`<h3>You ran an A/B. p = 0.04. What does that mean?</h3>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${['96% chance the new variant is better','4% chance results this extreme would happen if variants were identical','4% chance the test is wrong','Variant B will perform 4% better'].map((t,i)=>`<button class="btn ghost" data-c="${i}" style="text-align:left">${t}</button>`).join('')}</div>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.c==='1';const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Correct.</strong> p-value is conditional: <em>given there\\'s no effect</em>, how surprising is this data? Anything below 0.05 is the convention for "surprising enough to act on." It does NOT mean "96% likely to be true."':'<strong>Common mistake.</strong> p-value answers a question about the data, not about the truth. Imagine a world where both variants are identical — p = 0.04 means data this extreme would happen 4% of the time by chance alone.';});}},
+
+/* L4 — modeling */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'Watch a curve overfit',what:'Watch: a model tightens until it memorises noise.',
+  footer:'When training accuracy climbs and validation accuracy drops, the model has stopped learning the signal and started memorising the rows. Stop earlier.',
+  scaffold:1,runtime:'30-60s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Same data, four model complexities</h3>
+  <svg viewBox="0 0 500 200" id="L4a01_svg">${Array.from({length:12},(_,i)=>{const x=40+i*36;const y=160-(60+(i%3===0?20:i%4===0?-20:0)+i*4);return `<circle cx="${x}" cy="${y}" r="5" fill="var(--ink)"/>`;}).join('')}
+  <path id="L4a01_line" d="M 40 100 L 460 60" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <text x="40" y="25" font-family="ui-monospace" font-size="11" id="L4a01_lbl" fill="var(--accent)" font-weight="700">degree 1 (underfit)</text></svg>
+  <div class="row" style="margin-top:10px">${[1,2,3,12].map(d=>`<button class="btn ghost" data-d="${d}">degree ${d}</button>`).join('')}</div>`;
+  const paths={1:'M 40 100 L 460 60',2:'M 40 130 Q 250 60, 460 90',3:'M 40 120 C 100 60, 350 130, 460 80',12:'M 40 90 Q 80 130, 110 80 Q 150 50, 180 100 Q 220 140, 260 70 Q 300 50, 340 100 Q 380 140, 420 70 Q 450 50, 460 90'};
+  const labels={1:'degree 1 (underfit)',2:'degree 2 (right)',3:'degree 3 (right)',12:'degree 12 (overfit — memorising noise)'};
+  s.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{SFX.click();const d=b.dataset.d;s.querySelector('#L4a01_line').setAttribute('d',paths[d]);s.querySelector('#L4a01_lbl').textContent=labels[d];s.querySelector('#L4a01_lbl').setAttribute('fill',d==='12'?'var(--rose)':'var(--accent)');});}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'The bias-variance handle',what:'Watch: simple vs complex models drift their errors.',
+  footer:'Underfit = wrong on average (bias). Overfit = right on average, wildly inconsistent (variance). The model you ship lives somewhere in the middle.',
+  scaffold:1,runtime:'30-60s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Two errors, one trade-off</h3>
+  <div class="stat-grid">${[['Bias','Wrong on average','simple models','red'],['Variance','Right on average, jittery','complex models','red'],['Sweet spot','Both low enough','your job','green']].map(([n,d,c,cl])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${cl}">${d}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${c}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:10px">In production: validate on data the model never saw. If validation degrades while training improves, you\'re past the sweet spot.</p>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Move the train/test split',what:'Try: drag the split; watch generalization shift.',
+  footer:'Too little training data → high variance. Too little test data → can\'t measure. 70/30 is convention; 80/20 is convention with hubris. Both lose to k-fold cross-validation when data is small.',
+  scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Tune the split</h3>
+  <input type="range" id="L4i01_s" min="50" max="95" value="80" step="5">
+  <div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)"><span>50/50</span><span style="color:var(--ink);font-size:18px;font-weight:800" id="L4i01_v">80/20</span><span>95/5</span></div>
+  <div class="stat-grid" style="margin-top:14px">
+    <div class="stat"><div class="stat-label">Training acc</div><div class="stat-value" id="L4i01_tr">—</div></div>
+    <div class="stat"><div class="stat-label">Test acc</div><div class="stat-value" id="L4i01_te">—</div></div>
+    <div class="stat"><div class="stat-label">Verdict</div><div class="stat-value" id="L4i01_vv" style="font-size:14px">—</div></div>
+  </div>`;
+  const u=()=>{const t=+s.querySelector('#L4i01_s').value;s.querySelector('#L4i01_v').textContent=t+'/'+(100-t);const trAcc=0.85+t*0.001;const teAcc=Math.min(0.92,0.65+t*0.003-Math.max(0,(t-80)*0.005));s.querySelector('#L4i01_tr').textContent=(trAcc*100).toFixed(1)+'%';s.querySelector('#L4i01_te').textContent=(teAcc*100).toFixed(1)+'%';
+    let v,cls;if(t<60){v='Too little training';cls='red';}else if(t>90){v='Too little test (can\\'t measure)';cls='red';}else if(t>=70&&t<=85){v='Conventional sweet spot';cls='green';}else{v='Defensible';cls='amber';}
+    const e=s.querySelector('#L4i01_vv');e.textContent=v;e.className='stat-value '+cls;};
+  s.querySelector('#L4i01_s').oninput=()=>{SFX.hover();u();};u();}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'When would NOT modeling be smarter?',what:'Try: pick the scenario where a model is overkill.',
+  footer:'Modeling adds latency, maintenance, and an interpretability tax. If a SQL query gets you 80% of the way and the gap is "interesting," not "blocking" — don\'t model.',
+  scaffold:4,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'Predicting next quarter\\'s revenue from prior quarters',a:false,why:'Univariate forecasting from a flat trend rarely needs a model. A 3-month moving average gets 90% of the value.'},{q:'Recommending one of 50,000 products to one of 1M users',a:true,why:'Collaborative filtering or embedding-based search is the right reach — too many combinations for rules.'},{q:'Detecting fraud at 0.01% prevalence',a:true,why:'Class imbalance + complex feature interactions make ML genuinely useful here.'},{q:'Deciding which support ticket goes to which team',a:false,why:'A keyword router solves 80% of routing. ML adds 5 points and a model to maintain — usually not worth it.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. Should you model this?</h3>
+  <p class="panel">${q.q}</p>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Yes, model it</button><button class="btn ghost" data-p="false">No, simpler is better</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a?'Model it.':'Don\\'t model.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+/* L5 — communicating */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'Same data, three different talks',what:'Watch: one chart, three audiences.',
+  footer:'Engineers want the model details. The CFO wants ₹. Customers want the takeaway. Same chart in all three rooms gets you bored faces in two of them.',
+  scaffold:1,runtime:'30-60s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Three audiences, three reductions</h3>
+  <div class="row" style="margin-bottom:10px">${['Engineering','CFO','Customer'].map((n,i)=>`<button class="btn ghost" data-a="${i}">${n}</button>`).join('')}</div>
+  <div id="L5a01_p" class="panel" style="min-height:120px"></div>`;
+  const variants=[
+    'AUC 0.83, F1 0.71 at recall=0.6. Drift detected on the seven-day rolling window; retraining triggered Tuesday. Logged at 99.5th percentile latency.',
+    'Estimated ₹4.2Cr saved annually on reduced false negatives. Payback on the engineering investment is Q3, assuming churn assumptions hold.',
+    'We get back to you faster now. About 8 in 10 issues are resolved without you typing twice.',
+  ];
+  s.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{SFX.click();s.querySelector('#L5a01_p').innerHTML=`<div style="font-family:ui-monospace,monospace;font-size:14px;line-height:1.7">${variants[+b.dataset.a]}</div>`;});
+  s.querySelector('#L5a01_p').innerHTML='<em>Click an audience above.</em>';}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'Where the eye lands on your chart',what:'Watch: heatmap of where eyes go.',
+  footer:'On a chart, the eye lands first on the title, then the legend, then the rightmost point. If your conclusion is in the title, half your audience already left agreeing.',
+  scaffold:1,runtime:'<30s',mechanic:'eye-pattern',
+  mount(s){s.innerHTML=`<h3>What the eye sees first</h3>
+  <svg viewBox="0 0 500 200"><rect x="40" y="20" width="420" height="160" fill="var(--paper-2)" stroke="var(--rule)"/>
+  <text x="50" y="40" font-family="'Iowan Old Style',Georgia,serif" font-size="14" font-weight="800">Revenue is up 22% YoY</text>
+  <polyline points="60,150 130,140 200,120 270,110 340,90 410,60" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <circle cx="50" cy="38" r="22" fill="var(--rose)" fill-opacity=".3"/>
+  <text x="50" y="80" font-family="ui-monospace" font-size="10" fill="var(--rose)">1st</text>
+  <circle cx="410" cy="60" r="22" fill="var(--rose)" fill-opacity=".25"/>
+  <text x="410" y="100" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--rose)">2nd</text></svg>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Rewrite the headline',what:'Try: pick the headline that makes the chart land.',
+  footer:'"Q3 results" is a label. "Q3 was the worst quarter since 2022" is a headline. Charts answer questions; headlines name them.',
+  scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',predict:'Which headline carries the chart?',
+  mount(s){s.innerHTML=`<h3>Same chart. Pick the headline.</h3>
+  <svg viewBox="0 0 500 140" style="background:var(--paper-2);border-radius:5px;margin-bottom:14px"><polyline points="60,120 130,100 200,90 270,90 340,95 410,100" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="50" y="135" font-family="ui-monospace" font-size="11" fill="var(--muted)">Customer satisfaction (last 6 quarters)</text></svg>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${['"Customer satisfaction — last 6 quarters"','"We have a retention problem"','"Satisfaction plateaued in Q3 — first time in 6 quarters"','"Q1-Q6 customer satisfaction trend analysis"'].map((t,i)=>`<button class="btn ghost" data-c="${i}" style="text-align:left">${t}</button>`).join('')}</div>
+  <div class="reveal" id="L5i01_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const i=+b.dataset.c;const ok=i===2;const r=s.querySelector('#L5i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Best.</strong> Names what the audience should notice (the plateau) AND when it happened (Q3). The other three either label or jump to conclusions.':'<strong>Try again.</strong> The chart shows a plateau in Q3 — a good headline names the inflection, not the dataset name or your suspected diagnosis.';});}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Build the one-pager',what:'Try: drag headline, chart, recommendation into the right order.',
+  footer:'Headline first (what changed), chart second (the proof), recommendation last (what to do). Reversing this is the most common "I dumped 12 slides on her desk" failure.',
+  scaffold:4,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Headline (one sentence)','Chart (the evidence)','Recommendation (the action)','Appendix (methodology)'];const shuf=[...correct].sort(()=>Math.random()-.5);
+  s.innerHTML=`<h3>One-pager — order matters</h3>
+  <div id="L5i02_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map((t,i)=>`<div class="chip" data-i="${i}" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L5i02_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L5i02_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L5i02_l'));
+  s.querySelector('#L5i02_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Correct.</strong> Pyramid principle — headline first lets the busy reader stop after sentence one and still know what you want.':'<strong>Re-order.</strong> Headline → chart → recommendation → appendix. Putting methodology before the headline is the appendix-as-pre-amble mistake.';SFX.success();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

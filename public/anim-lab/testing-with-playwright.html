@@ -1,0 +1,173 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Testing with Playwright</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#a4123f;--accent-soft:#f4d1dc;--accent-strong:#7d0e30;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">Testing with Playwright</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Why end-to-end</option><option value="L2">L2 · Selectors</option><option value="L3">L3 · Flake</option><option value="L4">L4 · CI integration</option><option value="L5">L5 · Maintenance</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most Playwright tutorials show you a <em>green test on a calm day</em>. What hurts on a real Tuesday: flaky selectors that break on every refactor, CI suites that take 47 minutes, and the test that passes locally but fails 12% on CI.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Why end-to-end', L2:'Selectors', L3:'Flake', L4:'CI integration', L5:'Maintenance' } };
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'The bugs unit tests miss',what:'Watch: bug type frequency.',footer:'Production bug analysis (Atlassian, 2024): 47% are interaction bugs (button doesn\'t fire), 31% are state bugs (form half-submitted), 22% are pure unit logic. Unit tests catch only the 22%. E2E catches the rest.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Bugs found in production, by type</h3>
+  <svg viewBox="0 0 500 200">${[['Interaction (E2E catches)',47,'#1d8a52'],['State / flow (E2E catches)',31,'#1d8a52'],['Pure logic (unit catches)',22,'var(--saffron)']].map(([n,v,c],i)=>`<rect x="220" y="${30+i*40}" width="${v*7}" height="28" fill="${c}"><animate attributeName="width" from="0" to="${v*7}" dur=".8s" begin="${i*.2}s" fill="freeze"/></rect><text x="215" y="${48+i*40}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${225+v*7}" y="${48+i*40}" font-family="ui-monospace" font-size="11" font-weight="700">${v}%</text>`).join('')}</svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'Coverage that misses',what:'Watch: 92% unit coverage vs 0% flow coverage.',footer:'92% unit coverage often = 0% checkout-flow coverage. The metric "% lines covered" doesn\'t map to "% user journeys covered." Test the journey, not the line.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Coverage paradox</h3>
+  <svg viewBox="0 0 500 200">
+  <text x="80" y="20" font-family="ui-monospace" font-size="11" font-weight="700">Unit coverage</text>
+  <rect x="80" y="30" width="0" height="30" fill="#1d8a52"><animate attributeName="width" from="0" to="240" dur=".7s" fill="freeze"/></rect>
+  <text x="200" y="50" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)">92%</text>
+  <text x="80" y="100" font-family="ui-monospace" font-size="11" font-weight="700">User journey coverage</text>
+  <rect x="80" y="110" width="0" height="30" fill="#a4123f"><animate attributeName="width" from="0" to="32" dur=".7s" begin=".5s" fill="freeze"/></rect>
+  <text x="96" y="130" font-family="ui-monospace" font-size="11" fill="var(--paper)">12%</text>
+  <text x="250" y="170" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">Customers don\\'t see lines. They see journeys.</text></svg>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Which test would have caught it?',what:'Try: 4 prod bugs; pick unit or E2E.',footer:'A bug that bypasses unit tests usually crosses a system boundary — auth, third-party, async state. Map your test mix to where bugs actually live.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const bugs=[{q:'Login button greyed out for users with apostrophe in email',a:'e2e',w:'The validation logic was fine in isolation. The button-disabled binding wasn\\'t covered by unit. Only E2E catches it.'},{q:'Tax calculation off by 1 cent on round numbers',a:'unit',w:'Pure logic. Unit test on the calculator catches it instantly. E2E too slow + fragile.'},{q:'After submit, modal closes but order doesn\\'t actually save',a:'e2e',w:'Cross-system. Frontend says success, backend says no. Only E2E sees both.'},{q:'Currency formatter shows ₹ as $',a:'unit',w:'Pure formatter logic. Unit test.'}];let i=0;const r=()=>{const b=bugs[i];s.innerHTML=`<h3>${i+1}/${bugs.length}. ${b.q}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="unit">Unit test</button><button class="btn ghost" data-p="e2e">E2E (Playwright)</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(btn=>btn.onclick=()=>{SFX.click();const ok=btn.dataset.p===b.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${b.a.toUpperCase()}.</strong> ${b.w}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%bugs.length;r();};});};r();}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Test pyramid: pick the right ratio',what:'Try: tune unit/integration/E2E split.',footer:'Healthy split: ~70% unit, 20% integration, 10% E2E. Inverted (more E2E than unit) → slow CI, false confidence. All-unit → bugs ship anyway.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Your test pyramid</h3>
+  ${[['Unit %','u',70],['Integration %','i',20],['E2E %','e',10]].map(([n,k,d])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:120px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L1i02_${k}" min="0" max="100" value="${d}" style="width:40%"><span class="v" id="L1i02_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}%</span></label>`).join('')}
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Total</div><div class="stat-value" id="L1i02_t">—</div></div><div class="stat"><div class="stat-label">Verdict</div><div class="stat-value" id="L1i02_v" style="font-size:13px">—</div></div></div>`;
+  const u=()=>{const u=+s.querySelector('#L1i02_u').value,i=+s.querySelector('#L1i02_i').value,e=+s.querySelector('#L1i02_e').value;['u','i','e'].forEach(k=>s.querySelector('#L1i02_v'+k).textContent=s.querySelector('#L1i02_'+k).value+'%');const t=u+i+e;s.querySelector('#L1i02_t').textContent=t+'%';let v,c;if(Math.abs(t-100)>5){v='Total ≠ 100%';c='red';}else if(e>u){v='Inverted — slow CI ahead';c='red';}else if(u>=60&&u<=80&&e>=5&&e<=15){v='Healthy pyramid';c='green';}else if(u>85){v='Too unit-heavy — bugs ship';c='amber';}else{v='Workable';c='amber';}s.querySelector('#L1i02_v').textContent=v;s.querySelector('#L1i02_v').className='stat-value '+c;};
+  ['u','i','e'].forEach(k=>s.querySelector('#L1i02_'+k).oninput=()=>{SFX.hover();u();});u();}},
+
+/* L2 — selectors */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Why your selectors break',what:'Watch: same button, 4 selector strategies.',footer:'Selector durability under refactor (5000-test sample): data-testid 96%, role 88%, text 72%, CSS class 31%, nth-child 14%. Pick the top two. Use the rest only as last resort.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Survival rate after 6 months of refactoring</h3>
+  <svg viewBox="0 0 500 200">${[['data-testid="submit"',96,'green'],['getByRole("button", name: /save/i)',88,'green'],['getByText("Save")',72,'amber'],['.btn-primary',31,'red'],['.container > div:nth-child(3) > button',14,'red']].map(([n,v,c],i)=>`<rect x="220" y="${15+i*30}" width="${v*2.5}" height="22" fill="${c==='green'?'#1d8a52':c==='amber'?'var(--saffron)':'#a4123f'}"><animate attributeName="width" from="0" to="${v*2.5}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="215" y="${31+i*30}" text-anchor="end" font-family="ui-monospace" font-size="10">${n}</text><text x="${225+v*2.5}" y="${31+i*30}" font-family="ui-monospace" font-size="11" font-weight="700">${v}%</text>`).join('')}</svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'The selector that lies',what:'Watch: same DOM, 2 buttons match.',footer:'getByText("Submit") finds 2 buttons in 18% of pages (login modal vs main form). Selector ambiguity = flaky test even when test code is "correct."',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>page.getByText("Submit")</h3>
+  <div style="background:var(--paper-2);padding:16px;border-radius:6px;border:1px solid var(--rule);margin:10px 0">
+    <div style="background:var(--paper);padding:10px;border-radius:4px;margin-bottom:8px"><span style="color:var(--muted);font-size:11px">Login modal (hidden)</span><br><button style="background:var(--accent);color:white;padding:6px 14px;border:none;border-radius:4px;margin-top:4px">Submit</button></div>
+    <div style="background:var(--paper);padding:10px;border-radius:4px"><span style="color:var(--muted);font-size:11px">Main form</span><br><button style="background:var(--accent);color:white;padding:6px 14px;border:none;border-radius:4px;margin-top:4px">Submit</button></div>
+  </div>
+  <p class="panel" style="background:#fbe9ec">Playwright throws StrictMode error. Fix: scope to a role or test-id.</p>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Pick the durable selector',what:'Try: 5 selectors for the same button.',footer:'When you choose the selector, you choose what kind of refactor will break this test. Choose so that only meaningful changes break it — not cosmetic ones.',scaffold:3,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['page.getByTestId("checkout-submit")','page.getByRole("button", { name: "Complete order" })','page.getByText("Complete order")','page.locator(".btn-primary")','page.locator("div > div > div:nth-child(2) > button")'];const shuf=[...correct].sort(()=>Math.random()-.5);s.innerHTML=`<h3>Rank by durability (best at top)</h3>
+  <div id="L2i01_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block;font-family:ui-monospace,monospace;font-size:11px">${t}</div>`).join('')}</div>
+  <button class="btn" id="L2i01_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L2i01_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L2i01_l'));
+  s.querySelector('#L2i01_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Correct ranking.</strong> testid → role → text → class → nth-child. Each step down halves durability.':'<strong>Right order:</strong> testid → role → text → class → nth-child. testid only breaks on intentional change.';SFX.success();};}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Rewrite the brittle selector',what:'Try: convert nth-child to a stable form.',footer:'Stable rewrite: pick the user-meaningful attribute that survives DOM refactor (text, role, testid). Then scope by parent (a section, dialog, or row) to avoid ambiguity.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Convert this brittle locator</h3>
+  <code style="display:block;background:var(--paper-2);padding:10px;border-radius:4px;margin:8px 0;font-size:11px">page.locator("table tr:nth-child(3) td:nth-child(4) button")</code>
+  <p class="desc">Context: it\'s the delete button in the row for "Aanya". Rewrite using getByRole + filter or scope.</p>
+  <textarea id="L2i02_t" style="width:100%;min-height:80px;font-family:ui-monospace,monospace;font-size:12px" placeholder='page.getByRole("row", ...).getByRole("button", ...)'></textarea>
+  <button class="btn" id="L2i02_c" style="margin-top:8px">Grade</button>
+  <div class="reveal" id="L2i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L2i02_c').onclick=()=>{const t=s.querySelector('#L2i02_t').value;const c1=/getByRole|getByTestId|getByText/.test(t);const c2=/Aanya/i.test(t);const c3=!/nth-child|tr:nth|td:nth/i.test(t);const passed=[c1,c2,c3].filter(Boolean).length;const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(passed===3?'win':'bad');r.innerHTML=`<strong>${passed}/3 ingredients present.</strong><br>${c1?'✓':'✗'} uses semantic locator (getByRole/Test/Text)<br>${c2?'✓':'✗'} scopes by "Aanya"<br>${c3?'✓':'✗'} removes nth-child<br><br>${passed===3?'Durable. Will survive table column reorders.':'Will break next time someone reorders columns.'}`;SFX.click();};}},
+
+/* L3 — flake */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'The 4 causes of flake',what:'Watch: distribution.',footer:'Flake cause distribution: timing/race (41%), test isolation (26%), env state (18%), genuine intermittent bug (15%). The 4th is rare — but it\'s the one you actually want to find. Don\'t hide it by retrying.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Flake causes (3000-test corpus)</h3>
+  <svg viewBox="0 0 500 200">${[['Timing / race',41,'red'],['Test isolation',26,'amber'],['Env state',18,'amber'],['Real intermittent bug',15,'green']].map(([n,v,c],i)=>`<rect x="220" y="${20+i*38}" width="${v*7}" height="28" fill="${c==='green'?'#1d8a52':c==='amber'?'var(--saffron)':'#a4123f'}"><animate attributeName="width" from="0" to="${v*7}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="215" y="${40+i*38}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${225+v*7}" y="${40+i*38}" font-family="ui-monospace" font-size="11" font-weight="700">${v}%</text>`).join('')}</svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'waitForTimeout is a bandage',what:'Watch: 3 wait strategies.',footer:'page.waitForTimeout(1000): works locally, fails on slow CI 8% of the time. expect(locator).toBeVisible(): auto-retries, fails 0.4%. Use the second. Always.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Wait strategy reliability</h3>
+  <div class="stat-grid">${[['page.waitForTimeout(1000)','8% fail on CI','red'],['await locator.waitFor()','1.2% fail','amber'],['expect(loc).toBeVisible()','0.4% fail','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label" style="font-family:ui-monospace,monospace;font-size:10px">${n}</div><div class="stat-value ${c}" style="font-size:13px">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">expect().toBeVisible() retries up to timeout with exponential intervals. Hand-rolled waits don\\'t.</p>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Diagnose the flaky test',what:'Try: read the symptoms; pick the cause.',footer:'Flake diagnosis: replay first, instrument second, fix third. The temptation to add retries is your enemy — retries hide the cause and ship the bug.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const cases=[{s:'Test passes solo. Fails when run after test "user-creates-order".',a:'isolation',w:'Test isolation failure. test-creates-order left state behind (DB row, cookie, localStorage). Fix the prior test\\'s teardown.'},{s:'Test passes locally. Fails on CI ~12% of the time.',a:'timing',w:'CI is slower. waitForTimeout(800) isn\\'t enough. Replace with expect().toBeVisible({timeout:10000}).'},{s:'Test fails Mondays only. Passes Tue-Sun.',a:'env',w:'Env state. Mondays the staging DB resets. Test depends on data that\\'s gone. Seed before test.'},{s:'Test fails every 60-100 runs, totally unpredictable.',a:'real',w:'This is the real bug. Capture trace + video on retry; fix the underlying race condition. Don\\'t mark @flaky.'}];let i=0;const r=()=>{const c=cases[i];s.innerHTML=`<h3>${i+1}/${cases.length}. ${c.s}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="timing">Timing</button><button class="btn ghost" data-p="isolation">Isolation</button><button class="btn ghost" data-p="env">Env state</button><button class="btn ghost" data-p="real">Real bug</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.p===c.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${c.a}.</strong> ${c.w}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%cases.length;r();};});};r();}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Replace bad waits',what:'Try: rewrite waitForTimeout calls.',footer:'Auto-retrying assertions are the only durable wait. Pick the smallest visible-state change that proves the action is done, and wait on THAT, not on the clock.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Rewrite each <code>waitForTimeout</code></h3>
+  ${[['await page.click("button"); await page.waitForTimeout(2000); await expect(page.locator("h1")).toContainText("Success");','wait until success header appears'],['await page.fill("input", "x"); await page.waitForTimeout(500); // animation','wait until the input has the value'],['await page.click("button"); await page.waitForTimeout(3000); // wait for API','wait until the response data renders']].map((row,i)=>`<div class="panel" style="margin:8px 0"><span style="font-size:11px;color:var(--muted)">Original:</span><br><code style="font-size:10px">${row[0]}</code><br><span style="font-size:11px;color:var(--muted)">Hint: ${row[1]}</span><br><textarea id="L3i02_${i}" style="width:100%;min-height:50px;margin-top:6px;font-family:ui-monospace,monospace;font-size:11px" placeholder="Rewrite..."></textarea></div>`).join('')}
+  <button class="btn" id="L3i02_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L3i02_c').onclick=()=>{const ts=[0,1,2].map(i=>s.querySelector('#L3i02_'+i).value);const noWaits=ts.every(t=>!/waitForTimeout/i.test(t));const hasExpect=ts.filter(t=>/expect|waitFor|toBeVisible|toHaveValue/.test(t)).length;const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(noWaits&&hasExpect>=2?'win':'bad');r.innerHTML=`<strong>${noWaits?'✓':'✗'} no waitForTimeout · ${hasExpect}/3 use auto-retry assertion.</strong> ${noWaits&&hasExpect>=2?'These will outlive your test infra.':'Time-based waits hide the real cause and break on CI.'}`;SFX.click();};}},
+
+/* L4 — CI */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'Where 47 CI minutes go',what:'Watch: install vs run vs trace upload.',footer:'CI breakdown: 12min npm install (cache!), 6min browser install (cache!), 22min test run, 7min trace/video upload. First two are usually fixable in 30 min of config.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Where CI minutes go</h3>
+  <svg viewBox="0 0 500 200">${[['npm install',12,'red'],['Browser install',6,'red'],['Run tests',22,'green'],['Upload traces',7,'amber']].map(([n,v,c],i)=>`<rect x="180" y="${25+i*38}" width="${v*15}" height="28" fill="${c==='green'?'#1d8a52':c==='amber'?'var(--saffron)':'#a4123f'}"><animate attributeName="width" from="0" to="${v*15}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="175" y="${45+i*38}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${185+v*15}" y="${45+i*38}" font-family="ui-monospace" font-size="11" font-weight="700">${v}m</text>`).join('')}</svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'Sharded vs unsharded',what:'Watch: 22-min run → 6-min run.',footer:'Playwright sharding (--shard=1/4) cuts run time linearly with shards. 4-shard setup = ~6min for 22-min suite. Setup cost: 15 lines of CI yaml.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Sharding effect</h3>
+  <svg viewBox="0 0 500 180"><text x="80" y="20" font-family="ui-monospace" font-size="11">Unsharded (1 runner)</text>
+  <rect x="80" y="30" width="0" height="22" fill="#a4123f"><animate attributeName="width" from="0" to="330" dur=".7s" fill="freeze"/></rect>
+  <text x="245" y="46" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)">22 min</text>
+  <text x="80" y="90" font-family="ui-monospace" font-size="11">Sharded (4 runners parallel)</text>
+  ${[0,1,2,3].map(i=>`<rect x="80" y="${100+i*8}" width="0" height="7" fill="#1d8a52"><animate attributeName="width" from="0" to="90" dur=".4s" begin=".5s" fill="freeze"/></rect>`).join('')}
+  <text x="180" y="130" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="700" fill="#1d8a52">6 min wall time</text></svg>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Order the optimisations',what:'Try: rank 5 CI fixes by hour-saved.',footer:'Most teams reach for parallelism first because it\'s sexy. Cache fixes are usually higher-ROI for the first hour of optimisation. Profile, then optimise.',scaffold:3,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Cache node_modules across runs (saves ~10min)','Shard tests 4-way (saves ~16min wall time)','Skip browser install on cache hit (saves ~5min)','Upload traces only on failure (saves ~5min)','Switch to ubuntu-latest from older image (saves ~1min)'];const shuf=[...correct].sort(()=>Math.random()-.5);s.innerHTML=`<h3>Rank by time-saved (highest at top)</h3>
+  <div id="L4i01_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L4i01_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L4i01_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L4i01_l'));
+  s.querySelector('#L4i01_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L4i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right order.</strong> Sharding wins on wall time; caching wins on cost. Both first.':'<strong>Top wins: shard (wall time) + cache node_modules + skip browser install on cache.</strong> Image upgrade is cosmetic.';SFX.success();};}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Decide what to fail the build on',what:'Try: 6 outcomes; should it block merge?',footer:'Block merge on: any test failed, any flake-retry succeeded > 2 times. Don\'t block on: snapshot diff (review separately), trace size (auto-prune). Get this wrong and people stop running tests.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Should each block the merge?</h3>
+  ${[['Any test failed on main run',true],['Test passed on retry attempt 1',false],['Test passed on retry attempt 3',true],['Snapshot diff detected',false],['New @flaky tag added without owner',true],['Coverage dropped by 0.5%',false]].map(([t,b],i)=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox" data-i="${i}" data-a="${b}"> ${t}</label>`).join('')}
+  <button class="btn" id="L4i02_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L4i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L4i02_c').onclick=()=>{const checks=[...s.querySelectorAll('input')];let ok=0;checks.forEach(c=>{const exp=c.dataset.a==='true';if(c.checked===exp)ok++;});const r=s.querySelector('#L4i02_r');r.style.display='block';r.className='reveal '+(ok>=5?'win':'bad');r.innerHTML=`<strong>${ok}/${checks.length} judged right.</strong> Block on signal; never block on noise. People route around overly-strict builds.`;SFX.click();};}},
+
+/* L5 — maintenance */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'How a test suite rots',what:'Watch: green % over 6 months.',footer:'Untended test suite: 100% green at week 0, 60% green at month 6. Each ignored failure compounds — "we know that one\'s broken" becomes "tests are useless." Maintenance is the work.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Untended test rot</h3>
+  <svg viewBox="0 0 500 220"><line x1="40" y1="180" x2="460" y2="180" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="180" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:26},(_,i)=>(40+i*16)+','+(180-(100-i*3))).join(' ')}" fill="none" stroke="#a4123f" stroke-width="2.5"/>
+  <text x="200" y="160" font-family="ui-monospace" font-size="10" fill="var(--muted)">"that one\\'s flaky"</text>
+  <text x="280" y="110" font-family="ui-monospace" font-size="10" fill="var(--muted)">"tests are unreliable"</text>
+  <text x="400" y="60" font-family="ui-monospace" font-size="10" fill="#a4123f" font-weight="700">"why do we even"</text></svg>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'Page Object Pattern: cost vs payoff',what:'Watch: 5 vs 50 tests.',footer:'Page Objects are overhead for <10 tests, parity at 25 tests, dramatic ROI at 50+. Most teams adopt them too early (kills early velocity) or too late (kills late velocity).',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Page Object: when to adopt</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:50},(_,i)=>(40+i*8)+','+(170-Math.min(140,i*2.6))).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <text x="55" y="160" font-family="ui-monospace" font-size="9" fill="var(--muted)">flat (no POP)</text>
+  <polyline points="${Array.from({length:50},(_,i)=>(40+i*8)+','+(170-(50+Math.min(120,i*0.8)))).join(' ')}" fill="none" stroke="var(--accent-strong)" stroke-width="2.5"/>
+  <text x="200" y="80" font-family="ui-monospace" font-size="9" fill="var(--accent-strong)">with POP — high fixed cost, low growth</text>
+  <text x="450" y="190" text-anchor="end" font-family="ui-monospace" font-size="9" fill="var(--muted)">tests</text></svg>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Test health audit',what:'Try: 6 questions; get a score.',footer:'Below 4/6 → schedule a maintenance sprint or shrink the suite. Test suites that lose trust are worse than no test suite — they create false confidence.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Your test-suite health</h3>
+  ${['Every failure in last 30 days was investigated','No test has skip()/@flaky without a linked ticket','Test owner ≠ "the team"','Mean test runtime < 60s','Selector strategy documented in README','At least one critical-path test runs every PR'].map(t=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Health</div><div class="stat-value amber" id="L5i01_r">0/6</div></div>`;
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();const n=s.querySelectorAll('input:checked').length;const r=s.querySelector('#L5i01_r');r.textContent=n+'/6';r.className='stat-value '+(n>=5?'green':n>=3?'amber':'red');});}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Triage the failing tests',what:'Try: 5 failures; pick action.',footer:'Triage rules: fix if it\'s a real bug. Update if the app changed. Skip with ticket if blocked. Delete if no one can say why it exists. Never "@flaky" without a fix date.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const items=[{t:'Test failing 3mo. No owner. No one knows what it was checking.',a:'delete'},{t:'Test failed today. UI changed yesterday; selector broken.',a:'update'},{t:'Test failing on a real production bug — auth flow broken.',a:'fix'},{t:'Test depends on an external API. API team migrating Jul-Sep.',a:'skip'},{t:'Test passes locally, fails on CI 30% of the time.',a:'fix'}];s.innerHTML=`<h3>Triage</h3>
+  <div class="row" id="L5i02_p" style="margin:10px 0">${items.map((it,i)=>`<span class="chip" data-i="${i}" data-a="${it.a}">${it.t}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+    ${[['fix','Fix'],['update','Update test'],['skip','Skip with ticket'],['delete','Delete']].map(([k,n])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop"></div></div>`).join('')}
+  </div>
+  <button class="btn" id="L5i02_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L5i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L5i02_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.a===p.dataset.placed)ok++;});const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok>=4?'win':'bad');r.innerHTML=`<strong>${ok}/${items.length} triaged right.</strong> The "no one knows what it was checking" test? Delete. Mystery tests don\\'t earn keep.`;SFX.click();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

@@ -18,21 +18,46 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
   const audioRef = useRef<HTMLAudioElement>(null);
   const [bust, setBust] = useState(0);
   const [errored, setErrored] = useState(false);
-  const [started, setStarted] = useState(false);
+
+  // Anim-lab embeds (with a deep-link hash and no narration) auto-activate
+  // in solo mode — no Play overlay needed. For audio-narrated embeds we still
+  // need the user gesture to unlock the AudioContext.
+  const isAnimLab = /\/anim-lab\//.test(src) && /#L/.test(src);
+  const needsGesture = !!audioSrc && !isAnimLab;
+  const [started, setStarted] = useState(!needsGesture);
   const [muted, setMuted] = useState(false);
+  const [autoHeight, setAutoHeight] = useState<number | null>(null);
 
   useEffect(() => { setErrored(false); }, [src, bust]);
 
   // Reset audio + the start-overlay whenever the animation is replayed.
   useEffect(() => {
-    setStarted(false);
+    setStarted(!needsGesture);
+    setAutoHeight(null);
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-  }, [bust]);
+  }, [bust, needsGesture]);
+
+  // Listen for height postMessages from anim-lab solo mode so the iframe
+  // resizes to fit its content instead of clipping or wasting space.
+  useEffect(() => {
+    function onMsg(e: MessageEvent) {
+      if (e.source !== iframeRef.current?.contentWindow) return;
+      const data = e.data;
+      if (data?.type === "krit:anim-lab:height" && typeof data.h === "number") {
+        // Clamp 380-900 to avoid runaway and respect the spec's stage range.
+        const clamped = Math.max(380, Math.min(900, Math.round(data.h)));
+        setAutoHeight(clamped);
+      }
+    }
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, []);
 
   const url = `${src}${src.includes("?") ? "&" : "?"}v=${bust}`;
+  const renderedHeight = autoHeight ?? height;
 
   function handleStart() {
     setStarted(true);
@@ -55,8 +80,8 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
   return (
     <figure className="not-prose space-y-2">
       <div
-        className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm"
-        style={{ height: `${height}px` }}
+        className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-[height] duration-200"
+        style={{ height: `${renderedHeight}px` }}
       >
         {errored ? (
           fallbackImage ? (
@@ -71,11 +96,9 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
           <iframe
             ref={iframeRef}
             src={url}
-            sandbox="allow-scripts allow-same-origin"
+            sandbox="allow-scripts allow-same-origin allow-modals allow-popups-to-escape-sandbox"
             loading="lazy"
-            scrolling="no"
             className="h-full w-full"
-            style={{ overflow: "hidden" }}
             onError={() => setErrored(true)}
             title={caption ?? "Embedded animation"}
           />
@@ -88,7 +111,7 @@ export function EmbedAnimationBlock({ src, height = 420, caption, fallbackImage,
             onEnded={() => undefined}
           />
         )}
-        {!started && !errored && (
+        {!started && !errored && needsGesture && (
           <button
             type="button"
             onClick={handleStart}

@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same drink, different question · A positioning audit</title>
+<style>
+  :root {
+    --paper:     #faf6ec;
+    --paper-2:   #f4ecd8;
+    --ink:       #1a1814;
+    --ink-soft:  #3d3a32;
+    --muted:     #807a6c;
+    --rule:      #d8d0b8;
+    --rule-soft: #ebe3cb;
+    --accent:    #c1272d;   /* deep red — for the "fail" / against */
+    --accent-soft: #f7d9da;
+    --win:       #14554a;   /* teal — for the "win" / why us */
+    --win-soft:  #cfe3df;
+    --gold:      #b88e2d;
+    --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Charter', 'Georgia', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 100px;
+  }
+  @media (min-width: 880px) { main { padding: 60px 32px 120px; } }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 60px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .masthead .issue { color: var(--accent); font-weight: 700; }
+
+  /* TYPE */
+  h1 {
+    font-family: 'Iowan Old Style', 'Charter', Georgia, serif;
+    font-size: clamp(40px, 7.5vw, 76px);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.0;
+    margin: 0 0 28px;
+    color: var(--ink);
+  }
+  h1 .accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  h2 {
+    font-family: 'Iowan Old Style', 'Charter', Georgia, serif;
+    font-size: 34px; font-weight: 800;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    margin: 64px 0 18px;
+  }
+  h3 {
+    font-family: 'Iowan Old Style', 'Charter', Georgia, serif;
+    font-size: 22px; font-weight: 800;
+    margin: 24px 0 12px;
+  }
+  p, li { margin: 0 0 18px; color: var(--ink-soft); }
+  p.lede {
+    font-size: 22px; line-height: 1.45;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  p.dropcap::first-letter {
+    initial-letter: 3;
+    -webkit-initial-letter: 3;
+    font-weight: 900;
+    color: var(--accent);
+    margin-right: 8px;
+    font-family: 'Iowan Old Style', 'Charter', Georgia, serif;
+  }
+  strong { color: var(--ink); font-weight: 700; }
+  em { font-style: italic; color: var(--ink); }
+  .small { font-size: 14.5px; color: var(--muted); }
+
+  .kicker {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 700;
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .kicker::before { content: '§'; font-family: 'Iowan Old Style', serif; font-style: italic; color: var(--accent); font-size: 18px; }
+
+  .rule { border: none; border-top: 1px solid var(--rule); margin: 56px 0; }
+  .rule.thick { border-top: 2px solid var(--ink); }
+
+  /* CASE LAYOUT */
+  .case {
+    margin: 56px 0;
+  }
+  .case-number {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  /* BRAND CARDS — side by side */
+  .vs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin: 28px 0;
+  }
+  @media (min-width: 720px) {
+    .vs { grid-template-columns: 1fr 1fr; gap: 22px; }
+  }
+  .brand {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 22px 22px 24px;
+    position: relative;
+  }
+  .brand-name {
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 24px;
+    font-weight: 900;
+    margin: 12px 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .brand-tag {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .brand-price {
+    font-family: ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  .brand-price strong { color: var(--ink); }
+
+  /* The "icon" — abstract SVG, no real logos */
+  .brand-icon {
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+
+  /* REVEAL BUTTONS */
+  .reveal-list {
+    margin: 22px 0 8px;
+    background: var(--paper);
+    border-left: 3px solid var(--ink);
+    padding: 4px 0 4px 22px;
+  }
+  .reveal-row {
+    margin: 14px 0;
+  }
+  .reveal-q {
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .reveal-q .slot-tag {
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-right: 8px;
+    padding: 2px 6px;
+    background: var(--rule-soft);
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  /* UX F6 — reveal buttons currently outranked visually by surrounding serif body;
+     readers parse them as labels, not affordances. Bumped padding/size + accent border,
+     hover lifts the rule and the button rises. */
+  .reveal-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 10px 18px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 140ms var(--ease);
+    box-shadow: 0 1px 0 var(--rule);
+  }
+  .reveal-btn::after { content: ' →'; }
+  .reveal-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(193, 39, 45, 0.18);
+  }
+  .reveal-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .reveal-btn.opened { background: var(--win); border-color: var(--win); }
+  .reveal-btn.opened::after { content: ' · hide'; }
+  .reveal-content {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--paper-2);
+    border-radius: 5px;
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    animation: slideIn 280ms var(--ease) both;
+  }
+  .reveal-content strong { color: var(--accent); }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hidden { display: none !important; }
+
+  /* The three-slot frame */
+  .frame-card {
+    margin: 36px 0;
+    padding: 26px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+  }
+  .frame-card h3 {
+    color: var(--paper);
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 24px; font-weight: 800;
+    margin: 0 0 16px;
+  }
+  .slots {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  @media (min-width: 700px) { .slots { grid-template-columns: repeat(3, 1fr); } }
+  .slot {
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .slot-num {
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--paper-2);
+    opacity: 0.65;
+    margin-bottom: 6px;
+  }
+  .slot-name {
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--paper);
+  }
+  .slot p {
+    font-size: 14.5px;
+    color: var(--rule-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* MATCHING UI (Case 3) */
+  .matchbox {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 22px;
+    margin: 22px 0;
+  }
+  .match-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .match-row:last-child { border-bottom: none; }
+  .match-statement {
+    font-size: 16.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .match-select {
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    padding: 7px 10px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    color: var(--ink);
+    cursor: pointer;
+    min-width: 140px;
+  }
+  .match-row.correct .match-select {
+    border-color: var(--win);
+    background: var(--win-soft);
+    color: var(--win);
+  }
+  .match-row.wrong .match-select {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .match-check-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 11px 22px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 14px;
+  }
+  .match-fb {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--paper);
+    border-left: 3px solid var(--accent);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .match-fb.win { border-color: var(--win); color: var(--win); }
+
+  /* DIAGNOSTIC QUIZ */
+  .diag {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 22px;
+    margin: 22px 0;
+  }
+  .diag-q {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .diag-q:last-child { border-bottom: none; padding-bottom: 0; }
+  .diag-statement {
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 14px 16px;
+    border-left: 3px solid var(--gold);
+    margin: 0 0 14px;
+    border-radius: 0 4px 4px 0;
+  }
+  .diag-opts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 600px) { .diag-opts { grid-template-columns: repeat(3, 1fr); } }
+  .diag-opt {
+    text-align: left;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    padding: 11px 14px;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 140ms var(--ease);
+  }
+  .diag-opt:hover { border-color: var(--ink); }
+  .diag-opt.right { background: var(--win-soft); border-color: var(--win); color: var(--win); }
+  .diag-opt.wrong { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .diag-opt.shown-right { border-color: var(--win); }
+  .diag-explain {
+    margin-top: 10px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    padding: 10px 12px;
+    background: var(--paper);
+    border-left: 2px solid var(--win);
+    border-radius: 0 3px 3px 0;
+    line-height: 1.55;
+  }
+
+  /* BUILD-YOUR-OWN */
+  .build {
+    background: var(--paper-2);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    padding: 26px;
+    margin: 28px 0;
+  }
+  .build-field {
+    margin-bottom: 18px;
+  }
+  .build-label {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .build-help {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .build textarea {
+    width: 100%;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    padding: 12px 14px;
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 64px;
+    transition: border-color 140ms var(--ease);
+  }
+  .build textarea:focus { outline: none; border-color: var(--ink); }
+  .build-submit {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 13px 22px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .build-result {
+    margin-top: 18px;
+  }
+  .flag {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 6px 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    border-left: 3px solid var(--accent);
+  }
+  .praise {
+    background: var(--win-soft);
+    color: var(--win);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 6px 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    border-left: 3px solid var(--win);
+  }
+
+  /* CLOSER */
+  .closer-quote {
+    margin: 56px 0;
+    padding: 36px 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    text-align: center;
+    font-family: 'Iowan Old Style', Georgia, serif;
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .closer-quote cite {
+    display: block;
+    margin-top: 16px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: normal;
+  }
+
+  footer.colophon {
+    margin-top: 80px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <span>Krit Deep Dives · Marketing</span>
+    <span class="issue">Issue 01 · Positioning</span>
+  </div>
+
+  <!-- HERO -->
+  <section>
+    <div class="kicker">A short essay, three cases, one diagnostic</div>
+    <h1>Same drink,<br><span class="accent">different question.</span></h1>
+    <p class="lede">
+      Two bottled waters. Same H2O molecule, same factory equipment, same regulatory body, same shelf. One sells for ₹20 at any kirana in Bangalore. The other sells for the rupee equivalent of ₹165 at the Whole Foods near Indiranagar — six times the price for the same molecule. Both are profitable. Both are growing.
+    </p>
+    <p class="lede" style="margin-top: 24px; color: var(--ink-soft);">
+      The difference between them is the question they answered. This essay is about that question, and why most brands never figure out which one they're answering.
+    </p>
+  </section>
+
+  <hr class="rule thick">
+
+  <!-- CASE 1: LIQUID DEATH vs BISLERI -->
+  <section class="case">
+    <div class="case-number">Case 01</div>
+    <h2>The water that sounds like a heavy metal band.</h2>
+    <p class="dropcap">
+      In 2017, a former Netflix executive launched a beverage company. The product was water in an aluminium can. The brand was called <strong>Liquid Death</strong>. The cans had skulls on them and read <em>"murder your thirst."</em> By 2022 the company raised at a $1.4B post-money valuation; by 2024 it was on every Whole Foods shelf in the US and on the better-curated Indian boutique-grocery shelves. Meanwhile, Bisleri — the country's largest bottled water brand, founded in 1965 — was reporting flat growth and competing on price with private labels.
+    </p>
+    <p>
+      Both brands sell water. So why is one of them treated like a tech startup and the other treated like a commodity? Look at them side by side. Don't think about pricing yet — think about <em>who would buy this and what they'd compare it to.</em>
+    </p>
+
+    <div class="vs">
+      <div class="brand">
+        <div class="brand-icon" style="background: #1a1a1a;">
+          <svg viewBox="0 0 56 56" width="42" height="42">
+            <path d="M28 8 L20 22 L24 22 L18 38 L26 38 L22 48 L36 30 L30 30 L36 18 L32 18 L28 8 Z" fill="#fdf4d3"/>
+            <circle cx="20" cy="14" r="2" fill="#fdf4d3"/>
+            <circle cx="36" cy="14" r="2" fill="#fdf4d3"/>
+          </svg>
+        </div>
+        <div class="brand-name">Liquid Death</div>
+        <div class="brand-tag">"Murder Your Thirst." Tallboy aluminum cans. Heavy metal aesthetic. Tagline: <em>"Death to Plastic."</em></div>
+        <div class="brand-price"><strong>₹165 / can</strong> · sold in nightclubs, skate shops, Whole Foods</div>
+      </div>
+      <div class="brand">
+        <div class="brand-icon" style="background: #0099d8;">
+          <svg viewBox="0 0 56 56" width="42" height="42">
+            <ellipse cx="28" cy="14" rx="6" ry="8" fill="#fff"/>
+            <rect x="22" y="20" width="12" height="28" rx="2" fill="#fff"/>
+            <path d="M24 30 Q28 27 32 30" stroke="#0099d8" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="brand-name">Bisleri</div>
+        <div class="brand-tag">"Drink it. Trust it." 500ml plastic bottle. Family-safe blue label. Marketing message: <em>"Pure mineral water for healthy living."</em></div>
+        <div class="brand-price"><strong>₹20 / bottle</strong> · sold in kirana stores, train stations, restaurants</div>
+      </div>
+    </div>
+
+    <p>Click each question to see how a professional marketer would answer it for Liquid Death.</p>
+
+    <div class="reveal-list">
+      <div class="reveal-row">
+        <div class="reveal-q"><span class="slot-tag">slot 1</span>Who is this for?</div>
+        <button class="reveal-btn" data-reveal="ld-1">Reveal answer</button>
+        <div class="reveal-content hidden" id="ld-1">
+          <strong>The 22–35-year-old who orders craft beer at the bar but is doing a sober October.</strong> The "I don't want to be the only one not drinking" demographic. People who care about how their hand looks holding a beverage. Not really thirsty people — <em>identity-conscious socializers.</em>
+        </div>
+      </div>
+      <div class="reveal-row">
+        <div class="reveal-q"><span class="slot-tag">slot 2</span>Against what alternative?</div>
+        <button class="reveal-btn" data-reveal="ld-2">Reveal answer</button>
+        <div class="reveal-content hidden" id="ld-2">
+          <strong>Not other waters. Soda and beer.</strong> Liquid Death is positioned against your other can-in-hand options at a bar or party. That's why it's in a tallboy can, that's why it's called what it's called. The implicit message: "drinking water at this bar wouldn't be embarrassing if your water looked like THIS."
+        </div>
+      </div>
+      <div class="reveal-row">
+        <div class="reveal-q"><span class="slot-tag">slot 3</span>Why this and not the alternative?</div>
+        <button class="reveal-btn" data-reveal="ld-3">Reveal answer</button>
+        <div class="reveal-content hidden" id="ld-3">
+          <strong>Because the social cost of holding it is zero — and possibly negative (i.e., it's cool).</strong> Beer = calories, hangover, and now increasingly uncool among health-conscious millennials. Soda = sugar, kid energy. Liquid Death = looks like the rebellious thing, costs you nothing the next morning. The product is hydration, but the <em>job</em> is "permit me to not drink without looking like I'm not drinking."
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 28px;">
+      Now do the same exercise for Bisleri. The slot 1 answer is "Indian families who care about not getting waterborne illness." Slot 2: "tap water, unbranded bottled water." Slot 3: "safer than tap, brand trust built over 60 years."
+    </p>
+    <p>
+      Notice the gap. <strong>Bisleri's three answers are good and complete</strong> — they're not bad positioning. But the positioning is for a 1965 problem: "is this water safe?" Liquid Death's positioning is for a 2024 problem: "what does my hand look like at the bar?" Different question, different price.
+    </p>
+  </section>
+
+  <!-- THE FRAME -->
+  <div class="frame-card">
+    <div class="kicker" style="color: var(--gold);">The frame, named</div>
+    <h3>Three slots. Fill all three or you don't have positioning — you have a product description.</h3>
+    <div class="slots">
+      <div class="slot">
+        <div class="slot-num">Slot 1</div>
+        <div class="slot-name">Audience</div>
+        <p>Who specifically. Not "everyone who drinks water." Specific enough that you'd recognise this person walking down the street.</p>
+      </div>
+      <div class="slot">
+        <div class="slot-num">Slot 2</div>
+        <div class="slot-name">Alternative</div>
+        <p>What they'd buy if you didn't exist. Often <em>not</em> a direct competitor. Liquid Death's alternative is beer, not Bisleri.</p>
+      </div>
+      <div class="slot">
+        <div class="slot-num">Slot 3</div>
+        <div class="slot-name">Angle</div>
+        <p>The one reason this beats that alternative <em>for that audience</em>. Not three reasons. Not "high quality." One sharp claim.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule thick">
+
+  <!-- CASE 2: SLACK vs TEAMS -->
+  <section class="case">
+    <div class="case-number">Case 02</div>
+    <h2>Two work-chat apps. Two different ceilings.</h2>
+    <p>
+      In 2013, Slack launched. Its founders said publicly that they weren't trying to beat existing chat tools — they were trying to <em>kill email.</em> In 2017, Microsoft Teams launched. Its launch positioning, repeated in keynotes and marketing material, was simpler: <em>"Like Slack, but free if you have Office 365."</em>
+    </p>
+    <p>
+      Both companies grew. But the shape of their growth was completely different. Slack ran away with the developer and early-stage market and was <em>acquired by Salesforce in late 2020 for $27.7B</em> — a strong outcome, and one that ratified a ceiling: a top-down purchase by a giant whose existing buyers were asking the IT-procurement question Teams was built to answer. Teams meanwhile quietly reached <em>320 million daily active users</em> by 2024 — the largest collaboration tool on Earth, by a factor of five.
+    </p>
+    <p>
+      Before reading further: <strong>which positioning do you think aged better?</strong> Slack's "kill email" or Teams' "like Slack but free"?
+    </p>
+
+    <div class="vs">
+      <div class="brand" style="border-left: 4px solid #4a154b;">
+        <div class="brand-name" style="color: #4a154b;">Slack</div>
+        <div class="brand-tag">"Where work happens." Positioned against the email inbox. Slogan-era tagline: <em>"Be less busy."</em> Targeted modern teams who felt email was broken.</div>
+      </div>
+      <div class="brand" style="border-left: 4px solid #5059c9;">
+        <div class="brand-name" style="color: #5059c9;">Microsoft Teams</div>
+        <div class="brand-tag">"The hub for teamwork." Positioned against Slack. Marketing message: <em>"All the chat. None of the bill."</em> Targeted IT departments at Office 365 customers.</div>
+      </div>
+    </div>
+
+    <div class="reveal-list">
+      <div class="reveal-row">
+        <div class="reveal-q"><span class="slot-tag">verdict</span>Whose positioning aged better, and why?</div>
+        <button class="reveal-btn" data-reveal="st-1">Reveal the call</button>
+        <div class="reveal-content hidden" id="st-1">
+          <strong>Slack's positioning was better but more fragile. Teams' was worse but more durable.</strong>
+          <br><br>
+          Slack picked a giant alternative (email) which gave them runway to grow into for years — most knowledge workers really did hate email. But "kill email" doesn't tell IT departments what to do at procurement time. So Slack thrived bottom-up (engineers installed it) and stalled at the buying-committee level.
+          <br><br>
+          Teams picked a smaller alternative (Slack itself) but gave IT departments the one thing they needed: <em>"it's already paid for."</em> That positioning didn't sound exciting, but it answered the question that was actually being asked in 2017–2022 budget reviews. <strong>Teams' positioning was boring AND correct.</strong>
+          <br><br>
+          The general lesson: a positioning that sounds visionary often loses to a positioning that <em>answers the question your buyer is asking right now.</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- PULL QUOTE — promotes the keeper sentence from above (Marketing reviewer rec) -->
+    <blockquote style="margin: 40px 0 0; padding: 30px 32px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); font-family: 'Iowan Old Style', Georgia, serif; font-style: italic; font-size: 26px; line-height: 1.32; color: var(--ink); text-align: center;">
+      "Mediocre answers to <em style="font-style: normal; color: var(--accent); font-weight: 700;">live questions</em> beat brilliant answers to abstract ones."
+      <cite style="display: block; margin-top: 16px; font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); font-style: normal;">— The whole point of Case 02</cite>
+    </blockquote>
+  </section>
+
+  <hr class="rule thick">
+
+  <!-- CASE 3: NOTION (matching task) -->
+  <section class="case">
+    <div class="case-number">Case 03</div>
+    <h2>Notion: when positioning eliminates the question.</h2>
+    <p>
+      The strongest version of positioning isn't picking a side in a fight. It's making the fight feel obsolete. Notion's pitch, when it launched in 2016, did this — and it's worth dissecting because the move is harder than it looks.
+    </p>
+    <p>
+      Three statements about Notion are printed below. Each one fills a different slot — Audience, Alternative, or Angle. <strong>Drag the dropdowns to match each statement to its slot.</strong> Get all three right and you'll see the deeper move.
+    </p>
+
+    <div class="matchbox">
+      <div class="match-row" data-correct="alternative">
+        <div class="match-statement">
+          <em>"Most workspaces force you to pick: Word for documents, Excel for spreadsheets, Trello for tasks, Confluence for wiki — and then nothing fits together."</em>
+        </div>
+        <select class="match-select">
+          <option value="">— pick slot —</option>
+          <option value="audience">Audience</option>
+          <option value="alternative">Alternative</option>
+          <option value="angle">Angle</option>
+        </select>
+      </div>
+      <div class="match-row" data-correct="audience">
+        <div class="match-statement">
+          <em>"Small teams (5–50 people) who care more about clarity than process — designers, startup founders, solo creators, product teams."</em>
+        </div>
+        <select class="match-select">
+          <option value="">— pick slot —</option>
+          <option value="audience">Audience</option>
+          <option value="alternative">Alternative</option>
+          <option value="angle">Angle</option>
+        </select>
+      </div>
+      <div class="match-row" data-correct="angle">
+        <div class="match-statement">
+          <em>"One tool where docs, tables, tasks, and pages all live in the same canvas — so you stop choosing and start writing."</em>
+        </div>
+        <select class="match-select">
+          <option value="">— pick slot —</option>
+          <option value="audience">Audience</option>
+          <option value="alternative">Alternative</option>
+          <option value="angle">Angle</option>
+        </select>
+      </div>
+      <button class="match-check-btn" id="matchCheck">Check my matches</button>
+      <div class="match-fb hidden" id="matchFb"></div>
+    </div>
+
+    <p style="margin-top: 28px;">
+      Notice what Notion's "alternative" slot does. It's not Word or Excel or Confluence — those are the <em>incumbents</em>. The alternative Notion picked was <strong>"the act of having to choose between them at all."</strong> That's a sneakier and more powerful move: you reframe the buyer's problem so that the obvious incumbents become symptoms of a deeper inefficiency. Once the buyer accepts the reframe, none of the incumbents can answer them.
+    </p>
+    <p>
+      <em>If you can change what your buyer is asking, you've already won — they'll come to you to answer.</em>
+    </p>
+  </section>
+
+  <hr class="rule thick">
+
+  <!-- DIAGNOSTIC -->
+  <section>
+    <div class="kicker">The diagnostic</div>
+    <h2>Spot the broken slot.</h2>
+    <p>
+      Four brand statements below. Each one looks plausible on first read. Each one has exactly one slot that's <em>missing or vague</em>. Identify it. Audience answers tend to fail by being "everyone." Alternative answers tend to fail by being generic ("the old way"). Angle answers tend to fail by being unfalsifiable ("better quality").
+    </p>
+
+    <div class="diag">
+
+      <div class="diag-q" data-correct="audience">
+        <div class="diag-statement">"A modern productivity platform that helps anyone do their best work, replacing inefficient tools with one unified workspace built for the future of teams."</div>
+        <div class="diag-opts">
+          <button class="diag-opt" data-pick="audience">Audience is broken</button>
+          <button class="diag-opt" data-pick="alternative">Alternative is broken</button>
+          <button class="diag-opt" data-pick="angle">Angle is broken</button>
+        </div>
+        <div class="diag-explain hidden">
+          <strong>Audience.</strong> "Anyone" is the giveaway. Combined with "future of teams" and "best work," there's no recognisable person here. You can't picture them, you can't pitch them. Compare to "small teams, 5–50 people, who care more about clarity than process."
+        </div>
+      </div>
+
+      <div class="diag-q" data-correct="alternative">
+        <div class="diag-statement">"A new approach to financial planning for young professionals, helping them grow their wealth more effectively than traditional methods."</div>
+        <div class="diag-opts">
+          <button class="diag-opt" data-pick="audience">Audience is broken</button>
+          <button class="diag-opt" data-pick="alternative">Alternative is broken</button>
+          <button class="diag-opt" data-pick="angle">Angle is broken</button>
+        </div>
+        <div class="diag-explain hidden">
+          <strong>Alternative.</strong> "Traditional methods" is the tell. What specifically — a financial advisor? A bank RM? A robo-advisor? Just doing nothing? Each implies a different product and a different price point. The vague alternative makes the angle ("more effective") un-checkable too. Specificity in slot 2 forces honesty in slot 3.
+        </div>
+      </div>
+
+      <div class="diag-q" data-correct="angle">
+        <div class="diag-statement">"A high-quality coffee subscription for serious coffee drinkers in metros, delivered to your door."</div>
+        <div class="diag-opts">
+          <button class="diag-opt" data-pick="audience">Audience is broken</button>
+          <button class="diag-opt" data-pick="alternative">Alternative is broken</button>
+          <button class="diag-opt" data-pick="angle">Angle is broken</button>
+        </div>
+        <div class="diag-explain hidden">
+          <strong>Angle.</strong> "High-quality" tells you nothing falsifiable. Every coffee brand calls itself high-quality. The angle should answer: <em>why would a serious coffee drinker who currently has a favourite local roastery switch to a subscription?</em> Convenience? Variety? Education? Pick one and commit. "High-quality" is the angle equivalent of saying "we're good."
+        </div>
+      </div>
+
+      <div class="diag-q" data-correct="audience">
+        <div class="diag-statement">"A new kind of educational platform that uses AI to make every learner's experience personalised, replacing one-size-fits-all online courses."</div>
+        <div class="diag-opts">
+          <button class="diag-opt" data-pick="audience">Audience is broken</button>
+          <button class="diag-opt" data-pick="alternative">Alternative is broken</button>
+          <button class="diag-opt" data-pick="angle">Angle is broken</button>
+        </div>
+        <div class="diag-explain hidden">
+          <strong>Audience.</strong> "Every learner" — children, adults, professionals, university students, hobbyists all learn under wildly different constraints. The personalisation claim isn't false, but without an audience the claim can't be designed for or marketed to. Pick a specific learner type and the rest sharpens immediately. (Notice this is the same failure mode as Q1 — most generic positioning collapses at the Audience slot first.)
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="rule thick">
+
+  <!-- BUILD-YOUR-OWN -->
+  <section>
+    <div class="kicker">Build it for yourself</div>
+    <h2>Write positioning for something you're working on.</h2>
+    <p>
+      Fill the three slots below for a real project — your startup, your side project, your team's product, your own consulting offer. Write the way you'd talk to one person, not the way you'd write a press release.
+    </p>
+    <p class="small">
+      The page will flag <em>vagueness markers</em> in your text — words like "everyone", "best", "world-class", "innovative", "next-generation". They're not banned, just usually a sign the slot is hiding something. Heuristic-driven feedback, not a judgment.
+    </p>
+
+    <div class="build">
+      <div class="build-field">
+        <div class="build-label">Slot 1 · Audience</div>
+        <div class="build-help">Who is this for? Specific enough that you could describe what they look like, what they do at work, and one thing that frustrates them today.</div>
+        <textarea id="b1" placeholder="e.g., 'Independent designers in their late 20s billing $60–120/hr, who manage 3–6 clients at once and currently waste two hours a week reconciling invoices.'"></textarea>
+      </div>
+      <div class="build-field">
+        <div class="build-label">Slot 2 · Alternative</div>
+        <div class="build-help">What they'd reach for if you didn't exist. Name the product, the workflow, or the workaround. Not "the old way."</div>
+        <textarea id="b2" placeholder="e.g., 'Quickbooks Self-Employed, plus a spreadsheet they maintain by hand on Sunday nights.'"></textarea>
+      </div>
+      <div class="build-field">
+        <div class="build-label">Slot 3 · Angle</div>
+        <div class="build-help">The one reason this beats that alternative for that audience. One sharp claim. Falsifiable. Not "higher quality."</div>
+        <textarea id="b3" placeholder="e.g., 'Invoices reconcile themselves from bank-statement matching — Sunday nights become free.'"></textarea>
+      </div>
+      <button class="build-submit" id="buildSubmit">Run the diagnostic</button>
+      <div class="build-result" id="buildResult"></div>
+    </div>
+  </section>
+
+  <hr class="rule thick">
+
+  <!-- CLOSER -->
+  <div class="closer-quote">
+    "Positioning is a question of who you're<br>willing to <em>lose</em>."
+    <cite>— What this whole essay was really about</cite>
+  </div>
+
+  <p>
+    The hardest part of positioning isn't the writing. It's the willingness to exclude. Every time you sharpen Slot 1, you lose buyers. Every time you specify Slot 2, you lose conversations. Every time you commit to Slot 3, you forfeit other claims you could have made.
+  </p>
+  <p>
+    Most brands are vague because the founders are afraid to be specific. The vagueness feels safer — but the chart is brutal. Brands with sharp positioning don't grow because they're better; they grow because <em>the right buyer recognises themselves in the first sentence and the wrong buyer leaves immediately.</em> Both outcomes are wins. The vague brand has to convince everyone, which means convincing no one.
+  </p>
+  <p style="margin-top: 28px;">
+    If you only do one thing after this essay: open a notes app, and write down — for whatever you're working on — the <strong>name of one specific person</strong> who is your audience. Then write down the <strong>name of one specific competing tool or workflow</strong> they currently use. Then write one sentence on <strong>why you're better than that thing for that person.</strong> The positioning falls out of those three names. Everything else is grammar.
+  </p>
+
+  <!-- BETWEEN-SESSION HOOK · open Zeigarnik loop closing only on the next read -->
+  <div style="margin: 56px 0 0; padding: 28px 30px; background: var(--paper-2); border: 1.5px solid var(--ink); border-left: 6px solid var(--accent); border-radius: 6px;">
+    <div class="kicker" style="margin-bottom: 12px;">Open loop · for tomorrow</div>
+    <h3 style="margin: 0 0 12px; font-size: 22px;">Pick a brand you use daily. Write its three slots from memory.</h3>
+    <p style="margin: 0 0 12px;">
+      Could be Swiggy, ChatGPT, Bisleri, BookMyShow — anything you've spent money on this month. Sit with it for five minutes tomorrow. Then look at the brand's own positioning statement on their About page or homepage and see how close you got. Most of them will <em>fail</em> the three-slot test you just learned — and that's the lesson. Positioning is a discipline most marketing teams never enforce on themselves.
+    </p>
+    <p style="margin: 0; font-size: 14.5px; color: var(--muted);">
+      Come back and audit one of your own brand artifacts (deck, landing page, pitch) against the diagnostic above. Specificity is a skill that develops by reps, not by reading.
+    </p>
+  </div>
+
+  <footer class="colophon">
+    Same drink, different question · Krit Deep Dive · Issue 01 · v0.1 prototype
+  </footer>
+
+</main>
+
+<script>
+/* ─── REVEAL BUTTONS (Cases 1 + 2) ───
+   UX F6 — preserve the button's original label text and toggle a class to flip the
+   ::after pseudo-element. Avoids the previous behaviour where the button label
+   permanently changed to "Hide" and lost the "Reveal answer" verb. */
+document.querySelectorAll('[data-reveal]').forEach(btn => {
+  const originalText = btn.firstChild?.textContent?.trim() || btn.textContent.trim();
+  // Keep just the original label text in the button (the ::after handles state)
+  btn.textContent = originalText;
+  btn.addEventListener('click', () => {
+    const id = btn.dataset.reveal;
+    const el = document.getElementById(id);
+    if (el.classList.contains('hidden')) {
+      el.classList.remove('hidden');
+      btn.classList.add('opened');
+      btn.setAttribute('aria-expanded', 'true');
+    } else {
+      el.classList.add('hidden');
+      btn.classList.remove('opened');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+  btn.setAttribute('aria-expanded', 'false');
+});
+
+/* ─── MATCHING (Case 3 Notion) ─── */
+document.getElementById('matchCheck').addEventListener('click', () => {
+  const rows = document.querySelectorAll('.match-row');
+  let allRight = true;
+  rows.forEach(row => {
+    const correct = row.dataset.correct;
+    const sel = row.querySelector('.match-select');
+    row.classList.remove('correct', 'wrong');
+    if (sel.value === correct) row.classList.add('correct');
+    else { row.classList.add('wrong'); allRight = false; }
+  });
+  const fb = document.getElementById('matchFb');
+  fb.classList.remove('hidden', 'win');
+  if (allRight) {
+    fb.classList.add('win');
+    fb.innerHTML = '<strong>All three matched.</strong> Notice that the "alternative" slot isn\'t a competitor — it\'s the act of choosing between competitors. That reframe is the whole magic trick: Notion didn\'t pick a fight with Word or Excel, it picked a fight with the choice. When buyers accept the reframe, all the incumbents look incomplete.';
+  } else {
+    fb.innerHTML = '<strong>Not quite — the wrong rows are highlighted in red.</strong> Try again. Hint: the "alternative" statement is the one that names what people currently do instead. The "audience" statement names <em>who</em>. The "angle" statement names what beats the alternative for that audience.';
+  }
+});
+
+/* ─── DIAGNOSTIC ─── */
+document.querySelectorAll('.diag-q').forEach(q => {
+  const correct = q.dataset.correct;
+  q.querySelectorAll('.diag-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (opt.disabled) return;
+      const pick = opt.dataset.pick;
+      q.querySelectorAll('.diag-opt').forEach(o => {
+        o.disabled = true;
+        if (o.dataset.pick === correct) o.classList.add('shown-right');
+      });
+      opt.classList.add(pick === correct ? 'right' : 'wrong');
+      q.querySelector('.diag-explain').classList.remove('hidden');
+    });
+  });
+});
+
+/* ─── BUILD-YOUR-OWN with vagueness flagging ─── */
+const VAGUE_MARKERS = [
+  // word, severity (1 = soft flag, 2 = hard flag)
+  // Marketing-reviewer additions: "helps you" and "empowers" are the two most common
+  // vague-angle markers in 2026 B2B copy — they describe how you feel about your product
+  // rather than what it does.
+  { word: 'helps you',      sev: 2, slot: 'angle',
+    note: '"Helps you [X]" — replace with the specific result. "Helps you save time" means nothing without minutes-per-week. "Helps" is the angle version of "everyone."' },
+  { word: 'empowers',       sev: 2, slot: 'angle',
+    note: '"Empowers" — pure marketing filler. The reader can\'t check if you do this. Replace with the specific capability you actually provide.' },
+  { word: 'everyone',       sev: 2, slot: 'audience',
+    note: '"Everyone" — the canonical audience failure. No one builds for everyone. Cut it; name the specific person.' },
+  { word: 'anyone',         sev: 2, slot: 'audience',
+    note: '"Anyone" — same problem as "everyone". Replace with one specific person you can picture.' },
+  { word: 'all kinds of',   sev: 2, slot: 'audience',
+    note: '"All kinds of" softens the audience without committing. Pick one kind.' },
+  { word: 'modern',         sev: 1, slot: 'any',
+    note: '"Modern" — usually means "we don\'t want to say what we replace." Replace with the specific old thing.' },
+  { word: 'traditional',    sev: 1, slot: 'alternative',
+    note: '"Traditional [X]" is vague-alternative territory — what specifically? A consultant? A spreadsheet? Name it.' },
+  { word: 'the old way',    sev: 2, slot: 'alternative',
+    note: '"The old way" — every brand says this. What old way? Name the product or process you replace.' },
+  { word: 'high-quality',   sev: 2, slot: 'angle',
+    note: '"High-quality" isn\'t falsifiable. Every brand claims it. Replace with the specific thing this does better.' },
+  { word: 'best',           sev: 2, slot: 'angle',
+    note: '"Best" is rarely defensible and usually empty. Specify the one dimension you actually beat the alternative on.' },
+  { word: 'world-class',    sev: 2, slot: 'angle',
+    note: '"World-class" is a verbal shrug. Cut it and state what the angle actually is.' },
+  { word: 'cutting-edge',   sev: 2, slot: 'angle',
+    note: '"Cutting-edge" — vague-angle giveaway. State what specifically is new.' },
+  { word: 'next-generation', sev: 2, slot: 'any',
+    note: '"Next-generation" tells the reader nothing. What generation are we comparing against, and how is this different?' },
+  { word: 'innovative',     sev: 2, slot: 'any',
+    note: '"Innovative" — describes how you feel about your product, not what it does. Cut.' },
+  { word: 'seamless',       sev: 1, slot: 'angle',
+    note: '"Seamless" is buzzword bingo unless you can name the seams you removed.' },
+  { word: 'leverages',      sev: 1, slot: 'any',
+    note: '"Leverages" — replace with "uses" and the sentence usually loses 30% of its weight.' },
+  { word: 'unique',         sev: 1, slot: 'angle',
+    note: '"Unique" is a claim about you. Replace with the specific thing that\'s different (which should be the angle anyway).' },
+  { word: 'revolutionary',  sev: 2, slot: 'any',
+    note: '"Revolutionary" — buyer\'s eyes glaze. Show, don\'t claim.' },
+  { word: 'better',         sev: 1, slot: 'angle',
+    note: '"Better" — at what? On what dimension? Better-than-X-at-Y is what the angle actually needs to be.' },
+];
+
+document.getElementById('buildSubmit').addEventListener('click', () => {
+  const a = document.getElementById('b1').value.trim().toLowerCase();
+  const b = document.getElementById('b2').value.trim().toLowerCase();
+  const c = document.getElementById('b3').value.trim().toLowerCase();
+  const fields = [
+    { label: 'Slot 1 · Audience',    text: a, slot: 'audience' },
+    { label: 'Slot 2 · Alternative', text: b, slot: 'alternative' },
+    { label: 'Slot 3 · Angle',       text: c, slot: 'angle' },
+  ];
+  const result = document.getElementById('buildResult');
+  result.innerHTML = '';
+
+  let totalFlags = 0;
+  let emptyFields = 0;
+
+  fields.forEach(f => {
+    if (!f.text || f.text.length < 8) {
+      emptyFields++;
+      result.innerHTML += `<div class="flag"><strong>${f.label} is empty or too short.</strong> Give it at least one sentence — vague positioning usually starts with skipping a slot.</div>`;
+      return;
+    }
+    const hits = [];
+    VAGUE_MARKERS.forEach(m => {
+      if (f.text.includes(m.word) && (m.slot === 'any' || m.slot === f.slot)) {
+        hits.push(m);
+      }
+    });
+    if (hits.length === 0) {
+      result.innerHTML += `<div class="praise"><strong>${f.label}: no vagueness flags.</strong> That doesn't mean it's right — it means it's specific enough to be testable. Read it aloud; does it describe one person/thing?</div>`;
+    } else {
+      hits.forEach(h => {
+        totalFlags++;
+        result.innerHTML += `<div class="flag"><strong>${f.label} → "${h.word}"</strong> · ${h.note}</div>`;
+      });
+    }
+  });
+
+  if (emptyFields === 0 && totalFlags === 0) {
+    result.innerHTML = '<div class="praise" style="font-size: 16px;"><strong>Three slots filled, no vagueness markers caught.</strong> That\'s a starting line, not a finishing line — but it\'s the version you should now read aloud to one real buyer and watch their face. If their first reaction is a follow-up question, you have positioning. If their first reaction is "interesting," you have a brochure.</div>' + result.innerHTML;
+  }
+
+  // PEER-COMPARISON CALIBRATION (Learning Top-3 #1 for this prototype, Hattie & Timperley 2007).
+  // Heuristic flagging is lint; calibration requires the learner to RATE their own work between
+  // a concrete strong and weak example. Adds that ladder.
+  result.innerHTML += `
+    <div style="margin-top: 24px; padding: 22px; background: white; border: 1.5px solid var(--ink); border-radius: 6px;">
+      <div class="kicker" style="margin-bottom: 14px;">Calibrate · rate your own answer against these</div>
+      <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 18px;">
+        Lint isn't feedback. Here's a real strong and weak example for each slot. Read yours back, then place yourself on the ladder. The honest mark is the one you'd defend to the strong-example author.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr; gap: 14px;">
+        <div style="border: 1px solid var(--rule); border-radius: 5px; padding: 14px;">
+          <div style="font-family: ui-monospace, monospace; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px;">Slot 1 · Audience</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: var(--win-soft); border-left: 3px solid var(--win); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--win); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">STRONG</strong>Indian designers in their late 20s billing ₹5,000–10,000/hr, juggling 3–6 clients at once, who currently waste 2 hours every Sunday reconciling invoices by hand.</div>
+            <div style="background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--accent); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">WEAK</strong>Modern designers who want a better workflow.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid var(--rule); border-radius: 5px; padding: 14px;">
+          <div style="font-family: ui-monospace, monospace; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px;">Slot 2 · Alternative</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: var(--win-soft); border-left: 3px solid var(--win); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--win); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">STRONG</strong>Zoho Books + a Sunday-night spreadsheet they maintain by hand to cross-check.</div>
+            <div style="background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--accent); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">WEAK</strong>Traditional invoicing tools and manual processes.</div>
+          </div>
+        </div>
+
+        <div style="border: 1px solid var(--rule); border-radius: 5px; padding: 14px;">
+          <div style="font-family: ui-monospace, monospace; font-size: 10px; font-weight: 800; letter-spacing: 0.18em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px;">Slot 3 · Angle</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div style="background: var(--win-soft); border-left: 3px solid var(--win); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--win); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">STRONG</strong>Invoices reconcile from bank-statement matching automatically — Sunday nights are free.</div>
+            <div style="background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 10px 12px; font-size: 14px; line-height: 1.5; color: var(--ink);"><strong style="color: var(--accent); font-size: 10px; letter-spacing: 0.16em; display: block; margin-bottom: 4px;">WEAK</strong>Best-in-class invoicing that empowers freelancers.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 14px 16px; background: var(--paper-2); border-radius: 5px; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft);">
+        <strong style="color: var(--ink);">Honest self-rating:</strong> for each slot, where does your answer land — closer to the green strong example, the red weak one, or in between? The answer should be uncomfortably specific. Vague self-ratings are the same failure mode the vagueness flagger catches in your writing.
+      </div>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>

@@ -154,6 +154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The PM Venn — three jobs at once — where business, tech, UX overlap."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Outcome over output"
@@ -243,6 +249,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · PM's output is the meeting that didn't happen — time saved by good prioritisation."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 3-question scope test"
@@ -257,6 +269,12 @@
           "caption": "Three filters, one feature. If a request can't pass all three, it goes back, not into the backlog.",
           "maxWidth": 520,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 280' role='img'><rect width='520' height='280' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#1F2937'><circle cx='260' cy='140' r='130' fill='none' stroke='#0EA5E9' stroke-width='4'/><circle cx='260' cy='140' r='95' fill='none' stroke='#10B981' stroke-width='4'/><circle cx='260' cy='140' r='60' fill='none' stroke='#F59E0B' stroke-width='4'/><text x='260' y='25' text-anchor='middle' font-size='12' font-weight='bold' fill='#0369A1'>Q1: Who? (user, role, screen)</text><text x='260' y='55' text-anchor='middle' font-size='12' font-weight='bold' fill='#047857'>Q2: What changes in their day?</text><text x='260' y='90' text-anchor='middle' font-size='12' font-weight='bold' fill='#92400E'>Q3: What if we do nothing?</text><rect x='200' y='130' width='120' height='30' rx='6' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='260' y='150' text-anchor='middle' fill='white' font-size='12' font-weight='bold'>= a feature</text><text x='260' y='200' text-anchor='middle' font-size='11' font-style='italic' fill='#065F46'>Can't answer all 3 in 2 sentences each?</text><text x='260' y='220' text-anchor='middle' font-size='11' font-style='italic' fill='#065F46'>Send it back. You don't have a feature, you have a feeling.</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Triangulate your PM identity — rate yourself on 3 axes."
         },
         {
           "type": "chatScenario",
@@ -551,6 +569,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Decompose your week — fake work vs real — drag 10 PM activities into fake vs real."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "The PM is a translator between users, engineers, and sales/CEO — and a sequencer of finite engineering against infinite asks.",
@@ -645,6 +669,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Users lie. Watch them. — stated vs revealed preference gap."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — 'Tell me about the last time…'"
@@ -734,6 +764,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The five whys — surface need → real need."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The silence move"
@@ -748,6 +784,12 @@
           "caption": "The five seconds you don't speak are the most productive five seconds of the interview.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 200' role='img'><rect width='600' height='200' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><line x1='40' y1='100' x2='560' y2='100' stroke='#6B7280' stroke-width='2'/><g transform='translate(60 100)'><circle r='8' fill='#3B82F6'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#1E3A8A'>T+0</text><text x='0' y='40' text-anchor='middle' font-size='11' font-weight='bold' fill='#1E3A8A'>Q asked</text></g><g transform='translate(190 100)'><circle r='8' fill='#10B981'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#065F46'>T+8s</text><text x='0' y='40' text-anchor='middle' font-size='11' fill='#065F46'>1st answer ends</text><text x='0' y='56' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>('it's mostly fine')</text></g><rect x='200' y='75' width='180' height='50' rx='8' fill='#FCD34D' stroke='#92400E' stroke-width='2' opacity='0.7'/><text x='290' y='98' text-anchor='middle' font-size='12' font-weight='bold' fill='#7C2D12'>SILENCE — 5 seconds</text><text x='290' y='115' text-anchor='middle' font-size='10' fill='#92400E'>do not speak, do not nod</text><g transform='translate(390 100)'><circle r='8' fill='#F43F5E'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#9D174D'>T+13s</text><text x='0' y='40' text-anchor='middle' font-size='11' font-weight='bold' fill='#9D174D'>2nd answer begins</text><text x='0' y='56' text-anchor='middle' font-size='10' font-style='italic' fill='#9D174D'>('actually, last week...')</text></g><g transform='translate(540 100)'><circle r='8' fill='#8B5CF6'/><text x='0' y='-18' text-anchor='middle' font-size='10' fill='#5B21B6'>T+45s</text><text x='0' y='40' text-anchor='middle' font-size='11' fill='#5B21B6'>real signal</text></g><text x='300' y='180' text-anchor='middle' font-size='11' font-style='italic' fill='#5B21B6'>The 2nd answer is on average 3x more useful than the 1st.</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the leading question — pick which interview Q is leading."
         },
         {
           "type": "chatScenario",
@@ -1076,6 +1118,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Re-write the question — pick the better rewrite."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Users tell you what they want; their behavior tells you what they need. Tune for behavior, discount aspiration.",
@@ -1170,6 +1218,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · A PRD is 90% trimmed by the time it ships — draft → tight."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — RICE and value-vs-effort"
@@ -1259,6 +1313,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · RICE in motion — 5 features ranked by RICE."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Cut, don't compromise"
@@ -1273,6 +1333,12 @@
           "caption": "Compromise spreads pain across every feature. Cutting concentrates pain on the features that can wait.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 260' role='img'><rect width='580' height='260' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(30 30)'><text x='130' y='20' text-anchor='middle' font-weight='bold' fill='#7F1D1D'>COMPROMISE (the trap)</text><g transform='translate(0 35)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F1: 60%</text></g><g transform='translate(0 62)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F2: 60%</text></g><g transform='translate(0 89)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F3: 60%</text></g><g transform='translate(0 116)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F4: 60%</text></g><g transform='translate(0 143)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#FEE2E2' stroke='#7F1D1D'/><rect x='0' y='0' width='144' height='22' rx='3' fill='#FCA5A5'/><text x='10' y='16' font-size='10' fill='#7F1D1D'>F5: 60%</text></g><text x='130' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#7F1D1D'>5 unfinished things, 5x support cost</text></g><g transform='translate(310 30)'><text x='130' y='20' text-anchor='middle' font-weight='bold' fill='#065F46'>CUT (the right move)</text><g transform='translate(0 35)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F1: shipped well (100%)</text></g><g transform='translate(0 62)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F2: shipped well (100%)</text></g><g transform='translate(0 89)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#86EFAC' stroke='#065F46'/><text x='10' y='16' font-size='10' fill='#065F46'>F3: shipped well (100%)</text></g><g transform='translate(0 116)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#E5E7EB' stroke='#9CA3AF' stroke-dasharray='3 2'/><text x='10' y='16' font-size='10' fill='#6B7280'>F4: cut, on next quarter</text></g><g transform='translate(0 143)'><rect x='0' y='0' width='240' height='22' rx='3' fill='#E5E7EB' stroke='#9CA3AF' stroke-dasharray='3 2'/><text x='10' y='16' font-size='10' fill='#6B7280'>F5: cut, may not return</text></g><text x='130' y='195' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>3 great things, 0 support debt</text></g></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · RICE calculator — score a feature on RICE."
         },
         {
           "type": "chatScenario",
@@ -1561,6 +1627,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Find the missing PRD section — pick what this PRD is missing."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A PRD is a contract with future-you about what 'done' means. Outcome, out-of-scope, done-means, risks — those four sections, on one page.",
@@ -1655,6 +1727,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Roadmap = bets, not commitments — forecast confidence collapsing."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Now / Next / Later"
@@ -1744,6 +1822,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The \"now / next / later\" trick — three buckets, decreasing fidelity."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The polite no template"
@@ -1758,6 +1842,12 @@
           "caption": "The polite no is mostly a polite ask. Most asks don't survive the questions.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' fill='#1F2937'><g transform='translate(40 30)'><rect width='160' height='50' rx='8' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#831843'>Off-roadmap ask</text><text x='80' y='40' text-anchor='middle' font-size='10' fill='#9D174D'>(sales / founder / CS)</text></g><path d='M120 80 L120 110' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><g transform='translate(40 110)'><rect width='160' height='80' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='80' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#7C2D12'>The 3 questions:</text><text x='80' y='40' text-anchor='middle' font-size='10' fill='#7C2D12'>1. deal size?</text><text x='80' y='55' text-anchor='middle' font-size='10' fill='#7C2D12'>2. timing?</text><text x='80' y='70' text-anchor='middle' font-size='10' fill='#7C2D12'>3. who else wants it?</text></g><path d='M200 150 L300 95' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><path d='M200 150 L300 215' stroke='#1F2937' stroke-width='2' marker-end='url(#pna)'/><g transform='translate(300 50)'><rect width='220' height='90' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='110' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#064E3B'>Path A: no data</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#065F46'>Asker can't answer 1 of 3 Qs</text><text x='110' y='60' text-anchor='middle' font-size='10' fill='#065F46'>Ask quietly dies</text><text x='110' y='76' text-anchor='middle' font-size='10' font-style='italic' fill='#065F46'>~70% of asks end here</text></g><g transform='translate(300 175)'><rect width='220' height='90' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='110' y='22' text-anchor='middle' font-size='11' font-weight='bold' fill='#1E3A8A'>Path B: real data</text><text x='110' y='44' text-anchor='middle' font-size='10' fill='#1E3A8A'>Return next day with</text><text x='110' y='60' text-anchor='middle' font-size='10' fill='#1E3A8A'>yes / no / swap proposal</text><text x='110' y='76' text-anchor='middle' font-size='10' font-style='italic' fill='#1E3A8A'>often the right call is yes</text></g></g><defs><marker id='pna' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · You only have 5 NOW slots. Spend them. — bucket 8 features; lock when NOW = 5."
         },
         {
           "type": "chatScenario",
@@ -2086,6 +2176,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Saying no — pick the right script — pick the politest no."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A roadmap is a story you tell to align, not a contract you sign. Commit to direction; don't commit to dates beyond the current quarter.",
@@ -2180,6 +2276,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Launch = day 1 of measurement — pre-launch hype vs post-launch dip."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The pre-mortem"
@@ -2269,6 +2371,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Activation funnel — 100 sign-ups → 8 retained."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 7-day post-launch loop"
@@ -2283,6 +2391,12 @@
           "caption": "Four windows, four signals, four decisions. Most teams skip rows 3 and 4 entirely.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 280' role='img'><rect width='580' height='280' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' fill='#1F2937'><rect x='30' y='30' width='90' height='40' rx='6' fill='#FEE2E2' stroke='#7F1D1D'/><text x='75' y='48' text-anchor='middle' font-size='10' font-weight='bold' fill='#7F1D1D'>Day 0-1</text><text x='75' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D'>fires</text><rect x='130' y='30' width='220' height='40' rx='6' fill='white' stroke='#7F1D1D'/><text x='240' y='48' text-anchor='middle' font-size='10' fill='#7F1D1D'>error rate, support volume</text><text x='240' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D' font-style='italic'>red? hot-fix today</text><rect x='360' y='30' width='190' height='40' rx='6' fill='white' stroke='#7F1D1D'/><text x='455' y='48' text-anchor='middle' font-size='10' fill='#7F1D1D'>action: stabilize</text><text x='455' y='62' text-anchor='middle' font-size='9' fill='#7F1D1D' font-style='italic'>zero fires by EoD1</text><rect x='30' y='80' width='90' height='40' rx='6' fill='#FEF3C7' stroke='#92400E'/><text x='75' y='98' text-anchor='middle' font-size='10' font-weight='bold' fill='#7C2D12'>Day 2-7</text><text x='75' y='112' text-anchor='middle' font-size='9' fill='#7C2D12'>activation</text><rect x='130' y='80' width='220' height='40' rx='6' fill='white' stroke='#92400E'/><text x='240' y='98' text-anchor='middle' font-size='10' fill='#7C2D12'>activation rate, find rate</text><text x='240' y='112' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>under 30%? prompt is broken</text><rect x='360' y='80' width='190' height='40' rx='6' fill='white' stroke='#92400E'/><text x='455' y='98' text-anchor='middle' font-size='10' fill='#7C2D12'>action: fix discovery</text><text x='455' y='112' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>not the feature</text><rect x='30' y='130' width='90' height='40' rx='6' fill='#DCFCE7' stroke='#065F46'/><text x='75' y='148' text-anchor='middle' font-size='10' font-weight='bold' fill='#064E3B'>Day 7-14</text><text x='75' y='162' text-anchor='middle' font-size='9' fill='#064E3B'>value</text><rect x='130' y='130' width='220' height='40' rx='6' fill='white' stroke='#065F46'/><text x='240' y='148' text-anchor='middle' font-size='10' fill='#064E3B'>retention delta vs non-users</text><text x='240' y='162' text-anchor='middle' font-size='9' fill='#064E3B' font-style='italic'>negative? investigate first</text><rect x='360' y='130' width='190' height='40' rx='6' fill='white' stroke='#065F46'/><text x='455' y='148' text-anchor='middle' font-size='10' fill='#064E3B'>action: investigate or push</text><text x='455' y='162' text-anchor='middle' font-size='9' fill='#064E3B' font-style='italic'>don't promote a leak</text><rect x='30' y='180' width='90' height='40' rx='6' fill='#DBEAFE' stroke='#1E40AF'/><text x='75' y='198' text-anchor='middle' font-size='10' font-weight='bold' fill='#1E3A8A'>Day 14-30</text><text x='75' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A'>verdict</text><rect x='130' y='180' width='220' height='40' rx='6' fill='white' stroke='#1E40AF'/><text x='240' y='198' text-anchor='middle' font-size='10' fill='#1E3A8A'>outcome metric, themes in tickets</text><text x='240' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>did the PRD outcome move?</text><rect x='360' y='180' width='190' height='40' rx='6' fill='white' stroke='#1E40AF'/><text x='455' y='198' text-anchor='middle' font-size='10' fill='#1E3A8A'>action: double down / fix / kill</text><text x='455' y='212' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>and write 3 sentences</text><text x='290' y='258' text-anchor='middle' font-size='11' font-style='italic' fill='#1E3A8A'>Most teams skip rows 3 and 4. That's the entire problem.</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the right metric — 5 features, choose the metric."
         },
         {
           "type": "chatScenario",
@@ -2609,6 +2723,12 @@
             "good": "You got most of the operational rigor right but flinched on either metrics design or the day-90 decision. Re-read the section on **awareness → activation → outcome metrics** and the **ship/iterate/kill** decision tree.",
             "learn": "You shipped the feature the way Saral shipped Smart Reconcile — to applause, then silence. Re-read the lesson, especially the parts on **pre-mortems**, **named-owner follow-up loops**, and **the day-90 kill criterion**. The launch is the easy part. The next 89 days are the job."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/product-management.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Write the launch retrospective — rank lessons by their actionability."
         },
         {
           "type": "keyTakeaways",

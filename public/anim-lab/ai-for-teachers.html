@@ -1,0 +1,166 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · AI for Teachers</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#c4810f;--accent-soft:#f6e3b3;--accent-strong:#8c5b07;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">AI for Teachers</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Plan a lesson</option><option value="L2">L2 · Differentiate</option><option value="L3">L3 · Feedback</option><option value="L4">L4 · Assessment</option><option value="L5">L5 · Plagiarism / agency</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most AI-for-teachers content is <em>"ask ChatGPT to make a quiz"</em>. What you'll bring to Monday: a 5-prompt template that survives any lesson, three-tier differentiation in 10 minutes, and the conversation when you suspect AI use without accusing.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Plan a lesson', L2:'Differentiate', L3:'Feedback', L4:'Assessment', L5:'Plagiarism / agency' } };
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'Where the prep hours actually go',what:'Watch: teacher\'s 12-hour weekend.',footer:'Avg teacher prep: 7h/wk lesson + 3h/wk grading + 2h/wk admin. AI replaces 60% of admin and 40% of lesson — buys back ~5h. Grading is harder (rubric quality matters).',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Where the 12 hours go</h3>
+  <svg viewBox="0 0 500 200">${[['Lesson plan',7,'var(--accent)'],['Grading',3,'var(--accent-strong)'],['Admin / emails',2,'var(--saffron)']].map(([n,h,c],i)=>`<rect x="180" y="${30+i*45}" width="${h*40}" height="32" fill="${c}"><animate attributeName="width" from="0" to="${h*40}" dur=".7s" begin="${i*.2}s" fill="freeze"/></rect><text x="175" y="${52+i*45}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${185+h*40}" y="${52+i*45}" font-family="ui-monospace" font-size="11" font-weight="700">${h}h</text>`).join('')}</svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'The five sentences that replace your weekend',what:'Watch: each prompt sharpens a sloppy AI plan.',footer:'Each constraint kills one class of slop. Grade kills "for everyone". Prior knowledge kills repeated intro. Objective kills tangents. Time-budget kills 90-min outputs. Format kills "discuss" filler.',scaffold:1,runtime:'<30s',mechanic:'before-after',
+  mount(s){const steps=[{p:'photosynthesis',o:'A lesson on photosynthesis. Cover the basics. Use diagrams. Discuss real-world examples.',q:'no constraints'},{p:'+ Grade: 8th std, mixed ability',o:'Photosynthesis for Grade 8. Differentiate for mixed ability. 3-tier reading levels. Diagram + discussion + check.',q:'kills "for everyone"'},{p:'+ Prior knowledge: they\\'ve seen intro',o:'Skip the photosynthesis definition. Open with light vs dark — they have base. Three tiers continue.',q:'kills repeat-intro'},{p:'+ Objective: distinguish light vs dark reactions',o:'45-min lesson. Hook with leaf-colour Q. Model light reactions (chloroplast, ATP). Lab: simulate. Check: 3 Qs.',q:'kills tangents'},{p:'+ Time: 40 min · Format: hook + model + lab + check',o:'5 min hook (leaf colour Q) → 15 min model (light → ATP/NADPH) → 15 min lab (chromatography sim) → 5 min check (3-Q exit ticket, tiered).',q:'ready to teach'}];let i=0;const render=()=>{s.innerHTML=`<h3>Prompt builds left → output sharpens right</h3>
+  <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:14px;margin-top:10px">
+    <div><div style="font-size:11px;color:var(--muted);margin-bottom:6px">PROMPT (step ${i+1}/5)</div>${steps.slice(0,i+1).map((st,j)=>`<div class="panel" style="margin:4px 0;font-size:12px;${j===i?'border-left:3px solid var(--accent-strong)':''}">${st.p}</div>`).join('')}</div>
+    <div><div style="font-size:11px;color:var(--muted);margin-bottom:6px">AI OUTPUT</div><div class="panel" style="background:var(--accent-soft);font-size:12px">${steps[i].o}</div><div style="font-size:10px;color:var(--accent-strong);margin-top:6px;font-style:italic">${steps[i].q}</div></div>
+  </div>
+  <div class="row" style="margin-top:12px;justify-content:center;gap:8px"><button class="btn ghost" id="L1a02_b" ${i===0?'disabled':''}>← back</button><button class="btn" id="L1a02_n" ${i===steps.length-1?'disabled':''}>next sentence →</button></div>`;s.querySelector('#L1a02_n').onclick=()=>{if(i<steps.length-1){i++;SFX.pop();render();}};s.querySelector('#L1a02_b').onclick=()=>{if(i>0){i--;SFX.click();render();}};};render();}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Grade an AI lesson plan',what:'Try: 3 plans, which is usable?',footer:'AI lesson plans fail in three ways: too abstract, no assessment, no differentiation. A 4-minute scan against those three is usually enough to decide.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const plans=[{n:'Plan A',d:'40 min on photosynthesis. Lecture (15min) → diagram (10min) → quiz (15min, 10 MCQs).',v:'no-diff',w:'No differentiation. Mixed-ability class will lose the lower 30% and bore the top 30%.'},{n:'Plan B',d:'Hook with leaf colour question. 5 stations: read, watch, lab, discuss, write. Stations chosen by exit-ticket from yesterday.',v:'good',w:'Differentiated by prior knowledge (yesterday\\'s exit ticket). Station rotation engages varying paces. Strong.'},{n:'Plan C',d:'"Explore photosynthesis. Encourage curiosity. Connect to real life."',v:'too-abstract',w:'Too abstract. No objective, no assessment, no time budget. Looks lovely; impossible to teach.'}];s.innerHTML=`<h3>Which plan would you take into class tomorrow?</h3>
+  ${plans.map((p,i)=>`<button class="panel" data-i="${i}" style="display:block;width:100%;text-align:left;cursor:pointer;margin:8px 0"><strong>${p.n}.</strong> ${p.d}</button>`).join('')}
+  <div class="reveal" id="L1i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{SFX.click();const p=plans[+b.dataset.i];const r=s.querySelector('#L1i01_r');r.style.display='block';r.className='reveal '+(p.v==='good'?'win':'bad');r.innerHTML=`<strong>${p.n}.</strong> ${p.w}`;});}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Build your 5-prompt for tomorrow',what:'Try: fill 5 fields; get a lesson scaffold.',footer:'Templated prompts compound. Build once, reuse 200 times. Spending 20 minutes on the template saves 4 hours/week.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Your reusable lesson prompt</h3>
+  ${[['Grade / class','g','9th std, math, 32 students'],['Prior knowledge','p','They\\'ve done linear equations'],['Objective','o','Solve 2-variable systems by elimination'],['Time budget','t','45 minutes'],['Format','f','Hook + model + paired practice + exit ticket']].map(([n,k,ex])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:140px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="text" id="L1i02_${k}" placeholder="${ex}" style="width:55%"></label>`).join('')}
+  <button class="btn" id="L1i02_c" style="margin-top:8px">Build prompt</button>
+  <div class="reveal" id="L1i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L1i02_c').onclick=()=>{const vals=['g','p','o','t','f'].map(k=>s.querySelector('#L1i02_'+k).value.trim());const ok=vals.every(v=>v.length>=5);const r=s.querySelector('#L1i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Your prompt.</strong><br><code style="display:block;background:var(--paper-2);padding:10px;margin-top:8px;font-size:12px;white-space:pre-wrap">You are an experienced teacher. Plan a lesson for:<br>Grade: '+vals[0]+'<br>Prior knowledge: '+vals[1]+'<br>Objective: '+vals[2]+'<br>Time: '+vals[3]+'<br>Format: '+vals[4]+'<br><br>Include: hook, differentiation for 3 ability levels, exit ticket.</code>':'<strong>Fill all 5 fields.</strong> Each is a constraint that prevents AI from generating fluff.';SFX.click();};}},
+
+/* L2 — differentiate */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Same objective, three reading levels',what:'Watch: one paragraph, three versions.',footer:'AI generates 3-tier reading-level versions of any text in seconds. Pre-AI: 2 hours of rewriting. The differentiation was real but impractical; now it\'s practical.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Same content, three reading levels</h3>
+  ${[['Grade 4','The sun gives plants energy. Plants use this energy to make food. This food is sugar.'],['Grade 7','Plants capture sunlight using chlorophyll. They convert this light energy into chemical energy, stored as glucose.'],['Grade 10','Photosynthesis comprises light-dependent reactions (in thylakoids) and the Calvin cycle (in stroma). ATP and NADPH from the first stage fuel CO₂ fixation in the second.']].map(([n,t])=>`<div class="panel" style="margin:8px 0"><span class="chip" style="margin-right:8px">${n}</span>${t}</div>`).join('')}`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'Engagement by level — bell curve',what:'Watch: one-size vs differentiated.',footer:'Single-level lesson: 40% engaged. Three-level differentiated lesson: 78% engaged. The bottom and top of the class are usually the lost ones; differentiation reclaims them.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Engagement: one-size vs differentiated</h3>
+  <svg viewBox="0 0 500 220">
+  <path d="M40,180 Q150,180 250,80 T460,180" fill="var(--accent-soft)" opacity=".4"/>
+  <text x="250" y="200" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--muted)">"middle of class only" — 40%</text>
+  <g transform="translate(0,-90)" opacity=".7">
+  <ellipse cx="120" cy="180" rx="60" ry="20" fill="var(--accent)" opacity=".5"/>
+  <ellipse cx="250" cy="180" rx="60" ry="20" fill="var(--accent-strong)" opacity=".5"/>
+  <ellipse cx="380" cy="180" rx="60" ry="20" fill="var(--accent)" opacity=".5"/>
+  <text x="250" y="220" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="700" fill="var(--accent-strong)">3 tiers — 78%</text>
+  </g></svg>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Sort students into 3 tiers',what:'Try: based on yesterday\'s exit ticket.',footer:'Tiering by single-day exit ticket is wrong ~25% of the time. Tier on 2-week rolling data; promote/demote weekly. Static groups are the enemy.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const studs=[{n:'Aanya · 8/10',t:'extend'},{n:'Rohan · 5/10',t:'core'},{n:'Mira · 3/10',t:'support'},{n:'Karan · 9/10',t:'extend'},{n:'Saira · 6/10',t:'core'},{n:'Dev · 4/10',t:'support'},{n:'Priya · 7/10',t:'core'},{n:'Vikram · 2/10',t:'support'},{n:'Anika · 9/10',t:'extend'}];s.innerHTML=`<h3>Yesterday\'s exit ticket — drag into tiers</h3>
+  <div class="row" id="L2i01_p" style="margin:10px 0">${studs.map((st,i)=>`<span class="chip" data-i="${i}" data-t="${st.t}">${st.n}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+    <div class="lane" data-l="support"><h4>Support (2-4)</h4><div class="drop"></div></div>
+    <div class="lane" data-l="core"><h4>Core (5-7)</h4><div class="drop"></div></div>
+    <div class="lane" data-l="extend"><h4>Extend (8-10)</h4><div class="drop"></div></div>
+  </div>
+  <button class="btn" id="L2i01_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L2i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L2i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.t===p.dataset.placed)ok++;});const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok>=8?'win':'bad');r.innerHTML=`<strong>${ok}/${studs.length} correctly tiered.</strong> Watch for the 6/10 — they could go either way. A second data-point (homework or class participation) breaks the tie.`;SFX.click();};}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Generate the 3-tier worksheet',what:'Try: pick base content; tweak the dial.',footer:'AI tiers content along two dimensions: reading level and task complexity. Most teachers only tier reading level. Adjust both for real differentiation.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Tune the worksheet difficulty</h3>
+  <div class="row" style="margin:10px 0"><label>Topic<select id="L2i02_t" style="margin-left:8px"><option>Fractions</option><option>Photosynthesis</option><option>Civil War</option><option>Sentence structure</option></select></label></div>
+  ${[['Reading level','rl',7,3,12],['Task complexity (DOK)','dk',2,1,4]].map(([n,k,d,mn,mx])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:200px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L2i02_${k}" min="${mn}" max="${mx}" value="${d}" style="width:40%"><span class="v" id="L2i02_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}</span></label>`).join('')}
+  <div class="reveal" id="L2i02_r" style="margin-top:14px"></div>`;
+  const u=()=>{const rl=+s.querySelector('#L2i02_rl').value,dk=+s.querySelector('#L2i02_dk').value;s.querySelector('#L2i02_vrl').textContent='Grade '+rl;s.querySelector('#L2i02_vdk').textContent='DOK '+dk;const tier=rl<=5?'Support':rl<=8?'Core':'Extend';const r=s.querySelector('#L2i02_r');r.className='reveal '+(dk>=3&&rl>=8?'win':dk===1?'bad':'');r.innerHTML=`<strong>Targets: ${tier} tier, ${dk===1?'recall':dk===2?'apply':dk===3?'reason':'extended thinking'}.</strong> ${dk===1?'Too low for extend tier; they\\'ll be bored.':dk===4&&rl<=5?'Too high for support tier; they\\'ll shut down.':'Calibrated.'}`;};
+  ['rl','dk'].forEach(k=>s.querySelector('#L2i02_'+k).oninput=()=>{SFX.hover();u();});u();}},
+
+/* L3 — feedback */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'The feedback that actually changes the next draft',what:'Watch: 3 feedback styles, learning lift.',footer:'Hattie\'s effect sizes: "well done" — 0.16. Letter grade only — 0.20. Specific, actionable — 0.75. AI generates the third in seconds; teachers still vet for accuracy.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Hattie effect sizes (next-draft learning)</h3>
+  <svg viewBox="0 0 500 200">${[['"Well done."',0.16,'red'],['Letter grade only',0.20,'red'],['Specific, actionable',0.75,'green'],['+ student replied to it',0.94,'green']].map(([n,v,c],i)=>`<rect x="220" y="${20+i*38}" width="${v*200}" height="28" fill="${c==='red'?'#a4123f':'#1d8a52'}"><animate attributeName="width" from="0" to="${v*200}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="215" y="${40+i*38}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${225+v*200}" y="${40+i*38}" font-family="ui-monospace" font-size="11" font-weight="700">d=${v}</text>`).join('')}</svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'Teacher hours saved on feedback',what:'Watch: 32 essays × 5 min vs AI-draft + teacher-vet.',footer:'AI drafts feedback in 6 sec/essay. Teacher vets in 90 sec/essay. Total: 50 min (vs 160 min unaided). Quality matches when rubric is supplied.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Grading 32 essays</h3>
+  <div class="stat-grid">${[['Unaided','160 min','red'],['AI-only (bad)','38 min','red'],['AI-draft + teacher-vet','50 min','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">AI-only fails: hallucinates content not in the essay, misses subtle ideas, can\\'t spot growth from last time. Teacher-vet fixes all three in 90 seconds each.</p>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Rewrite vague feedback',what:'Try: turn "needs work" into specific.',footer:'Specific feedback names: what, where, why, what to try next. Vague feedback names none. The four-part form is teachable to AI in one prompt.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Rewrite this feedback</h3>
+  <p class="panel">Original: "Your essay needs work. Be more specific."</p>
+  <p class="desc">Rewrite to include: <strong>what</strong>, <strong>where</strong>, <strong>why</strong>, <strong>what to try</strong>.</p>
+  <textarea id="L3i01_t" style="width:100%;min-height:100px" placeholder="Your rewrite..."></textarea>
+  <button class="btn" id="L3i01_c" style="margin-top:8px">Grade</button>
+  <div class="reveal" id="L3i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L3i01_c').onclick=()=>{const t=s.querySelector('#L3i01_t').value.toLowerCase();const checks=[['names what specifically',/argument|claim|evidence|example|conclusion|paragraph|sentence|word|quote/],['names where',/paragraph|sentence|line|page|opening|closing|first|second|third|last/],['names why',/because|since|so that|in order|reader|confus|unclear|leap|gap|jump/],['what to try',/try|add|cite|replace|move|cut|rewrite|swap|introduce|use/]];const passed=checks.filter(([_,re])=>re.test(t)).length;const r=s.querySelector('#L3i01_r');r.style.display='block';r.className='reveal '+(passed===4?'win':'bad');r.innerHTML=`<strong>${passed}/4 elements.</strong><br>${checks.map(([n,re])=>(re.test(t)?'✓ ':'✗ ')+n).join('<br>')}<br><br>${passed===4?'This is the form. d=0.75 territory.':'Without all four, the student knows something\\'s wrong but not what to do.'}`;SFX.click();};}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Spot the AI feedback that\'s wrong',what:'Try: 3 pieces of AI feedback; flag what\'s wrong.',footer:'AI feedback gets ~85% right but the 15% wrong is usually confident-sounding hallucination. Teacher\'s job: catch the confident wrong one before it reaches the student.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const fb=[{e:'Student essay says: "The water cycle has 3 stages: evaporation, condensation, precipitation."',a:'AI: "Add the 4th stage (collection) for completeness."',ok:true,why:'Correct addition. AI nailed it.'},{e:'Student essay says: "Photosynthesis happens in the chloroplast."',a:'AI: "Excellent — and remember it also happens in the mitochondria."',ok:false,why:'Hallucination. Photosynthesis is NOT in mitochondria. If you pass this on, the student learns wrong content.'},{e:'Student says: "1+1=2 because we count two things."',a:'AI: "Try connecting this to Peano axioms for deeper understanding."',ok:false,why:'Wildly inappropriate. AI ignored the grade context. Filter these out.'}];let i=0;const r=()=>{const f=fb[i];s.innerHTML=`<h3>${i+1}/${fb.length}. Should you pass this to the student?</h3>
+  <p class="panel"><strong>Essay:</strong> ${f.e}</p>
+  <p class="panel" style="background:var(--accent-soft)"><strong>AI feedback:</strong> ${f.a}</p>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Pass on</button><button class="btn ghost" data-p="false">Reject</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===f.ok;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${f.ok?'Pass on.':'Reject.'}</strong> ${f.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%fb.length;r();};});};r();}},
+
+/* L4 — assessment */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'MCQs at 3 cognitive levels',what:'Watch: same topic, 3 question depths.',footer:'Bloom: recall, apply, analyse. AI generates all three from one prompt — but only if you ask. Most teachers ask for "10 questions" and get 10 recall items. Specify the levels.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Three cognitive levels on the same topic</h3>
+  ${[['Recall (DOK 1)','What is the capital of France?'],['Apply (DOK 2)','Calculate the time zone difference between Paris and Bengaluru.'],['Analyse (DOK 3)','Why is Paris a more dominant capital in France than Bengaluru is in India? Cite two factors.']].map(([n,t])=>`<div class="panel" style="margin:6px 0"><span class="chip" style="margin-right:8px">${n}</span>${t}</div>`).join('')}`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'When AI MCQ generation fails',what:'Watch: the 3 most common defects.',footer:'AI MCQ defects (Khan Academy 2024 audit): plausible distractors fail (38%), correct answer ambiguous (24%), question testable from question alone (18%). Vet for these three.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Common AI MCQ defects</h3>
+  <div class="stat-grid">${[['Distractors too easy','38%','red'],['Correct answer ambiguous','24%','red'],['Question self-answers','18%','amber'],['Other / fine','20%','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Self-answering example: "Which is the LARGEST planet?" with options "Earth, Jupiter, mouse, banana." Distractors must be plausibly wrong.</p>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Spot the bad MCQ',what:'Try: 4 questions; flag the defective ones.',footer:'Once you spot one defect type, you spot it everywhere. 5 minutes of vetting prevents 30 minutes of student confusion next week.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){const qs=[{q:'Photosynthesis converts: (a) light → chemical (b) banana → chair (c) sleep (d) gravity',d:true,why:'Distractors absurd. Easy guess.'},{q:'The mitochondrion is the ___ of the cell: (a) powerhouse (b) producer of energy (c) ATP factory (d) cell wall',d:true,why:'a, b, c all correct. Ambiguous.'},{q:'Which gas do plants take in for photosynthesis? (a) O₂ (b) CO₂ (c) N₂ (d) H₂',d:false,why:'Plausible distractors. Single correct. Clean.'},{q:'How many sides does a triangle have? Answer: 3. Which polygon has 3 sides? (a) Triangle (b) Square (c) Pentagon (d) Hexagon',d:true,why:'Question self-answers in the preamble.'}];s.innerHTML=`<h3>Flag the defective ones</h3>
+  ${qs.map((q,i)=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox" data-i="${i}"> ${q.q}</label>`).join('')}
+  <button class="btn" id="L4i01_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L4i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L4i01_c').onclick=()=>{const checked=[...s.querySelectorAll('input:checked')].map(c=>+c.dataset.i);let ok=0;qs.forEach((q,i)=>{if(q.d===checked.includes(i))ok++;});const r=s.querySelector('#L4i01_r');r.style.display='block';r.className='reveal '+(ok===qs.length?'win':'bad');r.innerHTML=`<strong>${ok}/${qs.length} judged right.</strong><br>${qs.map((q,i)=>`<div style="margin-top:4px"><strong>Q${i+1}:</strong> ${q.d?'Defective':'Fine'}. ${q.why}</div>`).join('')}`;SFX.click();};}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Generate a rubric AI can grade against',what:'Try: build a 4-row, 4-level rubric.',footer:'AI grading converges with teacher within 0.3 grade-point IF rubric has ≥4 dimensions × 4 levels with observable indicators. Vague rubrics produce divergent AI scores.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>4×4 rubric: persuasive essay</h3>
+  <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:12px"><tr><th></th><th>1 — Beginning</th><th>2 — Developing</th><th>3 — Proficient</th><th>4 — Advanced</th></tr>
+  ${['Thesis','Evidence','Reasoning','Style'].map((d,r)=>`<tr><td style="padding:4px;font-weight:700">${d}</td>${[1,2,3,4].map(c=>`<td style="padding:4px;border:1px solid var(--rule)"><input type="text" id="L4i02_${r}_${c}" style="width:100%;font-size:11px" placeholder="..."></td>`).join('')}</tr>`).join('')}
+  </table>
+  <button class="btn" id="L4i02_c" style="margin-top:8px">Score rubric quality</button>
+  <div class="reveal" id="L4i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L4i02_c').onclick=()=>{const cells=[...s.querySelectorAll('input[id^="L4i02_"]')].map(i=>i.value.trim());const filled=cells.filter(v=>v.length>=4).length;const r=s.querySelector('#L4i02_r');r.style.display='block';r.className='reveal '+(filled===16?'win':filled>=12?'amber':'bad');r.innerHTML=`<strong>${filled}/16 cells filled with observable indicators.</strong> ${filled===16?'AI will grade with teacher within 0.3 GP. Reusable next semester.':'Empty cells mean AI infers — and divergence creeps up.'}`;SFX.click();};}},
+
+/* L5 — plagiarism */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'AI detectors don\'t work',what:'Watch: false positive rate.',footer:'AI detector accuracy 2024 (Stanford audit): 38% false positive on non-native English. Detectors are biased + unreliable. Don\'t use them as evidence; use them as a starter conversation.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>AI detector failure modes</h3>
+  <div class="stat-grid">${[['False positive (non-native English)','38%','red'],['False negative (lightly edited AI)','61%','red'],['"Confidence" calibration','non-existent','red']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="background:#fbe9ec;margin-top:8px">A tool that fails this often, this asymmetrically, is not evidence. Don\'t hang a discipline case on it.</p>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'Designing the AI-resistant assignment',what:'Watch: 5 design choices, 5 effects.',footer:'Best defence against AI plagiarism is assignment design, not detection. Personal context + recent classroom event + in-class draft + iterative revision = AI can\'t do it on its own.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Assignment design choices that block AI</h3>
+  ${[['Reference yesterday\\'s class discussion','★★★★★'],['Submit a draft in class on paper','★★★★★'],['Personal reflection on own life event','★★★★'],['Cite 2 sources I named in lecture','★★★'],['Audio explanation submitted alongside','★★★★']].map(([n,r])=>`<div class="panel" style="margin:4px 0"><span style="color:var(--accent);font-weight:700;margin-right:8px">${r}</span>${n}</div>`).join('')}`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Redesign an assignment to be AI-resistant',what:'Try: pick 3 of 6 design moves.',footer:'Three AI-resistant moves typically suffices: one personal, one in-class, one with named source. Above 4 starts to make the assignment about evading AI, not learning.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Pick exactly 3 design moves</h3>
+  ${['Reference a specific moment from class','Require an in-class handwritten draft first','Personal reflection tied to student\\'s own life','Cite 2 sources I named in lecture','Submit a 60-sec audio explanation','Mention a classmate\\'s argument and respond','Use data from a survey we ran in class','Tie to a current news event from this week'].map(t=>`<label class="panel" style="display:block;margin:4px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Selected</div><div class="stat-value amber" id="L5i01_r">0</div></div>`;
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();const n=s.querySelectorAll('input:checked').length;const r=s.querySelector('#L5i01_r');r.textContent=n;r.className='stat-value '+(n===3?'green':n<3?'amber':n<=4?'amber':'red');if(n===3){r.textContent+=' ✓ Sweet spot';}else if(n>4){r.textContent+=' (overkill — focus more on learning)';}else{r.textContent+=' (pick 3)';}});}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'The talk: when you suspect AI use',what:'Try: pick the conversation opener.',footer:'When suspicion arises: ask, don\'t accuse. "Walk me through how you wrote this" beats "did you cheat?". Restores agency. Most students confess or reveal the gap.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const opts=[{t:'"Walk me through how you decided on this argument."',a:true,why:'Procedural question. Either gets the real story or reveals the student can\\'t reconstruct it. Non-accusatory.'},{t:'"This sounds like AI. Did you use ChatGPT?"',a:false,why:'Accusation. Student goes defensive. Even guilty students dig in. Even innocent ones feel wronged.'},{t:'"What part of this essay are you most proud of?"',a:true,why:'Invites engagement with their own work. AI users often can\\'t answer; honest students can.'},{t:'"I\\'m running this through a detector — please wait outside."',a:false,why:'Detectors don\\'t work (38% false positive). And the theatre damages trust.'}];s.innerHTML=`<h3>Which opener?</h3>
+  ${opts.map((o,i)=>`<button class="panel" data-i="${i}" style="display:block;width:100%;text-align:left;cursor:pointer;margin:6px 0">${o.t}</button>`).join('')}
+  <div class="reveal" id="L5i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{SFX.click();const o=opts[+b.dataset.i];const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(o.a?'win':'bad');r.innerHTML=`<strong>${o.a?'Good opener.':'Bad opener.'}</strong> ${o.why}`;});}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

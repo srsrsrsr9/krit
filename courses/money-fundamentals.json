@@ -150,6 +150,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Salary up → savings flat — Income doubles. Savings rate doesn't."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Lifestyle inflation, named and measured"
@@ -239,6 +245,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The \"I deserve it\" trap — Each raise → an upgrade locks in higher expenses."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 50-30-20 rule (and when to break it)"
@@ -253,6 +265,12 @@
           "caption": "Three legitimate splits. The 50-30-20 is a default, not a law. Adjust based on your actual rent + your actual savings target.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' font-size='10' fill='#FFFFFF' font-weight='bold' text-anchor='middle'><g transform='translate(40 40)'><text x='240' y='-8' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Default — 50/30/20</text><rect x='0' y='0' width='240' height='30' fill='#3B82F6'/><text x='120' y='20'>50% needs</text><rect x='240' y='0' width='144' height='30' fill='#60A5FA'/><text x='312' y='20'>30% wants</text><rect x='384' y='0' width='96' height='30' fill='#1E40AF'/><text x='432' y='20'>20% save</text></g><g transform='translate(40 90)'><text x='240' y='-8' text-anchor='middle' fill='#9A3412' font-weight='bold'>High-cost city — 60/25/15</text><rect x='0' y='0' width='288' height='30' fill='#EA580C'/><text x='144' y='20'>60% needs</text><rect x='288' y='0' width='120' height='30' fill='#FB923C'/><text x='348' y='20'>25% wants</text><rect x='408' y='0' width='72' height='30' fill='#9A3412'/><text x='444' y='20'>15% save</text></g><g transform='translate(40 140)'><text x='240' y='-8' text-anchor='middle' fill='#065F46' font-weight='bold'>Aggressive saver — 30/20/50</text><rect x='0' y='0' width='144' height='30' fill='#10B981'/><text x='72' y='20'>30%</text><rect x='144' y='0' width='96' height='30' fill='#34D399'/><text x='192' y='20'>20%</text><rect x='240' y='0' width='240' height='30' fill='#065F46'/><text x='360' y='20'>50% save + invest</text></g></g><text x='280' y='220' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A' font-style='italic'>break the rule deliberately, not accidentally</text></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Upgrade simulator — Pick upgrades; see net savings collapse."
         },
         {
           "type": "chatScenario",
@@ -518,6 +536,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Pre-commit your raise — Decide before the raise lands."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Wealth = the GAP between income and spending, compounded over time — not income itself",
@@ -611,6 +635,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Automate, don't willpower — A standing instruction = a habit on rails."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — How big, where parked"
@@ -700,6 +730,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Emergency fund — 3 months → 6 — A buffer that lets you make hard choices."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The risk-taking unlock"
@@ -707,6 +743,12 @@
         {
           "type": "markdown",
           "md": "Here's the non-obvious part. Once your emergency fund exists, **every downstream financial decision becomes more rational**. Job changes, salary negotiations, asking for time off, taking equity instead of cash, switching fields — all of these become possible without 'I have to make money in 60 days or I default on rent' pressure.\n\nThe buffer is not just protection. It's optionality. Most career upside in your 20s and 30s comes from optionality you can only afford if you can survive 6 months without an income.\n\nThis is why the move is high-leverage despite the boring math: the *return on freedom* dwarfs the *return on rate*."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Your emergency fund target — Plug your numbers; see the target."
         },
         {
           "type": "chatScenario",
@@ -999,6 +1041,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Bucket your money — Drag rupees into emergency, invest, spend, splurge."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Emergency fund = 6 months of essential expenses, in a liquid fund or sweep-in FD",
@@ -1090,6 +1138,12 @@
               "md": "A mango tree planted in 1985 produces nothing for 5 years, a few mangoes by year 7, and feeds three generations by year 30. The first decade looks like waste; the third decade is the entire point. Compounding works the same way."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Compounding visualised — 10 years isn't magic; 30 is."
         },
         {
           "type": "heading",
@@ -1187,6 +1241,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · 5 years late = 60% less — Same money. Different start date. Different ending."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The leakage cascade (small fees, big damage)"
@@ -1201,6 +1261,12 @@
           "caption": "1.4% annual fee differential. Over 30 years on a ₹1 crore portfolio: ~₹95 lakh in leakage. The brochure said 'small fee.'",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FEF2F2'/><g transform='translate(50 30)'><line x1='0' y1='200' x2='460' y2='200' stroke='#7F1D1D' stroke-width='2'/><line x1='0' y1='0' x2='0' y2='200' stroke='#7F1D1D' stroke-width='2'/><g font-family='sans-serif' font-size='10' fill='#7F1D1D'><text x='-5' y='5' text-anchor='end'>₹3Cr</text><text x='-5' y='200' text-anchor='end'>₹1Cr</text><text x='5' y='220'>year 0</text><text x='150' y='220'>10</text><text x='300' y='220'>20</text><text x='450' y='220'>30</text></g><path d='M 0 200 Q 80 175 150 130 Q 230 80 320 35 Q 400 10 460 0' stroke='#10B981' stroke-width='4' fill='none'/><text x='460' y='-5' font-family='monospace' font-size='10' fill='#065F46' font-weight='bold' text-anchor='end'>₹2.95Cr (0.2% fee)</text><path d='M 0 200 Q 80 180 150 145 Q 230 105 320 70 Q 400 50 460 40' stroke='#EF4444' stroke-width='3' fill='none' stroke-dasharray='4 3'/><text x='460' y='55' font-family='monospace' font-size='10' fill='#7F1D1D' font-weight='bold' text-anchor='end'>₹2.0Cr (1.6% fee)</text><path d='M 460 0 L 460 40' stroke='#9A3412' stroke-width='3' marker-start='url(#md)' marker-end='url(#md)'/><text x='505' y='25' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>₹95L gap</text></g><defs><marker id='md' viewBox='0 0 10 10' refX='5' refY='5' markerWidth='5' markerHeight='5' orient='auto-start-reverse'><path d='M0 0 L10 5 L0 10 z' fill='#9A3412'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Compounding calculator — Sliders for amount, rate, years."
         },
         {
           "type": "chatScenario",
@@ -1466,6 +1532,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Years to crore — How long at ₹X/month to hit ₹1Cr?"
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Compounding is a hockey stick — the last decade does most of the work",
@@ -1559,6 +1631,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · SIP averaging — You buy more when markets are down. By design."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Pick passive over active (the math)"
@@ -1647,6 +1725,12 @@
               "md": "Direct plans of every Indian mutual fund are ~0.85% cheaper than regular plans. Same fund, same portfolio, just no advisor commission. Switching takes 5 minutes online. Saves ₹85,000/year on a ₹1 crore portfolio. Forever."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Active vs index — 70% of active funds lose to the index over 10 years."
         },
         {
           "type": "heading",
@@ -1766,6 +1850,12 @@
           "date": "April 2025",
           "story": "From April 2024 to March 2025 a 34-year-old data engineer ran a clean experiment with **₹5L of his own money**. Two funds, both broadly large-cap Indian equity, very similar mandates, very different fee structures:\n\n- **Fund A — UTI Nifty 50 Index Fund (Direct, Growth):** TER **0.18%**\n- **Fund B — A well-known active large-cap fund (Direct, Growth):** TER **1.74%**\n\nHe put **₹2.5L in each** on **April 2, 2024** and didn't touch either for 12 months.\n\nResults on **March 31, 2025**:\n\n- Fund A (index): closing value **₹2.81L** → **+12.4%** for the year\n- Fund B (active): closing value **₹2.74L** → **+9.6%** for the year\n- Outperformance of the index over the active fund: **2.8 percentage points**\n\nOf that 2.8% gap, roughly **1.56 percentage points** is just the **TER difference** (1.74% − 0.18%). The other ~1.24% is the active manager actually underperforming the benchmark this year — which is *not unusual*. SPIVA India 2024 reports that **~63% of active large-cap funds underperformed the Nifty 50 over 5 years**.\n\nForward-projected on a **₹50K/month SIP for 25 years**: that 1.56% TER difference compounds to roughly **₹38L of foregone wealth** — paid as fees to the AMC, fees that bought him slightly worse performance.\n\nHe sold Fund B in April 2025. He did not tell his RM why.",
           "takeaway": "In Indian retail investing, **fees are the only certainty and outperformance is a coin flip.** The cheap, boring, index option is the answer to a question most people don't realise they're being asked."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick your fund — Active or index for which goals?"
         },
         {
           "type": "bossBattle",
@@ -1906,6 +1996,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Fund-expense impact — Slider for expense ratio; see 30-year cost."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Separate insurance from investment — bundles like ULIPs and endowments do both jobs poorly",
@@ -1997,6 +2093,12 @@
               "md": "Indian mothers have run this system for generations: monthly inflow, monthly outflow, savings carried forward. Pen and paper. Updated weekly. The 22-widget Notion app you built is a less reliable version of what's been working in the kitchen for 30 years. Copy the system; modernize the tools optional."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · 14 days of expenses, exposed — A typical urban Indian month, charted."
         },
         {
           "type": "heading",
@@ -2149,9 +2251,21 @@
           "md": "Saturday night. Excited. You build a 22-widget Notion dashboard with mood emoji column, automated graphs, savings-rate sparklines, currency conversion, color-coded categories, custom Hindi labels. Bahut santosh.\n\nMonday: glanced once.\n\nWednesday: 'I'll update it on the weekend.' Didn't.\n\nFriday: forgot the link.\n\nMonth later: dashboard is dead. The 3-number plain-text note you almost dismissed would still be running.\n\n**Three numbers. Plain text. Sunday 9 pm. Anything fancier is procrastination wearing the costume of productivity.**"
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Estimate vs actual — Guess your top category; reveal a likely answer."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Run a 14-day single-variable experiment"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/money-fundamentals.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Cut one subscription — See annual cost of a single recurring ₹."
         },
         {
           "type": "markdown",

@@ -1,0 +1,257 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · SQL Foundations</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#14554a;--accent-soft:#cfe3df;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">SQL Foundations</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option>
+      <option value="L1">L1 · Why SQL</option><option value="L2">L2 · Filtering</option><option value="L3">L3 · JOINs</option><option value="L4">L4 · GROUP BY</option><option value="L5">L5 · Subqueries</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Twenty drop-in artifacts for <em>SQL Foundations</em>. Every artifact shows the query + the result, side by side, so the relationship between syntax and data stays visible.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Why SQL', L2:'Filtering', L3:'JOINs', L4:'GROUP BY', L5:'Subqueries' } };
+const tbl = (rows, hi) => `<table style="border-collapse:collapse;font-family:ui-monospace,monospace;font-size:12.5px;width:100%">
+  <thead><tr>${Object.keys(rows[0]).map(k=>`<th style="text-align:left;border-bottom:2px solid var(--ink);padding:4px 8px">${k}</th>`).join('')}</tr></thead>
+  <tbody>${rows.map((r,i)=>`<tr style="${hi&&hi.includes(i)?'background:var(--accent-soft);':''}">${Object.values(r).map(v=>`<td style="border-bottom:1px solid var(--rule-soft);padding:4px 8px">${v}</td>`).join('')}</tr>`).join('')}</tbody>
+</table>`;
+const ART = [
+  /* L1 · Why SQL */
+  { id:'L1-a01', type:'anim', lesson:'L1', title:'Spreadsheet → table → query', what:'Same data, three views.',
+    footer:'The same 5 rows shown as a spreadsheet (cells), as a relational table (rows + types), and as a SQL query result (filtered/sorted).',
+    mount(s){const rows=[{id:1,name:'Asha',city:'Bangalore'},{id:2,name:'Bharat',city:'Mumbai'},{id:3,name:'Charvi',city:'Bangalore'},{id:4,name:'Dev',city:'Delhi'},{id:5,name:'Eshaan',city:'Bangalore'}];
+    s.innerHTML=`<h3>The same 5 rows, three views</h3>
+    <p class="desc"><strong>Spreadsheet:</strong></p>${tbl(rows)}
+    <p class="desc" style="margin-top:14px"><strong>Query:</strong> <code>SELECT name, city FROM users WHERE city = 'Bangalore'</code></p>
+    ${tbl(rows.filter(r=>r.city==='Bangalore').map(({id,...rest})=>rest))}`;} },
+
+  { id:'L1-a02', type:'anim', lesson:'L1', title:'How a query runs', what:'FROM → WHERE → GROUP → SELECT → ORDER, in order.',
+    footer:'SQL\'s logical execution order is NOT the order you write it. This animation traces it.',
+    mount(s){s.innerHTML=`<h3>The logical order</h3>
+    <p class="desc">You write <code>SELECT ... FROM ... WHERE ... GROUP BY ... ORDER BY</code>. The engine runs them in a different order.</p>
+    <div id="L1a02_steps" style="display:flex;flex-direction:column;gap:6px">
+      ${[['1. FROM','grab the table'],['2. WHERE','keep matching rows'],['3. GROUP BY','bucket the rows'],['4. SELECT','pick columns/aggregates'],['5. ORDER BY','sort'],['6. LIMIT','top-N']].map(([n,d])=>`<div class="panel">${n} — <span style="color:var(--muted)">${d}</span></div>`).join('')}
+    </div>` ;} },
+
+  { id:'L1-i01', type:'inter', lesson:'L1', title:'Spreadsheet vs SQL', what:'For the same task, which tool is right?',
+    footer:'5 scenarios; pick the right tool; explanation per answer.',
+    mount(s){const qs=[
+      {q:'500 rows, sum a column once',a:'sheet',why:'Excel handles this with one formula. SQL is overkill for one-off small data.'},
+      {q:'2M rows, group by user',a:'sql',why:'Excel chokes at ~1M; SQL handles this in seconds with GROUP BY.'},
+      {q:'Reconcile two tables on a key',a:'sql',why:'JOIN is exactly this. VLOOKUP works but breaks at scale.'},
+      {q:'Quick visualization for a one-pager',a:'sheet',why:'Sheets do charts natively. SQL queries + a viz tool is overkill here.'},
+    ];let i=0;
+    const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+      <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="sheet">Spreadsheet</button><button class="btn ghost" data-p="sql">SQL</button></div>
+      <div class="reveal" id="r" style="display:none"></div>`;
+      s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'bad');r2.innerHTML=`<strong>Answer: ${q.a}.</strong> ${q.why}<br><br><button class="btn" id="nx">Next →</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();} },
+
+  { id:'L1-i02', type:'inter', lesson:'L1', title:'Read a query in plain English', what:'See SQL; pick the plain English description.',
+    footer:'Translation drill — the bridge from "knows syntax" to "reads SQL fluently."',
+    mount(s){s.innerHTML=`<h3>What does this query say?</h3>
+    <pre class="code">SELECT city, COUNT(*) AS users
+FROM users
+WHERE created_at &gt; '2024-01-01'
+GROUP BY city
+ORDER BY users DESC
+LIMIT 5</pre>
+    <div class="row" style="margin-top:14px;flex-direction:column;align-items:stretch">
+      <button class="btn ghost" data-c="0">Top 5 cities with most users created after 2024-01-01</button>
+      <button class="btn ghost" data-c="1">All users created since 2024 in 5 cities</button>
+      <button class="btn ghost" data-c="2">5 users from each city created in 2024</button>
+    </div>
+    <div class="reveal" id="L1i02_r" style="display:none;margin-top:12px"></div>`;
+    s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.c==='0';const r=s.querySelector('#L1i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right.</strong> Read the SELECT + GROUP BY + ORDER + LIMIT together: bucket by city, count per bucket, sort descending, keep top 5. WHERE narrows the input rows.':'<strong>Re-read.</strong> SELECT/GROUP BY collapses rows; ORDER+LIMIT keeps top 5. WHERE narrows to 2024+. Together: top 5 cities by user count for 2024+ users.';});} },
+
+  /* L2 · Filtering */
+  { id:'L2-a01', type:'anim', lesson:'L2', title:'WHERE filters rows', what:'10 rows in; 3 rows out.',
+    footer:'A row-by-row scan. Each row tests the predicate; passing rows go to the output.',
+    mount(s){const rows=Array.from({length:6},(_,i)=>({id:i+1,name:['Asha','Bharat','Charvi','Dev','Eshaan','Farah'][i],age:[24,31,19,42,28,35][i]}));
+    s.innerHTML=`<h3>WHERE age &gt; 25</h3>
+    ${tbl(rows,[1,3,4,5])}
+    <p class="desc" style="margin-top:14px">Highlighted rows pass the predicate. The result table contains only those.</p>`;} },
+
+  { id:'L2-a02', type:'anim', lesson:'L2', title:'AND, OR, NOT as a Venn', what:'Boolean ops as overlapping circles.',
+    footer:'Set operations 101. AND = intersection, OR = union, NOT = complement.',
+    mount(s){s.innerHTML=`<h3>Boolean ops as sets</h3>
+    <svg viewBox="0 0 500 200"><circle cx="180" cy="100" r="70" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)"/><circle cx="280" cy="100" r="70" fill="var(--rose)" fill-opacity="0.3" stroke="var(--rose)"/>
+    <text x="120" y="105" font-family="ui-monospace" font-size="14" fill="var(--accent)" font-weight="700">A</text>
+    <text x="340" y="105" font-family="ui-monospace" font-size="14" fill="var(--rose)" font-weight="700">B</text>
+    <text x="230" y="105" text-anchor="middle" font-family="ui-monospace" font-size="14" fill="var(--ink)" font-weight="700">A ∧ B</text></svg>
+    <p class="panel">In SQL: <code>WHERE age &gt; 25 AND city = 'Bangalore'</code> = the intersection. <code>OR</code> = union. <code>NOT</code> = everything outside.</p>`;} },
+
+  { id:'L2-i01', type:'inter', lesson:'L2', title:'Build a WHERE clause', what:'Compose conditions; rows light up live.',
+    footer:'Live predicate builder. The result table updates as you toggle conditions.',
+    mount(s){const rows=[{n:'Asha',age:24,city:'BLR'},{n:'Bharat',age:31,city:'MUM'},{n:'Charvi',age:19,city:'BLR'},{n:'Dev',age:42,city:'DEL'},{n:'Eshaan',age:28,city:'BLR'}];
+    s.innerHTML=`<h3>WHERE...</h3>
+    <div class="row" style="margin-bottom:14px">
+      <label><input type="checkbox" id="L2i01_a">age &gt; 25</label>
+      <label style="margin-left:14px"><input type="checkbox" id="L2i01_b">city = 'BLR'</label>
+    </div>
+    <div id="L2i01_t"></div>`;
+    const u=()=>{const a=s.querySelector('#L2i01_a').checked,b=s.querySelector('#L2i01_b').checked;const hi=[];rows.forEach((r,i)=>{if((!a||r.age>25)&&(!b||r.city==='BLR'))hi.push(i);});s.querySelector('#L2i01_t').innerHTML=tbl(rows,hi);};
+    s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});u();} },
+
+  { id:'L2-i02', type:'inter', lesson:'L2', title:'NULL trap quiz', what:'Spot the silent NULL bug.',
+    footer:'NULL semantics break every beginner. NULL ≠ NULL, NOT IN ignores NULLs, AVG skips them. Practice the gotchas.',
+    mount(s){s.innerHTML=`<h3>What does this return?</h3>
+    <pre class="code">SELECT count(*) FROM users WHERE age != 25;
+<span class="anno">-- rows where age is NULL?</span></pre>
+    <div class="row">${['Includes NULL rows','Excludes NULL rows','Errors out'].map(o=>`<button class="btn ghost" data-c="${o}">${o}</button>`).join('')}</div>
+    <div class="reveal" id="L2i02_r" style="display:none;margin-top:12px"></div>`;
+    s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.c==='Excludes NULL rows';const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right.</strong> Any comparison with NULL is NULL (not true, not false). WHERE keeps only TRUE rows; NULL rows are dropped silently. Use <code>WHERE age != 25 OR age IS NULL</code> if you want them.':'<strong>Trap.</strong> NULL != 25 is NULL, which is not TRUE, so the row is dropped. NULL needs explicit handling via IS NULL.';});} },
+
+  /* L3 · JOINs */
+  { id:'L3-a01', type:'anim', lesson:'L3', title:'INNER JOIN as Venn', what:'Two tables; the overlap is the result.',
+    footer:'INNER JOIN keeps only rows where the key matches in BOTH tables.',
+    mount(s){s.innerHTML=`<h3>INNER JOIN</h3>
+    <svg viewBox="0 0 500 220"><circle cx="180" cy="110" r="80" fill="var(--accent)" fill-opacity="0.3" stroke="var(--accent)"/><circle cx="320" cy="110" r="80" fill="var(--rose)" fill-opacity="0.3" stroke="var(--rose)"/>
+    <text x="130" y="115" font-family="ui-monospace" font-size="13" fill="var(--accent)" font-weight="700">users</text>
+    <text x="350" y="115" font-family="ui-monospace" font-size="13" fill="var(--rose)" font-weight="700">orders</text>
+    <text x="250" y="115" text-anchor="middle" font-family="ui-monospace" font-size="13" fill="var(--ink)" font-weight="700">JOIN</text></svg>`;} },
+
+  { id:'L3-a02', type:'anim', lesson:'L3', title:'LEFT JOIN vs INNER', what:'Same query, different keep-set.',
+    footer:'LEFT keeps every left row; missing right side is NULL. INNER drops rows with no match.',
+    mount(s){s.innerHTML=`<h3>INNER vs LEFT, same data</h3>
+    ${tbl([{user:'Asha',order:'#7821'},{user:'Bharat',order:'#7822'},{user:'Charvi',order:'#7825'}])}
+    <p class="desc" style="margin:8px 0">INNER JOIN result: 3 rows (Dev had no order, so dropped).</p>
+    ${tbl([{user:'Asha',order:'#7821'},{user:'Bharat',order:'#7822'},{user:'Charvi',order:'#7825'},{user:'Dev',order:'NULL'}])}
+    <p class="desc">LEFT JOIN result: 4 rows. Dev appears with NULL order.</p>`;} },
+
+  { id:'L3-i01', type:'inter', lesson:'L3', title:'Pick the JOIN', what:'5 scenarios; pick INNER, LEFT, or FULL.',
+    footer:'JOIN choice is a business question disguised as a syntax one.',
+    mount(s){const qs=[
+      {q:'Show every user, with their orders if any',a:'LEFT',why:'Keep all users; orders are optional → LEFT JOIN users → orders.'},
+      {q:'Find users WITH no orders',a:'LEFT',why:'LEFT JOIN + WHERE orders.id IS NULL.'},
+      {q:'Match employees to managers; skip orphans',a:'INNER',why:'Both sides required → INNER.'},
+      {q:'Reconcile two systems; show mismatches both ways',a:'FULL',why:'FULL OUTER JOIN; rare but the right tool for reconciliation.'},
+    ];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+      <div class="row" style="margin:14px 0">${['INNER','LEFT','FULL','RIGHT'].map(o=>`<button class="btn ghost" data-p="${o}">${o}</button>`).join('')}</div>
+      <div class="reveal" id="r" style="display:none"></div>`;
+      s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'bad');r2.innerHTML=`<strong>Best: ${q.a}.</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next →</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();} },
+
+  { id:'L3-i02', type:'inter', lesson:'L3', title:'Trace the JOIN', what:'See which left-rows match which right-rows.',
+    footer:'Drag a key. See matches light up in both tables.',
+    mount(s){const L=[{id:1,name:'Asha'},{id:2,name:'Bharat'},{id:3,name:'Charvi'},{id:4,name:'Dev'}];
+    const R=[{user:1,order:'#7821'},{user:1,order:'#7855'},{user:2,order:'#7822'},{user:3,order:'#7825'},{user:5,order:'#7830'}];
+    s.innerHTML=`<h3>Click a user; see their orders highlighted</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><div class="stat-label">users</div><div id="L3i02_l"></div></div>
+      <div><div class="stat-label">orders</div><div id="L3i02_r"></div></div>
+    </div>`;
+    const render=(sel)=>{s.querySelector('#L3i02_l').innerHTML=tbl(L,L.map((u,i)=>u.id===sel?i:-1).filter(x=>x>=0));s.querySelector('#L3i02_r').innerHTML=tbl(R,R.map((o,i)=>o.user===sel?i:-1).filter(x=>x>=0));};
+    render(1);s.querySelector('#L3i02_l').onclick=e=>{const tr=e.target.closest('tr');if(!tr)return;const idx=[...tr.parentNode.children].indexOf(tr);SFX.click();render(L[idx-1]?.id||1);};} },
+
+  /* L4 · GROUP BY */
+  { id:'L4-a01', type:'anim', lesson:'L4', title:'GROUP BY collapses rows', what:'10 raw rows → 3 grouped rows.',
+    footer:'GROUP BY buckets rows by a column; aggregates summarize each bucket. The output has fewer rows than input.',
+    mount(s){const rows=[{city:'BLR',v:100},{city:'BLR',v:200},{city:'MUM',v:150},{city:'BLR',v:50},{city:'DEL',v:300},{city:'MUM',v:100}];
+    s.innerHTML=`<h3>BEFORE: 6 rows</h3>${tbl(rows)}
+    <p class="desc" style="margin:8px 0"><code>GROUP BY city</code> →</p>
+    <h3>AFTER: 3 rows</h3>${tbl([{city:'BLR',sum_v:350,count:3},{city:'MUM',sum_v:250,count:2},{city:'DEL',sum_v:300,count:1}])}`;} },
+
+  { id:'L4-a02', type:'anim', lesson:'L4', title:'HAVING filters groups', what:'GROUP first, then filter the buckets.',
+    footer:'WHERE filters rows; HAVING filters groups. They run at different points in the pipeline.',
+    mount(s){s.innerHTML=`<h3>WHERE vs HAVING</h3>
+    <pre class="code">SELECT city, count(*)
+FROM users
+<span class="hi">WHERE age &gt; 18</span>       <span class="anno">← filters rows</span>
+GROUP BY city
+<span class="hi">HAVING count(*) &gt; 100</span> <span class="anno">← filters groups</span></pre>
+    <p class="panel" style="margin-top:14px">If you put <code>count(*) &gt; 100</code> in WHERE, the engine errors: count doesn\'t exist until after grouping. HAVING is the post-group filter.</p>`;} },
+
+  { id:'L4-i01', type:'inter', lesson:'L4', title:'GROUP BY playground', what:'Toggle group columns and aggregates.',
+    footer:'Watch how grouping at different levels changes the row count and shape.',
+    mount(s){const rows=[{city:'BLR',plan:'free',rev:0},{city:'BLR',plan:'pro',rev:99},{city:'MUM',plan:'free',rev:0},{city:'BLR',plan:'pro',rev:99},{city:'MUM',plan:'pro',rev:99},{city:'DEL',plan:'free',rev:0}];
+    s.innerHTML=`<h3>Group by which columns?</h3>
+    <div class="row" style="margin-bottom:14px">
+      <label><input type="checkbox" id="L4i01_c" checked>city</label>
+      <label style="margin-left:14px"><input type="checkbox" id="L4i01_p">plan</label>
+    </div>
+    <div id="L4i01_o"></div>`;
+    const u=()=>{const c=s.querySelector('#L4i01_c').checked,p=s.querySelector('#L4i01_p').checked;const groups={};rows.forEach(r=>{const k=[c?r.city:'',p?r.plan:''].filter(Boolean).join('|');if(!groups[k])groups[k]={count:0,rev:0,city:r.city,plan:r.plan};groups[k].count++;groups[k].rev+=r.rev;});const out=Object.values(groups).map(g=>{const x={};if(c)x.city=g.city;if(p)x.plan=g.plan;x.count=g.count;x.sum_rev=g.rev;return x;});s.querySelector('#L4i01_o').innerHTML=tbl(out);};
+    s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});u();} },
+
+  { id:'L4-i02', type:'inter', lesson:'L4', title:'Pick the aggregate', what:'For a question, pick AVG vs COUNT vs SUM vs MAX.',
+    footer:'Aggregate choice is usually obvious — except when MEAN vs MEDIAN matters, then SQL only has AVG and you reach for PERCENTILE_CONT.',
+    mount(s){const qs=[
+      {q:'How many orders per user?',a:'COUNT'},
+      {q:'Total revenue this quarter?',a:'SUM'},
+      {q:'Highest score on the leaderboard?',a:'MAX'},
+      {q:'Typical user\'s session length?',a:'AVG'},
+    ];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+      <div class="row" style="margin:14px 0">${['COUNT','SUM','MAX','MIN','AVG'].map(o=>`<button class="btn ghost" data-p="${o}">${o}</button>`).join('')}</div>
+      <div class="reveal" id="r" style="display:none"></div>`;
+      s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'bad');r2.innerHTML=`<strong>Answer: ${q.a}.</strong><br><button class="btn" id="nx" style="margin-top:8px">Next →</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();} },
+
+  /* L5 · Subqueries */
+  { id:'L5-a01', type:'anim', lesson:'L5', title:'Subquery as a stepping stone', what:'Inner query first; outer query uses its result.',
+    footer:'Evaluate inside-out. The inner query produces a value or table; the outer uses it.',
+    mount(s){s.innerHTML=`<h3>The reading order</h3>
+    <pre class="code">SELECT name
+FROM users
+WHERE city = <span class="hi">(SELECT city FROM offices WHERE id = 5)</span></pre>
+    <ol style="padding-left:22px;line-height:1.7">
+      <li><strong>Inner</strong> runs first: returns 'Bangalore'</li>
+      <li><strong>Outer</strong> substitutes: <code>WHERE city = 'Bangalore'</code></li>
+      <li>Outer runs: returns matching users</li>
+    </ol>`;} },
+
+  { id:'L5-a02', type:'anim', lesson:'L5', title:'CTE makes it readable', what:'Same query, with vs without WITH.',
+    footer:'CTEs read top-to-bottom and let you name intermediate results. Almost always preferred over nested subqueries beyond two levels.',
+    mount(s){s.innerHTML=`<h3>CTE = name your steps</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><strong>Without CTE</strong><pre class="code">SELECT name FROM users
+WHERE city IN (
+  SELECT city FROM offices
+  WHERE staff_count &gt; 50
+)</pre></div>
+      <div><strong>With CTE</strong><pre class="code">WITH big_cities AS (
+  SELECT city FROM offices
+  WHERE staff_count &gt; 50
+)
+SELECT name FROM users
+WHERE city IN (SELECT city FROM big_cities)</pre></div>
+    </div>
+    <p class="panel" style="margin-top:14px">Same result. The CTE version reads forward; the nested version makes you scan inside-out.</p>`;} },
+
+  { id:'L5-i01', type:'inter', lesson:'L5', title:'Subquery or JOIN?', what:'Five scenarios, which approach reads better.',
+    footer:'Both work for most cases; one is usually clearer. Rule: if you need a value, subquery; if you need columns from both tables, JOIN.',
+    mount(s){const qs=[
+      {q:'Find users whose age is above the average',a:'sub',why:'Need a scalar value (the average). <code>WHERE age &gt; (SELECT avg(age) FROM users)</code>.'},
+      {q:'Show users with their order count',a:'join',why:'Need columns from both tables. JOIN + GROUP BY.'},
+      {q:'Find products never sold',a:'sub',why:'NOT EXISTS subquery is the canonical pattern.'},
+      {q:'List all orders with the customer\'s city',a:'join',why:'Pulling a column from another table → JOIN.'},
+    ];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+      <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="sub">Subquery</button><button class="btn ghost" data-p="join">JOIN</button></div>
+      <div class="reveal" id="r" style="display:none"></div>`;
+      s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'bad');r2.innerHTML=`<strong>Reads better as: ${q.a==='sub'?'Subquery':'JOIN'}.</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next →</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();} },
+
+  { id:'L5-i02', type:'inter', lesson:'L5', title:'Window function preview', what:'Same query with and without OVER().',
+    footer:'Window functions: aggregate per row without collapsing rows. The thing that makes top-N-per-group bearable.',
+    mount(s){s.innerHTML=`<h3>The window-function difference</h3>
+    <p class="desc">Click a button to see each variant on the same data.</p>
+    <div class="row" style="margin-bottom:14px"><button class="btn" data-v="group">GROUP BY</button><button class="btn ghost" data-v="window">OVER (WINDOW)</button></div>
+    <pre class="code" id="L5i02_q"></pre>
+    <div id="L5i02_o" style="margin-top:10px"></div>`;
+    const data=[{name:'Asha',city:'BLR',rev:200},{name:'Bharat',city:'MUM',rev:150},{name:'Charvi',city:'BLR',rev:300}];
+    const variants={group:{code:'SELECT city, SUM(rev) FROM users GROUP BY city',rows:[{city:'BLR',sum:500},{city:'MUM',sum:150}]},window:{code:'SELECT name, city, rev,\n  SUM(rev) OVER (PARTITION BY city) AS city_total\nFROM users',rows:data.map(d=>({...d,city_total:d.city==='BLR'?500:150}))}};
+    const u=v=>{s.querySelector('#L5i02_q').textContent=variants[v].code;s.querySelector('#L5i02_o').innerHTML=tbl(variants[v].rows);s.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('ghost',b.dataset.v!==v));};
+    s.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{SFX.click();u(b.dataset.v);});u('group');} },
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

@@ -17,7 +17,11 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed-all": "tsx prisma/seed.ts && tsx prisma/seed/import-all-courses.ts && tsx prisma/seed/import-all-showcase.ts",
     "db:import-course": "tsx prisma/seed/import-course.ts",
+    "db:import-all": "tsx prisma/seed/import-all-courses.ts",
+    "db:import-showcase": "tsx prisma/seed/import-all-showcase.ts",
+    "course:validate": "tsx prisma/seed/validate-all-courses.ts",
     "course:new": "tsx prisma/seed/showcase-course-new.ts",
     "course:import": "tsx prisma/seed/showcase-course-import.ts",
     "course:archive": "tsx prisma/seed/showcase-course-archive.ts archive",
@@ -26,7 +30,8 @@
     "course:audio": "bash scripts/render-tts-all.sh",
     "course:bonus": "node scripts/splice-bonus.mjs",
     "db:studio": "prisma studio",
-    "db:reset": "prisma migrate reset --force && npm run db:seed"
+    "db:reset": "prisma migrate reset --force && npm run db:seed",
+    "db:reset-all": "prisma migrate reset --force && npm run db:seed-all"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

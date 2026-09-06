@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anim Lab · The Leader's AI Operating System</title>
+<style>
+  :root {
+    --bg: #fbf6ec; --paper: #fffaf0; --paper-2: #f4ecd8;
+    --ink: #14110d; --ink-soft: #3d3a32; --muted: #6f6957;
+    --rule: #d8d1bf; --rule-soft: #ebe3cb;
+    --saffron: #c8881e; --saffron-soft: #f7d999;
+    --emerald: #14554a; --emerald-soft: #cfe3df;
+    --rose: #b32d2d; --rose-soft: #f5d6d6;
+    --gold: #b88e2d;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; background: var(--bg); color: var(--ink);
+    font-family: 'Iowan Old Style', 'Charter', Georgia, serif; font-size: 16px; line-height: 1.55; }
+  .topbar { position: sticky; top: 0; z-index: 5; background: rgba(251,246,236,0.94); backdrop-filter: blur(8px);
+    border-bottom: 1.5px solid var(--ink); padding: 14px 20px; display: flex; align-items: center; gap: 18px;
+    flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); font-weight: 700; }
+  .logo .dot { width: 8px; height: 8px; background: var(--saffron); border-radius: 50%; }
+  .course-name { font-family: 'Iowan Old Style', Georgia, serif; font-weight: 800; font-size: 17px;
+    border-left: 1px solid var(--rule); padding-left: 18px; }
+  select, .toggle { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 7px 12px; border-radius: 4px; background: var(--paper);
+    border: 1.5px solid var(--rule); color: var(--ink); cursor: pointer; }
+  .toggle { background: transparent; }
+  .toggle.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .topbar .right { margin-left: auto; display: flex; gap: 10px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 80px; }
+  .lede { font-size: 18px; line-height: 1.6; color: var(--ink-soft); max-width: 720px; margin: 0 0 28px; }
+  .lede em { color: var(--saffron); font-style: normal; font-weight: 700; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card { text-align: left; background: var(--paper); border: 1.5px solid var(--rule); border-radius: 7px;
+    padding: 16px 16px 18px; cursor: pointer; font-family: inherit; color: var(--ink); transition: all 160ms var(--ease);
+    display: flex; flex-direction: column; gap: 6px; }
+  .card:hover { transform: translateY(-2px); border-color: var(--saffron); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
+  .card .id { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 800; text-transform: uppercase; }
+  .card .id .badge { display: inline-block; padding: 2px 7px; margin-right: 6px; border-radius: 3px;
+    font-size: 9px; }
+  .card .id .badge.anim { background: var(--saffron); color: var(--ink); }
+  .card .id .badge.inter { background: var(--emerald); color: var(--paper); }
+  .card .title { font-family: 'Iowan Old Style', Georgia, serif; font-size: 17px; font-weight: 800; line-height: 1.25;
+    color: var(--ink); margin: 2px 0 0; }
+  .card .what { font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+  .lesson-label { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted);
+    text-transform: uppercase; margin-top: 6px; }
+  /* Focus view (dialog) */
+  dialog.focus { padding: 0; border: none; max-width: min(92vw, 880px); width: 100%; background: var(--paper);
+    border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,0.25); }
+  dialog.focus::backdrop { background: rgba(20,17,13,0.55); backdrop-filter: blur(2px); }
+  dialog.focus header { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-bottom: 1.5px solid var(--rule); background: var(--paper-2); }
+  dialog.focus header .meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  dialog.focus header h2 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; margin: 0; }
+  dialog.focus header .id-tag { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em;
+    color: var(--gold); font-weight: 800; text-transform: uppercase; }
+  dialog.focus header nav { display: flex; gap: 6px; }
+  dialog.focus header .nav-btn { background: var(--paper); border: 1.5px solid var(--rule); padding: 6px 10px;
+    border-radius: 4px; cursor: pointer; font-family: ui-monospace, monospace; font-size: 11px; }
+  dialog.focus header .nav-btn:hover { border-color: var(--ink); }
+  dialog.focus .stage { padding: 22px; min-height: 360px; }
+  dialog.focus footer { padding: 14px 16px; border-top: 1px solid var(--rule); background: var(--paper-2);
+    font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+  dialog.focus footer strong { color: var(--ink); }
+  /* Generic widget styles */
+  .stage h3 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 19px; margin: 0 0 6px; }
+  .stage .desc { font-size: 14.5px; color: var(--muted); margin: 0 0 18px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { background: var(--ink); color: var(--paper); border: none; padding: 9px 16px; border-radius: 4px;
+    font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: pointer; }
+  .btn:hover { background: var(--saffron); color: var(--ink); }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
+  .btn.ghost:hover { border-color: var(--ink); background: var(--paper-2); }
+  .panel { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 5px; padding: 12px 14px;
+    font-size: 14px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap: 10px; }
+  .stat { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 5px; padding: 10px 12px; }
+  .stat-label { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.16em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 2px; }
+  .stat-value { font-family: 'Iowan Old Style', Georgia, serif; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat-value.green { color: var(--emerald); } .stat-value.red { color: var(--rose); } .stat-value.amber { color: var(--saffron); }
+  input[type="range"] { width: 100%; accent-color: var(--saffron); }
+  textarea, input[type="text"], input[type="number"], select { background: var(--paper); border: 1.5px solid var(--rule);
+    padding: 8px 10px; border-radius: 4px; font-family: inherit; font-size: 14px; color: var(--ink); }
+  textarea:focus, input:focus, select:focus { outline: none; border-color: var(--saffron); }
+  .lane { background: var(--paper-2); border: 1px dashed var(--rule); border-radius: 6px; padding: 10px;
+    min-height: 70px; }
+  .lane h4 { margin: 0 0 6px; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); }
+  .chip { display: inline-block; padding: 4px 10px; margin: 3px; background: var(--paper); border: 1.5px solid var(--rule);
+    border-radius: 14px; font-size: 13px; cursor: grab; user-select: none; }
+  .chip:active { cursor: grabbing; }
+  svg { display: block; max-width: 100%; height: auto; }
+  .reveal { background: var(--paper-2); border-left: 3px solid var(--saffron); padding: 12px 14px; border-radius: 0 5px 5px 0;
+    margin-top: 12px; font-size: 14.5px; line-height: 1.55; }
+  .reveal.win { border-color: var(--emerald); background: var(--emerald-soft); }
+  .reveal.bad { border-color: var(--rose); background: var(--rose-soft); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span>
+  <span class="course-name">The Leader's AI Operating System</span>
+  <div class="right">
+    <select id="lessonFilter" aria-label="Filter by lesson">
+      <option value="">All lessons</option>
+      <option value="L1">L1 · The 30-Minute Trap</option>
+      <option value="L2">L2 · The Trust Stack</option>
+      <option value="L3">L3 · Learning With AI</option>
+      <option value="L4">L4 · Hiring in the AI Era</option>
+      <option value="L5">L5 · Team Design With AI</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+
+<main>
+  <p class="lede">
+    Twenty drop-in artifacts — 10 animations + 10 interactives — designed for the
+    leadership audience. Each one ties to a specific lesson and a specific
+    decision. <em>Click any card to open the focus view; ← / → cycle through.</em>
+  </p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog class="focus" id="focus">
+  <header>
+    <div class="meta">
+      <span class="id-tag" id="focusId">—</span>
+      <h2 id="focusTitle">—</h2>
+    </div>
+    <nav>
+      <button class="nav-btn" id="prevBtn" title="Previous (←)">←</button>
+      <button class="nav-btn" id="nextBtn" title="Next (→)">→</button>
+      <button class="nav-btn" id="closeBtn" title="Close (Esc)">✕</button>
+    </nav>
+  </header>
+  <div class="stage" id="stage"></div>
+  <footer id="focusFooter"></footer>
+</dialog>
+
+<script>
+/* ─── ZzFX (procedural SFX, ~1KB) ─────────────────────────────────────── */
+let zzfxV=.3,zzfxX,zzfx=(...t)=>{if(!zzfxX)zzfxX=new(window.AudioContext||window.webkitAudioContext);if(zzfxX.state==='suspended')zzfxX.resume();let[e=1,a=.05,n=220,r=0,i=0,s=.1,o=0,h=1,c=0,l=0,d=0,m=0,p=0,u=0,f=0,g=0,v=0,w=1,y=0,M=0,N=0]=t,k=2*Math.PI,b=zzfxX.sampleRate,F=440;c*=500*k/b/b;n*=(1-a+2*a*Math.random())*k/b;let A=[],S=0,T=0,L=0,Z=1,_=0,j=0,J=0,P=N<0?-1:1,B=k*P*N*2/b,C=Math.cos(B),x=Math.sin(B)/4,O=1+x,q=-2*C/O,D=(1-x)/O,E=(1+P*C)/2/O,H=-(P+C)/O,I=E,Q=0,R=0,U=0,V=0;r=b*r+9;y*=b;i*=b;s*=b;v*=b;l*=500*k/b**3;f*=k/b;d*=k/b;m*=b;p=b*p|0;for(g=r+y+i+s+v|0;L<g;A[L++]=j*e*zzfxV)++J%(100*g|0)||(j=o?1<o?2<o?3<o?4<o?(S/k%1<h/2)*2-1:Math.sin(S**3):Math.max(Math.min(Math.tan(S),1),-1):1-(2*S/k%2+2)%2:1-4*Math.abs(Math.round(S/k)-S/k):Math.sin(S),j=(p?1-M+M*Math.sin(k*L/p):1)*(4<o?j:(j<0?-1:1)*Math.abs(j)**h)*(L<r?L/r:L<r+y?1-(L-r)/y*(1-w):L<r+y+i?w:L<g-v?(g-L-v)/s*w:0),j=v?j/2+(v>L?0:(L<g-v?1:(g-L)/v)*A[L-v|0]/2/e):j,N?j=V=I*Q+H*(Q=R)+E*(R=j)-D*U-q*(U=V):0),B=(n+=c+=l)*Math.cos(f*T++),S+=B+B*u*Math.sin(L**5),Z&&++Z>m&&(n+=d,n+=d,Z=0),!p||++_%p||(n=B,c=0,Z=Z||1);let W=zzfxX.createBuffer(1,g,b);W.getChannelData(0).set(A);let Y=zzfxX.createBufferSource();Y.buffer=W;Y.connect(zzfxX.destination);Y.start();return Y};
+let SFX_ON = false;
+const SFX = {
+  click:   () => SFX_ON && zzfx(1,.05,800,0,.01,.05,0,1.5),
+  confirm: () => SFX_ON && zzfx(1,.05,400,.01,.1,.15,0,2,0,0,200,.05),
+  success: () => SFX_ON && zzfx(1,.05,537,.02,.02,.22,1,1.59,-6.98,4.97),
+  error:   () => SFX_ON && zzfx(1,.1,160,0,.1,.1,4,1,-1,0,0,0,0,0,0,0,0,.8),
+  hover:   () => SFX_ON && zzfx(.4,.05,1200,0,.005,.025,0,1.5),
+  pop:     () => SFX_ON && zzfx(1,.1,700,0,.01,.05,0,2),
+};
+document.getElementById('soundToggle').addEventListener('click', (e) => {
+  SFX_ON = !SFX_ON;
+  e.currentTarget.classList.toggle('on', SFX_ON);
+  e.currentTarget.setAttribute('aria-pressed', SFX_ON);
+  if (SFX_ON) SFX.confirm();
+});
+
+/* ─── ARTIFACT REGISTRY ─────────────────────────────────────────────── */
+// Each entry: { id, type, lesson, title, what, footer, mount(stage) }
+const ART = [];
+
+/* ════ LESSON 1 · The 30-Minute Trap ═════════════════════════════════ */
+
+ART.push({ id:'L1-a01', type:'anim', lesson:'L1', title:'The compounding curve',
+  what:'Saved hours compound when reinvested; flatten when given back as Slack.',
+  footer:'Two scenarios, twelve months. Compounding-zone reinvestment vs. cost-cut both start at the same AI gain in month 0. Watch the gap by Q4.',
+  mount(stage){ stage.innerHTML = `
+    <h3>Saved hours, 12 months out</h3>
+    <p class="desc">A team saves <strong>8 hrs/week</strong> from AI starting in Q1. The orange line reinvests it into capability building; the muted line takes it as cost reduction. Press play.</p>
+    <svg viewBox="0 0 600 280">
+      <g stroke="var(--rule-soft)" stroke-width="1">
+        ${Array.from({length:11},(_,i)=>`<line x1="${50+i*50}" y1="20" x2="${50+i*50}" y2="240"/>`).join('')}
+        ${Array.from({length:5},(_,i)=>`<line x1="50" y1="${40+i*50}" x2="550" y2="${40+i*50}"/>`).join('')}
+      </g>
+      <line x1="50" y1="240" x2="550" y2="240" stroke="var(--ink)" stroke-width="1.5"/>
+      <line x1="50" y1="20" x2="50" y2="240" stroke="var(--ink)" stroke-width="1.5"/>
+      <text x="556" y="244" font-family="ui-monospace" font-size="10" fill="var(--muted)">Q4</text>
+      <text x="46" y="16" text-anchor="end" font-family="ui-monospace" font-size="10" fill="var(--muted)">cap</text>
+      <path id="L1a01_flat" d="M50,220 L550,220" fill="none" stroke="var(--muted)" stroke-width="2.5" stroke-dasharray="4 4" stroke-dashoffset="500" />
+      <path id="L1a01_comp" d="M 50 220 ${Array.from({length:50},(_,i)=>{const t=(i+1)/50;const y=220-180*(1-Math.exp(-3*t));return `L ${50+t*500} ${y.toFixed(1)}`}).join(' ')}" fill="none" stroke="var(--saffron)" stroke-width="3" stroke-linecap="round" stroke-dasharray="700" stroke-dashoffset="700"/>
+      <text x="540" y="60" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--saffron)" font-weight="700">REINVEST</text>
+      <text x="540" y="210" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--muted)" font-weight="700">COST-CUT</text>
+    </svg>
+    <div class="row" style="margin-top:14px"><button class="btn" id="L1a01_play">▷ Play</button><button class="btn ghost" id="L1a01_reset">Reset</button></div>`;
+    const play = ()=>{ SFX.click(); const c=stage.querySelector('#L1a01_comp'),f=stage.querySelector('#L1a01_flat');
+      c.style.transition='none'; f.style.transition='none'; c.setAttribute('stroke-dashoffset','700'); f.setAttribute('stroke-dashoffset','500');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        c.style.transition='stroke-dashoffset 2.4s cubic-bezier(.22,.61,.36,1)'; c.setAttribute('stroke-dashoffset','0');
+        f.style.transition='stroke-dashoffset 2.4s cubic-bezier(.22,.61,.36,1)'; f.setAttribute('stroke-dashoffset','0');
+      })); };
+    stage.querySelector('#L1a01_play').onclick=play; stage.querySelector('#L1a01_reset').onclick=play; play();
+  }
+});
+
+ART.push({ id:'L1-a02', type:'anim', lesson:'L1', title:'Two engineers, twelve months',
+  what:'Sam vs. her counterpart — same AI gain, different ending.',
+  footer:'Both start with the same 8 hrs/week saved. One spends it on Slack; the other on shipping a new capability. By month 12, role title diverges.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Same starting line. Different ending.</h3>
+    <p class="desc">Two engineers, same role, same team, same AI gain in January. Watch the year unfold.</p>
+    <svg viewBox="0 0 600 240">
+      <g stroke="var(--rule-soft)" stroke-width="1">${Array.from({length:13},(_,i)=>`<line x1="${30+i*44}" y1="40" x2="${30+i*44}" y2="200"/>`).join('')}</g>
+      <line x1="30" y1="120" x2="582" y2="120" stroke="var(--rule)" stroke-dasharray="3 3"/>
+      <g id="L1a02_sam">
+        <circle r="9" fill="var(--saffron)" stroke="var(--ink)" stroke-width="1.5"><animate attributeName="cx" from="30" to="580" dur="3s" begin="0s;_reset.click+0.2s" fill="freeze"/><animate attributeName="cy" values="120;110;90;65;45" keyTimes="0;0.35;0.6;0.85;1" dur="3s" begin="0s;_reset.click+0.2s" fill="freeze"/></circle>
+      </g>
+      <g id="L1a02_other">
+        <circle r="9" fill="none" stroke="var(--muted)" stroke-width="2"><animate attributeName="cx" from="30" to="580" dur="3s" begin="0s;_reset.click+0.2s" fill="freeze"/><animate attributeName="cy" values="120;125;130;145;160" keyTimes="0;0.35;0.6;0.85;1" dur="3s" begin="0s;_reset.click+0.2s" fill="freeze"/></circle>
+      </g>
+      <text x="588" y="44" font-family="ui-monospace" font-size="10" fill="var(--saffron)" font-weight="700">SAM → Tech Lead</text>
+      <text x="588" y="170" font-family="ui-monospace" font-size="10" fill="var(--muted)" font-weight="700">Other → laid off</text>
+      <text x="30" y="220" font-family="ui-monospace" font-size="10" fill="var(--muted)">Jan</text>
+      <text x="290" y="220" font-family="ui-monospace" font-size="10" fill="var(--muted)">Jul</text>
+      <text x="540" y="220" font-family="ui-monospace" font-size="10" fill="var(--muted)">Dec</text>
+    </svg>
+    <button class="btn" id="_reset" style="margin-top:8px;">↻ Replay</button>`;
+    stage.querySelector('#_reset').onclick=()=>{SFX.click();};
+  }
+});
+
+ART.push({ id:'L1-i01', type:'inter', lesson:'L1', title:'Reclaim-rate slider',
+  what:'Move a slider between cost-cut and capability-build; watch P&L drift over a year.',
+  footer:'Tight on a P&L, generous enough to compound. Most surviving teams land in the 5–19% reinvestment zone.',
+  mount(stage){ stage.innerHTML=`
+    <h3>How much of the AI gain do you reinvest?</h3>
+    <p class="desc">Drag the slider. 0% = all cost-cut. 100% = all capability-build. Watch capability and cost shift together.</p>
+    <div class="row" style="gap:18px;align-items:center;">
+      <div style="flex:1;min-width:220px;">
+        <div style="display:flex;justify-content:space-between;font-family:ui-monospace,monospace;font-size:10px;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;"><span>0% · cost-cut</span><span>100% · build</span></div>
+        <input type="range" id="L1i01_s" min="0" max="100" value="12" style="margin-top:4px;">
+      </div>
+      <div class="stat" style="min-width:120px;"><div class="stat-label">Reinvest</div><div class="stat-value amber" id="L1i01_pct">12%</div></div>
+    </div>
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="stat-label">Year-1 P&L delta</div><div class="stat-value" id="L1i01_pnl">+₹—</div></div>
+      <div class="stat"><div class="stat-label">Capability score (Y3)</div><div class="stat-value" id="L1i01_cap">—</div></div>
+      <div class="stat"><div class="stat-label">Verdict</div><div class="stat-value" id="L1i01_verdict" style="font-size:14px;">—</div></div>
+    </div>
+    <div class="reveal" id="L1i01_reveal" style="display:none;"></div>`;
+    const s=stage.querySelector('#L1i01_s'),pct=stage.querySelector('#L1i01_pct'),pnl=stage.querySelector('#L1i01_pnl'),cap=stage.querySelector('#L1i01_cap'),ver=stage.querySelector('#L1i01_verdict'),rev=stage.querySelector('#L1i01_reveal');
+    const update=()=>{const v=+s.value; pct.textContent=v+'%'; const annualSave=2400000; const pnlDelta=annualSave*(1-v/100); const capScore=Math.round(20 + v*0.9 + v*v*0.005);
+      pnl.textContent='+₹'+(pnlDelta/100000).toFixed(1)+'L'; cap.textContent=capScore;
+      let verdict='', cls='', body='';
+      if(v<5){verdict='Cost-cut only';cls='red';body='All gain banked. Sarah is updating her LinkedIn — your strongest engineer felt the team stopped investing in her.';}
+      else if(v<=19){verdict='Compounding zone';cls='green';body='Tight enough to defend on a P&L, generous enough to compound. Most teams that survive Q4 land here.';}
+      else if(v<=35){verdict='Bold, defendable';cls='amber';body='Higher than most boards will swallow without an artefact roadmap. If you can ship one big thing per quarter, this works.';}
+      else {verdict='Hard to defend';cls='red';body='Velocity drops visibly before capability shows. You\'ll need a sponsor who believes in 4-quarter horizons.';}
+      ver.textContent=verdict; ver.className='stat-value '+cls;
+      rev.style.display='block'; rev.className='reveal '+(cls==='green'?'win':cls==='red'?'bad':''); rev.innerHTML=`<strong>${verdict}.</strong> ${body}`;
+    };
+    s.oninput=()=>{SFX.hover();update();}; update();
+  }
+});
+
+ART.push({ id:'L1-i02', type:'inter', lesson:'L1', title:'Where did the hour go?',
+  what:'Drag the reclaimed hour onto five buckets; see compounding vs leakage.',
+  footer:'Each token you place represents 15 minutes of weekly AI-saved time. Compounding buckets are dark; leakage is muted.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Spend 60 minutes — four 15-min tokens.</h3>
+    <p class="desc">Drag each token onto a bucket. Mix and match. Hit "Run year" to see what compounds.</p>
+    <div id="L1i02_tokens" class="row" style="margin-bottom:14px;">
+      ${Array.from({length:4},(_,i)=>`<span class="chip" draggable="true" data-tok="${i}">⏱ 15 min</span>`).join('')}
+    </div>
+    <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+      ${[['learn','Learn a new tool',1.4],['practice','Practice ICs',1.3],['ship','Ship a small thing',1.5],['slack','Reply to Slack',0.7],['meeting','Take a meeting',0.6]].map(([k,n,m])=>`<div class="lane" data-bucket="${k}" data-mul="${m}"><h4>${n}</h4><div class="bucket-drop" style="min-height:40px;"></div></div>`).join('')}
+    </div>
+    <div class="row" style="margin-top:14px;"><button class="btn" id="L1i02_run">Run year →</button><button class="btn ghost" id="L1i02_reset">Reset</button><span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);" id="L1i02_left">4 tokens left</span></div>
+    <div class="reveal" id="L1i02_out" style="display:none;"></div>`;
+    const tokens=stage.querySelector('#L1i02_tokens'),left=stage.querySelector('#L1i02_left'),out=stage.querySelector('#L1i02_out');
+    let placed={};
+    tokens.addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('tok',e.target.dataset.tok);});
+    stage.querySelectorAll('.lane').forEach(l=>{
+      l.addEventListener('dragover',e=>{e.preventDefault();l.style.borderColor='var(--saffron)';});
+      l.addEventListener('dragleave',()=>l.style.borderColor='');
+      l.addEventListener('drop',e=>{e.preventDefault();l.style.borderColor='';const tok=e.dataTransfer.getData('tok');if(!tok||placed[tok])return;placed[tok]=l.dataset.bucket;
+        l.querySelector('.bucket-drop').insertAdjacentHTML('beforeend','<span class="chip" style="cursor:default;">⏱</span>');
+        const chip=tokens.querySelector(`[data-tok="${tok}"]`);if(chip)chip.style.opacity='0.2';
+        const n=4-Object.keys(placed).length;left.textContent=n+' tokens left';SFX.pop();
+      });
+    });
+    stage.querySelector('#L1i02_run').onclick=()=>{const buckets={};Object.values(placed).forEach(b=>buckets[b]=(buckets[b]||0)+1);
+      let m=1;Object.entries(buckets).forEach(([k,c])=>{const mul=+stage.querySelector(`.lane[data-bucket="${k}"]`).dataset.mul;m*=Math.pow(mul,c/4);});
+      const score=Math.round(m*100);
+      out.style.display='block';
+      out.className='reveal '+(score>=120?'win':score<=85?'bad':'');
+      out.innerHTML=`<strong>Year-end multiplier: ${score}%</strong>. ${score>=120?'Capability compounded. The hour you reinvested came back 1.3×.':score<=85?'You banked it. Productivity flat; team velocity down 8% from morale drag.':'Mixed bag — close to break-even.'}`;SFX.success();};
+    stage.querySelector('#L1i02_reset').onclick=()=>{placed={};tokens.querySelectorAll('.chip').forEach(c=>c.style.opacity='1');stage.querySelectorAll('.bucket-drop').forEach(b=>b.innerHTML='');left.textContent='4 tokens left';out.style.display='none';};
+  }
+});
+
+/* ════ LESSON 2 · The Trust Stack ════════════════════════════════════ */
+
+ART.push({ id:'L2-a01', type:'anim', lesson:'L2', title:'Confidence distribution sweep',
+  what:'A histogram of model scores; threshold sweeps left/right.',
+  footer:'Real-world model output. Below the threshold = auto-reject; above = auto-accept. Watch the false-positive vs false-negative shift as the threshold moves.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Where do you set the line?</h3>
+    <p class="desc">The threshold animates across the score distribution. Notice where the two populations overlap — that's the cost.</p>
+    <svg viewBox="0 0 600 280">
+      ${(()=>{let bars='';for(let i=0;i<40;i++){const x=20+i*14;const h=Math.round(60*Math.exp(-Math.pow((i-12)/6,2))+50*Math.exp(-Math.pow((i-28)/5,2)));bars+=`<rect x="${x}" y="${240-h}" width="11" height="${h}" fill="${i<20?'rgba(179,45,45,0.4)':'rgba(20,85,74,0.4)'}"/>`;}return bars;})()}
+      <line id="L2a01_thr" x1="300" y1="20" x2="300" y2="245" stroke="var(--saffron)" stroke-width="3">
+        <animate attributeName="x1" values="180;480;180" keyTimes="0;0.5;1" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="x2" values="180;480;180" keyTimes="0;0.5;1" dur="5s" repeatCount="indefinite"/>
+      </line>
+      <text x="20" y="270" font-family="ui-monospace" font-size="11" fill="var(--rose)">REJECTS (truly negative)</text>
+      <text x="580" y="270" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--emerald)">ACCEPTS (truly positive)</text>
+    </svg>
+    <p class="panel" style="margin-top:10px;">The middle 25% is where the model is genuinely uncertain. <strong>That's the zone where a human should look.</strong> Setting an aggressive auto-decision threshold pretends the overlap isn't there.</p>`;
+  }
+});
+
+ART.push({ id:'L2-a02', type:'anim', lesson:'L2', title:'The ROC dance',
+  what:'Recall/precision trade-off curve sweeping over training data growth.',
+  footer:'As data grows from 1K → 100K examples, the ROC curve bows toward the top-left. The "perfect classifier" corner is up-left; random is the diagonal.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The ROC curve, watched bow.</h3>
+    <p class="desc">Bigger training set → better-shaped curve. Hit play.</p>
+    <svg viewBox="0 0 320 280">
+      <g stroke="var(--rule-soft)">${Array.from({length:5},(_,i)=>`<line x1="40" y1="${40+i*40}" x2="280" y2="${40+i*40}"/><line x1="${40+i*60}" y1="40" x2="${40+i*60}" y2="240"/>`).join('')}</g>
+      <line x1="40" y1="240" x2="280" y2="40" stroke="var(--muted)" stroke-dasharray="3 3"/>
+      <line x1="40" y1="240" x2="280" y2="240" stroke="var(--ink)"/>
+      <line x1="40" y1="40" x2="40" y2="240" stroke="var(--ink)"/>
+      <path id="L2a02_path" fill="none" stroke="var(--saffron)" stroke-width="3" stroke-linecap="round"/>
+      <text x="160" y="270" font-family="ui-monospace" font-size="10" fill="var(--muted)" text-anchor="middle">false positive rate →</text>
+      <text x="20" y="140" font-family="ui-monospace" font-size="10" fill="var(--muted)" transform="rotate(-90 20 140)">true positive rate</text>
+      <text id="L2a02_lbl" x="285" y="60" font-family="ui-monospace" font-size="11" fill="var(--saffron)" font-weight="700">1k</text>
+    </svg>
+    <div class="row" style="margin-top:8px;"><button class="btn" id="L2a02_play">▷ Play</button></div>`;
+    const stops=[{n:'1k',k:0.3},{n:'10k',k:0.55},{n:'100k',k:0.85},{n:'1M',k:0.97}],path=stage.querySelector('#L2a02_path'),lbl=stage.querySelector('#L2a02_lbl');
+    const draw=(k)=>{let d='M 40 240 ';for(let i=0;i<=40;i++){const x=i/40;const y=Math.pow(x,1-k);d+=`L ${40+x*240} ${240-y*200} `;} path.setAttribute('d',d);};
+    let i=0;const tick=()=>{const s=stops[i%stops.length];lbl.textContent=s.n;draw(s.k);i++;};draw(0.3);
+    stage.querySelector('#L2a02_play').onclick=()=>{SFX.click();let n=0;const id=setInterval(()=>{tick();if(++n>=8)clearInterval(id);},900);};
+  }
+});
+
+ART.push({ id:'L2-i01', type:'inter', lesson:'L2', title:'Threshold-and-fairness slider',
+  what:'Set the model\'s decision boundary; see false-positive vs false-negative cost.',
+  footer:'Same model. Different thresholds optimize for different errors. Below 0.65 the model is barely better than random; above 0.85 you reject too many real hires.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Tune the threshold</h3>
+    <p class="desc">Set your auto-accept threshold. The model below the threshold is auto-rejected. Real candidates and noise both live in there.</p>
+    <input type="range" id="L2i01_t" min="50" max="95" value="65">
+    <div class="row" style="margin:6px 0 12px;justify-content:space-between;"><span style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);">THRESHOLD</span><span style="font-family:ui-monospace,monospace;font-size:18px;font-weight:800;" id="L2i01_v">0.65</span></div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Auto-accept rate</div><div class="stat-value" id="L2i01_acc">—</div></div>
+      <div class="stat"><div class="stat-label">False positive cost</div><div class="stat-value red" id="L2i01_fp">—</div></div>
+      <div class="stat"><div class="stat-label">False negative cost</div><div class="stat-value amber" id="L2i01_fn">—</div></div>
+    </div>
+    <div class="reveal" id="L2i01_r" style="margin-top:14px;"></div>`;
+    const t=stage.querySelector('#L2i01_t'),v=stage.querySelector('#L2i01_v'),acc=stage.querySelector('#L2i01_acc'),fp=stage.querySelector('#L2i01_fp'),fn=stage.querySelector('#L2i01_fn'),r=stage.querySelector('#L2i01_r');
+    const upd=()=>{const x=+t.value/100;v.textContent=x.toFixed(2);
+      const accRate=Math.round((1-x)*100);const fpCost=Math.round(40*(1-x)*(1-x)*100);const fnCost=Math.round(40*x*x*100);
+      acc.textContent=accRate+'%';fp.textContent='₹'+(fpCost/100).toFixed(1)+'L';fn.textContent='₹'+(fnCost/100).toFixed(1)+'L';
+      let msg='';if(x<0.65){msg='<strong>You are the model.</strong> At &lt;0.65 the model is barely better than random. Setting auto-accept this low is like saying "flip a coin, then defend the coin."';r.className='reveal bad';}
+      else if(x<=0.80){msg='<strong>Sensible zone.</strong> Auto-accept clears the easy cases; everything in [threshold − 0.1, threshold] gets a human review.';r.className='reveal win';}
+      else {msg='<strong>Strict.</strong> You\'re rejecting marginal-but-good candidates. Use this only when false positives are catastrophic (e.g., security clearance).';r.className='reveal';}
+      r.innerHTML=msg;};
+    t.oninput=()=>{SFX.hover();upd();};upd();
+  }
+});
+
+ART.push({ id:'L2-i02', type:'inter', lesson:'L2', title:'The 0.62 coin',
+  what:'At threshold X, how often is the model better than random?',
+  footer:'Run 200 decisions. Compare your model\'s accuracy to a coin. Above ~0.65 confidence, the model finally edges the coin meaningfully.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Model vs coin · run 200 decisions</h3>
+    <p class="desc">Choose your model's reported confidence. Hit run; we sample 200 hire decisions at that confidence and compare to a coin flip.</p>
+    <div class="row" style="margin-bottom:10px;"><label style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);">CONFIDENCE</label><select id="L2i02_c"><option>0.55</option><option>0.62</option><option selected>0.70</option><option>0.80</option><option>0.90</option></select><button class="btn" id="L2i02_go">Run</button></div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Model accuracy</div><div class="stat-value" id="L2i02_m">—</div></div>
+      <div class="stat"><div class="stat-label">Coin accuracy</div><div class="stat-value" id="L2i02_co">—</div></div>
+      <div class="stat"><div class="stat-label">Model − coin</div><div class="stat-value" id="L2i02_d">—</div></div>
+    </div>
+    <div class="reveal" id="L2i02_r" style="margin-top:12px;"></div>`;
+    stage.querySelector('#L2i02_go').onclick=()=>{const c=+stage.querySelector('#L2i02_c').value;let mc=0,co=0;for(let i=0;i<200;i++){if(Math.random()<c)mc++;if(Math.random()<0.5)co++;}
+      const ma=Math.round(mc/2),ca=Math.round(co/2);stage.querySelector('#L2i02_m').textContent=ma+'%';stage.querySelector('#L2i02_co').textContent=ca+'%';
+      const d=ma-ca;stage.querySelector('#L2i02_d').textContent=(d>=0?'+':'')+d+'%';stage.querySelector('#L2i02_d').className='stat-value '+(d>15?'green':d<6?'red':'amber');
+      const r=stage.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(d>15?'win':d<6?'bad':'');
+      r.innerHTML=d<6?'<strong>The model is the coin.</strong> Below ~0.65 reported confidence, this model gives you nothing a coin doesn\'t. Pull it from production until the confidence sharpens.':d>15?'<strong>The model earns its keep.</strong> A meaningful edge at this confidence. Lock the threshold; build the audit trail.':'<strong>Marginal edge.</strong> The model helps a little. Keep human-in-loop for the bottom decile.';SFX.success();};
+  }
+});
+
+/* ════ LESSON 3 · Learning With AI ═══════════════════════════════════ */
+
+ART.push({ id:'L3-a01', type:'anim', lesson:'L3', title:'Skill atrophy clock',
+  what:'Junior who delegates everything → skill chart decays over 18 months.',
+  footer:'Skill atrophy follows roughly Ebbinghaus retention without practice. The faster you delegate, the steeper the curve.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Skill, when you stop practising</h3>
+    <p class="desc">The curve below is a junior engineer's coding skill over 18 months when AI does 100% of the implementation.</p>
+    <svg viewBox="0 0 600 240">
+      <g stroke="var(--rule-soft)">${Array.from({length:9},(_,i)=>`<line x1="${40+i*65}" y1="20" x2="${40+i*65}" y2="200"/>`).join('')}</g>
+      <line x1="40" y1="200" x2="600" y2="200" stroke="var(--ink)"/>
+      <line x1="40" y1="20" x2="40" y2="200" stroke="var(--ink)"/>
+      <path id="L3a01_p" d="${(()=>{let d='M 40 30 ';for(let i=1;i<=80;i++){const t=i/80;const y=30+150*(1-Math.exp(-2*t));d+=`L ${40+t*560} ${y.toFixed(1)} `;}return d;})()}" fill="none" stroke="var(--rose)" stroke-width="3" stroke-dasharray="800" stroke-dashoffset="800">
+        <animate attributeName="stroke-dashoffset" from="800" to="0" dur="3s" begin="1s" fill="freeze"/>
+      </path>
+      <text x="50" y="40" font-family="ui-monospace" font-size="10" fill="var(--ink)">100% skill</text>
+      <text x="540" y="195" text-anchor="end" font-family="ui-monospace" font-size="10" fill="var(--rose)">~20% retained</text>
+      <text x="320" y="222" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">Month →  3   6   9   12   15   18</text>
+    </svg>
+    <p class="panel" style="margin-top:8px;"><strong>Ebbinghaus + delegation =</strong> the same curve as memory without retrieval. Practise the bits you still want to own.</p>`;
+  }
+});
+
+ART.push({ id:'L3-a02', type:'anim', lesson:'L3', title:'Curiosity decay graph',
+  what:'Questions-asked-per-week drops as AI answers become friction-free.',
+  footer:'When the marginal cost of asking is zero, you stop asking. Counter-intuitive: easier answers can dampen curiosity.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Questions asked per week</h3>
+    <p class="desc">Two cohorts of new hires. One has AI; one doesn\'t. Tracked over 6 months.</p>
+    <svg viewBox="0 0 600 240">
+      <line x1="40" y1="200" x2="600" y2="200" stroke="var(--ink)"/>
+      <line x1="40" y1="20" x2="40" y2="200" stroke="var(--ink)"/>
+      <path d="M40,60 L100,55 L160,52 L220,50 L280,49 L340,48 L400,48 L460,47 L520,48 L580,48" fill="none" stroke="var(--emerald)" stroke-width="3"/>
+      <path id="L3a02_p" d="M40,60 L100,90 L160,115 L220,140 L280,160 L340,170 L400,175 L460,180 L520,182 L580,183" fill="none" stroke="var(--saffron)" stroke-width="3" stroke-dasharray="700" stroke-dashoffset="700">
+        <animate attributeName="stroke-dashoffset" from="700" to="0" dur="2.5s" begin="0.5s" fill="freeze"/>
+      </path>
+      <text x="585" y="46" font-family="ui-monospace" font-size="10" fill="var(--emerald)" text-anchor="end">no-AI cohort</text>
+      <text x="585" y="195" font-family="ui-monospace" font-size="10" fill="var(--saffron)" text-anchor="end">AI cohort</text>
+      <text x="320" y="222" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">Week →</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L3-i01', type:'inter', lesson:'L3', title:'Task allocation matrix',
+  what:'Drag 12 weekly tasks across "do yourself / AI does / supervise AI" lanes.',
+  footer:'Lock the lanes you want a junior to practice in; delegate the lanes you genuinely want at machine speed.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Where does each task go?</h3>
+    <p class="desc">Drag tasks into lanes. The mix dictates what your team practises vs forgets.</p>
+    <div class="row" id="L3i01_pool" style="margin:0 0 12px;padding:10px;background:var(--paper-2);border-radius:5px;">
+      ${['code review','design doc','customer interview','bug triage','data analysis','runbook','feature spec','status update','candidate screen','postmortem','PRD review','retrospective'].map((t,i)=>`<span class="chip" draggable="true" data-task="${i}">${t}</span>`).join('')}
+    </div>
+    <div style="display:grid;gap:10px;grid-template-columns:repeat(3,1fr);">
+      ${[['do','Do yourself'],['ai','AI does'],['sup','Supervise AI']].map(([k,n])=>`<div class="lane" data-lane="${k}"><h4>${n}</h4><div class="lane-drop" style="min-height:60px;"></div></div>`).join('')}
+    </div>
+    <div class="reveal" id="L3i01_r" style="margin-top:14px;display:none;"></div>`;
+    const pool=stage.querySelector('#L3i01_pool');
+    pool.addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('id',e.target.dataset.task);});
+    let counts={do:0,ai:0,sup:0};const lanes=stage.querySelectorAll('.lane');
+    lanes.forEach(l=>{
+      l.addEventListener('dragover',e=>{e.preventDefault();l.style.borderColor='var(--saffron)';});
+      l.addEventListener('dragleave',()=>l.style.borderColor='');
+      l.addEventListener('drop',e=>{e.preventDefault();l.style.borderColor='';const id=e.dataTransfer.getData('id');const chip=pool.querySelector(`[data-task="${id}"]`);if(!chip)return;
+        const clone=chip.cloneNode(true);clone.removeAttribute('draggable');clone.style.cursor='default';l.querySelector('.lane-drop').appendChild(clone);chip.remove();counts[l.dataset.lane]++;SFX.pop();render();});
+    });
+    function render(){const r=stage.querySelector('#L3i01_r');const tot=counts.do+counts.ai+counts.sup;if(tot<6){r.style.display='none';return;}r.style.display='block';
+      const aiPct=Math.round(counts.ai/tot*100);
+      if(aiPct>60){r.className='reveal bad';r.innerHTML=`<strong>${aiPct}% delegated.</strong> Your team is going to forget how to do these. If the model regresses tomorrow, you have no fallback.`;}
+      else if(aiPct<25){r.className='reveal';r.innerHTML=`<strong>${aiPct}% delegated.</strong> You\'re leaving compounding capability on the table. AI is doing little of your boring work.`;}
+      else{r.className='reveal win';r.innerHTML=`<strong>${aiPct}% delegated, ${Math.round(counts.sup/tot*100)}% supervised.</strong> Reasonable balance — junior still practises judgement on the hard bits.`;}}
+  }
+});
+
+ART.push({ id:'L3-i02', type:'inter', lesson:'L3', title:'Predict your team\'s adoption',
+  what:'Predict %, reveal "real cohorts here" benchmark, calibration delta.',
+  footer:'You under-predict in either direction is data about your team\'s readiness conversation with you.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Of your team, what % uses AI tools daily right now?</h3>
+    <p class="desc">Commit a number. We\'ll show you the cross-industry benchmark from a 2025 dev-survey.</p>
+    <input type="range" id="L3i02_s" min="0" max="100" value="50">
+    <div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);"><span>0%</span><span style="color:var(--ink);font-size:20px;font-weight:800;" id="L3i02_v">50%</span><span>100%</span></div>
+    <button class="btn" id="L3i02_go" style="margin-top:14px;">Lock prediction · reveal</button>
+    <div class="reveal" id="L3i02_r" style="display:none;margin-top:14px;"></div>`;
+    const s=stage.querySelector('#L3i02_s'),v=stage.querySelector('#L3i02_v');s.oninput=()=>v.textContent=s.value+'%';
+    stage.querySelector('#L3i02_go').onclick=()=>{const guess=+s.value;const actual=72;const delta=guess-actual;
+      const r=stage.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(Math.abs(delta)<=10?'win':'');
+      r.innerHTML=`<strong>You guessed ${guess}%. Actual: ${actual}%.</strong> ${Math.abs(delta)<=10?'Calibrated. You\'re seeing your team as they are.':delta<-10?'You undershot. Likely your team adopted faster than you noticed — when did you last sit with a junior?':'You overshot. Adoption is patchier than headlines suggest. Talk to your bottom-decile.'}`;SFX.success();};
+  }
+});
+
+/* ════ LESSON 4 · Hiring in the AI Era ═══════════════════════════════ */
+
+ART.push({ id:'L4-a01', type:'anim', lesson:'L4', title:'Resume funnel collapse',
+  what:'Top of funnel shrinks as AI screens get pickier; passes drop.',
+  footer:'A 5-stage funnel. AI screens compress the top three; what passes through the bottom is sparser but better-calibrated.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The funnel, post-AI</h3>
+    <p class="desc">Same role, two eras. 2022 funnel vs 2026 funnel.</p>
+    <svg viewBox="0 0 600 240">
+      ${[[120,90,'Applied',1200],[110,80,'Auto-screen',420],[90,65,'Phone',180],[60,45,'Onsite',60],[30,25,'Offer',12]].map(([w22,w26,label,n],i)=>`
+        <rect x="${30+i*110}" y="${30}" width="${w22*0.9}" height="40" fill="var(--paper-2)" stroke="var(--muted)"/>
+        <rect x="${30+i*110}" y="${150}" width="${w26*0.9}" height="40" fill="var(--saffron-soft)" stroke="var(--saffron)"/>
+        <text x="${30+i*110+20}" y="55" font-family="ui-monospace" font-size="10" fill="var(--muted)">${label}</text>
+        <text x="${30+i*110+20}" y="175" font-family="ui-monospace" font-size="10" fill="var(--saffron)">${label}</text>
+        <text x="${30+i*110+w22*0.9-5}" y="55" text-anchor="end" font-family="ui-monospace" font-size="10" font-weight="700">${n}</text>
+        <text x="${30+i*110+w26*0.9-5}" y="175" text-anchor="end" font-family="ui-monospace" font-size="10" font-weight="700">${Math.round(n*(i===0?1.5:i===4?0.7:0.55))}</text>
+      `).join('')}
+      <text x="20" y="22" font-family="ui-monospace" font-size="11" fill="var(--muted)" font-weight="700">2022</text>
+      <text x="20" y="142" font-family="ui-monospace" font-size="11" fill="var(--saffron)" font-weight="700">2026</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L4-a02', type:'anim', lesson:'L4', title:'The disappearing junior role',
+  what:'Open junior reqs on a calendar timeline fading from 2023 → 2026.',
+  footer:'Across 8 cohorts of YC companies, junior reqs as % of total dropped from 38% (2023) to 11% (2026).',
+  mount(stage){ stage.innerHTML=`
+    <h3>Junior reqs as % of total openings</h3>
+    <p class="desc">Across 800 startups. Years across the bottom; bars fade as junior reqs disappear.</p>
+    <svg viewBox="0 0 600 220">
+      <line x1="40" y1="180" x2="580" y2="180" stroke="var(--ink)"/>
+      ${[2022,2023,2024,2025,2026].map((y,i)=>{const h=[160,150,120,80,40][i];const c=['var(--emerald)','var(--emerald)','var(--saffron)','var(--rose)','var(--rose)'][i];return `
+        <rect x="${60+i*100}" y="${180-h}" width="60" height="${h}" fill="${c}" opacity="0.85">
+          <animate attributeName="height" from="0" to="${h}" dur="0.8s" begin="${i*0.2}s" fill="freeze"/>
+          <animate attributeName="y" from="180" to="${180-h}" dur="0.8s" begin="${i*0.2}s" fill="freeze"/>
+        </rect>
+        <text x="${90+i*100}" y="200" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--ink)">${y}</text>
+        <text x="${90+i*100}" y="${180-h-6}" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink-soft)" font-weight="700">${[38,34,26,18,11][i]}%</text>
+      `;}).join('')}
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L4-i01', type:'inter', lesson:'L4', title:'Scorecard builder',
+  what:'Weight 6 signals; see outcome ranking.',
+  footer:'Three candidates pre-scored across 6 signals. Adjust the weights to your taste; watch the ranking flip.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Weight the signals — see who wins</h3>
+    <p class="desc">Three candidates. Six signals. Move the weight sliders to reflect what you value.</p>
+    <div id="L4i01_w" style="display:grid;gap:8px;grid-template-columns:1fr 1fr;margin-bottom:14px;">
+      ${[['Resume',30],['Coding',25],['Comm',15],['Judgement',15],['Taste',10],['Fit',5]].map(([n,d])=>`<label style="display:flex;align-items:center;gap:10px;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">
+        <span style="width:80px;color:var(--ink);">${n}</span><input type="range" min="0" max="50" value="${d}" data-sig="${n}" style="flex:1;"><span class="wv" style="width:30px;text-align:right;color:var(--ink);font-weight:700;">${d}</span></label>`).join('')}
+    </div>
+    <div id="L4i01_out"></div>`;
+    const cands=[
+      {n:'Asha · senior IC',  s:{Resume:90,Coding:85,Comm:70,Judgement:80,Taste:75,Fit:90}},
+      {n:'Bharat · self-taught',s:{Resume:60,Coding:90,Comm:55,Judgement:75,Taste:90,Fit:65}},
+      {n:'Charvi · just out of FAANG',s:{Resume:95,Coding:80,Comm:75,Judgement:60,Taste:55,Fit:60}},
+    ];
+    const upd=()=>{const w={};stage.querySelectorAll('#L4i01_w input').forEach(i=>w[i.dataset.sig]=+i.value);const tot=Object.values(w).reduce((a,b)=>a+b,0)||1;
+      stage.querySelectorAll('#L4i01_w .wv').forEach((s,i)=>s.textContent=Object.values(w)[i]);
+      const ranked=cands.map(c=>{let sc=0;Object.entries(c.s).forEach(([k,v])=>sc+=v*(w[k]/tot));return {...c,score:Math.round(sc)};}).sort((a,b)=>b.score-a.score);
+      stage.querySelector('#L4i01_out').innerHTML=ranked.map((c,i)=>`<div class="panel" style="margin:6px 0;display:flex;justify-content:space-between;${i===0?'border-color:var(--emerald);background:var(--emerald-soft);':''}"><span><strong>#${i+1}</strong> · ${c.n}</span><span style="font-family:ui-monospace,monospace;font-weight:800;">${c.score}</span></div>`).join('');};
+    stage.querySelectorAll('#L4i01_w input').forEach(i=>i.oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+ART.push({ id:'L4-i02', type:'inter', lesson:'L4', title:'Salary-band drift',
+  what:'Slide three dials (AI%, seniority, geography); see comp band.',
+  footer:'Inferred from a 2026 compensation dataset. Bands are illustrative — the directionality is the point.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Compensation in an AI world</h3>
+    <p class="desc">Same role, same year. Three dials shift the band.</p>
+    <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr;margin-bottom:14px;">
+      ${[['AI %','ai',30,0,100],['Seniority','sen',6,1,15],['Geography','geo',2,0,4]].map(([n,k,v,mn,mx])=>`<label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">${n}<input type="range" id="L4i02_${k}" min="${mn}" max="${mx}" value="${v}" style="display:block;width:100%;"><span class="v" id="L4i02_v_${k}">${v}</span></label>`).join('')}
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Base band (₹ lakhs/yr)</div><div class="stat-value amber" id="L4i02_band">—</div></div>
+      <div class="stat"><div class="stat-label">Equity band</div><div class="stat-value" id="L4i02_eq">—</div></div>
+    </div>
+    <div class="reveal" id="L4i02_r" style="margin-top:12px;"></div>`;
+    const ai=stage.querySelector('#L4i02_ai'),sen=stage.querySelector('#L4i02_sen'),geo=stage.querySelector('#L4i02_geo');
+    const upd=()=>{stage.querySelector('#L4i02_v_ai').textContent=ai.value+'%';stage.querySelector('#L4i02_v_sen').textContent=sen.value+' yrs';stage.querySelector('#L4i02_v_geo').textContent=['Bangalore','Mumbai','NCR','Singapore','SF'][+geo.value];
+      const base=Math.round((20+(+sen.value)*8)*(1+(+ai.value)*0.015)*[1,1.05,1.12,1.8,3.5][+geo.value]);
+      stage.querySelector('#L4i02_band').textContent=base+'–'+(Math.round(base*1.3));stage.querySelector('#L4i02_eq').textContent=(+sen.value>5?'0.05–0.3%':'0.01–0.08%');
+      const r=stage.querySelector('#L4i02_r');r.innerHTML=`<strong>This band moves ${ai.value>50?'higher':'lower'} for AI-fluent candidates</strong> — the labour market is segmenting fast on AI demonstrable skill. A 2026 senior who can\'t ship with Cursor or Claude Code is getting paid like a 2023 mid.`;};
+    [ai,sen,geo].forEach(i=>i.oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+/* ════ LESSON 5 · Team Design With AI ════════════════════════════════ */
+
+ART.push({ id:'L5-a01', type:'anim', lesson:'L5', title:'Pyramid → diamond → hourglass',
+  what:'Org-shape morph as AI absorbs middle layers.',
+  footer:'Three stylised eras. Pyramid (lots of juniors), diamond (heavy mid-layer), hourglass (few mid, many specialists + supervisors).',
+  mount(stage){ stage.innerHTML=`
+    <h3>Three eras of team shape</h3>
+    <p class="desc">Watch the shape morph. The middle layer is where AI absorbs first.</p>
+    <svg viewBox="0 0 600 240">
+      <g fill="var(--saffron-soft)" stroke="var(--saffron)" stroke-width="1.5">
+        <polygon id="L5a01_p" points="290,30 320,30 350,80 260,80 230,30 380,30 230,140 380,140 290,30">
+          <animate attributeName="points" dur="6s" repeatCount="indefinite" values="
+            300,30 300,30 360,140 240,140 300,30 300,30;
+            300,30 300,30 380,90 220,90 380,150 220,150 300,30;
+            300,30 360,30 370,80 230,80 240,30 230,140 370,140 300,30"/>
+        </polygon>
+      </g>
+      <text x="300" y="200" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--ink)" font-weight="700">PYRAMID → DIAMOND → HOURGLASS</text>
+      <text x="300" y="220" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">specialists at top, supervisors at bottom; the middle thins</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L5-a02', type:'anim', lesson:'L5', title:'Span-of-control expansion',
+  what:'One manager\'s reports grow from 5 → 12 as AI takes admin.',
+  footer:'When AI handles status updates, OKR rollups, performance summaries, the manager can carry more reports with the same effective hours.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Span of control, 2022 → 2026</h3>
+    <p class="desc">Manager in the middle. Reports radiate outward.</p>
+    <svg viewBox="0 0 600 280">
+      <circle cx="300" cy="140" r="22" fill="var(--ink)"/>
+      <text x="300" y="146" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)" font-weight="700">MGR</text>
+      ${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2;const x=300+Math.cos(a)*110;const y=140+Math.sin(a)*100;
+        return `<circle cx="${x}" cy="${y}" r="14" fill="var(--saffron)" stroke="var(--ink)"><animate attributeName="opacity" from="${i<5?1:0}" to="1" dur="0.5s" begin="${1+i*0.2}s" fill="freeze"/></circle>
+                <line x1="300" y1="140" x2="${x}" y2="${y}" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 2"><animate attributeName="opacity" from="${i<5?0.5:0}" to="0.5" dur="0.5s" begin="${1+i*0.2}s" fill="freeze"/></line>`;
+      }).join('')}
+      <text x="300" y="265" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--muted)">5 reports (2022)  →  12 reports (2026)</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L5-i01', type:'inter', lesson:'L5', title:'Team-shape builder',
+  what:'Drag roles into a shape; see throughput score.',
+  footer:'A simple budget allocator. Senior ICs and supervisors compound; pure delegators don\'t. AI tier is the multiplier you add to each role.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Build a 12-person team</h3>
+    <p class="desc">Allocate 12 headcount across role types. AI tier shifts each role\'s contribution.</p>
+    <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-bottom:14px;">
+      ${[['Senior IC','sic',3,1.4],['Mid IC','mic',5,1.0],['Specialist','spc',1,1.6],['Manager','mgr',1,1.1],['Junior','jun',2,0.5]].map(([n,k,v,m])=>`<label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);"><span style="display:inline-block;width:90px;color:var(--ink);">${n}</span><input type="range" id="L5i01_${k}" min="0" max="8" value="${v}" data-mul="${m}"><span class="v" id="L5i01_v_${k}" style="color:var(--ink);font-weight:700;">${v}</span></label>`).join('')}
+      <label style="grid-column:span 2;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);"><span style="display:inline-block;width:90px;color:var(--ink);">AI tier</span><input type="range" id="L5i01_ai" min="0" max="3" value="1"><span class="v" id="L5i01_v_ai" style="color:var(--ink);font-weight:700;">moderate</span></label>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Headcount</div><div class="stat-value" id="L5i01_hc">12</div></div>
+      <div class="stat"><div class="stat-label">Throughput</div><div class="stat-value amber" id="L5i01_th">—</div></div>
+      <div class="stat"><div class="stat-label">Burn (₹L/mo)</div><div class="stat-value" id="L5i01_bn">—</div></div>
+    </div>`;
+    const k=['sic','mic','spc','mgr','jun','ai'];
+    const upd=()=>{const v={};k.forEach(x=>v[x]=+stage.querySelector('#L5i01_'+x).value);stage.querySelector('#L5i01_v_sic').textContent=v.sic;stage.querySelector('#L5i01_v_mic').textContent=v.mic;stage.querySelector('#L5i01_v_spc').textContent=v.spc;stage.querySelector('#L5i01_v_mgr').textContent=v.mgr;stage.querySelector('#L5i01_v_jun').textContent=v.jun;stage.querySelector('#L5i01_v_ai').textContent=['none','low','moderate','high'][v.ai];
+      const hc=v.sic+v.mic+v.spc+v.mgr+v.jun;stage.querySelector('#L5i01_hc').textContent=hc;
+      const aiM=[1,1.1,1.3,1.6][v.ai];
+      const th=Math.round((v.sic*1.4+v.mic*1.0+v.spc*1.6+v.mgr*1.1+v.jun*0.5)*aiM*10);
+      stage.querySelector('#L5i01_th').textContent=th;stage.querySelector('#L5i01_bn').textContent=Math.round((v.sic*40+v.mic*22+v.spc*45+v.mgr*35+v.jun*12)/1.5);};
+    k.forEach(x=>stage.querySelector('#L5i01_'+x).oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+ART.push({ id:'L5-i02', type:'inter', lesson:'L5', title:'Org-cost calculator',
+  what:'Toggle headcount + AI tier; see monthly burn.',
+  footer:'Per-seat tools at the top tier are <₹3k/mo. The bigger lever is whether the AI savings are recycled.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Monthly burn calculator</h3>
+    <div class="row" style="gap:14px;margin:10px 0;flex-wrap:wrap;">
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Headcount<input type="number" id="L5i02_hc" value="15" min="1" max="500" style="display:block;width:100px;margin-top:4px;"></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Avg comp (₹L/yr)<input type="number" id="L5i02_co" value="42" min="5" max="200" style="display:block;width:100px;margin-top:4px;"></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">AI tooling tier<select id="L5i02_ai" style="display:block;width:140px;margin-top:4px;"><option value="0">None</option><option value="1" selected>Basic (~₹800/seat)</option><option value="2">Pro (~₹2,000/seat)</option><option value="3">Max (~₹4,500/seat)</option></select></label>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Salary (₹L/mo)</div><div class="stat-value" id="L5i02_sal">—</div></div>
+      <div class="stat"><div class="stat-label">AI tools (₹L/mo)</div><div class="stat-value amber" id="L5i02_t">—</div></div>
+      <div class="stat"><div class="stat-label">Total (₹L/mo)</div><div class="stat-value" id="L5i02_tot">—</div></div>
+      <div class="stat"><div class="stat-label">AI % of burn</div><div class="stat-value" id="L5i02_p">—</div></div>
+    </div>`;
+    const upd=()=>{const hc=+stage.querySelector('#L5i02_hc').value,co=+stage.querySelector('#L5i02_co').value,t=+stage.querySelector('#L5i02_ai').value;const tool=[0,800,2000,4500][t];const sal=(hc*co)/12;const ai=hc*tool/100000;const tot=sal+ai;
+      stage.querySelector('#L5i02_sal').textContent=sal.toFixed(1);stage.querySelector('#L5i02_t').textContent=ai.toFixed(2);stage.querySelector('#L5i02_tot').textContent=tot.toFixed(1);stage.querySelector('#L5i02_p').textContent=((ai/tot)*100).toFixed(1)+'%';};
+    ['hc','co','ai'].forEach(x=>stage.querySelector('#L5i02_'+x).oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+/* ─── GALLERY RENDERING + FOCUS VIEW ────────────────────────────────── */
+function buildGrid(filter='') {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  ART.filter(a => !filter || a.lesson === filter).forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'card';
+    btn.dataset.id = a.id;
+    btn.innerHTML = `<div class="id"><span class="badge ${a.type==='anim'?'anim':'inter'}">${a.type==='anim'?'ANIM':'INTER'}</span>${a.id}</div>
+      <div class="title">${a.title}</div>
+      <div class="what">${a.what}</div>
+      <div class="lesson-label">${a.lesson} · ${({L1:'30-Min Trap',L2:'Trust Stack',L3:'Learning With AI',L4:'Hiring',L5:'Team Design'})[a.lesson]}</div>`;
+    btn.onclick = () => openFocus(a.id);
+    grid.appendChild(btn);
+  });
+}
+document.getElementById('lessonFilter').onchange = e => { SFX.click(); buildGrid(e.target.value); };
+buildGrid();
+
+const focus = document.getElementById('focus');
+let curIdx = -1;
+function openFocus(id) {
+  SFX.click();
+  curIdx = ART.findIndex(a => a.id === id);
+  renderFocus();
+  if (!focus.open) focus.showModal();
+  history.replaceState(null,'','#'+id);
+}
+function renderFocus() {
+  const a = ART[curIdx]; if(!a) return;
+  document.getElementById('focusId').textContent = a.id;
+  document.getElementById('focusTitle').textContent = a.title;
+  document.getElementById('focusFooter').innerHTML = `<strong>${a.lesson} · ${a.type}</strong> · ${a.footer || a.what}`;
+  const stage = document.getElementById('stage'); stage.innerHTML = '';
+  a.mount(stage);
+}
+document.getElementById('closeBtn').onclick = () => { SFX.click(); focus.close(); history.replaceState(null,'','#'); };
+document.getElementById('prevBtn').onclick = () => { SFX.click(); curIdx = (curIdx - 1 + ART.length) % ART.length; renderFocus(); history.replaceState(null,'','#'+ART[curIdx].id); };
+document.getElementById('nextBtn').onclick = () => { SFX.click(); curIdx = (curIdx + 1) % ART.length; renderFocus(); history.replaceState(null,'','#'+ART[curIdx].id); };
+document.addEventListener('keydown', e => {
+  if (!focus.open) return;
+  if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
+  if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+});
+const initialHash = window.location.hash.slice(1);
+if (initialHash && ART.some(a => a.id === initialHash)) openFocus(initialHash);
+</script>
+
+</body>
+</html>

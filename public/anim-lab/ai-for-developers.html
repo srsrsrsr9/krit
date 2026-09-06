@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anim Lab · AI for Developers</title>
+<style>
+  :root {
+    --bg: #fbf6ec; --paper: #fffaf0; --paper-2: #f4ecd8;
+    --code-bg: #0b1220; --code-text: #e2e8f0; --code-anno: #94a3b8;
+    --ink: #14110d; --ink-soft: #3d3a32; --muted: #6f6957;
+    --rule: #d8d1bf; --rule-soft: #ebe3cb;
+    --saffron: #c8881e; --saffron-soft: #f7d999;
+    --emerald: #14554a; --emerald-soft: #cfe3df;
+    --rose: #b32d2d; --rose-soft: #f5d6d6;
+    --sky: #0284c7; --sky-soft: #cfe6f5;
+    --gold: #b88e2d;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; background: var(--bg); color: var(--ink);
+    font-family: 'Iowan Old Style', Georgia, serif; font-size: 16px; line-height: 1.55; }
+  .topbar { position: sticky; top: 0; z-index: 5; background: rgba(251,246,236,0.94); backdrop-filter: blur(8px);
+    border-bottom: 1.5px solid var(--ink); padding: 14px 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: ui-monospace, monospace;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink); font-weight: 700; }
+  .logo .dot { width: 8px; height: 8px; background: var(--sky); border-radius: 50%; }
+  .course-name { font-family: 'Iowan Old Style', Georgia, serif; font-weight: 800; font-size: 17px;
+    border-left: 1px solid var(--rule); padding-left: 18px; }
+  select, .toggle { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 7px 12px; border-radius: 4px; background: var(--paper);
+    border: 1.5px solid var(--rule); color: var(--ink); cursor: pointer; }
+  .toggle { background: transparent; }
+  .toggle.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .topbar .right { margin-left: auto; display: flex; gap: 10px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 80px; }
+  .lede { font-size: 18px; line-height: 1.6; color: var(--ink-soft); max-width: 720px; margin: 0 0 28px; }
+  .lede em { color: var(--sky); font-style: normal; font-weight: 700; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card { text-align: left; background: var(--paper); border: 1.5px solid var(--rule); border-radius: 7px;
+    padding: 16px 16px 18px; cursor: pointer; font-family: inherit; color: var(--ink); transition: all 160ms var(--ease);
+    display: flex; flex-direction: column; gap: 6px; }
+  .card:hover { transform: translateY(-2px); border-color: var(--sky); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
+  .card .id { font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 800; text-transform: uppercase; }
+  .card .id .badge { display: inline-block; padding: 2px 7px; margin-right: 6px; border-radius: 3px; font-size: 9px; }
+  .card .id .badge.anim { background: var(--saffron); color: var(--ink); }
+  .card .id .badge.inter { background: var(--sky); color: var(--paper); }
+  .card .title { font-family: 'Iowan Old Style', Georgia, serif; font-size: 17px; font-weight: 800; line-height: 1.25;
+    color: var(--ink); margin: 2px 0 0; }
+  .card .what { font-size: 13.5px; line-height: 1.45; color: var(--muted); }
+  .lesson-label { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted);
+    text-transform: uppercase; margin-top: 6px; }
+  dialog.focus { padding: 0; border: none; max-width: min(92vw, 880px); width: 100%; background: var(--paper);
+    border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,0.25); }
+  dialog.focus::backdrop { background: rgba(20,17,13,0.55); backdrop-filter: blur(2px); }
+  dialog.focus header { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-bottom: 1.5px solid var(--rule); background: var(--paper-2); }
+  dialog.focus header .meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  dialog.focus header h2 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 18px; margin: 0; }
+  dialog.focus header .id-tag { font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em;
+    color: var(--gold); font-weight: 800; text-transform: uppercase; }
+  dialog.focus header nav { display: flex; gap: 6px; }
+  dialog.focus header .nav-btn { background: var(--paper); border: 1.5px solid var(--rule); padding: 6px 10px;
+    border-radius: 4px; cursor: pointer; font-family: ui-monospace, monospace; font-size: 11px; }
+  dialog.focus header .nav-btn:hover { border-color: var(--ink); }
+  dialog.focus .stage { padding: 22px; min-height: 360px; }
+  dialog.focus footer { padding: 14px 16px; border-top: 1px solid var(--rule); background: var(--paper-2);
+    font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; }
+  dialog.focus footer strong { color: var(--ink); }
+  .stage h3 { font-family: 'Iowan Old Style', Georgia, serif; font-size: 19px; margin: 0 0 6px; }
+  .stage .desc { font-size: 14.5px; color: var(--muted); margin: 0 0 18px; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { background: var(--ink); color: var(--paper); border: none; padding: 9px 16px; border-radius: 4px;
+    font-family: ui-monospace, monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: pointer; }
+  .btn:hover { background: var(--sky); }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
+  .btn.ghost:hover { border-color: var(--ink); background: var(--paper-2); }
+  .panel { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 5px; padding: 12px 14px;
+    font-size: 14px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap: 10px; }
+  .stat { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 5px; padding: 10px 12px; }
+  .stat-label { font-family: ui-monospace, monospace; font-size: 9px; letter-spacing: 0.16em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 2px; }
+  .stat-value { font-family: 'Iowan Old Style', Georgia, serif; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .stat-value.green { color: var(--emerald); } .stat-value.red { color: var(--rose); } .stat-value.amber { color: var(--saffron); } .stat-value.sky { color: var(--sky); }
+  input[type="range"] { width: 100%; accent-color: var(--sky); }
+  textarea, input[type="text"], input[type="number"], select { background: var(--paper); border: 1.5px solid var(--rule);
+    padding: 8px 10px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 14px; color: var(--ink); }
+  textarea:focus, input:focus, select:focus { outline: none; border-color: var(--sky); }
+  .lane { background: var(--paper-2); border: 1px dashed var(--rule); border-radius: 6px; padding: 10px; min-height: 70px; }
+  .lane h4 { margin: 0 0 6px; font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); }
+  .chip { display: inline-block; padding: 4px 10px; margin: 3px; background: var(--paper); border: 1.5px solid var(--rule);
+    border-radius: 14px; font-size: 13px; cursor: grab; user-select: none; font-family: ui-monospace, monospace; }
+  .chip:active { cursor: grabbing; }
+  svg { display: block; max-width: 100%; height: auto; }
+  pre.code { background: var(--code-bg); color: var(--code-text); padding: 12px 14px; border-radius: 4px;
+    font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; overflow-x: auto; margin: 8px 0; }
+  pre.code .anno { color: var(--code-anno); font-style: italic; }
+  pre.code .hi { background: rgba(245,196,81,0.18); padding: 1px 3px; border-radius: 2px; }
+  .reveal { background: var(--paper-2); border-left: 3px solid var(--sky); padding: 12px 14px; border-radius: 0 5px 5px 0;
+    margin-top: 12px; font-size: 14.5px; line-height: 1.55; }
+  .reveal.win { border-color: var(--emerald); background: var(--emerald-soft); }
+  .reveal.bad { border-color: var(--rose); background: var(--rose-soft); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span>
+  <span class="course-name">AI for Developers</span>
+  <div class="right">
+    <select id="lessonFilter" aria-label="Filter by lesson">
+      <option value="">All lessons</option>
+      <option value="L1">L1 · How we got here</option>
+      <option value="L2">L2 · The Transformer</option>
+      <option value="L3">L3 · LLMs in practice</option>
+      <option value="L4">L4 · Finetuning</option>
+      <option value="L5">L5 · RAG</option>
+      <option value="L6">L6 · Agents</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+
+<main>
+  <p class="lede">
+    Twenty drop-in artifacts — 10 animations + 10 interactives — designed for an engineering audience. Most have <em>code on the right, mechanic on the left</em>; the maths stays inspectable. Click any card.
+  </p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog class="focus" id="focus">
+  <header>
+    <div class="meta">
+      <span class="id-tag" id="focusId">—</span>
+      <h2 id="focusTitle">—</h2>
+    </div>
+    <nav>
+      <button class="nav-btn" id="prevBtn" title="Previous (←)">←</button>
+      <button class="nav-btn" id="nextBtn" title="Next (→)">→</button>
+      <button class="nav-btn" id="closeBtn" title="Close (Esc)">✕</button>
+    </nav>
+  </header>
+  <div class="stage" id="stage"></div>
+  <footer id="focusFooter"></footer>
+</dialog>
+
+<script>
+/* ZzFX micro */
+let zzfxV=.3,zzfxX,zzfx=(...t)=>{if(!zzfxX)zzfxX=new(window.AudioContext||window.webkitAudioContext);if(zzfxX.state==='suspended')zzfxX.resume();let[e=1,a=.05,n=220,r=0,i=0,s=.1,o=0,h=1,c=0,l=0,d=0,m=0,p=0,u=0,f=0,g=0,v=0,w=1,y=0,M=0,N=0]=t,k=2*Math.PI,b=zzfxX.sampleRate,F=440;c*=500*k/b/b;n*=(1-a+2*a*Math.random())*k/b;let A=[],S=0,T=0,L=0,Z=1,_=0,j=0,J=0,P=N<0?-1:1,B=k*P*N*2/b,C=Math.cos(B),x=Math.sin(B)/4,O=1+x,q=-2*C/O,D=(1-x)/O,E=(1+P*C)/2/O,H=-(P+C)/O,I=E,Q=0,R=0,U=0,V=0;r=b*r+9;y*=b;i*=b;s*=b;v*=b;l*=500*k/b**3;f*=k/b;d*=k/b;m*=b;p=b*p|0;for(g=r+y+i+s+v|0;L<g;A[L++]=j*e*zzfxV)++J%(100*g|0)||(j=o?1<o?2<o?3<o?4<o?(S/k%1<h/2)*2-1:Math.sin(S**3):Math.max(Math.min(Math.tan(S),1),-1):1-(2*S/k%2+2)%2:1-4*Math.abs(Math.round(S/k)-S/k):Math.sin(S),j=(p?1-M+M*Math.sin(k*L/p):1)*(4<o?j:(j<0?-1:1)*Math.abs(j)**h)*(L<r?L/r:L<r+y?1-(L-r)/y*(1-w):L<r+y+i?w:L<g-v?(g-L-v)/s*w:0),j=v?j/2+(v>L?0:(L<g-v?1:(g-L)/v)*A[L-v|0]/2/e):j,N?j=V=I*Q+H*(Q=R)+E*(R=j)-D*U-q*(U=V):0),B=(n+=c+=l)*Math.cos(f*T++),S+=B+B*u*Math.sin(L**5),Z&&++Z>m&&(n+=d,n+=d,Z=0),!p||++_%p||(n=B,c=0,Z=Z||1);let W=zzfxX.createBuffer(1,g,b);W.getChannelData(0).set(A);let Y=zzfxX.createBufferSource();Y.buffer=W;Y.connect(zzfxX.destination);Y.start();return Y};
+let SFX_ON = false;
+const SFX = {
+  click:   () => SFX_ON && zzfx(1,.05,800,0,.01,.05,0,1.5),
+  confirm: () => SFX_ON && zzfx(1,.05,400,.01,.1,.15,0,2,0,0,200,.05),
+  success: () => SFX_ON && zzfx(1,.05,537,.02,.02,.22,1,1.59,-6.98,4.97),
+  hover:   () => SFX_ON && zzfx(.4,.05,1200,0,.005,.025,0,1.5),
+  pop:     () => SFX_ON && zzfx(1,.1,700,0,.01,.05,0,2),
+  sparkle: () => SFX_ON && zzfx(.6,.05,1600,0,.01,.15,0,3, 20),
+};
+document.getElementById('soundToggle').addEventListener('click', e => {
+  SFX_ON = !SFX_ON; e.currentTarget.classList.toggle('on', SFX_ON); e.currentTarget.setAttribute('aria-pressed', SFX_ON);
+  if (SFX_ON) SFX.confirm();
+});
+
+const ART = [];
+
+/* ════ L1 · How we got here ══════════════════════════════════════════ */
+
+ART.push({ id:'L1-a01', type:'anim', lesson:'L1', title:'Five-year NLP timeline',
+  what:'Rule-based → word2vec → BERT → GPT → multimodal.',
+  footer:'Scrub the year slider; the diagram morphs through the 5 eras. The shape of progress: longer context, fewer rules, more parameters.',
+  mount(stage){ stage.innerHTML=`
+    <h3>2018 → 2026</h3>
+    <p class="desc">Five eras of NLP in one slider.</p>
+    <input type="range" id="L1a01_y" min="0" max="4" value="0" step="1">
+    <div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:10px;color:var(--muted);"><span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span></div>
+    <svg viewBox="0 0 600 200" style="margin-top:12px">
+      <g id="L1a01_g"></g>
+    </svg>
+    <div class="panel" id="L1a01_p" style="margin-top:8px"></div>`;
+    const eras=[
+      {t:'Rule-based + n-grams',d:'Hand-coded patterns; ~100M params; brittle on the long tail',c:'#94a3b8',n:5},
+      {t:'word2vec / GloVe',d:'Static embeddings; 300d vectors; first taste of "meaning as geometry"',c:'#0284c7',n:9},
+      {t:'BERT / encoder transformers',d:'Bidirectional context; 100M–340M params; fine-tune everything',c:'#14554a',n:14},
+      {t:'GPT-3/4 / decoder LLMs',d:'In-context learning; 175B → 1.7T params; prompts replace fine-tuning',c:'#c8881e',n:22},
+      {t:'Multimodal frontier',d:'Vision + audio + tool-use; reasoning models; 100k+ ctx',c:'#b32d2d',n:30},
+    ];
+    const upd=()=>{const v=+stage.querySelector('#L1a01_y').value;const e=eras[v];
+      const g=stage.querySelector('#L1a01_g');let nodes='';for(let i=0;i<e.n;i++){const x=80+((i*23)%440);const y=40+Math.floor(i/20)*60+(i%3)*15;nodes+=`<circle cx="${x}" cy="${y}" r="6" fill="${e.c}" opacity="0.85"/>`;}g.innerHTML=nodes;
+      stage.querySelector('#L1a01_p').innerHTML=`<strong>${e.t}</strong> · ${e.d}`;};
+    stage.querySelector('#L1a01_y').oninput=()=>{SFX.hover();upd();};upd();
+  }
+});
+
+ART.push({ id:'L1-a02', type:'anim', lesson:'L1', title:'Synonym list sprawl',
+  what:'3,400 synonyms grow then collapse as embeddings replace the table.',
+  footer:'A real Bangalore food-tech\'s synonym table. Pre-2020: kept growing. Post-embeddings deploy: collapsed to zero.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The synonym table that retired itself</h3>
+    <p class="desc">3,400 hand-maintained pairs → 0, on the week embeddings shipped.</p>
+    <svg viewBox="0 0 600 240">
+      <line x1="40" y1="200" x2="580" y2="200" stroke="var(--ink)"/>
+      <line x1="40" y1="20" x2="40" y2="200" stroke="var(--ink)"/>
+      <path d="M40,180 L120,160 L200,130 L280,90 L360,60 L400,55 L440,200 L520,200 L580,200" fill="none" stroke="var(--rose)" stroke-width="3" stroke-dasharray="700" stroke-dashoffset="700">
+        <animate attributeName="stroke-dashoffset" from="700" to="0" dur="3s" begin="0.5s" fill="freeze"/>
+      </path>
+      <line x1="400" y1="20" x2="400" y2="200" stroke="var(--saffron)" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="404" y="34" font-family="ui-monospace" font-size="11" fill="var(--saffron)" font-weight="700">embeddings shipped</text>
+      <text x="40" y="40" font-family="ui-monospace" font-size="10" fill="var(--muted)">~3,400</text>
+      <text x="580" y="195" text-anchor="end" font-family="ui-monospace" font-size="10" fill="var(--muted)">0 maintained</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L1-i01', type:'inter', lesson:'L1', title:'Keyword vs embedding race',
+  what:'Type a query; see two retrievers return different results side-by-side.',
+  footer:'Same corpus, two retrievers. Type a paraphrase ("kid-friendly", "no booze", "family dining") and watch where each one lands.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Race two retrievers</h3>
+    <p class="desc">Type a query. See keyword search vs embeddings find different things.</p>
+    <input type="text" id="L1i01_q" placeholder="e.g. kid-friendly restaurant" value="kid-friendly restaurant" style="width:100%;margin-bottom:14px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="panel"><h4 style="margin:0 0 8px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;">Keyword search</h4><div id="L1i01_kw"></div></div>
+      <div class="panel" style="border-color:var(--sky);"><h4 style="margin:0 0 8px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--sky);text-transform:uppercase;">Embedding search</h4><div id="L1i01_em"></div></div>
+    </div>`;
+    const docs=[
+      {t:'Family dining in Bangalore',k:['family','dining']},
+      {t:'Pure-veg restaurant, good for kids',k:['veg','kids']},
+      {t:'Beer garden, no kids',k:['beer','garden','no','kids']},
+      {t:'Quiet coffee shop, slow wifi',k:['coffee','shop','wifi']},
+      {t:'Fine dining for couples',k:['fine','dining','couples']},
+      {t:'Birthday party space',k:['birthday','party','space']},
+    ];
+    const SYN={kid:['family','kids','children','birthday'],friendly:['good','safe','kids'],restaurant:['dining','restaurant','place','shop'],no:['no']};
+    const upd=()=>{const q=stage.querySelector('#L1i01_q').value.toLowerCase();const qWords=q.split(/\s+/).filter(Boolean);
+      const kwRanked=docs.map(d=>({d,s:qWords.filter(w=>d.k.some(k=>k.includes(w))).length})).sort((a,b)=>b.s-a.s);
+      const expanded=qWords.flatMap(w=>SYN[w]||[w]);
+      const emRanked=docs.map(d=>({d,s:expanded.filter(w=>d.t.toLowerCase().includes(w)||d.k.some(k=>k.includes(w))).length+(d.t.toLowerCase().includes('family')||d.t.toLowerCase().includes('kids')?2:0)})).sort((a,b)=>b.s-a.s);
+      stage.querySelector('#L1i01_kw').innerHTML=kwRanked.slice(0,3).map((r,i)=>`<div style="padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;"><strong>${r.s}</strong> · ${r.d.t}</div>`).join('');
+      stage.querySelector('#L1i01_em').innerHTML=emRanked.slice(0,3).map((r,i)=>`<div style="padding:6px 0;border-bottom:1px solid var(--rule-soft);font-size:13px;"><strong>${r.s.toFixed(1)}</strong> · ${r.d.t}</div>`).join('');};
+    stage.querySelector('#L1i01_q').oninput=upd;upd();
+  }
+});
+
+ART.push({ id:'L1-i02', type:'inter', lesson:'L1', title:'Drag-classify NLP methods',
+  what:'Sort 8 techniques onto an evolution timeline.',
+  footer:'Drag each technique to the era you think it belongs to. Check answers — wrong placements get a red border.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Sort onto a timeline</h3>
+    <p class="desc">Drag chips into the right era. Click "check" when done.</p>
+    <div class="row" id="L1i02_pool" style="margin-bottom:12px;padding:10px;background:var(--paper-2);border-radius:5px;">
+      ${['n-gram','word2vec','LSTM','BERT','attention','RAG','SFT','tool-use'].map((t,i)=>`<span class="chip" draggable="true" data-id="${t}">${t}</span>`).join('')}
+    </div>
+    <div style="display:grid;gap:10px;grid-template-columns:repeat(5,1fr);">
+      ${['pre-2017','2017-19','2020-22','2023-24','2025-26'].map(y=>`<div class="lane" data-era="${y}"><h4>${y}</h4><div class="lane-drop"></div></div>`).join('')}
+    </div>
+    <div class="row" style="margin-top:12px;"><button class="btn" id="L1i02_chk">Check</button></div>
+    <div class="reveal" id="L1i02_r" style="display:none;"></div>`;
+    const truth={'n-gram':'pre-2017','word2vec':'pre-2017','LSTM':'pre-2017','BERT':'2017-19','attention':'2017-19','SFT':'2020-22','RAG':'2023-24','tool-use':'2025-26'};
+    const placed={};
+    stage.querySelector('#L1i02_pool').addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('id',e.target.dataset.id);});
+    stage.querySelectorAll('.lane').forEach(l=>{
+      l.addEventListener('dragover',e=>{e.preventDefault();l.style.borderColor='var(--sky)';});
+      l.addEventListener('dragleave',()=>l.style.borderColor='');
+      l.addEventListener('drop',e=>{e.preventDefault();l.style.borderColor='';const id=e.dataTransfer.getData('id');const chip=stage.querySelector(`#L1i02_pool [data-id="${id}"]`);if(!chip)return;
+        const cl=chip.cloneNode(true);cl.removeAttribute('draggable');cl.style.cursor='default';l.querySelector('.lane-drop').appendChild(cl);chip.remove();placed[id]=l.dataset.era;SFX.pop();});
+    });
+    stage.querySelector('#L1i02_chk').onclick=()=>{let right=0,wrong=[];Object.entries(truth).forEach(([k,v])=>{if(placed[k]===v)right++;else if(placed[k])wrong.push(k);});
+      const r=stage.querySelector('#L1i02_r');r.style.display='block';r.className='reveal '+(right>=6?'win':right<=3?'bad':'');
+      r.innerHTML=`<strong>${right}/8 correct.</strong> ${wrong.length?'Misplaced: '+wrong.join(', '):'Clean run.'} The shape: each era subsumes the last — RAG uses embeddings (2017-19), tool-use uses RAG.`;SFX.success();};
+  }
+});
+
+/* ════ L2 · The Transformer ══════════════════════════════════════════ */
+
+ART.push({ id:'L2-a01', type:'anim', lesson:'L2', title:'A token\'s first day',
+  what:'"bank" → token id → embedding vector → attention layers → output.',
+  footer:'The same word "bank" enters two sentences. Trace the journey: tokenize, embed, attention modulates, output.',
+  mount(stage){ stage.innerHTML=`
+    <h3>What happens to "bank"?</h3>
+    <p class="desc">Two sentences. Same word. Different outputs. Click each stage.</p>
+    <div class="row" id="L2a01_stages" style="margin-bottom:12px;">
+      ${['Input','Tokenize','Embed','Attention','Output'].map((s,i)=>`<button class="btn ghost" data-step="${i}">${i+1}. ${s}</button>`).join('')}
+    </div>
+    <div id="L2a01_panel" class="panel" style="min-height:180px;font-family:ui-monospace,monospace;font-size:13px;line-height:1.7;"></div>`;
+    const steps=[
+      `<strong>Sentence A:</strong> "I deposited money at the <span class="hi">bank</span>"<br><strong>Sentence B:</strong> "We sat on the river <span class="hi">bank</span> and watched"`,
+      `Tokenize: <code>"bank"</code> → token id <code>2924</code> in both sentences. <em>Same id.</em>`,
+      `Embed: token 2924 → vector <code>v ∈ R⁷⁶⁸</code>. <em>Same starting vector in both sentences.</em>`,
+      `Attention: each surrounding token contributes a weighted addition to "bank"\'s vector.<br>A: "money", "deposited" pull toward finance cluster.<br>B: "river", "sat" pull toward landscape cluster.`,
+      `Output: "bank" in A now lives near "credit union"; in B near "shore". <strong>Same start, different ending.</strong>`
+    ];
+    let cur=0;const upd=()=>{stage.querySelector('#L2a01_panel').innerHTML=steps[cur].replace(/\.hi\b/g,'hi');
+      stage.querySelectorAll('[data-step]').forEach(b=>b.classList.toggle('ghost',+b.dataset.step!==cur));};
+    stage.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{SFX.click();cur=+b.dataset.step;upd();});upd();
+  }
+});
+
+ART.push({ id:'L2-a02', type:'anim', lesson:'L2', title:'Attention heatmap as training runs',
+  what:'A 6×6 attention matrix lights up over training steps.',
+  footer:'At step 0 attention is random. By step 1000 the diagonal lights up (each word attends to itself), then off-diagonal patterns emerge.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The attention matrix, learning</h3>
+    <p class="desc">A 6×6 matrix for the sentence "the cat sat on the mat". Watch attention emerge.</p>
+    <svg viewBox="0 0 360 320" id="L2a02_svg">
+      ${(()=>{let g='';const words=['the','cat','sat','on','the','mat'];for(let i=0;i<6;i++){g+=`<text x="20" y="${50+i*40+5}" font-family="ui-monospace" font-size="11" text-anchor="end" fill="var(--ink)">${words[i]}</text>`;g+=`<text x="${60+i*40+20}" y="30" font-family="ui-monospace" font-size="11" text-anchor="middle" fill="var(--ink)">${words[i]}</text>`;for(let j=0;j<6;j++)g+=`<rect class="cell" data-i="${i}" data-j="${j}" x="${60+j*40}" y="${50+i*40}" width="38" height="38" fill="rgba(2,132,199,0.1)" stroke="var(--rule)"/>`;}return g;})()}
+    </svg>
+    <div class="row" style="margin-top:8px;align-items:center;">
+      <button class="btn" id="L2a02_play">▷ Train</button>
+      <span style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);">STEP <span id="L2a02_s" style="color:var(--ink);font-weight:700;">0</span></span>
+    </div>`;
+    const cells=stage.querySelectorAll('#L2a02_svg .cell');const lbl=stage.querySelector('#L2a02_s');
+    const patterns=[
+      ()=>cells.forEach(c=>c.setAttribute('fill','rgba(2,132,199,'+Math.random()*0.3+')')),
+      ()=>cells.forEach(c=>{const i=+c.dataset.i,j=+c.dataset.j;c.setAttribute('fill','rgba(2,132,199,'+(i===j?0.7:Math.random()*0.2)+')');}),
+      ()=>cells.forEach(c=>{const i=+c.dataset.i,j=+c.dataset.j;const v=i===j?0.4:(i===0&&j===4)||(i===4&&j===0)?0.8:(i===1&&j===2)?0.6:Math.random()*0.15;c.setAttribute('fill','rgba(2,132,199,'+v+')');}),
+    ];
+    let st=0;stage.querySelector('#L2a02_play').onclick=()=>{SFX.click();[0,500,1500,3000].forEach((step,k)=>setTimeout(()=>{lbl.textContent=step;patterns[Math.min(k,patterns.length-1)]();},k*900));};
+    patterns[0]();
+  }
+});
+
+ART.push({ id:'L2-i01', type:'inter', lesson:'L2', title:'Toggle attention layers',
+  what:'Disable layers 1..N; see output coherence drop.',
+  footer:'Stylised but directional: pulling layers out of a 12-layer model trashes coherence in predictable ways. Lower layers handle syntax, higher layers handle meaning.',
+  mount(stage){ stage.innerHTML=`
+    <h3>How many layers do you actually need?</h3>
+    <p class="desc">A real LLM has 12-96 layers. Toggle them on/off. Watch the output degrade.</p>
+    <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:14px 0;">
+      ${Array.from({length:12},(_,i)=>`<button class="btn ghost" data-layer="${i+1}" style="padding:8px 0;font-size:10px;">${i+1}</button>`).join('')}
+    </div>
+    <div class="panel"><strong>Prompt:</strong> "The cat sat on the mat. The mat was…"</div>
+    <div class="panel" style="background:var(--paper);border-left:3px solid var(--sky);margin-top:8px;font-family:ui-monospace,monospace;font-size:14px;" id="L2i01_out">red.</div>
+    <div class="reveal" id="L2i01_r" style="display:none;"></div>`;
+    let on=new Set([1,2,3,4,5,6,7,8,9,10,11,12]);
+    const outputs={
+      12:'red.',11:'red.',10:'red.',9:'red.',8:'wet.',7:'big.',6:'mat.',5:'cat.',4:'the the.',3:'a a a.',2:'... ... ...',1:'??? ???'
+    };
+    const upd=()=>{const k=on.size;stage.querySelector('#L2i01_out').textContent=outputs[k]||'??? ???';stage.querySelectorAll('[data-layer]').forEach(b=>{b.classList.toggle('ghost',!on.has(+b.dataset.layer));});
+      const r=stage.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(k>=10?'win':k<=4?'bad':'');
+      r.innerHTML=`<strong>${k}/12 layers on.</strong> ${k<=4?'Output is gibberish — lower layers handle syntax only.':k<=8?'Coherent but generic — middle layers carry topical structure.':k<=11?'Mostly fluent — top layers add the final semantic polish.':'Full output. Each layer earns its keep.'}`;};
+    stage.querySelectorAll('[data-layer]').forEach(b=>b.onclick=()=>{SFX.click();const l=+b.dataset.layer;if(on.has(l))on.delete(l);else on.add(l);upd();});upd();
+  }
+});
+
+ART.push({ id:'L2-i02', type:'inter', lesson:'L2', title:'Type-and-attend',
+  what:'Type a sentence; hover a token; see what it attends to.',
+  footer:'Synthetic attention scores for illustration. Real models produce per-head distributions you can pull with `output_attentions=True`.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Hover a word to see its attention</h3>
+    <input type="text" id="L2i02_s" value="the cat sat on the mat" style="width:100%;margin-bottom:14px;">
+    <div id="L2i02_words" style="display:flex;gap:8px;flex-wrap:wrap;font-size:18px;font-family:'Iowan Old Style',Georgia,serif;line-height:2.2;"></div>
+    <div class="panel" id="L2i02_info" style="margin-top:12px;">Hover a word above.</div>`;
+    const upd=()=>{const w=stage.querySelector('#L2i02_s').value.split(/\s+/).filter(Boolean);
+      stage.querySelector('#L2i02_words').innerHTML=w.map((x,i)=>`<span class="tk" data-i="${i}" style="padding:4px 10px;border:1.5px solid var(--rule);border-radius:14px;cursor:pointer;background:var(--paper);">${x}</span>`).join('');
+      stage.querySelectorAll('.tk').forEach(t=>t.onmouseenter=()=>{
+        const idx=+t.dataset.i;const scores=w.map((_,j)=>j===idx?0.45:Math.exp(-Math.abs(idx-j)*0.6)*0.5+Math.random()*0.1);const tot=scores.reduce((a,b)=>a+b,0);
+        stage.querySelectorAll('.tk').forEach((tk,j)=>{tk.style.background=`rgba(2,132,199,${(scores[j]/tot)*1.4})`;tk.style.borderColor=j===idx?'var(--sky)':'var(--rule)';});
+        stage.querySelector('#L2i02_info').innerHTML=`<strong>"${w[idx]}"</strong> attends most to: ${scores.map((s,j)=>({s,j})).sort((a,b)=>b.s-a.s).slice(0,3).map(x=>`<code>${w[x.j]}</code> (${(x.s/tot*100).toFixed(0)}%)`).join(', ')}`;
+      });};
+    stage.querySelector('#L2i02_s').oninput=upd;upd();
+  }
+});
+
+/* ════ L3 · LLMs in practice ═════════════════════════════════════════ */
+
+ART.push({ id:'L3-a01', type:'anim', lesson:'L3', title:'Cost-per-1M-tokens drop',
+  what:'2020 → 2026 inference cost falling, log scale.',
+  footer:'GPT-3 davinci was $60/1M tokens at launch. By 2026 frontier sits at ~$2-15; commodity at $0.05. ~1000× drop in 6 years.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The cost curve</h3>
+    <p class="desc">Inference cost per million tokens, log scale, 2020–2026.</p>
+    <svg viewBox="0 0 600 240">
+      <line x1="40" y1="20" x2="40" y2="200" stroke="var(--ink)"/>
+      <line x1="40" y1="200" x2="580" y2="200" stroke="var(--ink)"/>
+      ${['$60','$10','$1','$0.10','$0.01'].map((l,i)=>`<text x="35" y="${30+i*40+5}" text-anchor="end" font-family="ui-monospace" font-size="10" fill="var(--muted)">${l}</text><line x1="40" y1="${30+i*40}" x2="580" y2="${30+i*40}" stroke="var(--rule-soft)" stroke-dasharray="2 2"/>`).join('')}
+      <path d="M40,30 L120,40 L200,80 L280,110 L360,140 L440,170 L520,185 L580,190" fill="none" stroke="var(--sky)" stroke-width="3" stroke-dasharray="700" stroke-dashoffset="700">
+        <animate attributeName="stroke-dashoffset" from="700" to="0" dur="3s" begin="0.5s" fill="freeze"/>
+      </path>
+      ${[2020,2021,2022,2023,2024,2025,2026].map((y,i)=>`<text x="${40+i*88}" y="222" font-family="ui-monospace" font-size="10" fill="var(--muted)">${y}</text>`).join('')}
+      <text x="540" y="180" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--sky)" font-weight="700">≈ 1000× drop</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L3-a02', type:'anim', lesson:'L3', title:'Quality vs latency scatter',
+  what:'Bubble chart of model space, animated as new models drop.',
+  footer:'Each bubble is a model. Size = context window. The frontier (top-right) keeps shifting as new models ship.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Model landscape</h3>
+    <p class="desc">Quality vs latency. Bubble = context window. Hover for name.</p>
+    <svg viewBox="0 0 600 280">
+      <line x1="40" y1="240" x2="580" y2="240" stroke="var(--ink)"/>
+      <line x1="40" y1="20" x2="40" y2="240" stroke="var(--ink)"/>
+      ${[
+        ['GPT-3.5',60,80,8,'#94a3b8'],['Llama-2-7b',110,140,12,'#0284c7'],['Claude-3-Haiku',180,100,16,'#14554a'],['GPT-4',280,40,18,'#c8881e'],['Claude-3.7-Sonnet',360,55,28,'#b32d2d'],['Gemini-2.5-Pro',420,80,28,'#c8881e'],['o3',490,30,22,'#b32d2d'],['Llama-3-70b',200,160,18,'#0284c7'],['Mistral-Large',300,100,16,'#14554a'],['MiniLM-L6',60,220,6,'#94a3b8']
+      ].map(([n,x,y,r,c])=>`<circle class="bub" data-n="${n}" cx="${x}" cy="${y}" r="${r}" fill="${c}" opacity="0.7" style="cursor:pointer;"><title>${n}</title></circle>`).join('')}
+      <text x="40" y="270" font-family="ui-monospace" font-size="10" fill="var(--muted)">latency: low →</text>
+      <text x="580" y="270" text-anchor="end" font-family="ui-monospace" font-size="10" fill="var(--muted)">→ high</text>
+      <text x="20" y="120" font-family="ui-monospace" font-size="10" fill="var(--muted)" transform="rotate(-90 20 120)">quality →</text>
+      <text x="540" y="40" font-family="ui-monospace" font-size="11" fill="var(--rose)" font-weight="700">FRONTIER</text>
+    </svg>`;
+  }
+});
+
+ART.push({ id:'L3-i01', type:'inter', lesson:'L3', title:'Cost & latency calculator',
+  what:'Sliders for model size + req/sec; see ₹ per month.',
+  footer:'Rough pricing as of Q2 2026 — Anthropic Sonnet $3/M in, $15/M out. Llama-3-8b self-hosted ~$0.20/M. Order-of-magnitude only.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Monthly bill calculator</h3>
+    <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-bottom:14px;">
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Model tier<select id="L3i01_m" style="display:block;width:100%;margin-top:4px;"><option value="0.05">Small ($0.05/M)</option><option value="0.2" selected>7B self-host ($0.20/M)</option><option value="3">Claude Sonnet ($3/M)</option><option value="15">Claude Opus ($15/M)</option></select></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Req/sec<input type="number" id="L3i01_r" value="10" min="1" max="1000" style="display:block;width:100%;margin-top:4px;"></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Avg tokens/req<input type="number" id="L3i01_t" value="1000" min="100" max="50000" style="display:block;width:100%;margin-top:4px;"></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Output ratio (%)<input type="number" id="L3i01_o" value="20" min="0" max="100" style="display:block;width:100%;margin-top:4px;"></label>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Tokens/month</div><div class="stat-value" id="L3i01_tk">—</div></div>
+      <div class="stat"><div class="stat-label">USD/month</div><div class="stat-value sky" id="L3i01_u">—</div></div>
+      <div class="stat"><div class="stat-label">₹/month</div><div class="stat-value amber" id="L3i01_rs">—</div></div>
+    </div>`;
+    const upd=()=>{const c=+stage.querySelector('#L3i01_m').value,r=+stage.querySelector('#L3i01_r').value,t=+stage.querySelector('#L3i01_t').value,o=+stage.querySelector('#L3i01_o').value/100;
+      const tok=r*t*60*60*24*30;const usd=(tok*c)/1e6*(1-o)+(tok*c*5)/1e6*o;
+      stage.querySelector('#L3i01_tk').textContent=(tok/1e9).toFixed(2)+'B';stage.querySelector('#L3i01_u').textContent='$'+usd.toFixed(0);stage.querySelector('#L3i01_rs').textContent='₹'+(usd*83/100000).toFixed(1)+'L';};
+    ['m','r','t','o'].forEach(k=>stage.querySelector('#L3i01_'+k).oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+ART.push({ id:'L3-i02', type:'inter', lesson:'L3', title:'"Which model?" decision tree',
+  what:'Walk a decision tree: latency? cost? quality? privacy?',
+  footer:'Six questions get you to a model class. Treat it as a starting point, not a verdict — always benchmark on your specific data.',
+  mount(stage){ stage.innerHTML=`
+    <h3>What model should you reach for first?</h3>
+    <p class="desc" id="L3i02_q">Loading…</p>
+    <div class="row" id="L3i02_opts" style="margin-top:14px;flex-direction:column;align-items:stretch;"></div>
+    <div class="reveal" id="L3i02_r" style="display:none;margin-top:14px;"></div>
+    <button class="btn ghost" id="L3i02_reset" style="margin-top:14px;">↻ Restart</button>`;
+    const tree={
+      start:{q:'What\'s your primary constraint?',opts:[['Latency (<200ms)','lat'],['Cost (<$1k/mo)','cost'],['Quality (best possible)','q'],['Privacy (on-prem)','priv']]},
+      lat:{q:'Need it sub-100ms?',opts:[['Yes','lat-yes'],['<200ms is fine','lat-no']]},
+      'lat-yes':{r:'<strong>DistilBERT or MiniLM</strong> at 100M params, running on CPU. Use only for classification/embedding tasks. <em>For LLM-style generation, sub-100ms is currently impossible without sacrificing quality.</em>'},
+      'lat-no':{r:'<strong>Llama-3.2-3b or Phi-3-mini</strong>, self-hosted on a single GPU. ~150ms first token, $0.50/M in. Best latency/quality at scale.'},
+      cost:{q:'How much volume?',opts:[['<1M req/mo','cost-low'],['>10M req/mo','cost-high']]},
+      'cost-low':{r:'<strong>Claude Haiku or GPT-4o-mini</strong> via API. $0.25/M tokens. Zero ops, predictable cost.'},
+      'cost-high':{r:'<strong>Llama-3-8b self-hosted</strong> on rented A10G. $0.20/M effective. Crosses-over with API pricing at ~5M req/mo.'},
+      q:{q:'Reasoning or generation?',opts:[['Reasoning (math, code)','q-r'],['Generation (chat, content)','q-g']]},
+      'q-r':{r:'<strong>OpenAI o3 or Claude 3.7 Sonnet (extended thinking)</strong>. ~$15/M but worth it for hard reasoning.'},
+      'q-g':{r:'<strong>Claude 3.7 Sonnet or GPT-4.1</strong>. ~$3-5/M. Quality plateau — going higher buys little.'},
+      priv:{r:'<strong>Llama-3 family, self-hosted.</strong> 7B/8B for most tasks. 70B if you need frontier quality. Use vLLM for inference; never send data to a third-party API.'},
+    };
+    let cur='start';
+    const render=()=>{const n=tree[cur];const q=stage.querySelector('#L3i02_q'),o=stage.querySelector('#L3i02_opts'),r=stage.querySelector('#L3i02_r');
+      if(n.r){q.textContent='Recommendation:';o.innerHTML='';r.style.display='block';r.className='reveal win';r.innerHTML=n.r;return;}
+      q.textContent=n.q;r.style.display='none';
+      o.innerHTML=n.opts.map(([t,k])=>`<button class="btn ghost" data-go="${k}" style="text-align:left;justify-content:flex-start;padding:11px 14px;">${t}</button>`).join('');
+      o.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{SFX.click();cur=b.dataset.go;render();});};
+    stage.querySelector('#L3i02_reset').onclick=()=>{cur='start';render();};render();
+  }
+});
+
+/* ════ L4 · Finetuning ═══════════════════════════════════════════════ */
+
+ART.push({ id:'L4-a01', type:'anim', lesson:'L4', title:'Pre-train → SFT → RLHF pipeline',
+  what:'Three-stage funnel with loss curves animating.',
+  footer:'Pre-training takes weeks on thousands of GPUs. SFT takes hours on a single node. RLHF needs human raters. Cost asymmetry is huge.',
+  mount(stage){ stage.innerHTML=`
+    <h3>How models are made</h3>
+    <p class="desc">Three stages. Three loss curves. Three orders of magnitude in cost.</p>
+    <svg viewBox="0 0 600 240">
+      ${[['Pre-training','$5M-100M','rough → general',var(`--sky`),50],['SFT','$1k-50k','general → instruction-following',var(`--saffron`),250],['RLHF','$10k-200k','instruction → preferred',var(`--emerald`),450]].map((s,i)=>`
+        <rect x="${50+i*180}" y="40" width="160" height="80" rx="8" fill="${s[3]}" opacity="0.18" stroke="${s[3]}" stroke-width="2"/>
+        <text x="${130+i*180}" y="65" text-anchor="middle" font-family="ui-monospace" font-size="12" font-weight="700" fill="${s[3]}">${s[0]}</text>
+        <text x="${130+i*180}" y="85" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">${s[1]}</text>
+        <text x="${130+i*180}" y="105" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink)">${s[2]}</text>
+        ${i<2?`<path d="M${210+i*180} 80 L${230+i*180} 80" stroke="var(--ink)" stroke-width="2" marker-end="url(#arrh)"/>`:''}
+      `).join('')}
+      <defs><marker id="arrh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs>
+      <text x="300" y="160" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--muted)">Loss curve over training:</text>
+      <path d="M 50 200 Q 150 175 250 170" fill="none" stroke="var(--sky)" stroke-width="2"/>
+      <path d="M 250 170 Q 340 162 410 158" fill="none" stroke="var(--saffron)" stroke-width="2"/>
+      <path d="M 410 158 Q 480 155 550 150" fill="none" stroke="var(--emerald)" stroke-width="2"/>
+    </svg>`.replaceAll('var(\`--sky\`)','#0284c7').replaceAll('var(\`--saffron\`)','#c8881e').replaceAll('var(\`--emerald\`)','#14554a');
+  }
+});
+
+ART.push({ id:'L4-i01', type:'inter', lesson:'L4', title:'Hyperparameter playground',
+  what:'Sliders for lr, batch, epochs; see loss curve respond.',
+  footer:'A toy quadratic loss surface. Real training is harder, but the directional effects of lr/batch/epoch are real.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Train a toy model</h3>
+    <p class="desc">Move the sliders; see how the loss curve responds.</p>
+    <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr;margin-bottom:14px;">
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Learning rate<input type="range" id="L4i01_lr" min="1" max="100" value="30" step="1"><span id="L4i01_v_lr" style="color:var(--ink);font-weight:700;">0.030</span></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Batch size<input type="range" id="L4i01_b" min="1" max="9" value="5"><span id="L4i01_v_b" style="color:var(--ink);font-weight:700;">32</span></label>
+      <label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Epochs<input type="range" id="L4i01_e" min="1" max="30" value="10"><span id="L4i01_v_e" style="color:var(--ink);font-weight:700;">10</span></label>
+    </div>
+    <svg viewBox="0 0 600 200" style="background:var(--paper-2);border-radius:4px;">
+      <line x1="40" y1="170" x2="580" y2="170" stroke="var(--ink)"/>
+      <line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/>
+      <path id="L4i01_curve" fill="none" stroke="var(--sky)" stroke-width="2.5"/>
+      <text x="540" y="35" text-anchor="end" font-family="ui-monospace" font-size="11" id="L4i01_lbl" fill="var(--sky)" font-weight="700">—</text>
+    </svg>`;
+    const upd=()=>{const lr=+stage.querySelector('#L4i01_lr').value/1000,b=Math.pow(2,+stage.querySelector('#L4i01_b').value),e=+stage.querySelector('#L4i01_e').value;
+      stage.querySelector('#L4i01_v_lr').textContent=lr.toFixed(3);stage.querySelector('#L4i01_v_b').textContent=b;stage.querySelector('#L4i01_v_e').textContent=e;
+      let d='M 40 60 ';const n=e*10;let loss=0.9;const noise=lr>0.05?0.15:0.05;
+      for(let i=1;i<=n;i++){const t=i/n;loss=Math.max(0.05, 0.9*Math.exp(-lr*15*t)*(1+(Math.random()-0.5)*noise/(Math.sqrt(b)/4)));const x=40+t*540,y=20+loss*150;d+=`L ${x.toFixed(1)} ${y.toFixed(1)} `;}
+      stage.querySelector('#L4i01_curve').setAttribute('d',d);
+      stage.querySelector('#L4i01_lbl').textContent=lr>0.07?'diverging!':lr<0.005?'too slow':'converging';};
+    ['lr','b','e'].forEach(k=>stage.querySelector('#L4i01_'+k).oninput=()=>{SFX.hover();upd();});upd();
+  }
+});
+
+ART.push({ id:'L4-i02', type:'inter', lesson:'L4', title:'Drag training examples',
+  what:'Drop sentences into a training set; see model output shift.',
+  footer:'Toy version of "few-shot teaching." Each example you add nudges the inferred output style — but the model is shallow, so it overfits fast.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Teach a toy model</h3>
+    <p class="desc">Drop examples in. The model "learns" them. Then check the generalization.</p>
+    <div class="row" id="L4i02_pool" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px;">
+      ${[['"Q: 2+2 A: 4"','math'],['"Q: 5-1 A: 4"','math'],['"Q: hello A: hi"','chat'],['"Q: bye A: ciao"','chat'],['"Q: ☀️ A: sun"','emoji'],['"Q: 🌙 A: moon"','emoji']].map(([t,k],i)=>`<span class="chip" draggable="true" data-id="${i}" data-k="${k}">${t}</span>`).join('')}
+    </div>
+    <div class="lane" data-lane="train"><h4>Training set</h4><div class="lane-drop" id="L4i02_train" style="min-height:50px;"></div></div>
+    <div class="row" style="margin:14px 0 8px;"><label style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Test query<input type="text" id="L4i02_q" value="Q: 3+3 A:" style="width:240px;margin-left:8px;"></label><button class="btn" id="L4i02_pred">Predict</button></div>
+    <div class="panel" id="L4i02_out" style="font-family:ui-monospace,monospace;font-size:14px;">—</div>`;
+    const trained=[];
+    stage.querySelector('#L4i02_pool').addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('id',e.target.dataset.id);});
+    const drop=stage.querySelector('.lane');
+    drop.addEventListener('dragover',e=>{e.preventDefault();drop.style.borderColor='var(--sky)';});
+    drop.addEventListener('dragleave',()=>drop.style.borderColor='');
+    drop.addEventListener('drop',e=>{e.preventDefault();drop.style.borderColor='';const id=e.dataTransfer.getData('id');const chip=stage.querySelector(`#L4i02_pool [data-id="${id}"]`);if(!chip)return;
+      const cl=chip.cloneNode(true);cl.removeAttribute('draggable');cl.style.cursor='default';stage.querySelector('#L4i02_train').appendChild(cl);chip.remove();trained.push(chip.dataset.k);SFX.pop();});
+    stage.querySelector('#L4i02_pred').onclick=()=>{const q=stage.querySelector('#L4i02_q').value;const out=stage.querySelector('#L4i02_out');
+      if(!trained.length){out.innerHTML='<em>No training examples — model returns random tokens.</em>';return;}
+      const dominant={};trained.forEach(k=>dominant[k]=(dominant[k]||0)+1);
+      const sorted=Object.entries(dominant).sort((a,b)=>b[1]-a[1]);
+      const top=sorted[0][0];
+      const ans=top==='math'?'6':top==='chat'?'a friendly reply':top==='emoji'?'an emoji-shaped guess':'?';
+      out.innerHTML=`<strong>Predicted style:</strong> ${top}<br><strong>Output:</strong> ${ans}${sorted.length>1?` <em>(but it\'s confused — ${sorted.length} styles in training)</em>`:''}`;SFX.success();};
+  }
+});
+
+/* ════ L5 · RAG ══════════════════════════════════════════════════════ */
+
+ART.push({ id:'L5-a01', type:'anim', lesson:'L5', title:'The RAG pipeline',
+  what:'Chunk → embed → store → query → retrieve → prompt → generate.',
+  footer:'The whole pipeline in one diagram. Each step is animated; click to step through.',
+  mount(stage){ stage.innerHTML=`
+    <h3>The seven-step pipeline</h3>
+    <p class="desc">Click stages or use ← / →.</p>
+    <svg viewBox="0 0 600 200" id="L5a01_svg">
+      ${['Doc','Chunk','Embed','Store','Query','Retrieve','Generate'].map((s,i)=>`<g class="st" data-i="${i}"><rect x="${15+i*82}" y="60" width="70" height="50" rx="6" fill="var(--paper-2)" stroke="var(--rule)"/><text x="${50+i*82}" y="90" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--ink)">${s}</text></g>${i<6?`<line x1="${85+i*82}" y1="85" x2="${97+i*82}" y2="85" stroke="var(--ink)" stroke-width="1.5"/>`:''}`).join('')}
+    </svg>
+    <div class="panel" id="L5a01_p" style="min-height:80px;"></div>
+    <div class="row" style="margin-top:8px;"><button class="btn ghost" id="L5a01_prev">←</button><button class="btn ghost" id="L5a01_next">→</button></div>`;
+    const exp=[
+      'Documents arrive in arbitrary formats — PDF, MD, HTML, scraped text.',
+      'Chunk into 200-1000 token pieces with 10-20% overlap. <em>Chunk size is the most important RAG hyperparameter.</em>',
+      'Each chunk gets a vector via an embedding model. Same model for queries and chunks.',
+      'Vectors land in a database (pgvector, Pinecone, Weaviate, FAISS). Index for fast nearest-neighbour.',
+      'User asks a question. Embed the question with the same model.',
+      'Nearest-neighbour search returns the top-K chunks by cosine similarity.',
+      'Stuff the retrieved chunks into a system prompt; the LLM answers using them as context.',
+    ];
+    let cur=0;const upd=()=>{stage.querySelectorAll('.st').forEach((s,i)=>{const r=s.querySelector('rect');r.setAttribute('fill',i===cur?'var(--sky-soft)':'var(--paper-2)');r.setAttribute('stroke',i===cur?'var(--sky)':'var(--rule)');});stage.querySelector('#L5a01_p').innerHTML=`<strong>${cur+1}. ${['Document','Chunk','Embed','Store','Query','Retrieve','Generate'][cur]}.</strong> ${exp[cur]}`;};
+    stage.querySelectorAll('.st').forEach(s=>s.onclick=()=>{SFX.click();cur=+s.dataset.i;upd();});
+    stage.querySelector('#L5a01_prev').onclick=()=>{cur=(cur-1+7)%7;upd();};stage.querySelector('#L5a01_next').onclick=()=>{cur=(cur+1)%7;upd();};upd();
+  }
+});
+
+ART.push({ id:'L5-a02', type:'anim', lesson:'L5', title:'Top-K bobbing',
+  what:'Top 3 results shift as the query embedding moves in 2D.',
+  footer:'The corpus is fixed; only the query moves. Notice how the top-3 shuffle as you drag the query through the embedding space.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Watch the top-3 shuffle</h3>
+    <p class="desc">Press play; the query (saffron) traces a circle through the corpus. Top-3 nearest get lines.</p>
+    <svg viewBox="0 0 400 280" id="L5a02_svg">
+      ${(()=>{const docs=[['cat',280,80],['kitten',300,60],['dog',260,180],['puppy',280,200],['king',120,80],['queen',100,60],['apple',180,40],['banana',200,30]];let s=`<g id="L5a02_lines"></g>`;
+        docs.forEach(([n,x,y])=>{s+=`<circle cx="${x}" cy="${y}" r="9" fill="white" stroke="var(--ink-soft)" stroke-width="1.5" data-n="${n}"/><text x="${x}" y="${y-14}" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink)">${n}</text>`;});return s;})()}
+      <circle id="L5a02_q" r="12" fill="var(--saffron)" stroke="#92400e" stroke-width="2.5">
+        <animateMotion dur="8s" repeatCount="indefinite" path="M 200 140 a 80 60 0 1 1 0.1 0"/>
+      </circle>
+    </svg>
+    <p class="panel">In real RAG, the corpus lives in 384–1536 dimensions. Same mechanic — find the K nearest by cosine.</p>`;
+    const svg=stage.querySelector('#L5a02_svg');
+    setInterval(()=>{const q=stage.querySelector('#L5a02_q');const bbox=q.getBoundingClientRect(),svgB=svg.getBoundingClientRect();const qx=(q.getBBox?q.getBBox().x:0);
+      const qct=q.getCTM();const cx=qct?qct.e+0:200,cy=qct?qct.f+0:140;
+      const docs=stage.querySelectorAll('circle[data-n]');const dists=[...docs].map(d=>{const x=+d.getAttribute('cx'),y=+d.getAttribute('cy');return{d,dist:Math.hypot(x-cx,y-cy)};}).sort((a,b)=>a.dist-b.dist).slice(0,3);
+      let lines='';dists.forEach(({d})=>{const x=+d.getAttribute('cx'),y=+d.getAttribute('cy');lines+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--emerald)" stroke-width="1.5" opacity="0.5"/>`;});stage.querySelector('#L5a02_lines').innerHTML=lines;
+      docs.forEach(d=>d.setAttribute('fill',dists.some(({d:dd})=>dd===d)?'var(--emerald-soft)':'white'));},100);
+  }
+});
+
+ART.push({ id:'L5-i01', type:'inter', lesson:'L5', title:'Chunk-size slider',
+  what:'Set chunk size; see retrieval quality on a fixed query.',
+  footer:'Too small: chunks miss context. Too big: chunks are noisy. The sweet spot is typically 300-600 tokens for technical docs.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Pick a chunk size</h3>
+    <p class="desc">Same document, same query. Watch what gets retrieved.</p>
+    <input type="range" id="L5i01_c" min="50" max="2000" value="500" step="50">
+    <div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);"><span>50</span><span id="L5i01_v" style="color:var(--ink);font-size:16px;font-weight:800;">500 tokens</span><span>2000</span></div>
+    <div class="panel" style="margin-top:14px;">
+      <strong>Query:</strong> "What\'s the recommended chunk size for technical documentation?"
+    </div>
+    <div class="panel" id="L5i01_r" style="margin-top:8px;background:var(--paper);border-left:3px solid var(--sky);font-family:ui-monospace,monospace;font-size:13px;line-height:1.6;"></div>
+    <div class="reveal" id="L5i01_v2" style="display:none;"></div>`;
+    const upd=()=>{const c=+stage.querySelector('#L5i01_c').value;stage.querySelector('#L5i01_v').textContent=c+' tokens';
+      let result,verdict,cls;
+      if(c<150){result='"...recommended chunk size..." [chunk cut off]';verdict='Too small — chunks split mid-sentence; context lost.';cls='bad';}
+      else if(c<=750){result='"The recommended chunk size for technical documentation is 300-600 tokens, with 10-20% overlap..."';verdict='Sweet spot. Chunks are coherent and focused.';cls='win';}
+      else if(c<=1300){result='"[long surrounding context about authoring patterns...] The recommended chunk size is 300-600 tokens. [more context...]"';verdict='Acceptable but noisy — answer is buried in surrounding paragraphs.';cls='';}
+      else{result='"[3 pages of doc including auth, API tips, deployment notes, AND chunk-size guidance buried in section 4.7]"';verdict='Too big — too much noise. Retrieval will hit, but generation gets confused.';cls='bad';}
+      stage.querySelector('#L5i01_r').innerHTML=result;
+      const r2=stage.querySelector('#L5i01_v2');r2.style.display='block';r2.className='reveal '+cls;r2.innerHTML=`<strong>${verdict}</strong>`;};
+    stage.querySelector('#L5i01_c').oninput=()=>{SFX.hover();upd();};upd();
+  }
+});
+
+/* ════ L6 · Agents ═══════════════════════════════════════════════════ */
+
+ART.push({ id:'L6-a01', type:'anim', lesson:'L6', title:'Tool-call loop',
+  what:'Think → call → read → think loop trace.',
+  footer:'Each step is a real OpenAI tool-calling pattern. The model decides what to call; the runtime executes; the result feeds back.',
+  mount(stage){ stage.innerHTML=`
+    <h3>What an agent actually does</h3>
+    <p class="desc">User asks: "What\'s the weather in Bangalore tomorrow?". The agent loops.</p>
+    <div id="L6a01_trace" style="font-family:ui-monospace,monospace;font-size:13px;line-height:1.7;"></div>
+    <div class="row" style="margin-top:14px;"><button class="btn" id="L6a01_play">▷ Run</button><button class="btn ghost" id="L6a01_reset">Reset</button></div>`;
+    const trace=[
+      {role:'user',color:'var(--ink)',t:'What\'s the weather in Bangalore tomorrow?'},
+      {role:'model · thinking',color:'var(--muted)',t:'I need to know tomorrow\'s date and Bangalore\'s weather. I have a `get_weather` tool.'},
+      {role:'model · tool call',color:'var(--sky)',t:'<code>get_weather(city="Bangalore", date="tomorrow")</code>'},
+      {role:'tool · result',color:'var(--emerald)',t:'<code>{ "high_C": 32, "low_C": 21, "rain_mm": 0 }</code>'},
+      {role:'model · thinking',color:'var(--muted)',t:'Got it. I have what I need.'},
+      {role:'model · response',color:'var(--saffron)',t:'Tomorrow in Bangalore: high 32°C, low 21°C, no rain expected.'},
+    ];
+    const run=()=>{const t=stage.querySelector('#L6a01_trace');t.innerHTML='';
+      trace.forEach((line,i)=>setTimeout(()=>{t.innerHTML+=`<div style="margin:6px 0;padding:8px 12px;background:var(--paper-2);border-left:3px solid ${line.color};border-radius:0 4px 4px 0;animation:fade .4s var(--ease);"><strong style="color:${line.color};font-size:10px;letter-spacing:0.16em;text-transform:uppercase;">${line.role}</strong><br>${line.t}</div>`;if(SFX_ON)SFX.click();},i*800));};
+    stage.querySelector('#L6a01_play').onclick=run;stage.querySelector('#L6a01_reset').onclick=()=>{stage.querySelector('#L6a01_trace').innerHTML='';};run();
+  }
+});
+
+ART.push({ id:'L6-a02', type:'anim', lesson:'L6', title:'ReAct trace expansion',
+  what:'Reasoning + action interleaved (the ReAct paper pattern).',
+  footer:'ReAct = Reason + Act. Yao et al 2022. The model writes its reasoning explicitly before each tool call; reasoning is in the context for the next step.',
+  mount(stage){ stage.innerHTML=`
+    <h3>ReAct in action</h3>
+    <p class="desc">Reasoning is logged before each tool call. The trace is the audit log.</p>
+    <pre class="code">
+<span class="anno"># Goal: find the population of the capital of India</span>
+
+<span class="hi">Thought:</span> I need to find the capital first, then its population.
+<span class="hi">Action:</span> search("capital of India")
+<span class="hi">Observation:</span> "New Delhi is the capital of India."
+
+<span class="hi">Thought:</span> Now I need New Delhi\'s population.
+<span class="hi">Action:</span> search("New Delhi population 2024")
+<span class="hi">Observation:</span> "~33 million in the metro area as of 2024."
+
+<span class="hi">Thought:</span> I have the answer.
+<span class="hi">Final Answer:</span> ~33 million.
+    </pre>
+    <p class="panel">The model\'s <em>Thought</em> blocks make the trace auditable. If the answer is wrong, you can see exactly where reasoning slipped.</p>`;
+  }
+});
+
+ART.push({ id:'L6-i01', type:'inter', lesson:'L6', title:'Build-an-agent',
+  what:'Pick tools from a palette; see what tasks the agent can complete.',
+  footer:'A tool-budget exercise. More tools = more capability, but also more failure modes and higher latency per task.',
+  mount(stage){ stage.innerHTML=`
+    <h3>Pick your tools — see what the agent can do</h3>
+    <p class="desc">Toggle tools on. The right column lists which tasks become possible.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px;">
+      <div>
+        <h4 style="margin:0 0 8px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;">Tools</h4>
+        <div id="L6i01_tools">
+          ${[['search','Web search'],['code','Code interpreter'],['email','Send email'],['db','SQL on DB'],['cal','Calendar read/write'],['file','File system']].map(([k,n])=>`<label style="display:block;padding:8px;background:var(--paper-2);border:1.5px solid var(--rule);border-radius:5px;margin-bottom:6px;cursor:pointer;font-size:13.5px;"><input type="checkbox" data-tool="${k}" style="margin-right:8px;">${n}</label>`).join('')}
+        </div>
+      </div>
+      <div>
+        <h4 style="margin:0 0 8px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;">Tasks possible</h4>
+        <div id="L6i01_tasks" style="font-size:13.5px;"></div>
+      </div>
+    </div>`;
+    const tasks=[
+      {n:'Answer factual questions',req:['search']},
+      {n:'Summarise a CSV',req:['code']},
+      {n:'Set up a meeting',req:['cal','email']},
+      {n:'Run a query on prod DB',req:['db']},
+      {n:'Find a bug in a file',req:['file','code']},
+      {n:'Generate a weekly report',req:['db','code','email']},
+      {n:'Build a static site',req:['file','code']},
+    ];
+    const upd=()=>{const on=new Set([...stage.querySelectorAll('[data-tool]:checked')].map(c=>c.dataset.tool));
+      stage.querySelector('#L6i01_tasks').innerHTML=tasks.map(t=>{const ok=t.req.every(r=>on.has(r));return `<div style="padding:6px 10px;margin:4px 0;border-left:3px solid ${ok?'var(--emerald)':'var(--rule)'};${ok?'background:var(--emerald-soft);':'opacity:0.5;'}"><strong>${ok?'✓':'✗'}</strong> ${t.n} <span style="font-family:ui-monospace,monospace;font-size:10px;color:var(--muted);">[${t.req.join(', ')}]</span></div>`;}).join('');};
+    stage.querySelectorAll('[data-tool]').forEach(c=>c.onchange=()=>{SFX.click();upd();});upd();
+  }
+});
+
+/* ─── grid + focus ──────────────────────────────────────────────────── */
+function buildGrid(filter='') {
+  const grid = document.getElementById('grid'); grid.innerHTML = '';
+  ART.filter(a => !filter || a.lesson === filter).forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'card';
+    btn.innerHTML = `<div class="id"><span class="badge ${a.type==='anim'?'anim':'inter'}">${a.type==='anim'?'ANIM':'INTER'}</span>${a.id}</div>
+      <div class="title">${a.title}</div>
+      <div class="what">${a.what}</div>
+      <div class="lesson-label">${a.lesson} · ${({L1:'How we got here',L2:'The Transformer',L3:'LLMs in practice',L4:'Finetuning',L5:'RAG',L6:'Agents'})[a.lesson]}</div>`;
+    btn.onclick = () => openFocus(a.id);
+    grid.appendChild(btn);
+  });
+}
+document.getElementById('lessonFilter').onchange = e => { SFX.click(); buildGrid(e.target.value); };
+buildGrid();
+
+const focus = document.getElementById('focus'); let curIdx = -1;
+function openFocus(id) { SFX.click(); curIdx = ART.findIndex(a => a.id === id); renderFocus(); if(!focus.open) focus.showModal(); history.replaceState(null,'','#'+id); }
+function renderFocus() { const a = ART[curIdx]; if(!a) return;
+  document.getElementById('focusId').textContent = a.id;
+  document.getElementById('focusTitle').textContent = a.title;
+  document.getElementById('focusFooter').innerHTML = `<strong>${a.lesson} · ${a.type}</strong> · ${a.footer || a.what}`;
+  const stage = document.getElementById('stage'); stage.innerHTML = ''; a.mount(stage);
+}
+document.getElementById('closeBtn').onclick = () => { SFX.click(); focus.close(); history.replaceState(null,'','#'); };
+document.getElementById('prevBtn').onclick = () => { SFX.click(); curIdx = (curIdx - 1 + ART.length) % ART.length; renderFocus(); history.replaceState(null,'','#'+ART[curIdx].id); };
+document.getElementById('nextBtn').onclick = () => { SFX.click(); curIdx = (curIdx + 1) % ART.length; renderFocus(); history.replaceState(null,'','#'+ART[curIdx].id); };
+document.addEventListener('keydown', e => { if (!focus.open) return; if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click(); if (e.key === 'ArrowRight') document.getElementById('nextBtn').click(); });
+const initialHash = window.location.hash.slice(1);
+if (initialHash && ART.some(a => a.id === initialHash)) openFocus(initialHash);
+</script>
+
+</body>
+</html>

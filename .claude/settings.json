@@ -39,30 +39,34 @@
     ]
   },
   "hooks": {
-    "preToolUse": [
+    "PreToolUse": [
       {
-        "match": { "tool": "Bash" },
-        "command": ".claude/hooks/block-autonomous-commit.sh"
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/block-autonomous-commit.sh" }
+        ]
       },
       {
-        "match": { "tool": "Write" },
-        "command": ".claude/hooks/secret-scan.sh"
-      },
-      {
-        "match": { "tool": "Edit" },
-        "command": ".claude/hooks/secret-scan.sh"
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/secret-scan.sh" }
+        ]
       }
     ],
-    "postToolUse": [
+    "PostToolUse": [
       {
-        "match": { "tool": "Edit", "glob": "**/*.{ts,tsx}" },
-        "command": ".claude/hooks/typecheck-changed.sh",
-        "blocking": false
+        "matcher": "Edit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/typecheck-changed.sh" }
+        ]
       }
     ],
-    "userPromptSubmit": [
+    "UserPromptSubmit": [
       {
-        "command": ".claude/hooks/remind-slash-commands.sh"
+        "matcher": "",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/remind-slash-commands.sh" }
+        ]
       }
     ]
   },

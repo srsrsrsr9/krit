@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Krit Deep Dives · Four field-tests of reading-with-practice</title>
+<style>
+  :root {
+    --bg:        #0a0a0c;
+    --bar:       #15151a;
+    --bar-line:  #2a2a32;
+    --text:      #e8e8ec;
+    --text-soft: #b0b0ba;
+    --muted:     #9b9ba5;   /* UX F3: lifted from #6a6a76 (3.43:1 fail) for AA on #15151a (~4.8:1 pass) */
+    --accent:    #f5c451;
+    --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  body {
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── TAB BAR ─── */
+  .tab-bar {
+    flex-shrink: 0;
+    background: var(--bar);
+    border-bottom: 1px solid var(--bar-line);
+    display: flex;
+    align-items: stretch;
+    padding: 0 8px 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+
+  .wordmark {
+    display: flex; align-items: center;
+    padding: 0 18px 0 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--text-soft);
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-right: 1px solid var(--bar-line);
+    flex-shrink: 0;
+  }
+  .wordmark .k {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: #14110d;
+    border-radius: 4px;
+    display: grid; place-items: center;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px; font-weight: 900;
+    margin-right: 10px;
+  }
+  .wordmark .word { font-weight: 700; color: var(--text); }
+
+  .tab {
+    background: transparent;
+    border: none;
+    color: var(--text-soft);
+    padding: 14px 18px 12px;
+    font-family: -apple-system, 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 160ms var(--ease);
+    text-align: left;
+    flex-shrink: 0;
+    line-height: 1.2;
+    position: relative;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+  }
+  /* UX accessibility — keyboard focus must be visible on dark bar (Safari default is invisible here) */
+  .tab:focus-visible,
+  .open-standalone:focus-visible,
+  .kb-hint-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .tab .tab-num {
+    color: var(--accent);
+    margin-right: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    vertical-align: 1px;
+  }
+  .tab .tab-meta {
+    display: block;
+    font-family: ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+  .tab.active .tab-meta { color: var(--text-soft); }
+
+  .open-standalone {
+    margin-left: auto;
+    margin-right: 8px;
+    align-self: center;
+    background: transparent;
+    border: 1px solid var(--bar-line);
+    color: var(--text-soft);
+    padding: 7px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 160ms var(--ease);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .open-standalone:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ─── FRAME AREA ─── */
+  .frame-area {
+    flex: 1;
+    position: relative;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background: #fff;
+  }
+  iframe.active { display: block; }
+
+  /* loading indicator (briefly shown when an iframe first paints) */
+  .loading {
+    position: absolute;
+    inset: 0;
+    display: grid; place-items: center;
+    background: var(--bg);
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 400ms var(--ease);
+    z-index: 1;
+  }
+  .loading.gone { opacity: 0; }
+
+  /* ─── POSITIONING BAR ─── named product line + one-line positioning */
+  .positioning-bar {
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #0d0d12 0%, #15151a 100%);
+    border-bottom: 1px solid var(--bar-line);
+    padding: 10px 18px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-soft);
+    text-align: center;
+  }
+  .positioning-bar .pb-accent { color: var(--accent); font-style: italic; font-weight: 700; }
+  .positioning-bar .pb-strong { color: var(--text); font-weight: 700; }
+  @media (max-width: 720px) {
+    .positioning-bar { font-size: 12px; padding: 8px 14px; }
+  }
+
+  /* ─── PERSISTENT KEYBOARD HINT TOGGLE ─── replaces the mousemove-driven hint */
+  .kb-hint-toggle {
+    position: fixed;
+    bottom: 14px; right: 14px;
+    width: 30px; height: 30px;
+    background: rgba(20, 20, 24, 0.92);
+    backdrop-filter: blur(8px);
+    color: var(--text-soft);
+    font-family: ui-monospace, monospace;
+    font-size: 14px;
+    font-weight: 800;
+    border: 1px solid var(--bar-line);
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid; place-items: center;
+    transition: all 160ms var(--ease);
+    z-index: 100;
+  }
+  .kb-hint-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ─── KEYBOARD HINT (auto-fades) ─── */
+  .kb-hint {
+    position: fixed;
+    bottom: 14px; left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: rgba(20, 20, 24, 0.92);
+    backdrop-filter: blur(8px);
+    color: var(--text-soft);
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--bar-line);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 320ms var(--ease), transform 320ms var(--ease);
+    z-index: 100;
+  }
+  .kb-hint.shown {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .kb-hint kbd {
+    background: #2a2a32;
+    color: var(--text);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    margin: 0 2px;
+    font-weight: 700;
+    border: 1px solid #3a3a44;
+  }
+
+  /* ─── Mobile tweaks ─── */
+  @media (max-width: 720px) {
+    .wordmark .word { display: none; }
+    .tab { padding: 10px 12px 9px; font-size: 12px; }
+    .tab .tab-meta { display: none; }
+    .open-standalone { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="tab-bar" role="tablist" aria-label="Krit Deep Dives selector">
+  <div class="wordmark"><span class="k">K</span><span class="word">Krit Deep Dives</span></div>
+
+  <button class="tab active" data-tab="embeddings" data-src="../embeddings.html" role="tab" aria-selected="true" aria-controls="frame-embeddings" id="tab-embeddings">
+    <span class="tab-num">01</span>Embeddings
+    <span class="tab-meta">Tech · course-shell · 30 min</span>
+  </button>
+  <button class="tab" data-tab="finance" data-src="../compound-interest.html" role="tab" aria-selected="false" aria-controls="frame-finance" id="tab-finance">
+    <span class="tab-num">02</span>The Cost of Waiting
+    <span class="tab-meta">Finance · simulator · 5 min</span>
+  </button>
+  <button class="tab" data-tab="marketing" data-src="../positioning.html" role="tab" aria-selected="false" aria-controls="frame-marketing" id="tab-marketing">
+    <span class="tab-num">03</span>Same Drink, Different Question
+    <span class="tab-meta">Marketing · essay-with-quiz · 12 min</span>
+  </button>
+  <button class="tab" data-tab="mechanics" data-src="../bicycle.html" role="tab" aria-selected="false" aria-controls="frame-mechanics" id="tab-mechanics">
+    <span class="tab-num">04</span>Why a Bicycle Stays Up
+    <span class="tab-meta">Mechanics · paper · 12 min</span>
+  </button>
+
+  <a class="open-standalone" id="openStandalone" href="../embeddings.html" target="_blank" rel="noopener" title="Open this prototype in a new tab">Open standalone ↗</a>
+</nav>
+
+<!-- POSITIONING BAR — names the offer for cold visitors (Marketing P0). -->
+<div class="positioning-bar">
+  <span class="pb-strong">Krit Deep Dives</span> are <span class="pb-accent">30-minute interactive reads</span> that make you do the experiment, not just watch it — for self-directed adult learners who finish books and skip MOOCs. Four shapes a deep dive can take, below.
+</div>
+
+<div class="frame-area">
+  <div class="loading" id="loadingIndicator">loading…</div>
+  <iframe class="active" id="frame-embeddings" data-frame="embeddings" src="../embeddings.html"      title="Embeddings · technical deep dive"      aria-labelledby="tab-embeddings"></iframe>
+  <iframe              id="frame-finance"    data-frame="finance"    src="../compound-interest.html" title="The Cost of Waiting · finance simulator" aria-labelledby="tab-finance"></iframe>
+  <iframe              id="frame-marketing"  data-frame="marketing"  src="../positioning.html"       title="Same Drink, Different Question · marketing essay" aria-labelledby="tab-marketing"></iframe>
+  <iframe              id="frame-mechanics"  data-frame="mechanics"  src="../bicycle.html"           title="Why a Bicycle Stays Up · mechanics paper" aria-labelledby="tab-mechanics"></iframe>
+</div>
+
+<button class="kb-hint-toggle" id="kbHintToggle" aria-label="Show keyboard shortcuts" title="Keyboard shortcuts">?</button>
+<div class="kb-hint" id="kbHint" role="status" aria-live="polite">
+  <kbd>←</kbd> <kbd>→</kbd> switch prototypes &nbsp;·&nbsp; click <kbd>?</kbd> to toggle
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const frames = document.querySelectorAll('iframe[data-frame]');
+const openStandalone = document.getElementById('openStandalone');
+const loading = document.getElementById('loadingIndicator');
+const hint = document.getElementById('kbHint');
+const hintToggle = document.getElementById('kbHintToggle');
+const tabBar = document.querySelector('.tab-bar');
+
+// Track which iframes have already painted at least once so we know when to show "loading"
+const iframeReady = new WeakSet();
+frames.forEach(f => {
+  f.addEventListener('load', () => {
+    iframeReady.add(f);
+    // If the user is currently viewing this iframe, hide the loading indicator.
+    if (f.classList.contains('active')) hideLoading();
+  });
+});
+
+function showLoading() {
+  if (!loading) return;
+  loading.classList.remove('gone');
+  loading.style.display = 'grid';
+}
+function hideLoading() {
+  if (!loading) return;
+  loading.classList.add('gone');
+}
+
+function cleanTitle(tab) {
+  // Strip the leading "01 " number and the multi-line meta; use only the title text.
+  const titleNode = [...tab.childNodes].find(n =>
+    n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0
+  );
+  return titleNode ? titleNode.textContent.trim() : tab.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function activate(name) {
+  const tab = [...tabs].find(t => t.dataset.tab === name);
+  if (!tab) return;
+  tabs.forEach(t => {
+    const isActive = t.dataset.tab === name;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    t.setAttribute('tabindex', isActive ? '0' : '-1');
+  });
+  frames.forEach(f => f.classList.toggle('active', f.dataset.frame === name));
+  openStandalone.href = tab.dataset.src;
+  document.title = 'Krit · ' + cleanTitle(tab);
+  history.replaceState(null, '', '#' + name);
+
+  // UX F1 — show loading until the activated iframe has fired at least one load event.
+  const targetFrame = [...frames].find(f => f.dataset.frame === name);
+  if (targetFrame && !iframeReady.has(targetFrame)) showLoading();
+  else hideLoading();
+
+  // UX mobile — scroll the active chip into center view on the horizontal tab bar.
+  try { tab.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); } catch {}
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => activate(tab.dataset.tab));
+});
+
+// Deep link from URL hash
+const initialHash = window.location.hash.slice(1);
+if (initialHash && [...tabs].some(t => t.dataset.tab === initialHash)) {
+  activate(initialHash);
+}
+
+// UX F4 — arrow-key navigation. Critical fix: when focus is inside an iframe,
+// the outer document's e.target reads as <body>, so the old check missed it
+// and yanked the user across tabs while they were dragging a slider. Detect the
+// iframe-focus case via document.activeElement instead.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+  // Iframe-focus guard (was the missing piece): if a prototype is the focused element,
+  // assume the user is interacting INSIDE it — leave them alone.
+  const ae = document.activeElement;
+  if (ae && ae.tagName === 'IFRAME') return;
+
+  // Form-field guard (preserved): inputs/textareas/selects on the outer page should keep arrows.
+  if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+
+  e.preventDefault();
+  const order = [...tabs].map(t => t.dataset.tab);
+  const current = document.querySelector('.tab.active').dataset.tab;
+  const idx = order.indexOf(current);
+  const nextIdx = e.key === 'ArrowRight'
+    ? (idx + 1) % order.length
+    : (idx - 1 + order.length) % order.length;
+  activate(order[nextIdx]);
+});
+
+// Move-focus-to-active-tab on arrow-key activate so the tab itself becomes activeElement.
+const _origActivate = activate;
+window.activate = function(name) {
+  _origActivate(name);
+  const t = [...tabs].find(t => t.dataset.tab === name);
+  if (t) t.focus({ preventScroll: true });
+};
+
+// UX F1 — Initial hide: if the first iframe was already cached (load event missed),
+// don't leave the indicator stuck forever.
+if (frames[0].contentDocument && frames[0].contentDocument.readyState === 'complete') {
+  iframeReady.add(frames[0]);
+  hideLoading();
+}
+// And ALWAYS hide the loading indicator at most 4s after activation regardless,
+// so a wedged iframe doesn't trap the user behind a "loading…" overlay.
+setTimeout(() => hideLoading(), 4000);
+
+// UX F10 — Persistent keyboard hint toggle. Replaces the mousemove-driven wake.
+let hintPinned = false;
+hintToggle.addEventListener('click', () => {
+  hintPinned = !hintPinned;
+  hint.classList.toggle('shown', hintPinned);
+  hintToggle.style.color = hintPinned ? 'var(--accent)' : '';
+});
+// Show the hint briefly on first load (3.4s), then it goes away unless pinned.
+setTimeout(() => {
+  hint.classList.add('shown');
+  setTimeout(() => { if (!hintPinned) hint.classList.remove('shown'); }, 3400);
+}, 800);
+</script>
+
+</body>
+</html>

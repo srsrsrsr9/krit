@@ -462,6 +462,25 @@ export const SkillProofBlock = z.object({
   lang: z.string().optional(),
 });
 
+/**
+ * Spaced retrieval gate (P9 in docs/COURSE_CREATION_SPEC.md V2).
+ * Block 2 of lessons 2-5 — a 30-second cued recall of the prior lesson's i02
+ * commitment, BEFORE the cold open. Requires a learner answer, not a markdown
+ * recap. Karpicke retrieval-with-lag effect drives durable transfer.
+ */
+export const RetrievalGateBlock = z.object({
+  type: z.literal("retrievalGate"),
+  prompt: z.string().min(20),
+  /** When true, the renderer gates progression until a non-empty answer is recorded. */
+  expectsAnswer: z.boolean().default(true),
+  /** Slug of the lesson whose `i02` commitment this is testing. */
+  linkedLessonSlug: z.string().min(1),
+  /** Human-readable label of that commitment for the gate UI. */
+  linkedLessonCommitmentLabel: z.string().min(3),
+  /** Estimated time in seconds for E8 time-budget accounting. */
+  estSeconds: z.number().int().min(15).max(180).default(30),
+});
+
 export const ContentBlock = z.discriminatedUnion("type", [
   HeadingBlock,
   MarkdownBlock,
@@ -496,6 +515,7 @@ export const ContentBlock = z.discriminatedUnion("type", [
   ScaleSliderBlock,
   CardSwipeBlock,
   HandsOnBlock,
+  RetrievalGateBlock,
 ]);
 
 export type ContentBlock = z.infer<typeof ContentBlock>;

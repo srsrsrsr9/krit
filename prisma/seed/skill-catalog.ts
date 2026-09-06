@@ -75,6 +75,27 @@ export function getActiveSkills(): SkillCatalogEntry[] {
   return SKILL_CATALOG.filter((s) => !s.archived);
 }
 
-export function findCatalogSkill(slug: string): SkillCatalogEntry | undefined {
-  return SKILL_CATALOG.find((s) => s.slug === slug && !s.archived);
+/**
+ * Look up a catalog entry by slug, or — for tolerance with human-authored
+ * JSONs — by name, slugified-name, or a prefix of the catalog name. Helps
+ * existing showcase JSONs whose skillHints were written as display names
+ * ("Reinvestment", "Span of control") rather than canonical slugs.
+ */
+export function findCatalogSkill(input: string): SkillCatalogEntry | undefined {
+  const v = input.trim();
+  const bySlug = SKILL_CATALOG.find((s) => s.slug === v && !s.archived);
+  if (bySlug) return bySlug;
+  const byName = SKILL_CATALOG.find((s) => s.name.toLowerCase() === v.toLowerCase() && !s.archived);
+  if (byName) return byName;
+  const slugified = v.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const bySlugified = SKILL_CATALOG.find((s) => s.slug === slugified && !s.archived);
+  if (bySlugified) return bySlugified;
+  const byNameSlugified = SKILL_CATALOG.find(
+    (s) => s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === slugified && !s.archived,
+  );
+  if (byNameSlugified) return byNameSlugified;
+  const byPrefix = SKILL_CATALOG.find(
+    (s) => s.name.toLowerCase().startsWith(v.toLowerCase()) && !s.archived,
+  );
+  return byPrefix;
 }

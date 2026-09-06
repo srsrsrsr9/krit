@@ -153,6 +153,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where the money leaks — 100k impressions → 38 conversions."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The funnel-stage lens"
@@ -242,6 +248,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · 1% lift × 5 steps = 5% lift? — it compounds, badly."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Which stage gets AI?"
@@ -256,6 +268,12 @@
           "caption": "TOFU AI: cheap and stable. BOFU human: expensive and compounding. Both win, in different places.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FAF5FF'/><g transform='translate(40 40)'><rect width='220' height='160' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#1E3A8A'>TOFU — AI heavy</text><text x='20' y='60' font-family='sans-serif' font-size='12' fill='#1E3A8A'>Output: 4x</text><text x='20' y='82' font-family='sans-serif' font-size='12' fill='#1E3A8A'>Cost / piece: ₹40</text><text x='20' y='104' font-family='sans-serif' font-size='12' fill='#1E3A8A'>ROAS: 3.4x (stable)</text><text x='20' y='130' font-family='sans-serif' font-size='11' fill='#3730A3' font-style='italic'>variance absorbed by volume</text></g><g transform='translate(300 40)'><rect width='220' height='160' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='110' y='28' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#9D174D'>BOFU — Human heavy</text><text x='20' y='60' font-family='sans-serif' font-size='12' fill='#9D174D'>Output: 1x</text><text x='20' y='82' font-family='sans-serif' font-size='12' fill='#9D174D'>Cost / piece: ₹600</text><text x='20' y='104' font-family='sans-serif' font-size='12' fill='#9D174D'>ROAS: 4.1x (rising)</text><text x='20' y='130' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-style='italic'>each piece pays back hard</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Find the leaky step — drag 1% improvement to one step."
         },
         {
           "type": "chatScenario",
@@ -533,6 +551,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Hit a sub-₹3,000 CAC. Lock when you do. — tune three rates; lock your best."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "If LTV/CAC is under 3, you don't have a marketing engine — you have a fundraising plan, and AI cannot rescue the math.",
@@ -626,6 +650,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The \"everyone\" audience converts at 0.2% — audience size vs conversion."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The brand-voice anchor"
@@ -715,6 +745,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Persona scatter, before and after — 1 persona vs 7 micro-segments."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 3-pass review"
@@ -729,6 +765,12 @@
           "caption": "The 3-pass review. Order matters; you can't undo what an earlier pass would catch.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#FFF7ED'/><g font-family='sans-serif' font-size='12'><g transform='translate(80 30)'><rect width='400' height='70' rx='10' fill='#E9D5FF' stroke='#5B21B6' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#7C3AED'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>1</text><text x='80' y='30' fill='#5B21B6' font-weight='bold' font-size='14'>Voice pass</text><text x='80' y='50' fill='#5B21B6'>does this sound like us, or like ChatGPT?</text><text x='80' y='66' fill='#7C3AED' font-size='10' font-style='italic'>kills ~30% of drafts</text></g><g transform='translate(80 120)'><rect width='400' height='70' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#1E40AF'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>2</text><text x='80' y='30' fill='#1E40AF' font-weight='bold' font-size='14'>Fact pass</text><text x='80' y='50' fill='#1E40AF'>are claims and numbers verifiable?</text><text x='80' y='66' fill='#3730A3' font-size='10' font-style='italic'>kills ~15% — usually hallucinated stats</text></g><g transform='translate(80 210)'><rect width='400' height='70' rx='10' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><circle cx='40' cy='35' r='18' fill='#7F1D1D'/><text x='40' y='40' text-anchor='middle' fill='#FFFFFF' font-weight='bold' font-size='16'>3</text><text x='80' y='30' fill='#7F1D1D' font-weight='bold' font-size='14'>Slop pass</text><text x='80' y='50' fill='#7F1D1D'>does each paragraph earn its length?</text><text x='80' y='66' fill='#7F1D1D' font-size='10' font-style='italic'>cuts ~25% of length on average</text></g><path d='M280 100 L280 120' stroke='#5B21B6' stroke-width='2' marker-end='url(#a4)'/><path d='M280 190 L280 210' stroke='#1E40AF' stroke-width='2' marker-end='url(#a4)'/></g><defs><marker id='a4' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Triangulate a real audience — drag interest cards into the stack."
         },
         {
           "type": "chatScenario",
@@ -1009,6 +1051,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · AI-prompt your audience matrix — write a prompt that returns 6 micro-segments."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "AI is a draft engine, not a content factory — the pipeline is the protection.",
@@ -1102,6 +1150,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · 7 variants, 7 segments, one afternoon — matrix populating."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The no-conclusion-yet rule"
@@ -1191,6 +1245,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Same offer, three voices — voice changes, claim stays."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Lift vs noise"
@@ -1205,6 +1265,12 @@
           "caption": "Same hypothetical lift, three sample sizes. The 'winning' signal only stops being noise once the bands stop overlapping.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 320' role='img'><rect width='600' height='320' rx='14' fill='#FFF7ED'/><text x='300' y='30' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#7F1D1D'>Lift vs noise — same +5% lift, three sample sizes</text><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(40 60)'><text x='0' y='14'>n = 1,000</text><rect x='100' y='6' width='220' height='14' rx='3' fill='#FCA5A5' opacity='0.6'/><circle cx='160' cy='13' r='6' fill='#1E40AF'/><rect x='160' y='6' width='220' height='14' rx='3' fill='#FCD34D' opacity='0.6'/><circle cx='220' cy='13' r='6' fill='#10B981'/><text x='400' y='17' fill='#7F1D1D' font-style='italic'>bands overlap — no conclusion</text></g><g transform='translate(40 120)'><text x='0' y='14'>n = 5,000</text><rect x='130' y='6' width='100' height='14' rx='3' fill='#FCA5A5' opacity='0.6'/><circle cx='160' cy='13' r='6' fill='#1E40AF'/><rect x='190' y='6' width='100' height='14' rx='3' fill='#FCD34D' opacity='0.6'/><circle cx='220' cy='13' r='6' fill='#10B981'/><text x='400' y='17' fill='#92400E' font-style='italic'>bands barely overlap — borderline</text></g><g transform='translate(40 180)'><text x='0' y='14'>n = 20,000</text><rect x='145' y='6' width='40' height='14' rx='3' fill='#FCA5A5' opacity='0.6'/><circle cx='160' cy='13' r='6' fill='#1E40AF'/><rect x='205' y='6' width='40' height='14' rx='3' fill='#FCD34D' opacity='0.6'/><circle cx='220' cy='13' r='6' fill='#10B981'/><text x='400' y='17' fill='#065F46' font-style='italic'>bands separate — real lift</text></g></g><text x='300' y='270' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-style='italic'>Same campaign, same 5% lift. The signal becomes real only at n ~ 20,000.</text></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the variant that'll win — predict before reveal."
         },
         {
           "type": "chatScenario",
@@ -1480,6 +1546,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Rewrite with one constraint — rewrite a generic line to be specific."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Sample size is the unit of an A/B test, not days — measuring in days is confusing time with information.",
@@ -1573,6 +1645,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Channel CAC across 6 quarters — arbitrage windows open and close."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The consent ladder"
@@ -1662,6 +1740,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Which channel deserves the next ₹1L — LTV/CAC bars by channel."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The would-you-tell-them test"
@@ -1676,6 +1760,12 @@
           "caption": "The would-you-tell-them test. Three responses; one of them ends the relationship.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(40 50)'><circle cx='40' cy='40' r='30' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><circle cx='30' cy='35' r='3' fill='#1F2937'/><circle cx='50' cy='35' r='3' fill='#1F2937'/><path d='M28 50 Q40 56 52 50' stroke='#1F2937' stroke-width='2' fill='none'/><path d='M80 30 L120 30 L120 60 L80 60 L60 75 L70 60 L80 60 Z' fill='#FFFFFF' stroke='#92400E' stroke-width='2'/><text x='100' y='48' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>How did you know?</text></g><g transform='translate(220 30)'><rect width='280' height='40' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='15' y='25' fill='#065F46' font-weight='bold' font-family='sans-serif' font-size='12'>'You told us when you signed up.'</text><text x='250' y='25' text-anchor='end' fill='#065F46' font-size='14'>safe</text></g><g transform='translate(220 90)'><rect width='280' height='40' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='15' y='25' fill='#92400E' font-weight='bold' font-family='sans-serif' font-size='12'>'You favourited it on our site.'</text><text x='250' y='25' text-anchor='end' fill='#92400E' font-size='14'>fine</text></g><g transform='translate(220 150)'><rect width='280' height='40' rx='8' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='15' y='25' fill='#7F1D1D' font-weight='bold' font-family='sans-serif' font-size='11'>'We bought your data from a broker.'</text><text x='250' y='25' text-anchor='end' fill='#7F1D1D' font-size='14'>over the line</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Allocate next ₹5L — split budget; LTV reports back."
         },
         {
           "type": "chatScenario",
@@ -1956,6 +2046,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the saturating channel — read the 6-month CAC curve."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Personalize at the segment level, not the individual level — segments scale, individuals creep.",
@@ -2049,6 +2145,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Attribution is a model, not truth — same campaign, 4 attribution models."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 14-day campaign loop"
@@ -2138,6 +2240,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Holdout test: the only honest measurement — spend group vs holdout group."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The kill criterion that holds"
@@ -2152,6 +2260,12 @@
           "caption": "A kill criterion is a small written document. The three excuses are bouncing balloons. Pre-emption is the wall.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 320' role='img'><rect width='560' height='320' rx='14' fill='#FFF7ED'/><g transform='translate(180 30)'><rect width='200' height='160' rx='8' fill='#FFFFFF' stroke='#1F2937' stroke-width='2'/><text x='100' y='28' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='bold' fill='#1F2937'>KILL CRITERION</text><line x1='20' y1='40' x2='180' y2='40' stroke='#9CA3AF' stroke-width='1'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><text x='20' y='60'>✓ Pre-registered</text><text x='20' y='82'>✓ Specific (number, date)</text><text x='20' y='104'>✓ Cheap to honor</text><text x='20' y='126'>✓ Immune to excuses</text></g><text x='100' y='150' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#1F2937' font-style='italic'>signed: day 0</text></g><g transform='translate(40 220)'><ellipse cx='50' cy='40' rx='55' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'just give it</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>more time'</text></g><g transform='translate(220 230)'><ellipse cx='50' cy='40' rx='65' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'creative just</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>needs a tweak'</text></g><g transform='translate(420 220)'><ellipse cx='50' cy='40' rx='60' ry='30' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='2'/><text x='50' y='38' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>'switch the</text><text x='50' y='52' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7F1D1D' font-weight='bold'>attribution'</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Run an MMM lite — assign baseline + lift to each channel."
         },
         {
           "type": "chatScenario",
@@ -2432,6 +2546,12 @@
             "good": "Solid. Compromise at 5 tiles instead of 3; not perfect but a 90% reduction is real progress.",
             "learn": "Re-read the dashboard-delusion section. Adding tiles always feels productive; subtracting is what actually moves decisions."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/digital-marketing-with-ai.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Design a holdout — pick treatment vs control regions."
         },
         {
           "type": "keyTakeaways",

@@ -149,6 +149,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Spreadsheet → table → query — Same data, three views."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — SELECT, FROM, WHERE in plain English"
@@ -289,6 +295,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · How a query runs — FROM → WHERE → GROUP → SELECT → ORDER, in order."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Always pick columns; never SELECT *"
@@ -303,6 +315,12 @@
           "caption": "Same query intent, two shapes. The left one accepts whatever the table grows; the right one accepts only what you asked for. Auditing a query of the second kind is mechanical.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FEFCE8'/><g transform='translate(40 30)'><text x='100' y='0' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#7F1D1D' font-weight='bold'>SELECT * — bug waiting</text><rect x='0' y='15' width='200' height='50' rx='8' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><text x='100' y='42' text-anchor='middle' font-family='monospace' font-size='10' fill='#7F1D1D'>id, name, city, email,</text><text x='100' y='58' text-anchor='middle' font-family='monospace' font-size='10' fill='#7F1D1D'>phone, internal_notes, ...</text><rect x='40' y='80' width='120' height='25' rx='4' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='1.5'/><text x='100' y='97' text-anchor='middle' font-family='monospace' font-size='10' fill='#7F1D1D' font-weight='bold'>internal_notes (PII)</text><text x='100' y='130' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D' font-style='italic'>schema drift = silent leak</text></g><g transform='translate(320 30)'><text x='100' y='0' text-anchor='middle' font-family='sans-serif' font-size='13' fill='#065F46' font-weight='bold'>SELECT name, city</text><rect x='0' y='15' width='200' height='50' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='100' y='45' text-anchor='middle' font-family='monospace' font-size='11' fill='#064E3B'>name, city</text><text x='100' y='130' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46' font-style='italic'>explicit = audit-friendly</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Spreadsheet vs SQL — For the same task, which tool is right?"
         },
         {
           "type": "chatScenario",
@@ -590,6 +608,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Read a query in plain English — See SQL; pick the plain English description."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A SQL table is a spreadsheet with rules — fixed types, same shape per row, primary key indexes lookups",
@@ -681,6 +705,12 @@
               "md": "You don't answer mom's 'did you bring the milk?' Silence ≈ no. Same in SQL: a NULL in your filter condition produces UNKNOWN, which gets dropped just like FALSE. The row 'looks like' it failed your test. It didn't fail; it never got tested."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · WHERE filters rows — 10 rows in; 3 rows out."
         },
         {
           "type": "heading",
@@ -837,6 +867,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · AND, OR, NOT as a Venn — Boolean ops as overlapping circles."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — NULL is not a value"
@@ -951,6 +987,12 @@
           "date": "March 2025",
           "story": "PaisaPe runs settlement reconciliation every night for ~14 million transactions. On March 11, 2025, the RBI auditor for their quarterly review pulled their internal \"failed-payment\" report and found a **0.42% discrepancy** versus the bank's own statement: ₹4.7 crore of transactions that the bank said happened, that PaisaPe's own report said didn't.\n\nThe culprit was one line in a query that had run, untouched, for 19 months:\n\n```sql\nSELECT COUNT(*) FROM transactions\nWHERE payment_status <> 'success'\nAND created_at >= '2024-12-01';\n```\n\nThe problem: when an upstream service timed out, it wrote `NULL` into `payment_status`. And `NULL <> 'success'` doesn't evaluate to `TRUE`. It evaluates to `NULL`. Which the `WHERE` clause treats as \"don't include this row.\"\n\nResult: **62,400 timed-out transactions** had been quietly excluded from every \"failed payments\" report for 19 months. The auditor noticed because the bank's reconciliation file included them. The fix was eight characters: `OR payment_status IS NULL`. The remediation memo to RBI was twelve pages.\n\nThe engineer who wrote the original query had left the company in 2023. The query had passed code review three times.",
           "takeaway": "`NULL` is not equal to anything, not even itself — and `WHERE x <> 'A'` silently drops every row where `x` is unknown."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build a WHERE clause — Compose conditions; rows light up live."
         },
         {
           "type": "bossBattle",
@@ -1069,6 +1111,12 @@
             "good": "You found the NULL. You shipped a number. The fix you chose was a backstop instead of a structural prevention — re-read the section on three-valued logic and constraints, because this exact bug will reappear.",
             "learn": "Re-read the lesson on `NULL` semantics — especially **\"NULL is not equal to anything, not even itself\"** and the section on `IS NULL` / `IS NOT NULL`. The CMO is now planning a campaign for the wrong customer set. Tomorrow you'll have to walk it back."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · NULL trap quiz — Spot the silent NULL bug."
         },
         {
           "type": "keyTakeaways",
@@ -1218,6 +1266,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · INNER JOIN as Venn — Two tables; the overlap is the result."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Pick by intent, not by syntax habit"
@@ -1287,6 +1341,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · LEFT JOIN vs INNER — Same query, different keep-set."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The fan-out trap"
@@ -1325,6 +1385,12 @@
           "tone": "warn",
           "title": "The classic trap: fan-out",
           "md": "Whenever you JOIN to a table with multiple matches per row, **the left side gets multiplied**. Aggregations on left-side columns silently double-count.\n\nDiagnostic: if your COUNT(DISTINCT customer_id) doesn't match the number of customers in the JOIN result, you've fanned out. Fix:\n\n1. **Pre-aggregate the right side** in a CTE (covered in lesson 5):\n   ```sql\n   WITH order_summary AS (\n     SELECT customer_id, SUM(amount) AS total\n     FROM orders\n     GROUP BY customer_id\n   )\n   SELECT c.name, c.age, COALESCE(s.total, 0) AS total_revenue\n   FROM customers c\n   LEFT JOIN order_summary s ON s.customer_id = c.id;\n   ```\n2. **Use COUNT(DISTINCT)** when you can't pre-aggregate easily."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the JOIN — 5 scenarios; pick INNER, LEFT, or FULL."
         },
         {
           "type": "chatScenario",
@@ -1628,6 +1694,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Trace the JOIN — See which left-rows match which right-rows."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "JOINs are matchmakers — INNER keeps matches only, LEFT keeps the left side intact",
@@ -1721,6 +1793,12 @@
               "md": "A ration card lists one row per household, not per person. The household_id column is the grouping key; individual incomes are summed; individual names are NOT shown (which person's name would you pick?). GROUP BY is exactly this."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · GROUP BY collapses rows — 10 raw rows → 3 grouped rows."
         },
         {
           "type": "heading",
@@ -1886,6 +1964,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · HAVING filters groups — GROUP first, then filter the buckets."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — HAVING vs WHERE — when each runs"
@@ -2010,6 +2094,12 @@
           "date": "January 2025",
           "story": "GharSe's Head of Product, on January 17, 2025, opened the weekly product-quality dashboard with a smile: their newly launched **\"deep clean — premium\"** service had a stellar **4.5-star average** across 800 ratings. He greenlit a ₹1.2 crore marketing push and put it on the homepage hero.\n\nBy late February, refund requests for that service spiked 380%. The CX team flagged it. The data team re-ran the rating math, this time *not* trusting the dashboard.\n\nThe dashboard query was:\n\n```sql\nSELECT service_id, AVG(rating) AS avg_rating\nFROM bookings\nWHERE service_id = 'deep-clean-premium'\nGROUP BY service_id;\n```\n\nThe gotcha: of the 800 \"ratings,\" only **120 were actual numeric scores**. The other 680 were `NULL` — customers who never opened the rating prompt. `AVG()` silently skips NULLs. The 4.5 was an average of 120 self-selecting happy customers (the 15% who bothered to rate). The other 680 included **a lot of unhappy people** who churned in silence.\n\nWhen the analyst recalculated treating non-responses as a 1-star equivalent (the conservative business assumption), the rating was **1.8 stars**. The marketing push was paused mid-campaign. The Head of Product wrote a memo titled *\"Why I'm never trusting a single AVG() ever again.\"*\n\nNet cost: ₹47 lakh in spent ad budget on a product that needed fixing first, plus three months of customer trust to repair.",
           "takeaway": "`AVG()`, `SUM()`, `COUNT()` and friends silently skip `NULL` — and the *response rate* is often the most important number on the dashboard."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · GROUP BY playground — Toggle group columns and aggregates."
         },
         {
           "type": "bossBattle",
@@ -2164,6 +2254,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the aggregate — For a question, pick AVG vs COUNT vs SUM vs MAX."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "GROUP BY is a controlled collapse — buckets rows by a key, then aggregates each bucket",
@@ -2258,6 +2354,12 @@
               "md": "Recipes often read top-to-bottom but instruct the cook to do steps out of order ('first, brown the spice'). The reader has to do the translation. SQL is the same: SELECT comes first in the text, runs second-to-last in execution. Once you see this, debugging gets a lot faster."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Subquery as a stepping stone — Inner query first; outer query uses its result."
         },
         {
           "type": "heading",
@@ -2424,6 +2526,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · CTE makes it readable — Same query, with vs without WITH."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Compose CTEs into a pipeline"
@@ -2438,6 +2546,12 @@
           "caption": "CTE pipeline: named stages, top-to-bottom flow. Below: the equivalent nested-subquery shape, indistinguishable from a knot.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#ECFDF5'/><g transform='translate(40 30)'><text x='240' y='0' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46' font-weight='bold'>CTE pipeline (good)</text><g transform='translate(0 15)'><rect width='130' height='40' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='65' y='17' text-anchor='middle' font-family='monospace' font-size='10' fill='#064E3B' font-weight='bold'>1. paid_q1</text><text x='65' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>filter to Q1 paid</text></g><g transform='translate(165 15)'><rect width='130' height='40' rx='8' fill='#6EE7B7' stroke='#065F46' stroke-width='2'/><text x='65' y='17' text-anchor='middle' font-family='monospace' font-size='10' fill='#064E3B' font-weight='bold'>2. city_totals</text><text x='65' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>group by city</text></g><g transform='translate(330 15)'><rect width='130' height='40' rx='8' fill='#34D399' stroke='#065F46' stroke-width='2'/><text x='65' y='17' text-anchor='middle' font-family='monospace' font-size='10' fill='#064E3B' font-weight='bold'>3. SELECT top 5</text><text x='65' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>order, limit</text></g><line x1='130' y1='35' x2='165' y2='35' stroke='#065F46' stroke-width='2' marker-end='url(#cp)'/><line x1='295' y1='35' x2='330' y2='35' stroke='#065F46' stroke-width='2' marker-end='url(#cp)'/></g><g transform='translate(40 130)'><text x='240' y='0' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#7F1D1D' font-weight='bold'>nested subqueries (don't)</text><g transform='translate(160 15)'><rect x='0' y='0' width='200' height='110' rx='12' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='2'/><rect x='15' y='15' width='170' height='80' rx='10' fill='#FECACA' stroke='#7F1D1D' stroke-width='1.5'/><rect x='30' y='28' width='140' height='52' rx='8' fill='#FCA5A5' stroke='#7F1D1D' stroke-width='1.5'/><rect x='45' y='40' width='110' height='28' rx='6' fill='#F87171' stroke='#7F1D1D' stroke-width='1.5'/><text x='100' y='58' text-anchor='middle' font-family='monospace' font-size='9' fill='#FFFFFF' font-weight='bold'>SELECT *</text></g><text x='240' y='140' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D' font-style='italic'>same logic, indistinguishable from a knot</text></g><defs><marker id='cp' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Subquery or JOIN? — Five scenarios, which approach reads better."
         },
         {
           "type": "chatScenario",
@@ -2757,6 +2871,12 @@
             "good": "You shipped a working refactor and Aanya got her report. You missed at least one of: the baseline-first discipline, the right CTE granularity, or the CI test for future protection. Re-read the section on **CTE structure and refactoring patterns** — these are the senior moves.",
             "learn": "Re-read the lesson — especially the section on **CTEs vs subqueries** and the **refactoring playbook**. The strategy of \"baseline → refactor → verify → extend\" is the difference between the engineer who fears the 187-line query and the engineer who casually rewrites it on a Wednesday morning."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/sql-foundations.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Window function preview — Same query with and without OVER()."
         },
         {
           "type": "keyTakeaways",

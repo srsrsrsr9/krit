@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 1440 900" width="1440" height="900">
+  <title>Annotated: Finance prototype — strong CTA, but Krit is invisible inside the artifact</title>
+  <image href="../screenshots/02-finance-top.png" xlink:href="../screenshots/02-finance-top.png"
+         x="0" y="0" width="1440" height="900" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 1 (green) — CTA is the strongest in the set -->
+  <g>
+    <rect x="325" y="540" width="240" height="56" fill="rgba(20,85,74,0.10)" stroke="#14554a" stroke-width="3"/>
+    <circle cx="325" cy="540" r="16" fill="white" stroke="#14554a" stroke-width="2"/>
+    <text x="325" y="547" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+          font-size="20" fill="#14554a" text-anchor="middle" dominant-baseline="middle">1</text>
+    <rect x="60" y="540" width="260" height="100" fill="white" stroke="#14554a" stroke-width="2"/>
+    <text x="70" y="564" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#14554a" font-weight="bold">1. STRONGEST CTA IN SET.</text>
+    <text x="70" y="584" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">"Run the experiment" promises</text>
+    <text x="70" y="600" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">a verb the other three CTAs</text>
+    <text x="70" y="616" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">lack. Copy this pattern.</text>
+  </g>
+
+  <!-- 2 (red) — no Krit mention anywhere inside the artifact -->
+  <g>
+    <rect x="325" y="140" width="640" height="40" fill="rgba(193,39,45,0.10)" stroke="#c1272d" stroke-width="3"/>
+    <circle cx="325" cy="140" r="16" fill="white" stroke="#c1272d" stroke-width="2"/>
+    <text x="325" y="147" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+          font-size="20" fill="#c1272d" text-anchor="middle" dominant-baseline="middle">2</text>
+    <rect x="980" y="140" width="430" height="120" fill="white" stroke="#c1272d" stroke-width="2"/>
+    <text x="990" y="164" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#c1272d" font-weight="bold">2. NO BRAND INSIDE THE ARTIFACT.</text>
+    <text x="990" y="184" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">"FINANCE · 5 MIN · A SIMULATOR"</text>
+    <text x="990" y="200" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">Word "Krit" appears nowhere on the</text>
+    <text x="990" y="216" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">standalone page. If someone opens</text>
+    <text x="990" y="232" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">it in a new tab they don't know who</text>
+    <text x="990" y="248" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">to credit, share, or pay.</text>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>Embeddings — calibration friction at the entry</title>
+  <image x="0" y="0" width="1440" height="900"
+         xlink:href="file:///Users/srinivasvedantam/Documents/Me/elemes/v2/project-docs-v6/docs/review/screenshots/01-embeddings-top.png"/>
+
+  <!-- 1. 01 START tab — clear next action (orange = motivational positive) -->
+  <rect x="195" y="8" width="90" height="34" fill="rgba(245,158,11,0.20)" stroke="#f59e0b" stroke-width="3"/>
+  <circle cx="191" cy="12" r="14" fill="#fff" stroke="#f59e0b" stroke-width="2"/>
+  <text x="191" y="19" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#f59e0b">1</text>
+
+  <!-- 2. Points pill — visible reward channel -->
+  <rect x="1308" y="8" width="92" height="34" fill="rgba(245,158,11,0.20)" stroke="#f59e0b" stroke-width="3"/>
+  <circle cx="1304" cy="12" r="14" fill="#fff" stroke="#f59e0b" stroke-width="2"/>
+  <text x="1304" y="19" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#f59e0b">2</text>
+
+  <!-- 3. Calibration card — heavy friction front-loaded (purple = attention concern) -->
+  <rect x="395" y="425" width="645" height="375" fill="rgba(124,58,237,0.14)" stroke="#7c3aed" stroke-width="3"/>
+  <circle cx="391" cy="425" r="14" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="391" y="432" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#7c3aed">3</text>
+
+  <!-- legend -->
+  <g transform="translate(40,840)" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#222">
+    <rect x="0" y="-12" width="14" height="14" fill="rgba(245,158,11,0.5)" stroke="#f59e0b"/>
+    <text x="22" y="0">1 clear next action  2 reward channel visible from t=0 (telegraphs gamification)</text>
+    <rect x="0" y="8" width="14" height="14" fill="rgba(124,58,237,0.35)" stroke="#7c3aed"/>
+    <text x="22" y="20">3 calibration quiz BEFORE any payoff — competence-threat without prior autonomy or relatedness (SDT)</text>
+  </g>
+</svg>

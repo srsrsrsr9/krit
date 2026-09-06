@@ -1,0 +1,172 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · AI for Accounting</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#b88e2d;--accent-soft:#f3e4bd;--accent-strong:#7d5e1a;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">AI for Accounting</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Close the books</option><option value="L2">L2 · Reconciliation</option><option value="L3">L3 · Categorisation</option><option value="L4">L4 · Anomaly</option><option value="L5">L5 · Audit trail</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most "AI for accounting" content sells you a chatbot that explains debits. What you'll close faster: categorisation when "AMAZON" could be 4 things, recon at 5,000 lines, and the audit trail your CA will sign off on in 2027.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Close the books', L2:'Reconciliation', L3:'Categorisation', L4:'Anomaly', L5:'Audit trail' } };
+const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'Where the month-end days actually go',what:'Watch: 8-day close, broken down.',footer:'Typical mid-market close: 1.5d data import, 2.5d categorisation, 2d recon, 1d reviews, 1d reporting. AI compresses the first three; the last two stay human. Save 4 of 8 days.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>8-day close, by activity</h3>
+  <svg viewBox="0 0 500 220">${[['Data import',1.5,'var(--saffron)'],['Categorisation',2.5,'var(--accent)'],['Reconciliation',2,'var(--accent)'],['Reviews',1,'var(--accent-strong)'],['Reporting',1,'var(--accent-strong)']].map(([n,d,c],i)=>`<rect x="180" y="${20+i*36}" width="${d*60}" height="28" fill="${c}"><animate attributeName="width" from="0" to="${d*60}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="175" y="${40+i*36}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${185+d*60}" y="${40+i*36}" font-family="ui-monospace" font-size="11" font-weight="700">${d}d</text>`).join('')}</svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'AI-assisted close: 8 days → 4',what:'Watch: stretch removed.',footer:'AI categorisation + AI recon shave the first 6 days from 5 to 1.5. Day-by-day savings front-load. The "AI gives you back the weekend" pitch is real here.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Manual vs AI-assisted</h3>
+  <div class="stat-grid">${[['Manual close','8 days','red'],['+ AI categorisation','5.5 days','amber'],['+ AI recon','3.5 days','green'],['+ AI variance flag','3 days','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Build your close timeline',what:'Try: drag tasks onto days 1-5.',footer:'Reviews and reporting belong at the END. Putting reviews in the middle means re-reviews when later corrections cascade. Order matters as much as duration.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const tasks=[{t:'Import bank + ledger',d:1},{t:'AI categorise transactions',d:1},{t:'Reconcile bank statements',d:2},{t:'AI flag anomalies',d:2},{t:'CFO review',d:4},{t:'Generate P&L + BS',d:5}];s.innerHTML=`<h3>Place tasks on day 1-5</h3>
+  <div class="row" id="L1i01_p" style="margin:10px 0">${tasks.map((t,i)=>`<span class="chip" data-i="${i}" data-d="${t.d}">${t.t}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">
+    ${[1,2,3,4,5].map(d=>`<div class="lane" data-l="${d}"><h4>Day ${d}</h4><div class="drop"></div></div>`).join('')}
+  </div>
+  <button class="btn" id="L1i01_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L1i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L1i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.d===p.dataset.placed)ok++;});const r=s.querySelector('#L1i01_r');r.style.display='block';r.className='reveal '+(ok>=5?'win':'bad');r.innerHTML=`<strong>${ok}/${tasks.length} placed in the right order.</strong> Review last. Reporting last. Anything earlier creates rework when later steps surface corrections.`;SFX.click();};}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Where to automate — and where not to',what:'Try: tune four phases; lock to commit.',footer:'Right balance: 90% categorisation, 70% recon, 30% review, 60% reporting. Over-automating review creates false confidence — the CFO loses pattern-recognition the moment AI does it for them.',scaffold:3,runtime:'30-60s',mechanic:'live-explorer-lock',
+  mount(s){s.innerHTML=`<h3>Tune automation % per phase</h3>
+  ${[['Categorisation','c',90,0,100],['Reconciliation','r',70,0,100],['Review (CFO)','v',30,0,100],['Reporting','p',60,0,100]].map(([n,k,d,mn,mx])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:200px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L1i02_${k}" min="${mn}" max="${mx}" value="${d}" style="width:40%"><span class="v" id="L1i02_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}%</span></label>`).join('')}
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Close days saved</div><div class="stat-value" id="L1i02_s">—</div></div><div class="stat"><div class="stat-label">Risk profile</div><div class="stat-value" id="L1i02_x">—</div></div></div>
+  <button class="btn" id="L1i02_lock" style="margin-top:8px">Lock the policy</button>
+  <div class="reveal" id="L1i02_r" style="display:none;margin-top:10px"></div>`;
+  const u=()=>{const c=+s.querySelector('#L1i02_c').value,r=+s.querySelector('#L1i02_r').value,v=+s.querySelector('#L1i02_v').value,p=+s.querySelector('#L1i02_p').value;['c','r','v','p'].forEach(k=>s.querySelector('#L1i02_v'+k).textContent=s.querySelector('#L1i02_'+k).value+'%');const saved=(c*0.025+r*0.02+v*0.005+p*0.005).toFixed(1);s.querySelector('#L1i02_s').textContent=saved+' days';s.querySelector('#L1i02_x').textContent=v>50?'high':v>30?'medium':'low';};
+  ['c','r','v','p'].forEach(k=>s.querySelector('#L1i02_'+k).oninput=()=>{SFX.hover();u();s.querySelector('#L1i02_r').style.display='none';});
+  s.querySelector('#L1i02_lock').onclick=()=>{const c=+s.querySelector('#L1i02_c').value,r=+s.querySelector('#L1i02_r').value,v=+s.querySelector('#L1i02_v').value,p=+s.querySelector('#L1i02_p').value;const r2=s.querySelector('#L1i02_r');r2.style.display='block';let verdict,cls;if(v>50){verdict=`<strong>Risky lock: review at ${v}%.</strong> Over-automating CFO review is the failure pattern. The CFO loses pattern-recognition; first time AI miscategorises a material item, no human catches it. Cap review automation at 30%.`;cls='bad';}else if(c<60){verdict=`<strong>Under-using AI on categorisation (${c}%).</strong> Categorisation is where AI shines — 92%+ accuracy on a well-defined chart of accounts. Push to 85-90%.`;cls='bad';}else{verdict=`<strong>Balanced policy.</strong> High automation on categorisation + recon (the volume), low on review (the judgement). This is the shape mid-market firms converge on by year 2.`;cls='win';}r2.className='reveal '+cls;r2.innerHTML=verdict;SFX.click();};u();}},
+
+/* L2 — reconciliation */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Recon at scale: 5000 lines',what:'Watch: matched + unmatched + ambiguous.',footer:'AI matches 92% confidently, 5% probabilistically (review queue), 3% true exceptions. The accountant\'s real job becomes the 3%. The 92% no longer eats the week.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>AI recon outcomes on 5000 lines</h3>
+  <svg viewBox="0 0 500 200"><rect x="40" y="60" width="0" height="40" fill="#1d8a52"><animate attributeName="width" from="0" to="386" dur="1.2s" fill="freeze"/></rect><rect x="426" y="60" width="0" height="40" fill="var(--saffron)"><animate attributeName="width" from="0" to="21" dur=".8s" begin=".8s" fill="freeze"/></rect><rect x="447" y="60" width="0" height="40" fill="#a4123f"><animate attributeName="width" from="0" to="13" dur=".5s" begin="1.2s" fill="freeze"/></rect>
+  <text x="40" y="50" font-family="ui-monospace" font-size="11" fill="#1d8a52" font-weight="700">Matched · 92%</text>
+  <text x="40" y="130" font-family="ui-monospace" font-size="11" fill="#c4810f" font-weight="700">↗ Review (5%, ~250 lines)</text>
+  <text x="40" y="160" font-family="ui-monospace" font-size="11" fill="#a4123f" font-weight="700">↘ Exceptions (3%, ~150 lines)</text></svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'The 3% that\'s where you earn your fee',what:'Watch: 5 typical exception types.',footer:'Top exceptions: timing differences (35%), missing entries (24%), duplicate (18%), wrong amount (15%), wrong account (8%). 3 types account for 77% of cases. Train recognition there.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Exception type distribution</h3>
+  <div class="stat-grid">${[['Timing differences','35%','amber'],['Missing entries','24%','red'],['Duplicates','18%','amber'],['Wrong amount','15%','red'],['Wrong account','8%','red']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Classify 5 exceptions',what:'Try: drag exceptions to their type.',footer:'Faster classification → faster resolution → tighter close. Pattern recognition is teachable to AI; you teach it by labelling 50-100 cases first.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const items=[{t:'GST refund recorded Apr 30, bank shows May 3',a:'timing'},{t:'Vendor invoice in ledger ₹50,000; bank shows ₹5,00,000',a:'wrong-amt'},{t:'Salary payment appears twice in bank, once in ledger',a:'duplicate'},{t:'Bank shows ₹1.2L outgoing; no ledger entry',a:'missing'},{t:'Recorded to "Office Supplies"; actually rent',a:'wrong-acct'}];s.innerHTML=`<h3>Classify</h3>
+  <div class="row" id="L2i01_p" style="margin:10px 0">${items.map((it,i)=>`<span class="chip" data-i="${i}" data-a="${it.a}">${it.t}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+    ${[['timing','Timing'],['missing','Missing'],['duplicate','Duplicate'],['wrong-amt','Wrong ₹'],['wrong-acct','Wrong account']].map(([k,n])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop"></div></div>`).join('')}
+  </div>
+  <button class="btn" id="L2i01_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L2i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L2i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.a===p.dataset.placed)ok++;});const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok===items.length?'win':'bad');r.innerHTML=`<strong>${ok}/${items.length} classified right.</strong>`;SFX.click();};}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'When AI says 87% confident',what:'Try: pick a confidence threshold.',footer:'Threshold too high: review queue explodes. Too low: bad matches sneak through. 85% is the sweet spot for most ledgers; 90%+ for regulated entities.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>What\'s your auto-match threshold?</h3>
+  <label>Threshold<input type="range" id="L2i02_t" min="50" max="99" value="85" style="width:60%"><span class="v" id="L2i02_vt" style="margin-left:8px;color:var(--ink);font-weight:700">85%</span></label>
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Auto-matched</div><div class="stat-value" id="L2i02_a">—</div></div><div class="stat"><div class="stat-label">Review queue</div><div class="stat-value amber" id="L2i02_q">—</div></div><div class="stat"><div class="stat-label">Risk of bad match</div><div class="stat-value" id="L2i02_r">—</div></div></div>`;
+  const u=()=>{const t=+s.querySelector('#L2i02_t').value;s.querySelector('#L2i02_vt').textContent=t+'%';const auto=Math.round(5000*(1-Math.pow((t-50)/49,1.5)*.15));const queue=5000-auto-150;s.querySelector('#L2i02_a').textContent=auto;s.querySelector('#L2i02_q').textContent=queue;const risk=t<70?'high':t<85?'medium':'low';s.querySelector('#L2i02_r').textContent=risk;s.querySelector('#L2i02_r').className='stat-value '+(risk==='low'?'green':risk==='medium'?'amber':'red');};
+  s.querySelector('#L2i02_t').oninput=()=>{SFX.hover();u();};u();}},
+
+/* L3 — categorisation */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'Same vendor, 4 ledger categories',what:'Watch: messy real-world data.',footer:'"AMAZON" can be office supplies, software (Prime Video), travel (gift card), or asset (laptop). Categorisation needs context, not name matching. Rule-based fails; LLM with rules + memory works.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>"AMAZON" — four valid categories</h3>
+  ${[['₹1,200','Office Supplies (printer ink)'],['₹2,500','Software (Prime Video for office)'],['₹15,000','Travel (gift card for client)'],['₹85,000','Asset (laptop)']].map(([a,c])=>`<div class="panel" style="margin:4px 0;display:flex;justify-content:space-between"><span>AMAZON · ${a}</span><span class="chip">${c}</span></div>`).join('')}
+  <p class="panel" style="background:var(--accent-soft);margin-top:8px">Naive matching: all → "Office Supplies". Wrong P&L.</p>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'AI categorisation accuracy by chart of accounts',what:'Watch: accuracy vs # of accounts.',footer:'AI accuracy: 96% with 30 accounts, 88% with 100, 71% with 300. Bloated CoA hurts AI as much as humans. Most SMBs over-engineer their CoA.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Accuracy vs chart-of-accounts size</h3>
+  <svg viewBox="0 0 500 220"><line x1="40" y1="180" x2="460" y2="180" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="180" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:30},(_,i)=>{const n=10+i*15;const acc=Math.max(50,98-Math.pow(n/30,1.4)*5);return (40+i*14)+','+(180-acc*1.5);}).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  ${[[30,96],[100,88],[300,71]].map(([n,a])=>`<circle cx="${40+(n-10)/15*14}" cy="${180-a*1.5}" r="4" fill="var(--accent-strong)"/><text x="${40+(n-10)/15*14}" y="${175-a*1.5}" text-anchor="middle" font-family="ui-monospace" font-size="10">${n}/${a}%</text>`).join('')}
+  <text x="250" y="200" text-anchor="middle" font-family="ui-monospace" font-size="11">accounts</text></svg>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Categorise 6 transactions',what:'Try: drag each to the right bucket.',footer:'Practice on edge cases not easy ones. "ZOMATO" might be Travel-Meals (clients) or Salary-Benefit (employees). The chart-of-accounts policy must answer this *before* AI does.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const items=[{t:'Zoho ₹1,499/mo',a:'software'},{t:'Uber ₹420 (rider: CEO, 8pm Fri)',a:'travel'},{t:'Zomato ₹3,200 (team dinner)',a:'benefits'},{t:'AWS ₹48,000',a:'software'},{t:'Office cleaner ₹6,000/mo',a:'admin'},{t:'Stripe payout ₹1,40,000',a:'revenue'}];s.innerHTML=`<h3>Drag to category</h3>
+  <div class="row" id="L3i01_p" style="margin:10px 0">${items.map((it,i)=>`<span class="chip" data-i="${i}" data-a="${it.a}">${it.t}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+    ${[['software','Software'],['travel','Travel'],['benefits','Benefits'],['admin','Admin'],['revenue','Revenue']].map(([k,n])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop"></div></div>`).join('')}
+  </div>
+  <button class="btn" id="L3i01_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L3i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L3i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.a===p.dataset.placed)ok++;});const r=s.querySelector('#L3i01_r');r.style.display='block';r.className='reveal '+(ok===items.length?'win':'bad');r.innerHTML=`<strong>${ok}/${items.length}.</strong>`;SFX.click();};}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Write the categorisation prompt',what:'Try: write a prompt with rules + memory.',footer:'Good categorisation prompt names: vendor, amount, time-of-day cues, prior category for this vendor, policy edge cases. Skip any → AI invents categories.',scaffold:4,runtime:'30-60s',mechanic:'prompt-grade',
+  mount(s){s.innerHTML=`<h3>Write the categorisation prompt</h3>
+  <textarea id="L3i02_p" style="width:100%;min-height:140px" placeholder="You are a senior accountant. Categorise this transaction:..."></textarea>
+  <button class="btn" id="L3i02_g" style="margin-top:8px">Grade</button>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L3i02_g').onclick=()=>{const p=s.querySelector('#L3i02_p').value.toLowerCase();const checks=[['names vendor + amount',/vendor|amount|payee|name/],['names prior history',/prior|previous|history|last time|memory|context/],['names policy edge cases',/policy|edge|when|if.*then|client|team|meal/],['constrains to chart of accounts',/chart|account|list|only.*following|valid.*categories/],['asks for confidence',/confidence|certain|sure|score/]];const passed=checks.filter(([_,re])=>re.test(p)).length;const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(passed>=4?'win':'bad');r.innerHTML=`<strong>${passed}/5 elements.</strong><br>${checks.map(([n,re])=>(re.test(p)?'✓ ':'✗ ')+n).join('<br>')}<br><br>${passed>=4?'Will produce auditable categorisation.':'Each missing piece = AI improvises. Improvisation = inconsistency = audit headache.'}`;SFX.click();};}},
+
+/* L4 — anomaly */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'What anomaly detection actually catches',what:'Watch: 4 anomaly types.',footer:'Top anomalies AI catches that humans miss: weekend transactions (61%), round-number invoices (54%), duplicate within 2 days (47%), vendor concentration shift (38%). Boring stuff. Catches fraud anyway.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Anomaly catch rate vs human-only</h3>
+  <svg viewBox="0 0 500 200">${[['Weekend payments',61],['Round-number invoices',54],['Duplicates ≤2 days',47],['Vendor concentration shift',38],['Off-hours posting',31]].map(([n,v],i)=>`<rect x="220" y="${20+i*30}" width="${v*4}" height="22" fill="var(--accent)"><animate attributeName="width" from="0" to="${v*4}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="215" y="${36+i*30}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${225+v*4}" y="${36+i*30}" font-family="ui-monospace" font-size="11" font-weight="700">+${v}%</text>`).join('')}</svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'False positive rate over 6 months',what:'Watch: tuning pays off.',footer:'Untuned AI anomaly: 40% false positive — accountants disable it within a week. Tuned (3 months of labelled feedback): 8% FP. Tuning is the work; the model is commodity.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>FP rate while tuning</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:24},(_,i)=>(40+i*17)+','+(170-Math.max(15,100-i*4))).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <line x1="40" y1="115" x2="460" y2="115" stroke="#a4123f" stroke-dasharray="3 3"/>
+  <text x="460" y="113" text-anchor="end" font-family="ui-monospace" font-size="10" fill="#a4123f">22% (gives-up zone)</text>
+  <text x="450" y="190" text-anchor="end" font-family="ui-monospace" font-size="9" fill="var(--muted)">24 weeks of tuning</text></svg>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Which flags would you investigate?',what:'Try: 5 flags, pick the 2 worth investigating.',footer:'Investigation cost: ~30 min/flag. False positive cost: trust erosion. Pick flags that meet both: high anomaly score AND material impact. Boring small wrong is not worth 30 min.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const flags=[{t:'₹50,000 payment to new vendor, Sat 11pm',a:true,why:'Off-hours + new vendor + round number = classic 3-factor flag. Investigate.'},{t:'₹230 office tea expense',a:false,why:'Material immaterial. Skip even if AI flagged.'},{t:'CEO reimbursement ₹4,80,000 — 6× last month',a:true,why:'Round number, large variance, signing authority. Worth a conversation.'},{t:'Power bill ₹14,250 vs ₹13,990 last month',a:false,why:'Within seasonal range. Auto-acknowledge.'},{t:'AMAZON 3 payments ₹49,500 each, same day',a:true,why:'Possible split to avoid approval threshold. Always investigate splits.'}];s.innerHTML=`<h3>Pick the 2 to investigate</h3>
+  ${flags.map((f,i)=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox" data-i="${i}"> ${f.t}</label>`).join('')}
+  <button class="btn" id="L4i01_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L4i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L4i01_c').onclick=()=>{const checked=[...s.querySelectorAll('input:checked')].map(c=>+c.dataset.i);let ok=0;flags.forEach((f,i)=>{if(f.a===checked.includes(i))ok++;});const r=s.querySelector('#L4i01_r');r.style.display='block';r.className='reveal '+(ok>=4?'win':'bad');r.innerHTML=`<strong>${ok}/${flags.length} judged right.</strong><br>${flags.map((f,i)=>`<div style="margin-top:4px"><strong>${i+1}:</strong> ${f.a?'Investigate':'Skip'}. ${f.why}</div>`).join('')}`;SFX.click();};}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Tune the anomaly threshold',what:'Try: balance investigations vs catch-rate.',footer:'Investigation budget is your real constraint. 30 flags/wk = 15 hours of investigation = too much. Target 8-12 flags/wk by tightening threshold, not by accepting risk.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Tune your anomaly score threshold</h3>
+  <label>Threshold<input type="range" id="L4i02_t" min="40" max="95" value="75" style="width:60%"><span class="v" id="L4i02_vt" style="margin-left:8px;color:var(--ink);font-weight:700">75</span></label>
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Flags / week</div><div class="stat-value" id="L4i02_f">—</div></div><div class="stat"><div class="stat-label">% real anomalies</div><div class="stat-value" id="L4i02_p">—</div></div><div class="stat"><div class="stat-label">Verdict</div><div class="stat-value" id="L4i02_v" style="font-size:13px">—</div></div></div>`;
+  const u=()=>{const t=+s.querySelector('#L4i02_t').value;s.querySelector('#L4i02_vt').textContent=t;const f=Math.max(2,Math.round(80-t*0.8));const p=Math.min(92,40+t*0.6);s.querySelector('#L4i02_f').textContent=f;s.querySelector('#L4i02_p').textContent=p+'%';let v,c;if(f>20){v='Too noisy — team disables';c='red';}else if(f>=8&&f<=14){v='Workable';c='green';}else{v='Too few — missing things';c='amber';}s.querySelector('#L4i02_v').textContent=v;s.querySelector('#L4i02_v').className='stat-value '+c;};
+  s.querySelector('#L4i02_t').oninput=()=>{SFX.hover();u();};u();}},
+
+/* L5 — audit trail */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'What a regulator wants to see',what:'Watch: 5 columns in your AI log.',footer:'For ICAI / GST audit: every AI-assisted decision needs prompt + version + confidence + human reviewer + timestamp. Without these, AI output isn\'t evidence — it\'s rumour.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Auditable AI decision row</h3>
+  <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:11px">
+    <tr style="background:var(--accent-soft)"><th style="padding:6px;text-align:left">Txn ID</th><th style="padding:6px">Prompt v</th><th style="padding:6px">Conf</th><th style="padding:6px">AI suggested</th><th style="padding:6px">Reviewer</th><th style="padding:6px">Time</th></tr>
+    ${[['T-2401','cat-prompt-v3','94%','Software','priya@','2026-05-12 14:22'],['T-2402','cat-prompt-v3','71%','Travel→ override → Admin','priya@','2026-05-12 14:24']].map(r=>`<tr>${r.map(c=>`<td style="padding:6px;border-bottom:1px solid var(--rule)">${c}</td>`).join('')}</tr>`).join('')}
+  </table>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'When the prompt changes, restate',what:'Watch: model v1 vs v2 categorising last quarter.',footer:'If you change the categorisation prompt mid-quarter, re-run last quarter\'s transactions through both versions and reconcile. Without this, you have a "before-after" that\'s actually "v1 vs v2".',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Restate when prompt changes</h3>
+  <div class="stat-grid">${[['Same data, prompt v1','Travel: ₹4.2L','amber'],['Same data, prompt v2','Travel: ₹3.8L','amber'],['Restate journal','Travel reclassified ₹40k','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:13px">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Auditor will ask: "Why did Travel drop ₹40k Q-over-Q?" "We updated the categorisation prompt" is a valid answer — only if you logged it.</p>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Build an audit-trail row',what:'Try: fill all required columns.',footer:'A complete row makes the AI decision reviewable two years later by someone who has never seen this codebase. That\'s the bar — not "the developer remembers."',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Capture this AI decision properly</h3>
+  ${[['Transaction ID','tid','T-2403'],['Prompt version','pv','cat-prompt-v3'],['Confidence','cf','81%'],['AI suggestion','as','Office Supplies'],['Human reviewer','hr','priya@firm.co'],['Final category','fc','Office Supplies (accepted)']].map(([n,k,ex])=>`<label style="display:block;margin:4px 0"><span style="display:inline-block;width:160px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="text" id="L5i01_${k}" placeholder="${ex}" style="width:55%"></label>`).join('')}
+  <button class="btn" id="L5i01_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L5i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L5i01_c').onclick=()=>{const [tid,pv,cf,as,hr,fc]=['tid','pv','cf','as','hr','fc'].map(k=>s.querySelector('#L5i01_'+k).value.trim());const checks=[['Txn ID looks like an ID',/^[A-Z]{1,4}[-_]?\d+/i.test(tid)],['Prompt version is named + numbered',/v\d|version|\d/i.test(pv)&&pv.length>=4],['Confidence is a number/percent',/\d+\s*%?/.test(cf)],['AI suggestion is a category name',as.length>=3&&!/\d{2,}$/.test(as)],['Reviewer is a person (email or name)',/@|^[A-Z][a-z]/i.test(hr)&&hr.length>=3],['Final category recorded',fc.length>=3]];const passed=checks.filter(([_,ok])=>ok).length;const r=s.querySelector('#L5i01_r');r.style.display='block';r.className='reveal '+(passed===6?'win':'bad');r.innerHTML=`<strong>${passed}/6 quality checks.</strong><br>${checks.map(([n,ok])=>(ok?'✓ ':'✗ ')+n).join('<br>')}<br><br>${passed===6?'Row is auditable in 2 years. Save as template; reuse for every AI-assisted decision.':'Each gap is a question the regulator will ask in 2027 that you can\\'t answer.'}`;SFX.click();};}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Spot the unauditable AI use',what:'Try: 4 use cases; flag the unauditable ones.',footer:'Auditable AI use = repeatable + logged + reviewable. Anything else, your CA will refuse to sign. The line gets sharper with ICAI 2025 AI guidance.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const cases=[{t:'Senior CA used ChatGPT once to draft an email to client; not in workflow.',a:true,why:'OK. Communications draft, not an audit-bearing decision.'},{t:'Junior used ChatGPT to categorise 80 transactions, then pasted result; no log.',a:false,why:'NOT auditable. No prompt version, no confidence, no review trail.'},{t:'Workflow tool logs prompt, version, confidence, reviewer for every categorisation.',a:true,why:'Fully auditable. ICAI 2025 guidance compliant.'},{t:'Anomaly system flags suspicious txns; flags are stored but the model version isn\\'t.',a:false,why:'Half-auditable. Without model version, "why did it flag this last month but not now?" is unanswerable.'}];s.innerHTML=`<h3>Auditable or not?</h3>
+  ${cases.map((c,i)=>`<button class="panel" data-i="${i}" style="display:block;width:100%;text-align:left;cursor:pointer;margin:6px 0">${c.t}</button>`).join('')}
+  <div class="reveal" id="L5i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{SFX.click();const c=cases[+b.dataset.i];const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(c.a?'win':'bad');r.innerHTML=`<strong>${c.a?'Auditable.':'NOT auditable.'}</strong> ${c.why}`;});}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

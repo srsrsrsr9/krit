@@ -154,6 +154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · F-pattern vs Z-pattern — How the eye actually moves across a page."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Contrast as hierarchy"
@@ -239,6 +245,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Size weight contrast — The three levers of hierarchy."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Position as weight"
@@ -253,6 +265,12 @@
           "caption": "On text-heavy screens, the eye traces an F. Most of the right column is read in peripheral vision only; that is where you put the things you do not need them to read.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 260' role='img'><rect width='560' height='260' rx='14' fill='#ECFDF5'/><g transform='translate(40 30)'><rect x='0' y='0' width='480' height='200' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><line x1='15' y1='25' x2='450' y2='25' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='55' x2='350' y2='55' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='85' x2='200' y2='85' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='115' x2='180' y2='115' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='145' x2='150' y2='145' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><line x1='15' y1='175' x2='160' y2='175' stroke='#9CA3AF' stroke-width='8' opacity='0.5'/><path d='M15 25 L450 25 L15 30 L350 55 L15 60 L15 175' stroke='#10B981' stroke-width='3' fill='none' marker-end='url(#arr2)'/><circle cx='15' cy='25' r='8' fill='#10B981'/><text x='15' y='29' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#FFFFFF' font-weight='bold'>1</text></g><defs><marker id='arr2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#10B981'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Three-element ladder — Drag elements onto a hierarchy ladder."
         },
         {
           "type": "chatScenario",
@@ -580,6 +598,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Squint test — Toggle blur; see what survives."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "The eye is a lazy heuristic engine. It scans for the loudest, most isolated patch first. Design with that, not against it.",
@@ -674,6 +698,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · 8pt grid — Why 8 (not 7 or 9)."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 8-point spacing scale"
@@ -763,6 +793,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · 12-col grid behaviour — How a 12-col layout reflows at breakpoints."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The gutter that earns its keep"
@@ -777,6 +813,12 @@
           "caption": "Left: the gutter-eaten layout. Right: gutters wider than internal padding, so each card reads as its own island.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 220' role='img'><rect width='560' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(20 30)'><rect x='0' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='12' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='12' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='12' y='118' width='56' height='20' rx='4' fill='#92400E'/><rect x='92' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='104' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='104' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='118' width='56' height='20' rx='4' fill='#92400E'/><rect x='184' y='0' width='80' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='196' y='12' width='56' height='10' rx='2' fill='#FCD34D'/><rect x='196' y='28' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='40' width='56' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='52' width='40' height='6' rx='2' fill='#F3F4F6'/><rect x='196' y='118' width='56' height='20' rx='4' fill='#92400E'/><text x='130' y='175' text-anchor='middle' font-family='monospace' font-size='10' fill='#92400E'>gutter 12px (too tight)</text></g><g transform='translate(300 30)'><rect x='0' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='10' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='10' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='10' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='10' y='118' width='42' height='20' rx='4' fill='#065F46'/><rect x='94' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='104' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='104' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='104' y='118' width='42' height='20' rx='4' fill='#065F46'/><rect x='188' y='0' width='62' height='150' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1.5'/><rect x='198' y='12' width='42' height='10' rx='2' fill='#A7F3D0'/><rect x='198' y='28' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='198' y='40' width='42' height='6' rx='2' fill='#F3F4F6'/><rect x='198' y='118' width='42' height='20' rx='4' fill='#065F46'/><text x='125' y='175' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>gutter 32px (breathing)</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Spacing sandbox — Slider for spacing; see the comfortable zone."
         },
         {
           "type": "chatScenario",
@@ -1103,6 +1145,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Alignment fixer — Click misaligned elements; see what changes."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A grid is a contract. The whole win is the constraint, not the aesthetic.",
@@ -1197,6 +1245,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Contrast vs harmony — A color either contrasts or harmonises — pick one."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Pick a ratio, derive the scale"
@@ -1286,6 +1340,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Type scale — Modular scale (1.25 ratio) explained."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Tokens, not hex codes"
@@ -1300,6 +1360,12 @@
           "caption": "Left: every component knows the hex. Right: components reference meaning; values live in one place. Rebrand cost: zero in one column, weeks in the other.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 280' role='img'><rect width='560' height='280' rx='14' fill='#FFF7ED'/><g transform='translate(20 30)'><text x='110' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#B91C1C'>Hex everywhere</text><g font-family='monospace' font-size='10' fill='#1F2937'><rect x='0' y='30' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='48'>Button.tsx</text><text x='10' y='62' fill='#3B82F6'>bg: #3B82F6</text><rect x='0' y='80' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='98'>Header.tsx</text><text x='10' y='112' fill='#3D80F4'>bg: #3D80F4 (typo!)</text><rect x='0' y='130' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='148'>Toast.tsx</text><text x='10' y='162' fill='#DC2626'>bg: #DC2626</text><rect x='0' y='180' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='198'>Banner.tsx</text><text x='10' y='212' fill='#EF4444'>bg: #EF4444 (different red)</text></g><text x='110' y='245' text-anchor='middle' font-family='monospace' font-size='10' fill='#B91C1C'>4 hex values, 2 wrong</text></g><g transform='translate(290 30)'><text x='110' y='15' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#065F46'>Tokens</text><g font-family='monospace' font-size='10' fill='#1F2937'><rect x='0' y='30' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='48'>Button.tsx</text><text x='10' y='62' fill='#0EA5E9'>bg: interaction-default</text><rect x='0' y='80' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='98'>Header.tsx</text><text x='10' y='112' fill='#0EA5E9'>bg: interaction-default</text><rect x='0' y='130' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='148'>Toast.tsx</text><text x='10' y='162' fill='#B91C1C'>bg: feedback-error</text><rect x='0' y='180' width='220' height='40' rx='6' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='1'/><text x='10' y='198'>Banner.tsx</text><text x='10' y='212' fill='#B91C1C'>bg: feedback-error</text></g><text x='110' y='245' text-anchor='middle' font-family='monospace' font-size='10' fill='#065F46'>2 tokens, 0 typos possible</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Contrast checker — Pick colors; see WCAG ratio live."
         },
         {
           "type": "chatScenario",
@@ -1626,6 +1692,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Font pairer — Pick two fonts; see how they conflict or complement."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Pick a type-scale ratio (1.25 for SaaS) and derive 5-6 sizes. Six voices, not fourteen.",
@@ -1720,6 +1792,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Loading states ladder — 4 escalating loading states by duration."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — State changes that confirm"
@@ -1809,6 +1887,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Confirmation hierarchy — Toast vs modal vs full-page."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Microcopy that defuses"
@@ -1823,6 +1907,12 @@
           "caption": "Same error, two messages. The right one names the cause and the next step; the left one names the problem of the system.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 220' role='img'><rect width='560' height='220' rx='14' fill='#FEF3C7'/><g transform='translate(30 50)'><rect x='0' y='0' width='220' height='120' rx='10' fill='#FECACA' stroke='#B91C1C' stroke-width='2'/><circle cx='25' cy='30' r='12' fill='#B91C1C'/><text x='25' y='35' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#FFFFFF'>!</text><text x='45' y='35' font-family='sans-serif' font-size='13' font-weight='bold' fill='#7F1D1D'>Error</text><text x='15' y='65' font-family='sans-serif' font-size='12' fill='#1F2937'>Something went wrong.</text><text x='15' y='90' font-family='monospace' font-size='10' fill='#9CA3AF'>(useless apology)</text></g><g transform='translate(290 50)'><rect x='0' y='0' width='240' height='120' rx='10' fill='#FED7AA' stroke='#92400E' stroke-width='2'/><circle cx='25' cy='30' r='12' fill='#92400E'/><text x='25' y='35' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='bold' fill='#FFFFFF'>!</text><text x='45' y='35' font-family='sans-serif' font-size='13' font-weight='bold' fill='#92400E'>Card declined</text><text x='15' y='55' font-family='sans-serif' font-size='11' fill='#1F2937'>We couldn&apos;t save your invoice.</text><text x='15' y='70' font-family='sans-serif' font-size='11' fill='#1F2937'>Your card was declined; try a</text><text x='15' y='85' font-family='sans-serif' font-size='11' fill='#1F2937'>different card or contact your bank.</text><rect x='15' y='95' width='90' height='20' rx='4' fill='#92400E'/><text x='60' y='109' text-anchor='middle' font-family='sans-serif' font-size='10' font-weight='bold' fill='#FFFFFF'>Try again</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Rewrite the error — Vague error → specific error."
         },
         {
           "type": "chatScenario",
@@ -2149,6 +2239,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Button copy A/B — Pick the CTA; see conversion intuition."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Every click is a question. The interface owes the user an answer inside 100ms — even if the answer is just 'I heard you.'",
@@ -2243,6 +2339,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Critique loop — See → judge → propose → iterate."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 3-question critique"
@@ -2332,6 +2434,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Critique vs reaction — Same screen. Critique reads structural; reaction reads aesthetic."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The spec-first PR"
@@ -2346,6 +2454,12 @@
           "caption": "The spec-first PR: three short paragraphs of intent before the diff. The diff stops being the source of truth; the prose is.",
           "maxWidth": 480,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320' role='img'><rect width='480' height='320' rx='14' fill='#FFF7ED'/><g transform='translate(30 30)'><rect x='0' y='0' width='420' height='260' rx='10' fill='#FFFFFF' stroke='#D1D5DB' stroke-width='2'/><rect x='15' y='15' width='200' height='18' rx='3' fill='#FED7AA'/><text x='115' y='28' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='bold' fill='#92400E'>PR #247: Move company-size to step 2</text><line x1='15' y1='40' x2='405' y2='40' stroke='#E5E7EB' stroke-width='1'/><g transform='translate(15 50)'><rect x='0' y='0' width='100' height='14' rx='2' fill='#FCD34D'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#92400E'>What changed</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='320' height='10' rx='2' fill='#F3F4F6'/></g><g transform='translate(15 100)'><rect x='0' y='0' width='40' height='14' rx='2' fill='#A7F3D0'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#065F46'>Why</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='42' width='280' height='10' rx='2' fill='#F3F4F6'/></g><g transform='translate(15 165)'><rect x='0' y='0' width='130' height='14' rx='2' fill='#FCA5A5'/><text x='5' y='11' font-family='monospace' font-size='10' font-weight='bold' fill='#7F1D1D'>What we&apos;re NOT doing</text><rect x='0' y='18' width='390' height='10' rx='2' fill='#F3F4F6'/><rect x='0' y='30' width='320' height='10' rx='2' fill='#F3F4F6'/></g><line x1='15' y1='220' x2='405' y2='220' stroke='#E5E7EB' stroke-width='1'/><text x='15' y='238' font-family='monospace' font-size='10' fill='#9CA3AF'>+ 47 lines  - 12 lines  ●  3 files</text><text x='15' y='252' font-family='monospace' font-size='10' fill='#9CA3AF'>(diff comes after intent)</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Find the issue — Click hotspots on a mock; see what was wrong."
         },
         {
           "type": "chatScenario",
@@ -2670,6 +2784,12 @@
             "good": "You ran the critique loop but spent budget on the wrong screen, or didn't push back hard enough on a feature that should have been cut. Launch goes okay but with one redesign in the first month. Re-read the lesson on **the smallest change that helps** as the actual hardest of the three questions.",
             "learn": "You either let *just ship* win, or you ran the critique and turned it into a redesign. Re-read the lesson — especially the section on **critique as triage, not perfection**, and the part about **how protecting the launch is itself a design decision**."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ui-ux-design.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Critique template — Fill 3 boxes: what works, what doesn't, one specific change."
         },
         {
           "type": "keyTakeaways",

@@ -42,6 +42,19 @@ const Question = z.object({
 const RubricLevel = z.object({ label: z.string(), points: z.number().int().min(0) });
 const RubricCriterion = z.object({ criterion: z.string(), levels: z.array(RubricLevel).min(2) });
 
+// V2 spec fields. All optional for backwards compatibility with V1 course JSONs.
+const CastMember = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  role: z.string().min(3),
+});
+const Palette = z.object({
+  accent: z.string().regex(/^#[0-9a-f]{3,6}$/i),
+  accentSoft: z.string().regex(/^#[0-9a-f]{3,6}$/i),
+  accentStrong: z.string().regex(/^#[0-9a-f]{3,6}$/i),
+  paper: z.string().regex(/^#[0-9a-f]{3,6}$/i).optional(),
+});
+
 const CourseFile = z.object({
   path: z.object({
     slug: z.string().min(1),
@@ -52,6 +65,10 @@ const CourseFile = z.object({
     level: z.enum(["NOVICE", "WORKING", "PROFICIENT", "EXPERT"]).default("NOVICE"),
     estimatedMinutes: z.number().int().min(1).optional(),
   }),
+  // V2: cast + palette + register at root. Optional for backwards compat.
+  cast: z.array(CastMember).length(5).optional(),
+  palette: Palette.optional(),
+  register: z.string().min(10).optional(),
   skills: z.array(Skill).min(1),
   skillPrerequisites: z.array(SkillPrereq).default([]),
   lessons: z.array(z.object({
@@ -59,6 +76,8 @@ const CourseFile = z.object({
     title: z.string().min(1),
     subtitle: z.string().nullable().optional(),
     estimatedMinutes: z.number().int().min(1).default(8),
+    // V2: affectArc declared per lesson per E11.
+    affectArc: z.enum(["tense→relief", "curious→satisfied", "frustrated→competent", "skeptical→convinced"]).optional(),
     skills: z.array(z.string()).default([]),
     blocks: LessonBlocks,
   })).min(1),
@@ -87,7 +106,169 @@ const CourseFile = z.object({
 
 const db = new PrismaClient();
 
-async function main() {
+/**
+ * Import a single course JSON file into the DB. Reusable from seed.ts and
+ * other scripts. Throws on validation/integrity failure.
+ *
+ * @returns the imported course slug, or null if the file is missing.
+ */
+export async function importCourseFile(
+  filePath: string,
+  wsSlug = "krit-academy",
+  client: PrismaClient = db,
+): Promise<string> {
+  // Strip UTF-8 BOM and any wrapping ``` fences if the LLM left them.
+  let text = readFileSync(resolve(process.cwd(), filePath), "utf-8");
+  if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+  text = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+
+  let raw: unknown;
+  try {
+    raw = JSON.parse(text);
+  } catch (e) {
+    const repaired = repairJson(text);
+    try {
+      raw = JSON.parse(repaired);
+      console.log(`  ⚠ Repaired malformed JSON in ${filePath}`);
+    } catch (e2) {
+      throw new Error(`Could not parse ${filePath}: ${(e as Error).message} | ${(e2 as Error).message}`);
+    }
+  }
+  const parsed = CourseFile.safeParse(raw);
+  if (!parsed.success) {
+    const issues = parsed.error.issues.slice(0, 8).map(i => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Validation failed in ${filePath}: ${issues}`);
+  }
+  const course = parsed.data;
+
+  // Cross-reference checks
+  const skillSlugs = new Set(course.skills.map((s) => s.slug));
+  for (const p of course.skillPrerequisites) {
+    if (!skillSlugs.has(p.skill)) throw new Error(`Prereq references unknown skill: ${p.skill}`);
+    if (!skillSlugs.has(p.requires)) throw new Error(`Prereq requires unknown skill: ${p.requires}`);
+  }
+  for (const l of course.lessons) {
+    for (const s of l.skills) {
+      if (!skillSlugs.has(s)) throw new Error(`Lesson ${l.slug} references unknown skill: ${s}`);
+    }
+  }
+  for (const q of course.assessment.questions) {
+    const correct = q.choices.filter((c) => c.correct).length;
+    if (correct < 1) throw new Error(`Question "${q.stem.slice(0, 40)}…" has no correct choice`);
+    if (q.kind === "MCQ_SINGLE" && correct !== 1)
+      throw new Error(`Single-answer question must have exactly one correct choice: "${q.stem.slice(0, 40)}…"`);
+  }
+
+  const ws = await client.workspace.findUnique({ where: { slug: wsSlug } });
+  if (!ws) throw new Error(`Workspace '${wsSlug}' not found.`);
+
+  // Skills
+  const slugToId: Record<string, string> = {};
+  for (const s of course.skills) {
+    const existing = await client.skill.findFirst({ where: { workspaceId: ws.id, slug: s.slug } });
+    if (existing) { slugToId[s.slug] = existing.id; continue; }
+    const id = cuid();
+    await client.skill.create({
+      data: { id, workspaceId: ws.id, slug: s.slug, name: s.name, category: s.category ?? null, description: s.description ?? null, decayDays: s.decayDays ?? null },
+    });
+    slugToId[s.slug] = id;
+  }
+  for (const p of course.skillPrerequisites) {
+    await client.skillPrerequisite.upsert({
+      where: { skillId_prereqId: { skillId: slugToId[p.skill]!, prereqId: slugToId[p.requires]! } },
+      create: { id: cuid(), skillId: slugToId[p.skill]!, prereqId: slugToId[p.requires]! },
+      update: {},
+    });
+  }
+
+  // Lessons
+  const lessonIds: Record<string, string> = {};
+  for (const l of course.lessons) {
+    const existing = await client.lesson.findFirst({ where: { workspaceId: ws.id, slug: l.slug } });
+    const id = existing?.id ?? cuid();
+    if (existing) {
+      await client.lesson.update({
+        where: { id },
+        data: { title: l.title, subtitle: l.subtitle ?? null, estimatedMinutes: l.estimatedMinutes, blocks: l.blocks as unknown as Prisma.InputJsonValue },
+      });
+      await client.lessonSkill.deleteMany({ where: { lessonId: id } });
+    } else {
+      await client.lesson.create({
+        data: { id, workspaceId: ws.id, slug: l.slug, title: l.title, subtitle: l.subtitle ?? null, estimatedMinutes: l.estimatedMinutes, blocks: l.blocks as unknown as Prisma.InputJsonValue },
+      });
+    }
+    for (const s of l.skills) {
+      await client.lessonSkill.create({ data: { id: cuid(), lessonId: id, skillId: slugToId[s]! } });
+    }
+    lessonIds[l.slug] = id;
+  }
+
+  // Assessment
+  const assessSlug = `${course.path.slug}-assessment`;
+  const existingAssess = await client.assessment.findFirst({ where: { workspaceId: ws.id, slug: assessSlug } });
+  const assessId = existingAssess?.id ?? cuid();
+  if (existingAssess) {
+    await client.question.deleteMany({ where: { assessmentId: assessId } });
+    await client.assessmentSkill.deleteMany({ where: { assessmentId: assessId } });
+    await client.assessment.update({
+      where: { id: assessId },
+      data: { title: course.assessment.title, description: course.assessment.description ?? null, passThreshold: course.assessment.passThreshold, timeLimitSec: course.assessment.timeLimitSec ?? null, attemptsAllowed: course.assessment.attemptsAllowed },
+    });
+  } else {
+    await client.assessment.create({
+      data: { id: assessId, workspaceId: ws.id, slug: assessSlug, title: course.assessment.title, description: course.assessment.description ?? null, mode: "GRADED", passThreshold: course.assessment.passThreshold, timeLimitSec: course.assessment.timeLimitSec ?? null, attemptsAllowed: course.assessment.attemptsAllowed, shuffleQuestions: true },
+    });
+  }
+  for (const skillSlug of course.assessment.skills) {
+    await client.assessmentSkill.create({ data: { id: cuid(), assessmentId: assessId, skillId: slugToId[skillSlug]!, awardsAtLevel: "WORKING", weight: 1.0 } });
+  }
+  for (let i = 0; i < course.assessment.questions.length; i++) {
+    const q = course.assessment.questions[i]!;
+    await client.question.create({
+      data: { id: cuid(), assessmentId: assessId, order: i + 1, kind: q.kind, stem: q.stem, payload: { choices: q.choices } as unknown as Prisma.InputJsonValue, points: q.points, explanation: q.explanation ?? null, skillSlug: q.skillSlug ?? null },
+    });
+  }
+
+  // Project
+  const existingProject = await client.projectBrief.findFirst({ where: { workspaceId: ws.id, slug: course.project.slug } });
+  const projectId = existingProject?.id ?? cuid();
+  if (existingProject) {
+    await client.projectBrief.update({ where: { id: projectId }, data: { title: course.project.title, prompt: course.project.prompt, rubric: course.project.rubric as unknown as Prisma.InputJsonValue } });
+  } else {
+    await client.projectBrief.create({ data: { id: projectId, workspaceId: ws.id, slug: course.project.slug, title: course.project.title, prompt: course.project.prompt, rubric: course.project.rubric as unknown as Prisma.InputJsonValue } });
+  }
+
+  // Path
+  const existingPath = await client.path.findFirst({ where: { workspaceId: ws.id, slug: course.path.slug } });
+  const pathId = existingPath?.id ?? cuid();
+  const totalMinutes = course.path.estimatedMinutes ?? course.lessons.reduce((s, l) => s + l.estimatedMinutes, 0) + 60;
+  if (existingPath) {
+    await client.pathItem.deleteMany({ where: { pathId } });
+    await client.path.update({ where: { id: pathId }, data: { title: course.path.title, subtitle: course.path.subtitle ?? null, summary: course.path.summary ?? null, kind: course.path.kind, level: course.path.level, estimatedMinutes: totalMinutes, status: "PUBLISHED", publishedAt: existingPath.publishedAt ?? new Date() } });
+  } else {
+    await client.path.create({ data: { id: pathId, workspaceId: ws.id, slug: course.path.slug, title: course.path.title, subtitle: course.path.subtitle ?? null, summary: course.path.summary ?? null, kind: course.path.kind, level: course.path.level, estimatedMinutes: totalMinutes, status: "PUBLISHED", publishedAt: new Date() } });
+  }
+  let order = 1;
+  for (const l of course.lessons) {
+    await client.pathItem.create({ data: { id: cuid(), pathId, order: order++, kind: "LESSON", lessonId: lessonIds[l.slug]!, title: l.title } });
+  }
+  await client.pathItem.create({ data: { id: cuid(), pathId, order: order++, kind: "ASSESSMENT", assessmentId: assessId, title: course.assessment.title } });
+  await client.pathItem.create({ data: { id: cuid(), pathId, order: order++, kind: "PROJECT", projectId, title: course.project.title } });
+
+  // Credential
+  const existingCred = await client.credential.findFirst({ where: { workspaceId: ws.id, slug: course.credential.slug } });
+  if (existingCred) {
+    await client.credential.update({ where: { id: existingCred.id }, data: { title: course.credential.title, description: course.credential.description ?? null, issuerName: course.credential.issuerName, pathId } });
+  } else {
+    await client.credential.create({ data: { id: cuid(), workspaceId: ws.id, pathId, slug: course.credential.slug, title: course.credential.title, description: course.credential.description ?? null, issuerName: course.credential.issuerName } });
+  }
+
+  return course.path.slug;
+}
+
+// Legacy CLI flow kept verbatim below for backwards compatibility.
+// New code should prefer importCourseFile() above.
+async function mainLegacy() {
   const fileArg = process.argv[2];
   if (!fileArg) {
     console.error("Usage: tsx prisma/seed/import-course.ts <path-to-course.json> [workspace-slug]");
@@ -435,11 +616,15 @@ function repairJson(text: string): string {
   return out;
 }
 
-main()
-  .catch((e) => {
-    console.error("✗ Import failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await db.$disconnect();
-  });
+// Only run the CLI when invoked directly, not when imported.
+const isMain = process.argv[1] && process.argv[1].endsWith("import-course.ts");
+if (isMain) {
+  mainLegacy()
+    .catch((e) => {
+      console.error("✗ Import failed:", e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await db.$disconnect();
+    });
+}

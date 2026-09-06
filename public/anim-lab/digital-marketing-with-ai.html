@@ -1,0 +1,156 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Digital Marketing with AI</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#a4123f;--accent-soft:#f4d1dc;--accent-strong:#7d0e30;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">Digital Marketing with AI</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Funnels</option><option value="L2">L2 · Audience</option><option value="L3">L3 · Copy at scale</option><option value="L4">L4 · Channels</option><option value="L5">L5 · Measure</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most "AI marketing" decks are <em>slop generators with a tracking pixel</em>. What moves a conversion number: triangulating audiences across three intersecting dimensions, variant copy that holds the offer constant, and channel arbitrage windows that close in six months.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Funnels', L2:'Audience', L3:'Copy at scale', L4:'Channels', L5:'Measure' } };
+const fmt = n => '₹'+Math.round(n).toLocaleString('en-IN');
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'Where the money leaks',what:'Watch: 100k impressions → 38 conversions.',footer:'Awareness→Click 1.3%, Click→Landing 80%, Landing→Lead 12%, Lead→Sale 25%. The biggest leverage is almost never traffic — it\'s the landing-to-lead step.',scaffold:1,runtime:'<30s',mechanic:'cascade',
+  mount(s){s.innerHTML=`<h3>Funnel cascade</h3><svg viewBox="0 0 500 220">${[['Impr',100000,460,'var(--accent-soft)'],['Click',1300,360,'var(--saffron)'],['Land',1040,260,'var(--accent)'],['Lead',125,160,'var(--accent)'],['Sale',31,60,'var(--accent-strong)']].map((row,i)=>{const [n,v,w,c]=row;return `<rect x="${(500-w)/2}" y="${10+i*40}" width="0" height="30" fill="${c}"><animate attributeName="width" from="0" to="${w}" dur=".7s" begin="${i*.2}s" fill="freeze"/></rect><text x="250" y="${30+i*40}" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)">${n} · ${v.toLocaleString('en-IN')}</text>`;}).join('')}</svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'1% lift × 5 steps = 5% lift?',what:'Watch: it compounds, badly.',footer:'A 10% lift at step 1 followed by 10% drops at steps 2-5 nets you LOSS. Funnel math is multiplicative; channel reporting hides this.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Compounding effect of step-level changes</h3>
+  <div class="stat-grid">${[['+10% each step','×1.61','green'],['+10% only at top','×1.10','amber'],['+10% top, -3% middle 4','×0.97','red']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Marketers optimise the top because it\'s measurable. The compounding lives in the middle.</p>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Find the leaky step',what:'Try: drag 1% improvement to one step.',footer:'A 1% absolute improvement on the worst-converting step adds more pipeline than 10% more impressions. Find the floor; raise it.',scaffold:3,runtime:'30-60s',mechanic:'drag-into-slot',
+  mount(s){const base={impr:100000,clk:0.013,lp:0.8,lead:0.12,sale:0.25};const calc=b=>Math.round(b.impr*b.clk*b.lp*b.lead*b.sale);s.innerHTML=`<h3>You have <strong>+1% absolute</strong> to spend. Where?</h3>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0">
+    ${[['clk','CTR (1.3%)'],['lp','Landing → Lead (12%)'],['lead','Lead → Sale (25%)'],['none','Or spend on more impressions (+10k)']].map(([k,n])=>`<button class="btn ghost" data-k="${k}">${n}</button>`).join('')}
+  </div>
+  <div class="stat-grid"><div class="stat"><div class="stat-label">Baseline sales</div><div class="stat-value">${calc(base)}</div></div><div class="stat"><div class="stat-label">After your bet</div><div class="stat-value amber" id="L1i01_a">—</div></div></div>
+  <div class="reveal" id="L1i01_r" style="display:none;margin-top:12px"></div>`;
+  s.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{SFX.click();const k=b.dataset.k;const b2={...base};if(k==='clk')b2.clk+=0.01;else if(k==='lp')b2.lp+=0.01;else if(k==='lead')b2.lead+=0.01;else b2.impr+=10000;const after=calc(b2);s.querySelector('#L1i01_a').textContent=after;const r=s.querySelector('#L1i01_r');r.style.display='block';const best=k==='lp';r.className='reveal '+(best?'win':'bad');r.innerHTML=best?'<strong>Best bet.</strong> Landing→Lead is the biggest leak. 1% absolute there beats 1% anywhere else, and crushes the +10k impressions option.':'<strong>Not the best leverage.</strong> Landing→Lead (12%) is the biggest leak. 1% there ≈ '+calc({...base,lp:base.lp+0.01})+' sales — beats your '+after+'.';});}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Hit a sub-₹3,000 CAC. Lock when you do.',what:'Try: tune three rates; lock your best.',footer:'CAC = ad spend ÷ sales. Halving the worst step\'s drop can halve CAC. Most "we need a bigger budget" pleas are actually middle-funnel failures — and you\'ll see why once you try to break ₹3k.',scaffold:3,runtime:'30-60s',mechanic:'live-explorer-lock',
+  mount(s){s.innerHTML=`<h3>Budget ₹500k. CTR baseline 1.3%. Goal: CAC &lt; ₹3,000.</h3>
+  ${[['CTR %','clk',1.3,0.5,3],['Landing → Lead %','lp',12,5,30],['Lead → Sale %','lead',25,10,50]].map(([n,k,d,mn,mx])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:220px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L1i02_${k}" min="${mn*10}" max="${mx*10}" value="${d*10}" style="width:40%"><span class="v" id="L1i02_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}%</span></label>`).join('')}
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Sales</div><div class="stat-value" id="L1i02_s">—</div></div><div class="stat"><div class="stat-label">CAC</div><div class="stat-value" id="L1i02_c">—</div></div></div>
+  <button class="btn" id="L1i02_lock" style="margin-top:8px">Lock these numbers</button>
+  <div class="reveal" id="L1i02_r" style="display:none;margin-top:10px"></div>`;
+  const u=()=>{const cl=+s.querySelector('#L1i02_clk').value/1000,lp=+s.querySelector('#L1i02_lp').value/1000,ld=+s.querySelector('#L1i02_lead').value/1000;['clk','lp','lead'].forEach(k=>s.querySelector('#L1i02_v'+k).textContent=(+s.querySelector('#L1i02_'+k).value/10)+'%');const impr=500000/2;const sales=Math.round(impr*cl*lp*ld);s.querySelector('#L1i02_s').textContent=sales;const cac=sales?fmt(500000/sales):'∞';s.querySelector('#L1i02_c').textContent=cac;};
+  ['clk','lp','lead'].forEach(k=>s.querySelector('#L1i02_'+k).oninput=()=>{SFX.hover();u();s.querySelector('#L1i02_r').style.display='none';});
+  s.querySelector('#L1i02_lock').onclick=()=>{const cl=+s.querySelector('#L1i02_clk').value/10,lp=+s.querySelector('#L1i02_lp').value/10,ld=+s.querySelector('#L1i02_lead').value/10;const sales=Math.round(250000*cl/100*lp/100*ld/100);const cac=sales?500000/sales:Infinity;const r=s.querySelector('#L1i02_r');r.style.display='block';let v;if(cac<3000)v=`<strong>Locked: CAC ${fmt(cac)}.</strong> You hit the goal. Notice how you got there — most learners crank CTR alone and fail. The leverage was in Landing→Lead (the middle), not the top.`;else if(lp>=18)v=`<strong>Locked: CAC ${fmt(cac)}.</strong> Right instinct (middle-funnel) but you need to push LP→Lead higher OR also lift Lead→Sale. Combined middle lift > maxing one.`;else v=`<strong>Locked: CAC ${fmt(cac)}.</strong> You optimised the top (CTR) but the middle is the leak. Push Landing→Lead toward 18-22% — that\\'s where most teams find the break.`;r.className='reveal '+(cac<3000?'win':'bad');r.innerHTML=v;SFX.click();};u();}},
+
+/* L2 — audience */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'The "everyone" audience converts at 0.2%',what:'Watch: audience size vs conversion.',footer:'Broad: high reach, low signal — 0.2%. Narrow: low reach, high signal — 4-7%. AI lets you target the narrow band at scale; pre-AI, you couldn\'t afford it.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Conversion by audience tightness</h3>
+  <svg viewBox="0 0 500 200">${[['Open (everyone)',0.2,80,'red'],['Lookalike 5%',1.4,40,'amber'],['Interest stack',3.2,18,'amber'],['Retargeted warm',6.8,6,'green']].map((row,i)=>{const [n,c,sz,col]=row;return `<circle cx="${80+i*120}" cy="100" r="${sz}" fill="var(--accent)" opacity=".2"><animate attributeName="r" from="0" to="${sz}" dur=".6s" begin="${i*.15}s" fill="freeze"/></circle><circle cx="${80+i*120}" cy="100" r="${sz*c/4}" fill="var(--accent-strong)"/><text x="${80+i*120}" y="180" text-anchor="middle" font-family="ui-monospace" font-size="10">${n}</text><text x="${80+i*120}" y="105" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="700" fill="var(--paper)">${c}%</text>`;}).join('')}</svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'Persona scatter, before and after',what:'Watch: 1 persona vs 7 micro-segments.',footer:'Pre-AI: marketers carried 1-3 personas in their head. AI generates 7-12 micro-segments per audience with custom copy each. Same budget, 3-5× CTR.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>1 persona vs 7 micro-segments</h3>
+  <svg viewBox="0 0 500 200"><g><circle cx="120" cy="100" r="60" fill="var(--accent-soft)" stroke="var(--accent)" stroke-dasharray="3 3"/><circle cx="120" cy="100" r="3" fill="var(--accent-strong)"/><text x="120" y="180" text-anchor="middle" font-family="ui-monospace" font-size="11">"target persona"</text></g>
+  <g transform="translate(280,0)">${Array.from({length:7},(_,i)=>{const a=i/7*Math.PI*2;const x=100+Math.cos(a)*50,y=100+Math.sin(a)*50;return `<circle cx="${x}" cy="${y}" r="18" fill="var(--accent-soft)" stroke="var(--accent)"/><circle cx="${x}" cy="${y}" r="3" fill="var(--accent-strong)"/>`;}).join('')}<text x="100" y="180" text-anchor="middle" font-family="ui-monospace" font-size="11">7 micro-segments</text></g></svg>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Triangulate a real audience',what:'Try: drag interest cards into the stack.',footer:'A useful audience = 3 dimensions intersected (e.g. job + tool + life-event). Single-dimension audiences are flooded; the intersection is uncrowded.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){s.innerHTML=`<h3>You sell to: founders running 1-5 person teams who use Notion and just hired their first PM.</h3>
+  <div class="row" style="margin:10px 0">${['Job: Founder','Job: PM','Job: Marketer','Tool: Notion','Tool: Linear','Tool: Excel','Event: 1st hire','Event: Series A','Geo: India','Geo: SEA','Size: 1-5','Size: 50+'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}</div>
+  <div class="lane" id="L2i01_d"><h4>Stack (drag exactly 3 dimensions)</h4><div class="drop"></div></div>
+  <button class="btn" id="L2i01_c" style="margin-top:10px">Check fit</button>
+  <div class="reveal" id="L2i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));Lab.makeDropZone(s.querySelector('#L2i01_d'),t=>{const id=t?.dataset?.id;if(!id)return;const cl=t.cloneNode(true);cl.style.cursor='default';s.querySelector('#L2i01_d .drop').appendChild(cl);t.style.opacity='.2';});
+  s.querySelector('#L2i01_c').onclick=()=>{const got=[...s.querySelectorAll('#L2i01_d .drop .chip')].map(c=>c.dataset.id);const want=['Job: Founder','Tool: Notion','Event: 1st hire'];const ok=want.every(w=>got.includes(w))&&got.length===3;const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Tight stack.</strong> 3 dimensions intersected = ~1500-3000 person addressable in India. Channel will let you reach all of them weekly without saturation.':'<strong>Try again.</strong> The story names 3 things — job, tool, event. Pick exactly those. (got: '+got.length+', need: Founder + Notion + 1st hire)';SFX.click();};}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'AI-prompt your audience matrix',what:'Try: write a prompt that returns 6 micro-segments.',footer:'A useful audience prompt names: who buys, what they already do, what triggers them, and what they call themselves. Skip any of those → AI gives generic slop.',scaffold:4,runtime:'30-60s',mechanic:'prompt-grade',
+  mount(s){s.innerHTML=`<h3>Prompt the AI to give you 6 micro-segments</h3>
+  <textarea id="L2i02_p" style="width:100%;min-height:120px" placeholder="Write a prompt that yields useful segments..."></textarea>
+  <button class="btn" id="L2i02_g" style="margin-top:8px">Grade this prompt</button>
+  <div class="reveal" id="L2i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L2i02_g').onclick=()=>{const p=s.querySelector('#L2i02_p').value.toLowerCase();const checks=[['names a buyer role',/founder|cmo|director|owner|cto|head|manager|pm/],['names what they do',/use|run|manage|build|launch|sell/],['names a trigger',/hire|launch|raise|fund|migrate|switch|start|after/],['asks for 6 distinct segments',/6|six/]];const passed=checks.filter(([_,re])=>re.test(p)).length;const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(passed>=3?'win':'bad');r.innerHTML=`<strong>${passed}/4 ingredients present.</strong><br>${checks.map(([n,re])=>(re.test(p)?'✓ ':'✗ ')+n).join('<br>')}<br><br>${passed>=3?'Will yield segments specific enough to act on.':'Missing pieces → AI returns "marketers, students, professionals" type slop.'}`;SFX.click();};}},
+
+/* L3 — copy at scale */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'7 variants, 7 segments, one afternoon',what:'Watch: matrix populating.',footer:'Pre-AI: writer + designer + 2 days for 7 variants. With AI + a structured prompt: same 7 variants in 90 minutes including review. The bottleneck is now review, not generation.',scaffold:1,runtime:'<30s',mechanic:'matrix-fill',
+  mount(s){s.innerHTML=`<h3>Variant matrix</h3>
+  <svg viewBox="0 0 500 200">${Array.from({length:7},(_,i)=>Array.from({length:3},(_,j)=>`<rect x="${60+j*130}" y="${20+i*22}" width="120" height="18" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".5"><animate attributeName="fill" values="var(--accent-soft);var(--accent);var(--accent-soft)" dur=".8s" begin="${(i*3+j)*.15}s" fill="freeze"/></rect>`).join('')).join('')}
+  ${['headline','hook','CTA'].map((n,j)=>`<text x="${120+j*130}" y="14" text-anchor="middle" font-family="ui-monospace" font-size="11">${n}</text>`).join('')}
+  ${['founder-hire','founder-launch','PM-onboard','PM-handoff','marketer-stack','marketer-fail','exec-board'].map((n,i)=>`<text x="55" y="${33+i*22}" text-anchor="end" font-family="ui-monospace" font-size="10">${n}</text>`).join('')}</svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'Same offer, three voices',what:'Watch: voice changes, claim stays.',footer:'AI variant copy works when the offer (specific number, specific outcome) is fixed and only voice/order varies. If the offer itself varies, you\'re testing products, not copy.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>One claim, three registers</h3>
+  ${[['Plain','You\\'ll learn AI marketing in 6 weeks.'],['Bold','Six weeks to AI fluency. No fluff.'],['Earned','Three cohorts. 87% finished. Six weeks.']].map(([n,t])=>`<div class="panel" style="margin:8px 0"><span class="chip" style="margin-right:8px">${n}</span>${t}</div>`).join('')}
+  <p class="panel" style="background:var(--accent-soft);margin-top:8px">Hold the offer (<em>6 weeks · AI marketing · fluency</em>) constant. Vary the wrapper only.</p>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Pick the variant that\'ll win',what:'Try: predict before reveal.',footer:'Specificity beats cleverness in cold copy. Real numbers beat round numbers. "Six weeks" beats "fast"; "87%" beats "most".',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const sets=[{q:'Cold LinkedIn DM',o:['Hey, are you open to a quick chat?','Saw you hired 2 people last month — quick Q on onboarding','Want to grow faster? Let\\'s talk.'],a:1,why:'Names a specific recent action. CTR ~4.2% vs 0.6% for #1.'},{q:'Google Ad headline',o:['Best AI Marketing Course','AI Marketing in 6 Weeks · Mon-Fri 7am','Master AI Marketing Today!'],a:1,why:'Specific time + schedule. Quality score lift drops CPC ~40%.'},{q:'Cold email subject',o:['Quick question','Sandhya — onboarding flow you posted?','You won\\'t believe this!'],a:1,why:'Name + specific reference = open rate 38% vs 12% for #1.'}];let i=0;const r=()=>{const q=sets[i];s.innerHTML=`<h3>${i+1}/${sets.length}. ${q.q}: pick the winner</h3>
+  ${q.o.map((t,j)=>`<button class="panel" data-p="${j}" style="display:block;width:100%;text-align:left;cursor:pointer;margin:6px 0">${String.fromCharCode(65+j)}. ${t}</button>`).join('')}
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=+b.dataset.p===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${ok?'Right.':'Winner was '+String.fromCharCode(65+q.a)+'.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%sets.length;r();};});};r();}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Rewrite with one constraint',what:'Try: rewrite a generic line to be specific.',footer:'Adding one number, one name, or one recent action lifts CTR ~2-3× in cold copy. The constraint that forces specificity is the value of AI prompts.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Make this specific</h3>
+  <p class="panel">Original: "Our product helps you grow faster."</p>
+  <p class="desc">Rewrite. Must contain (a) one number, (b) one named role, (c) one time window.</p>
+  <textarea id="L3i02_t" style="width:100%;min-height:60px" placeholder="Your rewrite..."></textarea>
+  <button class="btn" id="L3i02_c" style="margin-top:8px">Check</button>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L3i02_c').onclick=()=>{const t=s.querySelector('#L3i02_t').value;const hasNum=/\d/.test(t);const hasRole=/founder|cmo|pm|manager|owner|head|director|cto|marketer|seller|analyst/i.test(t);const hasTime=/week|day|month|hour|min|year|quarter/i.test(t);const passed=[hasNum,hasRole,hasTime].filter(Boolean).length;const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(passed===3?'win':'bad');r.innerHTML=`<strong>${passed}/3 constraints hit.</strong> Number: ${hasNum?'✓':'✗'} · Role: ${hasRole?'✓':'✗'} · Time: ${hasTime?'✓':'✗'}<br><br>${passed===3?'This is the kind of copy AI can generate variants of. The constraints make it falsifiable.':'Add the missing pieces. Without them, you\\'re writing horoscopes.'}`;SFX.click();};}},
+
+/* L4 — channels */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'Channel CAC across 6 quarters',what:'Watch: arbitrage windows open and close.',footer:'Channel arbitrage = exploiting a temporarily undercrowded channel. Lasts 6-12 months. Most growth at small companies is timing the next channel, not optimising the saturated one.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>CAC by channel, quarter by quarter</h3>
+  <svg viewBox="0 0 500 220"><line x1="40" y1="180" x2="460" y2="180" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="180" stroke="var(--ink)"/>
+  ${[['Google Ads',[110,130,160,210,260,310],'var(--accent)'],['LinkedIn',[80,90,140,200,240,260],'var(--accent-strong)'],['Newsletter sponsor',[280,210,150,110,90,120],'var(--saffron)'],['TikTok creator',[400,310,200,140,90,70],'#1d8a52']].map(([n,d,c])=>`<polyline points="${d.map((v,i)=>(60+i*70)+','+(180-v*0.4)).join(' ')}" fill="none" stroke="${c}" stroke-width="2"/><text x="465" y="${180-d[d.length-1]*0.4}" font-family="ui-monospace" font-size="9" fill="${c}">${n}</text>`).join('')}
+  ${[1,2,3,4,5,6].map(q=>`<text x="${60+(q-1)*70}" y="200" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">Q${q}</text>`).join('')}</svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'Which channel deserves the next ₹1L',what:'Watch: LTV/CAC bars by channel.',footer:'Channel quality = LTV/CAC ratio (>3 healthy, >5 great, <2 broken). High volume + low LTV/CAC means you\'re subsidising churn.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>LTV/CAC ratio by channel (last 90d)</h3>
+  <svg viewBox="0 0 500 200">${[['Google Ads',2.1],['LinkedIn',3.4],['Email referral',7.8],['Cold outbound',4.2],['Newsletter sponsor',5.6]].map(([n,r],i)=>`<rect x="220" y="${20+i*32}" width="${r*40}" height="22" fill="${r>5?'#1d8a52':r>3?'var(--saffron)':'#a4123f'}"><animate attributeName="width" from="0" to="${r*40}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="215" y="${36+i*32}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${225+r*40}" y="${36+i*32}" font-family="ui-monospace" font-size="11" font-weight="700">${r}×</text>`).join('')}</svg>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Allocate next ₹5L',what:'Try: split budget; LTV reports back.',footer:'Channel diversification matters more than peak channel ROAS. Concentration risk kills startups when their one channel saturates.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){const ch=[['Google',2.1],['LinkedIn',3.4],['Email referral',7.8],['Cold outbound',4.2]];s.innerHTML=`<h3>Split ₹500k</h3>
+  ${ch.map(([n,r],i)=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:140px;font-family:ui-monospace,monospace;font-size:11px">${n} (${r}×)</span><input type="range" id="L4i01_${i}" min="0" max="100" value="25" style="width:40%"><span class="v" id="L4i01_v${i}" style="margin-left:8px;color:var(--ink);font-weight:700">25%</span></label>`).join('')}
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Total %</div><div class="stat-value" id="L4i01_t">—</div></div><div class="stat"><div class="stat-label">Expected LTV</div><div class="stat-value amber" id="L4i01_l">—</div></div></div>`;
+  const u=()=>{const v=ch.map((_,i)=>+s.querySelector('#L4i01_'+i).value);const t=v.reduce((a,b)=>a+b,0);ch.forEach((_,i)=>s.querySelector('#L4i01_v'+i).textContent=v[i]+'%');s.querySelector('#L4i01_t').textContent=t+'%';const ltv=ch.reduce((s,[n,r],i)=>s+v[i]/100*500000*r,0);s.querySelector('#L4i01_l').textContent=fmt(ltv);s.querySelector('#L4i01_l').className='stat-value '+(Math.abs(t-100)<5?(ltv>2000000?'green':'amber'):'red');};
+  ch.forEach((_,i)=>s.querySelector('#L4i01_'+i).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Spot the saturating channel',what:'Try: read the 6-month CAC curve.',footer:'CAC climbing >20% over 6 months with stable spend = saturation. Move 20-30% of that channel\'s budget into a test channel before it fully tips.',scaffold:3,runtime:'30-60s',mechanic:'compare-reveal',
+  mount(s){const ch=[{n:'Google Ads',d:[110,130,160,210,260,310],status:'saturating'},{n:'LinkedIn',d:[80,90,95,98,100,105],status:'stable'},{n:'Cold outbound',d:[400,310,200,140,90,70],status:'opening'}];s.innerHTML=`<h3>Which is saturating?</h3>
+  ${ch.map((c,i)=>`<button class="panel" data-i="${i}" style="display:block;width:100%;text-align:left;cursor:pointer;margin:8px 0"><strong>${c.n}</strong> · CAC over 6mo: ${c.d.map(v=>'₹'+v).join(' → ')}</button>`).join('')}
+  <div class="reveal" id="L4i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{SFX.click();const c=ch[+b.dataset.i];const r=s.querySelector('#L4i02_r');r.style.display='block';r.className='reveal '+(c.status==='saturating'?'win':'bad');r.innerHTML=`<strong>${c.n}: ${c.status}.</strong> Google: CAC tripled — saturating. LinkedIn: ~stable, working. Cold outbound: CAC dropping — opening window, double down.`;});}},
+
+/* L5 — measure */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'Attribution is a model, not truth',what:'Watch: same campaign, 4 attribution models.',footer:'Last-click credits Google. First-click credits SEO. Linear splits even. Markov-chain assigns by removal impact. Same dollars; four answers. Pick the model on purpose.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>One conversion, four attribution stories</h3>
+  <svg viewBox="0 0 500 200">${[['Last-click',{'Google':80,'LinkedIn':5,'Email':10,'Newsletter':5}],['First-click',{'Google':10,'LinkedIn':5,'Email':5,'Newsletter':80}],['Linear',{'Google':25,'LinkedIn':25,'Email':25,'Newsletter':25}],['Markov',{'Google':35,'LinkedIn':15,'Email':10,'Newsletter':40}]].map((row,i)=>{const [m,split]=row;let x=80;return `<text x="75" y="${30+i*40}" text-anchor="end" font-family="ui-monospace" font-size="10">${m}</text>`+Object.entries(split).map(([k,v],j)=>{const w=v*3;const c=['var(--accent)','var(--accent-strong)','var(--saffron)','#1d8a52'][j];const rect=`<rect x="${x}" y="${15+i*40}" width="${w}" height="20" fill="${c}"/>`+(v>=15?`<text x="${x+w/2}" y="${30+i*40}" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--paper)">${k}</text>`:'');x+=w;return rect;}).join('');}).join('')}</svg>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'Holdout test: the only honest measurement',what:'Watch: spend group vs holdout group.',footer:'Geographic holdout: 80% of regions get ads, 20% get nothing. Compare conversion. The only attribution-free truth. Every brand >₹10cr/yr should run one quarterly.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Geographic holdout, one quarter</h3>
+  <div class="stat-grid">${[['Treated regions (got ads)','312 conv · ₹4.1L spend','amber'],['Holdout regions (no ads)','181 conv · ₹0','red'],['Incremental conv','131 (+72%)','green'],['Incremental CAC','₹3,130','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Without holdout, you\\'d credit ads for all 312. Truth: 181 were going to convert anyway.</p>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Run an MMM lite',what:'Try: assign baseline + lift to each channel.',footer:'MMM (marketing mix modelling) decomposes sales into baseline + channel contributions. Even a back-of-envelope MMM beats last-click attribution for budget decisions.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>1000 sales/mo. Where did they come from?</h3>
+  ${[['Baseline (organic, repeat)','bl',300],['Google paid','gp',250],['LinkedIn paid','lp',150],['Email + referral','em',200],['Other','ot',100]].map(([n,k,d])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:180px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L5i01_${k}" min="0" max="500" value="${d}" style="width:40%"><span class="v" id="L5i01_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}</span></label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Total</div><div class="stat-value" id="L5i01_t">—</div></div>`;
+  const u=()=>{const v=['bl','gp','lp','em','ot'].map(k=>+s.querySelector('#L5i01_'+k).value);['bl','gp','lp','em','ot'].forEach(k=>s.querySelector('#L5i01_v'+k).textContent=s.querySelector('#L5i01_'+k).value);const t=v.reduce((a,b)=>a+b,0);s.querySelector('#L5i01_t').textContent=t;s.querySelector('#L5i01_t').className='stat-value '+(t>=990&&t<=1010?'green':'red');};
+  ['bl','gp','lp','em','ot'].forEach(k=>s.querySelector('#L5i01_'+k).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Design a holdout',what:'Try: pick treatment vs control regions.',footer:'A clean holdout needs comparable regions (similar baseline conversion), no overlap (no spillover ads), and ≥4 weeks of data. Most teams botch one of these three.',scaffold:4,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Holdout design: which 4 boxes are you ticking?</h3>
+  ${[['Regions are comparable in baseline conversion'],['No overlap (no geotargeting bleed into holdout)'],['≥4 weeks of measurement'],['Holdout ≥15% of total regions'],['Pre-registered the hypothesis'],['Decided in advance what counts as success']].map(([t])=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Holdout readiness</div><div class="stat-value amber" id="L5i02_r">0/6</div></div>`;
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();const n=s.querySelectorAll('input:checked').length;const r=s.querySelector('#L5i02_r');r.textContent=n+'/6';r.className='stat-value '+(n>=5?'green':n>=3?'amber':'red');});}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

@@ -153,6 +153,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The portfolio shape that wins — 10 small + 3 medium + 1 big."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 80/20 capability lens"
@@ -242,6 +248,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Most \"AI wins\" come from the small ones — outcome ROI by bet size."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 'what's now feasible that wasn't' question"
@@ -256,6 +268,12 @@
           "caption": "The leader's 2x2 for any AI proposal. Most of what crosses your desk lives in the bottom-right.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 360' role='img'><rect width='560' height='360' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' fill='#1F2937'><text x='280' y='30' text-anchor='middle' font-weight='bold' font-size='14' fill='#065F46'>The leader's 2x2 for AI proposals</text><line x1='280' y1='60' x2='280' y2='320' stroke='#374151' stroke-width='2'/><line x1='80' y1='190' x2='480' y2='190' stroke='#374151' stroke-width='2'/><text x='180' y='55' text-anchor='middle' font-size='11' fill='#374151'>Capability shifted? NO</text><text x='380' y='55' text-anchor='middle' font-size='11' fill='#374151'>Capability shifted? YES</text><text x='40' y='130' text-anchor='middle' font-size='11' fill='#374151' transform='rotate(-90 40 130)'>Cost OK? YES</text><text x='40' y='265' text-anchor='middle' font-size='11' fill='#374151' transform='rotate(-90 40 265)'>Cost OK? NO</text><rect x='90' y='70' width='180' height='110' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='180' y='115' text-anchor='middle' font-weight='bold' fill='#92400E'>WAIT</text><text x='180' y='135' text-anchor='middle' font-size='10' fill='#92400E'>same as last year;</text><text x='180' y='148' text-anchor='middle' font-size='10' fill='#92400E'>no new bet justified</text><rect x='290' y='70' width='180' height='110' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='380' y='115' text-anchor='middle' font-weight='bold' fill='#065F46'>FUND</text><text x='380' y='135' text-anchor='middle' font-size='10' fill='#065F46'>this is the 20%;</text><text x='380' y='148' text-anchor='middle' font-size='10' fill='#065F46'>cohort + kill criterion + ship</text><rect x='90' y='200' width='180' height='110' rx='10' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='180' y='245' text-anchor='middle' font-weight='bold' fill='#9D174D'>THEATRE</text><text x='180' y='265' text-anchor='middle' font-size='10' fill='#9D174D'>shiny demo, no math;</text><text x='180' y='278' text-anchor='middle' font-size='10' fill='#9D174D'>kill at the first meeting</text><rect x='290' y='200' width='180' height='110' rx='10' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='380' y='245' text-anchor='middle' font-weight='bold' fill='#1E40AF'>RESEARCH</text><text x='380' y='265' text-anchor='middle' font-size='10' fill='#1E40AF'>real shift, wrong cost;</text><text x='380' y='278' text-anchor='middle' font-size='10' fill='#1E40AF'>revisit in 6 months</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Allocate ₹2cr across bet sizes — split budget; see expected outcomes."
         },
         {
           "type": "chatScenario",
@@ -591,6 +609,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the bet you should kill — which one has no real signal?"
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "AI is two curves moving against each other — cost falling, capability rising. Strategy lives where they cross.",
@@ -682,6 +706,12 @@
               "md": "Series-B SaaS, ₹2.4 crore on one flagship AI feature, eleven-month roadmap, single team. Launches at month eleven; finds 47 paying users at month twelve. The lesson is not that AI is hard; it is that one bet means one outcome and one lesson. Three bets at the same total cost would have produced two early kills and one survivor — and your year of learning would have been compounded, not wasted."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The build-vs-buy curve — TCO over 24 months."
         },
         {
           "type": "heading",
@@ -777,6 +807,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · What \"moat\" actually means in AI — 4 moat types, decay rate."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 90-day milestone gate"
@@ -791,6 +827,12 @@
           "caption": "The 90-day gate cycle. Each gate produces a written outcome; the budget bar moves; the reserved slot fills as kills create capacity.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#EFF6FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><line x1='40' y1='80' x2='560' y2='80' stroke='#1E40AF' stroke-width='2'/><g><circle cx='180' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='180' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G1</text><text x='180' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 90</text></g><g><circle cx='340' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='340' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G2</text><text x='340' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 180</text></g><g><circle cx='500' cy='80' r='14' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><text x='500' y='84' text-anchor='middle' font-weight='bold' fill='#7C2D12'>G3</text><text x='500' y='55' text-anchor='middle' fill='#1E3A8A' font-weight='bold'>Day 270</text></g><g transform='translate(40 130)'><rect x='0' y='0' width='160' height='30' fill='#10B981' stroke='#065F46' stroke-width='1.5'/><text x='80' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 1</text><rect x='160' y='0' width='120' height='30' fill='#0EA5E9' stroke='#075985' stroke-width='1.5'/><text x='220' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 2</text><rect x='280' y='0' width='90' height='30' fill='#F59E0B' stroke='#92400E' stroke-width='1.5'/><text x='325' y='20' text-anchor='middle' fill='#FFFFFF' font-weight='bold'>Bet 3</text><rect x='370' y='0' width='90' height='30' fill='#E5E7EB' stroke='#6B7280' stroke-width='1.5' stroke-dasharray='4 3'/><text x='415' y='20' text-anchor='middle' fill='#374151' font-style='italic'>reserved</text></g><text x='40' y='185' fill='#1E3A8A' font-weight='bold'>After G1:</text><text x='40' y='200' fill='#1E3A8A'>Bet 3 sunset (kill hit). Reserved slot fills with new bet 3': 'AI for QA test generation'.</text><text x='40' y='235' fill='#1E3A8A' font-weight='bold'>After G2:</text><text x='40' y='250' fill='#1E3A8A'>Bet 2 narrowed to motor-only cohort. Bet 1 deepened (passed gate, 67% accept rate).</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build, buy, or wrap? — classify 5 candidate features."
         },
         {
           "type": "chatScenario",
@@ -1066,6 +1108,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Estimate your real build cost — drag the hidden costs in."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Concentration is worse than diversification for AI bets; binary 90-day outcomes punish single-bet programs.",
@@ -1159,6 +1207,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where AI teams die — org chart, friction points."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The thin governance layer"
@@ -1248,6 +1302,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The pod that ships AI — 4 roles, weekly cadence."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 'where does the why live?' question"
@@ -1262,6 +1322,12 @@
           "caption": "On the left, the 'why' is trapped in the AI team. On the right, it has roots across functions. Only one of these survives a leadership change.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#ECFDF5'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(40 60)'><rect x='40' y='80' width='160' height='80' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='120' y='115' text-anchor='middle' font-weight='bold' fill='#7C2D12'>AI team</text><text x='120' y='135' text-anchor='middle' font-size='10' fill='#7C2D12'>holds the 'why' alone</text><circle cx='40' cy='40' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='40' y='44' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='200' cy='40' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='200' y='44' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='40' cy='200' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='40' y='204' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><circle cx='200' cy='200' r='18' fill='#FEE2E2' stroke='#7F1D1D' stroke-width='1.5'/><text x='200' y='204' text-anchor='middle' font-size='10' fill='#7F1D1D'>?</text><text x='120' y='240' text-anchor='middle' font-style='italic' fill='#7F1D1D'>No external articulator. Rudderless.</text></g><g transform='translate(320 60)'><rect x='40' y='80' width='160' height='80' rx='10' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='120' y='115' text-anchor='middle' font-weight='bold' fill='#065F46'>AI team</text><text x='120' y='135' text-anchor='middle' font-size='10' fill='#065F46'>builds; 'why' lives outside</text><g><circle cx='40' cy='40' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='40' y='44' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>PM</text></g><g><circle cx='200' cy='40' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='200' y='44' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>CS</text></g><g><circle cx='40' cy='200' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='40' y='204' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>Sup</text></g><g><circle cx='200' cy='200' r='20' fill='#A7F3D0' stroke='#047857' stroke-width='1.5'/><text x='200' y='204' text-anchor='middle' font-size='9' fill='#064E3B' font-weight='bold'>User</text></g><line x1='52' y1='52' x2='90' y2='90' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='188' y1='52' x2='150' y2='90' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='52' y1='185' x2='90' y2='150' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><line x1='188' y1='185' x2='150' y2='150' stroke='#047857' stroke-width='1.5' marker-end='url(#a3)'/><text x='120' y='240' text-anchor='middle' font-style='italic' fill='#065F46'>Four articulators. Has roots.</text></g></g><defs><marker id='a3' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#047857'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Diagnose your org's AI shape — 5 yes/no, get a verdict."
         },
         {
           "type": "chatScenario",
@@ -1544,6 +1610,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Whose KPI moves? — every AI bet needs a named owner."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "AI cell and AI factory are the only two clean structures; everything in between is debt.",
@@ -1637,6 +1709,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What goes wrong, in order — top 5 AI incident types."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The kill switch"
@@ -1726,6 +1804,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The cost spike, animated — 1 bug, ₹40L lost weekend."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — What to write down"
@@ -1740,6 +1824,12 @@
           "caption": "The four artefacts. Four cards, four signatures, four pages of audit defence.",
           "maxWidth": 580,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 580 320' role='img'><rect width='580' height='320' rx='14' fill='#FAF5FF'/><g font-family='sans-serif' font-size='11' fill='#1F2937'><g transform='translate(40 40)'><rect width='110' height='130' rx='8' fill='#DCFCE7' stroke='#065F46' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#065F46'>Eval Card</text><text x='10' y='50' fill='#065F46'>set: fintech-v3</text><text x='10' y='65' fill='#065F46'>thresh: 1.5%</text><text x='10' y='80' fill='#065F46'>red-team:</text><text x='10' y='93' fill='#065F46'>18 Mar 2026</text><line x1='10' y1='110' x2='100' y2='110' stroke='#065F46' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#065F46' font-style='italic'>CTO sign</text></g><g transform='translate(180 40)'><rect width='110' height='130' rx='8' fill='#DBEAFE' stroke='#1E40AF' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#1E3A8A'>Kill Switch</text><text x='10' y='50' fill='#1E3A8A'>owner: Priya</text><text x='10' y='65' fill='#1E3A8A'>TTD: 8 min</text><text x='10' y='80' fill='#1E3A8A'>fallback:</text><text x='10' y='93' fill='#1E3A8A'>human agent</text><line x1='10' y1='110' x2='100' y2='110' stroke='#1E40AF' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#1E3A8A' font-style='italic'>CTO sign</text></g><g transform='translate(320 40)'><rect width='110' height='130' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='55' y='25' text-anchor='middle' font-weight='bold' fill='#7C2D12'>Logging</text><text x='10' y='50' fill='#7C2D12'>cost ✓</text><text x='10' y='65' fill='#7C2D12'>latency ✓</text><text x='10' y='80' fill='#7C2D12'>fail flag ✓</text><text x='10' y='93' fill='#7C2D12'>prompt cat ✓</text><line x1='10' y1='110' x2='100' y2='110' stroke='#92400E' stroke-width='1'/><text x='55' y='125' text-anchor='middle' font-size='9' fill='#7C2D12' font-style='italic'>CISO sign</text></g><g transform='translate(460 40)'><rect width='90' height='130' rx='8' fill='#FCE7F3' stroke='#9D174D' stroke-width='2'/><text x='45' y='25' text-anchor='middle' font-weight='bold' fill='#9D174D'>Owner</text><text x='10' y='50' fill='#9D174D'>Anika R.</text><text x='10' y='65' fill='#9D174D'>head ML</text><text x='10' y='80' fill='#9D174D'>esc: CTO</text><text x='10' y='93' fill='#9D174D'>14 May 26</text><line x1='10' y1='110' x2='80' y2='110' stroke='#9D174D' stroke-width='1'/><text x='45' y='125' text-anchor='middle' font-size='9' fill='#9D174D' font-style='italic'>self sign</text></g><text x='290' y='220' text-anchor='middle' font-size='13' fill='#1F2937' font-style='italic' font-weight='bold'>Four cards. Four pages. Four signatures.</text><text x='290' y='245' text-anchor='middle' font-size='11' fill='#374151'>Auditors believe these. They do not believe a 47-page policy.</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pre-mortem checklist — tick the 6 things to do BEFORE launch."
         },
         {
           "type": "chatScenario",
@@ -2022,6 +2112,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Sign or refuse? — 4 vendor contracts, sign-don't-sign."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Real eval gates beat policy docs because they are testable; anything that cannot fail cannot govern.",
@@ -2115,6 +2211,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · 90 days, three milestones — day-30, day-60, day-90 deliverables."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Cost-benefit framing"
@@ -2204,6 +2306,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · What kills 90-day plans — top 3 failure modes."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The rollback narrative"
@@ -2218,6 +2326,12 @@
           "caption": "Pre-commit both paths. The board reviews both. Failure is not a surprise; it's a contingency.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#ECFDF5'/><g transform='translate(40 30)'><circle cx='30' cy='90' r='14' fill='#1E40AF'/><text x='30' y='94' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#fff' font-weight='bold'>D0</text><line x1='44' y1='90' x2='200' y2='40' stroke='#10B981' stroke-width='2.5'/><line x1='44' y1='90' x2='200' y2='140' stroke='#F59E0B' stroke-width='2.5' stroke-dasharray='4 3'/><g transform='translate(210 25)'><rect width='260' height='40' rx='6' fill='#A7F3D0' stroke='#065F46'/><text x='130' y='17' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#065F46' font-weight='bold'>Success path · D90 · CAC −12%</text><text x='130' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#065F46'>scale to phase 2 · ₹6cr Q4 budget</text></g><g transform='translate(210 125)'><rect width='260' height='40' rx='6' fill='#FEF3C7' stroke='#92400E'/><text x='130' y='17' text-anchor='middle' font-family='sans-serif' font-size='11' fill='#7C2D12' font-weight='bold'>Rollback path · D45 · CAC unchanged</text><text x='130' y='32' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#7C2D12'>kill · 2 engineers to bet B · post-mortem</text></g><text x='240' y='200' text-anchor='middle' font-family='sans-serif' font-size='12' fill='#065F46' font-weight='bold'>Pre-committed both paths · the board sleeps</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build your 90-day spec — pick bet, owner, customer, metric."
         },
         {
           "type": "chatScenario",
@@ -2481,6 +2595,12 @@
             "good": "Board approves ₹2.7 cr (75%) — half because of confidence-honesty, half because they want to see 90 days first. Worth re-pitching at Q3 with results.",
             "learn": "Re-read the allergen list. Boards have heard 'transform/revolutionize/disrupt' enough times that those words now subtract trust."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-leaders.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the next quarterly bet — rank 4 options by leverage."
         },
         {
           "type": "keyTakeaways",

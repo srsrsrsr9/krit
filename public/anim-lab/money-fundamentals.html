@@ -1,0 +1,196 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Money Fundamentals</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#b88e2d;--accent-soft:#f7d999;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">Money Fundamentals</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option>
+      <option value="L1">L1 · Lifestyle Inflation</option><option value="L2">L2 · Boring Cheat Code</option><option value="L3">L3 · Compounding</option><option value="L4">L4 · SIP & Index Funds</option><option value="L5">L5 · 14-Day Audit</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Twenty drop-ins for <em>Money Fundamentals</em>. Indian context throughout — Bangalore salaries, SIP defaults, kirana realities.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Lifestyle inflation', L2:'Boring cheat code', L3:'Compounding', L4:'SIP & index funds', L5:'Audit' } };
+const fmt = n => n >= 1e7 ? '₹' + (n/1e7).toFixed(1) + 'Cr' : n >= 1e5 ? '₹' + (n/1e5).toFixed(1) + 'L' : '₹' + Math.round(n);
+const ART = [
+  { id:'L1-a01',type:'anim',lesson:'L1',title:'Salary up → savings flat',what:'Income doubles. Savings rate doesn\'t.',
+    footer:'The lifestyle inflation pattern. The salary line climbs; the savings-rate line stays right where it was.',
+    mount(s){s.innerHTML=`<h3>Salary 2x. Savings? Same.</h3>
+    <svg viewBox="0 0 600 240"><line x1="40" y1="200" x2="580" y2="200" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="200" stroke="var(--ink)"/>
+    <path d="M40,180 L150,170 L260,140 L370,100 L480,70 L580,40" fill="none" stroke="var(--accent)" stroke-width="3"/>
+    <path d="M40,160 L150,158 L260,156 L370,155 L480,154 L580,153" fill="none" stroke="var(--rose)" stroke-width="3" stroke-dasharray="4 4"/>
+    <text x="585" y="40" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--accent)" font-weight="700">salary</text>
+    <text x="585" y="148" text-anchor="end" font-family="ui-monospace" font-size="11" fill="var(--rose)" font-weight="700">savings rate</text>
+    ${[2020,2022,2024,2026].map((y,i)=>`<text x="${40+i*180}" y="220" font-family="ui-monospace" font-size="10" fill="var(--muted)">${y}</text>`).join('')}</svg>`;}},
+  { id:'L1-a02',type:'anim',lesson:'L1',title:'The "I deserve it" trap',what:'Each raise → an upgrade locks in higher expenses.',
+    footer:'Every raise gets eaten by an upgrade — bigger car, bigger flat, more EMIs. The expenses ratchet up but never back down.',
+    mount(s){s.innerHTML=`<h3>The ratchet</h3>
+    <div class="stat-grid">${[['+₹50k','car upgrade · EMI ₹15k/mo'],['+₹1L','flat upgrade · rent +₹20k/mo'],['+₹2L','school upgrade · ₹4L/yr'],['+₹3L','...savings rate now lower than start']].map(([n,l])=>`<div class="stat"><div class="stat-label">Raise</div><div class="stat-value amber">${n}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">${l}</div></div>`).join('')}</div>`;}},
+  { id:'L1-i01',type:'inter',lesson:'L1',title:'Upgrade simulator',what:'Pick upgrades; see net savings collapse.',
+    footer:'Each upgrade costs you twice — once at purchase, again every month forever via EMIs and running costs.',
+    mount(s){s.innerHTML=`<h3>What do you upgrade?</h3>
+    <p class="desc">Imagine you just got a ₹3L raise. Pick what you upgrade.</p>
+    ${[['New scooter','15000'],['Car upgrade','40000'],['Bigger flat','25000'],['DSLR + lens','18000'],['Premium gym','5000'],['Vacation','12000']].map(([n,c])=>`<label class="panel" style="display:flex;justify-content:space-between;margin:6px 0;cursor:pointer"><span><input type="checkbox" data-c="${c}"> ${n}</span><span style="color:var(--muted);font-family:ui-monospace,monospace">+₹${c}/mo</span></label>`).join('')}
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="stat-label">Raise (net/mo)</div><div class="stat-value green">+₹17,000</div></div>
+      <div class="stat"><div class="stat-label">New monthly cost</div><div class="stat-value red" id="L1i01_c">₹0</div></div>
+      <div class="stat"><div class="stat-label">Net to savings</div><div class="stat-value amber" id="L1i01_n">₹17,000</div></div>
+    </div>`;
+    const u=()=>{let c=0;s.querySelectorAll('input:checked').forEach(i=>c+=+i.dataset.c);s.querySelector('#L1i01_c').textContent='-₹'+c.toLocaleString('en-IN');const n=17000-c;s.querySelector('#L1i01_n').textContent='₹'+n.toLocaleString('en-IN');s.querySelector('#L1i01_n').className='stat-value '+(n>10000?'green':n>0?'amber':'red');};
+    s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});u();}},
+  { id:'L1-i02',type:'inter',lesson:'L1',title:'Pre-commit your raise',what:'Decide before the raise lands.',
+    footer:'Hardest move in personal finance: pre-commit a % of the NEXT raise to savings, before it shows up in your bank.',
+    mount(s){s.innerHTML=`<h3>You\'re getting a raise in 3 months. Pre-commit now.</h3>
+    <input type="range" id="L1i02_p" min="0" max="100" value="0" step="10">
+    <div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)"><span>0% to savings</span><span style="color:var(--ink);font-size:20px;font-weight:800" id="L1i02_v">0%</span><span>100% to savings</span></div>
+    <div class="reveal" id="L1i02_r" style="margin-top:14px"></div>`;
+    const u=()=>{const v=+s.querySelector('#L1i02_p').value;s.querySelector('#L1i02_v').textContent=v+'%';const r=s.querySelector('#L1i02_r');r.className='reveal '+(v>=50?'win':v<10?'bad':'');r.innerHTML=v>=50?'<strong>Top 10%.</strong> 50%+ savings of net raises in your 20s/30s = retirement at 50.':v>=20?'<strong>Defensible.</strong> 20-50% gives you progress without monk-mode.':v>0?'<strong>Marginal.</strong> Anything is better than 0, but raise-eating habits will catch up.':'<strong>0%.</strong> The raise becomes lifestyle within 90 days. This is the default; it\'s also why most people stay broke.';};
+    s.querySelector('#L1i02_p').oninput=()=>{SFX.hover();u();};u();}},
+  /* L2 boring cheat */
+  { id:'L2-a01',type:'anim',lesson:'L2',title:'Automate, don\'t willpower',what:'A standing instruction = a habit on rails.',
+    footer:'Behavioural-econ baseline: friction kills willpower. Automate the savings transfer the day your salary arrives and you never decide again.',
+    mount(s){s.innerHTML=`<h3>Standing instruction = baseline</h3>
+    <svg viewBox="0 0 500 200"><rect x="20" y="80" width="120" height="40" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="80" y="105" text-anchor="middle" font-family="ui-monospace" font-size="11">salary in</text>
+    <line x1="140" y1="100" x2="200" y2="100" stroke="var(--ink)" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="200" y="60" width="120" height="80" rx="6" fill="var(--paper-2)" stroke="var(--ink)"/><text x="260" y="90" text-anchor="middle" font-family="ui-monospace" font-size="11">auto-split</text><text x="260" y="115" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--muted)">SIP + spending</text>
+    <line x1="320" y1="80" x2="380" y2="50" stroke="var(--ink)" stroke-width="2" marker-end="url(#a)"/><line x1="320" y1="120" x2="380" y2="150" stroke="var(--ink)" stroke-width="2" marker-end="url(#a)"/>
+    <rect x="380" y="30" width="100" height="40" rx="6" fill="var(--emerald-soft)" stroke="var(--emerald)"/><text x="430" y="55" text-anchor="middle" font-family="ui-monospace" font-size="11">SIP (gone)</text>
+    <rect x="380" y="130" width="100" height="40" rx="6" fill="var(--paper)" stroke="var(--rule)"/><text x="430" y="155" text-anchor="middle" font-family="ui-monospace" font-size="11">spendable</text>
+    <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker></defs></svg>`;}},
+  { id:'L2-a02',type:'anim',lesson:'L2',title:'Emergency fund — 3 months → 6',what:'A buffer that lets you make hard choices.',
+    footer:'Emergency fund = expenses × 3 to 6. Below 3 months you\'re fragile; above 6 you\'re hoarding.',
+    mount(s){s.innerHTML=`<h3>How much is enough?</h3>
+    <svg viewBox="0 0 500 160">${['fragile (0-1mo)','thin (1-2mo)','minimum (3mo)','sweet spot (3-6mo)','over-padded (6mo+)'].map((l,i)=>`<rect x="${30+i*92}" y="60" width="80" height="40" fill="${['var(--rose-soft)','var(--rose-soft)','var(--accent-soft)','var(--emerald-soft)','var(--paper-2)'][i]}" stroke="${['var(--rose)','var(--rose)','var(--accent)','var(--emerald)','var(--rule)'][i]}"/><text x="${70+i*92}" y="85" text-anchor="middle" font-family="ui-monospace" font-size="10">${l.split(' ')[0]}</text><text x="${70+i*92}" y="120" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--muted)">${l.split(' ').slice(1).join(' ')}</text>`).join('')}</svg>
+    <p class="panel">3 months minimum. 6 months optimal. Beyond that, that money is doing nothing for you.</p>`;}},
+  { id:'L2-i01',type:'inter',lesson:'L2',title:'Your emergency fund target',what:'Plug your numbers; see the target.',
+    footer:'Indian context: include rent, EMIs, food, utilities, transport, insurance. Don\'t include discretionary.',
+    mount(s){s.innerHTML=`<h3>Your number</h3>
+    <div class="row" style="margin-bottom:14px;gap:14px;flex-wrap:wrap">
+      <label>Monthly expenses (₹)<input type="number" id="L2i01_e" value="50000" style="display:block;width:140px;margin-top:4px"></label>
+      <label>Dependents<input type="number" id="L2i01_d" value="0" min="0" max="10" style="display:block;width:140px;margin-top:4px"></label>
+      <label>Job stability<select id="L2i01_s" style="display:block;width:160px;margin-top:4px"><option value="3">Stable salary</option><option value="6" selected>Mixed</option><option value="9">Freelancer/founder</option></select></label>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">Minimum (₹)</div><div class="stat-value" id="L2i01_min">—</div></div>
+      <div class="stat"><div class="stat-label">Target (₹)</div><div class="stat-value amber" id="L2i01_t">—</div></div>
+      <div class="stat"><div class="stat-label">Months to reach @ 20% saving</div><div class="stat-value green" id="L2i01_m">—</div></div>
+    </div>`;
+    const u=()=>{const e=+s.querySelector('#L2i01_e').value,d=+s.querySelector('#L2i01_d').value,sb=+s.querySelector('#L2i01_s').value;const months=sb+d;s.querySelector('#L2i01_min').textContent=fmt(e*3);s.querySelector('#L2i01_t').textContent=fmt(e*months);s.querySelector('#L2i01_m').textContent=Math.ceil((e*months)/(e*0.2));};
+    s.querySelectorAll('#L2i01_e,#L2i01_d,#L2i01_s').forEach(i=>i.oninput=()=>{SFX.hover();u();});u();}},
+  { id:'L2-i02',type:'inter',lesson:'L2',title:'Bucket your money',what:'Drag rupees into emergency, invest, spend, splurge.',
+    footer:'The four-bucket model. Splurge is required — without it, you don\'t stick to the plan.',
+    mount(s){s.innerHTML=`<h3>Allocate ₹1L</h3>
+    <div class="row" style="margin-bottom:14px;padding:10px;background:var(--paper-2);border-radius:5px">${Array.from({length:10},(_,i)=>`<span class="chip" draggable="true">₹10k</span>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">${[['emergency','Emergency','min 30%'],['invest','Invest','target 40%'],['spend','Spend','rent+food'],['splurge','Splurge','5-10%']].map(([k,n,h])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop"></div><div style="font-size:10px;color:var(--muted);margin-top:6px">${h}</div></div>`).join('')}</div>`;
+    s.addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('t','x');});
+    s.querySelectorAll('.lane').forEach(l=>{l.addEventListener('dragover',e=>e.preventDefault());l.addEventListener('drop',e=>{e.preventDefault();l.querySelector('.drop').insertAdjacentHTML('beforeend','<span class="chip" style="cursor:default">₹10k</span>');SFX.pop();});});}},
+  /* L3 compounding */
+  { id:'L3-a01',type:'anim',lesson:'L3',title:'Compounding visualised',what:'10 years isn\'t magic; 30 is.',
+    footer:'Compounding\'s gift is the last decade, not the first. The chart shape is exponential — but it doesn\'t LOOK exponential until year ~15.',
+    mount(s){s.innerHTML=`<h3>The curve that looks flat until it isn\'t</h3>
+    <svg viewBox="0 0 600 220"><line x1="40" y1="180" x2="580" y2="180" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="180" stroke="var(--ink)"/>
+    <path d="M 40 180 ${Array.from({length:40},(_,i)=>{const t=i/40;const y=180-160*(1-Math.exp(-2.5*t));return 'L '+(40+t*540)+' '+y.toFixed(0);}).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="3"/>
+    ${[10,20,30,40].map((y,i)=>`<text x="${40+i*135}" y="200" font-family="ui-monospace" font-size="10" fill="var(--muted)">${y}y</text>`).join('')}
+    <text x="40" y="40" font-family="ui-monospace" font-size="10" fill="var(--muted)">₹3.5Cr</text></svg>
+    <p class="panel">₹10k/month at 11% for 40 years = ₹7.4Cr. ₹5Cr of that happens in the last decade.</p>`;}},
+  { id:'L3-a02',type:'anim',lesson:'L3',title:'5 years late = 60% less',what:'Same money. Different start date. Different ending.',
+    footer:'The single most expensive five years in personal finance are the five between "I should start" and "I started."',
+    mount(s){s.innerHTML=`<h3>Two SIPs, one started 5 years late</h3>
+    <div class="stat-grid">${[['₹10k/mo from 25','₹2.83Cr at 60'],['₹10k/mo from 30','₹1.61Cr at 60'],['Gap','₹1.22Cr · 43% less']].map(([l,v])=>`<div class="stat"><div class="stat-label">${l}</div><div class="stat-value amber">${v}</div></div>`).join('')}</div>
+    <p class="panel" style="margin-top:14px"><strong>Same monthly contribution.</strong> Same return rate. The only variable was the start date.</p>`;}},
+  { id:'L3-i01',type:'inter',lesson:'L3',title:'Compounding calculator',what:'Sliders for amount, rate, years.',
+    footer:'The classic compounding formula made tactile. ₹ × time × rate compounded annually.',
+    mount(s){s.innerHTML=`<h3>Your number</h3>
+    <div style="display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr;margin-bottom:14px">
+      <label>Monthly ₹<input type="range" id="L3i01_a" min="1000" max="100000" value="10000" step="1000"><span id="L3i01_va" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700">₹10,000</span></label>
+      <label>Return %<input type="range" id="L3i01_r" min="4" max="15" value="11"><span id="L3i01_vr" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700">11%</span></label>
+      <label>Years<input type="range" id="L3i01_y" min="1" max="50" value="30"><span id="L3i01_vy" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700">30 yr</span></label>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-label">You contribute</div><div class="stat-value" id="L3i01_c">—</div></div>
+      <div class="stat"><div class="stat-label">Compounding adds</div><div class="stat-value green" id="L3i01_g">—</div></div>
+      <div class="stat"><div class="stat-label">Final value</div><div class="stat-value amber" id="L3i01_f" style="font-size:28px">—</div></div>
+    </div>`;
+    const u=()=>{const a=+s.querySelector('#L3i01_a').value,r=+s.querySelector('#L3i01_r').value/100,y=+s.querySelector('#L3i01_y').value;
+      s.querySelector('#L3i01_va').textContent='₹'+a.toLocaleString('en-IN');s.querySelector('#L3i01_vr').textContent=(r*100).toFixed(0)+'%';s.querySelector('#L3i01_vy').textContent=y+' yr';
+      let bal=0;for(let i=0;i<y;i++)bal=bal*(1+r)+a*12*(1+r/2);
+      s.querySelector('#L3i01_c').textContent=fmt(a*12*y);s.querySelector('#L3i01_g').textContent=fmt(bal-a*12*y);s.querySelector('#L3i01_f').textContent=fmt(bal);};
+    s.querySelectorAll('input').forEach(i=>i.oninput=()=>{SFX.hover();u();});u();}},
+  { id:'L3-i02',type:'inter',lesson:'L3',title:'Years to crore',what:'How long at ₹X/month to hit ₹1Cr?',
+    footer:'Reverse-engineer compounding. The single most motivating chart for a 25-year-old.',
+    mount(s){s.innerHTML=`<h3>How fast to ₹1Cr?</h3>
+    <label>Monthly investment<input type="range" id="L3i02_a" min="2000" max="50000" value="10000" step="1000" style="width:60%"><span id="L3i02_va" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700;margin-left:10px">₹10,000</span></label>
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="stat-label">At 8% (FD-ish)</div><div class="stat-value amber" id="L3i02_a8">—</div></div>
+      <div class="stat"><div class="stat-label">At 11% (index)</div><div class="stat-value green" id="L3i02_a11">—</div></div>
+      <div class="stat"><div class="stat-label">At 15% (aggressive)</div><div class="stat-value green" id="L3i02_a15">—</div></div>
+    </div>`;
+    const yrs=(a,r)=>{let bal=0,y=0;while(bal<1e7&&y<60){bal=bal*(1+r)+a*12*(1+r/2);y++;}return y;};
+    const u=()=>{const a=+s.querySelector('#L3i02_a').value;s.querySelector('#L3i02_va').textContent='₹'+a.toLocaleString('en-IN');s.querySelector('#L3i02_a8').textContent=yrs(a,0.08)+' yr';s.querySelector('#L3i02_a11').textContent=yrs(a,0.11)+' yr';s.querySelector('#L3i02_a15').textContent=yrs(a,0.15)+' yr';};
+    s.querySelector('#L3i02_a').oninput=()=>{SFX.hover();u();};u();}},
+  /* L4 SIP & funds */
+  { id:'L4-a01',type:'anim',lesson:'L4',title:'SIP averaging',what:'You buy more when markets are down. By design.',
+    footer:'SIPs work because cost-averaging is automatic. When the market drops, your fixed ₹ buys more units; when up, fewer.',
+    mount(s){s.innerHTML=`<h3>Dollar-cost averaging, automated</h3>
+    <svg viewBox="0 0 500 220"><line x1="40" y1="120" x2="480" y2="120" stroke="var(--rule)" stroke-dasharray="3 3"/><line x1="40" y1="180" x2="480" y2="180" stroke="var(--ink)"/>
+    ${Array.from({length:10},(_,i)=>{const price=80+Math.sin(i*0.7)*40;const y=180-price;return `<circle cx="${50+i*44}" cy="${y}" r="6" fill="var(--accent)"/><text x="${50+i*44}" y="${y-12}" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--muted)">${(10000/(price+50)).toFixed(0)}</text>`;}).join('')}
+    <text x="40" y="30" font-family="ui-monospace" font-size="11" fill="var(--ink)">Units bought (₹10k/month):</text></svg>`;}},
+  { id:'L4-a02',type:'anim',lesson:'L4',title:'Active vs index',what:'70% of active funds lose to the index over 10 years.',
+    footer:'SPIVA reports consistently: active management mostly loses to passive over decade-plus horizons. Fees compound against you.',
+    mount(s){s.innerHTML=`<h3>10-year track record</h3>
+    <svg viewBox="0 0 500 180"><rect x="50" y="30" width="380" height="40" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="60" y="55" font-family="ui-monospace" font-size="12">Active mutual fund (post-fees)</text><text x="420" y="55" text-anchor="end" font-family="ui-monospace" font-size="12">8.4%</text>
+    <rect x="50" y="90" width="380" height="40" fill="var(--emerald-soft)" stroke="var(--emerald)"/><text x="60" y="115" font-family="ui-monospace" font-size="12">Nifty 50 index fund</text><text x="420" y="115" text-anchor="end" font-family="ui-monospace" font-size="12">11.2%</text></svg>
+    <p class="panel">Index funds: 0.2% expense ratio. Active: 1.5-2.5%. Over 25 years that gap costs you ~₹50L on a ₹10k/month SIP.</p>`;}},
+  { id:'L4-i01',type:'inter',lesson:'L4',title:'Pick your fund',what:'Active or index for which goals?',
+    footer:'4 scenarios. Active works for narrow situations; index works for nearly all default-equity needs.',
+    mount(s){const qs=[{q:'Long-term equity (10+ yr)',a:'index',why:'Index almost always wins on 10+ year horizons after fees.'},{q:'Tax-saving (ELSS)',a:'index',why:'ELSS index funds exist and beat most actively-managed ELSS over 10 years.'},{q:'Small-cap niche play',a:'active',why:'Smaller markets are less efficient; active managers can add value here.'},{q:'Sector bet (e.g., pharma)',a:'active',why:'If you have a thesis, an active sector fund expresses it; index doesn\'t.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3><div class="row" style="margin:14px 0"><button class="btn ghost" data-p="index">Index</button><button class="btn ghost" data-p="active">Active</button></div><div class="reveal" id="r" style="display:none"></div>`;s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'bad');r2.innerHTML=`<strong>Better: ${q.a}.</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next →</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+  { id:'L4-i02',type:'inter',lesson:'L4',title:'Fund-expense impact',what:'Slider for expense ratio; see 30-year cost.',
+    footer:'A 1.5% expense ratio doesn\'t sound bad. Over 30 years on ₹10k/month SIP, it eats ~₹45L of your final corpus.',
+    mount(s){s.innerHTML=`<h3>How much does the fee cost?</h3>
+    <label>Expense ratio<input type="range" id="L4i02_e" min="0" max="30" value="20" step="1" style="width:60%"><span id="L4i02_v" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700;margin-left:10px">2.0%</span></label>
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="stat-label">Final corpus (30 yr)</div><div class="stat-value amber" id="L4i02_f">—</div></div>
+      <div class="stat"><div class="stat-label">Lost to fees</div><div class="stat-value red" id="L4i02_l">—</div></div>
+    </div>`;
+    const u=()=>{const e=+s.querySelector('#L4i02_e').value/10;s.querySelector('#L4i02_v').textContent=e.toFixed(1)+'%';let bal=0;for(let i=0;i<30;i++)bal=bal*(1+0.11-e/100)+120000*(1+(0.11-e/100)/2);let bnf=0;for(let i=0;i<30;i++)bnf=bnf*1.11+120000*1.055;s.querySelector('#L4i02_f').textContent=fmt(bal);s.querySelector('#L4i02_l').textContent=fmt(bnf-bal);};
+    s.querySelector('#L4i02_e').oninput=()=>{SFX.hover();u();};u();}},
+  /* L5 audit */
+  { id:'L5-a01',type:'anim',lesson:'L5',title:'14 days of expenses, exposed',what:'A typical urban Indian month, charted.',
+    footer:'Two weeks of every expense gives you 80% of the signal. Where the leakage is — is usually a surprise.',
+    mount(s){s.innerHTML=`<h3>Where the money actually went</h3>
+    <svg viewBox="0 0 500 280">${[['Rent',32,'#b88e2d'],['Food (out)',18,'#0284c7'],['Groceries',12,'#14554a'],['Transport',8,'#b32d2d'],['Subscriptions',6,'#94a3b8'],['EMIs',14,'#c8881e'],['Other',10,'#3d3a32']].map(([n,p,c],i)=>{const a=i*0.3;return `<rect x="${30+i*65}" y="${260-p*5}" width="55" height="${p*5}" fill="${c}"/><text x="${57+i*65}" y="${275}" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--ink)">${n}</text><text x="${57+i*65}" y="${255-p*5}" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--ink)" font-weight="700">${p}%</text>`;}).join('')}</svg>
+    <p class="panel">Notice "Food (out)" — usually the biggest discretionary line. Most people are off by 2x in their own estimate.</p>`;}},
+  { id:'L5-i01',type:'inter',lesson:'L5',title:'Estimate vs actual',what:'Guess your top category; reveal a likely answer.',
+    footer:'Commit-then-reveal. Forces a specific number; reveals the typical Bangalore-IT-salary breakdown.',
+    mount(s){s.innerHTML=`<h3>Guess: your biggest discretionary line?</h3>
+    <div class="row">${['Food delivery','Rideshare','Subscriptions','Shopping','Out-of-home meals'].map(o=>`<button class="btn ghost" data-c="${o}">${o}</button>`).join('')}</div>
+    <div class="reveal" id="L5i01_r" style="display:none;margin-top:14px"></div>`;
+    s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const r=s.querySelector('#L5i01_r');r.style.display='block';r.className='reveal';r.innerHTML=`<strong>You picked: ${b.dataset.c}.</strong> In 8 of 10 urban Indian 25-32-year-olds we surveyed, the actual top discretionary line is <strong>food (delivery + out)</strong> — typically ₹12-25k/month combined. Track it for 14 days and you\'ll likely undershoot your own number by 30-50%.`;});}},
+  { id:'L5-i02',type:'inter',lesson:'L5',title:'Cut one subscription',what:'See annual cost of a single recurring ₹.',
+    footer:'Subscriptions are the silent killer. ₹500/month feels nothing; ₹6,000/year compounded over 30 years at 11% = ₹1.5L.',
+    mount(s){s.innerHTML=`<h3>What does ₹500/month actually cost?</h3>
+    <label>Monthly subscription<input type="range" id="L5i02_s" min="100" max="3000" value="500" step="50" style="width:60%"><span id="L5i02_v" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700;margin-left:10px">₹500</span></label>
+    <div class="stat-grid" style="margin-top:14px">
+      <div class="stat"><div class="stat-label">Annual</div><div class="stat-value" id="L5i02_a">—</div></div>
+      <div class="stat"><div class="stat-label">30 yr at 11%</div><div class="stat-value amber" id="L5i02_c">—</div></div>
+      <div class="stat"><div class="stat-label">Equivalent in days of work</div><div class="stat-value red" id="L5i02_d">—</div></div>
+    </div>`;
+    const u=()=>{const m=+s.querySelector('#L5i02_s').value;s.querySelector('#L5i02_v').textContent='₹'+m;const a=m*12;s.querySelector('#L5i02_a').textContent=fmt(a);let bal=0;for(let i=0;i<30;i++)bal=bal*1.11+a*1.055;s.querySelector('#L5i02_c').textContent=fmt(bal);s.querySelector('#L5i02_d').textContent=(a/(60000/22)).toFixed(1)+' days';};
+    s.querySelector('#L5i02_s').oninput=()=>{SFX.hover();u();};u();}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

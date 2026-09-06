@@ -149,6 +149,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Sticker, not box — `x = 5` puts a sticker on the value 5, not in a box called x."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Name binding and rebinding"
@@ -249,6 +255,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Reassign, don't mutate — Reassigning x moves the sticker; mutating x[0] changes the value under both stickers."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The mutable default trap"
@@ -269,6 +281,12 @@
           "caption": "The default `[]` is created at definition time. All calls share the one list. Mutate it once, you've mutated it for the next caller — and the next.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FEFCE8'/><g transform='translate(60 50)'><rect width='180' height='60' rx='8' fill='#FEF3C7' stroke='#A16207' stroke-width='2'/><text x='90' y='25' text-anchor='middle' font-family='monospace' font-size='11' fill='#854D0E' font-weight='bold'>def add_item(</text><text x='90' y='42' text-anchor='middle' font-family='monospace' font-size='11' fill='#854D0E' font-weight='bold'>item, basket=[]):</text></g><g transform='translate(380 50)'><ellipse cx='0' cy='30' rx='80' ry='30' fill='#FCD34D' stroke='#92400E' stroke-width='3'/><text x='0' y='25' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>[ ]</text><text x='0' y='42' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E' font-style='italic'>created ONCE</text><text x='0' y='80' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E' font-weight='bold'>at definition time</text></g><g><line x1='240' y1='80' x2='300' y2='80' stroke='#92400E' stroke-width='2' marker-end='url(#mt)'/></g><g transform='translate(80 165)' font-family='monospace' font-size='10'><rect x='0' y='0' width='110' height='22' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='55' y='15' text-anchor='middle' fill='#064E3B'>add_item('apple')</text><rect x='130' y='0' width='130' height='22' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='195' y='15' text-anchor='middle' fill='#064E3B'>add_item('banana')</text><rect x='280' y='0' width='130' height='22' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='345' y='15' text-anchor='middle' fill='#064E3B'>add_item('cherry')</text></g><g><path d='M135 165 Q200 130 360 105' stroke='#065F46' stroke-width='1.5' fill='none' stroke-dasharray='3 2' marker-end='url(#mg2)'/><path d='M275 165 Q320 135 380 105' stroke='#065F46' stroke-width='1.5' fill='none' stroke-dasharray='3 2' marker-end='url(#mg2)'/><path d='M425 165 Q420 135 400 105' stroke='#065F46' stroke-width='1.5' fill='none' stroke-dasharray='3 2' marker-end='url(#mg2)'/></g><defs><marker id='mt' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#92400E'/></marker><marker id='mg2' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#065F46'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Trace the references — Step through a 4-line snippet and predict what each variable holds."
         },
         {
           "type": "chatScenario",
@@ -590,6 +608,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Type sticker game — Drag value-types to the variable names that fit them."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Python names are stickers, not boxes — `=` aliases, it does not copy",
@@ -681,6 +705,12 @@
               "md": "Every commuter knows: at each station, the same five things happen. You don't think 'station 1, station 2'; you think 'at each station, do this.' That's `for x in items`. Python handles the index; you just say what to do. Less ceremony, fewer off-by-ones, less 2 a.m. debugging."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · if/elif/else as a slide — A value enters; one of three branches lights up."
         },
         {
           "type": "heading",
@@ -782,6 +812,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · while vs for — Two loops counting the same way, structured differently."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The off-by-one trap (and how to never see it again)"
@@ -877,6 +913,12 @@
           "date": "October 2023, two days before Diwali sale",
           "story": "Festive sale. Marketing wanted a *'one in a million'* gimmick — every millionth checkout, the user wins a 100% discount. PR went up Friday, demoed Saturday, deployed Monday morning at 09:00 IST.\n\nBy 10:42 a.m., the BI dashboard lit up. **One in a million** had become **roughly one in 999,999** — close enough that nobody flinched. Then 11:14: revenue was off plan by ₹3.2 lakh and climbing. By noon, ₹18 lakh.\n\nThe culprit was a perfect-looking loop:\n\n```python\nfor i in range(len(checkouts)):\n    if i % 1_000_000 == 0:\n        checkouts[i].discount_pct = 100\n```\n\nLook closely. `range(len(checkouts))` starts at `0`. `0 % 1_000_000 == 0`. **The first checkout of every batch got 100% off.** Batches ran every 30 seconds. We were giving away one free order every 30 seconds during peak Diwali traffic.\n\nThe idiomatic version would have been `for i, c in enumerate(checkouts, start=1)`. The `start=1` is the entire fix. Total damage by the time the rollback completed at 12:47 p.m.: **₹47.3 lakh in unintended discounts**, 6,214 checkouts, one PM crying in the conference room, and a director-level post-mortem that produced exactly one rule: *no `range(len(...))` ships from this team again.*\n\nThe author was a five-year Python engineer. He'd written the same loop a thousand times. He just hadn't written it on a million-row collection on the day before Diwali.",
           "takeaway": "`range(len(x))` is a *boundary statement disguised as a count statement*. If your loop uses the index for anything other than indexing, you wanted `enumerate` — and you almost certainly wanted `start=1`."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Branch picker — Pick the next condition; reveal what code actually executes."
         },
         {
           "type": "bossBattle",
@@ -1003,6 +1045,12 @@
           "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Off-by-one trainer — Choose range() args; see exactly which numbers print."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Iterate over items, not indices — `for x in items`, not `for i in range(len(items))`",
@@ -1096,6 +1144,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Function as machine — Input goes in, output comes out, side effects happen in the middle."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Args, kwargs, and defaults that don't bite"
@@ -1179,9 +1233,21 @@
         },
         {
           "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Args, kwargs, defaults — Same function, three call shapes."
+        },
+        {
+          "type": "embedAnimation",
           "src": "/courses/python-foundations/anim/trap-python-functions.html",
           "height": 420,
           "caption": "Watch the trap happen live — and the fix at the end."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build a one-liner — Compose a list comprehension via dropdowns; see output update."
         },
         {
           "type": "callout",
@@ -1430,6 +1496,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Pure or impure? — Classify functions as pure or side-effectful."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A function signature is a contract — make it visible with type hints",
@@ -1523,6 +1595,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · list vs tuple vs set vs dict — Same data, four containers, four shapes."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Pick by access pattern, not by data type"
@@ -1612,6 +1690,12 @@
               "md": "Stable identifiers (passport number, Aadhaar, email) make good dict keys because they don't change. Lists, dicts, and sets cannot be dict keys precisely because they can change. Python won't let you try; that's the `unhashable type` error."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Hash-map lookup — Why dict[x] is O(1) and list.index(x) is O(n)."
         },
         {
           "type": "heading",
@@ -1728,6 +1812,12 @@
           "date": "January 2025",
           "story": "Our nightly fraud-flagging job had a service-level objective: finish before 04:30 IST so the morning ops team could review flagged orders over chai. For sixteen months it ran in roughly **2 minutes 50 seconds**. Then, over four weeks, it crept up: 4 minutes, 12, 47, 88, **4 hours 11 minutes**. The 06:30 standup got an awkward *'…the report isn't ready yet'* every morning.\n\nThe SRE on rotation blamed the database. The DBA blamed the network. I blamed nobody and read the code:\n\n```python\nseen_order_ids = []\nfor order in todays_orders:\n    if order.id not in seen_order_ids:\n        seen_order_ids.append(order.id)\n        process(order)\n```\n\n`order.id not in seen_order_ids` on a **list** is O(n). Inside a `for` loop over the same orders, that's **O(n²)**. When `todays_orders` was 30,000 rows (sixteen months ago), n² was 900M comparisons — fast on modern hardware. After Diwali expansion to Tier-2 cities, `todays_orders` was **180,000** rows. n² became **32.4 billion** comparisons. The database was innocent.\n\nFix: `seen_order_ids = set()`. `in` on a set is O(1). Job time the next night: **2 minutes 11 seconds**. The PR was three characters: `[]` to `set()` and `.append` to `.add`. The code review took longer than the change.\n\nThe cost wasn't compute. The cost was four weeks of *'the report isn't ready'* eroding ops trust, and one all-hands where an exec said *'Python doesn't scale'* — a sentence that haunts me.",
           "takeaway": "The wrong container is almost never an algorithm problem; it's a *shape* problem. *'Have I seen this?'* wants a `set`. *'How many?'* wants a `Counter`. *'Look up by key?'* wants a `dict`. List is the default — and almost never the right answer past 10K rows."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the container — Given a task, pick the right container; reveal performance."
         },
         {
           "type": "bossBattle",
@@ -1882,6 +1972,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Mutate-and-see — Mutate a dict, list, set — see what changes and what breaks."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Pick a container by access pattern, not by data type — uniqueness → set, lookup-by-key → dict, ordered-with-dups → list",
@@ -1976,6 +2072,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Module → import → use — How a file becomes something you can import."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Read and validate at the boundary"
@@ -2021,6 +2123,12 @@
           ]
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · try/except path — Watch the exception bubble up until something catches it."
+        },
+        {
           "type": "quiz",
           "prompt": "Reading a CSV with `open(path, encoding='utf-8-sig')` instead of `'utf-8'` does what?",
           "multi": false,
@@ -2050,6 +2158,12 @@
               "explain": "Inverse of what -sig does — it's still UTF-8 decoded; just BOM-aware."
             }
           ]
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Mini-project: word counter — Build a tiny word-counting script step by step."
         },
         {
           "type": "chatScenario",
@@ -2375,6 +2489,12 @@
             "good": "B+. The pipeline runs, the Q4 number is right, the bad-row crashes are loud and named. You added one guardrail instead of two. Vidya signs off; the next-quarter retro will catch the rest. Auditors are happy. You can sleep.",
             "learn": "C-tier — but the boundary discipline is the *one* thing that separates a script that works once from a pipeline a financial team can rely on. Re-read the mini-project lesson on read/transform/summarize/write boundaries. The three rules: (1) **encoding is a contract,** never `errors='ignore'`. (2) **schema is a contract,** validate the header before you parse. (3) **failures are loud,** with row numbers, so finance can fix the data instead of distrusting the code. Memorize these three before next quarter."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/python-foundations.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Order the project — Drag steps into the right order to ship a mini-tool."
         },
         {
           "type": "keyTakeaways",

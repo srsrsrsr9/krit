@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why a bicycle stays up · A short paper on a wrong intuition</title>
+<style>
+  :root {
+    --paper:     #fafaf7;
+    --paper-2:   #f1f0e9;
+    --ink:       #14110d;
+    --ink-soft:  #2f2a22;
+    --muted:     #5a5448;
+    --rule:      #d8d1bf;
+    --rule-soft: #ebe5d2;
+    --accent:    #8a1c1c;   /* claret — for "wrong" / falsified */
+    --accent-soft: #f1d6d6;
+    --true:      #2d5e3a;   /* deep green — for "correct" */
+    --true-soft: #d2e3d6;
+    --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    /* Specifically: stop the auto-spinning gyroscope animation and the Kooijman roll loop */
+    #gyroWheel, #kooijmanBike, #kooijmanBike * { animation: none !important; }
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', 'Source Serif Pro', 'Georgia', serif;
+    font-size: 17px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  main { max-width: 640px; margin: 0 auto; padding: 56px 24px 100px; }
+  .wide { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .breakout { max-width: 820px; margin-left: -50px; margin-right: -50px; }
+  @media (max-width: 780px) { .breakout { margin-left: 0; margin-right: 0; } }
+
+  /* MASTHEAD / running header */
+  .running-head {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 56px;
+    display: flex; justify-content: space-between;
+  }
+  .running-head .doi { color: var(--ink); }
+
+  h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: clamp(36px, 5.8vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.018em;
+    line-height: 1.08;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .subtitle {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-style: italic;
+    font-size: 21px;
+    color: var(--ink-soft);
+    margin: 0 0 22px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+  .byline {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+
+  /* SECTION NUMBERING */
+  .sec-num {
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 60px 0 6px;
+  }
+  h2 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+  h3 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 19px; font-weight: 700;
+    margin: 28px 0 10px;
+  }
+
+  /* PROSE */
+  p, li {
+    margin: 0 0 18px;
+    color: var(--ink-soft);
+  }
+  p.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink); }
+  strong { color: var(--ink); font-weight: 700; }
+  em { font-style: italic; }
+
+  /* ABSTRACT */
+  .abstract {
+    background: var(--paper-2);
+    border-left: 3px solid var(--ink);
+    padding: 20px 22px;
+    margin: 0 0 56px;
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+  .abstract h4 {
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+  .abstract p:last-child { margin-bottom: 0; }
+  .abstract strong { color: var(--ink); }
+
+  /* CALLOUT — the WRONG and TRUE boxes */
+  .claim {
+    margin: 28px 0;
+    padding: 18px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .claim-wrong {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    color: var(--accent);
+  }
+  .claim-wrong strong { color: var(--accent); }
+  .claim-true {
+    background: var(--true-soft);
+    border-left: 3px solid var(--true);
+    color: var(--true);
+  }
+  .claim-true strong { color: var(--true); }
+  .claim-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* FIGURE */
+  figure {
+    margin: 36px 0;
+    padding: 0;
+  }
+  figure.wide-fig {
+    margin-left: -40px; margin-right: -40px;
+  }
+  @media (max-width: 720px) { figure.wide-fig { margin-left: 0; margin-right: 0; } }
+  .fig-frame {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 22px;
+  }
+  .fig-frame svg { display: block; width: 100%; height: auto; user-select: none; touch-action: none; }
+  figcaption {
+    margin-top: 12px;
+    padding-top: 10px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px solid var(--rule);
+  }
+  figcaption strong {
+    font-style: normal;
+    color: var(--ink);
+    font-family: ui-monospace, monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* INTERACTIVE CONTROLS */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  .control-group {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 200px;
+  }
+  .control-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+  .control-label .val {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  input[type="range"] {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+    margin: 0;
+    height: 22px;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px; background: var(--rule); border-radius: 2px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    background: var(--ink);
+    border-radius: 50%;
+    margin-top: -7px;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 4px; background: var(--rule); border-radius: 2px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px;
+    background: var(--ink);
+    border: none;
+    border-radius: 50%;
+  }
+  .btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 9px 16px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 140ms var(--ease);
+  }
+  .btn:hover { background: var(--accent); }
+  .btn.active { background: var(--accent); }
+  .btn-toggle {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-toggle:hover { background: var(--ink); color: var(--paper); }
+  .btn-toggle.on { background: var(--ink); color: var(--paper); }
+  .btn-row { display: flex; gap: 6px; }
+
+  /* MARGINALIA — footnote-style citations */
+  .ref {
+    display: inline-block;
+    font-family: ui-monospace, monospace;
+    font-size: 0.72em;
+    font-weight: 700;
+    color: var(--accent);
+    vertical-align: super;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0 2px;
+  }
+  .ref:hover { background: var(--accent-soft); }
+
+  .refs-list {
+    margin-top: 72px;
+    padding-top: 22px;
+    border-top: 1px solid var(--ink);
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .refs-list h4 {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+    font-weight: 700;
+  }
+  .refs-list ol {
+    padding-left: 20px;
+    margin: 0;
+  }
+  .refs-list li {
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+  }
+
+  /* EXPERIMENT INSTRUCTIONS */
+  .experiment {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--true);
+    padding: 22px 24px;
+    margin: 36px 0;
+  }
+  .experiment h3 { margin-top: 0; color: var(--true); }
+  .experiment ol { padding-left: 22px; }
+  .experiment li { margin-bottom: 10px; color: var(--ink-soft); }
+  .experiment .warn {
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13.5px;
+    border-radius: 3px;
+    border-left: 2px solid var(--accent);
+  }
+
+  /* PREDICT MOMENT — single-question commit */
+  .commit {
+    background: white;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    padding: 22px;
+    margin: 28px 0;
+  }
+  .commit-q {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .commit-opts {
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .commit-opt {
+    text-align: left;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    padding: 11px 14px;
+    font-family: inherit;
+    font-size: 15.5px;
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 140ms var(--ease);
+  }
+  .commit-opt:hover { border-color: var(--ink); }
+  .commit-opt.picked-right { background: var(--true-soft); border-color: var(--true); color: var(--true); }
+  .commit-opt.picked-wrong { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .commit-opt.show-right { border-color: var(--true); }
+  .commit-fb {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--paper-2);
+    border-left: 3px solid var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .hidden { display: none !important; }
+  body.demo-dragging * { cursor: grabbing !important; }
+</style>
+</head>
+<body>
+
+<main>
+
+  <div class="running-head">
+    <span>Krit Deep Dives · Mechanics</span>
+    <span class="doi">No. 03 · 2026</span>
+  </div>
+
+  <h1>Why a bicycle <em>stays up</em>.</h1>
+  <p class="subtitle">And why the answer everyone gives you is wrong — falsified in print, 2011, but still taught in physics classrooms.</p>
+  <p class="byline">A short paper · 12 minutes · two interactive demos · one experiment for you to run on a real bike</p>
+
+  <!-- Abstract collapsed to a TL;DR + expandable details (Psychology: 150 words of academic prose
+       between the dissonance headline and the §1 predict-commit was a known bounce-risk moment). -->
+  <details class="abstract">
+    <summary style="cursor: pointer; list-style: none; padding-bottom: 6px; border-bottom: 1px solid var(--rule); margin-bottom: 14px;">
+      <span style="font-family: ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.24em; color: var(--muted); text-transform: uppercase; font-weight: 700;">TL;DR · 1 sentence</span>
+      <span style="display: block; font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.45; color: var(--ink); margin-top: 6px; font-style: normal;">
+        Most people think gyroscopic forces keep a bicycle up. <strong>They don't</strong> — a 2011 <em>Science</em> paper<a class="ref" href="#ref-1">[1]</a> built a bike with cancelled gyroscopic forces. It rolled fine. <span style="color: var(--muted); font-size: 14px; display: inline-block; margin-top: 4px;">▸ Expand for the academic framing.</span>
+      </span>
+    </summary>
+    <p>
+      Ask ten engineers why a bicycle stays upright while moving, and roughly nine will say "gyroscopic forces." This explanation is intuitive, repeatedly published in textbooks, and <strong>experimentally false</strong>. The Kooijman team built a bicycle with cancelled gyroscopic forces and cancelled trail — the two effects commonly cited as the source of stability. The bike rode itself just fine.
+    </p>
+    <p style="margin-bottom: 0;">
+      So what actually keeps a bike up? <strong>Stability in motion is not a force, it is a feedback loop.</strong> This paper demolishes the wrong intuition with the 2011 experiment, then rebuilds the correct model — caster effect plus counter-steering plus distributed mass — using two interactive figures, and ends with a physical experiment you can run on any bicycle within 30 seconds of finishing the read.
+    </p>
+  </details>
+
+  <!-- §1 — THE POPULAR ANSWER -->
+  <div class="sec-num">§ 1 · The popular answer (and why it feels right)</div>
+  <h2>The gyroscope intuition.</h2>
+  <p class="lede">
+    A spinning wheel resists being tipped. You can verify this in your hand: hold a bicycle wheel by its axle, spin it, and try to tilt it. The wheel pushes back. This is angular momentum, and it is real.
+  </p>
+  <p>
+    The natural extrapolation is that this same effect — multiplied by two wheels, multiplied by the speed of cycling — keeps the bike upright as it moves. The faster you go, the more "gyroscopic stability" you have, and the harder it is to fall over. This story is satisfying because it explains a familiar fact: bikes really are easier to balance at speed than at a standstill.
+  </p>
+
+  <!-- UX F7 — hint moved ABOVE the figure (was below in muted text, missed by most readers).
+       Also adds cursor:pointer on the figure and a hover ring on the wheel. -->
+  <p style="text-align: center; font-family: 'Source Serif 4', Georgia, serif; font-style: italic; font-size: 13.5px; color: var(--ink-soft); margin: 24px 0 -8px;">
+    ↻ <strong style="color: var(--ink); font-style: normal;">Click the wheel</strong> to start or stop the spin.
+  </p>
+
+  <figure id="gyroFigure" style="cursor: pointer;" aria-label="Interactive: click to spin the wheel">
+    <div class="fig-frame">
+      <svg id="gyroFig" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+        <title>A spinning bicycle wheel demonstrating angular momentum</title>
+        <desc>Interactive figure. A bicycle wheel rotates around its axle when clicked; an arrow shows the angular momentum vector L along the axle.</desc>
+        <defs>
+          <radialGradient id="wheelGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fafaf7"/>
+            <stop offset="100%" stop-color="#d8d1bf"/>
+          </radialGradient>
+          <marker id="redArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a1c1c"/>
+          </marker>
+        </defs>
+        <style>
+          #gyroFigure:hover #gyroHoverRing { opacity: 0.6; }
+          #gyroHoverRing { opacity: 0; transition: opacity 200ms; }
+        </style>
+        <!-- Hover ring — UX F7 signifier -->
+        <circle id="gyroHoverRing" cx="200" cy="140" r="86" fill="none" stroke="#8a1c1c" stroke-width="2" stroke-dasharray="4 4"/>
+        <!-- Axle -->
+        <line x1="120" y1="140" x2="280" y2="140" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+        <!-- Wheel (rotating) -->
+        <g id="gyroWheel" transform="translate(200, 140)">
+          <circle r="78" fill="url(#wheelGrad)" stroke="#14110d" stroke-width="3"/>
+          <circle r="78" fill="none" stroke="#14110d" stroke-width="3"/>
+          <circle r="6" fill="#14110d"/>
+          <!-- spokes -->
+          <line x1="0" y1="0" x2="0" y2="-72" stroke="#5a5448" stroke-width="2"/>
+          <line x1="0" y1="0" x2="62" y2="-36" stroke="#5a5448" stroke-width="2"/>
+          <line x1="0" y1="0" x2="62" y2="36" stroke="#5a5448" stroke-width="2"/>
+          <line x1="0" y1="0" x2="0" y2="72" stroke="#5a5448" stroke-width="2"/>
+          <line x1="0" y1="0" x2="-62" y2="36" stroke="#5a5448" stroke-width="2"/>
+          <line x1="0" y1="0" x2="-62" y2="-36" stroke="#5a5448" stroke-width="2"/>
+          <!-- direction marker on rim -->
+          <circle cx="0" cy="-78" r="6" fill="#8a1c1c"/>
+        </g>
+        <!-- Angular momentum arrow -->
+        <g transform="translate(200, 140)">
+          <line x1="0" y1="0" x2="120" y2="0" stroke="#8a1c1c" stroke-width="2.5" marker-end="url(#redArrow)"/>
+          <text x="130" y="6" fill="#8a1c1c" font-family="ui-monospace, monospace" font-size="13" font-weight="700">L</text>
+          <text x="148" y="6" fill="#8a1c1c" font-family="ui-monospace, monospace" font-size="11">(ang. momentum)</text>
+        </g>
+        <!-- Hand schematic -->
+        <path d="M 90 130 Q 80 140 90 150 L 120 150 L 120 130 Z" fill="#d8d1bf" stroke="#14110d" stroke-width="2"/>
+        <text x="60" y="180" font-family="ui-monospace, monospace" font-size="11" fill="#5a5448">grip</text>
+      </svg>
+    </div>
+    <figcaption><strong>Fig. 1 ·</strong> A spinning wheel. Angular momentum vector L points along the axle. Tilt the wheel and it resists — this is real physics. The popular story extrapolates from this single observation to two wheels on a moving bicycle.</figcaption>
+  </figure>
+
+  <p>
+    Now here is the move that physics textbooks have made for fifty years. <em>If</em> this effect is what stabilises a bicycle, <em>then</em> two predictions follow:
+  </p>
+  <ol>
+    <li><strong>Cancel the angular momentum of the wheels</strong> — for instance, by adding a second, counter-spinning wheel mounted on the same axle — and the bike should become un-rideable.</li>
+    <li><strong>Make the wheels much lighter</strong> — so their angular momentum is much smaller — and the bike should become harder to ride.</li>
+  </ol>
+  <p>
+    Both predictions are testable. They were tested. They failed.
+  </p>
+
+  <!-- COMMIT MOMENT -->
+  <div class="commit">
+    <div class="commit-q">Before reading on — what do you predict?</div>
+    <p style="font-size: 15.5px; color: var(--ink-soft); margin: 0 0 14px;">
+      You build a bicycle whose front and rear wheels have <em>extra counter-rotating flywheels</em> attached to their axles, perfectly cancelling the net gyroscopic effect. You let it go down a gentle slope with no rider. What happens?
+    </p>
+    <div class="commit-opts">
+      <button class="commit-opt" data-pick="falls">A · The bike falls over within a metre or two — gyroscopic forces were what kept it up.</button>
+      <button class="commit-opt" data-pick="stays" data-explain="This is what Kooijman et al observed in 2011 — and the result that shocked physicists who had been teaching the gyroscopic explanation for decades. The bike stayed up. It self-stabilized just like a normal bike. The gyroscopic effect is not necessary for bicycle stability. (Most people pick the first option, including most physics PhDs the authors informally surveyed.)">B · The bike rolls along just fine and self-stabilizes — gyroscopic forces aren't doing the work.</button>
+      <button class="commit-opt" data-pick="wobbles">C · The bike wobbles unstably but doesn't quite fall — gyroscopic forces help a little but aren't the main effect.</button>
+    </div>
+    <div class="commit-fb hidden" id="commitFb"></div>
+  </div>
+
+  <!-- §2 — THE FALSIFICATION -->
+  <div class="sec-num">§ 2 · The 2011 experiment</div>
+  <h2>Kooijman's two-mass-skate bicycle.</h2>
+  <p>
+    The decisive experiment was published by Kooijman, Meijaard, Papadopoulos, Ruina, and Schwab in <em>Science</em> in April 2011<a class="ref" href="#ref-1">[1]</a>. They built a bicycle — specifically engineered to test the gyroscopic and trail explanations — with two properties:
+  </p>
+  <ol>
+    <li><strong>Counter-rotating discs</strong> at each wheel, sized so that the net angular momentum was zero at every speed.</li>
+    <li><strong>Negative trail</strong> — the contact patch was <em>ahead</em> of the steering axis projection on the ground, the opposite of a normal bike, which is the configuration most theorists predicted should make the bike unstable.</li>
+  </ol>
+  <p>
+    On paper, both stability mechanisms were neutralised. The bike should have fallen.
+  </p>
+
+  <div class="claim claim-wrong">
+    <span class="claim-label">The popular claim — what it predicts</span>
+    <strong>"Cancel the gyroscopic forces and remove the caster trail, and a riderless bicycle cannot self-stabilize."</strong> If this claim is true, the Kooijman bike falls within the first few revolutions.
+  </div>
+
+  <div class="claim claim-true">
+    <span class="claim-label">What actually happened</span>
+    <strong>The bike rode itself.</strong> Released down a small incline at walking speed, it stayed upright, recovered from perturbations (pushed laterally with a stick), and continued for the length of the test track without falling.
+  </div>
+
+  <!-- KOOIJMAN ANIMATION — Learning Top-3 #1, single highest-leverage fix across all four
+       prototypes. Posner-Strike (1982) + Chi (2005): prior beliefs survive verbal contradiction
+       far more than perceptual contradiction. Show the bike rolling, with its visibly
+       counter-rotating discs cancelling gyroscopic forces, *not* falling. -->
+  <figure class="wide-fig" aria-label="Kooijman et al's two-mass-skate bicycle, rolling self-stably with gyroscopic forces cancelled">
+    <div class="fig-frame">
+      <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg">
+        <title>Kooijman et al two-mass-skate bicycle — rolling self-stably with gyroscopic forces cancelled</title>
+        <desc>Animated side-view of a bicycle on an inclined plane. Two counter-rotating discs are visible on each wheel; their net angular momentum is zero. The bike rolls forward with a small natural lean that auto-corrects.</desc>
+
+        <!-- Ground / incline -->
+        <line x1="0" y1="200" x2="760" y2="200" stroke="#14110d" stroke-width="2"/>
+        <g stroke="#d8d1bf" stroke-width="1">
+          <line x1="0"   y1="200" x2="40"  y2="210"/>
+          <line x1="80"  y1="200" x2="120" y2="210"/>
+          <line x1="160" y1="200" x2="200" y2="210"/>
+          <line x1="240" y1="200" x2="280" y2="210"/>
+          <line x1="320" y1="200" x2="360" y2="210"/>
+          <line x1="400" y1="200" x2="440" y2="210"/>
+          <line x1="480" y1="200" x2="520" y2="210"/>
+          <line x1="560" y1="200" x2="600" y2="210"/>
+          <line x1="640" y1="200" x2="680" y2="200"/>
+          <line x1="700" y1="200" x2="740" y2="200"/>
+        </g>
+
+        <!-- The bicycle (in a group that rolls left → right + wobbles a tiny lean) -->
+        <g id="kooijmanBike">
+          <!-- Translate the whole bike across the frame -->
+          <animateTransform attributeName="transform" type="translate"
+            values="-100,0; 760,0"
+            dur="6.5s"
+            begin="0s; rolled.end+0.3s"
+            id="rolled"
+            repeatCount="indefinite"/>
+
+          <!-- Small lean wobble — bike "starts to fall," caster catches it, repeats.
+               This is the visible-feedback claim the prose makes. -->
+          <g transform-origin="100 200">
+            <animateTransform attributeName="transform" type="rotate"
+              values="0; -2.5; 0; 2; 0; -1.8; 0"
+              dur="3.2s"
+              repeatCount="indefinite"/>
+
+            <!-- Frame: two triangle struts (rear + front) joined at a top tube + seat post -->
+            <line x1="40" y1="160" x2="100" y2="120" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+            <line x1="100" y1="120" x2="160" y2="160" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+            <line x1="40" y1="160" x2="100" y2="160" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+            <line x1="100" y1="120" x2="100" y2="160" stroke="#14110d" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Saddle (empty, no rider — this is the riderless test bike) -->
+            <line x1="92" y1="118" x2="108" y2="114" stroke="#14110d" stroke-width="4" stroke-linecap="round"/>
+            <!-- Handlebar post + bar -->
+            <line x1="160" y1="160" x2="170" y2="115" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+            <line x1="160" y1="115" x2="180" y2="115" stroke="#14110d" stroke-width="3" stroke-linecap="round"/>
+
+            <!-- Rear wheel + counter-rotating disc inside -->
+            <g>
+              <circle cx="40" cy="170" r="28" fill="none" stroke="#14110d" stroke-width="2.5"/>
+              <!-- Spokes (visible direction marker — rotates ONE way) -->
+              <g>
+                <animateTransform attributeName="transform" type="rotate"
+                  from="0 40 170" to="360 40 170"
+                  dur="0.8s" repeatCount="indefinite"/>
+                <line x1="40" y1="142" x2="40" y2="198" stroke="#5a5448" stroke-width="1.5"/>
+                <line x1="12" y1="170" x2="68" y2="170" stroke="#5a5448" stroke-width="1.5"/>
+              </g>
+              <!-- COUNTER-rotating disc — visibly smaller, mounted on the same axle, rotating opposite -->
+              <g>
+                <animateTransform attributeName="transform" type="rotate"
+                  from="0 40 170" to="-360 40 170"
+                  dur="0.8s" repeatCount="indefinite"/>
+                <circle cx="40" cy="170" r="14" fill="#8a1c1c" opacity="0.18" stroke="#8a1c1c" stroke-width="1.5"/>
+                <line x1="40" y1="156" x2="40" y2="184" stroke="#8a1c1c" stroke-width="1.5"/>
+                <line x1="26" y1="170" x2="54" y2="170" stroke="#8a1c1c" stroke-width="1.5"/>
+              </g>
+              <circle cx="40" cy="170" r="3" fill="#14110d"/>
+            </g>
+
+            <!-- Front wheel + counter-rotating disc -->
+            <g>
+              <circle cx="170" cy="170" r="28" fill="none" stroke="#14110d" stroke-width="2.5"/>
+              <g>
+                <animateTransform attributeName="transform" type="rotate"
+                  from="0 170 170" to="360 170 170"
+                  dur="0.8s" repeatCount="indefinite"/>
+                <line x1="170" y1="142" x2="170" y2="198" stroke="#5a5448" stroke-width="1.5"/>
+                <line x1="142" y1="170" x2="198" y2="170" stroke="#5a5448" stroke-width="1.5"/>
+              </g>
+              <g>
+                <animateTransform attributeName="transform" type="rotate"
+                  from="0 170 170" to="-360 170 170"
+                  dur="0.8s" repeatCount="indefinite"/>
+                <circle cx="170" cy="170" r="14" fill="#8a1c1c" opacity="0.18" stroke="#8a1c1c" stroke-width="1.5"/>
+                <line x1="170" y1="156" x2="170" y2="184" stroke="#8a1c1c" stroke-width="1.5"/>
+                <line x1="156" y1="170" x2="184" y2="170" stroke="#8a1c1c" stroke-width="1.5"/>
+              </g>
+              <circle cx="170" cy="170" r="3" fill="#14110d"/>
+            </g>
+          </g>
+        </g>
+
+        <!-- Annotation legend (static) -->
+        <g transform="translate(20, 20)">
+          <rect x="0" y="0" width="14" height="14" fill="none" stroke="#14110d" stroke-width="2"/>
+          <text x="22" y="12" font-family="ui-monospace, monospace" font-size="11" fill="#14110d">wheel · spinning forward (gyroscope: +L)</text>
+
+          <rect x="0" y="22" width="14" height="14" fill="#8a1c1c" opacity="0.18" stroke="#8a1c1c" stroke-width="1.5"/>
+          <text x="22" y="34" font-family="ui-monospace, monospace" font-size="11" fill="#8a1c1c">counter-rotating disc (gyroscope: −L)</text>
+
+          <text x="0" y="56" font-family="ui-monospace, monospace" font-size="11" fill="#5a5448">net angular momentum across both = 0</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>
+      <strong>Fig. K · Animation.</strong> The Kooijman two-mass-skate bicycle, schematic side view. Each wheel carries a counter-rotating disc (rose) sized so the net gyroscopic moment is zero at every wheel speed. The bike still rolls self-stably, recovering from the small lean perturbations you see in the wobble. <strong>The video is what makes the falsification land.</strong> The original 90-second clip from the Science paper supplementary materials lives at <a href="https://www.science.org/doi/10.1126/science.1201959" target="_blank" rel="noopener" style="color: var(--accent); border-bottom: 1px dotted var(--accent); text-decoration: none;">science.org/doi/10.1126/science.1201959</a> (the embedded video tab) — worth the 90 seconds.
+    </figcaption>
+  </figure>
+
+  <p>
+    The paper concludes — and this is the key sentence for our purposes — that <em>"neither of the two effects commonly identified as necessary for bicycle stability is in fact necessary."</em> A bicycle's self-stability arises from the <strong>combined geometry of the frame, the distribution of mass, and steering dynamics</strong> — and any of several mechanisms can do the work. Different bikes use different combinations.
+  </p>
+  <p>
+    So what <em>does</em> keep a real bike up? Two effects dominate, and they're both more elegant than the gyroscopic story. The first is geometric. The second is the most counterintuitive piece of physics most people will ever encounter while doing something they do every day.
+  </p>
+
+  <!-- §3 — THE CASTER EFFECT -->
+  <div class="sec-num">§ 3 · The caster effect</div>
+  <h2>The front wheel steers itself into the lean.</h2>
+  <p class="lede">
+    Look at a bicycle from the side. Notice that the front wheel's contact with the ground is <em>behind</em> the line of the steering axis projected to the ground. This horizontal distance is called <strong>trail</strong>, and on most bicycles it's around 50–80mm.
+  </p>
+  <p>
+    This is the same geometry as a shopping cart's front wheel, or a furniture caster. Push a shopping cart forward and the caster wheels naturally swing to align with the direction of motion — they don't need to be steered. The same effect, on a bicycle, is what keeps the front wheel pointing where it needs to point.
+  </p>
+  <p>
+    But there's a more interesting consequence. <strong>When the bike leans, the caster effect makes the front wheel automatically steer into the direction of the lean.</strong> Drag the slider below.
+  </p>
+
+  <figure class="wide-fig">
+    <div class="fig-frame">
+      <svg id="casterFig" viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interactive caster-effect demonstration">
+        <title>Caster effect — the front wheel auto-steers into the direction of bike lean</title>
+        <desc>Side view of a bike on the left, top-down view of the front wheel on the right. Drag the bike-lean slider below: the front wheel rotates into the lean automatically, with no rider input. The amount of rotation depends on the caster trail.</desc>
+        <!-- Background reference grid -->
+        <g stroke="#ebe5d2" stroke-width="1">
+          <line x1="0" y1="280" x2="720" y2="280"/>
+          <line x1="360" y1="0" x2="360" y2="360"/>
+        </g>
+        <text x="708" y="296" font-family="ui-monospace, monospace" font-size="10" fill="#5a5448" text-anchor="end">ground</text>
+
+        <!-- Bike (rear view, schematic) -->
+        <g id="bikeGroup" transform="translate(360, 280)">
+          <!-- Rear wheel (we render only as a circle) -->
+          <circle id="bikeRearWheel" cx="0" cy="-50" r="50" fill="none" stroke="#14110d" stroke-width="3"/>
+          <line x1="0" y1="0" x2="0" y2="-50" stroke="#14110d" stroke-width="2" stroke-dasharray="3 3"/>
+          <!-- Frame stylized as a rider's torso -->
+          <line x1="0" y1="-50" x2="0" y2="-140" stroke="#14110d" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="0" cy="-160" r="14" fill="#14110d"/>
+          <!-- Lean indicator -->
+          <text id="bikeLeanLabel" x="20" y="-100" font-family="ui-monospace, monospace" font-size="11" fill="#8a1c1c" font-weight="700">0°</text>
+        </g>
+
+        <!-- Top-down view inset on the right showing the front wheel -->
+        <g transform="translate(540, 60)">
+          <text x="0" y="-12" font-family="ui-monospace, monospace" font-size="10" letter-spacing="0.14em" fill="#5a5448" text-transform="uppercase">Front wheel · top-down</text>
+          <rect x="-30" y="-30" width="160" height="240" fill="white" stroke="#d8d1bf" stroke-width="1"/>
+          <!-- bike going forward = up the inset -->
+          <text x="50" y="220" font-family="ui-monospace, monospace" font-size="10" fill="#5a5448" text-anchor="middle">↑ direction of motion</text>
+          <!-- steering axis (vertical line through pivot at top of headtube projected to ground = a point) -->
+          <circle id="pivotDot" cx="50" cy="100" r="3" fill="#5a5448"/>
+          <text x="58" y="103" font-family="ui-monospace, monospace" font-size="9" fill="#5a5448">pivot</text>
+          <!-- trail (line from pivot to contact patch behind) -->
+          <line id="trailLine" x1="50" y1="100" x2="50" y2="160" stroke="#5a5448" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="58" y="135" font-family="ui-monospace, monospace" font-size="9" fill="#5a5448">trail</text>
+          <!-- the front wheel itself (rectangle), pivoting around pivot -->
+          <g id="frontWheelGroup" transform="translate(50, 130) rotate(0)">
+            <rect x="-4" y="-32" width="8" height="64" fill="#14110d" rx="2"/>
+            <!-- contact patch dot at bottom -->
+            <circle cx="0" cy="30" r="3" fill="#8a1c1c"/>
+          </g>
+        </g>
+
+        <!-- Numeric readout -->
+        <g transform="translate(40, 40)">
+          <text font-family="ui-monospace, monospace" font-size="10" letter-spacing="0.14em" fill="#5a5448" text-transform="uppercase" x="0" y="0">Steering angle (auto)</text>
+          <text id="steerOut" font-family="Source Serif 4, Georgia, serif" font-weight="800" font-size="34" fill="#14110d" x="0" y="36">0°</text>
+        </g>
+      </svg>
+    </div>
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label"><span>Bike lean (you control)</span><span class="val" id="leanVal">0°</span></div>
+        <input type="range" id="leanSlider" min="-30" max="30" value="0" step="1">
+      </div>
+      <div class="control-group">
+        <div class="control-label"><span>Caster trail</span><span class="val" id="trailVal">60mm</span></div>
+        <input type="range" id="trailSlider" min="0" max="120" value="60" step="5">
+      </div>
+    </div>
+    <figcaption><strong>Fig. 2 · Interactive.</strong> Drag the <em>bike lean</em> slider. Notice that without any rider input, the front wheel (top-down inset, right) <strong>automatically rotates into the direction of the lean.</strong> The amount of rotation depends on the trail — try setting trail to zero, then increasing it. The wheel turn at zero trail collapses to zero. <em>This auto-steering is what most of bicycle self-stability really is.</em></figcaption>
+  </figure>
+
+  <p>
+    Here is what's happening in the figure. When the bike leans to the right by angle θ, gravity pulls the bike's mass sideways and, crucially, also acts on the front-wheel contact patch — which is offset behind the steering axis (the trail). That offset converts the lateral pull into a <em>torque</em> around the steering axis. The torque rotates the front wheel toward the lean. A bike leaning right has its front wheel auto-steering right. The bike starts turning right. The turn produces an outward centripetal acceleration that <strong>pushes the bike back upright.</strong>
+  </p>
+  <p>
+    Notice the structure of this explanation. There is no "force" holding the bike up. There is a <em>feedback loop</em>: lean → steer → turn → un-lean → repeat. The bike doesn't resist falling; it <strong>recovers from starting to fall</strong>, fast enough that you never notice.
+  </p>
+
+  <div class="claim claim-true">
+    <span class="claim-label">The principle, named</span>
+    <strong>Stability in motion is not a force. It is a feedback loop with sufficient gain and short enough delay.</strong> Same principle in autopilots, in cruise control, in walking, in heart-rate regulation, in nearly every system that "just stays" where it should be.
+  </div>
+
+  <!-- §4 — COUNTER-STEERING -->
+  <div class="sec-num">§ 4 · Counter-steering</div>
+  <h2>To turn left, you push the handlebars right.</h2>
+  <p class="lede">
+    Here is the piece of physics most cyclists do every day without knowing. If you want to turn a bicycle <em>left</em> at any speed above walking pace, you do not push the handlebars left. <strong>You push them right — briefly — and the bike turns left.</strong>
+  </p>
+  <p>
+    This is called <em>counter-steering</em>, and it sounds wrong until you understand the chain of events. Below, simulate a left-turn maneuver. The slider represents your handlebar input. Watch the resulting trajectory.
+  </p>
+
+  <figure class="wide-fig">
+    <div class="fig-frame">
+      <svg id="counterFig" viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Counter-steering simulator">
+        <title>Counter-steering — to turn left, you push the handlebars right</title>
+        <desc>Top-down trajectory simulation. Choose a goal direction and a handlebar push direction, then play. The bike's trajectory deflects opposite to the push direction first, then carves a turn that direction. Mismatching push to goal turns the bike toward the goal.</desc>
+        <!-- top-down view of a bike trajectory -->
+        <defs>
+          <marker id="redArrowSmall" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a1c1c"/>
+          </marker>
+          <marker id="trueArrowSmall" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2d5e3a"/>
+          </marker>
+        </defs>
+        <!-- Lane lines -->
+        <g stroke="#ebe5d2" stroke-width="1">
+          <line x1="0" y1="60" x2="720" y2="60"/>
+          <line x1="0" y1="160" x2="720" y2="160" stroke-dasharray="6 6"/>
+          <line x1="0" y1="260" x2="720" y2="260"/>
+        </g>
+        <text x="710" y="74" font-family="ui-monospace, monospace" font-size="10" fill="#5a5448" text-anchor="end">left edge</text>
+        <text x="710" y="254" font-family="ui-monospace, monospace" font-size="10" fill="#5a5448" text-anchor="end">right edge</text>
+
+        <!-- Trajectory path (will be drawn dynamically) -->
+        <path id="trajPath" d="M 60 160" fill="none" stroke="#14110d" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Bike marker (top-down) -->
+        <g id="bikeMarker" transform="translate(60, 160) rotate(0)">
+          <rect x="-22" y="-5" width="44" height="10" fill="#14110d" rx="3"/>
+          <circle cx="14" cy="0" r="4" fill="#8a1c1c"/>
+        </g>
+
+        <!-- Phase labels -->
+        <g id="phaseLabel" transform="translate(360, 30)">
+          <text id="phaseText" font-family="ui-monospace, monospace" font-size="11" letter-spacing="0.14em" fill="#5a5448" text-anchor="middle" text-transform="uppercase">PHASE 1 · handlebar input causes momentary opposite lean</text>
+        </g>
+      </svg>
+    </div>
+    <div class="controls">
+      <div class="control-group">
+        <div class="control-label"><span>Your goal</span></div>
+        <div class="btn-row">
+          <button class="btn btn-toggle on" id="goalLeft">Turn LEFT</button>
+          <button class="btn btn-toggle" id="goalRight">Turn RIGHT</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="control-label"><span>Handlebar push</span><span class="val" id="hbVal">left</span></div>
+        <div class="btn-row">
+          <button class="btn btn-toggle on" id="hbLeft">Push LEFT</button>
+          <button class="btn btn-toggle" id="hbRight">Push RIGHT</button>
+        </div>
+      </div>
+      <div class="control-group" style="flex: 0 0 auto;">
+        <button class="btn" id="counterPlay">▷  Run</button>
+      </div>
+    </div>
+    <figcaption><strong>Fig. 3 · Interactive.</strong> Pick your turning <em>goal</em>, then pick a handlebar <em>push</em>. Run the simulation. Try matching push-direction to goal-direction first — the result is the opposite of what you want. Then try mismatching them. <em>To go LEFT, push RIGHT.</em></figcaption>
+  </figure>
+
+  <p>
+    The reason is mechanical. At speed, pushing the handlebars right does <strong>not</strong> immediately turn the bike right. Instead, it shifts the contact patch of the front wheel to the right relative to the bike's centre of mass, which makes the bike <em>fall to the left</em>. Now you have a bike leaning left at speed. The caster effect from §3 then kicks in: the front wheel auto-rotates left, the bike steers left, you turn left.
+  </p>
+  <p>
+    The whole maneuver takes maybe 200 milliseconds. Experienced cyclists do it without conscious thought; ask one to consciously demonstrate it and they will often deny doing it at all. Motorcycle instructors, however, teach it explicitly — at motorcycle speeds the effect is too pronounced to ignore. Many fatal motorcycle accidents are people <em>trying to steer normally</em> into a curve and finding their bike going straight off the road instead.
+  </p>
+
+  <!-- §5 — THE EXPERIMENT -->
+  <div class="sec-num">§ 5 · Run the experiment yourself</div>
+  <h2>The 30-second confirmation on a real bike.</h2>
+  <p>
+    The most efficient way to convince yourself of counter-steering is to feel it. Find a bicycle, find a quiet street or empty parking lot, and try the following. (If you've ridden a bike before, you already know how to counter-steer — your body figured it out unconsciously. The exercise is to make it conscious.)
+  </p>
+
+  <div class="experiment">
+    <h3>Procedure</h3>
+    <ol>
+      <li>Get up to a comfortable speed on flat ground — fast enough that you're not balancing slowly. Roughly 15 km/h is right.</li>
+      <li>Choose a direction to turn — say, <strong>left</strong>.</li>
+      <li>Without leaning your body, <strong>push the LEFT handlebar grip forward</strong> (i.e., steer the front wheel left). Just a small push.</li>
+      <li>Notice what happens. The bike will resist turning left and instead start drifting <em>right</em>, despite the front wheel pointing left.</li>
+      <li>Now do the opposite. <strong>Push the LEFT grip BACKWARD</strong> — i.e., steer the front wheel slightly right. Notice the bike lean left, then carve a clean left turn.</li>
+      <li>Switch hands, switch sides, repeat until the chain of events <em>(push right → lean left → carve left)</em> stops feeling counterintuitive.</li>
+    </ol>
+    <div class="warn"><strong>Safety:</strong> Try this with low traffic and a helmet. The first few attempts feel wrong and you may briefly weave. Empty parking lot is ideal.</div>
+  </div>
+
+  <p>
+    Once you've felt it, the popular gyroscopic explanation will become uninhabitable for you. You will not be able to look at a bicycle the same way. You'll also notice that you've been doing this every day, on every bike you've ever ridden, since you were five years old — without ever having a word for it.
+  </p>
+
+  <!-- §6 — THE BROADER LESSON -->
+  <div class="sec-num">§ 6 · The broader lesson</div>
+  <h2>What the wrong intuition tells us about all intuitions.</h2>
+  <p>
+    The gyroscopic-stability story is what philosophers of science call a <em>"just-so" explanation</em>. It uses a real and observable effect (angular momentum), maps it onto a phenomenon that needs explaining (bike stability), and stops there. It feels complete. It is taught. It survives in textbooks for decades. <strong>It was wrong, on average, for fifty years</strong>.
+  </p>
+  <p>
+    The fix in 2011 wasn't a better theory in the armchair. It was an experiment specifically designed to be <em>falsifiable</em>: if the story is right, our bike falls. The bike didn't fall. The story dies.
+  </p>
+  <p>
+    This is the pattern. Whenever you believe something you can't easily test, ask: <em>what observation would I have to make to know I'm wrong?</em> If you can't construct the answer, you're holding a belief, not a model. Kooijman and colleagues built a bike that made the belief check itself. We can all do that more often, in domains less photogenic than cycling.
+  </p>
+
+  <div class="claim claim-true" style="font-size: 17.5px;">
+    <span class="claim-label">For your toolkit</span>
+    The strongest beliefs you'll hold are the ones you've successfully <em>tried</em> to falsify and failed. Belief without an attempted falsification is just inherited intuition.
+  </div>
+
+  <!-- BETWEEN-SESSION HOOK · open Zeigarnik loop closing only on the next read.
+       Psychology Top-3 #3 — currently no anticipation between sessions. -->
+  <div style="margin: 48px 0 0; padding: 24px 26px; background: var(--paper-2); border-left: 4px solid var(--true); border-radius: 0 6px 6px 0;">
+    <div class="sec-num" style="margin-top: 0; color: var(--true);">Open loop · for next time</div>
+    <h3 style="margin: 0 0 12px; font-size: 19px;">Once you've felt counter-steering on a bike, you can answer this:</h3>
+    <p style="font-size: 15.5px; line-height: 1.55; color: var(--ink); margin: 0 0 10px;">
+      <strong>Why is counter-steering more pronounced — and more dangerous — on a motorcycle than on a bicycle?</strong> (Hint: motorcycles weigh 200kg+, move 5× faster, and the angular momentum of their wheels is genuinely large. Some of the gyroscopic story <em>is</em> right at motorcycle scale, even though it isn't at bicycle scale. Most riding fatalities involve people instinctively steering into a curve and finding their bike going straight off the road.)
+    </p>
+    <p style="font-size: 14px; color: var(--muted); margin: 0;">
+      Try the parking-lot experiment first. Then revisit this question with the felt experience in your hands.
+    </p>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="refs-list">
+    <h4>References &amp; further reading</h4>
+    <ol>
+      <li id="ref-1">
+        Kooijman, J. D. G., Meijaard, J. P., Papadopoulos, J. M., Ruina, A., &amp; Schwab, A. L. (2011). <em>A bicycle can be self-stable without gyroscopic or caster effects.</em> Science, 332(6027), 339–342. <a href="https://www.science.org/doi/10.1126/science.1201959" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent);">DOI: 10.1126/science.1201959</a>
+      </li>
+      <li>
+        Meijaard, J. P., Papadopoulos, J. M., Ruina, A., &amp; Schwab, A. L. (2007). <em>Linearized dynamics equations for the balance and steer of a bicycle: a benchmark and review.</em> Proceedings of the Royal Society A, 463(2084), 1955–1982. <span style="color: var(--muted);">The mathematical companion paper deriving the equations of motion that the 2011 experiment tests.</span>
+      </li>
+      <li>
+        Jones, D. E. H. (1970). <em>The stability of the bicycle.</em> Physics Today, 23(4), 34–40. <span style="color: var(--muted);">The original David Jones "unrideable bicycle" experiments — the first published attempt to falsify the gyroscopic explanation. Forty years ahead of its time and largely ignored until Kooijman et al. rediscovered the result.</span>
+      </li>
+      <li>
+        Wilson, D. G., &amp; Papadopoulos, J. (2004). <em>Bicycling Science</em> (3rd ed.), MIT Press. <span style="color: var(--muted);">The standard reference. Chapter 8 covers stability and control with appropriate caveats added after 2011.</span>
+      </li>
+    </ol>
+    <p style="margin-top: 22px; font-size: 12.5px; color: var(--muted);">
+      Krit Deep Dives · Mechanics · No. 03 · v0.1 prototype · This paper was written for the curious non-physicist; the mathematics is in the references. If you build the riderless test rig, send video.
+    </p>
+  </div>
+
+</main>
+
+<script>
+/* ───────── §1 · Gyroscope figure (just spins) ───────── */
+(function gyroDemo() {
+  const wheel = document.getElementById('gyroWheel');
+  if (!wheel) return;
+  let spinning = false;
+  let angle = 0;
+  let raf = null;
+  function tick() {
+    angle = (angle + 6) % 360;
+    wheel.setAttribute('transform', `translate(200, 140) rotate(${angle})`);
+    if (spinning) raf = requestAnimationFrame(tick);
+  }
+  // UX F7 — listen on the parent <figure> (cursor:pointer set in HTML) so the whole
+  // figure area is a click target, not just the SVG canvas.
+  const fig = document.getElementById('gyroFigure') || document.getElementById('gyroFig');
+  fig.addEventListener('click', () => {
+    spinning = !spinning;
+    if (spinning) raf = requestAnimationFrame(tick);
+    else if (raf) cancelAnimationFrame(raf);
+  });
+})();
+
+/* ───────── §1 · Commit moment ───────── */
+document.querySelectorAll('.commit-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    if (opt.disabled) return;
+    const pick = opt.dataset.pick;
+    document.querySelectorAll('.commit-opt').forEach(o => {
+      o.disabled = true;
+      if (o.dataset.pick === 'stays') o.classList.add('show-right');
+    });
+    opt.classList.add(pick === 'stays' ? 'picked-right' : 'picked-wrong');
+    const fb = document.getElementById('commitFb');
+    fb.classList.remove('hidden');
+    const correctOpt = document.querySelector('.commit-opt[data-pick="stays"]');
+    fb.innerHTML = '<strong>' + (pick === 'stays' ? 'You picked the result that surprised the field.' : 'The bike stays up.') + '</strong> ' + correctOpt.dataset.explain;
+  });
+});
+
+/* ───────── §3 · Caster figure ───────── */
+(function casterDemo() {
+  const bikeGroup = document.getElementById('bikeGroup');
+  const leanLabel = document.getElementById('bikeLeanLabel');
+  const frontWheelGroup = document.getElementById('frontWheelGroup');
+  const trailLine = document.getElementById('trailLine');
+  const steerOut = document.getElementById('steerOut');
+  const leanSlider = document.getElementById('leanSlider');
+  const trailSlider = document.getElementById('trailSlider');
+  const leanVal = document.getElementById('leanVal');
+  const trailVal = document.getElementById('trailVal');
+  if (!bikeGroup) return;
+
+  function render() {
+    const lean = +leanSlider.value;
+    const trail = +trailSlider.value;
+    leanVal.textContent = (lean >= 0 ? '+' : '') + lean + '°';
+    trailVal.textContent = trail + 'mm';
+
+    // Bike rear view tilts
+    bikeGroup.setAttribute('transform', `translate(360, 280) rotate(${lean})`);
+    leanLabel.textContent = (lean >= 0 ? '+' : '') + lean + '°';
+
+    // Caster physics (simplified): steer angle proportional to lean × normalized trail
+    const trailFactor = trail / 60;  // 60mm = baseline
+    const steerAngle = lean * 0.85 * trailFactor;
+    frontWheelGroup.setAttribute('transform', `translate(50, ${100 + trail * 0.5}) rotate(${steerAngle})`);
+    trailLine.setAttribute('y2', 100 + trail * 0.5 + 30);
+    steerOut.textContent = (steerAngle >= 0 ? '+' : '') + steerAngle.toFixed(1) + '°';
+    steerOut.setAttribute('fill', Math.abs(steerAngle) > 1 ? '#8a1c1c' : '#14110d');
+  }
+
+  // rAF-throttle
+  let pendingRender = false;
+  function schedule() {
+    if (pendingRender) return;
+    pendingRender = true;
+    requestAnimationFrame(() => { pendingRender = false; render(); });
+  }
+  leanSlider.addEventListener('input', schedule);
+  trailSlider.addEventListener('input', schedule);
+
+  // Drag class for cursor
+  [leanSlider, trailSlider].forEach(s => {
+    s.addEventListener('pointerdown', () => document.body.classList.add('demo-dragging'));
+    s.addEventListener('pointerup',   () => document.body.classList.remove('demo-dragging'));
+    s.addEventListener('pointercancel', () => document.body.classList.remove('demo-dragging'));
+  });
+
+  render();
+})();
+
+/* ───────── §4 · Counter-steering simulator ───────── */
+(function counterDemo() {
+  const traj = document.getElementById('trajPath');
+  const bikeMarker = document.getElementById('bikeMarker');
+  const phaseText = document.getElementById('phaseText');
+  if (!traj) return;
+
+  let goal = 'left';
+  let push = 'left';
+  let raf = null;
+  let startT = 0;
+
+  function setActive(group, val, mapping) {
+    Object.keys(mapping).forEach(k => {
+      document.getElementById(mapping[k]).classList.toggle('on', k === val);
+    });
+  }
+
+  document.getElementById('goalLeft').addEventListener('click', () => {
+    goal = 'left';
+    setActive('goal', 'left', { left: 'goalLeft', right: 'goalRight' });
+  });
+  document.getElementById('goalRight').addEventListener('click', () => {
+    goal = 'right';
+    setActive('goal', 'right', { left: 'goalLeft', right: 'goalRight' });
+  });
+  document.getElementById('hbLeft').addEventListener('click', () => {
+    push = 'left';
+    setActive('push', 'left', { left: 'hbLeft', right: 'hbRight' });
+    document.getElementById('hbVal').textContent = 'left';
+  });
+  document.getElementById('hbRight').addEventListener('click', () => {
+    push = 'right';
+    setActive('push', 'right', { left: 'hbLeft', right: 'hbRight' });
+    document.getElementById('hbVal').textContent = 'right';
+  });
+
+  function run() {
+    if (raf) cancelAnimationFrame(raf);
+    startT = performance.now();
+    // Reset trajectory
+    traj.setAttribute('d', 'M 60 160');
+    let points = [{ x: 60, y: 160 }];
+
+    function step(now) {
+      const t = (now - startT) / 1000;  // seconds
+      if (t > 5) return;
+
+      const x = 60 + t * 120;
+      // Counter-steering physics:
+      //   PHASE 1 (0 - 0.4s): the handlebar push causes a momentary OPPOSITE lateral shift
+      //   PHASE 2 (0.4s+):    the resulting lean (opposite of push) drives the caster turn IN THE LEAN DIRECTION
+      //
+      // pushSign: +1 if push right, -1 if push left
+      // The bike's trajectory in y deflects in OPPOSITE direction of push.
+      const pushSign = (push === 'right' ? 1 : -1);
+      const turnDirection = -pushSign;  // bike goes opposite to push
+      let y = 160;
+      if (t < 0.4) {
+        // small wobble in the push direction first (front wheel briefly heads toward push)
+        y += pushSign * 8 * (t / 0.4);
+        phaseText.textContent = 'PHASE 1 · handlebar push → bike starts leaning OPPOSITE';
+      } else {
+        // Then carving turn in opposite direction
+        const ct = t - 0.4;
+        y += pushSign * 8 - turnDirection * 60 * ct * ct;
+        phaseText.textContent = 'PHASE 2 · lean activates caster → bike carves TOWARD lean';
+      }
+      // clamp y
+      y = Math.max(40, Math.min(280, y));
+
+      points.push({ x, y });
+      // Build path string
+      const d = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+      traj.setAttribute('d', d);
+
+      // Bike marker direction from last two points
+      const p1 = points[points.length - 1];
+      const p0 = points[Math.max(0, points.length - 4)];
+      const ang = Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180 / Math.PI;
+      bikeMarker.setAttribute('transform', `translate(${p1.x}, ${p1.y}) rotate(${ang})`);
+
+      raf = requestAnimationFrame(step);
+    }
+    raf = requestAnimationFrame(step);
+  }
+
+  document.getElementById('counterPlay').addEventListener('click', run);
+  // Run once on load to show something
+  run();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · The Science of Well-Being</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#b32d2d;--accent-soft:#f5d2d2;--accent-strong:#7a1818;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">The Science of Well-Being</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Miswanting</option><option value="L2">L2 · Hedonic adaptation</option><option value="L3">L3 · G.I.Joe fallacy</option><option value="L4">L4 · Two cheat codes</option><option value="L5">L5 · Diagnostics</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most well-being advice is <em>true and useless</em>. What you'll measure: why salary raises stop helping, the gap between knowing and doing, and what to track for 14 days to actually shift baseline mood.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Miswanting', L2:'Hedonic adaptation', L3:'G.I.Joe fallacy', L4:'Cheat codes', L5:'Diagnostics' } };
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'You wanted the wrong thing, mostly',what:'Watch: predicted vs actual happiness.',footer:'Gilbert (2006): people predict 7/10 happiness from the new car. Six months in, they\'re back to 5/10 — same as before. The wanting was the problem.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Predicted vs actual happiness, after a "good thing"</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/>
+  <path d="M40,140 L460,30" fill="none" stroke="var(--saffron)" stroke-width="2" stroke-dasharray="4 4"/>
+  <text x="465" y="30" font-family="ui-monospace" font-size="10" fill="var(--saffron)">predicted</text>
+  <path d="M40,140 L100,40 L160,60 L260,90 L380,120 L460,130" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <text x="465" y="135" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">actual</text></svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'The promotion that didn\'t fix it',what:'Watch: 4 milestones, 4 returns to baseline.',footer:'Each "big win" gives a 4-6 week happiness bump, then back to baseline. The next win starts from the same place. The treadmill is real.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Four wins, one constant baseline</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="120" x2="460" y2="120" stroke="var(--accent-strong)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="44" y="115" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">baseline</text>
+  ${[0,1,2,3].map(i=>`<rect x="${60+i*100}" y="50" width="60" height="0" fill="var(--accent)"><animate attributeName="height" values="0;70;70;5" keyTimes="0;.2;.6;1" dur="2s" begin="${i*.5}s" fill="freeze"/></rect><text x="${90+i*100}" y="195" text-anchor="middle" font-family="ui-monospace" font-size="10">${['raise','car','flat','marriage'][i]}</text>`).join('')}</svg>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Predict what would NOT make you happier',what:'Try: rank 5 changes by predicted impact.',footer:'Research consistently shows: income above ~₹15L/yr (India) barely moves daily mood. Relationships and meaning move it. Most people invert this.',scaffold:2,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Spending more time with people you like','Doing something you\\'re uniquely good at','Sleeping an extra hour','Salary raise (above ₹15L/yr)','New car / phone upgrade'];const shuf=[...correct].sort(()=>Math.random()-.5);
+  s.innerHTML=`<h3>Rank by ACTUAL impact on weekly happiness (highest at top)</h3>
+  <div id="L1i01_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L1i01_c" style="margin-top:14px">Check vs research</button>
+  <div class="reveal" id="L1i01_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L1i01_l'));
+  s.querySelector('#L1i01_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L1i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Aligned with research.</strong> Time-with-people + signature strengths sit at the top. Salary and gadgets sit at the bottom — they hit baseline within weeks.':'<strong>Common inversion.</strong> Most people put salary in the top 2. The research puts it in the bottom 2 (above the ₹15L/yr threshold). Relationships + flow activities are the levers.';SFX.success();};}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Spot your own miswanting',what:'Try: pick which "want" is likely to backfire.',footer:'A want backfires when it\'s status-driven, comparison-based, and reversible the next week by a peer\'s purchase. Test every want against this.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'A car ₹5L nicer than my current one',a:true,why:'Status comparison, hedonic adaptation 6 weeks. Classic miswanting.'},{q:'A weekly dinner with three close friends',a:false,why:'Time with close people is the most reliable happiness lever.'},{q:'Promotion to VP (₹8L raise + 15hr/wk extra)',a:true,why:'Above the threshold, raise is invisible. The hours cost is real.'},{q:'An extra hour of sleep a night',a:false,why:'Most reliable single intervention. Affects nearly every mood marker.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Likely backfires</button><button class="btn ghost" data-p="false">Solid bet</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a?'Backfires.':'Solid.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+/* L2 — hedonic adaptation */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Why nothing stays special',what:'Watch: novelty curve, daily.',footer:'Novelty halves every ~2 weeks. The new flat is special; the same flat after 8 weeks is just where you live. This is a feature of perception, not a bug.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Novelty decay</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><path d="M${40+',30 '}${Array.from({length:30},(_,i)=>{const t=i/30;return ' L '+(40+t*420)+','+(30+t*t*120);}).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <text x="60" y="30" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">"WOW"</text>
+  <text x="430" y="155" font-family="ui-monospace" font-size="10" fill="var(--muted)">"meh"</text>
+  ${[0,4,12,24].map((d,i)=>`<text x="${40+(d/30)*420}" y="195" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--muted)">${d===0?'day 0':'day '+d}</text>`).join('')}</svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'The interruption trick',what:'Watch: same gift, with breaks.',footer:'Watching the show in one binge: 6/10 enjoyment. Watching the same show with breaks: 8/10. Counterintuitive — but interruption resets novelty.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The Wilson/Nelson "interruption" finding</h3>
+  <div class="stat-grid">${[['Continuous good experience','6.2/10','red'],['Same experience, with breaks','8.1/10','green'],['Bonus: bad experiences','reversed — breaks hurt','amber']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Apply: don\'t spread your favourite indulgence flat — punctuate it.</p>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Stretch the novelty',what:'Try: design a 14-day pleasant experience.',footer:'Two 30-min ice-cream sessions a week beat one 60-min binge. Capacity for joy is per-event, not per-hour. Design for events.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>How will you spread 14 hours of "good thing"?</h3>
+  <label>Frequency<input type="range" id="L2i01_f" min="1" max="14" value="7" style="width:60%"><span id="L2i01_vf" style="margin-left:8px;color:var(--ink);font-weight:700">7×</span></label>
+  <div class="stat-grid" style="margin-top:14px">
+    <div class="stat"><div class="stat-label">Sessions per fortnight</div><div class="stat-value" id="L2i01_s">—</div></div>
+    <div class="stat"><div class="stat-label">Predicted joy total</div><div class="stat-value amber" id="L2i01_j">—</div></div>
+    <div class="stat"><div class="stat-label">Verdict</div><div class="stat-value" id="L2i01_v" style="font-size:14px">—</div></div>
+  </div>`;
+  const u=()=>{const f=+s.querySelector('#L2i01_f').value;s.querySelector('#L2i01_vf').textContent=f+'×';s.querySelector('#L2i01_s').textContent=f;const per=Math.min(8,8-Math.abs(7-f)*0.3);const tot=Math.round(per*f);s.querySelector('#L2i01_j').textContent=tot+' joy-units';let v,c;if(f<3){v='Too rare — anticipation fades';c='red';}else if(f>=5&&f<=9){v='Sweet spot — 5–9 sessions';c='green';}else if(f<=12){v='Too frequent — habituation creeps';c='amber';}else{v='Daily = baseline. Bad design.';c='red';}s.querySelector('#L2i01_v').textContent=v;s.querySelector('#L2i01_v').className='stat-value '+c;};
+  s.querySelector('#L2i01_f').oninput=()=>{SFX.hover();u();};u();}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Re-savour: write 3 lines',what:'Try: write 3 specific moments from last week.',footer:'Re-savouring = mentally re-experiencing a good moment. 3 specific moments, 60 seconds each, daily — increases baseline mood within 2 weeks (Seligman et al).',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Three good moments from last week</h3>
+  <p class="desc">Specific beats generic. Each line should contain: a place or time, a person or sense (sun, sound, smell, taste), and a concrete moment — not a feeling label.</p>
+  ${[1,2,3].map(i=>`<textarea id="L2i02_${i}" style="width:100%;min-height:50px;margin:6px 0" placeholder="Moment ${i} — e.g. 'Cycling home Tuesday evening, sun behind me, light turned green as I rolled up'"></textarea>`).join('')}
+  <button class="btn" id="L2i02_c" style="margin-top:8px">Check specificity</button>
+  <div class="reveal" id="L2i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L2i02_c').onclick=()=>{const ts=[1,2,3].map(i=>s.querySelector('#L2i02_'+i).value.trim());const placeRe=/morning|evening|afternoon|night|monday|tuesday|wednesday|thursday|friday|saturday|sunday|home|office|street|park|cafe|kitchen|terrace|train|metro|car|station|\d+\s*(am|pm|o'?clock)/i;const senseRe=/sun|rain|wind|cold|warm|hot|smell|sound|music|taste|laugh|voice|colour|color|sky|sweat|breeze|light|dark/i;const feelingOnly=/^(i felt|i was)\s+\w+\.?$/i;const moments=ts.map(t=>{const hasPlace=placeRe.test(t),hasSense=senseRe.test(t),tooVague=t.length<25||feelingOnly.test(t);return{t,hasPlace,hasSense,tooVague,ok:hasPlace&&hasSense&&!tooVague};});const ok=moments.filter(m=>m.ok).length;const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(ok===3?'win':'bad');r.innerHTML=`<strong>${ok}/3 specific enough.</strong><br>${moments.map((m,i)=>`<div style="margin-top:4px;font-size:12px"><strong>${i+1}:</strong> ${m.ok?'✓ specific':(!m.hasPlace?'✗ no time/place':!m.hasSense?'✗ no sense or person':'✗ too vague')}</div>`).join('')}<br>${ok===3?'Re-experiencing a specific moment is the active ingredient. Two weeks of this — baseline mood typically rises ~10%.':'A line like "I felt good Tuesday" doesn\\'t trigger re-experience. Re-write with one sense + one moment.'}`;SFX.click();};}},
+
+/* L3 — G.I.Joe */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'Knowing ≠ doing',what:'Watch: gap between awareness and behaviour.',footer:'Most adults know their habits hurt them. Most don\'t change. Awareness alone moves behaviour by ~5%. The work is in the system that surrounds the awareness.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The G.I.Joe fallacy</h3>
+  <div class="stat-grid">${[['Knows sugar is bad','94%','red'],['Knows exercise helps','97%','red'],['Acts on either','22%','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">"Knowing is half the battle." Half is generous.</p>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'Friction beats intention',what:'Watch: one less click — adoption doubles.',footer:'Behaviour-change literature: reduce friction by one step → adoption ~2×. Add one step → drops by half. Most intentions die at the third click.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Friction map: gym</h3>
+  <svg viewBox="0 0 500 200">${[['Gym in basement',82,'green'],['Gym 10-min walk',47,'amber'],['Gym 20-min drive',21,'red'],['Gym 30+ min',6,'red']].map(([n,p,c],i)=>`<rect x="200" y="${30+i*38}" width="${p*3}" height="28" fill="var(--accent)" opacity="${p/100+.2}"><animate attributeName="width" from="0" to="${p*3}" dur=".8s" begin="${i*.2}s" fill="freeze"/></rect><text x="195" y="${48+i*38}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${205+p*3}" y="${48+i*38}" font-family="ui-monospace" font-size="11" font-weight="700">${p}%</text>`).join('')}</svg>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Add friction to a bad habit',what:'Try: 3 ways to make Instagram harder.',footer:'Each friction unit roughly halves usage. Logout + delete app + no homescreen icon = ~10× harder to open. Boring habit = forgotten habit.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Lock down Instagram</h3>
+  ${['Log out after every session','Move icon to last screen, in a folder','Delete the app; only use mobile web','Tell a friend you\\'re quitting (commitment)','Set screen-time hard limit (30m/day)','Replace the impulse: open Krit instead','Turn off all notifications','Greyscale your phone'].map(t=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Predicted reduction</div><div class="stat-value amber" id="L3i01_r">0%</div></div>`;
+  const u=()=>{const n=s.querySelectorAll('input:checked').length;const r=Math.min(95,n*15);const e=s.querySelector('#L3i01_r');e.textContent='-'+r+'%';e.className='stat-value '+(r>=60?'green':r>=30?'amber':'red');};
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Implementation intention builder',what:'Try: write "if X, then Y".',footer:'Goal: vague. Implementation intention: concrete. "When my alarm goes off, I put on my running shoes before opening my phone." Doubles follow-through (Gollwitzer 1999).',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Write yours: IF [cue], THEN [action]</h3>
+  <div class="row" style="margin:14px 0;align-items:stretch">
+    <span style="display:flex;align-items:center;font-family:ui-monospace,monospace;font-size:13px">IF</span>
+    <input type="text" id="L3i02_if" placeholder="alarm goes off at 6:30am" style="flex:1">
+    <span style="display:flex;align-items:center;font-family:ui-monospace,monospace;font-size:13px">THEN</span>
+    <input type="text" id="L3i02_th" placeholder="put on running shoes before checking phone" style="flex:1">
+  </div>
+  <div class="reveal" id="L3i02_r" style="display:none"></div>
+  <button class="btn" id="L3i02_c">Check it</button>`;
+  s.querySelector('#L3i02_c').onclick=()=>{const ifx=s.querySelector('#L3i02_if').value.trim(),th=s.querySelector('#L3i02_th').value.trim();const r=s.querySelector('#L3i02_r');r.style.display='block';if(ifx.length<10||th.length<10){r.className='reveal bad';r.innerHTML='<strong>Too vague.</strong> Both halves need specific, observable triggers/actions. "Tomorrow I\\'ll exercise" doesn\\'t work; "When I finish my morning chai, I put on running shoes" does.';}else{r.className='reveal win';r.innerHTML='<strong>Solid structure.</strong> Read it aloud once a day for 7 days; the pairing becomes automatic. Most habits fail because they\\'re not paired with a trigger.';}SFX.click();};}},
+
+/* L4 — cheat codes */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'Sleep — the actual cheat code',what:'Watch: mood vs sleep hours.',footer:'7-9 hours: stable mood. <6 hours: -23% mood, -31% memory, +15% impulsivity. Most people are chronically under-slept; most "well-being" advice ignores this.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Sleep deficit is the dominant factor</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/>${[4,5,6,7,8,9].map((h,i)=>{const m=[40,55,70,90,92,93][i];return `<rect x="${60+i*65}" y="${170-m}" width="50" height="${m}" fill="var(--accent)" opacity="${m/100}"><animate attributeName="height" from="0" to="${m}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="${85+i*65}" y="190" text-anchor="middle" font-family="ui-monospace" font-size="11">${h}h</text>`;}).join('')}<text x="40" y="30" font-family="ui-monospace" font-size="10" fill="var(--muted)">mood score</text></svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'Exercise — the under-the-radar one',what:'Watch: 20 min walk vs antidepressant.',footer:'Blumenthal et al, Duke 1999: 16 weeks of aerobic exercise = SSRI for mild-moderate depression. The catch: only if it\'s sustained. 8 weeks doesn\'t do it.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Comparable effects, in trial conditions</h3>
+  <div class="stat-grid">${[['SSRI (sertraline)','60% recovery','amber'],['Exercise (3×/wk, 30min)','60% recovery','green'],['Both','69% recovery','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">at week 16</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Recurrence at 6 months: exercise group lower than meds group. Habit > drug for sustaining.</p>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Three habits beat one perfect one',what:'Try: build a stack; commit to test it.',footer:'Three habits stacked beat any single perfect one. 7h sleep + 20m walk + 1 close conversation/day → ~40% baseline-mood lift in 4 weeks. The stack effect compounds; the single-habit effect plateaus.',scaffold:3,runtime:'30-60s',mechanic:'live-explorer-lock',
+  mount(s){s.innerHTML=`<h3>Build your 4-week stack</h3>
+  ${[['Sleep hours','sl',7,5,9],['Movement min/day','mv',20,0,60],['Close-conversation count/wk','cv',3,0,7]].map(([n,k,d,mn,mx])=>`<label style="display:block;margin:8px 0"><span style="display:inline-block;width:200px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L4i01_${k}" min="${mn}" max="${mx}" value="${d}" style="width:40%"><span class="v" id="L4i01_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}</span></label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Predicted 4-week mood lift</div><div class="stat-value" id="L4i01_r">—</div></div>
+  <button class="btn" id="L4i01_lock" style="margin-top:8px">Commit to this stack</button>
+  <div class="reveal" id="L4i01_v" style="display:none;margin-top:10px"></div>`;
+  const u=()=>{const sl=+s.querySelector('#L4i01_sl').value,mv=+s.querySelector('#L4i01_mv').value,cv=+s.querySelector('#L4i01_cv').value;['sl','mv','cv'].forEach(k=>s.querySelector('#L4i01_v'+k).textContent=s.querySelector('#L4i01_'+k).value);const score=(sl>=7?15:sl>=6?8:-5)+Math.min(20,mv*0.5)+Math.min(15,cv*3);s.querySelector('#L4i01_r').textContent=(score>0?'+':'')+score+'%';};
+  ['sl','mv','cv'].forEach(k=>s.querySelector('#L4i01_'+k).oninput=()=>{SFX.hover();u();s.querySelector('#L4i01_v').style.display='none';});
+  s.querySelector('#L4i01_lock').onclick=()=>{const sl=+s.querySelector('#L4i01_sl').value,mv=+s.querySelector('#L4i01_mv').value,cv=+s.querySelector('#L4i01_cv').value;const score=(sl>=7?15:sl>=6?8:-5)+Math.min(20,mv*0.5)+Math.min(15,cv*3);const v=s.querySelector('#L4i01_v');v.style.display='block';let msg,cls;if(sl<7){msg=`<strong>Stack locked at ${score}%.</strong> The bottleneck is sleep (${sl}h). Below 7h, the other two habits compound less. Fix sleep first; the stack does its job from there.`;cls='bad';}else if(score>=30){msg=`<strong>Stack locked at +${score}%.</strong> Each habit fed each other — sleep enabled the walk, the walk seeded the conversation, the conversation enabled tomorrow\\'s sleep. Run for 14 days; recheck baseline mood.`;cls='win';}else{msg=`<strong>Locked at +${score}%.</strong> Workable. Push one lever harder for the bigger compounding — usually movement (the cheapest variable to add).`;cls='';}v.className='reveal '+cls;v.innerHTML=msg;SFX.click();};u();}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Pick what you\'d cut to make room',what:'Try: which to drop to find 30 min/day.',footer:'No new habit gets adopted without an old habit losing time. Pick the lowest-value 30 min in your week; the new habit goes there.',scaffold:4,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){s.innerHTML=`<h3>You need 30 min/day. What do you cut?</h3>
+  <div class="row" id="L4i02_pool" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+    ${['Doomscrolling','TV after dinner','Long commute (route change)','Social drinks','News headlines','Phone in bed','Recurring meetings','Email reflex-check'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="lane" data-l="cut"><h4>Cut</h4><div class="drop"></div></div>
+    <div class="lane" data-l="keep"><h4>Keep</h4><div class="drop"></div></div>
+  </div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));
+  s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const id=t?.dataset?.id;if(!id)return;const cl=t.cloneNode(true);cl.style.cursor='default';l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));}},
+
+/* L5 — diagnostics */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'The 5-question PERMA',what:'Watch: 5 axes of well-being.',footer:'Seligman\'s PERMA: Positive emotion · Engagement · Relationships · Meaning · Accomplishment. Score each 1-10 weekly; track the gaps over time.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>PERMA, the field map</h3><svg viewBox="0 0 400 320"><g transform="translate(200,160)">${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2-Math.PI/2;const r=[110,80,140,90,120][i];const x1=Math.cos(a)*150,y1=Math.sin(a)*150;const x2=Math.cos(a)*r,y2=Math.sin(a)*r;return `<line x1="0" y1="0" x2="${x1}" y2="${y1}" stroke="var(--rule)" stroke-dasharray="2 2"/><circle cx="${x2}" cy="${y2}" r="5" fill="var(--accent)"/><text x="${x1*1.18}" y="${y1*1.18}" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--ink)">${['Positive','Engaged','Relate','Meaning','Accomplish'][i]}</text>`;}).join('')}<polygon points="${[0,1,2,3,4].map(i=>{const a=i/5*Math.PI*2-Math.PI/2;const r=[110,80,140,90,120][i];return Math.cos(a)*r+','+Math.sin(a)*r;}).join(' ')}" fill="var(--accent)" fill-opacity=".2" stroke="var(--accent)" stroke-width="2"/></g></svg>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'The mood ticker',what:'Watch: 14-day mood graph.',footer:'Track once a day for 14 days. Pattern shows up in week 2 — usually 1-2 weekly cycles + a sleep-correlated dip. The data is the intervention.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>14 days, one number a day</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><polyline points="${Array.from({length:14},(_,i)=>(40+i*30)+','+(170-(50+Math.sin(i*0.9)*30+(i%7===0?-15:0)))).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>${Array.from({length:14},(_,i)=>`<circle cx="${40+i*30}" cy="${170-(50+Math.sin(i*0.9)*30+(i%7===0?-15:0))}" r="4" fill="var(--accent-strong)"/>`).join('')}<text x="40" y="190" font-family="ui-monospace" font-size="9" fill="var(--muted)">d1</text><text x="430" y="190" font-family="ui-monospace" font-size="9" fill="var(--muted)">d14</text></svg>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Rate your PERMA today',what:'Try: 5 sliders, see your shape.',footer:'PERMA is a self-report instrument. Reliability lifts with weekly use. Use the gaps (e.g. low Meaning) to choose the next 14-day intervention.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Score each 1-10</h3>
+  ${['Positive emotion (joy, gratitude)','Engagement (flow, absorption)','Relationships (felt connected)','Meaning (purpose, contribution)','Accomplishment (achieved, progressed)'].map((n,i)=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:240px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L5i01_${i}" min="1" max="10" value="6" style="width:30%"><span class="v" id="L5i01_v${i}" style="margin-left:8px;color:var(--ink);font-weight:700">6</span></label>`).join('')}
+  <div class="reveal" id="L5i01_r" style="margin-top:14px"></div>`;
+  const u=()=>{const v=[0,1,2,3,4].map(i=>+s.querySelector('#L5i01_'+i).value);[0,1,2,3,4].forEach(i=>s.querySelector('#L5i01_v'+i).textContent=v[i]);const min=Math.min(...v);const idx=v.indexOf(min);const names=['Positive emotion','Engagement','Relationships','Meaning','Accomplishment'];const r=s.querySelector('#L5i01_r');r.className='reveal '+(min>=7?'win':min<=4?'bad':'');r.innerHTML=`<strong>Lowest: ${names[idx]} (${min}/10).</strong> Target the next 14 days at this axis specifically — not the whole stack at once.`;};
+  [0,1,2,3,4].forEach(i=>s.querySelector('#L5i01_'+i).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Design your 14-day experiment',what:'Try: pick one intervention; commit to a measurement.',footer:'A 14-day experiment with one intervention and one measurement beats a 365-day "be healthier" plan. Specific. Time-bound. Falsifiable.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Your 14-day spec</h3>
+  <div class="row" style="margin:10px 0"><label>Intervention<select id="L5i02_i" style="margin-left:8px"><option>Sleep 7+ hrs every night</option><option>20 min walk after lunch</option><option>One close conversation/day</option><option>No phone after 9pm</option><option>3 savouring notes/evening</option></select></label></div>
+  <div class="row" style="margin:10px 0"><label>Measurement<select id="L5i02_m" style="margin-left:8px"><option>Daily mood 1-10 at 8pm</option><option>Hours of focused work</option><option>Number of social interactions</option><option>Sleep tracker minutes</option></select></label></div>
+  <button class="btn" id="L5i02_c">Lock the spec</button>
+  <div class="reveal" id="L5i02_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelector('#L5i02_c').onclick=()=>{const i=s.querySelector('#L5i02_i').value,m=s.querySelector('#L5i02_m').value;const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal win';r.innerHTML=`<strong>Your spec.</strong> Intervention: <em>${i}</em>. Measurement: <em>${m}</em>. <br><br>Run for 14 days. At the end: did the measurement change? If yes, keep doing it. If no, discard and try the next. Two-week experiments compound; year-long resolutions don\\'t.`;SFX.success();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

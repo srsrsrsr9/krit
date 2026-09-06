@@ -154,6 +154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where the month-end days actually go — 8-day close, broken down."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Classify-then-verify"
@@ -247,6 +253,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · AI-assisted close: 8 days → 4 — stretch removed."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 80/20 split between AI and CA"
@@ -261,6 +273,12 @@
           "caption": "The split is not vague. Every engagement should be able to colour-code each task into one of these two slices.",
           "maxWidth": 540,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 320' role='img'><rect width='540' height='320' rx='14' fill='#FAF5FF'/><g transform='translate(140 50)'><circle cx='100' cy='100' r='100' fill='#FFF'/><path d='M100 100 L100 0 A100 100 0 1 1 21.13 158.78 Z' fill='#10B981' stroke='#065F46' stroke-width='2'/><path d='M100 100 L21.13 158.78 A100 100 0 0 1 100 0 Z' fill='#F43F5E' stroke='#9F1239' stroke-width='2'/><text x='130' y='80' fill='#FFF' font-family='sans-serif' font-size='28' font-weight='bold' text-anchor='middle'>80</text><text x='130' y='105' fill='#FFF' font-family='monospace' font-size='10' text-anchor='middle'>AI</text><text x='55' y='150' fill='#FFF' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle'>20</text><text x='55' y='168' fill='#FFF' font-family='monospace' font-size='9' text-anchor='middle'>CA only</text></g><g transform='translate(20 250)' font-family='monospace' font-size='10' fill='#065F46'><rect x='0' y='0' width='14' height='14' fill='#10B981'/><text x='22' y='12'>extract / classify / reconcile / draft / summarise</text></g><g transform='translate(20 275)' font-family='monospace' font-size='10' fill='#9F1239'><rect x='0' y='0' width='14' height='14' fill='#F43F5E'/><text x='22' y='12'>signature / judgment / opinion / disclosure</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build your close timeline — drag tasks onto days 1-5."
         },
         {
           "type": "chatScenario",
@@ -587,6 +605,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Where to automate — and where not to — tune four phases; lock to commit."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "A ledger is patterns at scale; AI is a machine for patterns at scale; the match is structural, not magical.",
@@ -679,6 +703,12 @@
               "md": "An LLM cheerfully returned ₹14,28,000 as a total. The actual figure was ₹14,82,000. Two digits swapped, comma placement identical, ₹54,000 of ITC marooned. With text, a typo is visible. With numbers, a typo is money."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Recon at scale: 5000 lines — matched + unmatched + ambiguous."
         },
         {
           "type": "heading",
@@ -774,6 +804,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The 3% that's where you earn your fee — 5 typical exception types."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 'show your sources' demand"
@@ -788,6 +824,12 @@
           "caption": "Every extracted value carries a pointer home. If the pointer is missing or fabricated, the value is suspect.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FAF5FF'/><g transform='translate(30 30)'><rect width='220' height='220' rx='10' fill='#FFF' stroke='#8B5CF6' stroke-width='2'/><text x='110' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#5B21B6' font-weight='bold'>SOURCE INVOICE</text><g font-family='monospace' font-size='10' fill='#1F2937'><text x='14' y='50'>L1: ABC Industries Pvt Ltd</text><text x='14' y='66'>L2: 14, MIDC Hinjewadi, Pune</text><text x='14' y='82'>L3: GSTIN 27ABCDE1234F1Z5</text><text x='14' y='98'>L4: Inv #INV-2026-0421</text><text x='14' y='114'>L5: Date: 14-Apr-2026</text><text x='14' y='130'>L6: --- ITEMS ---</text><text x='14' y='146'>L7: Cotton yarn... 12,40,000</text><text x='14' y='162'>L8: Add IGST 18%   2,23,200</text><text x='14' y='178'>L9: --- ---</text><text x='14' y='194'>L10: Total 14,63,200</text></g></g><g transform='translate(330 50)'><rect width='240' height='180' rx='10' fill='#F5F3FF' stroke='#8B5CF6' stroke-width='2'/><text x='120' y='24' text-anchor='middle' font-family='monospace' font-size='11' fill='#5B21B6' font-weight='bold'>EXTRACTED + CITED</text><g font-family='monospace' font-size='10' fill='#1F2937'><text x='14' y='52'>vendor: 'ABC Industries' (L1)</text><text x='14' y='72'>gstin: '27ABCDE...' (L3)</text><text x='14' y='92'>invoice: 'INV-2026-0421' (L4)</text><text x='14' y='112'>taxable: 12,40,000 (L7)</text><text x='14' y='132'>igst: 2,23,200 (L8)</text><text x='14' y='152'>total: 14,63,200 (L10)</text></g></g><g stroke='#8B5CF6' stroke-width='1.5' fill='none' opacity='0.6'><path d='M252 60 Q300 70 330 65' stroke-dasharray='3 3'/><path d='M252 90 Q300 100 330 105' stroke-dasharray='3 3'/><path d='M252 195 Q300 180 330 165' stroke-dasharray='3 3'/></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Classify 5 exceptions — drag exceptions to their type."
         },
         {
           "type": "chatScenario",
@@ -1114,6 +1156,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · When AI says 87% confident — pick a confidence threshold."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Numbers are not text. A wrong number looks identical to a right one; verification is non-negotiable.",
@@ -1206,6 +1254,12 @@
               "md": "Indian bank narrations vary every month for the same vendor — abbreviations, truncations, channel codes, capitalisation. Exact matching gives up. A model that does embedding similarity does not."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Same vendor, 4 ledger categories — messy real-world data."
         },
         {
           "type": "heading",
@@ -1305,6 +1359,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · AI categorisation accuracy by chart of accounts — accuracy vs # of accounts."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The human-in-the-loop tier"
@@ -1319,6 +1379,12 @@
           "caption": "The human-in-the-loop tier is at the top of the pyramid — small in volume, decisive in impact.",
           "maxWidth": 540,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 320' role='img'><rect width='540' height='320' rx='14' fill='#FAF5FF'/><g transform='translate(170 30)'><polygon points='100,0 60,80 140,80' fill='#F43F5E' stroke='#9F1239' stroke-width='2'/><polygon points='60,80 30,180 170,180 140,80' fill='#FCD34D' stroke='#92400E' stroke-width='2'/><polygon points='30,180 0,260 200,260 170,180' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='100' y='52' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF' font-weight='bold'>CA only</text><text x='100' y='65' text-anchor='middle' font-family='monospace' font-size='8' fill='#FFF'>~5%</text><text x='100' y='130' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>AI proposes</text><text x='100' y='145' text-anchor='middle' font-family='monospace' font-size='11' fill='#7C2D12' font-weight='bold'>CA reviews</text><text x='100' y='160' text-anchor='middle' font-family='monospace' font-size='9' fill='#7C2D12'>~15%</text><text x='100' y='220' text-anchor='middle' font-family='monospace' font-size='12' fill='#FFF' font-weight='bold'>AI auto-accepted</text><text x='100' y='236' text-anchor='middle' font-family='monospace' font-size='10' fill='#FFF'>(with sampling)</text><text x='100' y='250' text-anchor='middle' font-family='monospace' font-size='9' fill='#FFF'>~80%</text></g><g transform='translate(440 50)'><line x1='0' y1='0' x2='0' y2='220' stroke='#1F2937' stroke-width='2' marker-start='url(#arr)' marker-end='url(#arr)'/><text x='10' y='30' font-family='monospace' font-size='10' fill='#9F1239'>high ₹</text><text x='10' y='200' font-family='monospace' font-size='10' fill='#065F46'>low ₹</text><text x='10' y='115' font-family='monospace' font-size='9' fill='#1F2937'>at stake</text></g><defs><marker id='arr' viewBox='0 0 10 10' refX='5' refY='5' markerWidth='5' markerHeight='5' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Categorise 6 transactions — drag each to the right bucket."
         },
         {
           "type": "chatScenario",
@@ -1650,6 +1716,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Write the categorisation prompt — write a prompt with rules + memory."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Reconciliation is fuzzy matching at scale; AI is a fuzzy matcher; the alignment is structural, not magical.",
@@ -1742,6 +1814,12 @@
               "md": "Sandeep filed a GSTR-3B based on a ChatGPT paragraph that quoted a superseded version of Rule 36(4). The notice arrived in three weeks. Without RAG against the current corpus, you're filing against a stale snapshot."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What anomaly detection actually catches — 4 anomaly types."
         },
         {
           "type": "heading",
@@ -1837,6 +1915,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · False positive rate over 6 months — tuning pays off."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The never-ship rule for filings"
@@ -1851,6 +1935,12 @@
           "caption": "AI ends at the review desk. The CA's hand is the only one on the upload button.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(20 80)'><rect width='130' height='80' rx='10' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='65' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#1E3A8A' font-weight='bold'>AI drafts</text><text x='65' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>populates GSTR-3B</text><text x='65' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>from books</text></g><path d='M150 120 L190 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(190 80)'><rect width='150' height='80' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='75' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#92400E' font-weight='bold'>CA reviews</text><text x='75' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>changes / confirms /</text><text x='75' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>signs the artefact</text></g><line x1='350' y1='40' x2='350' y2='200' stroke='#F43F5E' stroke-width='4' stroke-dasharray='6 4'/><text x='350' y='30' text-anchor='middle' font-family='monospace' font-size='10' fill='#9F1239' font-weight='bold'>NEVER-SHIP LINE</text><path d='M360 120 L400 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(400 80)'><rect width='180' height='80' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='90' y='30' text-anchor='middle' font-family='monospace' font-size='12' fill='#065F46' font-weight='bold'>CA-signed file</text><text x='90' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>uploaded to GST portal</text><text x='90' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>by the CA</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Which flags would you investigate? — 5 flags, pick the 2 worth investigating."
         },
         {
           "type": "chatScenario",
@@ -2182,6 +2272,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Tune the anomaly threshold — balance investigations vs catch-rate."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Indian tax law is finite and indexed; there is no excuse for asking AI to recall when retrieval is one query away.",
@@ -2274,6 +2370,12 @@
               "md": "Old working papers were tick marks and partner initials in a manila file. New working papers are timestamped JSON in an eval log. The format is digital; the discipline is identical."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What a regulator wants to see — 5 columns in your AI log."
         },
         {
           "type": "heading",
@@ -2369,6 +2471,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · When the prompt changes, restate — model v1 vs v2 categorising last quarter."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The four-eye review"
@@ -2383,6 +2491,12 @@
           "caption": "Four eyes, two distinct CAs, one shipped artefact. The discipline isn't new; what's new is what the eyes are looking at.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240' role='img'><rect width='600' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(20 80)'><rect width='110' height='80' rx='10' fill='#DBEAFE' stroke='#1E3A8A' stroke-width='2'/><text x='55' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#1E3A8A' font-weight='bold'>AI draft</text><text x='55' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>+ retrieved</text><text x='55' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1E3A8A'>passages</text></g><path d='M130 120 L160 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(160 70)'><rect width='130' height='100' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='28' text-anchor='middle' font-family='monospace' font-size='11' fill='#92400E' font-weight='bold'>Reviewer 1</text><g transform='translate(40 40)'><ellipse cx='10' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='10' cy='10' r='3' fill='#1F2937'/><ellipse cx='30' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='30' cy='10' r='3' fill='#1F2937'/></g><text x='65' y='80' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>senior CA</text></g><path d='M290 120 L320 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(320 70)'><rect width='130' height='100' rx='10' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='65' y='28' text-anchor='middle' font-family='monospace' font-size='11' fill='#92400E' font-weight='bold'>Reviewer 2</text><g transform='translate(40 40)'><ellipse cx='10' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='10' cy='10' r='3' fill='#1F2937'/><ellipse cx='30' cy='10' rx='8' ry='5' fill='#FFF' stroke='#1F2937'/><circle cx='30' cy='10' r='3' fill='#1F2937'/></g><text x='65' y='80' text-anchor='middle' font-family='sans-serif' font-size='9' fill='#92400E'>partner</text></g><path d='M450 120 L480 120' stroke='#1F2937' stroke-width='2' marker-end='url(#a)'/><g transform='translate(480 80)'><rect width='100' height='80' rx='10' fill='#D1FAE5' stroke='#065F46' stroke-width='2'/><text x='50' y='30' text-anchor='middle' font-family='monospace' font-size='11' fill='#065F46' font-weight='bold'>shipped</text><text x='50' y='50' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>signed +</text><text x='50' y='66' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>logged</text></g><defs><marker id='a' viewBox='0 0 10 10' refX='8' refY='5' markerWidth='6' markerHeight='6' orient='auto'><path d='M0 0 L10 5 L0 10 z' fill='#1F2937'/></marker></defs></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Build an audit-trail row — fill all required columns."
         },
         {
           "type": "chatScenario",
@@ -2707,6 +2821,12 @@
             "good": "Pramod is happy with the broad design but corrects you on the eval log granularity or the four-eye review structure. Re-read the lesson on the eval log and the lone-reviewer shortcut. Bring v2 of the policy on Monday morning.",
             "learn": "Pramod is firm. *'Anand, this is the lesson the entire 90 days has been preparing you for. AI cannot sign. The CA signs, with evidence. Re-read the lesson on the eval log and the four-eye review. We will write the policy together on Monday.'* The disciplinary case in the field notes is in the textbook because a partner almost lost his ICAI registration over a Saturday-evening shortcut. Do not be that partner in 12 years."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-for-accounting.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Spot the unauditable AI use — 4 use cases; flag the unauditable ones."
         },
         {
           "type": "keyTakeaways",

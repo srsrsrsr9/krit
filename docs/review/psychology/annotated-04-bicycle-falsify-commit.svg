@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>Bicycle — productive dissonance vs academic density</title>
+  <image x="0" y="0" width="1440" height="900"
+         xlink:href="file:///Users/srinivasvedantam/Documents/Me/elemes/v2/project-docs-v6/docs/review/screenshots/04-mechanics-top.png"/>
+
+  <!-- 1. "stays up" claret-italics — productive cognitive dissonance -->
+  <rect x="425" y="140" width="560" height="120" fill="rgba(245,158,11,0.16)" stroke="#f59e0b" stroke-width="3"/>
+  <circle cx="421" cy="140" r="14" fill="#fff" stroke="#f59e0b" stroke-width="2"/>
+  <text x="421" y="147" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#f59e0b">1</text>
+
+  <!-- 2. abstract block — academic density up front -->
+  <rect x="425" y="460" width="590" height="360" fill="rgba(124,58,237,0.14)" stroke="#7c3aed" stroke-width="3"/>
+  <circle cx="421" cy="460" r="14" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="421" y="467" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#7c3aed">2</text>
+
+  <g transform="translate(40,840)" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#222">
+    <rect x="0" y="-12" width="14" height="14" fill="rgba(245,158,11,0.5)" stroke="#f59e0b"/>
+    <text x="22" y="0">1 claret-italics "stays up" violates expectation → System 2 wakes up (Kahneman). Earned, not contrived.</text>
+    <rect x="0" y="8" width="14" height="14" fill="rgba(124,58,237,0.35)" stroke="#7c3aed"/>
+    <text x="22" y="20">2 dense academic ABSTRACT delays the predict-commit moment by ~400 words — friction without reward (Fogg)</text>
+  </g>
+</svg>

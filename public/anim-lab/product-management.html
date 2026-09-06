@@ -1,0 +1,177 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Product Management</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#0284c7;--accent-soft:#cfe6f5;--accent-strong:#0367a3;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">Product Management</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · What a PM does</option><option value="L2">L2 · Talking to users</option><option value="L3">L3 · PRDs &amp; prioritization</option><option value="L4">L4 · Roadmaps</option><option value="L5">L5 · Ship + measure</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">PM is mostly <em>saying no</em>. What you'll practice: weighing 8 features into a 3-slot Now lane, finding the missing PRD section before review, and watching the activation funnel where users actually drop.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'What a PM does', L2:'Talking to users', L3:'PRDs & priorities', L4:'Roadmaps', L5:'Ship + measure' } };
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'The PM Venn — three jobs at once',what:'Watch: where business, tech, UX overlap.',footer:'Most PM job-descriptions ask for one of three. The actual job is the overlap. If you only do one, your team will pass you in two quarters.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The intersection</h3><svg viewBox="0 0 500 240"><circle cx="180" cy="100" r="80" fill="var(--accent)" fill-opacity=".25" stroke="var(--accent)"/><circle cx="320" cy="100" r="80" fill="var(--saffron)" fill-opacity=".25" stroke="var(--saffron)"/><circle cx="250" cy="180" r="80" fill="var(--rose)" fill-opacity=".25" stroke="var(--rose)"/><text x="120" y="100" font-family="ui-monospace" font-size="11" font-weight="800">BUSINESS</text><text x="350" y="100" font-family="ui-monospace" font-size="11" font-weight="800">TECH</text><text x="220" y="220" font-family="ui-monospace" font-size="11" font-weight="800">UX</text><text x="250" y="150" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="800" fill="var(--accent-strong)">PM</text></svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'PM\'s output is the meeting that didn\'t happen',what:'Watch: time saved by good prioritisation.',footer:'A PM who can\'t cut 10 hours of useless work per week is shipping the same as no PM. The work that doesn\'t happen is the value.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Hours-per-week — before vs after a real PM</h3><svg viewBox="0 0 500 200">${[['Bad PRDs','before',12,'red'],['Meetings about meetings','before',8,'red'],['Real prioritisation','after',3,'green'],['Async writing','after',2,'green']].map(([n,p,h,c],i)=>`<rect x="100" y="${30+i*36}" width="${h*22}" height="24" fill="var(--${c}-soft||var(--paper-2))" stroke="var(--${c==='red'?'rose':'emerald'})"><animate attributeName="width" from="0" to="${h*22}" dur="1s" begin="${i*0.3}s" fill="freeze"/></rect><text x="92" y="${48+i*36}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${110+h*22}" y="${48+i*36}" font-family="ui-monospace" font-size="11" font-weight="700">${h}h</text>`).join('')}</svg>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Triangulate your PM identity',what:'Try: rate yourself on 3 axes.',footer:'No PM is great at all three. Pick the two your role most needs; coach the third. Self-rating below 6/10 on all three = you\'re not yet operating as a PM.',scaffold:2,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Rate yourself</h3>
+  ${['Business / commercial','Technical depth','UX / design instinct'].map((n,i)=>`<label style="display:block;margin:8px 0"><span style="display:inline-block;width:200px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L1i01_${i}" min="1" max="10" value="6" style="width:50%"><span class="v" id="L1i01_v${i}" style="margin-left:8px;color:var(--ink);font-weight:700">6</span></label>`).join('')}
+  <div class="reveal" id="L1i01_r" style="margin-top:14px"></div>`;
+  const u=()=>{const v=[0,1,2].map(i=>+s.querySelector('#L1i01_'+i).value);[0,1,2].forEach(i=>s.querySelector('#L1i01_v'+i).textContent=v[i]);const min=Math.min(...v);const sum=v.reduce((a,b)=>a+b,0);const r=s.querySelector('#L1i01_r');r.className='reveal '+(min>=7?'win':sum>=18?'':'bad');r.innerHTML=min>=7?'<strong>Generalist.</strong> Rare. Beware of being thinly competent — pick a specialty within the next two roles.':sum<=12?'<strong>Operating gap.</strong> All three below 5/10 suggests you\\'re still learning the craft. Pair with a senior PM for 3 months.':v.indexOf(min)===0?'<strong>Tech/UX PM.</strong> Business is your gap — sit in on pricing/finance review.':v.indexOf(min)===1?'<strong>Biz/UX PM.</strong> Tech is your gap — pair with eng leads for a month.':'<strong>Biz/Tech PM.</strong> UX is your gap — sit through 5 user tests this quarter.';};
+  [0,1,2].forEach(i=>s.querySelector('#L1i01_'+i).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Decompose your week — fake work vs real',what:'Try: drag 10 PM activities into fake vs real.',footer:'Most PMs spend 30-50% of their week on fake work — status meetings, ceremony, replying-to-replies. The real work is async, slow, and uncomfortable.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){s.innerHTML=`<h3>Fake work or real work?</h3>
+  <div class="row" id="L1i02_pool" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+    ${['Status meeting','User interview','Forward-and-CC reply','Write PRD draft','Standup attendance','Calibrate roadmap with eng','Brainstorm session','Read tickets in JIRA','Watch a customer use the product','Tag-everyone Slack thread'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="lane" data-l="real"><h4>Real PM work</h4><div class="drop"></div></div>
+    <div class="lane" data-l="fake"><h4>Fake / theatre</h4><div class="drop"></div></div>
+  </div>
+  <div class="reveal" id="L1i02_r" style="display:none;margin-top:14px"></div>`;
+  const truth={'Status meeting':'fake','User interview':'real','Forward-and-CC reply':'fake','Write PRD draft':'real','Standup attendance':'fake','Calibrate roadmap with eng':'real','Brainstorm session':'fake','Read tickets in JIRA':'real','Watch a customer use the product':'real','Tag-everyone Slack thread':'fake'};
+  const placed={};
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));
+  s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,(t)=>{const id=t?.dataset?.id;if(!id||placed[id])return;placed[id]=l.dataset.l;const c=t.cloneNode(true);c.style.cursor='default';l.querySelector('.drop').appendChild(c);t.style.opacity='.2';
+    if(Object.keys(placed).length===10){const right=Object.entries(placed).filter(([k,v])=>truth[k]===v).length;const r=s.querySelector('#L1i02_r');r.style.display='block';r.className='reveal '+(right>=8?'win':'bad');r.innerHTML=`<strong>${right}/10 correct.</strong> Real PM work is generative (writing PRDs, watching users) or convergent (calibrating with eng). Fake work is reactive (replying, attending, brainstorming with no decision).`;}}));}},
+
+/* L2 — user interviews */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Users lie. Watch them.',what:'Watch: stated vs revealed preference gap.',footer:'90% of users say they want a feature. 12% actually use it. Watch what they do; ignore what they say.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The stated/revealed gap</h3>
+  <svg viewBox="0 0 500 200"><rect x="60" y="40" width="${0.92*350}" height="40" fill="var(--accent-soft)" stroke="var(--accent)"><animate attributeName="width" from="0" to="${0.92*350}" dur="1s" fill="freeze"/></rect>
+  <rect x="60" y="100" width="${0.12*350}" height="40" fill="var(--rose-soft)" stroke="var(--rose)"><animate attributeName="width" from="0" to="${0.12*350}" dur="1s" begin="0.5s" fill="freeze"/></rect>
+  <text x="50" y="65" text-anchor="end" font-family="ui-monospace" font-size="11">Said they want it</text>
+  <text x="50" y="125" text-anchor="end" font-family="ui-monospace" font-size="11">Actually used it</text>
+  <text x="${65+0.92*350}" y="65" font-family="ui-monospace" font-size="11" font-weight="700">92%</text>
+  <text x="${65+0.12*350}" y="125" font-family="ui-monospace" font-size="11" font-weight="700" fill="var(--rose)">12%</text></svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'The five whys',what:'Watch: surface need → real need.',footer:'Don\'t accept the first answer. Five "why"s gets you from feature request to job-to-be-done. The real need is usually hiding three whys deep.',scaffold:1,runtime:'30-60s',mechanic:'cascade-reveal',
+  mount(s){s.innerHTML=`<h3>"I want a dashboard"</h3>
+  <div id="L2a02_st" style="display:flex;flex-direction:column;gap:6px"></div>
+  <button class="btn" id="L2a02_b" style="margin-top:10px">Why?</button>`;
+  const steps=['"I want a dashboard"','Why? "To see metrics."','Why? "To know if we\\'re on track."','Why? "Because my boss asks in the 1:1."','Why? "And I never have a good answer."','Real need: <em>not data, but confidence going into the 1:1.</em>'];
+  let i=0;const r=()=>{i++;if(i>steps.length)return;s.querySelector('#L2a02_st').innerHTML=steps.slice(0,i).map((t,j)=>`<div class="panel" style="${j===steps.length-1?'background:var(--accent-soft);border-color:var(--accent)':''}">${t}</div>`).join('');if(i>=steps.length)s.querySelector('#L2a02_b').disabled=true;SFX.click();};
+  s.querySelector('#L2a02_b').onclick=r;r();}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Spot the leading question',what:'Try: pick which interview Q is leading.',footer:'"Wouldn\'t you love a feature for X?" gets you yeses every time. "How do you currently solve X?" gets you data. Tone of voice matters; structure matters more.',scaffold:2,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'"Do you think our pricing is fair?"',a:true,why:'Leading. "Fair" implies a judgement; the polite answer is "yes". Better: "Walk me through how you decided to pay for this."'},{q:'"What was the last task you tried to do here that took longer than expected?"',a:false,why:'Open, recent, behaviour-anchored. Excellent question.'},{q:'"Would a feature for X save you time?"',a:true,why:'Leading. They\\'ll say yes. Better: "Tell me about the last time you wished software did Y for you."'},{q:'"How often do you collaborate with your team on this?"',a:false,why:'Neutral; gets you a frequency answer that you can dig into.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Leading</button><button class="btn ghost" data-p="false">Open / OK</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a?'Leading.':'Open.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Re-write the question',what:'Try: pick the better rewrite.',footer:'Behaviour-anchored questions reveal what people DID. Hypothetical questions reveal what they think they\'d do. The former is data; the latter is fiction.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){s.innerHTML=`<h3>Re-write: "Would you use this feature?"</h3>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${['"How often do you imagine you\\'d use it?"','"When was the last time you wished software did this for you?"','"On a 1-10, how excited are you about this?"','"What do you currently do instead?"'].map((t,i)=>`<button class="btn ghost" data-c="${i}" style="text-align:left">${t}</button>`).join('')}</div>
+  <div class="reveal" id="L2i02_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const i=+b.dataset.c;const ok=i===1||i===3;const r=s.querySelector('#L2i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Best.</strong> Both anchor on past behaviour. Either "when was the last time" or "what do you do instead" gets you concrete history, not imagined futures.':'<strong>Still hypothetical.</strong> "Imagine" and "1-10 excitement" both ask for prediction, not memory. People are wrong about both. Anchor on actual past events.';});}},
+
+/* L3 — PRDs & priorities */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'A PRD is 90% trimmed by the time it ships',what:'Watch: draft → tight.',footer:'First PRDs are 2000 words. By RICE-scoring you\'re at 800. By eng review you\'re at 400. The 400 you keep are the only ones that mattered.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Draft to ship</h3>
+  <svg viewBox="0 0 500 200"><rect x="40" y="40" width="380" height="${2000/8}" fill="var(--paper-2)" stroke="var(--ink)"/><rect x="40" y="40" width="380" height="${800/8}" fill="var(--accent-soft)" stroke="var(--accent)"><animate attributeName="height" from="${2000/8}" to="${800/8}" dur="1s" begin="1s" fill="freeze"/></rect><rect x="40" y="40" width="380" height="${400/8}" fill="var(--accent)"><animate attributeName="height" from="${2000/8}" to="${400/8}" dur="1s" begin="2s" fill="freeze"/></rect>
+  <text x="430" y="50" font-family="ui-monospace" font-size="10" fill="var(--ink-soft)">2000w (draft)</text>
+  <text x="430" y="${50+800/8}" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">800w (after RICE)</text>
+  <text x="430" y="${50+400/8}" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)" font-weight="700">400w (ship)</text></svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'RICE in motion',what:'Watch: 5 features ranked by RICE.',footer:'Reach × Impact × Confidence / Effort. Most "obvious" features bottom-out at low confidence × high effort. The boring high-confidence ones win.',scaffold:1,runtime:'30-60s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>5 features, RICE scored</h3>
+  <svg viewBox="0 0 500 240">${[['AI tagging','100×7×0.4/8',35],['Dark mode','1000×3×0.9/2',135],['Onboarding tour','500×5×0.8/3',67],['Slack integration','200×6×0.7/5',16],['Refactor backend','—×—×—/13',8]].map(([n,f,r],i)=>`<rect x="160" y="${30+i*38}" width="${r*2}" height="28" fill="var(--accent)" opacity=".8"><animate attributeName="width" from="0" to="${r*2}" dur=".9s" begin="${i*.25}s" fill="freeze"/></rect><text x="155" y="${48+i*38}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${165+r*2}" y="${48+i*38}" font-family="ui-monospace" font-size="11" font-weight="700">${r}</text>`).join('')}</svg>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'RICE calculator',what:'Try: score a feature on RICE.',footer:'Don\'t over-trust precision. RICE is a relative-rank tool — useful when you have 5 features to choose from. Stop using it once you have <3.',scaffold:2,runtime:'<30s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>Score this feature</h3>
+  ${[['Reach (users/quarter)','r',500,1,10000],['Impact (1=low, 3=high)','i',2,1,3],['Confidence (%)','c',60,10,100],['Effort (eng-weeks)','e',4,1,20]].map(([n,k,d,mn,mx])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:180px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L3i01_${k}" min="${mn}" max="${mx}" value="${d}" style="width:40%"><span class="v" id="L3i01_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}</span></label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">RICE score</div><div class="stat-value amber" id="L3i01_s">—</div></div>`;
+  const u=()=>{const r=+s.querySelector('#L3i01_r').value,i=+s.querySelector('#L3i01_i').value,c=+s.querySelector('#L3i01_c').value,e=+s.querySelector('#L3i01_e').value;['r','i','c','e'].forEach(k=>s.querySelector('#L3i01_v'+k).textContent=s.querySelector('#L3i01_'+k).value);const sc=Math.round(r*i*(c/100)/e);const sEl=s.querySelector('#L3i01_s');sEl.textContent=sc;sEl.className='stat-value '+(sc>200?'green':sc>50?'amber':'red');};
+  ['r','i','c','e'].forEach(k=>s.querySelector('#L3i01_'+k).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Find the missing PRD section',what:'Try: pick what this PRD is missing.',footer:'Every shipped PRD has: context, success metric, scope, non-goals, deadline, owner. Missing any one and the project drifts.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){s.innerHTML=`<h3>What\'s missing?</h3>
+  <pre class="code">PRD: Add dark mode
+
+Context: Users have asked for dark mode for 18 months.
+Scope: Toggle in settings; CSS-variable swap.
+Owner: @priya
+Deadline: Q1 2026</pre>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${['Success metric','Non-goals','Both','Nothing missing'].map(t=>`<button class="btn ghost" data-c="${t}" style="text-align:left">${t}</button>`).join('')}</div>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.c==='Both';const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Both.</strong> No success metric (how do we know it worked?) AND no non-goals (what we\\'re NOT doing — e.g. "no system-theme auto-detect in v1"). Without these, scope creeps and you can\\'t close it.':'<strong>Re-read.</strong> No metric to declare done. No non-goals to bound creep. Both are missing.';});}},
+
+/* L4 — roadmaps */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'Roadmap = bets, not commitments',what:'Watch: forecast confidence collapsing.',footer:'Quarter 1 is mostly committed. Quarter 2 is bets. Quarter 3-4 are aspirations. The further out, the more wrong you\'ll be — name that explicitly.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Confidence decays fast</h3><svg viewBox="0 0 500 200">${['Q1','Q2','Q3','Q4'].map((q,i)=>{const c=[90,55,25,10][i];return `<rect x="${60+i*100}" y="${170-c*1.5}" width="80" height="${c*1.5}" fill="var(--accent)" opacity="${c/100+.2}"><animate attributeName="height" from="0" to="${c*1.5}" dur=".8s" begin="${i*.3}s" fill="freeze"/><animate attributeName="y" from="170" to="${170-c*1.5}" dur=".8s" begin="${i*.3}s" fill="freeze"/></rect><text x="${100+i*100}" y="190" text-anchor="middle" font-family="ui-monospace" font-size="11">${q}</text><text x="${100+i*100}" y="${165-c*1.5}" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="700">${c}%</text>`;}).join('')}</svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'The "now / next / later" trick',what:'Watch: three buckets, decreasing fidelity.',footer:'Move things from "later" to "next" only when you finish "now" things. The discipline of three buckets prevents promising everything in Q1.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Bucket roadmap</h3>
+  <div class="stat-grid">${[['NOW','this quarter, committed, eng-sized','green'],['NEXT','quarter+1, bets, rough estimates','amber'],['LATER','aspirations, ideas, no sizing','red']].map(([n,d,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${d}</div></div>`).join('')}</div>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'You only have 5 NOW slots. Spend them.',what:'Try: bucket 8 features; lock when NOW = 5.',footer:'If everything is "now," nothing is. The discipline is what you say no to — only the in-QA + scoped items earn "now" this quarter. Ideas without scope go "later".',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const items=[{t:'Dark mode (designed)',a:'next'},{t:'Mobile app (idea)',a:'later'},{t:'Onboarding redesign (scoped)',a:'now'},{t:'AI search (research)',a:'later'},{t:'Slack integration (scoped)',a:'now'},{t:'Export to PDF (in QA)',a:'now'},{t:'New billing system (idea)',a:'later'},{t:'Real-time collab (research)',a:'next'}];s.innerHTML=`<h3>Bucket these 8 features</h3>
+  <div class="row" id="L4i01_pool" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+    ${items.map((it,i)=>`<span class="chip" data-i="${i}" data-a="${it.a}">${it.t}</span>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+    ${[['now','NOW (≤5)'],['next','NEXT'],['later','LATER']].map(([k,n])=>`<div class="lane" data-l="${k}"><h4>${n}</h4><div class="drop"></div></div>`).join('')}
+  </div>
+  <button class="btn" id="L4i01_c" style="margin-top:10px">Check the cut</button>
+  <div class="reveal" id="L4i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));
+  s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L4i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];const nowCount=placed.filter(p=>p.dataset.placed==='now').length;let ok=0;placed.forEach(p=>{if(p.dataset.a===p.dataset.placed)ok++;});const r=s.querySelector('#L4i01_r');r.style.display='block';const verdict=nowCount>5?'overcommit':ok>=6?'good':'undercut';r.className='reveal '+(verdict==='good'?'win':'bad');r.innerHTML=verdict==='overcommit'?`<strong>You over-committed.</strong> ${nowCount} items in NOW. Cap is 5. Move the lowest-confidence two to NEXT.`:verdict==='good'?`<strong>${ok}/${items.length} placed right.</strong> NOW gets the in-QA + scoped items. NEXT gets the designed-but-unscheduled. LATER gets ideas + research. Discipline preserved.`:`<strong>${ok}/${items.length} right.</strong> Watch for the trap of putting "ideas" in NEXT — until they're scoped, they belong in LATER.`;SFX.click();};}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Saying no — pick the right script',what:'Try: pick the politest no.',footer:'"No" doesn\'t mean "never". "Not yet, here\'s when we\'d revisit" preserves the relationship AND the priority. Practise this; it\'s 30% of senior PM work.',scaffold:4,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){s.innerHTML=`<h3>VP asks for a feature mid-quarter. Pick your response.</h3>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${['"No, sorry, that\\'s not on the roadmap."','"Sure, we\\'ll squeeze it in."','"It\\'s a great idea. We\\'re committed to X this quarter; can we revisit in Q2 planning on the 14th?"','"Let me ask the team and get back to you."'].map((t,i)=>`<button class="btn ghost" data-c="${i}" style="text-align:left">${t}</button>`).join('')}</div>
+  <div class="reveal" id="L4i02_r" style="display:none;margin-top:14px"></div>`;
+  s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const i=+b.dataset.c;const r=s.querySelector('#L4i02_r');r.style.display='block';r.className='reveal '+(i===2?'win':'bad');r.innerHTML=i===0?'<strong>Too cold.</strong> Closes the door; the VP will route around you.':i===1?'<strong>Disaster.</strong> You just broke your current commitment to please one person.':i===2?'<strong>Best.</strong> Acknowledges the idea, names the current commitment, sets a specific revisit date. Keeps the door open without breaking the quarter.':'<strong>Stalling.</strong> The "I\\'ll get back to you" answer eventually becomes a yes by default.';});}},
+
+/* L5 — ship + measure */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'Launch = day 1 of measurement',what:'Watch: pre-launch hype vs post-launch dip.',footer:'Most features show a hype curve: spike at launch, drop within a week. The number that matters is week 4 retention, not day 1 signups.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>The launch curve</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/><path d="M40,150 L80,80 L120,40 L180,80 L240,110 L300,125 L360,130 L420,131" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <line x1="120" y1="20" x2="120" y2="170" stroke="var(--saffron)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="124" y="35" font-family="ui-monospace" font-size="10" fill="var(--saffron)">launch day</text>
+  <line x1="360" y1="20" x2="360" y2="170" stroke="var(--accent-strong)" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="364" y="35" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">week 4 — the truth</text></svg>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'Activation funnel',what:'Watch: 100 sign-ups → 8 retained.',footer:'Most products lose 90%+ between signup and activation. Focus the next sprint on the worst-converting step; don\'t add features above it.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Where they fall off</h3>
+  <svg viewBox="0 0 500 240">${[['Signed up',100],['Confirmed email',82],['Completed onboarding',47],['First action',28],['Day-7 return',14],['Day-28 retained',8]].map(([n,v],i)=>`<rect x="160" y="${30+i*32}" width="${v*3}" height="24" fill="var(--accent)" opacity="${0.95-i*0.1}"><animate attributeName="width" from="0" to="${v*3}" dur=".9s" begin="${i*.2}s" fill="freeze"/></rect><text x="155" y="${48+i*32}" text-anchor="end" font-family="ui-monospace" font-size="10">${n}</text><text x="${165+v*3}" y="${48+i*32}" font-family="ui-monospace" font-size="10" font-weight="700">${v}</text>`).join('')}</svg>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Pick the right metric',what:'Try: 5 features, choose the metric.',footer:'Vanity = page views, signups. Real = activation, retention, revenue. The metric you ship with determines the team you build.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'Onboarding redesign',a:'activation',why:'Activation rate (% completing first key action). Page views don\\'t prove the redesign worked.'},{q:'New pricing page',a:'conversion',why:'Visitor → trial conversion. Page views are noise.'},{q:'AI-powered search',a:'retention',why:'Day-7 return after first search. Searches-per-session is vanity; coming back is real.'},{q:'Slack notifications opt-in',a:'engagement',why:'Notifications opened / total sent. Sending more without anyone opening is anti-growth.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:14px 0">${['signups','activation','retention','engagement','conversion'].map(o=>`<button class="btn ghost" data-p="${o}">${o}</button>`).join('')}</div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.p===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>Best: ${q.a}.</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Write the launch retrospective',what:'Try: rank lessons by their actionability.',footer:'A retro that doesn\'t change behaviour was a meeting. End every retro with two specific commits — not "we should communicate better."',scaffold:4,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Decide what we\\'d do differently next time','Name 2 specific behaviour changes','Assign each to an owner','Schedule a follow-up to check','Archive document'];const shuf=[...correct].sort(()=>Math.random()-.5);
+  s.innerHTML=`<h3>Order the retro steps</h3>
+  <div id="L5i02_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L5i02_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L5i02_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L5i02_l'));
+  s.querySelector('#L5i02_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Order.</strong> Discuss → commit → assign → schedule → archive. Skip "assign" and the retro is theatre.':'<strong>Discuss → commit → assign → schedule → archive.</strong> Without assignment + follow-up, nothing changes.';SFX.success();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

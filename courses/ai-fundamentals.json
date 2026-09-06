@@ -149,6 +149,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · An LLM is a guesser, not a knower — token-by-token completion."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Tokens, context, temperature in plain English"
@@ -240,6 +246,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Context window = working memory — token budget fills up."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — What it CAN and CANNOT do"
@@ -254,6 +266,12 @@
           "caption": "The fit map. Top row is where AI ships products. Bottom row is where companies announce 'AI features' that turn into customer-support tickets.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(40 30)'><rect width='480' height='50' rx='8' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><circle cx='30' cy='25' r='12' fill='#10B981'/><text x='30' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#FFFFFF' font-weight='bold'>✓</text><text x='60' y='20' font-family='sans-serif' font-size='11' fill='#064E3B' font-weight='bold'>RELIABLY</text><text x='60' y='38' font-family='sans-serif' font-size='10' fill='#065F46'>summarize, transform, classify, draft in style, explain</text></g><g transform='translate(40 90)'><rect width='480' height='50' rx='8' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><circle cx='30' cy='25' r='12' fill='#F59E0B'/><text x='30' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#FFFFFF' font-weight='bold'>~</text><text x='60' y='20' font-family='sans-serif' font-size='11' fill='#7C2D12' font-weight='bold'>WITH VERIFICATION</text><text x='60' y='38' font-family='sans-serif' font-size='10' fill='#92400E'>research, multi-step reasoning, code with specs, data extraction</text></g><g transform='translate(40 150)'><rect width='480' height='50' rx='8' fill='#FECACA' stroke='#7F1D1D' stroke-width='2'/><circle cx='30' cy='25' r='12' fill='#EF4444'/><text x='30' y='30' text-anchor='middle' font-family='sans-serif' font-size='14' fill='#FFFFFF' font-weight='bold'>✗</text><text x='60' y='20' font-family='sans-serif' font-size='11' fill='#7F1D1D' font-weight='bold'>CANNOT (without retrieval/tools)</text><text x='60' y='38' font-family='sans-serif' font-size='10' fill='#7F1D1D'>cite sources, do exact math, know post-cutoff events, niche distinctions</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Tokens cost more than words — type text, see token count update."
         },
         {
           "type": "chatScenario",
@@ -544,6 +562,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Predict: what does it not know? — pick which question stumps an LLM."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "An LLM is a next-token predictor — confident but not omniscient",
@@ -637,6 +661,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Cargo-cult prompting is theatre — \"Act as a senior engineer\" — does it matter?"
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 5-part prompt structure"
@@ -727,6 +757,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Few-shot examples are gold — 0 → 1 → 3 examples."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Few-shot examples are the real cheat code"
@@ -734,6 +770,12 @@
         {
           "type": "markdown",
           "md": "Among the 5 parts, examples are not first among equals — they are the **dominant** lever for structured tasks.\n\n- A prompt with no examples gets a generic answer in the most-probable register.\n- A prompt with 3 examples gets an answer that *matches the examples'* register, structure, length, and tone.\n\nFor structured tasks (classification, transformation, drafting in a style), 3 well-chosen examples typically move quality 20-30%. For unstructured creative tasks, 1 good example does most of the work.\n\n**Special case — show one BAD example.** Telling the model 'avoid this style' with one concrete bad example is more effective than a paragraph of guidelines. The model patterns to avoid are now visible."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Tighten the prompt — edit a vague prompt; see the model's plausible response shift."
         },
         {
           "type": "chatScenario",
@@ -1052,6 +1094,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Spec checklist — score your prompt — check off what your prompt declares."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Prompts are an API — Role + Context + Task + Format + Examples",
@@ -1145,6 +1193,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where hallucinations come from — the model fills the gap when context is sparse."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — RAG (retrieval) as the real fix"
@@ -1235,6 +1289,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Citations vs hallucinations — cited claims survive scrutiny."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — When the cost of being wrong is too high to ship at all"
@@ -1242,6 +1302,12 @@
         {
           "type": "markdown",
           "md": "RAG fixes a lot. It does not fix everything. Some use cases should not be shipped with AI at all, regardless of how careful the engineering is.\n\n**Refuse the use case when:**\n\n- *The cost of being wrong is unbounded* (medical, legal, life-safety, regulatory non-compliance with civil penalties).\n- *Verification is as expensive as doing it from scratch* (you'd have to re-do the work to check the AI's work — net negative).\n- *Users cannot detect the failure mode* (a confident wrong answer to a question they don't have expertise to verify).\n- *The deployment is unsupervised at scale* (1M users see the output before you spot a bad sample).\n\nThe ROI on saying 'no' to one of these is enormous. Most rolled-back AI features were rolled back because someone saw an upside without doing the math on the downside."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Slide the grounding dial — change the grounding; watch hallucination drop."
         },
         {
           "type": "chatScenario",
@@ -1555,6 +1621,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Did the model just lie? — classify outputs as facts vs hallucinations."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Hallucination is structural — a property of next-token prediction, not a bug",
@@ -1648,6 +1720,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · AI is a hammer, not a swiss-army — tool-vs-task fit."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — High-volume + low-stakes is the sweet spot"
@@ -1735,6 +1813,12 @@
               "md": "Pressure to 'use AI' usually points engineering teams toward flagship low-volume high-stakes features that look good in press releases. Those are the same features that get rolled back. Same press release works for high-volume sweet-spot features; the engineering succeeds; the CEO still gets to say 'we use AI.'"
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Latency / cost / quality — pick two — the iron triangle."
         },
         {
           "type": "heading",
@@ -1836,6 +1920,12 @@
           "date": "June 2025",
           "story": "**Saraswati Healthcare**, a 600-bed multi-specialty group with hospitals in Chennai and Coimbatore, piloted an AI feature that auto-drafted **discharge summaries** from the structured EMR record plus the doctor's progress notes. The vendor had pitched it as 'doctor saves 12 minutes per discharge, scales linearly with bed count.' Procurement loved the math. The pilot launched on a Monday across two wards.\n\nBy Wednesday, attending physicians were complaining the drafts confidently invented medications the patient had **never been on**. By Friday, a draft for a post-cardiac-surgery patient listed a contraindicated beta-blocker that the patient had explicitly refused (documented in the nursing notes the AI had not been wired to read). A senior consultant caught it during sign-off; the patient was not harmed.\n\nOn day 11, the CMIO (the clinical lead in the field-notes byline) pulled the plug. The post-mortem found three things: clinicians could not visually distinguish AI drafts from human drafts in the UI; there was no structured 'I edited this' signal back to the model; and the time savings (real, about 8 minutes per discharge) was never enough to outweigh the **constant low-grade vigilance cost** of reading every line for hallucinations.\n\nThe hospital later relaunched the feature as **'AI suggests, doctor authors,'** with a side-by-side diff view, mandatory clinician initialing of every section, and zero auto-save. Adoption was slower but stuck. The original 'auto-draft' framing never came back.",
           "takeaway": "Tool-fit is not 'is the model capable of generating output X.' It is 'does the human in the loop have the ability and the incentive to catch errors before they harm someone.' If the answer is no, the right call is refuse, not ship-with-disclaimer."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · AI or not — fit-check — 5 scenarios, pick AI vs not."
         },
         {
           "type": "bossBattle",
@@ -1996,6 +2086,12 @@
           "caption": "Watch the trap happen live — and the fix at the end."
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Cost-vs-quality picker — slider for quality target; see right model."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Three axes pick AI fit: volume, stakes, verifiability",
@@ -2090,6 +2186,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The AI-augmented vs AI-driven gap — human-in-loop vs fully-autonomous."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Define output, prototype prompt, evaluate"
@@ -2179,6 +2281,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The cost of a bad output — severity buckets."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 14-day workflow audit"
@@ -2186,6 +2294,12 @@
         {
           "type": "markdown",
           "md": "For AI workflows already in production, run a 14-day audit periodically. Three numbers, two minutes a week.\n\n**1. Pass-rate** — % of outputs that meet your output spec (parse correctly, no error states).\n**2. Quality-score** — agreement with ground-truth on a fresh weekly sample of 20 outputs.\n**3. Override-rate** — for HITL features, % of AI outputs the human edits/rejects.\n\nThe loop:\n- Day 0: take baseline on all 3 numbers.\n- Day 1-13: keep the workflow running unchanged.\n- Day 14: take final measurements.\n\nIf pass-rate or quality-score drops more than 5 points, you have drift. Common causes: model version changed, input distribution shifted (new customer segment, new domain vocabulary), prompt got edited without re-evaluation.\n\n**The 14-day audit is what catches silent drift before users do.**"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Decompose: which step is AI? — drag steps to \"you\" or \"AI\"."
         },
         {
           "type": "chatScenario",
@@ -2503,6 +2617,12 @@
             "good": "Most pieces are right but one layer (the audit purpose, the alert thresholds, or the ownership model) is fuzzy. Read the Maitri story again and tighten the weakest layer; the cost of a missed drift is roughly two orders of magnitude larger than the cost of a tighter process.",
             "learn": "You skipped the eval set, ran quarterly, or left ownership diffuse. This is exactly the Maitri pattern. The launch is not the work; the maintenance is the work. Redo the battle and treat the eval set as a load-bearing artefact, not a 'nice to have.'"
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/ai-fundamentals.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Build your weekly workflow — assemble a 5-step weekly AI-augmented routine."
         },
         {
           "type": "keyTakeaways",

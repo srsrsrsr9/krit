@@ -154,6 +154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What \"leader\" used to mean, vs now — 6 skills, before and after."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The 70-20-10 split"
@@ -243,6 +249,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The hours, redistributed — 40-hr week, two scenarios."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The 'what stays human' question"
@@ -257,6 +269,12 @@
           "caption": "The three pillars that survive. AI removes the floor; the ceiling sits on these three.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#ECFDF5'/><rect x='40' y='40' width='520' height='30' fill='#065F46'/><text x='300' y='60' text-anchor='middle' font-family='sans-serif' font-size='14' font-weight='700' fill='white'>What stays human</text><g><rect x='80' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='135' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Account-</text><text x='135' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>ability</text><text x='135' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>signs the call</text></g><g><rect x='245' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='300' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Calibration</text><text x='300' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>to people</text><text x='300' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>reads the room</text></g><g><rect x='410' y='90' width='110' height='110' fill='#10B981' stroke='#065F46' stroke-width='2'/><text x='465' y='130' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>Ambiguity</text><text x='465' y='148' text-anchor='middle' font-family='sans-serif' font-size='13' font-weight='700' fill='white'>arbitration</text><text x='465' y='180' text-anchor='middle' font-family='sans-serif' font-size='10' fill='white'>holds the values</text></g><g transform='translate(80 220)' font-family='sans-serif' font-size='10' fill='#5B21B6'><rect x='0' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='40' y='18' text-anchor='middle'>drafting</text><rect x='100' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='140' y='18' text-anchor='middle'>research</text><rect x='200' y='0' width='80' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='240' y='18' text-anchor='middle'>formatting</text><rect x='300' y='0' width='100' height='28' fill='#DDD6FE' stroke='#5B21B6' stroke-width='1'/><text x='350' y='18' text-anchor='middle'>first-pass review</text><text x='420' y='18' fill='#5B21B6' font-style='italic'>→ AI takes these</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Where are YOUR 40 hours going? — rate 6 buckets."
         },
         {
           "type": "chatScenario",
@@ -519,6 +537,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · The cuts that actually buy hours — pick 5 with the highest hours/wk impact."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Tasks change in months; jobs change in years; lead in the gap.",
@@ -613,6 +637,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The pod that used to be a department — 25 people → 8 people, same output."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The trust calibration loop"
@@ -700,6 +730,12 @@
               "md": "Take your car for a service after a clean run of 8 weeks. The mechanic still runs the 10-point checklist. Eight clean weeks is *the case for the checklist*, not against it. Confidence is not evidence. The same logic applies to your AI workflow; an absence of findings is precisely when sampling matters most."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Roles that grow, roles that shrink — 12 role demands, 2 years out."
         },
         {
           "type": "heading",
@@ -825,6 +861,12 @@
           "takeaway": "Tools without training is just expensive shelfware. The ratio you want is roughly **1:3 — one rupee on tools, three on the humans using them.**"
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Redesign a 25-person dept — pick 8 roles to keep."
+        },
+        {
           "type": "bossBattle",
           "title": "Boss Battle: The ₹2 Crore Tooling Budget",
           "setup": "**Week 8.** Rajiv survived the Week 2 CEO ambush. The CFO just signed off a **₹2 crore AI tooling budget** for the next twelve months. The CTO is already forwarding ChatGPT Enterprise quotes. Three vendors are circling. The COO sent a calendar invite titled *\"Tool selection — let's move fast.\"* It is 9:47am. The meeting is at 11.\n\nYou — playing coach — have until 11 to redirect Rajiv. He's a smart director who has not yet seen the Bengaluru SaaS field note.",
@@ -943,6 +985,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Hire vs upskill? — 4 gaps; pick hire-or-upskill."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Every team runs handoff patterns — A (human-only), B (human-first/AI-assist), C (AI-first/human-review) — even when nobody named them.",
@@ -1037,6 +1085,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Decisions that move to AI; decisions that don't — 6 decision types."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The new T-shape"
@@ -1126,6 +1180,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The cost of a wrong AI decision — 1 mis-route, 12 cascade effects."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Behavioral interview design"
@@ -1140,6 +1200,12 @@
           "caption": "The interview-signal matrix. You're hiring from the top-right quadrant only. Most candidates land in the bottom-left.",
           "maxWidth": 600,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 280' role='img'><rect width='600' height='280' rx='14' fill='#FFF7ED'/><g><line x1='100' y1='40' x2='100' y2='240' stroke='#1F2937' stroke-width='2'/><line x1='100' y1='240' x2='540' y2='240' stroke='#1F2937' stroke-width='2'/><text x='80' y='40' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>names</text><text x='80' y='52' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>failure</text><text x='80' y='240' text-anchor='end' font-family='sans-serif' font-size='10' fill='#1F2937'>vague</text><text x='100' y='258' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>generic</text><text x='540' y='258' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#1F2937'>specific</text><rect x='320' y='60' width='220' height='80' fill='#A7F3D0' stroke='#065F46' stroke-width='2'/><text x='430' y='90' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#065F46'>STRONG HIRE</text><text x='430' y='110' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>specific story +</text><text x='430' y='124' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#065F46'>named failure mode</text><rect x='100' y='60' width='220' height='80' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='210' y='90' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#92400E'>maybe</text><text x='210' y='108' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>names failure modes</text><text x='210' y='122' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>but no real story</text><rect x='320' y='160' width='220' height='80' fill='#FEF3C7' stroke='#92400E' stroke-width='2'/><text x='430' y='190' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#92400E'>tool user</text><text x='430' y='208' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>specific story</text><text x='430' y='222' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#92400E'>no failure analysis</text><rect x='100' y='160' width='220' height='80' fill='#FECACA' stroke='#DC2626' stroke-width='2'/><text x='210' y='190' text-anchor='middle' font-family='sans-serif' font-size='12' font-weight='700' fill='#7F1D1D'>weak hire</text><text x='210' y='208' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>generalises</text><text x='210' y='222' text-anchor='middle' font-family='sans-serif' font-size='10' fill='#7F1D1D'>everything</text></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Draw your decision-rights map — drag 8 decisions into 3 zones."
         },
         {
           "type": "chatScenario",
@@ -1402,6 +1468,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · When AI disagrees with you — 4 disagreements; what do you do?"
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Execution skill went to zero in 2024; judgment is the only thing left for a senior to be filtered on.",
@@ -1496,6 +1568,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What your team is actually scared of — 5 fears, ranked honestly."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The public-mistake protocol"
@@ -1583,6 +1661,12 @@
               "md": "In your grandmother's kitchen, when something goes wrong with the salt, she announces it. Everyone laughs, eats anyway, the next batch is better. That is the public-mistake protocol, just sixty years older. In your office when AI ships a wrong number, the message gets quietly deleted and replaced with 'no big deal'. The fix is the same as in the kitchen: the senior shares first. Once that happens, the junior's safe-to-share switch flips. The kitchen has been doing this since 1985."
             }
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The all-hands that goes wrong — 3 announcement patterns."
         },
         {
           "type": "heading",
@@ -1708,6 +1792,12 @@
           "takeaway": "Once-a-year training tests *memory*. Weekly sprints change *habits*. AI risk is a habits problem, so train like it."
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Write the message to your team — name a change, on a date, with a why."
+        },
+        {
           "type": "bossBattle",
           "title": "Boss Battle: The Annual vs. Weekly Decision",
           "setup": "**Week 20.** The HR Head, Sneha, just emailed Rajiv a shiny one-pager: *\"Annual AI Ethics & Safety Training Programme — 4 hours, vendor-led, mandatory, perfect for the December cycle.\"* The vendor quote is ₹38 lakh. Sneha has already shown the deck to two partners.\n\nRajiv pings you.\n\n*\"Coach, this is exactly what the field-note Pune firm did. But Sneha's already half-sold to the partners. How do I redirect this without making her look bad?\"*",
@@ -1826,6 +1916,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Respond to a team fear — 4 scenarios; pick the best response."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "AI tooling has a 6-week knowledge half-life; annual L&D cycles cannot keep up by design.",
@@ -1920,6 +2016,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · What stays rare — 6 skills, scarcity-over-time."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The public post-mortem"
@@ -2009,6 +2111,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Your skill stack, refactored — where to invest the next 12 mo."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The explicit ladder"
@@ -2023,6 +2131,12 @@
           "caption": "Decisions get made; the ladder says by whom. Ambiguity is the source of nearly every escalation cycle.",
           "maxWidth": 560,
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 560 240' role='img'><rect width='560' height='240' rx='14' fill='#FFF7ED'/><g transform='translate(40 25)' font-family='sans-serif' font-size='11'><g><rect width='100' height='32' rx='4' fill='#A7F3D0' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#065F46' font-weight='bold'>IC</text><text x='110' y='20' fill='#1F2937'>tool choice, technique, peer review</text></g><g transform='translate(0 36)'><rect width='100' height='32' rx='4' fill='#6EE7B7' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#065F46' font-weight='bold'>Manager</text><text x='110' y='20' fill='#1F2937'>sprint scope, hiring of ICs, perf coaching</text></g><g transform='translate(0 72)'><rect width='100' height='32' rx='4' fill='#34D399' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#fff' font-weight='bold'>Director</text><text x='110' y='20' fill='#1F2937'>quarterly budget, team-level reorg</text></g><g transform='translate(0 108)'><rect width='100' height='32' rx='4' fill='#10B981' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#fff' font-weight='bold'>VP</text><text x='110' y='20' fill='#1F2937'>org redesign, multi-quarter bets</text></g><g transform='translate(0 144)'><rect width='100' height='32' rx='4' fill='#059669' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#fff' font-weight='bold'>CEO</text><text x='110' y='20' fill='#1F2937'>strategic pivots, public positioning</text></g><g transform='translate(0 180)'><rect width='100' height='32' rx='4' fill='#065F46' stroke='#065F46'/><text x='50' y='20' text-anchor='middle' fill='#fff' font-weight='bold'>Board</text><text x='110' y='20' fill='#1F2937'>existential bets, founder removal, sale</text></g></g></svg>"
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Audit your edge — score 6 dimensions; spot the gap."
         },
         {
           "type": "chatScenario",
@@ -2280,6 +2394,12 @@
             "good": "You avoided the cover-up but flinched once. Re-read the lesson on **public post-mortems** — every quiet fix in the era of audit logs is a slow trust drain.",
             "learn": "You took the field-note VP's path and traded a small lie for four quarters of damage. Re-read the lesson — modern AI tooling makes cover-ups not just unethical but operationally expensive. Your draw was a drill. The next near-miss won't be."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/leadership-in-age-of-ai.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Commit to 1 thing for 12 months — pick the bet that compounds."
         },
         {
           "type": "keyTakeaways",

@@ -154,6 +154,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L1-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The bugs unit tests miss — bug type frequency."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The regression bargain"
@@ -244,6 +250,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L1-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Coverage that misses — 92% unit coverage vs 0% flow coverage."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The coverage bait"
@@ -257,6 +269,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#FAF5FF'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='32' text-anchor='middle' font-weight='700' font-size='15'>The coverage bait</text><circle cx='160' cy='130' r='70' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='160' y='115' text-anchor='middle' font-weight='700'>92%</text><text x='160' y='135' text-anchor='middle' font-size='11'>coverage</text><text x='160' y='160' text-anchor='middle' font-size='11' fill='#92400E'>looks great</text><circle cx='440' cy='130' r='70' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='440' y='115' text-anchor='middle' font-weight='700'>0</text><text x='440' y='135' text-anchor='middle' font-size='11'>real bugs caught</text><text x='440' y='160' text-anchor='middle' font-size='11' fill='#9F1239'>still ships broken</text><path d='M 230 130 L 370 130' stroke='#6B7280' stroke-width='2' stroke-dasharray='4 3' fill='none'/></g></svg>",
           "alt": "Two circles: 92% coverage on the left, 0 real bugs caught on the right, connected by a dashed line",
           "caption": "Coverage tells you what code ran. It does not tell you what the code does."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L1-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Which test would have caught it? — 4 prod bugs; pick unit or E2E."
         },
         {
           "type": "chatScenario",
@@ -583,6 +601,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L1-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Test pyramid: pick the right ratio — tune unit/integration/E2E split."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Tests are documentation for future-you, written in a language the runtime can verify.",
@@ -677,6 +701,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L2-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Why your selectors break — same button, 4 selector strategies."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — Unit-as-fast-feedback"
@@ -767,6 +797,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L2-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · The selector that lies — same DOM, 2 buttons match."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — E2E for the critical path"
@@ -780,6 +816,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#EFF6FF'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>The critical path filter</text><rect x='40' y='60' width='160' height='160' rx='10' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='120' y='90' text-anchor='middle' font-weight='700'>CEO calls</text><text x='120' y='115' text-anchor='middle' font-size='11'>signup</text><text x='120' y='135' text-anchor='middle' font-size='11'>checkout</text><text x='120' y='155' text-anchor='middle' font-size='11'>billing</text><text x='120' y='175' text-anchor='middle' font-size='11'>core feature</text><text x='120' y='200' text-anchor='middle' font-size='10' fill='#9F1239'>e2e: yes</text><rect x='220' y='60' width='160' height='160' rx='10' fill='#FEF3C7' stroke='#F59E0B' stroke-width='2'/><text x='300' y='90' text-anchor='middle' font-weight='700'>Customer calls</text><text x='300' y='115' text-anchor='middle' font-size='11'>password reset</text><text x='300' y='135' text-anchor='middle' font-size='11'>export CSV</text><text x='300' y='155' text-anchor='middle' font-size='11'>2FA setup</text><text x='300' y='200' text-anchor='middle' font-size='10' fill='#92400E'>integration: yes</text><rect x='400' y='60' width='160' height='160' rx='10' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='480' y='90' text-anchor='middle' font-weight='700'>Nobody calls</text><text x='480' y='115' text-anchor='middle' font-size='11'>tooltip text</text><text x='480' y='135' text-anchor='middle' font-size='11'>icon colour</text><text x='480' y='155' text-anchor='middle' font-size='11'>spacing nudge</text><text x='480' y='200' text-anchor='middle' font-size='10' fill='#065F46'>e2e: no</text></g></svg>",
           "alt": "Three columns: CEO calls (e2e yes), Customer calls (integration), Nobody calls (no e2e)",
           "caption": "The critical-path filter is brutal but accurate. Most things don't make the cut."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L2-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Pick the durable selector — 5 selectors for the same button."
         },
         {
           "type": "chatScenario",
@@ -1071,6 +1113,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L2-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Rewrite the brittle selector — convert nth-child to a stable form."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Tests live at three altitudes — unit, integration, e2e — each with a different cost-to-confidence ratio.",
@@ -1165,6 +1213,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L3-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · The 4 causes of flake — distribution."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — getByRole over CSS"
@@ -1255,6 +1309,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L3-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · waitForTimeout is a bandage — 3 wait strategies."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Web-first assertions"
@@ -1268,6 +1328,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#FEF3C7'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>Retrying vs one-shot assertion</text><text x='150' y='65' text-anchor='middle' font-weight='600' fill='#9F1239'>One-shot (BAD)</text><rect x='40' y='75' width='220' height='130' rx='8' fill='white' stroke='#F43F5E' stroke-width='2'/><text x='150' y='100' text-anchor='middle' font-size='11'>t=0ms: locate → null</text><text x='150' y='125' text-anchor='middle' font-size='11'>t=0ms: assert → FAIL</text><text x='150' y='160' text-anchor='middle' font-size='11' fill='#9F1239'>(test ends here)</text><text x='150' y='185' text-anchor='middle' font-size='10' fill='#9F1239'>element rendered at 80ms</text><text x='450' y='65' text-anchor='middle' font-weight='600' fill='#065F46'>Retrying (GOOD)</text><rect x='340' y='75' width='220' height='130' rx='8' fill='white' stroke='#10B981' stroke-width='2'/><text x='450' y='100' text-anchor='middle' font-size='11'>t=0ms: locate → null, retry</text><text x='450' y='118' text-anchor='middle' font-size='11'>t=20ms: null, retry</text><text x='450' y='136' text-anchor='middle' font-size='11'>t=80ms: found, assert</text><text x='450' y='160' text-anchor='middle' font-size='11' fill='#065F46'>PASS at 80ms</text><text x='450' y='185' text-anchor='middle' font-size='10' fill='#065F46'>(timeout was 5s, never hit)</text></g></svg>",
           "alt": "Two boxes comparing one-shot assertion (fails immediately) and retrying assertion (passes at 80ms)",
           "caption": "Web-first assertions are not slower; they're patient. Big difference."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L3-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Diagnose the flaky test — read the symptoms; pick the cause."
         },
         {
           "type": "chatScenario",
@@ -1593,6 +1659,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L3-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Replace bad waits — rewrite waitForTimeout calls."
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Playwright auto-waits for elements to be actionable. If your test sleeps, your test is wrong.",
@@ -1687,6 +1759,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L4-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · Where 47 CI minutes go — install vs run vs trace upload."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The trace viewer ritual"
@@ -1777,6 +1855,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L4-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Sharded vs unsharded — 22-min run → 6-min run."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — The deterministic-clock fix"
@@ -1790,6 +1874,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#ECFDF5'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='30' text-anchor='middle' font-weight='700' font-size='15'>Real clock vs page.clock</text><rect x='40' y='60' width='240' height='160' rx='10' fill='#FEE2E2' stroke='#F43F5E' stroke-width='2'/><text x='160' y='90' text-anchor='middle' font-weight='700'>Real clock</text><text x='160' y='115' text-anchor='middle' font-size='11'>waitForTimeout(300)</text><text x='160' y='135' text-anchor='middle' font-size='11'>= 300ms wall time</text><text x='160' y='160' text-anchor='middle' font-size='11'>+ 250ms CI jitter</text><text x='160' y='185' text-anchor='middle' font-size='11' fill='#9F1239'>= flaky 4% of runs</text><rect x='320' y='60' width='240' height='160' rx='10' fill='#DCFCE7' stroke='#10B981' stroke-width='2'/><text x='440' y='90' text-anchor='middle' font-weight='700'>page.clock.install()</text><text x='440' y='115' text-anchor='middle' font-size='11'>clock.runFor(310)</text><text x='440' y='135' text-anchor='middle' font-size='11'>= 0ms wall time</text><text x='440' y='160' text-anchor='middle' font-size='11'>+ no jitter</text><text x='440' y='185' text-anchor='middle' font-size='11' fill='#065F46'>= deterministic, fast</text></g></svg>",
           "alt": "Comparison: real clock with sleeps and CI jitter vs page.clock with deterministic time control",
           "caption": "If the clock is in your control, time can never make your test flaky."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L4-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Order the optimisations — rank 5 CI fixes by hour-saved."
         },
         {
           "type": "chatScenario",
@@ -2087,6 +2177,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L4-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Decide what to fail the build on — 6 outcomes; should it block merge?"
+        },
+        {
           "type": "keyTakeaways",
           "points": [
             "Flake is information you haven't decoded yet. Treat it as a signal pointing at a non-determinism, not noise to suppress.",
@@ -2181,6 +2277,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L5-a01",
+          "height": 640,
+          "caption": "Watch (~30s) · How a test suite rots — green % over 6 months."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 1 — The failure-budget rule"
@@ -2270,6 +2372,12 @@
           }
         },
         {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L5-a02",
+          "height": 640,
+          "caption": "Watch (~30s) · Page Object Pattern: cost vs payoff — 5 vs 50 tests."
+        },
+        {
           "type": "heading",
           "level": 2,
           "text": "Move 2 — Sharding, not skipping"
@@ -2283,6 +2391,12 @@
           "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 240'><rect width='600' height='240' fill='#ECFDF5'/><g font-family='ui-sans-serif, system-ui' font-size='13' fill='#1F2937'><text x='300' y='28' text-anchor='middle' font-weight='700' font-size='15'>Serial vs sharded CI</text><text x='150' y='60' text-anchor='middle' font-weight='600'>Serial — 1 worker</text><rect x='40' y='75' width='220' height='22' rx='4' fill='#FEE2E2' stroke='#F43F5E'/><text x='150' y='91' text-anchor='middle' font-size='10'>312 tests · 28 min</text><text x='450' y='60' text-anchor='middle' font-weight='600'>4 shards in parallel</text><rect x='340' y='75' width='220' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='450' y='84' text-anchor='middle' font-size='9'>shard 1 · 78 tests · 7m</text><rect x='340' y='90' width='200' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='440' y='99' text-anchor='middle' font-size='9'>shard 2 · 78 tests · 6.5m</text><rect x='340' y='105' width='220' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='450' y='114' text-anchor='middle' font-size='9'>shard 3 · 78 tests · 7m</text><rect x='340' y='120' width='205' height='12' rx='2' fill='#DCFCE7' stroke='#10B981'/><text x='440' y='129' text-anchor='middle' font-size='9'>shard 4 · 78 tests · 6.7m</text><text x='150' y='180' text-anchor='middle' font-size='12' fill='#9F1239'>devs alt-tab to Slack</text><text x='450' y='180' text-anchor='middle' font-size='12' fill='#065F46'>devs ship the next PR</text><text x='300' y='215' text-anchor='middle' font-size='11' fill='#5B21B6'>same suite, same coverage, ~4x wall-time</text></g></svg>",
           "alt": "Bar chart comparing 28-minute serial run vs four 7-minute parallel shards",
           "caption": "Sharding is free wall-time. The CI bill is rounding error compared to engineer time."
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L5-i01",
+          "height": 640,
+          "caption": "Try (~60s) · Test health audit — 6 questions; get a score."
         },
         {
           "type": "chatScenario",
@@ -2606,6 +2720,12 @@
             "good": "You made the right argument but pulled punches at one of the stages. Re-read the section on **opportunity-cost framing** — boards understand 'this costs you 28 weeks of features' better than any quality-philosophy argument.",
             "learn": "You either accepted the 95% target or refused it without offering an alternative. In six months Tarakash will hit 95% coverage and ship the same incidents. Re-read the lesson — especially **why coverage % is a vanity metric** and **how to propose journey-based targets that boards can track**."
           }
+        },
+        {
+          "type": "embedAnimation",
+          "src": "/anim-lab/testing-with-playwright.html?solo=1#L5-i02",
+          "height": 640,
+          "caption": "Try (~60s) · Triage the failing tests — 5 failures; pick action."
         },
         {
           "type": "keyTakeaways",

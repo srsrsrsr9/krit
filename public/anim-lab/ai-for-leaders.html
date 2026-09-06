@@ -1,0 +1,170 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · AI for Leaders</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#b25e0c;--accent-soft:#f3d9b8;--accent-strong:#854506;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">AI for Leaders</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · Bet sizing</option><option value="L2">L2 · Build vs buy</option><option value="L3">L3 · Org wiring</option><option value="L4">L4 · Risk</option><option value="L5">L5 · 90-day plan</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most AI strategy decks are vibes. What you'll decide here: how to size 10 small bets against 1 big one, when to walk from a vendor contract, and the 90-day spec that survives the next exec offsite.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Bet sizing', L2:'Build vs buy', L3:'Org wiring', L4:'Risk', L5:'90-day plan' } };
+const fmt=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'The portfolio shape that wins',what:'Watch: 10 small + 3 medium + 1 big.',footer:'Pareto rule for AI bets: 70% small (₹5L · 3mo), 20% medium (₹50L · 9mo), 10% one big bet. Most leaders invert this — one big bet, no small ones. Then they wonder why the big bet got everything wrong.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Bet portfolio shape</h3>
+  <svg viewBox="0 0 500 220">${Array.from({length:10},(_,i)=>`<rect x="${30+i*20}" y="150" width="15" height="20" fill="var(--accent-soft)" stroke="var(--accent)"><animate attributeName="height" from="0" to="20" dur=".5s" begin="${i*.08}s" fill="freeze"/></rect>`).join('')}
+  ${Array.from({length:3},(_,i)=>`<rect x="${240+i*45}" y="100" width="35" height="70" fill="var(--accent)"><animate attributeName="height" from="0" to="70" dur=".6s" begin="${.8+i*.15}s" fill="freeze"/></rect>`).join('')}
+  <rect x="400" y="20" width="60" height="150" fill="var(--accent-strong)"><animate attributeName="height" from="0" to="150" dur=".8s" begin="1.4s" fill="freeze"/></rect>
+  <text x="105" y="195" text-anchor="middle" font-family="ui-monospace" font-size="11">10 × ₹5L</text>
+  <text x="285" y="195" text-anchor="middle" font-family="ui-monospace" font-size="11">3 × ₹50L</text>
+  <text x="430" y="195" text-anchor="middle" font-family="ui-monospace" font-size="11">1 × ₹5cr</text></svg>`;}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'Most "AI wins" come from the small ones',what:'Watch: outcome ROI by bet size.',footer:'Small bets land 1 in 2; medium 1 in 5; big 1 in 10. By contribution to revenue: small bets dominate the first 18 months. The big bet only pays off in year 3 — if at all.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Contribution to first-18mo AI revenue</h3>
+  <div class="stat-grid">${[['Small bets (₹5L)','62%','green'],['Medium (₹50L)','28%','amber'],['Big bet (₹5cr)','10%','red']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">If your AI budget is 95% one big bet, you have a press release, not a portfolio.</p>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Allocate ₹2cr across bet sizes',what:'Try: split budget; see expected outcomes.',footer:'Expected value of a balanced AI portfolio outperforms a single big bet by ~2.3× over 18 months, *and* gives you 3-5 working pilots to learn from. Learning compounds.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>You have ₹2cr</h3>
+  ${[['Small bets (₹5L each)','sm',60,0,100],['Medium bets (₹50L each)','md',30,0,100],['Big bet (₹2cr)','bg',10,0,100]].map(([n,k,d])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:200px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="range" id="L1i01_${k}" min="0" max="100" value="${d}" style="width:40%"><span class="v" id="L1i01_v${k}" style="margin-left:8px;color:var(--ink);font-weight:700">${d}%</span></label>`).join('')}
+  <div class="stat-grid" style="margin-top:14px"><div class="stat"><div class="stat-label">Bets</div><div class="stat-value" id="L1i01_b">—</div></div><div class="stat"><div class="stat-label">Expected wins (18mo)</div><div class="stat-value amber" id="L1i01_w">—</div></div></div>`;
+  const u=()=>{const sm=+s.querySelector('#L1i01_sm').value,md=+s.querySelector('#L1i01_md').value,bg=+s.querySelector('#L1i01_bg').value;['sm','md','bg'].forEach(k=>s.querySelector('#L1i01_v'+k).textContent=s.querySelector('#L1i01_'+k).value+'%');const smN=Math.floor(2e7*sm/100/5e5),mdN=Math.floor(2e7*md/100/5e6),bgN=bg>=50?1:0;const wins=smN*0.5+mdN*0.2+bgN*0.1;s.querySelector('#L1i01_b').textContent=smN+' sm · '+mdN+' md · '+bgN+' bg';s.querySelector('#L1i01_w').textContent=wins.toFixed(1);s.querySelector('#L1i01_w').className='stat-value '+(wins>=4?'green':wins>=2?'amber':'red');};
+  ['sm','md','bg'].forEach(k=>s.querySelector('#L1i01_'+k).oninput=()=>{SFX.hover();u();});u();}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Spot the bet you should kill',what:'Try: which one has no real signal?',footer:'Kill criteria for an AI bet: no learnings in 60 days, no user, no metric movement. "We just need more time" without any of those = funeral, not extension.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const bets=[{n:'Bet A: AI-drafted contracts',m:'5 lawyers use it daily, 40% faster drafting',k:false,why:'Real usage, real metric. Keep.'},{n:'Bet B: AI customer support agent',m:'Built in 3 months. No deployment plan. CS dir hasn\\'t been consulted.',k:true,why:'Built without buyer, owner, or path to production. Kill.'},{n:'Bet C: AI sales copilot',m:'12 reps tested. 6 say "useful". 6 say "annoying". Metric: TBD.',k:false,why:'Mixed signal but real usage. Find the variant that works for both groups.'},{n:'Bet D: Visionary AI strategy doc',m:'Quarterly retreat output. Beautiful slides. No project, no owner, no budget.',k:true,why:'No artifact, no decision, no owner. This is theatre.'}];let i=0;const r=()=>{const b=bets[i];s.innerHTML=`<h3>${i+1}/${bets.length}. ${b.n}</h3>
+  <p class="panel">${b.m}</p>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Kill</button><button class="btn ghost" data-p="false">Keep</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(btn=>btn.onclick=()=>{SFX.click();const ok=(btn.dataset.p==='true')===b.k;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${b.k?'Kill.':'Keep.'}</strong> ${b.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%bets.length;r();};});};r();}},
+
+/* L2 — build vs buy */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'The build-vs-buy curve',what:'Watch: TCO over 24 months.',footer:'Buy = predictable TCO, ceiling on differentiation. Build = unpredictable TCO, no ceiling. Cross-over point in TCO is usually month 14-18 for general AI features.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Buy vs Build TCO</h3>
+  <svg viewBox="0 0 500 220"><line x1="40" y1="180" x2="460" y2="180" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="180" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:24},(_,i)=>(40+i*17)+','+(180-(20+i*4.5))).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+  <text x="450" y="60" font-family="ui-monospace" font-size="10" fill="var(--accent-strong)">build</text>
+  <polyline points="${Array.from({length:24},(_,i)=>(40+i*17)+','+(180-(60+i*1.5))).join(' ')}" fill="none" stroke="var(--saffron)" stroke-width="2.5"/>
+  <text x="450" y="135" font-family="ui-monospace" font-size="10" fill="#c4810f">buy</text>
+  <line x1="${40+15*17}" y1="20" x2="${40+15*17}" y2="180" stroke="var(--rule)" stroke-dasharray="3 3"/>
+  <text x="${40+15*17}" y="200" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--muted)">crossover m15</text></svg>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'What "moat" actually means in AI',what:'Watch: 4 moat types, decay rate.',footer:'Models: zero moat (commoditises monthly). Data: real moat if private + growing. Workflow integration: durable. Distribution: durable. Build for the ones that last.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Moat durability (12-month decay)</h3>
+  <div class="stat-grid">${[['Model performance','-95%','red'],['Proprietary data','-15%','green'],['Workflow integration','-10%','green'],['Distribution / brand','-5%','green']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Building on "we have a better model" = building on sand.</p>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Build, buy, or wrap?',what:'Try: classify 5 candidate features.',footer:'Build only if it\'s your moat. Wrap (API + your data) if it\'s your context. Buy if it\'s table-stakes. Most teams build what they should wrap.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){const items=[{t:'Generic AI chatbot for support',a:'buy'},{t:'AI scoring on YOUR proprietary loan data',a:'build'},{t:'Doc summarization for sales',a:'wrap'},{t:'Image generation for marketing',a:'buy'},{t:'Personalised pricing on your txn history',a:'build'},{t:'Meeting notes → CRM',a:'wrap'}];s.innerHTML=`<h3>Classify each</h3>
+  <div class="row" id="L2i01_p" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">${items.map((it,i)=>`<span class="chip" data-i="${i}" data-a="${it.a}">${it.t}</span>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+    <div class="lane" data-l="build"><h4>Build</h4><div class="drop"></div></div>
+    <div class="lane" data-l="wrap"><h4>Wrap (API + your data)</h4><div class="drop"></div></div>
+    <div class="lane" data-l="buy"><h4>Buy</h4><div class="drop"></div></div>
+  </div>
+  <button class="btn" id="L2i01_c" style="margin-top:10px">Check</button>
+  <div class="reveal" id="L2i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const i=t?.dataset?.i;if(i==null)return;const cl=t.cloneNode(true);cl.style.cursor='default';cl.dataset.placed=l.dataset.l;l.querySelector('.drop').appendChild(cl);t.style.opacity='.2';}));
+  s.querySelector('#L2i01_c').onclick=()=>{const placed=[...s.querySelectorAll('[data-placed]')];let ok=0;placed.forEach(p=>{if(p.dataset.a===p.dataset.placed)ok++;});const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok>=4?'win':'bad');r.innerHTML=`<strong>${ok}/${items.length} classified right.</strong> Rule of thumb: if the data you\\'re feeding the model is generic — buy. If the data is yours and the workflow is yours — wrap. Only build the inference itself when it IS your moat.`;SFX.click();};}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Estimate your real build cost',what:'Try: drag the hidden costs in.',footer:'Build cost ≠ engineer salary. Add: eval cost, ops, on-call, data labelling, regression testing, abandoned experiments. Typical multiplier: 3-4× the engineer line.',scaffold:3,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Engineer salary says ₹50L/yr. What\'s the real cost?</h3>
+  <div class="row" id="L2i02_pool" style="margin:10px 0">${['Eval / annotation: ₹15L','On-call / ops: ₹20L','Data labelling: ₹25L','Abandoned prototypes: ₹10L','Compliance review: ₹8L','Distraction tax: -₹0','Manager time: ₹12L'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}</div>
+  <div class="lane" id="L2i02_lane"><h4>Hidden costs (drag in)</h4><div class="drop"></div></div>
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Real annual cost</div><div class="stat-value amber" id="L2i02_t">₹50L</div></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));Lab.makeDropZone(s.querySelector('#L2i02_lane'),t=>{const id=t?.dataset?.id;if(!id)return;const cl=t.cloneNode(true);cl.style.cursor='default';s.querySelector('#L2i02_lane .drop').appendChild(cl);t.style.opacity='.2';const total=50+[...s.querySelectorAll('#L2i02_lane .drop .chip')].reduce((sum,c)=>{const m=c.dataset.id.match(/₹(\d+)L/);return sum+(m?+m[1]:0);},0);s.querySelector('#L2i02_t').textContent='₹'+total+'L'+(total>=120?' (typical 3-4×)':'');});}},
+
+/* L3 — org wiring */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'Where AI teams die',what:'Watch: org chart, friction points.',footer:'Most AI initiatives die at one of three handoffs: research→eng (no clear interface), eng→product (no product surface), product→user (no behaviour change). Wire all three or expect graveyard.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The three lethal handoffs</h3>
+  <svg viewBox="0 0 500 200">${[['Research','Eng',60,150],['Eng','Product',180,150],['Product','User',300,150]].map(([a,b,x],i)=>`<rect x="${x}" y="60" width="80" height="40" fill="var(--accent)" rx="4"/><text x="${x+40}" y="85" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)">${a}</text><rect x="${x+120}" y="60" width="80" height="40" fill="var(--accent-strong)" rx="4"/><text x="${x+160}" y="85" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)">${b}</text><text x="${x+100}" y="130" text-anchor="middle" font-family="ui-monospace" font-size="20" fill="#a4123f">⚡</text><text x="${x+100}" y="150" text-anchor="middle" font-family="ui-monospace" font-size="9" fill="var(--muted)">${['interface','surface','adoption'][i]}</text>`).join('')}</svg>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'The pod that ships AI',what:'Watch: 4 roles, weekly cadence.',footer:'Working AI pod = ML eng + product eng + designer + domain owner. 4 people, ≤30hr/wk meetings, weekly demo. Smaller is faster; bigger is theatre.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The AI pod</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+    ${[['ML engineer','models, evals, deploys'],['Product engineer','UX surface, integration, ops'],['Designer','flow + interactions'],['Domain owner','says yes/no, knows the customer']].map(([n,d])=>`<div class="panel"><strong>${n}</strong><br><span style="color:var(--muted);font-size:12px">${d}</span></div>`).join('')}
+  </div>
+  <p class="panel" style="background:var(--accent-soft);margin-top:10px">Weekly demo to a real user. Anything else is research, not product.</p>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Diagnose your org\'s AI shape',what:'Try: 5 yes/no, get a verdict.',footer:'Three "yes" answers correlates with ship-rate >1 feature/quarter. Two or fewer correlates with "exec deck-only".',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>How does your AI org look?</h3>
+  ${['One named exec owns the AI P&L (not "everyone")','Pods of ≤6 people with full-stack skills','At least one weekly demo to a real customer','A documented AI guardrails policy (used, not shelved)','>30% of engineering time on AI (not "we are using AI")'].map(t=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">AI maturity</div><div class="stat-value amber" id="L3i01_r">0/5</div></div>`;
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();const n=s.querySelectorAll('input:checked').length;const r=s.querySelector('#L3i01_r');r.textContent=n+'/5';r.className='stat-value '+(n>=4?'green':n>=3?'amber':'red');});}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Whose KPI moves?',what:'Try: every AI bet needs a named owner.',footer:'A bet without a P&L owner whose comp depends on the metric is theatre. Tie the AI metric to one named person\'s scorecard or the bet won\'t ship.',scaffold:4,runtime:'30-60s',mechanic:'drag-into-slot',
+  mount(s){const bets=[{n:'AI contract drafting',o:'Head of Legal'},{n:'AI sales copilot',o:'VP Sales'},{n:'AI customer support agent',o:'VP Support'},{n:'AI inventory forecasting',o:'COO'}];s.innerHTML=`<h3>Match the bet to the owner whose scorecard moves</h3>
+  <div class="row" id="L3i02_p" style="margin:10px 0">${['Head of Legal','VP Sales','VP Support','COO','CIO','Innovation Lab'].map(o=>`<span class="chip" data-o="${o}">${o}</span>`).join('')}</div>
+  ${bets.map((b,i)=>`<div class="lane" data-i="${i}" style="margin:6px 0"><h4>${b.n}</h4><div class="drop"></div></div>`).join('')}
+  <button class="btn" id="L3i02_c">Check</button>
+  <div class="reveal" id="L3i02_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,t=>{const o=t?.dataset?.o;if(!o)return;l.querySelector('.drop').innerHTML=`<span class="chip" data-o="${o}">${o}</span>`;}));
+  s.querySelector('#L3i02_c').onclick=()=>{let ok=0;bets.forEach((b,i)=>{const lane=s.querySelector(`[data-i="${i}"] .drop .chip`);if(lane&&lane.dataset.o===b.o)ok++;});const r=s.querySelector('#L3i02_r');r.style.display='block';r.className='reveal '+(ok===bets.length?'win':'bad');r.innerHTML=`<strong>${ok}/${bets.length} matched.</strong> "Innovation Lab" is the trap option — owning innovation means owning nothing. Tie each bet to a line exec, or kill it.`;SFX.click();};}},
+
+/* L4 — risk */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'What goes wrong, in order',what:'Watch: top 5 AI incident types.',footer:'Incident frequency (24mo industry data): hallucination (43%), data leak (22%), bias decision (15%), prompt injection (12%), cost spike (8%). Plan for #1, not #5.',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>AI incident frequency (24mo)</h3>
+  <svg viewBox="0 0 500 200">${[['Hallucinated output',43],['PII / data leak',22],['Biased decision',15],['Prompt injection',12],['Cost spike',8]].map(([n,v],i)=>`<rect x="180" y="${25+i*30}" width="${v*7}" height="22" fill="${v>=20?'#a4123f':v>=10?'var(--saffron)':'var(--accent)'}"><animate attributeName="width" from="0" to="${v*7}" dur=".7s" begin="${i*.15}s" fill="freeze"/></rect><text x="175" y="${41+i*30}" text-anchor="end" font-family="ui-monospace" font-size="11">${n}</text><text x="${185+v*7}" y="${41+i*30}" font-family="ui-monospace" font-size="11" font-weight="700">${v}%</text>`).join('')}</svg>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'The cost spike, animated',what:'Watch: 1 bug, ₹40L lost weekend.',footer:'Real incident: prompt loop sent same query 8000×/min for 51 hours. ₹38L OpenAI bill. Fix is cheap: per-tenant rate limits + spend alerts + circuit breaker. Most teams have zero of three.',scaffold:1,runtime:'<30s',mechanic:'curve-fitting',
+  mount(s){s.innerHTML=`<h3>Cost spike incident — 51 hours</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="170" x2="460" y2="170" stroke="var(--ink)"/><line x1="40" y1="20" x2="40" y2="170" stroke="var(--ink)"/>
+  <polyline points="${Array.from({length:51},(_,i)=>(40+i*8)+','+(170-Math.min(140,i*i*0.05))).join(' ')}" fill="none" stroke="#a4123f" stroke-width="2.5"/>
+  <text x="40" y="15" font-family="ui-monospace" font-size="10" fill="var(--muted)">cumulative ₹</text>
+  <text x="460" y="35" text-anchor="end" font-family="ui-monospace" font-size="11" fill="#a4123f" font-weight="700">₹38L</text>
+  <text x="450" y="190" text-anchor="end" font-family="ui-monospace" font-size="9" fill="var(--muted)">51 hours</text></svg>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'Pre-mortem checklist',what:'Try: tick the 6 things to do BEFORE launch.',footer:'A pre-mortem reduces incident probability ~60% (per Klein, 2007). It costs 1 hour. Skip it and you\'ll spend 100× more on the post-mortem.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Pre-launch AI risk checklist</h3>
+  ${['Per-user cost cap with hard cutoff','PII detection on inputs AND outputs','Logging of all prompts + responses','Adversarial prompt suite passed','Designated human-in-loop for edge cases','Rollback in <5 minutes verified'].map(t=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Launch readiness</div><div class="stat-value amber" id="L4i01_r">0/6</div></div>`;
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();const n=s.querySelectorAll('input:checked').length;const r=s.querySelector('#L4i01_r');r.textContent=n+'/6';r.className='stat-value '+(n>=5?'green':n>=3?'amber':'red');});}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Sign or refuse?',what:'Try: 4 vendor contracts, sign-don\'t-sign.',footer:'Top non-negotiables in an AI vendor contract: (1) data isn\'t used for training, (2) audit logs available, (3) SOC2 or equivalent, (4) termination clause with data return. If 2+ are missing, walk.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const cs=[{c:'AI vendor wants to use your data to "improve their model". Standard NDA only.',a:false,why:'Hard no. Training-data clause is the line.'},{c:'Vendor offers 99.9% uptime, SOC2, audit logs, but only US data residency.',a:true,why:'Sign. India residency is nice-to-have; the core controls are present.'},{c:'Cheapest vendor. No SOC2. CEO says "we\\'ll get there".',a:false,why:'Walk. SOC2 lag = ops gap that will show up at the worst moment.'},{c:'Big-name vendor. SOC2, audit logs, data residency, $200k/yr (3x more).',a:true,why:'Sign if regulated industry. Premium = insurance.'}];let i=0;const r=()=>{const cn=cs[i];s.innerHTML=`<h3>${i+1}/${cs.length}. ${cn.c}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Sign</button><button class="btn ghost" data-p="false">Walk</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===cn.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${cn.a?'Sign.':'Walk.'}</strong> ${cn.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%cs.length;r();};});};r();}},
+
+/* L5 — 90-day plan */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'90 days, three milestones',what:'Watch: day-30, day-60, day-90 deliverables.',footer:'Day 30: one pod, one bet, one customer-facing pilot live. Day 60: pilot metric reported. Day 90: kill/keep decision + next portfolio. Anything later than this is theatre.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The 90-day spine</h3>
+  <svg viewBox="0 0 500 200"><line x1="40" y1="100" x2="460" y2="100" stroke="var(--ink)" stroke-width="2"/>${[['Day 30','Pod + pilot live'],['Day 60','First metric'],['Day 90','Decision']].map(([d,t],i)=>`<circle cx="${100+i*150}" cy="100" r="14" fill="var(--accent)"><animate attributeName="r" from="0" to="14" dur=".5s" begin="${i*.3}s" fill="freeze"/></circle><text x="${100+i*150}" y="105" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--paper)" font-weight="700">${i+1}</text><text x="${100+i*150}" y="75" text-anchor="middle" font-family="ui-monospace" font-size="11" font-weight="700">${d}</text><text x="${100+i*150}" y="140" text-anchor="middle" font-family="ui-monospace" font-size="11">${t}</text>`).join('')}</svg>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'What kills 90-day plans',what:'Watch: top 3 failure modes.',footer:'Why 90-day AI plans slip: (1) too many bets at once (43%), (2) no real customer in the loop (31%), (3) eval criteria invented at the end (26%). Pre-commit to all three.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Why 90-day plans slip</h3>
+  <div class="stat-grid">${[['Too many bets at once','43%','red'],['No real customer in the loop','31%','red'],['Eval criteria invented at end','26%','amber']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${v}</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:8px">Pre-commit: number of bets, customer name, success criteria. Write them before day 1, not day 75.</p>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Build your 90-day spec',what:'Try: pick bet, owner, customer, metric.',footer:'A complete 90-day spec: bet description, named pod lead, named customer, one quantitative metric, one kill threshold. Five fields. Most "AI plans" miss 3 of them.',scaffold:4,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Your 90-day spec</h3>
+  ${[['Bet (one sentence)','b'],['Pod lead (name)','l'],['Customer (named team or person)','c'],['Metric to move','m'],['Kill threshold','k']].map(([n,k])=>`<label style="display:block;margin:6px 0"><span style="display:inline-block;width:180px;font-family:ui-monospace,monospace;font-size:11px">${n}</span><input type="text" id="L5i01_${k}" style="width:55%"></label>`).join('')}
+  <button class="btn" id="L5i01_c" style="margin-top:8px">Lock spec</button>
+  <div class="reveal" id="L5i01_r" style="display:none;margin-top:10px"></div>`;
+  s.querySelector('#L5i01_c').onclick=()=>{const [b,l,c,m,k]=['b','l','c','m','k'].map(x=>s.querySelector('#L5i01_'+x).value.trim());const checks=[['Bet is specific (names AI use + outcome)',/AI|model|llm|agent/i.test(b)&&b.length>=20],['Pod lead is a named person',/\b[A-Z][a-z]+/.test(l)&&l.length>=3&&!/\bteam\b|\bowner\b|\beveryone\b/i.test(l)],['Customer is named, not "the team"',/\b[A-Z][a-z]+|@|\.com/.test(c)&&!/^the |^our |everyone|nobody|all/i.test(c)&&c.length>=3],['Metric is quantitative',/\d|%|hour|day|week|month|count|rate|cost|ratio|score|points/i.test(m)],['Kill threshold names a number + date',/\d/.test(k)&&/(day|week|month|by|before|under|less|miss|fail|<|≤)/i.test(k)]];const passed=checks.filter(([_,ok])=>ok).length;const r=s.querySelector('#L5i01_r');r.style.display='block';r.className='reveal '+(passed===5?'win':'bad');r.innerHTML=`<strong>${passed}/5 quality checks passed.</strong><br>${checks.map(([n,ok])=>(ok?'✓ ':'✗ ')+n).join('<br>')}<br><br>${passed===5?'Falsifiable, owned, customer-anchored. Print it, stick it on the wall, review weekly.':'A spec that fails any of these five will slip silently. Most commonly: customer field is "the team" + kill threshold has no number.'}`;SFX.click();};}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Pick the next quarterly bet',what:'Try: rank 4 options by leverage.',footer:'Quarterly bet leverage = (potential revenue × probability) ÷ org-effort. Most leaders rank by potential revenue alone. The denominator matters.',scaffold:3,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['AI contract drafting (legal, +12% throughput, low risk)','AI sales copilot (named reps, +5-8% close rate, medium risk)','AI inventory forecasting (proven elsewhere, +3% margin, medium risk)','AI customer support agent (high savings, BUT no exec owner, no pilot customer)'];const shuf=[...correct].sort(()=>Math.random()-.5);s.innerHTML=`<h3>Rank by leverage (highest at top)</h3>
+  <div id="L5i02_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L5i02_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L5i02_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L5i02_l'));
+  s.querySelector('#L5i02_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right order.</strong> Legal first: clear owner, low risk, near-term throughput. Support last: even with biggest savings, no owner = no shipping. The denominator is who will run it.':'<strong>Top bet is contract drafting</strong> — clear owner, low risk, near-term throughput. The "biggest savings" support bet goes last because no exec is signed up.';SFX.success();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

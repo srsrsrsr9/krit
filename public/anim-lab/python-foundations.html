@@ -1,0 +1,266 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · Python Foundations</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#0284c7;--accent-soft:#cfe6f5;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span>
+  <span class="course-name">Python Foundations</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option>
+      <option value="L1">L1 · Variables Are Stickers</option><option value="L2">L2 · Control Flow</option><option value="L3">L3 · Functions</option><option value="L4">L4 · Containers</option><option value="L5">L5 · Mini-project</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Twenty drop-in artifacts — 10 animations + 10 interactives — for <em>Python Foundations</em>. Each ties to a specific lesson and shows the mechanic, not the syntax.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Variables are stickers', L2:'Control flow', L3:'Functions', L4:'Containers', L5:'Mini-project' } };
+const ART = [
+  /* L1 · Variables Are Stickers */
+  { id:'L1-a01', type:'anim', lesson:'L1', title:'Sticker, not box', what:'`x = 5` puts a sticker on the value 5, not in a box called x.',
+    footer:'Animation shows two stickers on the same value — Python\'s reference model in 12 seconds.',
+    mount(s){s.innerHTML=`<h3>Two stickers, one value</h3><p class="desc">Watch <code>a = [1,2,3]; b = a; b.append(4)</code> visually.</p>
+    <svg viewBox="0 0 500 220"><rect x="220" y="80" width="60" height="60" rx="4" fill="var(--paper-2)" stroke="var(--ink)"/><text x="250" y="115" text-anchor="middle" font-family="ui-monospace" font-size="14" fill="var(--ink)" id="L1a01_val">[1,2,3]</text>
+    <text x="100" y="60" font-family="ui-monospace" font-size="20" fill="var(--accent)" font-weight="800">a</text><line x1="120" y1="58" x2="218" y2="105" stroke="var(--accent)" stroke-width="2"/>
+    <text x="400" y="60" font-family="ui-monospace" font-size="20" fill="var(--emerald)" font-weight="800" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".4s" begin="1s" fill="freeze"/>b</text>
+    <line x1="395" y1="58" x2="285" y2="105" stroke="var(--emerald)" stroke-width="2" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".4s" begin="1.2s" fill="freeze"/></line></svg>
+    <button class="btn" id="L1a01_btn" style="margin-top:14px">Append to b</button>`;
+    s.querySelector('#L1a01_btn').onclick=()=>{SFX.click();s.querySelector('#L1a01_val').textContent='[1,2,3,4]';};} },
+
+  { id:'L1-a02', type:'anim', lesson:'L1', title:'Reassign, don\'t mutate', what:'Reassigning x moves the sticker; mutating x[0] changes the value under both stickers.',
+    footer:'The single most common Python beginner trap, shown side-by-side.',
+    mount(s){s.innerHTML=`<h3>Two operations, two outcomes</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div class="panel"><strong>Reassign</strong><pre class="code"><span class="anno"># a, b initially point to same list</span>
+a = [1,2,3]
+b = a
+b = [9,9,9]  <span class="hi">← b gets new sticker</span>
+<span class="anno">a is still [1,2,3]</span></pre></div>
+      <div class="panel"><strong>Mutate</strong><pre class="code"><span class="anno"># a, b initially point to same list</span>
+a = [1,2,3]
+b = a
+b[0] = 9  <span class="hi">← changes value</span>
+<span class="anno">a is now [9,2,3]</span></pre></div></div>`;} },
+
+  { id:'L1-i01', type:'inter', lesson:'L1', title:'Trace the references', what:'Step through a 4-line snippet and predict what each variable holds.',
+    footer:'Pure reference-trace exercise. The point: variables in Python are bindings, not boxes.',
+    mount(s){s.innerHTML=`<h3>Predict at each step</h3><p class="desc">Step through, predict, reveal.</p>
+    <pre class="code" id="L1i01_code">a = [1, 2]
+b = a
+b.append(3)
+a = [9]</pre>
+    <div class="row" style="margin-top:10px"><button class="btn" id="L1i01_step">Step ▷</button><span style="font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);">Line <strong id="L1i01_line">0</strong>/4</span></div>
+    <div class="stat-grid" style="margin-top:12px"><div class="stat"><div class="stat-label">a</div><div class="stat-value" id="L1i01_a">—</div></div><div class="stat"><div class="stat-label">b</div><div class="stat-value" id="L1i01_b">—</div></div></div>`;
+    const states=[['—','—'],['[1,2]','—'],['[1,2]','[1,2]'],['[1,2,3]','[1,2,3]'],['[9]','[1,2,3]']];let i=0;
+    s.querySelector('#L1i01_step').onclick=()=>{SFX.click();if(i<states.length-1)i++;else i=0;s.querySelector('#L1i01_line').textContent=i;s.querySelector('#L1i01_a').textContent=states[i][0];s.querySelector('#L1i01_b').textContent=states[i][1];};} },
+
+  { id:'L1-i02', type:'inter', lesson:'L1', title:'Type sticker game', what:'Drag value-types to the variable names that fit them.',
+    footer:'Sorting exercise reinforcing dynamic typing. Same name can hold any type; that\'s the language\'s promise (and trap).',
+    mount(s){s.innerHTML=`<h3>What fits where?</h3><p class="desc">Drag types to names. (Trick: any name accepts any type.)</p>
+    <div class="row" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+      ${['42','3.14','"hello"','[1,2,3]','True','None','{"a":1}','(1,2)'].map(t=>`<span class="chip" draggable="true">${t}</span>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      ${['x','count','name','data'].map(n=>`<div class="lane" data-n="${n}"><h4>${n}</h4><div class="drop"></div></div>`).join('')}
+    </div>
+    <div class="reveal win" style="margin-top:14px;display:none" id="L1i02_r"><strong>All valid.</strong> Python\'s names don\'t care about types — that\'s why type hints exist as a separate, optional layer.</div>`;
+    s.addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('t',e.target.textContent);});
+    s.querySelectorAll('.lane').forEach(l=>{l.addEventListener('dragover',e=>e.preventDefault());l.addEventListener('drop',e=>{e.preventDefault();const t=e.dataTransfer.getData('t');l.querySelector('.drop').insertAdjacentHTML('beforeend',`<span class="chip" style="cursor:default">${t}</span>`);SFX.pop();s.querySelector('#L1i02_r').style.display='block';});});} },
+
+  /* L2 · Control Flow */
+  { id:'L2-a01', type:'anim', lesson:'L2', title:'if/elif/else as a slide', what:'A value enters; one of three branches lights up.',
+    footer:'Visualizes how Python evaluates an if/elif/else chain top-to-bottom and exits on first match.',
+    mount(s){s.innerHTML=`<h3>Watch a value find its branch</h3>
+    <svg viewBox="0 0 500 280"><circle cx="50" cy="50" r="20" fill="var(--accent)"><animate attributeName="cy" values="50;90;150;210" keyTimes="0;.4;.7;1" dur="3s" repeatCount="indefinite"/></circle>
+    ${['x > 100','x > 10','else'].map((l,i)=>`<rect x="120" y="${80+i*60}" width="320" height="40" rx="6" fill="var(--paper-2)" stroke="var(--rule)"/><text x="280" y="${105+i*60}" text-anchor="middle" font-family="ui-monospace" font-size="13">${l}</text>`).join('')}
+    <text x="70" y="55" font-family="ui-monospace" font-size="12" fill="var(--ink)">x = 42</text>
+    </svg>`;} },
+
+  { id:'L2-a02', type:'anim', lesson:'L2', title:'while vs for', what:'Two loops counting the same way, structured differently.',
+    footer:'`for` is preferred when you know the iterable; `while` for unbounded conditions.',
+    mount(s){s.innerHTML=`<h3>Two loops, same job</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="panel"><strong>while</strong><pre class="code">i = 0
+while i < 5:
+    print(i)
+    i += 1</pre><div style="font-family:ui-monospace,monospace;font-size:18px;text-align:center" id="L2a02_w">0</div></div>
+      <div class="panel"><strong>for</strong><pre class="code">for i in range(5):
+    print(i)</pre><div style="font-family:ui-monospace,monospace;font-size:18px;text-align:center" id="L2a02_f">0</div></div>
+    </div>
+    <button class="btn" id="L2a02_run" style="margin-top:14px">▷ Run</button>`;
+    s.querySelector('#L2a02_run').onclick=()=>{SFX.click();[0,1,2,3,4].forEach((n,i)=>setTimeout(()=>{s.querySelector('#L2a02_w').textContent=n;s.querySelector('#L2a02_f').textContent=n;SFX.pop();},i*350));};} },
+
+  { id:'L2-i01', type:'inter', lesson:'L2', title:'Branch picker', what:'Pick the next condition; reveal what code actually executes.',
+    footer:'Forces commit before reveal — same pedagogy as the embeddings deep dive.',
+    mount(s){s.innerHTML=`<h3>What runs when x = 7?</h3>
+    <pre class="code">x = 7
+if x > 100:
+    print("huge")
+elif x > 10:
+    print("big")
+elif x > 5:
+    print("medium")
+else:
+    print("small")</pre>
+    <div class="row" style="margin-top:10px">${['huge','big','medium','small'].map(o=>`<button class="btn ghost" data-pick="${o}">${o}</button>`).join('')}</div>
+    <div class="reveal" id="L2i01_r" style="display:none;margin-top:14px"></div>`;
+    s.querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{SFX.click();const ok=b.dataset.pick==='medium';const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Correct.</strong> x=7 fails `>100` and `>10`, passes `>5`, prints "medium" and exits. Python doesn\'t check the remaining branches.':'<strong>Not quite.</strong> x=7 passes only `>5`. Python exits the chain on first match. Try again.';});} },
+
+  { id:'L2-i02', type:'inter', lesson:'L2', title:'Off-by-one trainer', what:'Choose range() args; see exactly which numbers print.',
+    footer:'The single most common loop bug. Practice the boundary semantics live.',
+    mount(s){s.innerHTML=`<h3>What does range(<input type="number" id="L2i02_a" value="2" min="0" max="9" style="width:50px"/>, <input type="number" id="L2i02_b" value="6" min="0" max="9" style="width:50px"/>) print?</h3>
+    <div id="L2i02_out" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px"></div>
+    <p class="panel" style="margin-top:14px"><strong>Rule:</strong> start inclusive, stop exclusive. So range(2, 6) gives 2, 3, 4, 5 — not 6.</p>`;
+    const u=()=>{const a=+s.querySelector('#L2i02_a').value,b=+s.querySelector('#L2i02_b').value;let html='';for(let i=a;i<b;i++)html+=`<span class="chip" style="background:var(--accent-soft)">${i}</span>`;s.querySelector('#L2i02_out').innerHTML=html||'<em style="color:var(--muted)">empty range</em>';};
+    s.querySelectorAll('input').forEach(i=>i.oninput=()=>{SFX.hover();u();});u();} },
+
+  /* L3 · Functions */
+  { id:'L3-a01', type:'anim', lesson:'L3', title:'Function as machine', what:'Input goes in, output comes out, side effects happen in the middle.',
+    footer:'A function is a black-box machine. Document the contract; trust the body.',
+    mount(s){s.innerHTML=`<h3>Function as a machine</h3>
+    <svg viewBox="0 0 500 200">
+      <rect x="200" y="60" width="120" height="80" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="260" y="105" text-anchor="middle" font-family="ui-monospace" font-size="13" font-weight="700">add(a,b)</text>
+      <circle cx="100" cy="100" r="15" fill="var(--paper-2)" stroke="var(--ink)"><animate attributeName="cx" values="100;200" dur="2s" repeatCount="indefinite"/></circle>
+      <text x="100" y="105" text-anchor="middle" font-family="ui-monospace" font-size="11">3,4</text>
+      <circle cx="320" cy="100" r="15" fill="var(--emerald-soft)" stroke="var(--emerald)" stroke-width="2"><animate attributeName="cx" values="320;420" dur="2s" repeatCount="indefinite" begin="1s"/></circle>
+      <text x="420" y="105" text-anchor="middle" font-family="ui-monospace" font-size="11">7</text>
+    </svg>`;} },
+
+  { id:'L3-a02', type:'anim', lesson:'L3', title:'Args, kwargs, defaults', what:'Same function, three call shapes.',
+    footer:'Defaults make optional parameters cheap. kwargs name the args at the call site.',
+    mount(s){s.innerHTML=`<h3>Three ways to call greet()</h3>
+    <pre class="code">def greet(name, greeting=<span class="hi">"Hi"</span>, end="!"):
+    print(f"{greeting}, {name}{end}")</pre>
+    <div class="stat-grid" style="margin-top:12px">
+      <div class="stat"><div class="stat-label">greet("Sam")</div><div class="stat-value" style="font-size:13px;font-family:ui-monospace">Hi, Sam!</div></div>
+      <div class="stat"><div class="stat-label">greet("Sam", "Hey")</div><div class="stat-value" style="font-size:13px;font-family:ui-monospace">Hey, Sam!</div></div>
+      <div class="stat"><div class="stat-label">greet("Sam", end=".")</div><div class="stat-value" style="font-size:13px;font-family:ui-monospace">Hi, Sam.</div></div>
+    </div>`;} },
+
+  { id:'L3-i01', type:'inter', lesson:'L3', title:'Build a one-liner', what:'Compose a list comprehension via dropdowns; see output update.',
+    footer:'Constrained syntax-builder — defangs the unreadability of nested comprehensions.',
+    mount(s){s.innerHTML=`<h3>Compose a comprehension</h3>
+    <div style="font-family:ui-monospace,monospace;font-size:16px;background:#0b1220;color:#e2e8f0;padding:14px;border-radius:4px">
+      [ <select id="L3i01_op"><option>x</option><option>x*2</option><option>x*x</option><option>str(x)</option></select> for x in
+      <select id="L3i01_src"><option>range(5)</option><option>range(10)</option><option>[1,3,5,7]</option></select>
+      <select id="L3i01_if"><option value=""></option><option>if x % 2 == 0</option><option>if x > 3</option></select> ]
+    </div>
+    <div class="panel" style="margin-top:14px;font-family:ui-monospace,monospace" id="L3i01_out">—</div>`;
+    const u=()=>{const op=s.querySelector('#L3i01_op').value,src=s.querySelector('#L3i01_src').value,iff=s.querySelector('#L3i01_if').value;
+      let xs=src==='range(5)'?[0,1,2,3,4]:src==='range(10)'?[0,1,2,3,4,5,6,7,8,9]:[1,3,5,7];
+      if(iff.includes('% 2'))xs=xs.filter(x=>x%2===0);if(iff.includes('> 3'))xs=xs.filter(x=>x>3);
+      xs=xs.map(x=>op==='x'?x:op==='x*2'?x*2:op==='x*x'?x*x:String(x));
+      s.querySelector('#L3i01_out').textContent='['+xs.map(x=>typeof x==='string'?`'${x}'`:x).join(', ')+']';};
+    s.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{SFX.click();u();});u();} },
+
+  { id:'L3-i02', type:'inter', lesson:'L3', title:'Pure or impure?', what:'Classify functions as pure or side-effectful.',
+    footer:'Pure functions are easier to test. Impure aren\'t wrong — but you need to know which is which.',
+    mount(s){s.innerHTML=`<h3>Sort the functions</h3>
+    <div class="row" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+      ${['add(a,b)','print(x)','random.choice(xs)','sorted(xs)','xs.append(7)','json.dumps(d)','time.time()','len(s)'].map(t=>`<span class="chip" draggable="true">${t}</span>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="lane" data-l="pure"><h4>Pure</h4><div class="drop"></div></div>
+      <div class="lane" data-l="impure"><h4>Side-effectful</h4><div class="drop"></div></div>
+    </div>`;
+    s.addEventListener('dragstart',e=>{if(e.target.classList.contains('chip'))e.dataTransfer.setData('t',e.target.textContent);});
+    s.querySelectorAll('.lane').forEach(l=>{l.addEventListener('dragover',e=>e.preventDefault());l.addEventListener('drop',e=>{e.preventDefault();const t=e.dataTransfer.getData('t');l.querySelector('.drop').insertAdjacentHTML('beforeend',`<span class="chip" style="cursor:default">${t}</span>`);SFX.pop();});});} },
+
+  /* L4 · Containers */
+  { id:'L4-a01', type:'anim', lesson:'L4', title:'list vs tuple vs set vs dict', what:'Same data, four containers, four shapes.',
+    footer:'The right container for the job is a 60% productivity boost — and Python\'s big four cover most needs.',
+    mount(s){s.innerHTML=`<h3>The big four, side by side</h3>
+    <div class="stat-grid">
+      ${[['list','[1,2,3,2]','ordered, mutable, duplicates ok'],['tuple','(1,2,3,2)','ordered, immutable, hashable'],['set','{1,2,3}','unordered, unique, fast lookups'],['dict','{"a":1,"b":2}','key→value, ordered since 3.7']].map(([n,c,d])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value" style="font-size:14px;font-family:ui-monospace">${c}</div><div style="font-size:12px;color:var(--muted);margin-top:4px">${d}</div></div>`).join('')}
+    </div>`;} },
+
+  { id:'L4-a02', type:'anim', lesson:'L4', title:'Hash-map lookup', what:'Why dict[x] is O(1) and list.index(x) is O(n).',
+    footer:'Hash the key → jump to a slot. The reason dict beats list for membership tests at any scale.',
+    mount(s){s.innerHTML=`<h3>Why dict is fast</h3>
+    <svg viewBox="0 0 500 240"><text x="40" y="40" font-family="ui-monospace" font-size="13" fill="var(--ink)">key "sam"</text><line x1="100" y1="38" x2="180" y2="38" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrh)"/><rect x="180" y="20" width="80" height="36" rx="4" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="220" y="42" text-anchor="middle" font-family="ui-monospace" font-size="11">hash() → 3</text><line x1="260" y1="38" x2="340" y2="100" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrh)"/>
+    ${[0,1,2,3,4,5].map(i=>`<rect x="340" y="${60+i*24}" width="120" height="22" fill="${i===3?'var(--emerald-soft)':'var(--paper-2)'}" stroke="var(--rule)"/><text x="346" y="${76+i*24}" font-family="ui-monospace" font-size="11">slot ${i}${i===3?': sam=42':''}</text>`).join('')}
+    <defs><marker id="arrh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs></svg>`;} },
+
+  { id:'L4-i01', type:'inter', lesson:'L4', title:'Pick the container', what:'Given a task, pick the right container; reveal performance.',
+    footer:'Five real scenarios, one correct answer each.',
+    mount(s){s.innerHTML=`<h3>What container fits the job?</h3>
+    <div id="L4i01_q"></div>`;
+    const qs=[
+      {q:'Storing 50k user IDs, need to test membership constantly',a:'set',why:'O(1) lookups via hashing. List would be O(n) per check.'},
+      {q:'A function returns two values that belong together — a coord (x, y)',a:'tuple',why:'Immutable, hashable, signals "these are one thing." dict is overkill.'},
+      {q:'A grocery list you keep editing',a:'list',why:'Order matters; you mutate; duplicates are OK. Classic list use.'},
+      {q:'Mapping country code → country name',a:'dict',why:'Key-value lookup is exactly what dict is for.'},
+    ];
+    let i=0;const render=()=>{const q=qs[i];s.querySelector('#L4i01_q').innerHTML=`<p class="panel">${i+1}/${qs.length}. ${q.q}</p>
+      <div class="row" style="margin-top:10px">${['list','tuple','set','dict'].map(o=>`<button class="btn ghost" data-o="${o}">${o}</button>`).join('')}</div>
+      <div class="reveal" id="r" style="display:none;margin-top:14px"></div>`;
+      s.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{SFX.click();const r=s.querySelector('#r');r.style.display='block';r.className='reveal '+(b.dataset.o===q.a?'win':'bad');r.innerHTML=`<strong>${b.dataset.o===q.a?'Right.':'Better answer: '+q.a+'.'}</strong> ${q.why} <button class="btn" style="margin-left:10px" onclick="(${(()=>{}).toString()})()" id="nx">Next</button>`;document.getElementById('nx').onclick=()=>{i=(i+1)%qs.length;render();};});};
+    render();} },
+
+  { id:'L4-i02', type:'inter', lesson:'L4', title:'Mutate-and-see', what:'Mutate a dict, list, set — see what changes and what breaks.',
+    footer:'Live REPL feeling. The state panel updates with every op.',
+    mount(s){s.innerHTML=`<h3>Run an op, see the state</h3>
+    <div class="row" style="margin-bottom:12px">${['xs.append(4)','xs.pop()','xs[0] = 9','xs.sort(reverse=True)'].map(op=>`<button class="btn ghost" data-op="${op}">${op}</button>`).join('')}<button class="btn" id="L4i02_r">↻ Reset</button></div>
+    <div class="panel" style="font-family:ui-monospace,monospace;font-size:16px"><strong>xs = </strong><span id="L4i02_v">[1, 2, 3]</span></div>`;
+    let xs=[1,2,3];const u=()=>s.querySelector('#L4i02_v').textContent='['+xs.join(', ')+']';
+    s.querySelectorAll('[data-op]').forEach(b=>b.onclick=()=>{SFX.click();const op=b.dataset.op;if(op.includes('append'))xs.push(4);else if(op.includes('pop'))xs.pop();else if(op.includes('= 9'))xs[0]=9;else xs.sort((a,b)=>b-a);u();});
+    s.querySelector('#L4i02_r').onclick=()=>{xs=[1,2,3];u();};} },
+
+  /* L5 · Mini-project */
+  { id:'L5-a01', type:'anim', lesson:'L5', title:'Module → import → use', what:'How a file becomes something you can import.',
+    footer:'The Python import dance, simplified.',
+    mount(s){s.innerHTML=`<h3>From file to function call</h3>
+    <pre class="code"><span class="anno"># utils.py</span>
+def double(x):
+    return x * 2
+
+<span class="anno"># main.py</span>
+<span class="hi">from utils import double</span>
+print(double(5))  <span class="anno"># → 10</span></pre>
+    <p class="panel" style="margin-top:14px">Modules are just <code>.py</code> files. Packages are folders with <code>__init__.py</code>.</p>`;} },
+
+  { id:'L5-a02', type:'anim', lesson:'L5', title:'try/except path', what:'Watch the exception bubble up until something catches it.',
+    footer:'Exceptions propagate up the call stack. The first matching except wins.',
+    mount(s){s.innerHTML=`<h3>How exceptions travel</h3>
+    <svg viewBox="0 0 500 280">${['call f()','call g()','call h() ←ZeroDivisionError','except ZeroDivisionError: ✓'].map((l,i)=>`<rect x="60" y="${20+i*60}" width="380" height="40" rx="6" fill="${i===3?'var(--emerald-soft)':i===2?'var(--rose-soft)':'var(--paper-2)'}" stroke="${i===3?'var(--emerald)':i===2?'var(--rose)':'var(--rule)'}"/><text x="80" y="${45+i*60}" font-family="ui-monospace" font-size="13">${l}</text>${i<3?`<line x1="200" y1="${60+i*60}" x2="200" y2="${80+i*60}" stroke="var(--ink)" stroke-width="2" marker-end="url(#arr)"/>`:''}`).join('')}
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker></defs></svg>`;} },
+
+  { id:'L5-i01', type:'inter', lesson:'L5', title:'Mini-project: word counter', what:'Build a tiny word-counting script step by step.',
+    footer:'Type a sentence, see the dict build live. Bridge from "I know syntax" to "I can build something."',
+    mount(s){s.innerHTML=`<h3>Build it live</h3>
+    <input type="text" id="L5i01_t" value="the cat sat on the mat" style="width:100%;margin-bottom:10px">
+    <pre class="code">text = "<span id="L5i01_e">the cat sat on the mat</span>"
+counts = {}
+for word in text.split():
+    counts[word] = counts.get(word, 0) + 1</pre>
+    <div class="panel" style="font-family:ui-monospace,monospace;margin-top:10px"><strong>counts = </strong><span id="L5i01_o">—</span></div>`;
+    const u=()=>{const t=s.querySelector('#L5i01_t').value;s.querySelector('#L5i01_e').textContent=t;const c={};t.split(/\s+/).filter(Boolean).forEach(w=>c[w]=(c[w]||0)+1);s.querySelector('#L5i01_o').textContent=JSON.stringify(c);};
+    s.querySelector('#L5i01_t').oninput=u;u();} },
+
+  { id:'L5-i02', type:'inter', lesson:'L5', title:'Order the project', what:'Drag steps into the right order to ship a mini-tool.',
+    footer:'Sequencing is the missing skill between syntax and shipping. Practice it explicitly.',
+    mount(s){s.innerHTML=`<h3>Order the steps</h3><p class="desc">Drag into the right order; click Check.</p>
+    <div id="L5i02_steps" style="display:flex;flex-direction:column;gap:6px">
+      ${['Run script with sample input','Open the file in your editor','pip install requests','Write the function','Test edge cases','Commit to git'].sort(()=>Math.random()-.5).map((t,i)=>`<div class="chip" draggable="true" data-i="${i}" style="display:block;cursor:grab">${t}</div>`).join('')}
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="L5i02_chk">Check</button></div>
+    <div class="reveal" id="L5i02_r" style="display:none"></div>`;
+    const wrap=s.querySelector('#L5i02_steps');let dragged;
+    wrap.addEventListener('dragstart',e=>{dragged=e.target;});
+    wrap.addEventListener('dragover',e=>{e.preventDefault();const t=e.target.closest('.chip');if(t&&t!==dragged){const r=t.getBoundingClientRect();const b=e.clientY-r.top>r.height/2;t.parentNode.insertBefore(dragged,b?t.nextSibling:t);}});
+    s.querySelector('#L5i02_chk').onclick=()=>{const order=['Open the file in your editor','pip install requests','Write the function','Run script with sample input','Test edge cases','Commit to git'];const got=[...wrap.querySelectorAll('.chip')].map(c=>c.textContent);const ok=order.every((x,i)=>got[i]===x);const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right order.</strong> Setup → write → run → test → commit. Most beginners skip the test step; don\'t.':'<strong>Re-order.</strong> Open file → install deps → write → run → test → commit. Skipping any step costs you later.';};} },
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

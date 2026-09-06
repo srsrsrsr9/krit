@@ -216,28 +216,44 @@ async function resolveSkills(
   const slugToSkillId = new Map(dbSkills.map((s) => [s.slug, s.id] as const));
   let createdCount = 0;
 
-  for (const slug of allHints) {
-    if (dbSlugs.has(slug)) continue;
-    const catalog = findCatalogSkill(slug);
-    if (catalog) {
-      // Auto-create catalog skill (workspace-scoped to keep tenants tidy)
-      const created = await prisma.skill.create({
-        data: {
-          id: cuid(),
-          workspaceId,
-          slug: catalog.slug,
-          name: catalog.name,
-          category: catalog.category,
-          description: catalog.description ?? null,
-        },
-      });
-      slugToSkillId.set(catalog.slug, created.id);
-      createdCount++;
-    } else {
-      report.errors.push(
-        `skillHint "${slug}" is not in the curated catalog AND not in the DB.\n         → Add it to prisma/seed/skill-catalog.ts (and re-import) OR use a slug from the catalog.`,
-      );
+  for (const hint of allHints) {
+    if (dbSlugs.has(hint)) {
+      // hint already maps directly to a DB slug — record alias and skip
+      slugToSkillId.set(hint, slugToSkillId.get(hint)!);
+      continue;
     }
+    const catalog = findCatalogSkill(hint);
+    if (!catalog) {
+      report.errors.push(
+        `skillHint "${hint}" is not in the curated catalog AND not in the DB.\n         → Add it to prisma/seed/skill-catalog.ts (and re-import) OR use a slug from the catalog.`,
+      );
+      continue;
+    }
+    // Catalog mapped this hint to a canonical slug. Look it up first; create
+    // only if it really isn't in the DB yet. This handles the common case
+    // where the hint is a display name ("Reinvestment") whose canonical slug
+    // ("reinvestment") was already seeded by db:seed or a prior course.
+    const existing = await prisma.skill.findFirst({
+      where: { slug: catalog.slug, OR: [{ workspaceId: null }, { workspaceId }] },
+    });
+    if (existing) {
+      slugToSkillId.set(hint, existing.id);
+      slugToSkillId.set(catalog.slug, existing.id);
+      continue;
+    }
+    const created = await prisma.skill.create({
+      data: {
+        id: cuid(),
+        workspaceId,
+        slug: catalog.slug,
+        name: catalog.name,
+        category: catalog.category,
+        description: catalog.description ?? null,
+      },
+    });
+    slugToSkillId.set(hint, created.id);
+    slugToSkillId.set(catalog.slug, created.id);
+    createdCount++;
   }
   return { slugToSkillId, createdCount };
 }
@@ -316,10 +332,14 @@ async function main() {
     console.log(`\n  ✓ ${createdCount} catalog skill(s) auto-created in this workspace.`);
   }
 
-  // ── 5. Confirm ─────────────────────────────────────────────────────────
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  const ans = await ask(rl, "\nProceed with import? (y/N)", "N");
-  rl.close();
+  // ── 5. Confirm (skip prompt when --yes / CI / non-TTY) ─────────────────
+  const autoYes = args.includes("--yes") || !process.stdin.isTTY || process.env.CI === "true";
+  let ans = "y";
+  if (!autoYes) {
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    ans = await ask(rl, "\nProceed with import? (y/N)", "N");
+    rl.close();
+  }
   if (ans.toLowerCase() !== "y") {
     console.log("Aborted.");
     await prisma.$disconnect();
@@ -350,6 +370,8 @@ async function main() {
           subtitle: course.subtitle ?? null,
           summary: course.audience ?? null,
           estimatedMinutes: course.estimatedMinutes,
+          status: "PUBLISHED",
+          publishedAt: new Date(),
         },
       });
 

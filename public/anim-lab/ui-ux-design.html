@@ -1,0 +1,201 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · UI/UX Design</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#c8881e;--accent-soft:#f7d999;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">UI/UX Design</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option>
+      <option value="L1">L1 · Visual Hierarchy</option><option value="L2">L2 · Layout & Grids</option><option value="L3">L3 · Color & Type</option><option value="L4">L4 · Interaction & Microcopy</option><option value="L5">L5 · Feedback Loop</option>
+    </select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Twenty drop-ins for <em>UI/UX Design</em>. Visual hierarchy, grid, color, microcopy, critique — each artifact shows the before/after of a single design decision.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'Visual hierarchy', L2:'Layout & grids', L3:'Color & type', L4:'Interaction & microcopy', L5:'Feedback loop' } };
+const ART = [
+  /* L1 hierarchy */
+  { id:'L1-a01',type:'anim',lesson:'L1',title:'F-pattern vs Z-pattern',what:'How the eye actually moves across a page.',
+    footer:'Eye-tracking research: text-heavy pages get scanned F-shaped; visual pages scan Z. Design around the pattern, not against it.',
+    mount(s){s.innerHTML=`<h3>Where eyes go first</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="panel"><strong>F-pattern</strong><svg viewBox="0 0 200 140"><rect x="10" y="10" width="180" height="120" fill="var(--paper)"/>${[20,40,60].map((y,i)=>`<rect x="20" y="${y}" width="${[160,140,100][i]}" height="3" fill="var(--ink)"/>`).join('')}<path d="M 20 30 L 180 30 L 20 50 L 160 50 L 20 70 L 100 70" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+      <div class="panel"><strong>Z-pattern</strong><svg viewBox="0 0 200 140"><rect x="10" y="10" width="180" height="120" fill="var(--paper)"/><path d="M 20 25 L 180 25 L 20 110 L 180 110" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+    </div>` ;}},
+  { id:'L1-a02',type:'anim',lesson:'L1',title:'Size weight contrast',what:'The three levers of hierarchy.',
+    footer:'You don\'t need all three. Pick one or two; design with restraint.',
+    mount(s){s.innerHTML=`<h3>One headline, four treatments</h3>
+    ${['<div style="font-size:14px">Same size, same weight, same color</div>','<div style="font-size:22px">Size only</div>','<div style="font-size:14px;font-weight:800">Weight only</div>','<div style="font-size:14px;color:var(--accent)">Color only</div>'].map(h=>`<div class="panel">${h}</div>`).join('')}
+    <p class="panel" style="margin-top:14px">One signal usually beats three.</p>`;}},
+  { id:'L1-i01',type:'inter',lesson:'L1',title:'Three-element ladder',what:'Drag elements onto a hierarchy ladder.',
+    footer:'Forces explicit ordering. If everything is "important," nothing is.',
+    mount(s){s.innerHTML=`<h3>Rank these for a SaaS landing page</h3>
+    <p class="desc">Drag to order: most important at top.</p>
+    <div id="L1i01_list" style="display:flex;flex-direction:column;gap:6px">
+      ${['Pricing','Customer logos','Hero headline','Primary CTA','Secondary CTA','Footer'].sort(()=>Math.random()-.5).map(t=>`<div class="chip" draggable="true" style="display:block;cursor:grab">${t}</div>`).join('')}
+    </div>
+    <button class="btn" id="L1i01_c" style="margin-top:14px">Check</button>
+    <div class="reveal" id="L1i01_r" style="display:none"></div>`;
+    const wrap=s.querySelector('#L1i01_list');let drag;
+    wrap.addEventListener('dragstart',e=>drag=e.target);
+    wrap.addEventListener('dragover',e=>{e.preventDefault();const t=e.target.closest('.chip');if(t&&t!==drag){const r=t.getBoundingClientRect();t.parentNode.insertBefore(drag,e.clientY-r.top>r.height/2?t.nextSibling:t);}});
+    s.querySelector('#L1i01_c').onclick=()=>{const want=['Hero headline','Primary CTA','Customer logos','Pricing','Secondary CTA','Footer'];const got=[...wrap.querySelectorAll('.chip')].map(c=>c.textContent);const ok=want.slice(0,3).every((x,i)=>got[i]===x);const r=s.querySelector('#L1i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Right ordering.</strong> Headline → CTA → social proof is the canonical first scroll.':'<strong>Re-order.</strong> Headline first (says what), CTA next (offers next step), then logos (proof). Pricing belongs lower if you\'re selling on value first.';SFX.success();};}},
+  { id:'L1-i02',type:'inter',lesson:'L1',title:'Squint test',what:'Toggle blur; see what survives.',
+    footer:'Squint test = does the hierarchy hold when you can\'t read text? If only one or two things stand out, you\'re fine.',
+    mount(s){s.innerHTML=`<h3>Blur it. What still stands out?</h3>
+    <label>Blur amount<input type="range" id="L1i02_b" min="0" max="20" value="0"><span id="L1i02_v" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700">0px</span></label>
+    <div id="L1i02_canvas" style="background:var(--paper-2);padding:30px;border-radius:6px;margin-top:14px;transition:filter .2s">
+      <div style="font-family:'Iowan Old Style',Georgia,serif;font-size:36px;font-weight:900;margin-bottom:10px">Headline goes here</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px">Supporting subhead with details.</div>
+      <button style="background:var(--accent);color:var(--ink);border:none;padding:10px 18px;font-family:ui-monospace,monospace;font-size:11px;font-weight:800">Sign up free →</button>
+    </div>`;
+    s.querySelector('#L1i02_b').oninput=()=>{const v=s.querySelector('#L1i02_b').value;s.querySelector('#L1i02_v').textContent=v+'px';s.querySelector('#L1i02_canvas').style.filter=`blur(${v}px)`;SFX.hover();};}},
+  /* L2 layout */
+  { id:'L2-a01',type:'anim',lesson:'L2',title:'8pt grid',what:'Why 8 (not 7 or 9).',
+    footer:'Divides cleanly. Works at 1×, 2×, 3× density. Pretty much every modern design system uses an 8pt base.',
+    mount(s){s.innerHTML=`<h3>Every spacing on an 8pt scale</h3>
+    <svg viewBox="0 0 400 200">${[0,1,2,3,4,5,6,7].map(i=>`<rect x="${20+i*45}" y="80" width="40" height="${8*(i+1)}" fill="var(--accent)" opacity="0.7"/><text x="${40+i*45}" y="${75}" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink)">${8*(i+1)}</text>`).join('')}</svg>`;}},
+  { id:'L2-a02',type:'anim',lesson:'L2',title:'12-col grid behaviour',what:'How a 12-col layout reflows at breakpoints.',
+    footer:'12 has the most divisors (1,2,3,4,6,12) — flexible at every breakpoint.',
+    mount(s){s.innerHTML=`<h3>Same content, three breakpoints</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      ${[['Desktop',[6,3,3]],['Tablet',[6,6]],['Mobile',[12]]].map(([n,cols])=>`<div class="panel"><strong>${n}</strong><div style="display:grid;grid-template-columns:repeat(12,1fr);gap:2px;margin-top:8px">${cols.map(c=>`<div style="grid-column:span ${c};background:var(--accent-soft);padding:8px;text-align:center;font-family:ui-monospace,monospace;font-size:10px">${c}</div>`).join('')}</div></div>`).join('')}
+    </div>`;}},
+  { id:'L2-i01',type:'inter',lesson:'L2',title:'Spacing sandbox',what:'Slider for spacing; see the comfortable zone.',
+    footer:'There\'s a Goldilocks zone for vertical rhythm. Too tight = cluttered; too loose = disconnected.',
+    mount(s){s.innerHTML=`<h3>Adjust spacing</h3>
+    <label>Block spacing<input type="range" id="L2i01_s" min="4" max="80" value="24"><span id="L2i01_v" style="font-family:ui-monospace,monospace;color:var(--ink);font-weight:700">24px</span></label>
+    <div id="L2i01_p" style="margin-top:14px;background:var(--paper-2);padding:16px;border-radius:6px">
+      <div style="background:var(--accent-soft);padding:14px;border-radius:4px">Block A</div>
+      <div id="L2i01_g" style="height:24px"></div>
+      <div style="background:var(--accent-soft);padding:14px;border-radius:4px">Block B</div>
+    </div>
+    <div class="reveal" id="L2i01_r" style="display:none"></div>`;
+    s.querySelector('#L2i01_s').oninput=()=>{const v=+s.querySelector('#L2i01_s').value;s.querySelector('#L2i01_v').textContent=v+'px';s.querySelector('#L2i01_g').style.height=v+'px';const r=s.querySelector('#L2i01_r');r.style.display='block';r.className='reveal '+(v>=16&&v<=40?'win':v<8||v>60?'bad':'');r.innerHTML=v<8?'<strong>Too tight.</strong> Blocks read as one.':v>60?'<strong>Too loose.</strong> Reader loses connection between blocks.':v>=16&&v<=40?'<strong>Goldilocks zone.</strong> 16-40px is where related blocks feel grouped but distinct.':'<strong>Acceptable.</strong>';SFX.hover();};}},
+  { id:'L2-i02',type:'inter',lesson:'L2',title:'Alignment fixer',what:'Click misaligned elements; see what changes.',
+    footer:'Pixel-precise alignment is invisible when right and screams when wrong.',
+    mount(s){s.innerHTML=`<h3>Spot the misalignment</h3>
+    <div id="L2i02_c" style="background:var(--paper-2);padding:24px;border-radius:6px;margin-top:14px;position:relative">
+      <div style="background:var(--paper);padding:14px;border:1px solid var(--rule);margin-left:0">Block 1</div>
+      <div style="background:var(--paper);padding:14px;border:1px solid var(--rule);margin-left:3px;margin-top:8px" id="L2i02_b">Block 2 (slightly off)</div>
+      <div style="background:var(--paper);padding:14px;border:1px solid var(--rule);margin-left:0;margin-top:8px">Block 3</div>
+    </div>
+    <button class="btn" id="L2i02_fix" style="margin-top:14px">Snap to grid</button>`;
+    s.querySelector('#L2i02_fix').onclick=()=>{SFX.click();s.querySelector('#L2i02_b').style.transition='margin-left .3s';s.querySelector('#L2i02_b').style.marginLeft='0';};}},
+  /* L3 color & type */
+  { id:'L3-a01',type:'anim',lesson:'L3',title:'Contrast vs harmony',what:'A color either contrasts or harmonises — pick one.',
+    footer:'Complementary colors fight for attention; analogous colors recede. Both are valid; the wrong one for the job isn\'t.',
+    mount(s){s.innerHTML=`<h3>Two pairs, two effects</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="panel"><strong>Analogous (harmony)</strong><div style="display:flex;height:80px;margin-top:8px"><div style="flex:1;background:#c8881e"></div><div style="flex:1;background:#b88e2d"></div><div style="flex:1;background:#a8902a"></div></div></div>
+      <div class="panel"><strong>Complementary (contrast)</strong><div style="display:flex;height:80px;margin-top:8px"><div style="flex:1;background:#c8881e"></div><div style="flex:1;background:#0284c7"></div></div></div>
+    </div>`;}},
+  { id:'L3-a02',type:'anim',lesson:'L3',title:'Type scale',what:'Modular scale (1.25 ratio) explained.',
+    footer:'Pick a base size, multiply by a ratio. 1.25 is conservative; 1.618 (golden) is dramatic.',
+    mount(s){s.innerHTML=`<h3>16px × 1.25ⁿ</h3>
+    ${[16,20,25,31,39,49,61].map((sz,i)=>`<div style="font-family:'Iowan Old Style',Georgia,serif;font-size:${sz}px;line-height:1;margin:6px 0;border-left:2px solid var(--accent);padding-left:12px"><span style="font-family:ui-monospace,monospace;font-size:10px;color:var(--muted);margin-right:8px">${sz}px</span>Headline ${7-i}</div>`).join('')}`;}},
+  { id:'L3-i01',type:'inter',lesson:'L3',title:'Contrast checker',what:'Pick colors; see WCAG ratio live.',
+    footer:'Below 4.5:1, body text fails AA. Below 3:1, even large text fails.',
+    mount(s){s.innerHTML=`<h3>Check the ratio</h3>
+    <div class="row" style="margin-bottom:14px">
+      <label>Text<input type="color" id="L3i01_t" value="#3d3a32" style="margin-left:8px"></label>
+      <label style="margin-left:14px">Bg<input type="color" id="L3i01_b" value="#fbf6ec" style="margin-left:8px"></label>
+    </div>
+    <div id="L3i01_p" style="padding:30px;border-radius:6px;text-align:center;font-size:24px;font-weight:700">Sample text on background</div>
+    <div class="stat" style="margin-top:14px"><div class="stat-label">WCAG ratio</div><div class="stat-value amber" id="L3i01_r">—</div></div>`;
+    const lum=h=>{const r=parseInt(h.slice(1,3),16)/255,g=parseInt(h.slice(3,5),16)/255,b=parseInt(h.slice(5,7),16)/255;const c=v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);return 0.2126*c(r)+0.7152*c(g)+0.0722*c(b);};
+    const u=()=>{const t=s.querySelector('#L3i01_t').value,b=s.querySelector('#L3i01_b').value;s.querySelector('#L3i01_p').style.color=t;s.querySelector('#L3i01_p').style.background=b;const lt=lum(t),lb=lum(b);const r=(Math.max(lt,lb)+0.05)/(Math.min(lt,lb)+0.05);s.querySelector('#L3i01_r').textContent=r.toFixed(2)+':1';s.querySelector('#L3i01_r').className='stat-value '+(r>=4.5?'green':r>=3?'amber':'red');};
+    s.querySelectorAll('input[type=color]').forEach(i=>i.oninput=u);u();}},
+  { id:'L3-i02',type:'inter',lesson:'L3',title:'Font pairer',what:'Pick two fonts; see how they conflict or complement.',
+    footer:'Pair one serif with one sans; or two from same family. Avoid two display fonts.',
+    mount(s){s.innerHTML=`<h3>Pair them</h3>
+    <div class="row" style="margin-bottom:14px">
+      <label>Headline<select id="L3i02_h"><option value="Georgia, serif">Georgia (serif)</option><option value="'Iowan Old Style', serif">Iowan (serif)</option><option value="-apple-system, sans-serif">System sans</option><option value="'Courier New', monospace">Courier (mono)</option></select></label>
+      <label style="margin-left:14px">Body<select id="L3i02_b"><option value="Georgia, serif">Georgia</option><option value="-apple-system, sans-serif" selected>System sans</option><option value="'Iowan Old Style', serif">Iowan</option><option value="'Courier New', monospace">Courier</option></select></label>
+    </div>
+    <div id="L3i02_p" class="panel">
+      <h2 style="font-size:30px;margin:0 0 10px" id="L3i02_ph">A bold headline like this</h2>
+      <p id="L3i02_pb" style="margin:0">Followed by body copy that supports the headline, sets context, and invites the reader to keep going.</p>
+    </div>`;
+    const u=()=>{s.querySelector('#L3i02_ph').style.fontFamily=s.querySelector('#L3i02_h').value;s.querySelector('#L3i02_pb').style.fontFamily=s.querySelector('#L3i02_b').value;};
+    s.querySelectorAll('select').forEach(sel=>sel.onchange=()=>{SFX.click();u();});u();}},
+  /* L4 interaction & microcopy */
+  { id:'L4-a01',type:'anim',lesson:'L4',title:'Loading states ladder',what:'4 escalating loading states by duration.',
+    footer:'Skeletons for <500ms. Spinner for <2s. Progress bar for >2s. Estimated time for >10s.',
+    mount(s){s.innerHTML=`<h3>Pick the right loading state</h3>
+    ${[['<500ms','no indicator needed'],['<2s','spinner or skeleton'],['<10s','progress bar'],['>10s','progress + ETA + cancel']].map(([d,t])=>`<div class="panel" style="display:flex;justify-content:space-between;margin:6px 0"><strong>${d}</strong><span>${t}</span></div>`).join('')}`;}},
+  { id:'L4-a02',type:'anim',lesson:'L4',title:'Confirmation hierarchy',what:'Toast vs modal vs full-page.',
+    footer:'Toast for soft confirms (saved, copied). Modal for "you sure?". Full-page for catastrophic.',
+    mount(s){s.innerHTML=`<h3>Three confirms, three levels</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+      ${[['Toast','Saved.','low'],['Modal','Delete this file?','medium'],['Full page','Are you ABSOLUTELY sure you want to delete all user data?','high']].map(([n,t,l])=>`<div class="panel" style="text-align:center"><div class="stat-label">${n}</div><div style="font-size:14px;margin:8px 0">${t}</div><div style="font-size:10px;color:var(--muted)">stakes: ${l}</div></div>`).join('')}
+    </div>`;}},
+  { id:'L4-i01',type:'inter',lesson:'L4',title:'Rewrite the error',what:'Vague error → specific error.',
+    footer:'"Something went wrong" is a copy-out. Specific errors tell user WHAT happened and what to do.',
+    mount(s){s.innerHTML=`<h3>Rewrite this</h3>
+    <div class="panel" style="margin:14px 0;background:var(--rose-soft);border-color:var(--rose)">⚠️ Something went wrong. Please try again.</div>
+    <p class="desc">Pick a better message for: <em>user tried to upload a 50MB image, max is 10MB</em>.</p>
+    <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+      ${['"Error: file too big"','"Image is 50MB — max is 10MB. Compress or pick a smaller one."','"Upload failed."','"50MB exceeds the 10MB limit. Try a smaller file or compress this one."'].map((t,i)=>`<button class="btn ghost" data-c="${i}" style="text-align:left;justify-content:flex-start">${t}</button>`).join('')}
+    </div>
+    <div class="reveal" id="L4i01_r" style="display:none;margin-top:12px"></div>`;
+    s.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{SFX.click();const i=+b.dataset.c;const ok=i===1||i===3;const r=s.querySelector('#L4i01_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>Better.</strong> Tells user the exact problem (50MB vs 10MB) AND the next step (compress / pick smaller).':'<strong>Not quite.</strong> Best errors: state the constraint that was violated, give the next action. Try again.';});}},
+  { id:'L4-i02',type:'inter',lesson:'L4',title:'Button copy A/B',what:'Pick the CTA; see conversion intuition.',
+    footer:'Specific verb > "Submit". "Get my plan" > "Sign up". Test on real users; the ranking surprises you.',
+    mount(s){s.innerHTML=`<h3>Pick the best CTA for a fitness app</h3>
+    <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+      ${['Sign up','Start free trial','Get my plan','Submit','Start training today'].map(t=>`<button class="btn ghost" data-t="${t}" style="text-align:left">${t}</button>`).join('')}
+    </div>
+    <div class="reveal" id="L4i02_r" style="display:none;margin-top:12px"></div>`;
+    s.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{SFX.click();const v=b.dataset.t;const r=s.querySelector('#L4i02_r');r.style.display='block';r.className='reveal '+(v==='Get my plan'||v==='Start training today'?'win':v==='Submit'?'bad':'');r.innerHTML=`<strong>${v}.</strong> ${v==='Get my plan'?'First-person + specific noun. Usually wins in fitness CTAs.':v==='Start training today'?'Action-led + time-anchor. Strong second.':v==='Submit'?'Worst — "Submit" describes the form action, not the user benefit.':'OK — vague but acceptable. Specific noun > generic verb.'}`;});}},
+  /* L5 critique */
+  { id:'L5-a01',type:'anim',lesson:'L5',title:'Critique loop',what:'See → judge → propose → iterate.',
+    footer:'A critique is not "good/bad" — it\'s spotting the gap between current and intended.',
+    mount(s){s.innerHTML=`<h3>The cycle</h3>
+    <svg viewBox="0 0 500 200">${[['SEE',100,100],['JUDGE',225,100],['PROPOSE',350,100],['ITERATE',475,100]].map(([t,x,y],i)=>`<circle cx="${x-25}" cy="${y}" r="35" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="${x-25}" y="${y+4}" text-anchor="middle" font-family="ui-monospace" font-size="10" font-weight="700">${t}</text>${i<3?`<line x1="${x+10}" y1="${y}" x2="${x+90}" y2="${y}" stroke="var(--ink)" stroke-width="2" marker-end="url(#a)"/>`:''}`).join('')}<path d="M 450 100 Q 480 30 100 30 Q 70 30 75 80" fill="none" stroke="var(--ink)" stroke-dasharray="3 3" marker-end="url(#a)"/><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink)"/></marker></defs></svg>`;}},
+  { id:'L5-a02',type:'anim',lesson:'L5',title:'Critique vs reaction',what:'Same screen. Critique reads structural; reaction reads aesthetic.',
+    footer:'Reactions ("looks cluttered") are starting points; critique ("the CTA competes with the headline for top hierarchy") names what to fix.',
+    mount(s){s.innerHTML=`<h3>Reaction vs critique</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="panel" style="background:var(--rose-soft);border-color:var(--rose)"><strong>Reaction</strong><ul><li>"Feels cramped"</li><li>"Don\'t like the green"</li><li>"It\'s too busy"</li></ul></div>
+      <div class="panel" style="background:var(--emerald-soft);border-color:var(--emerald)"><strong>Critique</strong><ul><li>"4px spacing inside cards is below the 8pt minimum"</li><li>"#10b981 contrasts at 2.8:1 — fails AA on body text"</li><li>"Three competing visual weights on the hero"</li></ul></div>
+    </div>`;}},
+  { id:'L5-i01',type:'inter',lesson:'L5',title:'Find the issue',what:'Click hotspots on a mock; see what was wrong.',
+    footer:'Trained-eye drill. Hotspots are pre-marked issues — picking them up trains the muscle of seeing.',
+    mount(s){s.innerHTML=`<h3>Click any saffron dot</h3>
+    <svg viewBox="0 0 500 280" style="background:var(--paper-2);border-radius:6px">
+      <rect x="20" y="20" width="460" height="40" fill="var(--ink)"/><text x="40" y="46" font-family="-apple-system" font-size="14" fill="var(--paper)">My SaaS</text>
+      <text x="40" y="100" font-family="'Iowan Old Style',Georgia,serif" font-size="28" font-weight="900">Big bold headline</text>
+      <text x="40" y="140" font-family="-apple-system" font-size="20" font-weight="900" fill="var(--rose)">Equally bold subhead</text>
+      <text x="40" y="180" font-family="-apple-system" font-size="11" fill="#a8a8a8">Tiny grey body text that\'s hard to read on light bg</text>
+      <rect x="40" y="200" width="120" height="40" fill="var(--accent)"/><text x="100" y="225" text-anchor="middle" font-family="-apple-system" font-size="13">Click here</text>
+      <rect x="170" y="200" width="120" height="40" fill="var(--rose)"/><text x="230" y="225" text-anchor="middle" font-family="-apple-system" font-size="13" fill="var(--paper)">Or here</text>
+      <circle cx="40" cy="140" r="9" fill="var(--accent)" data-c="sub" style="cursor:pointer"/>
+      <circle cx="40" cy="180" r="9" fill="var(--accent)" data-c="body" style="cursor:pointer"/>
+      <circle cx="170" cy="220" r="9" fill="var(--accent)" data-c="cta" style="cursor:pointer"/>
+    </svg>
+    <div class="panel" id="L5i01_o" style="margin-top:14px">Click a saffron hotspot.</div>`;
+    const c={sub:'Two equally bold elements compete. Subhead should be visually quieter than headline.',body:'Grey-on-light at this size likely fails WCAG AA. Lift contrast.',cta:'Two CTAs of equal weight. Pick one as primary; demote the other.'};
+    s.querySelectorAll('[data-c]').forEach(d=>d.onclick=()=>{SFX.click();s.querySelector('#L5i01_o').innerHTML=`<strong>Issue:</strong> ${c[d.dataset.c]}`;});}},
+  { id:'L5-i02',type:'inter',lesson:'L5',title:'Critique template',what:'Fill 3 boxes: what works, what doesn\'t, one specific change.',
+    footer:'Structured critique is calmer than free-form. Three boxes; honest in each; one change at a time.',
+    mount(s){s.innerHTML=`<h3>Write a critique in three boxes</h3>
+    <div class="form-field" style="margin:14px 0"><label style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.16em;color:var(--emerald);text-transform:uppercase;display:block;margin-bottom:6px">What works</label><textarea style="width:100%;height:60px"></textarea></div>
+    <div class="form-field" style="margin:14px 0"><label style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.16em;color:var(--rose);text-transform:uppercase;display:block;margin-bottom:6px">What doesn't</label><textarea style="width:100%;height:60px"></textarea></div>
+    <div class="form-field" style="margin:14px 0"><label style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;display:block;margin-bottom:6px">One specific change</label><textarea style="width:100%;height:60px"></textarea></div>
+    <p class="panel">If "one specific change" is hard to write, the critique was reaction not structural. Re-read your "what doesn\'t" — turn it into a fix.</p>`;}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

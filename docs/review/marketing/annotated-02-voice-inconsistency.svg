@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 1440 900" width="1440" height="900">
+  <title>Annotated: Bicycle prototype — Krit's masthead identity inconsistency across the gallery</title>
+  <image href="../screenshots/04-mechanics-top.png" xlink:href="../screenshots/04-mechanics-top.png"
+         x="0" y="0" width="1440" height="900" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 1 (red) — masthead naming: "Krit Papers · Mechanics" is the 4th different gallery-identity in 4 tabs -->
+  <g>
+    <rect x="420" y="48" width="600" height="44" fill="rgba(193,39,45,0.12)" stroke="#c1272d" stroke-width="3"/>
+    <circle cx="420" cy="48" r="16" fill="white" stroke="#c1272d" stroke-width="2"/>
+    <text x="420" y="55" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+          font-size="20" fill="#c1272d" text-anchor="middle" dominant-baseline="middle">1</text>
+    <rect x="60" y="48" width="350" height="120" fill="white" stroke="#c1272d" stroke-width="2"/>
+    <text x="70" y="72" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#c1272d" font-weight="bold">1. FOUR MASTHEADS, ONE BRAND.</text>
+    <text x="70" y="92" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">Marketing tab: "Krit Quarterly"</text>
+    <text x="70" y="108" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">Mechanics tab: "Krit Papers"</text>
+    <text x="70" y="124" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">Embeddings tab: "Krit · Deep Dive"</text>
+    <text x="70" y="140" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d">Finance tab: no Krit anywhere</text>
+    <text x="70" y="158" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#c1272d" font-style="italic">→ no learnable brand shorthand</text>
+  </g>
+
+  <!-- 2 (green) — "experimentally false" anchor is exactly the angle a thoughtful reader pays for -->
+  <g>
+    <rect x="420" y="540" width="640" height="60" fill="rgba(20,85,74,0.10)" stroke="#14554a" stroke-width="3"/>
+    <circle cx="420" cy="540" r="16" fill="white" stroke="#14554a" stroke-width="2"/>
+    <text x="420" y="547" font-family="Helvetica, Arial, sans-serif" font-weight="bold"
+          font-size="20" fill="#14554a" text-anchor="middle" dominant-baseline="middle">2</text>
+    <rect x="1070" y="540" width="350" height="100" fill="white" stroke="#14554a" stroke-width="2"/>
+    <text x="1080" y="564" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#14554a" font-weight="bold">2. CONTRARIAN HOOK, EXECUTED.</text>
+    <text x="1080" y="584" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">"Experimentally false" + 2011</text>
+    <text x="1080" y="600" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">Science citation is the kind</text>
+    <text x="1080" y="616" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">of credible-contrarian claim</text>
+    <text x="1080" y="632" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#14554a">that justifies a ~$10 deep dive.</text>
+  </g>
+</svg>

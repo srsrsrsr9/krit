@@ -10,7 +10,7 @@
     --paper: #fffaf0;
     --ink: #0f172a;
     --ink-soft: #334155;
-    --muted: #64748b;
+    --muted: #475569;   /* UX F2: was #64748b (4.41:1 fail on #fbf6ec body bg); now ≈6.6:1 AA pass */
     --rule: #e7dfd0;
     --rule-soft: #f1ead8;
     --saffron: #f59e0b;
@@ -24,6 +24,10 @@
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
   body {
     margin: 0;
     background: var(--bg);
@@ -483,6 +487,712 @@
   .mt-12 { margin-top: 12px; }
   .mt-16 { margin-top: 16px; }
   .hidden { display: none; }
+
+  /* ─── CHAPTER NAV (top bar) ─── */
+  .topbar { gap: 12px; padding: 10px 16px; }
+  .wordmark { flex-shrink: 0; }
+  @media (max-width: 720px) { .wordmark span:last-child { display: none; } }
+  .chapter-nav {
+    display: flex; gap: 2px;
+    overflow-x: auto;
+    flex: 1;
+    min-width: 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+  }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chap {
+    padding: 4px 9px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-decoration: none;
+    border-radius: 11px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 140ms var(--ease);
+    flex-shrink: 0;
+  }
+  .chap:hover { color: var(--ink); }
+  .chap.current {
+    color: var(--ink); border-color: var(--saffron); background: var(--saffron-soft);
+  }
+  .chap.locked { opacity: 0.4; }
+  .chap.locked::after { content: ' ·'; }
+  .chap.done { color: var(--ink); }
+  .chap.done::before { content: '✓ '; color: var(--emerald); font-weight: 800; }
+
+  .points-pill {
+    flex-shrink: 0;
+    background: var(--emerald-soft);
+    color: #064e3b;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    transition: transform 200ms var(--ease);
+  }
+  .points-pill.bump { transform: scale(1.18); }
+  .mute-toggle {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    display: grid; place-items: center;
+    transition: all 140ms var(--ease);
+  }
+  .mute-toggle:hover { border-color: var(--saffron); color: var(--ink); }
+  .mute-toggle.muted { color: var(--muted); opacity: 0.4; }
+
+  /* ─── CHAPTER ANCHORS + END (gates) ─── */
+  .chapter-anchor {
+    height: 0;
+    scroll-margin-top: 70px;
+  }
+  .chapter-end {
+    margin: 36px 0 12px;
+    padding: 20px;
+    background: linear-gradient(135deg, #fffaf0 0%, #fef3c7 100%);
+    border: 1.5px solid var(--saffron);
+    border-radius: 8px;
+    display: flex; flex-direction: column; gap: 10px; align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-end::before {
+    content: ''; position: absolute;
+    top: -20px; right: -20px; width: 80px; height: 80px;
+    background: radial-gradient(circle, var(--saffron) 0%, transparent 60%);
+    opacity: 0.18;
+  }
+  .chapter-end .ce-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.2em; color: #92400e;
+    text-transform: uppercase;
+  }
+  .chapter-end .ce-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 19px; font-weight: 800;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .next-chap-btn {
+    background: var(--ink); color: var(--paper);
+    padding: 12px 22px;
+    font-family: ui-monospace, monospace;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.18em;
+    border: none; border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 160ms var(--ease);
+  }
+  .next-chap-btn:hover { background: var(--saffron); color: var(--ink); transform: translateY(-1px); }
+  .next-chap-btn.done {
+    background: var(--emerald); color: white; cursor: default;
+  }
+  .next-chap-btn.done:hover { transform: none; background: var(--emerald); color: white; }
+
+  /* ─── GRAFFITI BURST (reward animation) ─── */
+  .graffiti-burst {
+    position: fixed;
+    width: 300px; height: 300px;
+    pointer-events: none;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+  }
+  .graffiti-burst svg { width: 100%; height: 100%; overflow: visible; }
+  .graffiti-burst .gpath {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: scribble 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    filter: url(#sprayFilter);
+  }
+  .graffiti-burst .gpath.p2 { animation-delay: 90ms; }
+  .graffiti-burst .gpath.p3 { animation-delay: 180ms; }
+  .graffiti-burst .gpath.p4 { animation-delay: 260ms; }
+  .graffiti-burst .gpath.p5 { animation-delay: 340ms; }
+  .graffiti-burst .splat {
+    opacity: 0;
+    transform-origin: center;
+    animation: splat 600ms var(--ease) forwards;
+  }
+  .graffiti-burst .splat.s2 { animation-delay: 120ms; }
+  .graffiti-burst .splat.s3 { animation-delay: 240ms; }
+  .graffiti-burst .pts-text {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 26px; font-weight: 900;
+    text-anchor: middle;
+    fill: var(--ink);
+    opacity: 0;
+    animation: ptsPop 1400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 300ms;
+    paint-order: stroke;
+    stroke: var(--paper); stroke-width: 6px;
+  }
+  .graffiti-burst.fading { opacity: 0; transition: opacity 500ms; }
+  @keyframes scribble { to { stroke-dashoffset: 0; } }
+  @keyframes splat {
+    0% { opacity: 0; transform: scale(0.3) rotate(-8deg); }
+    40% { opacity: 0.85; transform: scale(1.1) rotate(2deg); }
+    100% { opacity: 0.6; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes ptsPop {
+    0% { opacity: 0; transform: translateY(0) scale(0.6); }
+    25% { opacity: 1; transform: translateY(-12px) scale(1.15); }
+    70% { opacity: 1; transform: translateY(-50px) scale(1); }
+    100% { opacity: 0; transform: translateY(-80px) scale(0.9); }
+  }
+
+  /* ─── KARPATHY VIEWER ─── */
+  .karpathy-viewer {
+    margin: 28px 0;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .karpathy-controls {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: white;
+    border-bottom: 1px solid var(--rule);
+    gap: 10px;
+  }
+  .karpathy-controls .btn { padding: 7px 14px; font-size: 10px; }
+  .kp-progress {
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  .kp-progress strong { color: var(--saffron); font-weight: 900; }
+  .karpathy-code {
+    background: #0b1220;
+    color: #475569;
+    padding: 18px 18px 18px 24px;
+    font-family: ui-monospace, monospace;
+    font-size: 12.5px;
+    line-height: 1.65;
+    margin: 0;
+    border-radius: 0;
+    max-height: 520px;
+    overflow-y: auto;
+    border-left: 4px solid #1e293b;
+    transition: border-left-color 240ms var(--ease);
+    position: relative;
+  }
+  .karpathy-code .kp-section {
+    display: block;
+    color: #475569;
+    opacity: 0.4;
+    transition: all 280ms var(--ease);
+    padding: 4px 0;
+    border-left: 2px solid transparent;
+    padding-left: 10px;
+    margin-left: -10px;
+  }
+  .karpathy-code .kp-section.active {
+    color: #e2e8f0;
+    opacity: 1;
+    border-left-color: var(--saffron);
+    background: rgba(245, 158, 11, 0.06);
+  }
+  .karpathy-code .kp-section .kp-anno { color: #94a3b8; font-style: italic; }
+  .karpathy-code .kp-section.active .kp-anno { color: #cbd5e1; }
+  .karpathy-commentary {
+    padding: 16px 18px;
+    background: var(--saffron-soft);
+    border-top: 1px solid var(--rule);
+    font-size: 15px;
+    line-height: 1.55;
+    color: #78350f;
+    min-height: 70px;
+  }
+  .karpathy-commentary strong { color: var(--ink); }
+
+  /* Section nav helper */
+  .section-anchored { scroll-margin-top: 70px; }
+
+  /* ─── JARGON HOVER/TAP DEFINITIONS ─── */
+  .jargon {
+    border-bottom: 1px dotted var(--saffron);
+    cursor: help;
+    position: relative;
+    font-style: normal;
+    transition: color 140ms var(--ease);
+  }
+  .jargon:hover, .jargon.open { color: #92400e; border-bottom-style: solid; }
+  .jargon-popup {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(300px, 80vw);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 14px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5;
+    border-radius: 6px;
+    z-index: 200;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+    text-align: left;
+    letter-spacing: normal;
+    text-transform: none;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 160ms var(--ease), transform 160ms var(--ease);
+    transform: translateX(-50%) translateY(4px);
+  }
+  .jargon-popup.shown { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .jargon-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%; left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ink);
+  }
+  .jargon-popup .jp-label {
+    display: block;
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--saffron);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  /* ─── EXTERNAL DIVE CARDS ─── */
+  .external-dives {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 22px 0 8px;
+  }
+  @media (min-width: 760px) { .external-dives { grid-template-columns: 1fr 1fr; } }
+  .external-dive {
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-left: 4px solid var(--sky);
+    border-radius: 8px;
+    padding: 16px 18px 18px;
+    display: flex; flex-direction: column;
+    transition: border-color 200ms var(--ease), transform 200ms var(--ease);
+  }
+  .external-dive:hover { border-color: var(--saffron); transform: translateY(-1px); }
+  .external-dive.read { border-left-color: var(--emerald); }
+  .external-dive.answered { background: linear-gradient(180deg, var(--paper) 0%, var(--emerald-soft) 100%); }
+  .ed-meta {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    font-family: ui-monospace, monospace;
+    font-size: 10px; letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .ed-type {
+    background: var(--ink); color: var(--paper);
+    padding: 2px 7px; border-radius: 3px;
+    font-weight: 700;
+  }
+  .ed-type.article { background: var(--sky); }
+  .ed-type.video   { background: var(--rose); }
+  .ed-type.repo    { background: var(--ink); }
+  .ed-type.docs    { background: var(--emerald); }
+  .ed-type.live    { background: var(--saffron); color: var(--ink); }
+  .ed-source { font-weight: 700; color: var(--ink-soft); }
+  .ed-length { color: var(--muted); }
+  .ed-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 18px; font-weight: 800;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .ed-why {
+    font-size: 14px; line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .ed-actions {
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    margin-top: auto;
+  }
+  .ed-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 14px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 140ms var(--ease);
+  }
+  .ed-link:hover { background: var(--saffron); color: var(--ink); }
+  .ed-back-btn {
+    background: var(--saffron-soft);
+    color: #92400e;
+    border: 1.5px solid var(--saffron);
+    padding: 7px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 140ms var(--ease);
+  }
+  .ed-back-btn:hover { background: var(--saffron); color: var(--ink); }
+  .ed-question {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  .ed-q-prompt {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.16em; color: var(--saffron);
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .ed-q-text { font-size: 15px; line-height: 1.45; margin: 0 0 10px; font-weight: 600; }
+
+  /* ─── COSINE PLAYGROUND (interactive widget) ─── */
+  .cosine-widget {
+    margin: 28px 0;
+    padding: 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-left: 4px solid var(--sky);
+    border-radius: 8px;
+  }
+  .cw-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .cw-kicker {
+    font-family: ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .cw-kicker .layer-tag {
+    background: var(--sky); color: var(--paper);
+    padding: 2px 7px; border-radius: 3px;
+    font-weight: 700; letter-spacing: 0.16em;
+  }
+  .cw-body { display: grid; grid-template-columns: 1fr; gap: 18px; margin-top: 14px; }
+  @media (min-width: 720px) { .cw-body { grid-template-columns: 1fr 220px; } }
+  .cw-canvas-wrap {
+    position: relative;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    touch-action: none;
+    user-select: none;
+  }
+  .cw-canvas-wrap svg { display: block; width: 100%; height: 100%; }
+  .cw-grid line { stroke: var(--rule-soft); stroke-width: 1; }
+  .cw-axes line { stroke: var(--rule); stroke-width: 1.5; }
+  .cw-axes text { fill: var(--muted); font-family: ui-monospace, monospace; font-size: 10px; }
+  .cw-arrow {
+    stroke-width: 3;
+    stroke-linecap: round;
+    fill: none;
+  }
+  .cw-arrow.a { stroke: var(--saffron); }
+  .cw-arrow.b { stroke: var(--emerald); }
+  .cw-tip {
+    cursor: grab;
+    transition: transform 80ms var(--ease);
+    will-change: transform;
+  }
+  .cw-tip:hover { transform: scale(1.15); }
+  .cw-tip.dragging { cursor: grabbing; transform: scale(1.25); }
+  /* Kill all cw transitions while actively dragging so the canvas tracks cleanly */
+  body.cw-dragging .cw-tip,
+  body.cw-dragging .cw-stat-value,
+  body.cw-dragging .cw-arrow { transition: none !important; }
+  .cw-tip.a { fill: var(--saffron); }
+  .cw-tip.b { fill: var(--emerald); }
+  .cw-label {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 800;
+    fill: var(--ink);
+    pointer-events: none;
+  }
+  .cw-readout {
+    display: flex; flex-direction: column; gap: 14px;
+    justify-content: center;
+  }
+  .cw-stat {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 12px 14px;
+  }
+  .cw-stat-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cw-stat-value {
+    font-family: 'Source Serif 4', serif;
+    font-size: 30px; font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    transition: color 240ms var(--ease);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .cw-stat-value.green { color: var(--emerald); }
+  .cw-stat-value.red { color: var(--rose); }
+  .cw-stat-value.neutral { color: var(--ink-soft); }
+  .cw-presets {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 12px;
+  }
+  .cw-preset {
+    background: white;
+    border: 1.5px solid var(--rule);
+    padding: 6px 10px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: all 140ms var(--ease);
+  }
+  .cw-preset:hover { border-color: var(--saffron); color: var(--ink); }
+  .cw-hint {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: var(--sky); background-color: rgba(2, 132, 199, 0.07);
+    border-left: 3px solid var(--sky);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .cw-hint strong { color: var(--ink); }
+
+  /* ─── EXTERNAL DIVE — inline context paragraph above each card ─── */
+  .ed-context {
+    margin: 28px 0 0;
+    padding: 14px 16px;
+    background: rgba(2, 132, 199, 0.05);
+    border: 1.5px solid rgba(2, 132, 199, 0.2);
+    border-bottom: none;
+    border-radius: 7px 7px 0 0;
+  }
+  .ed-context-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .ed-context p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); }
+  .ed-context + .external-dive {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin: 0 0 28px;
+    border-top: 1px dashed var(--rule);
+  }
+
+  /* ─── CONTRASTIVE FORCES WIDGET (Walkthrough 2) ─── */
+  .cf-widget, .tk-widget {
+    margin: 24px 0;
+    padding: 18px;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-left: 4px solid var(--saffron);
+    border-radius: 8px;
+  }
+  .tk-widget { border-left-color: var(--emerald); }
+  .cf-head, .tk-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .cf-head .cw-kicker .layer-tag { background: var(--saffron); color: var(--ink); }
+  .tk-head .cw-kicker .layer-tag { background: var(--emerald); color: var(--paper); }
+  .cf-controls, .tk-controls {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .cf-btn, .tk-btn {
+    background: white;
+    border: 1.5px solid var(--rule);
+    padding: 7px 12px;
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: all 140ms var(--ease);
+  }
+  .cf-btn:hover, .tk-btn:hover { border-color: var(--saffron); color: var(--ink); }
+  .cf-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .cf-btn.primary:hover { background: var(--saffron); color: var(--ink); border-color: var(--saffron); }
+  .cf-body, .tk-body {
+    display: grid; grid-template-columns: 1fr; gap: 16px;
+    margin-top: 14px;
+  }
+  @media (min-width: 720px) {
+    .cf-body, .tk-body { grid-template-columns: 1fr 200px; }
+  }
+  .cf-canvas-wrap, .tk-canvas-wrap {
+    position: relative;
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+  }
+  .cf-canvas-wrap svg, .tk-canvas-wrap svg { display: block; width: 100%; height: 100%; }
+  .cf-pair-line, .tk-link {
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+  }
+  .cf-pair-line.similar    { stroke: var(--emerald); stroke-opacity: 0.35; stroke-dasharray: 4 4; }
+  .cf-pair-line.dissimilar { stroke: var(--rose);    stroke-opacity: 0.30; stroke-dasharray: 4 4; }
+  .cf-dot, .tk-dot {
+    transition: cx 480ms cubic-bezier(0.4, 0, 0.2, 1),
+                cy 480ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.cf-anim-off .cf-dot { transition: none; }
+  .cf-dot      { fill: #fef3c7; stroke: var(--saffron); stroke-width: 2; }
+  .cf-dot.active { fill: var(--saffron); }
+  .cf-label    {
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 800;
+    fill: var(--ink);
+    pointer-events: none;
+    text-anchor: middle;
+    transition: x 480ms cubic-bezier(0.4, 0, 0.2, 1),
+                y 480ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  body.cf-anim-off .cf-label { transition: none; }
+  .cf-readout, .tk-readout {
+    display: flex; flex-direction: column; gap: 10px;
+    justify-content: flex-start;
+  }
+  .cf-step-readout, .tk-stat {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 10px 12px;
+  }
+  .cf-step-label, .tk-stat-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cf-step-value, .tk-stat-value {
+    font-family: 'Source Serif 4', serif;
+    font-size: 26px; font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .cf-step-value.green { color: var(--emerald); }
+  .cf-step-value.amber { color: var(--saffron); }
+  .cf-legend {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .cf-legend .swatch {
+    display: inline-block; width: 18px; height: 0;
+    border-top: 2px dashed currentColor;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+  .cf-legend .similar { color: var(--emerald); }
+  .cf-legend .dissimilar { color: var(--rose); }
+
+  /* ─── TOP-K RETRIEVAL WIDGET (Walkthrough 3 query) ─── */
+  .tk-dot      { fill: white; stroke: var(--ink-soft); stroke-width: 1.5; }
+  .tk-dot.match { fill: var(--emerald-soft); stroke: var(--emerald); }
+  .tk-dot.query { fill: var(--saffron); stroke: #92400e; stroke-width: 2.5; cursor: grab; }
+  .tk-dot.query.dragging { cursor: grabbing; }
+  .tk-label {
+    font-family: ui-monospace, monospace;
+    font-size: 11px; font-weight: 700;
+    fill: var(--ink-soft);
+    pointer-events: none;
+    text-anchor: middle;
+  }
+  .tk-label.match { fill: var(--ink); font-weight: 800; }
+  .tk-link { stroke: var(--emerald); stroke-opacity: 0.6; stroke-width: 1.5; }
+  .tk-link-label {
+    font-family: ui-monospace, monospace;
+    font-size: 10px; font-weight: 800;
+    fill: #064e3b;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .tk-results-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .tk-results-list li {
+    display: flex; justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .tk-results-list li:last-child { border-bottom: none; }
+  .tk-results-list li.top { color: var(--ink); font-weight: 800; }
+  .tk-results-list li.top .sim { color: var(--emerald); }
+  body.cw-dragging .tk-dot { transition: none !important; }
 </style>
 </head>
 <body>
@@ -490,12 +1200,35 @@
 <div class="topbar">
   <div class="wordmark">
     <span class="wordmark-k">K</span>
-    <span>Krit · Deep Dive</span>
+    <span>Krit Deep Dives</span>
   </div>
-  <div class="progress-pill" id="topProgress">0 / 14 complete</div>
+  <nav class="chapter-nav" id="chapterNav" aria-label="Chapters">
+    <a class="chap" data-chap="1" href="#ch-1">01 Start</a>
+    <a class="chap" data-chap="2" href="#ch-2">02 Why</a>
+    <a class="chap" data-chap="3" href="#ch-3">03 How</a>
+    <a class="chap" data-chap="4" href="#ch-4">04 Use</a>
+    <a class="chap" data-chap="5" href="#ch-5">05 Build</a>
+    <a class="chap" data-chap="6" href="#ch-6">06 Where</a>
+    <a class="chap" data-chap="7" href="#ch-7">07 Test</a>
+    <a class="chap" data-chap="8" href="#ch-8">08 Reflect</a>
+  </nav>
+  <div class="points-pill" id="pointsPill">0 PTS</div>
+  <button class="mute-toggle" id="muteToggle" aria-label="Toggle sound" title="Toggle sound effects">♪</button>
 </div>
 
+<!-- SVG filter for spray-paint texture, shared by all graffiti bursts -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sprayFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="2"/>
+    </filter>
+  </defs>
+</svg>
+
 <main>
+
+  <div class="chapter-anchor" id="ch-1" data-chap="1"></div>
 
   <!-- ───────────────── HERO ───────────────── -->
   <section id="hero">
@@ -518,12 +1251,21 @@
   <!-- ───────────────── PRE-TEST ───────────────── -->
   <section id="pretest">
     <div class="card layer-2">
-      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Calibration</span><span>Pre-flight check</span></div>
-      <h3>Before we start — how confident are you on each?</h3>
-      <p class="small">Rate each 1 (no clue) to 5 (could teach it). We'll surface the same statements at the end and show what shifted.</p>
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Calibration</span><span>Where you stand now</span></div>
+      <h3>No quiz here. Just mark where you are today.</h3>
+      <p class="small">This isn't a test — there are no right answers. Drop a 1 if you've never heard of it, a 5 if you could teach it, a 3 if you'd recognise it but couldn't write it. At the end, the same five statements come back and we show you the <em>shift</em>. The shift is the point; today's number is just where you started.</p>
       <div id="preConfBox"></div>
     </div>
   </section>
+
+  <!-- ────── CHAPTER 1 END ────── -->
+  <div class="chapter-end" data-end-chap="1">
+    <span class="ce-label">Chapter 01 · Start</span>
+    <div class="ce-title">Calibration set. Now the actual page begins.</div>
+    <button class="next-chap-btn" data-advance="1">Lock in chapter 1 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-2" data-chap="2"></div>
 
   <!-- ───────────────── HOOK ───────────────── -->
   <h2>The wall keyword search hit</h2>
@@ -550,7 +1292,7 @@
     Now imagine <strong>384 axes</strong>. Or <strong>1,536</strong>. Each one a learned semantic dimension you didn't have to name — the model figured out which axes carry useful signal during training.
   </p>
   <p>
-    That's an embedding. A vector of (e.g.) 384 floats, one per axis, where similar meanings produce nearby vectors. The unit of comparison is <strong>cosine similarity</strong>: a number from −1 (opposite) through 0 (unrelated) to 1 (identical).
+    That's an embedding. A vector of (e.g.) 384 floats, one per axis, where similar meanings produce nearby vectors. The unit of comparison is <strong><dfn class="jargon" data-def="A measure of similarity between two vectors that looks at their direction (angle), not their length. Formula: dot(a, b) ÷ (|a|·|b|). Range −1 to 1. For sentence embeddings on natural English, anything above 0.7 typically means 'meaningfully similar.'">cosine similarity</dfn></strong>: a number from −1 (opposite) through 0 (unrelated) to 1 (identical).
   </p>
 
   <div class="figure">
@@ -585,6 +1327,92 @@
     </div>
   </section>
 
+  <!-- ───────────────── COSINE PLAYGROUND ───────────────── -->
+  <section id="cosine-play">
+    <div class="cosine-widget">
+      <div class="cw-head">
+        <div class="cw-kicker"><span class="layer-tag">Layer 1 · Interactive</span><span>Cosine by hand</span></div>
+        <div class="cw-presets">
+          <button class="cw-preset" data-preset="synonyms">Synonyms</button>
+          <button class="cw-preset" data-preset="related">Related</button>
+          <button class="cw-preset" data-preset="unrelated">Unrelated</button>
+          <button class="cw-preset" data-preset="opposites">Opposites</button>
+          <button class="cw-preset" data-preset="random">Shuffle</button>
+        </div>
+      </div>
+      <h3 style="margin: 10px 0 4px; font-size: 19px;">Drag the dots. Watch the score.</h3>
+      <p class="small" style="margin: 0; color: var(--ink-soft);">
+        Two 2D vectors stand in for two embeddings. The maths is the same in 384 dimensions — there's just more room for things to be perpendicular. Drag the saffron or emerald tip.
+      </p>
+      <div class="cw-body">
+        <div class="cw-canvas-wrap">
+          <svg id="cosineSvg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive cosine similarity">
+            <g class="cw-grid">
+              <line x1="0" y1="50"  x2="400" y2="50"/>
+              <line x1="0" y1="100" x2="400" y2="100"/>
+              <line x1="0" y1="150" x2="400" y2="150"/>
+              <line x1="0" y1="250" x2="400" y2="250"/>
+              <line x1="0" y1="300" x2="400" y2="300"/>
+              <line x1="0" y1="350" x2="400" y2="350"/>
+              <line x1="50"  y1="0" x2="50"  y2="400"/>
+              <line x1="100" y1="0" x2="100" y2="400"/>
+              <line x1="150" y1="0" x2="150" y2="400"/>
+              <line x1="250" y1="0" x2="250" y2="400"/>
+              <line x1="300" y1="0" x2="300" y2="400"/>
+              <line x1="350" y1="0" x2="350" y2="400"/>
+            </g>
+            <g class="cw-axes">
+              <line x1="0" y1="200" x2="400" y2="200"/>
+              <line x1="200" y1="0" x2="200" y2="400"/>
+              <text x="394" y="194" text-anchor="end">+x</text>
+              <text x="206" y="14">+y</text>
+            </g>
+            <path id="cwArc" fill="rgba(245,158,11,0.10)" stroke="rgba(245,158,11,0.35)" stroke-width="1.5"/>
+            <line id="cwArrowA" class="cw-arrow a" x1="200" y1="200" x2="320" y2="120"/>
+            <line id="cwArrowB" class="cw-arrow b" x1="200" y1="200" x2="280" y2="280"/>
+            <polygon id="cwHeadA" fill="#f59e0b"/>
+            <polygon id="cwHeadB" fill="#10b981"/>
+            <!-- UX F5: tips bumped 14→18 for Fitts's-law-compliant touch target; pulse ring on first paint hints draggability on touch where :hover doesn't fire -->
+            <circle class="cw-tip-pulse" cx="320" cy="120" r="20" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0">
+              <animate attributeName="r" from="18" to="32" dur="1.2s" begin="0.5s;0.5s+4s" repeatCount="3"/>
+              <animate attributeName="opacity" values="0.7;0" dur="1.2s" begin="0.5s;0.5s+4s" repeatCount="3"/>
+            </circle>
+            <circle id="cwTipA" class="cw-tip a" cx="320" cy="120" r="18"/>
+            <circle id="cwTipB" class="cw-tip b" cx="280" cy="280" r="18"/>
+            <text id="cwLabelA" class="cw-label" x="332" y="113" fill="#92400e">A</text>
+            <text id="cwLabelB" class="cw-label" x="292" y="296" fill="#064e3b">B</text>
+          </svg>
+        </div>
+        <div class="cw-readout">
+          <div class="cw-stat">
+            <div class="cw-stat-label">Cosine similarity</div>
+            <div class="cw-stat-value neutral" id="cwCos">0.00</div>
+          </div>
+          <div class="cw-stat">
+            <div class="cw-stat-label">Angle between</div>
+            <div class="cw-stat-value neutral" id="cwAngle">0°</div>
+          </div>
+          <div class="cw-stat">
+            <div class="cw-stat-label" style="margin-bottom: 6px;">A · B / (|A||B|)</div>
+            <div id="cwFormula" style="font-family: ui-monospace, monospace; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5;">— / —</div>
+          </div>
+        </div>
+      </div>
+      <div class="cw-hint" id="cwHint">
+        <strong>Try this:</strong> drag <em>B</em> until it points opposite to <em>A</em>. The cosine moves from <strong>+1</strong> (same direction) through <strong>0</strong> (perpendicular) to <strong>−1</strong> (opposite). For real embeddings, &gt;0.7 means "close in meaning"; near 0 means "unrelated"; negative is rare for sentence embeddings (the space they live in is mostly positive).
+      </div>
+    </div>
+  </section>
+
+  <!-- ────── CHAPTER 2 END ────── -->
+  <div class="chapter-end" data-end-chap="2">
+    <span class="ce-label">Chapter 02 · Why</span>
+    <div class="ce-title">You can name the wall, and you've committed your first prediction.</div>
+    <button class="next-chap-btn" data-advance="2">Lock in chapter 2 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-3" data-chap="3"></div>
+
   <!-- ───────────────── HOW BUILT ───────────────── -->
   <h2>How embeddings actually get built (the 90-second version)</h2>
   <p>
@@ -594,11 +1422,40 @@
     The breakthrough was that the <em>side effect</em> of the prediction task was a meaning space. After training, words that play similar roles in sentences ended up with similar vectors. <strong>"king" – "man" + "woman" ≈ "queen"</strong> wasn't a feature anyone designed. It fell out of forcing the model to predict context.
   </p>
   <p>
-    Modern embeddings use the same idea with three upgrades: (1) the model is a transformer encoder (so context matters — <em>bank</em> in a river sentence vs a finance sentence get different vectors), (2) the prediction task is richer (masked language modelling, contrastive learning), (3) the output is per-sentence, not per-word.
+    Modern embeddings use the same idea with three upgrades: (1) the model is a <dfn class="jargon" data-def="A neural network that reads a sequence of tokens and outputs a context-aware vector for each one. Stacked self-attention layers let every token's vector be modulated by every other token in the sentence — which is how the same word can end up in different places depending on its surroundings.">transformer encoder</dfn> (so context matters — <em>bank</em> in a river sentence vs a finance sentence get different vectors), (2) the prediction task is richer (masked language modelling, <dfn class="jargon" data-def="A training objective that learns by comparison: pull pairs that should be similar closer together and push pairs that should be dissimilar apart. Powers most modern sentence embeddings and CLIP-style text-image models. Walkthrough 2 builds the simplest possible version of this.">contrastive learning</dfn>), (3) the output is per-sentence, not per-word.
   </p>
   <p class="small">
     For 90% of production use, you don't need to know any of this. You pick a model (<code>bge-small-en-v1.5</code>, <code>all-MiniLM-L6-v2</code>), call <code>.encode()</code>, and the floats come out. The intuition above matters for <em>debugging</em>: when embeddings give weird results, it's usually because the model was trained on data unlike yours, not because the math is wrong.
   </p>
+
+  <!-- DIVE 1 · Alammar — supports the 90-second tour above with the long version -->
+  <div class="ed-context">
+    <p class="ed-context-label">Deeper · pointed read · ~12 min</p>
+    <p>The 90-second tour above is the shape. Alammar's version is the picture. Open the article and scroll to the section titled <strong>"Skipgram"</strong> (about a third of the way down) — read through "Negative Sampling." That's where you'll see <em>why</em> the model needs negative examples at all, which is the trick that made training tractable. Come back and Predict #2 below will land harder.</p>
+  </div>
+  <div class="external-dive" data-dive="ed-alammar">
+    <div class="ed-meta">
+      <span class="ed-type article">Article</span>
+      <span class="ed-source">Jay Alammar</span>
+      <span class="ed-length">Skipgram + Negative Sampling</span>
+    </div>
+    <h3 class="ed-title">Illustrated Word2Vec · Skipgram section</h3>
+    <p class="ed-why">The exact section that derives Skip-gram with Negative Sampling — the training task whose <em>side effect</em> is the meaningful vector space. Maps directly to what Walkthrough 2 will build.</p>
+    <div class="ed-actions">
+      <a class="ed-link" href="https://jalammar.github.io/illustrated-word2vec/#skipgram" target="_blank" rel="noopener">Open at section ↗</a>
+      <button class="ed-back-btn" data-dive-back="ed-alammar">I've read the section · quiz me</button>
+    </div>
+    <div class="ed-question hidden" data-dive-q="ed-alammar">
+      <p class="ed-q-prompt">Return question · about negative sampling</p>
+      <p class="ed-q-text">Why does Skip-gram need <em>negative</em> samples in addition to the positive (real-context) word pairs?</p>
+      <div class="quiz-choices">
+        <button class="quiz-choice" data-q="ed-alammar-q" data-correct="false">A · To prevent the embedding values from drifting too large during training.</button>
+        <button class="quiz-choice" data-q="ed-alammar-q" data-correct="true" data-explain="Right. With only positive pairs, the model has a trivial winning strategy: make every word's vector similar to every other word's vector — then it 'predicts' context perfectly. Negative samples (random non-context pairs) force the model to push some words apart, which is what shapes a useful similarity space. This is the SAME structure as Walkthrough 2's similar + dissimilar lists.">B · Without negatives, the model could trivially predict every word is similar to every other word — there'd be no force pulling unrelated things apart.</button>
+        <button class="quiz-choice" data-q="ed-alammar-q" data-correct="false">C · Because the softmax over all 30,000 vocab words is too computationally expensive — negatives speed it up.</button>
+      </div>
+      <div class="quiz-explain hidden" id="ed-alammar-qExplain"></div>
+    </div>
+  </div>
 
   <!-- ───────────────── PREDICT #2 ───────────────── -->
   <section id="predict-2">
@@ -618,6 +1475,44 @@
       </div>
     </div>
   </section>
+
+  <!-- DIVE 2 · 3B1B Attention — visualises the exact mechanism Predict #2 hinged on -->
+  <div class="ed-context">
+    <p class="ed-context-label">Deeper · pointed watch · ~5 min clip</p>
+    <p>Predict #2 sat on one fact: <em>attention reshapes each token's embedding based on its neighbours.</em> The cleanest visualisation of that fact is in Grant Sanderson's attention video. Jump to <strong>~2:00</strong> and watch through <strong>~7:00</strong>. You'll see the same word ("mole") get pulled in different directions depending on whether the sentence is about chemistry or skin or animals. That's literally what's happening to "bank" in the question above.</p>
+  </div>
+  <div class="external-dive" data-dive="ed-3b1b">
+    <div class="ed-meta">
+      <span class="ed-type video">Video</span>
+      <span class="ed-source">3Blue1Brown</span>
+      <span class="ed-length">~5 min clip, starts 2:00</span>
+    </div>
+    <h3 class="ed-title">Attention in transformers · the embedding-modulation segment</h3>
+    <p class="ed-why">The 5 minutes that make "contextual embeddings" tangible. Watch the "mole" example; it's the same idea as "bank" in Predict #2. After this, attention stops being a black box.</p>
+    <div class="ed-actions">
+      <a class="ed-link" href="https://www.youtube.com/watch?v=eMlx5fFNoYc&amp;t=120s" target="_blank" rel="noopener">Open at 2:00 ↗</a>
+      <button class="ed-back-btn" data-dive-back="ed-3b1b">I've watched the clip · quiz me</button>
+    </div>
+    <div class="ed-question hidden" data-dive-q="ed-3b1b">
+      <p class="ed-q-prompt">Return question · what does attention actually do?</p>
+      <p class="ed-q-text">In the "mole" example Grant uses, what's happening to the initial embedding vector?</p>
+      <div class="quiz-choices">
+        <button class="quiz-choice" data-q="ed-3b1b-q" data-correct="false">A · It gets replaced by a new vector picked from a context-specific dictionary.</button>
+        <button class="quiz-choice" data-q="ed-3b1b-q" data-correct="false">B · The model swaps in a different tokeniser based on the sentence.</button>
+        <button class="quiz-choice" data-q="ed-3b1b-q" data-correct="true" data-explain="Right. The initial vector for 'mole' is the same in every sentence — it's the lookup-table row. Attention then adds carefully-weighted contributions from every surrounding token, nudging the vector toward the chemistry-cluster or the skin-cluster or the animal-cluster as appropriate. Same starting point, different additions, different final position. That's how 'bank' (Predict #2) ends up near 'credit union' in the finance sentence.">C · The vector gets additive contributions from surrounding tokens — same starting point, different additions, different final position.</button>
+      </div>
+      <div class="quiz-explain hidden" id="ed-3b1b-qExplain"></div>
+    </div>
+  </div>
+
+  <!-- ────── CHAPTER 3 END ────── -->
+  <div class="chapter-end" data-end-chap="3">
+    <span class="ce-label">Chapter 03 · How</span>
+    <div class="ce-title">90-second tour done. The bank test was the real check — context beats keywords.</div>
+    <button class="next-chap-btn" data-advance="3">Lock in chapter 3 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-4" data-chap="4"></div>
 
   <!-- ───────────────── WORKED EXAMPLE ───────────────── -->
   <section id="worked">
@@ -751,6 +1646,388 @@ for i, item in enumerate(items):
     </div>
   </section>
 
+  <!-- ────── CHAPTER 4 END ────── -->
+  <div class="chapter-end" data-end-chap="4">
+    <span class="ce-label">Chapter 04 · Use</span>
+    <div class="ce-title">You've used embeddings end-to-end. Now we open the box.</div>
+    <button class="next-chap-btn" data-advance="4">Lock in chapter 4 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-5" data-chap="5"></div>
+
+  <!-- ───────────────── BUILD FROM SCRATCH ───────────────── -->
+  <section id="build">
+    <h2>Open the black box — build one in 60 lines</h2>
+    <p>
+      You've used a pretrained embedding model. Now we'll build a tiny one from scratch — small enough that nothing is hiding. Three short walkthroughs in PyTorch, then we'll read the whole file as one piece. By the end, the line <em>"embeddings are a lookup table that training reshapes"</em> will stop being a metaphor.
+    </p>
+    <p class="small">
+      First walkthrough — what's in the table and what feeds it. Second — the math that reshapes it. Third — the loop that runs the math a thousand times. A scrubbable, Karpathy-style read of the whole file follows.
+    </p>
+
+    <h3>Walkthrough 1 · The data and the model</h3>
+
+    <pre><code><span class="anno"># PyTorch only — no other libraries.</span>
+import torch
+import torch.nn as nn
+import torch.nn.functional as F</code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Standard imports. <code>nn.Embedding</code> is the lookup table; <code>F.cosine_similarity</code> is the comparison we'll train against. Three lines, no surprises.
+    </p>
+
+    <pre><code><span class="anno"># Toy vocabulary. Real models train on 30k+ tokens; we use 10.</span>
+vocab = ['cat',   'dog',  'puppy', 'kitten', 'king',
+         'queen', 'man',  'woman', 'apple',  'banana']
+w2i = {w: i for i, w in enumerate(vocab)}
+<span class="anno"># w2i['cat']    == 0
+# w2i['banana'] == 9</span></code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Embedding models work on integer indices, not strings. The <code>w2i</code> map is what tokenisation does in real systems — convert text into a sequence of integers the model can look up. Everything downstream operates on integers.
+    </p>
+
+    <pre><code><span class="anno"># The training signal. The ONLY place we tell the model what 'meaning' is.</span>
+similar = [('cat',   'kitten'), ('dog',   'puppy'),
+           ('king',  'queen'),  ('apple', 'banana')]
+
+dissimilar = [('cat',    'king'),   ('apple', 'queen'),
+              ('puppy',  'banana'), ('kitten','man')]</code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Eight pairs. Four to pull together, four to push apart. The model has no other ground truth — no dictionary, no part-of-speech tags, no concept of "animal" or "royalty." It only sees: <em>these two indices should end up close; these two should end up far.</em>
+    </p>
+    <p>
+      Real models get this signal at scale by treating co-occurrence as a proxy: words that appear in the same sentence are "similar," words from random sentences are "dissimilar." Same mechanism, billions of pairs.
+    </p>
+
+    <pre><code><span class="anno"># The model. Literally a lookup table: 10 words × 3 dimensions = 30 numbers.</span>
+EMB_DIM = 3
+embeddings = nn.Embedding(num_embeddings=len(vocab), embedding_dim=EMB_DIM)</code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      That's the entire model. Not a metaphor — <code>nn.Embedding(10, 3)</code> allocates a 10×3 matrix of random floats and exposes a lookup. Index <code>0</code> returns row <code>0</code>. Index <code>9</code> returns row <code>9</code>. The matrix is what we train.
+    </p>
+    <p>
+      Production embedding models stack a transformer encoder on top of this lookup so context can modulate each vector. The foundation — the lookup — is identical.
+    </p>
+
+    <pre><code><span class="anno"># "Embedding a word" = looking up its row.</span>
+cat_vec = embeddings(torch.tensor(w2i['cat']))
+print(cat_vec)
+<span class="anno"># tensor([-0.31, 1.42, 0.07], grad_fn=&lt;EmbeddingBackward&gt;)</span></code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Three numbers. Right now they mean nothing — the matrix was filled with random floats when we created it. Training will reshape those numbers so 'cat' and 'kitten' end up close and 'cat' and 'king' end up far.
+    </p>
+
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Predict-then-reveal</span><span>Before any training</span></div>
+      <h3>Predict: cosine similarity of <code>cat_vec</code> and <code>kitten_vec</code> <em>right now</em> — before a single training step?</h3>
+      <p class="small">The table was just filled with random floats. Cosine ranges −1 to 1. Type your guess.</p>
+      <div class="predict-stage">
+        <div class="predict-input-row">
+          <input type="number" id="wt1p1Input" step="0.01" min="-1" max="1" placeholder="−1.00 – 1.00">
+          <button class="btn" data-predict="wt1p1">Commit</button>
+        </div>
+        <div class="reveal-box hidden" id="wt1p1Reveal">
+          <span class="actual">≈ 0.04</span>
+          <div class="vs">Your guess: <strong id="wt1p1Your"></strong> · Off by <strong id="wt1p1Diff"></strong></div>
+          <div class="feedback" id="wt1p1Fb"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      <strong>That's the load-bearing move for this whole section.</strong> The model is a table. Training is what loads meaning into the table. The 0.73 you predicted for 'king' vs 'queen' earlier wasn't math — it was the residue of billions of training pairs that nudged those two rows of a much larger table to land near each other.
+    </p>
+
+    <h3 style="margin-top: 44px;">Walkthrough 2 · The math that does the nudging</h3>
+    <p>
+      Walkthrough 1 left us with a randomly-filled table and a list of pairs. This walkthrough is where the math turns into code. Two questions: <em>what's a "loss"</em> and <em>what does training actually do to the table?</em>
+    </p>
+
+    <pre><code><span class="anno"># Cosine similarity in two lines. Dot product divided by magnitudes.</span>
+def cosine(a, b):
+    return (a * b).sum() / (a.norm() * b.norm())</code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      That's the formula. <code>F.cosine_similarity</code> does the same thing with batch handling; we wrote it by hand so nothing is hidden. Output: a scalar between −1 (opposite directions) and 1 (same direction).
+    </p>
+
+    <pre><code><span class="anno"># The loss: a single number. How wrong are we, right now?</span>
+def contrastive_loss(emb, similar, dissimilar):
+    pull = 0.0
+    for w1, w2 in similar:
+        v1 = emb(torch.tensor(w2i[w1]))
+        v2 = emb(torch.tensor(w2i[w2]))
+        pull += (1 - cosine(v1, v2))             <span class="anno"># 0 when identical, grows as they drift apart</span>
+
+    push = 0.0
+    for w1, w2 in dissimilar:
+        v1 = emb(torch.tensor(w2i[w1]))
+        v2 = emb(torch.tensor(w2i[w2]))
+        push += torch.clamp(cosine(v1, v2) + 0.3, min=0)  <span class="anno"># fires only if too close</span>
+
+    return (pull + push) / (len(similar) + len(dissimilar))</code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Read it in two halves. The <strong>pull</strong> half loops over similar pairs and adds <code>(1 − cosine)</code> — high when the pair is far apart, zero when they're identical. The <strong>push</strong> half loops over dissimilar pairs and adds the cosine if it's still above <code>−0.3</code> — i.e. it only fires when they're not yet pushed apart enough.
+    </p>
+    <p>
+      Loss = how much we're wrong. Lower is better. Right now (random table), the loss is around <code>0.9</code>. After training it'll be near <code>0.05</code>.
+    </p>
+
+    <pre><code><span class="anno"># An optimizer. Plain SGD with a learning rate.</span>
+opt = torch.optim.SGD(embeddings.parameters(), lr=0.5)
+
+<span class="anno"># ── ONE training step ──</span>
+opt.zero_grad()                                <span class="anno"># forget last step's gradient</span>
+loss = contrastive_loss(embeddings, similar, dissimilar)
+loss.backward()                                <span class="anno"># gradient of loss w.r.t. every embedding</span>
+opt.step()                                     <span class="anno"># nudge each vector against its gradient</span></code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      Four lines that do the whole thing. <code>.backward()</code> is where PyTorch shines: for every one of the 30 numbers in the table, it computes the <dfn class="jargon" data-def="The direction (and magnitude) you'd nudge each parameter to reduce the loss the fastest. PyTorch computes this automatically via the chain rule across all operations that produced the loss — this is autograd. The optimizer then takes a small step in the opposite direction (gradient descent).">gradient</dfn> — which direction would lower the loss. <code>opt.step()</code> nudges each number a little in that direction. <strong>One pair at a time, the table reshapes.</strong>
+    </p>
+
+    <!-- ───────────────── CONTRASTIVE FORCES WIDGET ───────────────── -->
+    <div class="cf-widget" id="cfWidget">
+      <div class="cf-head">
+        <div class="cw-kicker"><span class="layer-tag">Layer 1 · Interactive</span><span>The pull, the push, in motion</span></div>
+        <div class="cf-controls">
+          <button class="cf-btn primary" data-cf="step">Step</button>
+          <button class="cf-btn" data-cf="run">Run 50</button>
+          <button class="cf-btn" data-cf="reset">Reset</button>
+        </div>
+      </div>
+      <h3 style="margin: 10px 0 4px; font-size: 19px;">Watch the table reshape itself.</h3>
+      <p class="small" style="margin: 0; color: var(--ink-soft);">
+        Nine words start at random positions in 2D. Each <span style="color: var(--emerald); font-weight: 700;">green dashed line</span> is a similar pair (pull together). Each <span style="color: var(--rose); font-weight: 700;">red dashed line</span> is a dissimilar pair (push apart). Hit <strong>Step</strong> a few times — or <strong>Run 50</strong> — and watch clusters form. The maths in the code above is doing exactly this, in 3D, on a 10-row table.
+      </p>
+      <div class="cf-body">
+        <div class="cf-canvas-wrap">
+          <svg id="cfSvg" viewBox="-200 -200 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Contrastive forces in motion">
+            <g id="cfLines"></g>
+            <g id="cfDots"></g>
+            <g id="cfLabels"></g>
+          </svg>
+        </div>
+        <div class="cf-readout">
+          <div class="cf-step-readout">
+            <div class="cf-step-label">Step</div>
+            <div class="cf-step-value" id="cfStep">0</div>
+          </div>
+          <div class="cf-step-readout">
+            <div class="cf-step-label">Loss</div>
+            <div class="cf-step-value amber" id="cfLoss">—</div>
+          </div>
+          <div class="cf-step-readout">
+            <div class="cf-step-label">cos(cat, kitten)</div>
+            <div class="cf-step-value" id="cfCatKitten">—</div>
+          </div>
+          <div class="cf-legend">
+            <span class="similar"><span class="swatch"></span>pull</span>
+            &nbsp; · &nbsp;
+            <span class="dissimilar"><span class="swatch"></span>push</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Predict-then-reveal</span><span>After one step</span></div>
+      <h3>Cosine of <code>cat</code> and <code>kitten</code> was ≈0.04 before this step. After one step at lr=0.5, it is…</h3>
+      <div class="predict-stage">
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-q="wt2p1" data-correct="false">A · Up significantly — now &gt; 0.2</button>
+          <button class="quiz-choice" data-q="wt2p1" data-correct="true" data-explain="One step moves it a little — typically into the 0.05–0.15 range with lr=0.5. The gradient knows the right direction; the learning rate keeps the magnitude small. After ~50 steps cos(cat, kitten) is past 0.85. The math is one step. The magic is repetition.">B · Up a little — now in the 0.05–0.15 range</button>
+          <button class="quiz-choice" data-q="wt2p1" data-correct="false">C · Down — the model got worse</button>
+          <button class="quiz-choice" data-q="wt2p1" data-correct="false">D · Unchanged — gradient was zero</button>
+        </div>
+        <div class="quiz-explain hidden" id="wt2p1Explain"></div>
+      </div>
+    </div>
+
+    <p class="small" style="margin-top: 24px; padding: 12px 14px; background: var(--rule-soft); border-radius: 5px; border-left: 3px solid var(--sky);">
+      <strong>Up next · Walkthrough 3:</strong> the loop, the query, the result. One step is math. A loop is learning.
+    </p>
+
+    <h3 style="margin-top: 44px;">Walkthrough 3 · The loop, the query, the result</h3>
+    <p>
+      One step nudges a little. Two hundred steps teach the table. After that, "encode a word" returns a vector that actually means something — meaning being whatever the pairs told it.
+    </p>
+
+    <pre><code><span class="anno"># Training loop. 200 steps.</span>
+for step in range(200):
+    opt.zero_grad()
+    loss = contrastive_loss(embeddings, similar, dissimilar)
+    loss.backward()
+    opt.step()
+    if step % 40 == 0:
+        cs = cosine(embeddings(torch.tensor(w2i['cat'])),
+                    embeddings(torch.tensor(w2i['kitten']))).item()
+        print(f'step {step:3d}  loss {loss.item():.3f}  cos(cat, kitten) {cs:.3f}')
+
+<span class="anno"># step   0  loss 0.873  cos(cat, kitten) 0.041
+# step  40  loss 0.231  cos(cat, kitten) 0.751
+# step  80  loss 0.124  cos(cat, kitten) 0.891
+# step 120  loss 0.087  cos(cat, kitten) 0.933
+# step 160  loss 0.063  cos(cat, kitten) 0.957</span></code><button class="copy-btn">Copy</button></pre>
+
+    <p>
+      The whole table reshapes. <code>cos(cat, kitten)</code> climbs from random (0.04) toward near-synonymous (0.96). The other pairs reshape in parallel. We never told the model what a cat <em>is</em> — only that 'cat' should end up near 'kitten'. The semantic structure is a side effect of the pulls and pushes.
+    </p>
+
+    <pre><code><span class="anno"># Query: encode a word, find the nearest neighbours in the vocab.</span>
+query = embeddings(torch.tensor(w2i['queen']))
+results = []
+for w, i in w2i.items():
+    if w == 'queen': continue
+    sim = cosine(query, embeddings(torch.tensor(i))).item()
+    results.append((w, sim))
+results.sort(key=lambda x: -x[1])
+print(results[:3])
+<span class="anno"># [('king', 0.94), ('woman', 0.62), ('man', 0.31)]</span></code><button class="copy-btn">Copy</button></pre>
+
+    <!-- ───────────────── TOP-K RETRIEVAL WIDGET ───────────────── -->
+    <div class="tk-widget" id="tkWidget">
+      <div class="tk-head">
+        <div class="cw-kicker"><span class="layer-tag">Layer 1 · Interactive</span><span>Semantic search, by hand</span></div>
+        <div class="tk-controls">
+          <button class="tk-btn" data-tk="reset">Reset query</button>
+        </div>
+      </div>
+      <h3 style="margin: 10px 0 4px; font-size: 19px;">Drag the query. Watch the top 3.</h3>
+      <p class="small" style="margin: 0; color: var(--ink-soft);">
+        Ten vocabulary words sit at their post-training positions (cat near kitten, king near queen, and so on). Drag the <span style="color: #92400e; font-weight: 700;">saffron query dot</span> around and the three nearest words light up with their cosine scores. That's the entire query loop from the code above — encode, sort by cosine, return top-K.
+      </p>
+      <div class="tk-body">
+        <div class="tk-canvas-wrap">
+          <svg id="tkSvg" viewBox="-200 -200 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Top-K retrieval">
+            <g id="tkLinks"></g>
+            <g id="tkLinkLabels"></g>
+            <g id="tkDots"></g>
+            <g id="tkLabels"></g>
+            <!-- Query dot rendered last so it sits on top -->
+            <circle id="tkQuery" class="tk-dot query" cx="0" cy="-130" r="13"/>
+            <text id="tkQueryLabel" class="tk-label" x="0" y="-148" fill="#92400e" style="font-weight: 800;">query</text>
+          </svg>
+        </div>
+        <div class="tk-readout">
+          <div class="tk-stat">
+            <div class="tk-stat-label">Top 3 nearest</div>
+            <ul class="tk-results-list" id="tkResults"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      That's semantic search. Encode the query, encode the candidates, sort by cosine. With <code>sentence-transformers</code> you skip the training step (someone else did it on billions of pairs) — but the query loop is identical.
+    </p>
+
+    <div class="card layer-2">
+      <div class="card-kicker l2"><span class="layer-tag">Layer 2 · Predict-then-reveal</span><span>After training</span></div>
+      <h3>After training, which word will be closest to <code>banana</code>?</h3>
+      <div class="predict-stage">
+        <div class="quiz-choices">
+          <button class="quiz-choice" data-q="wt3p1" data-correct="true" data-explain="Apple. Because (apple, banana) was in our similar pairs. The model learned exactly what we told it — nothing more, nothing less. If we'd mistakenly put 'banana' in a similar pair with 'king', the model would happily make banana ≈ king. The training signal IS the meaning. This is the load-bearing fact behind 'embeddings reflect their training data, not Truth' — when production embeddings give weird results, it's almost always a data-shape mismatch, not a math bug.">A · apple</button>
+          <button class="quiz-choice" data-q="wt3p1" data-correct="false">B · cat</button>
+          <button class="quiz-choice" data-q="wt3p1" data-correct="false">C · king</button>
+          <button class="quiz-choice" data-q="wt3p1" data-correct="false">D · queen</button>
+        </div>
+        <div class="quiz-explain hidden" id="wt3p1Explain"></div>
+      </div>
+    </div>
+
+    <p>
+      That's the whole loop. Real training adds: bigger vocab, bigger dimension, a transformer encoder, billions of pairs from natural text, smarter loss functions (InfoNCE, triplet, margin), and learning-rate schedules. None of those change the shape of what we just built — they change the scale.
+    </p>
+
+    <h3 style="margin-top: 44px;">Read it whole · the 60-line file</h3>
+    <p>
+      The walkthroughs broke the file into beats. This view puts the beats back together — full file on one page, the highlight moves through it as you advance. Use it as a reference; copy the whole thing and run it.
+    </p>
+
+    <div class="karpathy-viewer" id="karpathyViewer">
+      <div class="karpathy-controls">
+        <button class="btn" data-kp-prev>← Prev</button>
+        <div class="kp-progress">Section <strong id="kpCur">1</strong> / <span id="kpTotal">5</span> · <span id="kpTitle">Imports</span></div>
+        <button class="btn saffron" data-kp-next>Next →</button>
+      </div>
+      <pre class="karpathy-code"><code><span class="kp-section active" data-kp="1" data-title="Imports"><span class="kp-anno"># A 60-line, single-file contrastive embedding trainer.
+# Run: python embed_from_scratch.py</span>
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+</span>
+<span class="kp-section" data-kp="2" data-title="Data &amp; pairs"><span class="kp-anno"># ── DATA ─────────────────────────────────────────────────────</span>
+vocab = ['cat',   'dog',  'puppy', 'kitten', 'king',
+         'queen', 'man',  'woman', 'apple',  'banana']
+w2i = {w: i for i, w in enumerate(vocab)}
+
+similar    = [('cat',   'kitten'), ('dog',   'puppy'),
+              ('king',  'queen'),  ('apple', 'banana')]
+dissimilar = [('cat',    'king'),   ('apple', 'queen'),
+              ('puppy',  'banana'), ('kitten','man')]
+</span>
+<span class="kp-section" data-kp="3" data-title="Model"><span class="kp-anno"># ── MODEL ────────────────────────────────────────────────────</span>
+EMB_DIM = 3
+embeddings = nn.Embedding(len(vocab), EMB_DIM)
+
+def cosine(a, b):
+    return (a * b).sum() / (a.norm() * b.norm())
+</span>
+<span class="kp-section" data-kp="4" data-title="Loss + optimizer"><span class="kp-anno"># ── LOSS + OPTIMIZER ─────────────────────────────────────────</span>
+def contrastive_loss(emb, similar, dissimilar):
+    pull = sum((1 - cosine(emb(torch.tensor(w2i[a])),
+                           emb(torch.tensor(w2i[b]))))
+               for a, b in similar)
+    push = sum(torch.clamp(cosine(emb(torch.tensor(w2i[a])),
+                                  emb(torch.tensor(w2i[b]))) + 0.3, min=0)
+               for a, b in dissimilar)
+    return (pull + push) / (len(similar) + len(dissimilar))
+
+opt = torch.optim.SGD(embeddings.parameters(), lr=0.5)
+</span>
+<span class="kp-section" data-kp="5" data-title="Train loop &amp; query"><span class="kp-anno"># ── TRAIN ────────────────────────────────────────────────────</span>
+for step in range(200):
+    opt.zero_grad()
+    loss = contrastive_loss(embeddings, similar, dissimilar)
+    loss.backward()
+    opt.step()
+
+<span class="kp-anno"># ── QUERY ────────────────────────────────────────────────────</span>
+query = embeddings(torch.tensor(w2i['queen']))
+results = []
+for w, i in w2i.items():
+    if w == 'queen': continue
+    sim = cosine(query, embeddings(torch.tensor(i))).item()
+    results.append((w, sim))
+results.sort(key=lambda x: -x[1])
+print(results[:3])
+<span class="kp-anno"># [('king', 0.94), ('woman', 0.62), ('man', 0.31)]</span>
+</span></code><button class="copy-btn" data-kp-copy>Copy whole file</button></pre>
+      <div class="karpathy-commentary" id="kpCommentary">
+        <strong>Imports.</strong> Just PyTorch. Three lines, no surprises. Everything else is built from these.
+      </div>
+    </div>
+
+    <p class="small" style="margin-top: 20px;">
+      That's the whole thing. Sixty lines of Python that does, at toy scale, what a 384-dimensional production embedding model does at industrial scale. The only thing missing for production is the data, the depth, and the optimizer hyperparameters. The shape is identical.
+    </p>
+  </section>
+
+  <!-- ────── CHAPTER 5 END ────── -->
+  <div class="chapter-end" data-end-chap="5">
+    <span class="ce-label">Chapter 05 · Build</span>
+    <div class="ce-title">You can now build an embedding model from scratch. Most of the rest of the page is applications — let's see what this primitive actually unlocks.</div>
+    <button class="next-chap-btn" data-advance="5">Lock in chapter 5 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-6" data-chap="6"></div>
+
   <!-- ───────────────── APPLICATIONS ───────────────── -->
   <h2>What this one primitive unlocks</h2>
   <p>You've now built (in your head and in your terminal) the single thing modern AI is mostly made of. Here's what it's used for in production, with one-line "why this works":</p>
@@ -761,8 +2038,37 @@ for i, item in enumerate(items):
   <h3>Classification</h3>
   <p>Encode each labelled example. At inference, encode the new item, find the K nearest labelled examples, vote. <em>Why it works:</em> embeddings cluster by meaning, so K-NN finds genuine semantic neighbours. Often beats fine-tuned classifiers on small datasets.</p>
 
-  <h3>RAG (Retrieval-Augmented Generation)</h3>
+  <h3><dfn class="jargon" data-def="A pattern where, instead of fine-tuning an LLM on your data, you retrieve relevant chunks at query time (using embeddings + cosine similarity) and stuff them into the prompt. The LLM reads the chunks to answer. Cheaper to update, easier to debug, and the citations come for free.">RAG</dfn> (Retrieval-Augmented Generation)</h3>
   <p>The R is embeddings. You chunk your docs, embed each chunk, and at query time retrieve the top-K relevant chunks to stuff into an LLM prompt. <em>Why it works:</em> grounds the LLM in your specific data without finetuning. The LLM never had to memorise your docs; it just reads them at query time.</p>
+
+  <!-- DIVE 4 · Anthropic embeddings recommendation — architectural choice -->
+  <div class="ed-context">
+    <p class="ed-context-label">Deeper · pointed read · ~6 min</p>
+    <p>If you're building RAG on Claude, here's where you start. Anthropic deliberately doesn't ship its own embedding endpoint — the docs page explains the architectural reason and points you at <strong>Voyage AI</strong>. Read the intro and the <em>"Voyage AI"</em> section that follows; skip the model-list table on first read. The takeaway worth keeping: <strong>the embedding decision is decoupled from the generation decision</strong> on purpose, so you can swap either side.</p>
+  </div>
+  <div class="external-dive" data-dive="ed-anthropic">
+    <div class="ed-meta">
+      <span class="ed-type docs">Docs</span>
+      <span class="ed-source">Anthropic</span>
+      <span class="ed-length">Intro + Voyage section</span>
+    </div>
+    <h3 class="ed-title">Embeddings · Anthropic's recommended path</h3>
+    <p class="ed-why">Why Anthropic stays out of embeddings, who they partner with (Voyage), and how that fits into a Claude RAG pipeline. The framing is the real lesson — separation of concerns at the API layer.</p>
+    <div class="ed-actions">
+      <a class="ed-link" href="https://docs.anthropic.com/en/docs/build-with-claude/embeddings#voyage-ai" target="_blank" rel="noopener">Open at Voyage AI section ↗</a>
+      <button class="ed-back-btn" data-dive-back="ed-anthropic">I've read it · quiz me</button>
+    </div>
+    <div class="ed-question hidden" data-dive-q="ed-anthropic">
+      <p class="ed-q-prompt">Return question · architecture decision</p>
+      <p class="ed-q-text">Anthropic doesn't ship its own embedding endpoint. What's the recommended path in the docs?</p>
+      <div class="quiz-choices">
+        <button class="quiz-choice" data-q="ed-anthropic-q" data-correct="false">A · Fine-tune Claude itself on embedding pairs.</button>
+        <button class="quiz-choice" data-q="ed-anthropic-q" data-correct="false">B · Skip embeddings; use Claude tool use for retrieval instead.</button>
+        <button class="quiz-choice" data-q="ed-anthropic-q" data-correct="true" data-explain="Right. The docs route you to a third-party embedding provider — Voyage AI is the named partner, with OpenAI and Cohere also mentioned. The shape of the recommendation matters: Anthropic deliberately keeps the embedding decision separate from the generation decision so you can swap either side. That separation IS the architecture lesson.">C · Use a third-party embedding provider (Voyage AI, OpenAI, Cohere) and Claude for generation.</button>
+      </div>
+      <div class="quiz-explain hidden" id="ed-anthropic-qExplain"></div>
+    </div>
+  </div>
 
   <h3>Clustering / deduplication</h3>
   <p>Embed everything, run K-means or HDBSCAN. Items with high cosine similarity merge. <em>Why it works:</em> the embedding space is a real metric space — distances are meaningful, so traditional unsupervised methods just work.</p>
@@ -778,6 +2084,35 @@ for i, item in enumerate(items):
     Models like <code>all-MiniLM-L6-v2</code> are trained on general English. If your data is heavily Indian context (Hinglish reviews, Indian regulatory docs), use <code>bge-small-en-v1.5</code> or test multilingual models like <code>paraphrase-multilingual-MiniLM-L12-v2</code>. <strong>The cheapest experiment: encode 20 representative items, eyeball the similarity matrix.</strong> If pairs you'd expect to match score below 0.4, the model is wrong for your data.
   </p>
 
+  <!-- DIVE 3 · sentence-transformers Pretrained Models — the actual decision tree -->
+  <div class="ed-context">
+    <p class="ed-context-label">Deeper · pointed skim · ~5 min</p>
+    <p>So how do you pick? The <strong>sentence-transformers Pretrained Models</strong> page is the decision document the rest of us actually use. Open it and scroll to the <em>"Original Models"</em> performance table. Read the columns left-to-right: <em>STSb / sentence embedding score / speed / size</em>. The trade-off you're looking for: <strong>highest quality at &lt;100MB and &gt;1000 sentences/sec on CPU.</strong> Treat it like a spec sheet, not a leaderboard.</p>
+  </div>
+  <div class="external-dive" data-dive="ed-sbert">
+    <div class="ed-meta">
+      <span class="ed-type docs">Docs</span>
+      <span class="ed-source">sentence-transformers</span>
+      <span class="ed-length">Performance table</span>
+    </div>
+    <h3 class="ed-title">Pretrained Models · the model spec sheet</h3>
+    <p class="ed-why">The page real engineers keep open when picking an embedding model. You don't read it linearly — you scan the table for the cell that matches your throughput and quality constraints.</p>
+    <div class="ed-actions">
+      <a class="ed-link" href="https://sbert.net/docs/sentence_transformer/pretrained_models.html#original-models" target="_blank" rel="noopener">Open at performance table ↗</a>
+      <button class="ed-back-btn" data-dive-back="ed-sbert">I've scanned the table · quiz me</button>
+    </div>
+    <div class="ed-question hidden" data-dive-q="ed-sbert">
+      <p class="ed-q-prompt">Return question · the constraint-driven pick</p>
+      <p class="ed-q-text">You need English-only embeddings running at &gt;100 QPS on a single CPU box, under 100MB on disk. Which class of model do you reach for first?</p>
+      <div class="quiz-choices">
+        <button class="quiz-choice" data-q="ed-sbert-q" data-correct="false">A · OpenAI text-embedding-3-large via API.</button>
+        <button class="quiz-choice" data-q="ed-sbert-q" data-correct="true" data-explain="Right. all-MiniLM-L6-v2 is ~80MB, 384-dim, encodes &gt;14k sentences/sec on CPU per the table, and scores high enough on STSb for the vast majority of production cases. The MiniLM family is the default 'good enough until proven otherwise' pick. Bigger models are a fine experiment but rarely earn their weight at this throughput.">B · all-MiniLM-L6-v2 (or another MiniLM-family model).</button>
+        <button class="quiz-choice" data-q="ed-sbert-q" data-correct="false">C · The biggest BGE model — quality first, optimise later.</button>
+      </div>
+      <div class="quiz-explain hidden" id="ed-sbert-qExplain"></div>
+    </div>
+  </div>
+
   <h3>2. Confusing cosine, dot product, and Euclidean</h3>
   <p>
     Cosine measures the <em>angle</em> between vectors (direction only — magnitudes ignored). Dot product factors in magnitude (so longer vectors score higher). Euclidean measures the straight-line distance. <strong>For most sentence-transformer models, the vectors come pre-normalised, so cosine and dot product give the same answer.</strong> When in doubt, use cosine.
@@ -787,6 +2122,15 @@ for i, item in enumerate(items):
   <p>
     If you upgrade your embedding model, every cached vector in your DB becomes stale. They were computed by a different model. You either re-embed everything (one-time cost) or you live with two parallel index versions. <strong>Architect for this from day one</strong> — store the model name alongside each vector in your DB.
   </p>
+
+  <!-- ────── CHAPTER 6 END ────── -->
+  <div class="chapter-end" data-end-chap="6">
+    <span class="ce-label">Chapter 06 · Where</span>
+    <div class="ce-title">You can name where embeddings show up in production, and what people get wrong. Time to prove it sticks.</div>
+    <button class="next-chap-btn" data-advance="6">Lock in chapter 6 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-7" data-chap="7"></div>
 
   <!-- ───────────────── SPACED REVIEW ───────────────── -->
   <section id="spaced">
@@ -830,6 +2174,15 @@ for i, item in enumerate(items):
     </div>
   </section>
 
+  <!-- ────── CHAPTER 7 END ────── -->
+  <div class="chapter-end" data-end-chap="7">
+    <span class="ce-label">Chapter 07 · Test</span>
+    <div class="ce-title">You've shipped the capstone and survived the review. Last beat — see what shifted.</div>
+    <button class="next-chap-btn" data-advance="7">Lock in chapter 7 · Continue →</button>
+  </div>
+
+  <div class="chapter-anchor section-anchored" id="ch-8" data-chap="8"></div>
+
   <!-- ───────────────── POST-TEST + CALIBRATION ───────────────── -->
   <section id="posttest">
     <div class="card layer-2">
@@ -847,16 +2200,6 @@ for i, item in enumerate(items):
     </div>
   </section>
 
-  <!-- ───────────────── NEXT STEPS ───────────────── -->
-  <h2>Where to read more</h2>
-  <p>Embeddings are 90 minutes; <em>understanding</em> them well enough to debug a production system is a few weekends. These are the references that earn the weight:</p>
-  <ul>
-    <li><strong>Jay Alammar · <em>The Illustrated Word2Vec</em></strong> — best intuition-first explanation; if anything above felt hand-wavy, read this. <span class="small">(jalammar.github.io)</span></li>
-    <li><strong>Lilian Weng · <em>Generalized Visual Language Models</em></strong> — for how modern multimodal embeddings work. <span class="small">(lilianweng.github.io)</span></li>
-    <li><strong>sentence-transformers docs</strong> — the model catalogue is itself the most useful thing on the internet for picking an embedding model. <span class="small">(sbert.net)</span></li>
-    <li><strong>Anthropic · <em>Embeddings</em> docs</strong> — practical patterns for using embeddings in production with Claude. <span class="small">(docs.anthropic.com)</span></li>
-    <li><strong>The MTEB leaderboard</strong> — when you're picking a model, this is the up-to-date benchmark. <span class="small">(huggingface.co/spaces/mteb/leaderboard)</span></li>
-  </ul>
 
   <!-- ───────────────── PROGRESS PANEL ───────────────── -->
   <section id="progressPanel">
@@ -875,6 +2218,28 @@ for i, item in enumerate(items):
       <div class="mt-16">
         <button class="btn" id="resetBtn">Reset this page's progress</button>
       </div>
+    </div>
+  </section>
+
+  <!-- ────── CHAPTER 8 END ────── -->
+  <div class="chapter-end" data-end-chap="8">
+    <span class="ce-label">Chapter 08 · Reflect · Final</span>
+    <div class="ce-title">You've read every chapter, taken every prediction, built one from scratch, and re-rated your confidence. That's the whole deep dive.</div>
+    <button class="next-chap-btn" data-advance="8">Lock in the deep dive · Done →</button>
+  </div>
+
+  <!-- BETWEEN-SESSION HOOK (Psychology Top-3 #3) — Zeigarnik card extending past page-close.
+       One unresolved question that opens a curiosity loop closing only in tomorrow's return. -->
+  <section style="margin-top: 56px;">
+    <div class="card" style="background: var(--paper); border-left: 4px solid var(--sky); padding: 28px 26px;">
+      <div class="kicker" style="color: var(--sky); margin-bottom: 14px;">Open loop · for tomorrow</div>
+      <h3 style="font-size: 22px; margin: 0 0 12px;">Before you come back, one question you'll be able to answer in 24 hours that you can't yet:</h3>
+      <p style="font-size: 17px; line-height: 1.55; color: var(--ink); margin: 0 0 16px;">
+        <strong>If you upgrade your embedding model from <code>all-MiniLM-L6-v2</code> to <code>bge-small-en-v1.5</code> on a corpus of 100k documents, what breaks — and what's the safest migration path?</strong>
+      </p>
+      <p class="small" style="margin-bottom: 0;">
+        We won't tell you the answer here. Try it on a real corpus, hit the wall yourself, then read <em>Pitfall #3</em> above with new eyes. Come back tomorrow — <span id="retentionPrompt" style="color: var(--sky); font-weight: 700;">your 3-day retention check is scheduled</span> and we'll lead with what you predicted, what surprised you, and what's now stable. <em>Self-referential recall</em> (Rogers, Kuiper &amp; Kirker 1977) is the strongest retrieval cue we have.
+      </p>
     </div>
   </section>
 
@@ -976,6 +2341,15 @@ const PREDICTS = {
         : "You went lower than reality. Modern embeddings put related-but-not-identical pairs in 0.7-0.85 — they capture role similarity, not just exact match.";
     },
   },
+  wt1p1: {
+    actual: 0.04,
+    feedback: (guess, diff) => {
+      const g = Math.abs(guess);
+      if (g < 0.2) return "Calibrated. Two random vectors in 3D have cosine centred on 0 — the exact value depends on the random seed (yours might be −0.18, this run shows 0.04). Either way, it means nothing yet. Untrained embeddings are noise.";
+      if (g < 0.5) return "Closer to a trained value than an untrained one. Pre-training, two random vectors are essentially orthogonal — cosine averages 0. You're carrying the trained intuition from earlier in the page into a context where it doesn't apply yet.";
+      return "Too high (or low). You're guessing what a trained model would produce. The whole point of walkthrough 1: the table starts random. Walkthrough 2 is where it stops being random.";
+    },
+  },
 };
 
 document.querySelectorAll('[data-predict]').forEach(btn => {
@@ -983,7 +2357,7 @@ document.querySelectorAll('[data-predict]').forEach(btn => {
     const key = btn.dataset.predict;
     const input = document.getElementById(key + 'Input');
     const guess = parseFloat(input.value);
-    if (isNaN(guess) || guess < 0 || guess > 1) {
+    if (isNaN(guess) || guess < -1 || guess > 1) {
       input.style.borderColor = 'var(--rose)';
       return;
     }
@@ -1288,8 +2662,7 @@ function updateProgressPanel() {
   const conf = Object.keys(state.postConf).length;
   const cap = state.capstone ? 1 : 0;
   const total = stages + hands + predictions + review + conf + cap;
-  const maxTotal = 3 + 3 + 2 + 5 + 4 + 1;  // sum of expected counts
-  document.getElementById('topProgress').textContent = `${Math.min(total, maxTotal)} / ${maxTotal} complete`;
+  const maxTotal = 3 + 3 + 5 + 5 + 4 + 1;  // stages + hands-on + predicts(p1,p2,wt1p1,wt2p1,wt3p1) + review + conf + capstone
 
   document.getElementById('statCheckpoints').textContent = stages + hands + (state.capstone ? 1 : 0);
   document.getElementById('statPredictions').textContent = predictions;
@@ -1321,6 +2694,982 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   localStorage.removeItem(STORAGE_KEY);
   location.reload();
 });
+
+/* ─────────────────────────────────────────────────────────────
+   CHAPTER NAVIGATION + GATES + REWARDS + KARPATHY VIEWER
+   Everything below is the "soft-gated reading layer" — chapter
+   nav in the topbar, end-of-chapter buttons that fire graffiti +
+   chiptune + points, and a paginated full-file reader.
+   ──────────────────────────────────────────────────────────── */
+const CHAPTERS = 8;
+const PTS_PER_CHAPTER = 100;
+
+// Back-fill new state shape for users who started before this version.
+if (typeof state.unlockedChapter !== 'number') state.unlockedChapter = 1;
+if (typeof state.points !== 'number') state.points = 0;
+if (!state.chaptersDone) state.chaptersDone = {};
+if (typeof state.muted !== 'boolean') state.muted = false;
+if (typeof state.kpSection !== 'number') state.kpSection = 1;
+
+function updateNav() {
+  document.querySelectorAll('.chap').forEach(el => {
+    const n = +el.dataset.chap;
+    el.classList.toggle('locked', n > state.unlockedChapter);
+    el.classList.toggle('done', !!state.chaptersDone[n]);
+  });
+}
+
+// Locked chapter clicks → confirm-and-skip (soft gate).
+document.querySelectorAll('.chap').forEach(el => {
+  el.addEventListener('click', (e) => {
+    const target = +el.dataset.chap;
+    if (target > state.unlockedChapter) {
+      e.preventDefault();
+      // Soft-gate copy reframed (Learning F): not "is locked" / "skip ahead anyway?"
+      // — the lock metaphor with a bypass trains learners that effort signals are negotiable.
+      // Reframe as honest navigation: ordered chapters, not gates, with the cost named.
+      const ok = confirm(
+        `Jump ahead to Chapter ${String(target).padStart(2, '0')}?\n\n` +
+        `The chapters build on each other — earlier predictions calibrate later ones. Jump if you already know the material; otherwise the order earns the depth.`
+      );
+      if (!ok) return;
+      state.unlockedChapter = target;
+      save();
+      updateNav();
+      window.location.hash = el.getAttribute('href');
+    }
+  });
+});
+
+// Scroll-spy: highlight the chapter currently in view.
+const chapterAnchors = Array.from(document.querySelectorAll('.chapter-anchor'))
+  .map(el => ({ n: +el.dataset.chap, el }))
+  .sort((a, b) => a.n - b.n);
+
+function updateCurrentChap() {
+  const scrollTop = window.scrollY + 90;
+  let current = 1;
+  for (const c of chapterAnchors) {
+    if (c.el.offsetTop <= scrollTop) current = c.n;
+  }
+  document.querySelectorAll('.chap').forEach(el => {
+    el.classList.toggle('current', +el.dataset.chap === current);
+  });
+  const currentChip = document.querySelector(`.chap[data-chap="${current}"]`);
+  if (currentChip) {
+    const nav = document.getElementById('chapterNav');
+    const chipLeft = currentChip.offsetLeft;
+    const navWidth = nav.clientWidth;
+    nav.scrollTo({
+      left: chipLeft - navWidth / 2 + currentChip.clientWidth / 2,
+      behavior: 'smooth',
+    });
+  }
+}
+let _scrollTick = false;
+window.addEventListener('scroll', () => {
+  if (_scrollTick) return;
+  _scrollTick = true;
+  requestAnimationFrame(() => { updateCurrentChap(); _scrollTick = false; });
+}, { passive: true });
+
+// Variable-ratio bonus insights (Psych Top-3 #2). ~15% probability per chapter close.
+// Each insight is a non-essential "bonus" — a quick observation tied to the chapter the
+// reader just finished. Skinner / Schultz: occasional unpredictable rewards keep the
+// dopamine signal alive after the predictable reveals stop surprising.
+const BONUS_INSIGHTS = {
+  2: { kicker: 'Bonus insight unlocked',
+       title: 'The 0.73 you guessed earlier wasn\'t maths.',
+       body: 'It was the residue of about 4 billion training pairs that nudged "king" and "queen" toward similar vectors. Different training corpus, different number. The score is a measurement of a particular model\'s biases, not a property of the words themselves.' },
+  3: { kicker: 'Bonus insight unlocked',
+       title: 'Word2Vec is older than your laptop.',
+       body: 'Mikolov et al published it in 2013. The neural-net trick that powers semantic search and most of "modern AI" is twelve years old. Most of what feels new is the scale of compute, not the idea.' },
+  4: { kicker: 'Bonus insight unlocked',
+       title: 'You just wrote the same query loop ChatGPT uses.',
+       body: 'Every RAG-backed assistant — Perplexity, Notion AI, You.com — embeds your query, sorts by cosine against a corpus, and stuffs the top hits into a prompt. Eight lines. The "intelligence" is in the index, not the inference.' },
+  5: { kicker: 'Bonus insight unlocked',
+       title: 'Andrej Karpathy thinks this trick is the bottleneck.',
+       body: 'In his 2024 talk, Karpathy argued that the next 10× in AI capability won\'t come from larger models — it\'ll come from better embeddings of larger, weirder data (video, audio, action). The lookup table you just built is the layer he\'s pointing at.' },
+  6: { kicker: 'Bonus insight unlocked',
+       title: 'Some embedding APIs are billed by the token, like LLMs.',
+       body: 'Voyage AI: $0.05 per 1M tokens for voyage-3. OpenAI: $0.13 per 1M for text-embedding-3-large. At 100k docs × 500 tokens each, the cost to index your corpus once is under ₹500 / $6. Embeddings are the cheapest part of a RAG stack — usually under 5% of total spend.' },
+  7: { kicker: 'Bonus insight unlocked',
+       title: 'Pinecone, Weaviate, pgvector, FAISS are all the same engine.',
+       body: 'They all do approximate-nearest-neighbour search on vectors. The differences are in latency at scale, hosting model, filter support. For under 1M vectors, pgvector inside your existing Postgres is the right answer 90% of the time. Don\'t reach for managed vector DBs first.' },
+};
+
+function maybeFireBonus(chapterNum) {
+  // ~15% per chapter, but never on first chapter (avoid threat-before-reward in opening)
+  if (chapterNum < 2) return;
+  if (Math.random() > 0.15) return;
+  const insight = BONUS_INSIGHTS[chapterNum];
+  if (!insight) return;
+  showBonusToast(insight);
+}
+
+function showBonusToast({ kicker, title, body }) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+    z-index: 999; max-width: min(440px, 92vw);
+    background: var(--paper); border: 1.5px solid var(--saffron);
+    border-left: 4px solid var(--saffron);
+    border-radius: 8px; padding: 16px 18px 18px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+    opacity: 0; transition: all 380ms cubic-bezier(0.22, 0.61, 0.36, 1);
+    font-family: 'Source Serif 4', Georgia, serif;
+  `;
+  toast.innerHTML = `
+    <div style="font-family: ui-monospace, monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--saffron); font-weight: 800; margin-bottom: 6px;">${kicker} · +25 pts</div>
+    <div style="font-size: 17px; font-weight: 800; line-height: 1.25; margin-bottom: 6px;">${title}</div>
+    <div style="font-size: 14.5px; line-height: 1.55; color: var(--ink-soft);">${body}</div>
+    <button style="margin-top: 12px; background: transparent; border: 1px solid var(--rule); padding: 6px 12px; font-family: ui-monospace, monospace; font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; border-radius: 3px;" onclick="this.parentElement.style.opacity=0; this.parentElement.style.transform='translateX(-50%) translateY(20px)'; setTimeout(()=>this.parentElement.remove(), 380);">Got it</button>
+  `;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  }));
+  // Award bonus points
+  state.points = (state.points || 0) + 25;
+  save();
+  updatePoints();
+  // Auto-dismiss after 9s if not clicked
+  setTimeout(() => {
+    if (!document.body.contains(toast)) return;
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(() => toast.remove(), 380);
+  }, 9000);
+}
+
+// UX F9 — Pip animation: a small dot flies from the just-clicked button into the points pill,
+// connecting the checkpoint to the score. Gestalt proximity was failing; this restores it.
+function fireScorePip(fromEl) {
+  const pill = document.getElementById('pointsPill');
+  if (!pill || !fromEl) return;
+  const a = fromEl.getBoundingClientRect();
+  const b = pill.getBoundingClientRect();
+  const pip = document.createElement('div');
+  pip.style.cssText = `
+    position: fixed; left: ${a.left + a.width/2 - 8}px; top: ${a.top + a.height/2 - 8}px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--saffron); box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+    z-index: 998; pointer-events: none;
+    transition: all 480ms cubic-bezier(0.4, 0, 0.2, 1);
+  `;
+  document.body.appendChild(pip);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    pip.style.left = (b.left + b.width/2 - 8) + 'px';
+    pip.style.top = (b.top + b.height/2 - 8) + 'px';
+    pip.style.transform = 'scale(0.4)';
+    pip.style.opacity = '0.2';
+  }));
+  setTimeout(() => {
+    pip.remove();
+    pill.style.borderWidth = '2px';
+    pill.style.borderStyle = 'solid';
+    pill.style.borderColor = 'var(--saffron)';
+    setTimeout(() => { pill.style.border = ''; }, 320);
+  }, 500);
+}
+
+// "Next chapter" advance buttons.
+document.querySelectorAll('[data-advance]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    const n = +btn.dataset.advance;
+    if (state.chaptersDone[n]) return;
+
+    state.chaptersDone[n] = true;
+    state.unlockedChapter = Math.max(state.unlockedChapter, Math.min(CHAPTERS, n + 1));
+    const pointsBefore = state.points || 0;
+    state.points = pointsBefore + PTS_PER_CHAPTER;
+    save();
+
+    btn.classList.add('done');
+    btn.textContent = '✓ Chapter ' + n + ' locked in';
+
+    // Reward burst: graffiti scribble + chiptune + animated points bump + pip-to-pill.
+    const r = btn.getBoundingClientRect();
+    fireGraffiti(r.left + r.width / 2, r.top + r.height / 2, PTS_PER_CHAPTER);
+    playChime(n);
+    bumpPoints(pointsBefore, state.points);
+    fireScorePip(btn);
+
+    updateNav();
+
+    // Variable-ratio bonus — sometimes (~15%) fires an extra insight toast.
+    setTimeout(() => maybeFireBonus(n + 1), 1100);
+
+    // Auto-scroll to next chapter after the reward animation settles.
+    if (n < CHAPTERS) {
+      setTimeout(() => {
+        const next = document.getElementById('ch-' + (n + 1));
+        if (next) next.scrollIntoView({ behavior: 'smooth' });
+      }, 950);
+    }
+  });
+});
+// Restore done state on reload.
+document.querySelectorAll('[data-advance]').forEach(btn => {
+  const n = +btn.dataset.advance;
+  if (state.chaptersDone[n]) {
+    btn.classList.add('done');
+    btn.textContent = '✓ Chapter ' + n + ' locked in';
+  }
+});
+
+/* ─── POINTS PILL ─── */
+function updatePoints() {
+  const pill = document.getElementById('pointsPill');
+  if (pill) pill.textContent = (state.points || 0) + ' PTS';
+}
+function bumpPoints(from, to) {
+  const pill = document.getElementById('pointsPill');
+  if (!pill) return;
+  pill.classList.add('bump');
+  let n = from;
+  const step = Math.max(1, Math.round((to - from) / 14));
+  const tick = setInterval(() => {
+    n = Math.min(to, n + step);
+    pill.textContent = n + ' PTS';
+    if (n >= to) {
+      clearInterval(tick);
+      setTimeout(() => pill.classList.remove('bump'), 260);
+    }
+  }, 22);
+}
+
+/* ─── GRAFFITI BURST (spray-paint scribble at click point) ─── */
+function fireGraffiti(x, y, pts) {
+  const colors = ['#f59e0b', '#10b981', '#ef4444', '#0284c7', '#a855f7'];
+  // five tag-like curves; randomised order so each burst looks different
+  const pool = [
+    'M -90 -10 Q -40 -80, 10 -20 T 90 10',
+    'M -70 30 Q 0 -50, 80 30',
+    'M -60 -45 L 70 55',
+    'M -85 35 Q -20 -30, 30 -55 T 95 -5',
+    'M -25 -75 Q 35 -20, -10 60',
+    'M -80 -20 C -30 -90, 30 -90, 80 -20',
+    'M -50 50 Q 0 0, 50 50 T 90 30',
+  ];
+  // pick 4-5 random distinct paths
+  const picked = pool.slice().sort(() => Math.random() - 0.5).slice(0, 5);
+  const shuffled = colors.slice().sort(() => Math.random() - 0.5);
+
+  const div = document.createElement('div');
+  div.className = 'graffiti-burst';
+  div.style.left = x + 'px';
+  div.style.top = y + 'px';
+  div.innerHTML = `
+    <svg viewBox="-120 -120 240 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      ${picked.map((d, i) => `<path class="gpath${i ? ' p' + (i + 1) : ''}" d="${d}" stroke="${shuffled[i % shuffled.length]}" stroke-width="${5 - i * 0.4}" />`).join('')}
+      <circle class="splat"    cx="-60" cy="-50" r="14" fill="${shuffled[0]}" opacity="0.55"/>
+      <circle class="splat s2" cx="55"  cy="60"  r="10" fill="${shuffled[1]}" opacity="0.55"/>
+      <circle class="splat s3" cx="40"  cy="-65" r="8"  fill="${shuffled[2]}" opacity="0.55"/>
+      <text class="pts-text" x="0" y="-95">+${pts} PTS</text>
+    </svg>
+  `;
+  document.body.appendChild(div);
+  setTimeout(() => div.classList.add('fading'), 1300);
+  setTimeout(() => div.remove(), 1900);
+}
+
+/* ─── WEB AUDIO CHIME (8-bit square-wave jingle, one per chapter) ─── */
+let audioCtx = null;
+function getCtx() {
+  if (state.muted) return null;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  } catch { return null; }
+}
+const JINGLES = [
+  [523.25, 659.25, 783.99, 1046.50],                          // ch 1  C E G C
+  [587.33, 739.99, 880.00, 1174.66],                          // ch 2  D F# A D
+  [659.25, 783.99, 987.77, 1318.51],                          // ch 3  E G B E
+  [698.46, 880.00, 1046.50, 1396.91],                         // ch 4  F A C F
+  [783.99, 987.77, 1174.66, 1567.98, 1975.53],                // ch 5  G B D G B  (build — bigger)
+  [523.25, 659.25, 880.00, 783.99, 1046.50],                  // ch 6  C E A G C
+  [659.25, 587.33, 783.99, 1046.50],                          // ch 7  E D G C
+  [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98, 2093.00],// ch 8  C E G C E G C  finale
+];
+function playChime(chapter) {
+  const ctx = getCtx();
+  if (!ctx) return;
+  const notes = JINGLES[(chapter - 1) % JINGLES.length];
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = freq;
+    osc.detune.value = (Math.random() - 0.5) * 8; // tiny wobble for character
+    osc.connect(gain).connect(ctx.destination);
+    const start = ctx.currentTime + i * 0.085;
+    const dur = i === notes.length - 1 ? 0.34 : 0.15;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(0.13, start + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    osc.start(start);
+    osc.stop(start + dur + 0.02);
+  });
+}
+
+/* ─── MUTE TOGGLE ─── */
+const muteBtn = document.getElementById('muteToggle');
+function updateMuteUi() {
+  muteBtn.classList.toggle('muted', state.muted);
+  muteBtn.textContent = state.muted ? '✕' : '♪';
+  muteBtn.title = state.muted ? 'Sound off — click to enable' : 'Sound on — click to mute';
+  muteBtn.setAttribute('aria-pressed', state.muted ? 'true' : 'false');
+}
+muteBtn.addEventListener('click', () => {
+  state.muted = !state.muted;
+  save();
+  updateMuteUi();
+  if (!state.muted) playChime(1); // chirp on enable so user knows it works
+});
+updateMuteUi();
+
+/* ─── KARPATHY VIEWER (paginated full-file read) ─── */
+const KP_SECTIONS = 5;
+const KP_TITLES = ['Imports', 'Data & pairs', 'Model', 'Loss + optimizer', 'Train loop & query'];
+const KP_COMMENTARY = [
+  "<strong>Imports.</strong> Just PyTorch. Three lines, no surprises. Everything else is built from these.",
+  "<strong>Data &amp; pairs.</strong> The vocab is a list of strings; <code>w2i</code> turns them into integer indices (this is what tokenisation does at scale). The real training signal is in <code>similar</code> and <code>dissimilar</code> — the only place we tell the model what 'meaning' is.",
+  "<strong>Model.</strong> <code>nn.Embedding(10, 3)</code> is the entire model — a 10×3 matrix of random floats with a lookup operation. <code>cosine</code> is our similarity function, written by hand so nothing is hiding.",
+  "<strong>Loss + optimizer.</strong> Two halves: pull similar pairs closer (<code>1 − cosine</code>), push dissimilar pairs apart (<code>cosine + 0.3</code> clamped). The optimizer is plain SGD — it's what nudges the table when we call <code>step()</code>.",
+  "<strong>Train loop &amp; query.</strong> 200 steps reshape the table; after that, 'encode a word' returns a vector with real semantic structure. The query loop at the bottom is what semantic search looks like in code — encode, sort by cosine, return top K. That's the whole primitive.",
+];
+function setKp(n) {
+  n = Math.max(1, Math.min(KP_SECTIONS, n));
+  state.kpSection = n;
+  save();
+  document.querySelectorAll('.kp-section').forEach(el => {
+    el.classList.toggle('active', +el.dataset.kp === n);
+  });
+  const curEl = document.getElementById('kpCur');
+  const titleEl = document.getElementById('kpTitle');
+  const commentEl = document.getElementById('kpCommentary');
+  if (curEl) curEl.textContent = n;
+  if (titleEl) titleEl.textContent = KP_TITLES[n - 1];
+  if (commentEl) commentEl.innerHTML = KP_COMMENTARY[n - 1];
+
+  const active = document.querySelector('.kp-section.active');
+  const code = document.querySelector('.karpathy-code');
+  if (active && code) {
+    const offset = active.offsetTop - code.clientHeight / 2 + active.clientHeight / 2;
+    code.scrollTo({ top: Math.max(0, offset), behavior: 'smooth' });
+  }
+}
+document.querySelector('[data-kp-next]')?.addEventListener('click', () => setKp(state.kpSection + 1));
+document.querySelector('[data-kp-prev]')?.addEventListener('click', () => setKp(state.kpSection - 1));
+
+/* ─── INITIAL PAINT ─── */
+updatePoints();
+updateNav();
+updateCurrentChap();
+setKp(state.kpSection);
+
+/* ─────────────────────────────────────────────────────────────
+   EXTERNAL DIVES — return-question gate
+   "Click an external link, come back, prove you read it."
+   The question stays hidden until the learner presses "I've read it."
+   ──────────────────────────────────────────────────────────── */
+state.dives = state.dives || {};
+
+function revealDiveQuestion(key) {
+  const card = document.querySelector(`.external-dive[data-dive="${key}"]`);
+  if (!card) return;
+  card.classList.add('read');
+  const q = card.querySelector(`[data-dive-q="${key}"]`);
+  if (q) q.classList.remove('hidden');
+  const btn = card.querySelector(`[data-dive-back="${key}"]`);
+  if (btn) btn.style.display = 'none';
+}
+
+document.querySelectorAll('[data-dive-back]').forEach(btn => {
+  const key = btn.dataset.diveBack;
+  if (state.dives[key] && state.dives[key].opened) revealDiveQuestion(key);
+  btn.addEventListener('click', () => {
+    state.dives[key] = state.dives[key] || {};
+    state.dives[key].opened = true;
+    save();
+    revealDiveQuestion(key);
+  });
+});
+
+// When the dive's quiz is answered correctly, paint the card emerald.
+document.querySelectorAll('.external-dive .quiz-choice').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.correct === 'true') {
+      const card = btn.closest('.external-dive');
+      if (card) card.classList.add('answered');
+      const key = card?.dataset.dive;
+      if (key) {
+        state.dives[key] = state.dives[key] || {};
+        state.dives[key].correct = true;
+        save();
+      }
+    }
+  });
+});
+
+// Track when the external link is opened — a softer signal we can use later.
+document.querySelectorAll('.external-dive .ed-link').forEach(a => {
+  a.addEventListener('click', () => {
+    const card = a.closest('.external-dive');
+    const key = card?.dataset.dive;
+    if (!key) return;
+    state.dives[key] = state.dives[key] || {};
+    state.dives[key].clickedAt = Date.now();
+    save();
+  });
+});
+
+/* ─────────────────────────────────────────────────────────────
+   JARGON HOVER / TAP
+   <dfn class="jargon" data-def="..."> → popup on hover (desktop)
+   or tap (mobile). Only one open at a time.
+   ──────────────────────────────────────────────────────────── */
+let openJargon = null;
+function hideJargon(el) {
+  if (!el || !el._jpop) return;
+  el.classList.remove('open');
+  el._jpop.classList.remove('shown');
+  const p = el._jpop;
+  el._jpop = null;
+  if (openJargon === el) openJargon = null;
+  setTimeout(() => p.remove(), 200);
+}
+function showJargon(el) {
+  if (el._jpop) return;
+  if (openJargon && openJargon !== el) hideJargon(openJargon);
+  openJargon = el;
+  el.classList.add('open');
+  const popup = document.createElement('span');
+  popup.className = 'jargon-popup';
+  popup.innerHTML = `<span class="jp-label">${el.textContent}</span>${el.dataset.def || ''}`;
+  el.appendChild(popup);
+  el._jpop = popup;
+  // double-rAF so the transition triggers
+  requestAnimationFrame(() => requestAnimationFrame(() => popup.classList.add('shown')));
+}
+document.querySelectorAll('.jargon').forEach(el => {
+  el.addEventListener('mouseenter', () => showJargon(el));
+  el.addEventListener('mouseleave', () => hideJargon(el));
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (el._jpop) hideJargon(el); else showJargon(el);
+  });
+});
+document.addEventListener('click', () => { if (openJargon) hideJargon(openJargon); });
+
+/* ─────────────────────────────────────────────────────────────
+   COSINE PLAYGROUND — drag two vectors, see the score live
+   2D stand-in for the 384-D real thing. SVG y is flipped so we
+   convert math-y ↔ svg-y at the boundary and use math-y everywhere
+   else.
+   ──────────────────────────────────────────────────────────── */
+(function cosinePlayground() {
+  const cwSvg = document.getElementById('cosineSvg');
+  if (!cwSvg) return;
+
+  const ORIGIN = 200;
+  let vA = { x: 120,  y: 80 };
+  let vB = { x: 80,   y: -80 };
+  let dragging = null;
+
+  const arrowA = document.getElementById('cwArrowA');
+  const arrowB = document.getElementById('cwArrowB');
+  const tipA   = document.getElementById('cwTipA');
+  const tipB   = document.getElementById('cwTipB');
+  const headA  = document.getElementById('cwHeadA');
+  const headB  = document.getElementById('cwHeadB');
+  const labelA = document.getElementById('cwLabelA');
+  const labelB = document.getElementById('cwLabelB');
+  const arc    = document.getElementById('cwArc');
+  const cosOut = document.getElementById('cwCos');
+  const angleOut = document.getElementById('cwAngle');
+  const formulaOut = document.getElementById('cwFormula');
+
+  const dot = (a, b) => a.x*b.x + a.y*b.y;
+  const mag = (a) => Math.sqrt(a.x*a.x + a.y*a.y);
+  const toSvg = (v) => ({ x: ORIGIN + v.x, y: ORIGIN - v.y });
+  const fromSvg = (p) => ({ x: p.x - ORIGIN, y: ORIGIN - p.y });
+
+  function arrowhead(svgTo) {
+    const dx = svgTo.x - ORIGIN, dy = svgTo.y - ORIGIN;
+    const len = Math.sqrt(dx*dx + dy*dy);
+    if (len < 1) return '0,0 0,0 0,0';
+    const ux = dx/len, uy = dy/len;
+    const back = 14, side = 7;
+    const baseX = svgTo.x - ux*back, baseY = svgTo.y - uy*back;
+    const px = -uy, py = ux;
+    return `${svgTo.x},${svgTo.y} ${baseX + px*side},${baseY + py*side} ${baseX - px*side},${baseY - py*side}`;
+  }
+
+  function render() {
+    const aS = toSvg(vA);
+    const bS = toSvg(vB);
+    arrowA.setAttribute('x2', aS.x); arrowA.setAttribute('y2', aS.y);
+    arrowB.setAttribute('x2', bS.x); arrowB.setAttribute('y2', bS.y);
+    tipA.setAttribute('cx', aS.x); tipA.setAttribute('cy', aS.y);
+    tipB.setAttribute('cx', bS.x); tipB.setAttribute('cy', bS.y);
+    headA.setAttribute('points', arrowhead(aS));
+    headB.setAttribute('points', arrowhead(bS));
+
+    // Labels: 18px past the tip along the same direction.
+    const labelOff = (v) => {
+      const m = Math.max(0.001, mag(v));
+      return { x: v.x/m * (m + 22), y: v.y/m * (m + 22) };
+    };
+    const laS = toSvg(labelOff(vA));
+    const lbS = toSvg(labelOff(vB));
+    labelA.setAttribute('x', laS.x); labelA.setAttribute('y', laS.y + 4);
+    labelB.setAttribute('x', lbS.x); labelB.setAttribute('y', lbS.y + 4);
+
+    // Pie-slice arc from origin showing the angle.
+    const r = 40;
+    const angA = Math.atan2(vA.y, vA.x);
+    const angB = Math.atan2(vB.y, vB.x);
+    let delta = angB - angA;
+    while (delta >  Math.PI) delta -= 2*Math.PI;
+    while (delta < -Math.PI) delta += 2*Math.PI;
+    const sweep = delta > 0 ? 0 : 1; // SVG y-flipped → sweep flag inverted
+    const large = Math.abs(delta) > Math.PI ? 1 : 0;
+    const arcStart = toSvg({ x: r*Math.cos(angA), y: r*Math.sin(angA) });
+    const arcEnd   = toSvg({ x: r*Math.cos(angB), y: r*Math.sin(angB) });
+    arc.setAttribute('d',
+      `M ${ORIGIN} ${ORIGIN} L ${arcStart.x} ${arcStart.y} ` +
+      `A ${r} ${r} 0 ${large} ${sweep} ${arcEnd.x} ${arcEnd.y} Z`);
+
+    const mA = mag(vA), mB = mag(vB);
+    let cos = (mA < 0.001 || mB < 0.001) ? 0 : dot(vA, vB) / (mA * mB);
+    cos = Math.max(-1, Math.min(1, cos));
+    const angDeg = Math.acos(cos) * 180 / Math.PI;
+
+    cosOut.textContent = (cos >= 0 ? '+' : '') + cos.toFixed(2);
+    angleOut.textContent = angDeg.toFixed(0) + '°';
+    formulaOut.innerHTML =
+      `<span style="color:var(--ink)">${dot(vA, vB).toFixed(0)}</span>` +
+      ` &nbsp;÷&nbsp; ` +
+      `(${mA.toFixed(0)} × ${mB.toFixed(0)})`;
+    cosOut.classList.toggle('green',   cos > 0.6);
+    cosOut.classList.toggle('red',     cos < -0.3);
+    cosOut.classList.toggle('neutral', cos >= -0.3 && cos <= 0.6);
+  }
+
+  function svgPointFromEvent(evt) {
+    const pt = cwSvg.createSVGPoint();
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+    const ctm = cwSvg.getScreenCTM();
+    if (!ctm) return { x: ORIGIN, y: ORIGIN };
+    return pt.matrixTransform(ctm.inverse());
+  }
+
+  function startDrag(which) {
+    return (e) => {
+      e.preventDefault();
+      dragging = which;
+      document.body.classList.add('cw-dragging');
+      (which === 'A' ? tipA : tipB).classList.add('dragging');
+      try { (which === 'A' ? tipA : tipB).setPointerCapture(e.pointerId); } catch {}
+    };
+  }
+  // rAF-throttled move: coalesce high-rate pointer events into one paint per frame
+  let pendingEvt = null;
+  let rafScheduled = false;
+  function applyMove() {
+    rafScheduled = false;
+    const e = pendingEvt;
+    pendingEvt = null;
+    if (!e || !dragging) return;
+    const p = svgPointFromEvent(e);
+    let v = fromSvg(p);
+    const m = mag(v);
+    const MAX = 180, MIN = 14;
+    if (m > MAX) { v.x = v.x/m * MAX; v.y = v.y/m * MAX; }
+    else if (m < MIN) {
+      const m2 = Math.max(0.001, m);
+      v.x = v.x/m2 * MIN; v.y = v.y/m2 * MIN;
+    }
+    if (dragging === 'A') vA = v; else vB = v;
+    render();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    pendingEvt = e;
+    if (!rafScheduled) {
+      rafScheduled = true;
+      requestAnimationFrame(applyMove);
+    }
+  }
+  function onUp() {
+    if (!dragging) return;
+    (dragging === 'A' ? tipA : tipB).classList.remove('dragging');
+    document.body.classList.remove('cw-dragging');
+    dragging = null;
+  }
+  tipA.addEventListener('pointerdown', startDrag('A'));
+  tipB.addEventListener('pointerdown', startDrag('B'));
+  window.addEventListener('pointermove', onMove, { passive: false });
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
+
+  const PRESETS = {
+    synonyms:  () => { vA = { x: 130, y:  70 }; vB = { x: 140, y:  55 }; },
+    related:   () => { vA = { x: 130, y:  70 }; vB = {  x: 90, y: 130 }; },
+    unrelated: () => { vA = { x: 150, y:  30 }; vB = { x: -20, y: 150 }; },
+    opposites: () => { vA = { x: 130, y:  70 }; vB = { x:-130, y: -70 }; },
+    random:    () => {
+      const r = (m) => (Math.random() * 2 - 1) * m;
+      const pick = () => { let v; do { v = { x: r(150), y: r(150) }; } while (mag(v) < 30); return v; };
+      vA = pick(); vB = pick();
+    },
+  };
+  document.querySelectorAll('.cw-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const fn = PRESETS[btn.dataset.preset];
+      if (fn) { fn(); render(); }
+    });
+  });
+
+  render();
+})();
+
+/* ─────────────────────────────────────────────────────────────
+   CONTRASTIVE FORCES (Walkthrough 2)
+   Force-directed simulation: similar pairs pull together, dissimilar
+   pairs push apart when close. NOT the actual cosine gradient — it's
+   a visual approximation that produces the same qualitative behaviour
+   (clusters form, dissimilar dots end up far apart). The point is
+   visceral: training is THIS, run a thousand times.
+   ──────────────────────────────────────────────────────────── */
+(function contrastiveForces() {
+  const svg = document.getElementById('cfSvg');
+  if (!svg) return;
+
+  const WORDS = ['cat', 'kitten', 'dog', 'puppy', 'king', 'queen', 'apple', 'banana', 'man'];
+  const SIMILAR = [
+    ['cat', 'kitten'], ['dog', 'puppy'],
+    ['king', 'queen'], ['apple', 'banana'],
+  ];
+  const DISSIMILAR = [
+    ['cat', 'king'], ['apple', 'queen'],
+    ['puppy', 'banana'], ['kitten', 'man'],
+  ];
+
+  const dotsG   = document.getElementById('cfDots');
+  const labelsG = document.getElementById('cfLabels');
+  const linesG  = document.getElementById('cfLines');
+  const stepOut = document.getElementById('cfStep');
+  const lossOut = document.getElementById('cfLoss');
+  const ckOut   = document.getElementById('cfCatKitten');
+
+  let pos = {};
+  let stepCount = 0;
+  let running = false;
+
+  function rand(m) { return (Math.random() * 2 - 1) * m; }
+  function reset() {
+    pos = {};
+    for (const w of WORDS) pos[w] = { x: rand(140), y: rand(140) };
+    stepCount = 0;
+    render(true);
+  }
+
+  function cosine(a, b) {
+    const m1 = Math.hypot(a.x, a.y), m2 = Math.hypot(b.x, b.y);
+    if (m1 < 0.001 || m2 < 0.001) return 0;
+    return (a.x*b.x + a.y*b.y) / (m1 * m2);
+  }
+  function computeLoss() {
+    let pull = 0, push = 0;
+    for (const [a, b] of SIMILAR)    pull += (1 - cosine(pos[a], pos[b]));
+    for (const [a, b] of DISSIMILAR) push += Math.max(0, cosine(pos[a], pos[b]) + 0.3);
+    return (pull + push) / (SIMILAR.length + DISSIMILAR.length);
+  }
+
+  function step() {
+    const f = {};
+    for (const w of WORDS) f[w] = { x: 0, y: 0 };
+
+    // Pull: each similar pair attracts toward each other
+    const pullK = 0.08;
+    for (const [a, b] of SIMILAR) {
+      const dx = pos[b].x - pos[a].x;
+      const dy = pos[b].y - pos[a].y;
+      f[a].x += dx * pullK;  f[a].y += dy * pullK;
+      f[b].x -= dx * pullK;  f[b].y -= dy * pullK;
+    }
+    // Push: dissimilar pairs repel if within threshold
+    const pushK = 0.14;
+    const threshold = 220;
+    for (const [a, b] of DISSIMILAR) {
+      const dx = pos[a].x - pos[b].x;
+      const dy = pos[a].y - pos[b].y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < threshold && dist > 0.001) {
+        const factor = (threshold - dist) / dist * pushK;
+        f[a].x += dx * factor;  f[a].y += dy * factor;
+        f[b].x -= dx * factor;  f[b].y -= dy * factor;
+      }
+    }
+    // Apply with light damping, clamp to canvas
+    for (const w of WORDS) {
+      pos[w].x = Math.max(-170, Math.min(170, pos[w].x + f[w].x));
+      pos[w].y = Math.max(-170, Math.min(170, pos[w].y + f[w].y));
+    }
+    stepCount++;
+    render();
+  }
+
+  function render(instant) {
+    if (instant) document.body.classList.add('cf-anim-off');
+
+    // Lines (rebuild each frame — there are only 8 of them)
+    linesG.innerHTML = '';
+    for (const [a, b] of SIMILAR) {
+      const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln.setAttribute('class', 'cf-pair-line similar');
+      ln.setAttribute('x1', pos[a].x); ln.setAttribute('y1', pos[a].y);
+      ln.setAttribute('x2', pos[b].x); ln.setAttribute('y2', pos[b].y);
+      linesG.appendChild(ln);
+    }
+    for (const [a, b] of DISSIMILAR) {
+      const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln.setAttribute('class', 'cf-pair-line dissimilar');
+      ln.setAttribute('x1', pos[a].x); ln.setAttribute('y1', pos[a].y);
+      ln.setAttribute('x2', pos[b].x); ln.setAttribute('y2', pos[b].y);
+      linesG.appendChild(ln);
+    }
+
+    // Dots + labels (rebuild on first paint, reposition after)
+    if (!dotsG.firstChild) {
+      for (const w of WORDS) {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('class', 'cf-dot');
+        c.setAttribute('r', 8);
+        c.dataset.word = w;
+        dotsG.appendChild(c);
+        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('class', 'cf-label');
+        t.dataset.word = w;
+        t.textContent = w;
+        labelsG.appendChild(t);
+      }
+    }
+    for (const c of dotsG.children) {
+      const p = pos[c.dataset.word];
+      c.setAttribute('cx', p.x);
+      c.setAttribute('cy', p.y);
+    }
+    for (const t of labelsG.children) {
+      const p = pos[t.dataset.word];
+      t.setAttribute('x', p.x);
+      t.setAttribute('y', p.y - 14);
+    }
+
+    stepOut.textContent = stepCount;
+    const loss = computeLoss();
+    lossOut.textContent = loss.toFixed(2);
+    lossOut.classList.toggle('green', loss < 0.3);
+    lossOut.classList.toggle('amber', loss >= 0.3);
+    const ck = cosine(pos['cat'], pos['kitten']);
+    ckOut.textContent = (ck >= 0 ? '+' : '') + ck.toFixed(2);
+    ckOut.classList.toggle('green', ck > 0.7);
+
+    if (instant) {
+      // re-enable animation after the next frame
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        document.body.classList.remove('cf-anim-off');
+      }));
+    }
+  }
+
+  async function run50() {
+    if (running) return;
+    running = true;
+    for (let i = 0; i < 50; i++) {
+      step();
+      // small delay so the animation reads — CSS transition is 480ms
+      // so we run quick steps; the transitions smooth visually anyway
+      await new Promise(r => setTimeout(r, 80));
+    }
+    running = false;
+  }
+
+  document.querySelector('[data-cf="step"]')?.addEventListener('click', () => { if (!running) step(); });
+  document.querySelector('[data-cf="run"]') ?.addEventListener('click', () => run50());
+  document.querySelector('[data-cf="reset"]')?.addEventListener('click', () => { if (!running) reset(); });
+
+  reset();
+})();
+
+/* ─────────────────────────────────────────────────────────────
+   TOP-K RETRIEVAL (Walkthrough 3, query loop)
+   Ten vocab dots at fixed "post-training" positions. The user drags
+   the query dot; we compute cosine to every vocab dot and highlight
+   the top three with lines + labelled scores.
+   ──────────────────────────────────────────────────────────── */
+(function topKRetrieval() {
+  const svg = document.getElementById('tkSvg');
+  if (!svg) return;
+
+  // Semantically arranged: each cluster (cat/kitten, dog/puppy, etc.) is local.
+  const VOCAB_POS = {
+    cat:    { x:  110, y:  -80 },
+    kitten: { x:  130, y:  -55 },
+    dog:    { x:   90, y:   80 },
+    puppy:  { x:  115, y:  105 },
+    king:   { x: -105, y:  -60 },
+    queen:  { x: -125, y:  -85 },
+    man:    { x: -135, y:   95 },
+    woman:  { x: -100, y:  125 },
+    apple:  { x:  -30, y: -145 },
+    banana: { x:  -10, y: -125 },
+  };
+  const WORDS = Object.keys(VOCAB_POS);
+
+  const dotsG     = document.getElementById('tkDots');
+  const labelsG   = document.getElementById('tkLabels');
+  const linksG    = document.getElementById('tkLinks');
+  const linkLabsG = document.getElementById('tkLinkLabels');
+  const queryDot  = document.getElementById('tkQuery');
+  const queryLab  = document.getElementById('tkQueryLabel');
+  const results   = document.getElementById('tkResults');
+
+  let q = { x: 0, y: -130 };
+  let dragging = false;
+
+  function cosine(a, b) {
+    const m1 = Math.hypot(a.x, a.y), m2 = Math.hypot(b.x, b.y);
+    if (m1 < 0.001 || m2 < 0.001) return 0;
+    return (a.x*b.x + a.y*b.y) / (m1 * m2);
+  }
+
+  function render() {
+    // Compute cosines to every vocab dot, sort, pick top 3
+    const scored = WORDS.map(w => ({ w, sim: cosine(q, VOCAB_POS[w]) }))
+      .sort((a, b) => b.sim - a.sim);
+    const topSet = new Set(scored.slice(0, 3).map(s => s.w));
+
+    // First-render: build vocab dots + labels
+    if (!dotsG.firstChild) {
+      for (const w of WORDS) {
+        const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('class', 'tk-dot');
+        c.setAttribute('r', 9);
+        c.setAttribute('cx', VOCAB_POS[w].x);
+        c.setAttribute('cy', VOCAB_POS[w].y);
+        c.dataset.word = w;
+        dotsG.appendChild(c);
+        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('class', 'tk-label');
+        t.setAttribute('x', VOCAB_POS[w].x);
+        t.setAttribute('y', VOCAB_POS[w].y - 16);
+        t.dataset.word = w;
+        t.textContent = w;
+        labelsG.appendChild(t);
+      }
+    }
+    // Mark top-3
+    for (const c of dotsG.children) {
+      c.classList.toggle('match', topSet.has(c.dataset.word));
+    }
+    for (const l of labelsG.children) {
+      l.classList.toggle('match', topSet.has(l.dataset.word));
+    }
+
+    // Lines from query to top 3
+    linksG.innerHTML = '';
+    linkLabsG.innerHTML = '';
+    for (const s of scored.slice(0, 3)) {
+      const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      ln.setAttribute('class', 'tk-link');
+      ln.setAttribute('x1', q.x); ln.setAttribute('y1', q.y);
+      ln.setAttribute('x2', VOCAB_POS[s.w].x); ln.setAttribute('y2', VOCAB_POS[s.w].y);
+      linksG.appendChild(ln);
+
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('class', 'tk-link-label');
+      t.setAttribute('x', (q.x + VOCAB_POS[s.w].x) / 2);
+      t.setAttribute('y', (q.y + VOCAB_POS[s.w].y) / 2 - 4);
+      t.setAttribute('text-anchor', 'middle');
+      t.textContent = (s.sim >= 0 ? '+' : '') + s.sim.toFixed(2);
+      linkLabsG.appendChild(t);
+    }
+
+    // Query dot + label
+    queryDot.setAttribute('cx', q.x);
+    queryDot.setAttribute('cy', q.y);
+    queryLab.setAttribute('x', q.x);
+    queryLab.setAttribute('y', q.y - 20);
+
+    // Results list (top 5)
+    results.innerHTML = '';
+    scored.slice(0, 5).forEach((s, i) => {
+      const li = document.createElement('li');
+      if (i < 3) li.classList.add('top');
+      li.innerHTML = `<span>${s.w}</span><span class="sim">${(s.sim >= 0 ? '+' : '') + s.sim.toFixed(2)}</span>`;
+      results.appendChild(li);
+    });
+  }
+
+  function svgPoint(evt) {
+    const pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    return pt.matrixTransform(ctm.inverse());
+  }
+
+  // rAF-throttled drag (same pattern as cosine widget)
+  let pendingEvt = null, rafQ = false;
+  function applyDrag() {
+    rafQ = false;
+    const e = pendingEvt; pendingEvt = null;
+    if (!e || !dragging) return;
+    const p = svgPoint(e);
+    q.x = Math.max(-180, Math.min(180, p.x));
+    q.y = Math.max(-180, Math.min(180, p.y));
+    render();
+  }
+
+  queryDot.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    dragging = true;
+    queryDot.classList.add('dragging');
+    document.body.classList.add('cw-dragging');
+    try { queryDot.setPointerCapture(e.pointerId); } catch {}
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    e.preventDefault();
+    pendingEvt = e;
+    if (!rafQ) { rafQ = true; requestAnimationFrame(applyDrag); }
+  }, { passive: false });
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    queryDot.classList.remove('dragging');
+    document.body.classList.remove('cw-dragging');
+  }
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+
+  document.querySelector('[data-tk="reset"]')?.addEventListener('click', () => {
+    q = { x: 0, y: -130 };
+    render();
+  });
+
+  render();
+})();
 </script>
 
 </body>

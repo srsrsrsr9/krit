@@ -1,0 +1,177 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Anim Lab · AI Fundamentals</title>
+<link rel="stylesheet" href="_shell.css">
+<style>:root{--accent:#0284c7;--accent-soft:#cfe6f5;--accent-strong:#0367a3;}</style>
+</head><body>
+<header class="topbar">
+  <span class="logo"><span class="dot"></span>Anim Lab</span><span class="course-name">AI Fundamentals</span>
+  <div class="right">
+    <select id="lessonFilter"><option value="">All lessons</option><option value="L1">L1 · What an LLM Is</option><option value="L2">L2 · Prompting</option><option value="L3">L3 · Hallucination</option><option value="L4">L4 · When to use AI</option><option value="L5">L5 · AI-augmented workflow</option></select>
+    <button class="toggle" id="soundToggle" aria-pressed="false">♪ Sound</button>
+  </div>
+</header>
+<main>
+  <p class="lede">Most "AI literacy" courses teach you to <em>fear the wrong things</em>. What you'll get tomorrow: what a token actually costs, why your "creative" prompts keep failing, and the three jobs AI shouldn't have.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<dialog class="focus" id="focus">
+  <header><div class="meta"><span class="id-tag" id="focusId">—</span><h2 id="focusTitle">—</h2></div>
+    <nav><button class="nav-btn" id="prevBtn">←</button><button class="nav-btn" id="nextBtn">→</button><button class="nav-btn" id="closeBtn">✕</button></nav></header>
+  <div class="stage" id="stage"></div><footer id="focusFooter"></footer>
+</dialog>
+<script>
+const COURSE = { lessons: { L1:'What an LLM is', L2:'Prompting', L3:'Hallucination', L4:'When to use AI', L5:'Workflow' } };
+const ART = [
+{ id:'L1-a01',type:'anim',lesson:'L1',title:'An LLM is a guesser, not a knower',what:'Watch: token-by-token completion.',footer:'Each token is sampled from a probability distribution. The model never "knows" the answer; it generates the most-likely next token, conditional on what came before.',scaffold:1,runtime:'<30s',mechanic:'tokenize-anim',
+  mount(s){s.innerHTML=`<h3>Generation, one token at a time</h3>
+  <pre class="code">The capital of France is <span class="hi" id="L1a01_t">_</span></pre>
+  <div id="L1a01_p" class="panel" style="margin-top:10px;font-family:ui-monospace,monospace;font-size:13px"></div>
+  <button class="btn" id="L1a01_b" style="margin-top:10px">▷ Sample</button>`;
+  s.querySelector('#L1a01_b').onclick=()=>{const tokens=['Paris',' Paris','France','Lyon'];const probs=[0.78,0.09,0.07,0.03,0.03];s.querySelector('#L1a01_t').textContent='_';
+    tokens.forEach((t,i)=>setTimeout(()=>{s.querySelector('#L1a01_p').innerHTML=tokens.map((tk,j)=>`<div style="display:flex;justify-content:space-between;padding:3px 0"><span>${tk}</span><span>${(probs[j]*100).toFixed(0)}%</span></div>`).join('');},i*150));
+    setTimeout(()=>s.querySelector('#L1a01_t').textContent='Paris',800);SFX.click();};}},
+
+{ id:'L1-a02',type:'anim',lesson:'L1',title:'Context window = working memory',what:'Watch: token budget fills up.',footer:'Long-context models don\'t have better memory — they have more *current attention*. Everything past the window is genuinely forgotten, not "less prioritized."',scaffold:1,runtime:'<30s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Context filling up</h3>
+  <svg viewBox="0 0 500 80"><rect x="20" y="20" width="460" height="40" fill="var(--paper-2)" stroke="var(--ink)"/><rect id="L1a02_f" x="20" y="20" width="0" height="40" fill="var(--accent)"><animate attributeName="width" from="0" to="460" dur="3s" repeatCount="indefinite"/></rect>
+  <text x="250" y="45" text-anchor="middle" font-family="ui-monospace" font-size="12" fill="var(--ink)" font-weight="700">200,000 tokens (~150,000 words)</text></svg>
+  <p class="panel" style="margin-top:10px">Past the window, the model is starting fresh. RAG re-injects relevant chunks; memory frameworks persist key facts. Without them, every session is amnesiac.</p>`;}},
+
+{ id:'L1-i01',type:'inter',lesson:'L1',title:'Tokens cost more than words',what:'Try: type text, see token count update.',footer:'1 English word ≈ 1.3 tokens. Code is denser (~3 tokens per line). Indian-language text can be 3× more. Pricing is per-token, not per-word.',scaffold:2,runtime:'<30s',mechanic:'live-explorer',
+  mount(s){s.innerHTML=`<h3>How many tokens is your prompt?</h3>
+  <textarea id="L1i01_t" style="width:100%;height:80px">The quick brown fox jumps over the lazy dog.</textarea>
+  <div class="stat-grid" style="margin-top:14px">
+    <div class="stat"><div class="stat-label">Chars</div><div class="stat-value" id="L1i01_c">—</div></div>
+    <div class="stat"><div class="stat-label">Approx tokens</div><div class="stat-value amber" id="L1i01_tk">—</div></div>
+    <div class="stat"><div class="stat-label">@ ₹3/1M cost</div><div class="stat-value" id="L1i01_co">—</div></div>
+  </div>`;
+  const u=()=>{const t=s.querySelector('#L1i01_t').value;const tk=Math.ceil(t.length/3.8);s.querySelector('#L1i01_c').textContent=t.length;s.querySelector('#L1i01_tk').textContent=tk;s.querySelector('#L1i01_co').textContent='₹'+(tk*3/1e6).toFixed(6);};
+  s.querySelector('#L1i01_t').oninput=()=>{SFX.hover();u();};u();}},
+
+{ id:'L1-i02',type:'inter',lesson:'L1',title:'Predict: what does it not know?',what:'Try: pick which question stumps an LLM.',footer:'LLMs are frozen at their training cutoff. "Today\'s weather", "what\'s in my email", "the JIRA ticket I closed an hour ago" — all unknown without tools.',scaffold:3,runtime:'30-60s',mechanic:'predict-reveal',predict:'Which question can a vanilla LLM answer?',
+  mount(s){const qs=[{q:'Who won the Cricket World Cup in 2011?',a:true,why:'In training data. Probably memorised by every modern LLM.'},{q:'What is today\\'s stock price of HDFC?',a:false,why:'Real-time data — requires tool calls.'},{q:'How does Python\\'s GIL work?',a:true,why:'Well-documented, in training corpus.'},{q:'What\\'s the last commit on my GitHub repo?',a:false,why:'Private + real-time. Even with the URL, vanilla LLM has no fetch.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Knows it</button><button class="btn ghost" data-p="false">Can\\'t know it</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a?'Can answer.':'Can\\'t — needs tools.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+/* L2 — prompting */
+{ id:'L2-a01',type:'anim',lesson:'L2',title:'Cargo-cult prompting is theatre',what:'Watch: "Act as a senior engineer" — does it matter?',footer:'Modern models barely care about persona prompts. Examples + structure + constraints carry the load. "You are an expert" is decoration.',scaffold:1,runtime:'30-60s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Same task. Three prompt styles. Tiny difference.</h3>
+  <div class="stat-grid">${[['"Write a function"','baseline',75],['"Act as a senior engineer. Write a function."','+ persona',76],['"Write a function. Output: Python 3.12, type hints, docstring, raises ValueError on negative input."','+ structure',92]].map(([p,n,acc])=>`<div class="stat"><div class="stat-label">${n}</div><div style="font-size:11px;color:var(--ink-soft);margin:4px 0">${p}</div><div class="stat-value ${acc>=90?'green':'amber'}">${acc}% pass</div></div>`).join('')}</div>
+  <p class="panel" style="margin-top:10px">Structure beats persona. Persona just primes the surface texture, not the substance.</p>`;}},
+
+{ id:'L2-a02',type:'anim',lesson:'L2',title:'Few-shot examples are gold',what:'Watch: 0 → 1 → 3 examples.',footer:'One example doubles accuracy. Three triples it. After ~5 examples diminishing returns hit. Skip the "as an expert" — write three "input → output" examples instead.',scaffold:1,runtime:'30-60s',mechanic:'bar-grow',
+  mount(s){s.innerHTML=`<h3>Examples beat instructions</h3>
+  <svg viewBox="0 0 500 200">${[['0 examples',32],['1 example',68],['3 examples',88],['5 examples',91]].map(([n,p],i)=>`<rect x="${30+i*120}" y="${180-p*1.5}" width="80" height="${p*1.5}" fill="var(--accent)" opacity=".85"><animate attributeName="height" from="0" to="${p*1.5}" dur="1s" begin="${i*0.3}s" fill="freeze"/><animate attributeName="y" from="180" to="${180-p*1.5}" dur="1s" begin="${i*0.3}s" fill="freeze"/></rect><text x="${70+i*120}" y="195" text-anchor="middle" font-family="ui-monospace" font-size="10" fill="var(--ink)">${n}</text><text x="${70+i*120}" y="${175-p*1.5}" text-anchor="middle" font-family="ui-monospace" font-size="11" fill="var(--accent-strong)" font-weight="700">${p}%</text>`).join('')}</svg>`;}},
+
+{ id:'L2-i01',type:'inter',lesson:'L2',title:'Tighten the prompt',what:'Try: edit a vague prompt; see the model\'s plausible response shift.',footer:'Most prompting "issues" are underspecification. Names: input shape, output shape, edge cases, constraints, example. Ship all five; the model needs them.',scaffold:2,runtime:'30-60s',mechanic:'compose-build',
+  mount(s){s.innerHTML=`<h3>Edit the prompt — see the response change</h3>
+  <textarea id="L2i01_p" style="width:100%;height:80px">summarize this text</textarea>
+  <div class="panel" id="L2i01_o" style="margin-top:10px;font-family:ui-monospace,monospace;font-size:13px">—</div>`;
+  const u=()=>{const p=s.querySelector('#L2i01_p').value.toLowerCase();let out;
+    if(p.includes('3 bullet')||p.includes('three bullet'))out='Three bullets, 12 words each. Lead with the action item.';
+    else if(p.includes('one sentence')||p.includes('one-sentence'))out='One sentence, ~20 words. No filler.';
+    else if(p.includes('email'))out='Subject line + body, formal tone, action items bolded.';
+    else if(p.length<20)out='Vague. Will pick a default — likely 4-6 sentence paragraph. You may get any of: bullets, plain text, headers.';
+    else out='Specific enough — will follow format constraints you named.';
+    s.querySelector('#L2i01_o').textContent=out;};
+  s.querySelector('#L2i01_p').oninput=()=>{SFX.hover();u();};u();}},
+
+{ id:'L2-i02',type:'inter',lesson:'L2',title:'Spec checklist — score your prompt',what:'Try: check off what your prompt declares.',footer:'5 boxes: input shape, output shape, edge cases, constraints, one example. ≥4 of 5 = production prompt. ≤2 = noise.',scaffold:3,runtime:'30-60s',mechanic:'checklist-score',
+  mount(s){s.innerHTML=`<h3>Did you specify…</h3>
+  ${['Input shape (types, fields, examples)','Output shape (return type, error mode)','Edge cases that matter','Constraints (length, style, deps)','One concrete example end-to-end'].map(t=>`<label class="panel" style="display:block;margin:6px 0;cursor:pointer"><input type="checkbox"> ${t}</label>`).join('')}
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Production-readiness</div><div class="stat-value amber" id="L2i02_s">0/5 — noise</div></div>`;
+  const u=()=>{const n=s.querySelectorAll('input:checked').length;const e=s.querySelector('#L2i02_s');const labels=['noise','rough','draft','workable','production','production'];e.textContent=`${n}/5 — ${labels[n]}`;e.className='stat-value '+(n>=4?'green':n>=2?'amber':'red');};
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});}},
+
+/* L3 — hallucination */
+{ id:'L3-a01',type:'anim',lesson:'L3',title:'Where hallucinations come from',what:'Watch: the model fills the gap when context is sparse.',footer:'Hallucination = high-confidence interpolation into territory the model has thin data on. The model isn\'t lying; it\'s extrapolating.',scaffold:1,runtime:'30-60s',mechanic:'distribution-morph',
+  mount(s){s.innerHTML=`<h3>Sparse training data = confident invention</h3>
+  <svg viewBox="0 0 500 200">${Array.from({length:30},(_,i)=>{const x=20+i*16;const y=Math.random()<0.7?100+Math.random()*40:80;return `<circle cx="${x}" cy="${y}" r="3" fill="${y===80?'var(--rose)':'var(--accent)'}"/>`;}).join('')}
+  <text x="20" y="180" font-family="ui-monospace" font-size="10" fill="var(--accent)">▪ training data — dense → reliable</text>
+  <text x="20" y="195" font-family="ui-monospace" font-size="10" fill="var(--rose)">▪ sparse zone — model still confidently answers</text></svg>
+  <p class="panel" style="margin-top:8px">In sparse zones, the model interpolates from its dense neighbours. The output looks fine. It might be wrong.</p>`;}},
+
+{ id:'L3-a02',type:'anim',lesson:'L3',title:'Citations vs hallucinations',what:'Watch: cited claims survive scrutiny.',footer:'RAG with citations cuts hallucination ~5×. The fix isn\'t prompting harder — it\'s grounding the model in retrievable sources.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Same task, with and without RAG</h3>
+  <div class="stat-grid">${[['Vanilla LLM','22%','red'],['+ RAG with citations','4%','green'],['+ "say I don\\'t know"','3%','green']].map(([n,r,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}">${r}</div><div style="font-size:11px;color:var(--muted);margin-top:4px">hallucination rate</div></div>`).join('')}</div>`;}},
+
+{ id:'L3-i01',type:'inter',lesson:'L3',title:'Slide the grounding dial',what:'Try: change the grounding; watch hallucination drop.',footer:'Toggling "show your sources" adds one line to the prompt and cuts the failure rate from 22% to 4%. One line. Cheapest reliability fix in AI.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>What lowers hallucination risk?</h3>
+  <div class="row" style="flex-direction:column;align-items:stretch;gap:6px">
+  ${[['Source documents in prompt',20],['"Cite your sources or say I don\\'t know"',15],['Few-shot examples',8],['Tool to verify (web search, calculator)',25],['Vague open question',-35]].map(([t,w])=>`<label class="panel" style="cursor:pointer"><input type="checkbox" data-w="${w}"> ${t}</label>`).join('')}</div>
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Hallucination risk</div><div class="stat-value red" id="L3i01_r">HIGH</div></div>`;
+  const u=()=>{let r=60;s.querySelectorAll('[data-w]:checked').forEach(c=>r-=+c.dataset.w);r=Math.max(2,Math.min(95,r));const e=s.querySelector('#L3i01_r');e.textContent=r>40?'HIGH ('+r+'%)':r>15?'MEDIUM ('+r+'%)':'LOW ('+r+'%)';e.className='stat-value '+(r>40?'red':r>15?'amber':'green');};
+  s.querySelectorAll('input').forEach(i=>i.onchange=()=>{SFX.click();u();});u();}},
+
+{ id:'L3-i02',type:'inter',lesson:'L3',title:'Did the model just lie?',what:'Try: classify outputs as facts vs hallucinations.',footer:'You can\'t spot a hallucination by reading once. Spot-checks against the source. If there\'s no source, the model is the source — and that\'s the risk.',scaffold:4,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'"Goa\\'s capital is Panaji." (no source given)',a:'fact',why:'True — but you didn\\'t verify. Confident output ≠ verified output.'},{q:'"In 2019, India\\'s GDP grew 6.1%, citing IMF World Economic Outlook."',a:'fact',why:'Cites a source. You can check. The act of citing also discourages confabulation.'},{q:'"As stated in the Reserve Bank Act 1934, Section 17(2), banks must hold..."',a:'maybe',why:'Sounds authoritative. May be entirely confabulated — RBI Acts cite real but the section number could be fake. Verify the section.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. Classify this output</h3><div class="panel">${q.q}</div>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="fact">Likely true</button><button class="btn ghost" data-p="maybe">Verify before believing</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(b.dataset.p===q.a?'win':'');r2.innerHTML=`<strong>${q.a==='fact'?'Verifiable.':'Verify first.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+/* L4 — when to use AI */
+{ id:'L4-a01',type:'anim',lesson:'L4',title:'AI is a hammer, not a swiss-army',what:'Watch: tool-vs-task fit.',footer:'AI excels at fuzzy pattern tasks. It loses to deterministic systems at exact lookup. Pick the wrong tool and your team will hate the AI.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The fit chart</h3>
+  <div class="stat-grid">${[['Summarisation','great','green'],['Code review (semantic)','great','green'],['Customer Q&A (with RAG)','great','green'],['Exact ID lookup','use SQL','red'],['Real-time stock prices','use API','red'],['Math beyond ~10 digits','use calculator','red']].map(([n,v,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${v}</div></div>`).join('')}</div>`;}},
+
+{ id:'L4-a02',type:'anim',lesson:'L4',title:'Latency / cost / quality — pick two',what:'Watch: the iron triangle.',footer:'GPT-4o-mini = cheap + fast. Claude Opus = high quality + cheap-ish but slow. o3-pro = high quality + reasoning, but $$$ and slow. No tier is all three.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Pick two</h3>
+  <svg viewBox="0 0 500 240"><polygon points="250,30 70,200 430,200" fill="none" stroke="var(--ink)" stroke-width="2"/>
+  <text x="250" y="20" text-anchor="middle" font-family="ui-monospace" font-size="12" font-weight="800">QUALITY</text>
+  <text x="50" y="220" text-anchor="middle" font-family="ui-monospace" font-size="12" font-weight="800">FAST</text>
+  <text x="450" y="220" text-anchor="middle" font-family="ui-monospace" font-size="12" font-weight="800">CHEAP</text>
+  <circle cx="160" cy="180" r="40" fill="var(--accent)" fill-opacity=".25"/><text x="160" y="185" text-anchor="middle" font-family="ui-monospace" font-size="11">Haiku</text>
+  <circle cx="320" cy="120" r="40" fill="var(--saffron)" fill-opacity=".25"/><text x="320" y="125" text-anchor="middle" font-family="ui-monospace" font-size="11">Sonnet</text>
+  <circle cx="250" cy="60" r="40" fill="var(--rose)" fill-opacity=".25"/><text x="250" y="65" text-anchor="middle" font-family="ui-monospace" font-size="11">o3</text></svg>`;}},
+
+{ id:'L4-i01',type:'inter',lesson:'L4',title:'AI or not — fit-check',what:'Try: 5 scenarios, pick AI vs not.',footer:'Tax filing? No (regulation precision). Customer email triage? Yes (fuzzy, recoverable). The fit-check is about consequence-of-mistake, not coolness of task.',scaffold:2,runtime:'30-60s',mechanic:'predict-reveal',
+  mount(s){const qs=[{q:'Routing customer support tickets to teams',a:true,why:'Fuzzy, recoverable, can sample-audit. Great fit.'},{q:'Filing quarterly GST returns',a:false,why:'Regulation-precise, audit trail required. AI as helper, not signer.'},{q:'Drafting personalised cold outreach emails',a:true,why:'Volume + fuzzy quality bar + you read before sending. Great fit.'},{q:'Computing a customer\\'s loan EMI exactly',a:false,why:'Pure math — a 4-line script is more reliable and 1000× faster.'}];let i=0;const r=()=>{const q=qs[i];s.innerHTML=`<h3>${i+1}/${qs.length}. ${q.q}</h3>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" data-p="true">Use AI</button><button class="btn ghost" data-p="false">Don't use AI</button></div>
+  <div class="reveal" id="r" style="display:none"></div>`;
+  s.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{SFX.click();const ok=(b.dataset.p==='true')===q.a;const r2=s.querySelector('#r');r2.style.display='block';r2.className='reveal '+(ok?'win':'bad');r2.innerHTML=`<strong>${q.a?'Yes — use AI.':'No — don\\'t use AI here.'}</strong> ${q.why}<br><button class="btn" id="nx" style="margin-top:8px">Next</button>`;s.querySelector('#nx').onclick=()=>{i=(i+1)%qs.length;r();};});};r();}},
+
+{ id:'L4-i02',type:'inter',lesson:'L4',title:'Cost-vs-quality picker',what:'Try: slider for quality target; see right model.',footer:'80% of business tasks are fine at GPT-4o-mini\'s quality. Reaching for o3 by default 4× your bill and rarely your output quality.',scaffold:3,runtime:'30-60s',mechanic:'slider-with-verdict',
+  mount(s){s.innerHTML=`<h3>What quality bar do you need?</h3>
+  <input type="range" id="L4i02_q" min="1" max="10" value="6"><div class="row" style="justify-content:space-between;font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)"><span>"good enough"</span><span style="color:var(--ink);font-size:18px;font-weight:800" id="L4i02_v">6/10</span><span>"can't be wrong"</span></div>
+  <div class="stat" style="margin-top:14px"><div class="stat-label">Recommended tier</div><div class="stat-value" id="L4i02_r" style="font-size:16px">—</div></div>`;
+  const u=()=>{const v=+s.querySelector('#L4i02_q').value;s.querySelector('#L4i02_v').textContent=v+'/10';const tiers=[['Llama-3-8b self-hosted ($0.20/M)','green'],['Llama-3-8b self-hosted ($0.20/M)','green'],['GPT-4o-mini / Haiku ($0.25/M)','green'],['GPT-4o-mini / Haiku ($0.25/M)','green'],['GPT-4o-mini / Haiku ($0.25/M)','amber'],['Claude Sonnet ($3/M)','amber'],['Claude Sonnet ($3/M)','amber'],['Claude Opus / GPT-4.1 ($15/M)','amber'],['o3 with reasoning ($60/M)','red'],['o3 with reasoning ($60/M)','red']];s.querySelector('#L4i02_r').textContent=tiers[v-1][0];s.querySelector('#L4i02_r').className='stat-value '+tiers[v-1][1];};
+  s.querySelector('#L4i02_q').oninput=()=>{SFX.hover();u();};u();}},
+
+/* L5 — workflow */
+{ id:'L5-a01',type:'anim',lesson:'L5',title:'The AI-augmented vs AI-driven gap',what:'Watch: human-in-loop vs fully-autonomous.',footer:'Human-in-loop catches the 1-in-20 bad outputs. Fully autonomous needs that 1-in-20 to be tolerable — most workflows can\'t.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>Two postures</h3>
+  <div class="stat-grid">${[['AI-augmented','You decide, AI suggests','Email drafting · code review · summarisation','green'],['AI-driven','AI decides, sometimes asks','Classification · routing · ticket tagging','amber'],['Fully autonomous','AI decides, you never see','Be very, very sure','red']].map(([n,d,ex,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:14px">${d}</div><div style="font-size:11px;color:var(--muted);margin-top:6px">${ex}</div></div>`).join('')}</div>`;}},
+
+{ id:'L5-a02',type:'anim',lesson:'L5',title:'The cost of a bad output',what:'Watch: severity buckets.',footer:'Right cost-bucket for the AI = the answer to "if it\'s wrong, can we fix it cheap?" If yes — automate. If no — keep human.',scaffold:1,runtime:'<30s',mechanic:'compare-reveal',
+  mount(s){s.innerHTML=`<h3>The reversibility check</h3>
+  <div class="stat-grid">${[['Reversible in seconds','Auto-route email · spell-check','green'],['Reversible in a day','Code change · marketing copy','amber'],['Hard to reverse','Sent message · public statement','red'],['Irreversible','Money moved · data deleted','red']].map(([n,ex,c])=>`<div class="stat"><div class="stat-label">${n}</div><div class="stat-value ${c}" style="font-size:13px">${ex}</div></div>`).join('')}</div>`;}},
+
+{ id:'L5-i01',type:'inter',lesson:'L5',title:'Decompose: which step is AI?',what:'Try: drag steps to "you" or "AI".',footer:'Most "AI workflows" need 70% you, 30% AI. Decomposing into atomic steps shows you where AI earns its keep and where you still must.',scaffold:3,runtime:'30-60s',mechanic:'drag-bucket',
+  mount(s){s.innerHTML=`<h3>You handle the customer escalation. Which step is AI?</h3>
+  <div class="row" id="L5i01_pool" style="margin-bottom:10px;padding:10px;background:var(--paper-2);border-radius:5px">
+    ${['Read the 12 prior emails','Decide whether to refund','Draft the reply','Send the reply','Update CRM with reason'].map(t=>`<span class="chip" data-id="${t}">${t}</span>`).join('')}
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="lane" data-l="you"><h4>YOU do this</h4><div class="drop" style="min-height:60px"></div></div>
+    <div class="lane" data-l="ai"><h4>AI does this</h4><div class="drop" style="min-height:60px"></div></div>
+  </div>
+  <div class="reveal" id="L5i01_r" style="display:none;margin-top:14px"></div>`;
+  const truth={'Read the 12 prior emails':'ai','Decide whether to refund':'you','Draft the reply':'ai','Send the reply':'you','Update CRM with reason':'ai'};
+  const placed={};
+  s.querySelectorAll('.chip').forEach(c=>Lab.makeDraggable(c));
+  s.querySelectorAll('.lane').forEach(l=>Lab.makeDropZone(l,(target)=>{const id=target?.dataset?.id;if(!id||placed[id])return;placed[id]=l.dataset.l;const clone=target.cloneNode(true);clone.style.cursor='default';l.querySelector('.drop').appendChild(clone);target.style.opacity='.2';
+    if(Object.keys(placed).length===5){const right=Object.entries(placed).filter(([k,v])=>truth[k]===v).length;const r=s.querySelector('#L5i01_r');r.style.display='block';r.className='reveal '+(right===5?'win':right>=3?'':'bad');r.innerHTML=`<strong>${right}/5 right.</strong> AI reads + drafts + records. You decide + send. Decisions and outbound communication stay human; the boring middle is the AI.`;}}));}},
+
+{ id:'L5-i02',type:'inter',lesson:'L5',title:'Build your weekly workflow',what:'Try: assemble a 5-step weekly AI-augmented routine.',footer:'A weekly workflow that includes AI in 2-3 places is more valuable than a one-shot prompt. Repetition is where the savings live.',scaffold:4,runtime:'30-60s',mechanic:'order-sort',
+  mount(s){const correct=['Monday 9am: AI summarises last week\\'s tickets','Tuesday: review AI flags, decide priorities','Wed-Thu: do the work','Friday morning: AI drafts the weekly update','Friday afternoon: edit + send'];const shuf=[...correct].sort(()=>Math.random()-.5);
+  s.innerHTML=`<h3>Build the routine (▲▼ to reorder)</h3><div id="L5i02_l" style="display:flex;flex-direction:column;gap:6px">${shuf.map(t=>`<div class="chip" style="display:block">${t}</div>`).join('')}</div>
+  <button class="btn" id="L5i02_c" style="margin-top:14px">Check</button>
+  <div class="reveal" id="L5i02_r" style="display:none"></div>`;
+  const wrap=Lab.makeSortable(s.querySelector('#L5i02_l'));
+  s.querySelector('#L5i02_c').onclick=()=>{const got=[...wrap.querySelectorAll('.chip')].map(c=>c.dataset.sortText);const ok=correct.every((x,i)=>got[i]===x);const r=s.querySelector('#L5i02_r');r.style.display='block';r.className='reveal '+(ok?'win':'bad');r.innerHTML=ok?'<strong>That\\'s the rhythm.</strong> AI at start of week (summarise) and end of week (draft) — bookends. You stay in the middle where decisions happen.':'<strong>Re-order.</strong> AI bookends the week; you own the middle. Summarise on Monday, draft on Friday.';SFX.success();};}},
+];
+</script>
+<script src="_shell.js"></script>
+</body></html>

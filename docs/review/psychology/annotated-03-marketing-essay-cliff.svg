@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <title>Marketing — hook is strong, but the cliff before any interaction</title>
+  <image x="0" y="0" width="1440" height="900"
+         xlink:href="file:///Users/srinivasvedantam/Documents/Me/elemes/v2/project-docs-v6/docs/review/screenshots/03-marketing-top.png"/>
+
+  <!-- 1. "Same drink, different question" — strong serif hook -->
+  <rect x="392" y="200" width="660" height="160" fill="rgba(124,58,237,0.10)" stroke="#7c3aed" stroke-width="3"/>
+  <circle cx="388" cy="200" r="14" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="388" y="207" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#7c3aed">1</text>
+
+  <!-- 2. wall of text before any interaction — habituation risk -->
+  <rect x="392" y="380" width="660" height="245" fill="rgba(124,58,237,0.16)" stroke="#7c3aed" stroke-width="3" stroke-dasharray="8,5"/>
+  <circle cx="388" cy="380" r="14" fill="#fff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="388" y="387" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="20" fill="#7c3aed">2</text>
+
+  <g transform="translate(40,840)" font-family="Helvetica, Arial, sans-serif" font-size="13" fill="#222">
+    <rect x="0" y="-12" width="14" height="14" fill="rgba(124,58,237,0.25)" stroke="#7c3aed"/>
+    <text x="22" y="0">1 hook is excellent — concrete numbers + curiosity gap (Loewenstein)</text>
+    <rect x="0" y="8" width="14" height="14" fill="rgba(124,58,237,0.35)" stroke="#7c3aed" stroke-dasharray="6,4"/>
+    <text x="22" y="20">2 ~400 words of body before ANY interaction — von Restorff novelty deficit; scroll-bounce risk peaks here</text>
+  </g>
+</svg>
